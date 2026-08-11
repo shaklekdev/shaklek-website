@@ -3,11 +3,11 @@
 Status: **zero real AI exists in the product today**, and per the business dossier (§13), that's deliberate — Phase 1 is a human-run "Concierge MVP" on purpose, to validate the co-design loop before investing in the hard engineering. Don't skip ahead of this without a real reason.
 
 ## Where things actually stand
-- Quick Customize on the design page simulates variation by cycling a hardcoded local color list — not AI, just a UI stand-in
-- The "tell us what you'd like changed" field and the upload flow both route to a human stylist by email — this **is** the Phase 1 model working as intended, not a gap to rush past
+- The old Quick Customize (fake local color-cycle) is gone, replaced by a real chat-based customize flow shared between `/design/[slug]` and `/upload` — but its intent parsing is rule-based keyword matching (`src/lib/customizeParser.ts` / `/api/customize`), **not** real NLP. It's a functional stand-in with the same route/component contract a real model-backed version will use, not Phase 2 itself.
+- The freeform note and the upload flow both still route to a human stylist by email — this **is** the Phase 1 model working as intended, not a gap to rush past. The chat layer sits on top of that, it doesn't replace it.
 
 ## Phase 2 — Assisted AI (per dossier §13, only after Phase 1 data exists)
-- [ ] **Structured design-spec schema** — the shared format that chat, the visualization, and the tailor spec sheet all read from. Needs to be defined before any of the below can start (dossier checklist item 8).
+- [x] **Structured design-spec schema** — `src/data/designSpec.ts`. Shared by both entry points (catalog-start and upload-start); constraint fields (single fabric, single layer, no logo) are already part of it, currently checked by rule-based keyword matching rather than a model.
 - [ ] **Intent parsing** — real NLP on the common request patterns Phase 1 surfaces (e.g. "shorter sleeves," "looser waist") into that structured spec, via **Claude on Amazon Bedrock** (not the direct Anthropic API — see `aws-infrastructure-todo.md` for why Bedrock). Should be scoped against real Phase 1 request data, not decided in the abstract.
 - [ ] **Live preview image generation** — **Titan Image Generator on Bedrock**, called synchronously alongside the intent-parsing call, image-to-image conditioned on the catalog item's base photo (never generated from scratch). This is deliberately a constrained preview, not a replacement for the parametric engine below — it answers "roughly what will this look like," the tailor spec still governs what actually gets made.
 - [ ] **Constraint enforcement** — the producibility rule (one fabric, one layer, no logos) and the originality-distance rule (dossier §4b/§11 — customization must diverge enough from any brand reference before checkout) both need to be hard rules the system enforces, not a model's best guess.

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { colors } from "@/data/colors";
-import type { DesignSpec } from "@/data/designSpec";
+import { PASSING_CONSTRAINTS, type DesignSpec } from "@/data/designSpec";
 
 type ChatMessage = { role: "ai" | "user"; text: string };
 
@@ -41,6 +41,18 @@ export default function CustomizeChat({
   const [sending, setSending] = useState(false);
 
   const colorHex = colors.find((c) => c.name === spec.color)?.hex ?? previewGradient[0];
+
+  // A flagged constraint otherwise never clears — nothing else in this stub
+  // resets singleFabric/singleLayer/noLogo back to true, which would strand
+  // a customer at a permanently disabled Continue button even after they've
+  // clearly moved on to a different request.
+  function clearFlag() {
+    onSpecChange({ ...spec, constraints: { ...PASSING_CONSTRAINTS } });
+    setMessages((m) => [
+      ...m,
+      { role: "ai", text: "Cleared — that request won't be included. Continue whenever you're ready." },
+    ]);
+  }
 
   async function sendMessage(text: string) {
     const message = text.trim();
@@ -118,6 +130,12 @@ export default function CustomizeChat({
               <li key={i}>{n}</li>
             ))}
           </ul>
+          <button
+            onClick={clearFlag}
+            className="mt-2 font-medium text-red-800 underline underline-offset-2 hover:text-red-900"
+          >
+            Drop that part of the request and continue
+          </button>
         </div>
       )}
 
