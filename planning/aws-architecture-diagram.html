@@ -1,0 +1,306 @@
+<title>Shaklek — AWS Architecture</title>
+<style>
+:root{
+  --bg:#faf8f4; --card:#ffffff; --line:#e4ddd0;
+  --ink:#1a1a1a; --ink-soft:#6b6b6b; --ink-faint:#a0a0a0;
+  --gold:#9c8445; --gold-soft:#f2ede0;
+  --built:#3c6b47; --built-soft:#e7f0e9;
+  --tbd:#9c3b28; --tbd-soft:#f5e9e6;
+  --c-compute:#b8720e; --c-db:#2d5f8a; --c-storage:#3c6b47;
+  --c-security:#9c3b28; --c-integration:#6b4c9a; --c-ai:#0e7c86;
+  --font-display:'Georgia','Times New Roman',serif;
+  --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --font-mono:ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17160f; --card:#201f16; --line:#39362a;
+    --ink:#f1ede1; --ink-soft:#b8b2a0; --ink-faint:#847e6b;
+    --gold:#c4a964; --gold-soft:#2a2618;
+    --built:#7fb98c; --built-soft:#1c2a20;
+    --tbd:#d97a63; --tbd-soft:#2c1f1c;
+    --c-compute:#e0a339; --c-db:#7fa8c9; --c-storage:#7fb98c;
+    --c-security:#d97a63; --c-integration:#b19bd6; --c-ai:#5fc3cd;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17160f; --card:#201f16; --line:#39362a;
+  --ink:#f1ede1; --ink-soft:#b8b2a0; --ink-faint:#847e6b;
+  --gold:#c4a964; --gold-soft:#2a2618;
+  --built:#7fb98c; --built-soft:#1c2a20;
+  --tbd:#d97a63; --tbd-soft:#2c1f1c;
+  --c-compute:#e0a339; --c-db:#7fa8c9; --c-storage:#7fb98c;
+  --c-security:#d97a63; --c-integration:#b19bd6; --c-ai:#5fc3cd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.65}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px 100px}
+.eyebrow{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 14px;padding-top:48px}
+h1{font-family:var(--font-display);font-weight:400;font-size:clamp(1.6rem,3.6vw,2.2rem);letter-spacing:-.01em;margin:0 0 12px;text-wrap:balance}
+.dek{max-width:66ch;color:var(--ink-soft);font-size:.98rem;margin:0 0 32px}
+
+figure{margin:0 0 40px;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+figure svg{width:100%;height:auto;display:block}
+figcaption{margin-top:16px;font-size:.82rem;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px}
+.legend{display:flex;flex-wrap:wrap;gap:14px 22px;margin-bottom:18px;font-family:var(--font-mono);font-size:.68rem;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+h2{font-family:var(--font-display);font-weight:400;font-size:1.3rem;margin:40px 0 6px}
+.section-note{color:var(--ink-soft);font-size:.9rem;margin:0 0 18px;max-width:66ch}
+
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin-bottom:8px}
+th{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:12px 12px 12px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+td:first-child{color:var(--ink);font-weight:500;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.status{display:inline-block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:20px}
+.status.built{background:var(--built-soft);color:var(--built)}
+.status.tbd{background:var(--tbd-soft);color:var(--tbd)}
+
+.callout{margin:24px 0;padding:16px 18px;background:var(--gold-soft);border-left:3px solid var(--gold);border-radius:2px;font-size:.88rem;color:var(--ink-soft)}
+.callout strong{color:var(--ink)}
+.footnote{padding-top:24px;margin-top:24px;border-top:1px dashed var(--line);font-family:var(--font-mono);font-size:.68rem;color:var(--ink-faint)}
+
+.flow-h3{font-family:var(--font-display);font-weight:400;font-size:1.05rem;margin:30px 0 4px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.flow-tag{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:400}
+ol.flow{list-style:none;counter-reset:flow-step;margin:12px 0 28px;padding:0;border-left:1px solid var(--line)}
+ol.flow li{position:relative;counter-increment:flow-step;padding:0 0 18px 30px;font-size:.88rem;color:var(--ink-soft)}
+ol.flow li::before{content:counter(flow-step);position:absolute;left:-11px;top:0;width:20px;height:20px;border-radius:50%;background:var(--card);border:1px solid var(--line);color:var(--ink-faint);font-family:var(--font-mono);font-size:.65rem;display:flex;align-items:center;justify-content:center}
+ol.flow li:last-child{padding-bottom:0}
+ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-soft);padding:1px 5px;border-radius:3px;color:var(--ink)}
+.flow-status{display:inline-block;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-right:8px;vertical-align:middle}
+.flow-status.built{background:var(--built-soft);color:var(--built)}
+.flow-status.tbd{background:var(--tbd-soft);color:var(--tbd)}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Shaklek — Technical Architecture</p>
+  <h1>The full AWS picture, before we build another piece of it</h1>
+  <p class="dek">
+    Every service the product needs, how they connect, and — just as
+    important — which ones are actually AWS versus third-party APIs that
+    happen to be called from AWS. This now includes the AI layer as a real
+    part of the architecture, not a footnote: it's actually two distinct
+    flows with different AWS services behind them, not one box.
+  </p>
+
+  <div class="legend">
+    <span><i style="background:var(--c-compute)"></i>Compute</span>
+    <span><i style="background:var(--c-db)"></i>Database</span>
+    <span><i style="background:var(--c-storage)"></i>Storage</span>
+    <span><i style="background:var(--c-security)"></i>Security / Auth</span>
+    <span><i style="background:var(--c-integration)"></i>Integration / scheduling</span>
+    <span><i style="background:var(--c-ai)"></i>AI / ML</span>
+    <span><i style="background:var(--ink-faint)"></i>External — not AWS</span>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 1100 660" role="img" aria-label="Architecture diagram inside an AWS Cloud boundary: customer and staff browsers reach shaklek.com via DNS, which routes to AWS Amplify. Amplify reads and writes Amazon RDS, stores files in Amazon S3, checks sessions against Clerk, and calls Amazon Bedrock — which hosts both Claude for reasoning and Titan Image Generator for image-to-image generation — to parse live customization requests and generate a constrained preview image during a customer session. Separately, Amazon EventBridge triggers an AWS Lambda function on a weekly schedule; that Lambda also calls Bedrock to analyze trend signals and regenerate an inspired, non-copied design image, then writes the candidate to RDS with a pending-review status for a human stylist to approve through the same Amplify-hosted dashboard before anything reaches a tailor. Outside the AWS boundary, the remaining external dependencies are Clerk for authentication, the Stripe payment gateway, and the Resend email service.">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="currentColor" />
+        </marker>
+      </defs>
+      <g font-family="ui-monospace,'SF Mono',Menlo,monospace" font-size="10.5">
+
+        <!-- Browsers -->
+        <rect x="140" y="20" width="200" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <text x="240" y="41" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="currentColor">Customer</text>
+        <text x="240" y="57" text-anchor="middle" fill="currentColor" opacity="0.6">browser</text>
+
+        <rect x="760" y="20" width="200" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <text x="860" y="41" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="currentColor">Staff / tailor</text>
+        <text x="860" y="57" text-anchor="middle" fill="currentColor" opacity="0.6">browser — review dashboard</text>
+
+        <path d="M240,70 L240,90 L500,90 L500,110" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M860,70 L860,90 L600,90 L600,110" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+
+        <!-- DNS -->
+        <rect x="450" y="110" width="200" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <text x="550" y="131" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="currentColor">DNS</text>
+        <text x="550" y="147" text-anchor="middle" fill="currentColor" opacity="0.6">shaklek.com</text>
+
+        <path d="M550,160 L550,190" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+
+        <!-- AWS Cloud boundary -->
+        <rect x="60" y="190" width="980" height="330" rx="6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.55"/>
+        <text x="82" y="212" font-size="10" letter-spacing="1.5" opacity="0.6" fill="currentColor">AWS CLOUD</text>
+
+        <!-- Amplify hub -->
+        <rect x="360" y="200" width="300" height="65" rx="4" fill="var(--c-compute)" fill-opacity="0.12" stroke="var(--c-compute)" stroke-width="1.6"/>
+        <text x="510" y="223" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="currentColor">AWS Amplify</text>
+        <text x="510" y="239" text-anchor="middle" opacity="0.75" fill="currentColor">Next.js app — storefront + review dashboard</text>
+        <text x="510" y="252" text-anchor="middle" opacity="0.6" fill="currentColor" font-size="9">auto HTTPS · CDN · CI/CD from git</text>
+
+        <!-- Row B: data -->
+        <rect x="90" y="300" width="230" height="60" rx="4" fill="var(--c-db)" fill-opacity="0.1" stroke="var(--c-db)" stroke-width="1.4"/>
+        <text x="205" y="321" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Amazon RDS</text>
+        <text x="205" y="336" text-anchor="middle" opacity="0.7" fill="currentColor">orders, customers,</text>
+        <text x="205" y="349" text-anchor="middle" opacity="0.7" fill="currentColor">tailors, catalog + review status</text>
+
+        <rect x="350" y="300" width="230" height="60" rx="4" fill="var(--c-storage)" fill-opacity="0.1" stroke="var(--c-storage)" stroke-width="1.4"/>
+        <text x="465" y="321" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Amazon S3</text>
+        <text x="465" y="336" text-anchor="middle" opacity="0.7" fill="currentColor">catalog + generated</text>
+        <text x="465" y="349" text-anchor="middle" opacity="0.7" fill="currentColor">preview images</text>
+
+        <!-- Bedrock, spans the AI need for both live + scheduled flows -->
+        <rect x="770" y="285" width="240" height="105" rx="4" fill="var(--c-ai)" fill-opacity="0.12" stroke="var(--c-ai)" stroke-width="1.6"/>
+        <text x="890" y="306" text-anchor="middle" font-family="Georgia,serif" font-size="12.5" fill="currentColor">Amazon Bedrock</text>
+        <text x="890" y="322" text-anchor="middle" opacity="0.75" fill="currentColor">Claude — parses text,</text>
+        <text x="890" y="335" text-anchor="middle" opacity="0.75" fill="currentColor">analyzes trend images</text>
+        <text x="890" y="351" text-anchor="middle" opacity="0.75" fill="currentColor">Titan Image Generator —</text>
+        <text x="890" y="364" text-anchor="middle" opacity="0.75" fill="currentColor">image-to-image, inspired not copied</text>
+
+        <!-- connectors Amplify -> row B -->
+        <path d="M430,265 L430,278 L205,278 L205,300" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="317" y="273" text-anchor="middle" opacity="0.7" fill="currentColor">reads / writes</text>
+
+        <path d="M490,265 L490,286 L465,286 L465,300" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="478" y="298" text-anchor="middle" opacity="0.7" fill="currentColor">stores files</text>
+
+        <path d="M660,225 L740,225 L740,315 L770,315" fill="none" stroke="var(--c-ai)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="705" y="218" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">parses request + generates</text>
+        <text x="705" y="230" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">preview, synchronously</text>
+
+        <!-- Row C: scheduled AI pipeline (trend intake) -->
+        <text x="90" y="393" font-size="9.5" letter-spacing="0.5" opacity="0.6" fill="currentColor">SCHEDULED — TREND INTAKE (DOSSIER §5)</text>
+
+        <rect x="90" y="400" width="180" height="55" rx="4" fill="var(--c-integration)" fill-opacity="0.1" stroke="var(--c-integration)" stroke-width="1.4"/>
+        <text x="180" y="422" text-anchor="middle" font-family="Georgia,serif" font-size="11.5" fill="currentColor">Amazon EventBridge</text>
+        <text x="180" y="437" text-anchor="middle" opacity="0.7" fill="currentColor">weekly schedule</text>
+
+        <rect x="290" y="400" width="180" height="55" rx="4" fill="var(--c-compute)" fill-opacity="0.1" stroke="var(--c-compute)" stroke-width="1.4"/>
+        <text x="380" y="422" text-anchor="middle" font-family="Georgia,serif" font-size="11.5" fill="currentColor">AWS Lambda</text>
+        <text x="380" y="437" text-anchor="middle" opacity="0.7" fill="currentColor">trend-intake job</text>
+
+        <path d="M270,427 L290,427" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="280" y="418" text-anchor="middle" opacity="0.7" fill="currentColor" font-size="8.5">triggers</text>
+
+        <path d="M380,400 L380,388 L180,388 L180,360" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="270" y="385" text-anchor="middle" opacity="0.7" fill="currentColor" font-size="9.5">writes candidate, pending review</text>
+
+        <path d="M470,420 L740,420 L740,355 L770,355" fill="none" stroke="var(--c-ai)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="600" y="413" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">analyzes trends + regenerates</text>
+        <text x="600" y="425" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">inspired design image</text>
+
+        <!-- Auth: Clerk is decided but is NOT AWS, so it lives in the external row, not row B -->
+        <path d="M600,265 L600,540 L280,540 L280,570" fill="none" stroke="var(--c-security)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="608" y="472" opacity="0.85" fill="var(--c-security)">verifies session</text>
+        <text x="608" y="484" opacity="0.85" fill="var(--c-security)">(Clerk, external)</text>
+
+        <!-- External row: Clerk, payment, email — none of these are AWS -->
+        <text x="150" y="558" font-size="10" letter-spacing="1.5" opacity="0.55" fill="currentColor">EXTERNAL — NOT AWS</text>
+
+        <path d="M660,255 L1030,255 L1030,540 L640,540 L640,570" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="960" y="248" text-anchor="middle" opacity="0.7" fill="currentColor">checkout + stylist notifications</text>
+
+        <rect x="150" y="570" width="260" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="280" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Clerk</text>
+        <text x="280" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">customer + staff auth — decided</text>
+
+        <rect x="470" y="570" width="340" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="640" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Payment gateway + Resend</text>
+        <text x="640" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">Stripe — decided · Resend — built</text>
+
+      </g>
+    </svg>
+    <figcaption>
+      Bedrock moved inside the AWS boundary — it's an AWS service, unlike
+      calling Anthropic directly — which means Claude and image generation
+      no longer require a separate external dependency at all. Both AI
+      flows share the same Bedrock component for different reasons: the
+      live path (teal, top) calls it synchronously mid-conversation for
+      text parsing and a constrained, image-to-image preview generated
+      from the base catalog photo — never generated from scratch, which is
+      what keeps it close to buildable. The scheduled path (teal, bottom)
+      analyzes trend signals and regenerates an inspired image weekly, then
+      writes it to RDS as pending review, not directly to the catalog — a
+      human stylist has to approve it through the same Amplify-hosted
+      dashboard before it ever reaches a tailor. Auth, payment, and email
+      remain outside AWS entirely — Clerk (rust-red arrow) was chosen over
+      Cognito specifically because it isn't AWS: a managed service was
+      worth more than staying inside the boundary for a solo maintainer.
+    </figcaption>
+  </figure>
+
+  <h2>Every component, status honestly marked</h2>
+  <p class="section-note">Not a wishlist — this is what exists today versus what's still a decision or a build.</p>
+  <table>
+    <tr><th>Component</th><th>What it's for</th><th>Status</th></tr>
+    <tr><td>AWS Amplify</td><td>Hosts the Next.js app — pages, API routes, automatic HTTPS and CDN, deploys automatically from git</td><td><span class="status tbd">Not deployed</span></td></tr>
+    <tr><td>Amazon RDS (Postgres)</td><td>Orders, customer profiles, tailor records, eventually the catalog</td><td><span class="status tbd">Not started</span></td></tr>
+    <tr><td>Amazon S3</td><td>Catalog images and uploaded reference photos — currently images are just base64-emailed, doesn't scale</td><td><span class="status tbd">Not started — small task</span></td></tr>
+    <tr><td>Clerk (auth)</td><td>Customer accounts, plus separate staff logins for the tailor swipe tool and trend review dashboard. Decided over Cognito and Auth.js — see below</td><td><span class="status tbd">Decided — not built. Dashboard is unauthenticated today</span></td></tr>
+    <tr><td>Stripe (payment)</td><td>Actually taking money at checkout — the UI exists, nothing real is behind it. Decided over Telr/PayTabs — see below</td><td><span class="status tbd">Decided — merchant account blocked on incorporation</span></td></tr>
+    <tr><td>Resend</td><td>Emails the stylist when an order or upload comes in</td><td><span class="status built">Code built</span> — needs an API key to actually send</td></tr>
+    <tr><td>AWS Lambda</td><td>Runs the weekly trend-intake job — pulls trend signals, calls Bedrock to analyze them and regenerate an inspired candidate image, writes it to RDS as pending review (dossier §5)</td><td><span class="status tbd">Deliberately not yet — Phase 2</span></td></tr>
+    <tr><td>Amazon EventBridge</td><td>Triggers the Lambda job on a weekly schedule, matching the catalog's weekly refresh</td><td><span class="status tbd">Deliberately not yet — Phase 2</span></td></tr>
+    <tr><td>Amazon Bedrock (Claude + Titan Image Generator)</td><td>Called two distinct ways: synchronously from Amplify to parse a live customization request and generate a constrained preview image during a session, and by the scheduled Lambda job to analyze trend signals and regenerate an inspired (never copied) candidate image — same AWS service, two callers and cadences. Every trend-sourced candidate lands as pending review, never straight into the catalog — a human stylist approves it through the dashboard first</td><td><span class="status tbd">Deliberately not yet — Phase 1 validates the human-run version first</span></td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Why Bedrock lives inside the AWS boundary and Anthropic doesn't:</strong>
+    Calling Anthropic's API directly would mean a third-party dependency
+    outside AWS entirely — its own bill, its own outage surface, no shared
+    IAM. Amazon Bedrock hosts the same Claude models (plus Titan Image
+    Generator, which Anthropic doesn't offer) as a first-party AWS service,
+    so it shows up on the one AWS bill, inherits the same IAM permissions
+    as everything else in the diagram, and needed a separate box at all
+    only because it's genuinely a different capability — reasoning versus
+    image generation — not because it's a different vendor. Clerk, payment,
+    and Resend are the real external dependencies: third-party products
+    that AWS-hosted code happens to call over the internet, don't show up
+    on the AWS bill, and an AWS outage doesn't take them down — but a
+    Clerk, Resend, or Stripe outage isn't something AWS support can fix
+    either.
+  </div>
+
+  <h2>Auth and payment: decided</h2>
+  <p class="section-note">Both were open as of the last revision of this doc. One constraint settled both: this gets maintained by one person, so the option with the least ongoing operational surface won even where a "more AWS-native" or "more local" option existed.</p>
+  <table>
+    <tr><th>Decision</th><th>Chosen</th><th>Passed over</th></tr>
+    <tr>
+      <td>Auth</td>
+      <td><strong>Clerk</strong> — fully managed: prebuilt sign-in UI, session handling, and magic-link/social login all done for you. Free tier (~10k MAU) covers pilot scale, so "cheapest" and "easiest" agree here.</td>
+      <td><strong>Cognito</strong> stays inside AWS but has real, well-documented friction for custom flows. <strong>Auth.js</strong> is free but self-hosted — you own the session logic and DB adapter yourself. Both cost more in maintenance time than Clerk, even though Clerk is the paid option on paper.</td>
+    </tr>
+    <tr>
+      <td>Payment gateway</td>
+      <td><strong>Stripe</strong> — best documentation and developer experience by a wide margin. Stripe Checkout is a hosted page, so Shaklek's code never touches card details (near-zero PCI burden). Settles in AED, operates in the UAE directly.</td>
+      <td><strong>Telr / PayTabs</strong> are UAE-local and may integrate more natively with some local banks and bundle Tabby/Tamara BNPL — but cost more integration and maintenance effort without a clear offsetting advantage at pilot scale. Tabby still gets added as a separate direct integration later; Stripe doesn't block it.</td>
+    </tr>
+  </table>
+
+  <h2>How a request actually flows, step by step</h2>
+  <p class="section-note">The boxes above show what talks to what. This is what happens, in order, inside each of the two flows — deliberately detailed enough to show exactly which steps are real code today and which are still a sketch.</p>
+
+  <h3 class="flow-h3">A — Customer designs and checks out <span class="flow-tag">synchronous, seconds</span></h3>
+  <ol class="flow">
+    <li><span class="flow-status built">built</span> Browser requests <code>shaklek.com</code> → DNS resolves to AWS Amplify → Amplify serves the pre-rendered catalog page (<code>src/app/page.tsx</code>) from its CDN edge cache.</li>
+    <li><span class="flow-status built">built</span> Customer opens a catalog item → <code>/design/[slug]</code>, statically generated per item at build time from <code>src/data/catalog.ts</code> via <code>generateStaticParams()</code>.</li>
+    <li><span class="flow-status tbd">not built</span> Customer types a customization request (or taps Quick Customize) → browser <code>POST</code>s to a new Amplify API route, e.g. <code>/api/customize</code>. Today, Quick Customize just cycles a hardcoded local color list — no network call at all.</li>
+    <li><span class="flow-status tbd">not built</span> That route calls <strong>Claude on Bedrock</strong> to parse the free-text request into the structured design-spec schema (garment id, requested changes, notes), and to run the hard constraint checks: one fabric, one layer, no logos, and the originality-distance rule against any brand reference.</li>
+    <li><span class="flow-status tbd">not built</span> If the spec passes, the same route calls <strong>Titan Image Generator on Bedrock</strong> — image-to-image, conditioned on the base item's photo pulled from S3 plus the structured spec — producing a constrained preview. Never generated from a blank canvas; that's what keeps the preview close to something a tailor could actually cut.</li>
+    <li><span class="flow-status tbd">not built</span> If the spec fails a constraint check instead, no preview is generated — the request routes to a human stylist by email, exactly like today's Phase 1 flow (<code>/api/custom-requests</code>). The AI only ever adds a preview on top of that; it doesn't replace the human fallback.</li>
+    <li><span class="flow-status tbd">not built</span> The preview image is written to S3; its URL and the structured spec return to the browser and render next to the catalog photo.</li>
+    <li><span class="flow-status built">built</span> Customer proceeds to <code>/checkout</code> → fills in size, color, notes → total computed client-side from <code>src/data/colors.ts</code> pricing rules.</li>
+    <li><span class="flow-status tbd">not built</span> Checkout submits to <strong>Stripe Checkout</strong> (hosted payment page) instead of today's payment-method picker UI, which currently has no gateway behind it.</li>
+    <li><span class="flow-status tbd">not built</span> Stripe redirects back on success; a Stripe webhook hits an Amplify API route to confirm the payment and write the order to <strong>Amazon RDS</strong> as a durable record — today, an order only ever exists as an email.</li>
+    <li><span class="flow-status built">built</span> <code>/api/orders</code> emails <code>orders@shaklek.com</code> via Resend with the order details (needs <code>RESEND_API_KEY</code> to actually send today — currently just logs).</li>
+  </ol>
+
+  <h3 class="flow-h3">B — Weekly trend intake <span class="flow-tag">scheduled, asynchronous</span></h3>
+  <ol class="flow">
+    <li><span class="flow-status tbd">not built</span> <strong>Amazon EventBridge</strong> fires on a weekly schedule (e.g. Monday, early hours Gulf time), invoking an <strong>AWS Lambda</strong> trend-intake function.</li>
+    <li><span class="flow-status tbd">not built</span> Lambda pulls trend <em>signals</em> from configured sources — recurring silhouettes, colors, construction details — explicitly not full images or listings. This is the concrete mechanism behind the "not scraping and reproducing" rule in dossier §11, not just a policy statement.</li>
+    <li><span class="flow-status tbd">not built</span> Lambda calls <strong>Claude on Bedrock</strong> to turn the aggregated signals into a short list of candidate concepts: title, garment type, a description of the pattern being chased, source count, weeks running — the same shape already modeled in <code>src/data/trends.ts</code>.</li>
+    <li><span class="flow-status tbd">not built</span> For each candidate, Lambda calls <strong>Titan Image Generator on Bedrock</strong> — image-to-image, conditioned on a same-category base catalog photo from S3 — to produce an inspired, non-copied preview image, stored back to S3.</li>
+    <li><span class="flow-status tbd">not built</span> Lambda writes each candidate to <strong>Amazon RDS</strong> with <code>status = pending</code>. Never directly into the live catalog table — this is the row that makes the human-review step non-optional rather than a suggestion.</li>
+    <li><span class="flow-status built">built</span> A stylist opens <code>/dashboard/trends</code> (real UI, ships today) — sees each candidate's preview, signal description, source count, and weeks-running, and clicks Approve or Reject. Currently runs entirely on the mock data in <code>src/data/trends.ts</code>; nothing persists on reload yet.</li>
+    <li><span class="flow-status tbd">not built</span> Approve should write <code>status = approved</code> back to RDS and copy the candidate into the live catalog table, making it purchasable. Reject should mark it <code>rejected</code> and stop there. Today, both actions only update local component state in the browser.</li>
+    <li><span class="flow-status tbd">not built</span> The dashboard itself needs Clerk-based staff auth in front of it — right now <code>/dashboard/trends</code> is a public URL with no login at all.</li>
+  </ol>
+
+  <p class="footnote">Shaklek — technical architecture · prepared 10 August 2026, updated 11 August 2026 · companion to planning/aws-infrastructure-todo.md and planning/payment-auth-todo.md</p>
+</div>

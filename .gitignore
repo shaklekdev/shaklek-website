@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Node / Next.js (website/)
+website/node_modules/
+website/.next/
+website/out/
+website/.vercel/
+website/*.tsbuildinfo
+website/next-env.d.ts
+website/npm-debug.log*
+website/yarn-debug.log*
+website/yarn-error.log*
+website/.pnpm-debug.log*
+website/coverage/
+
+# env files — never committed, even if one shows up later
+**/.env*
+!**/.env.example
