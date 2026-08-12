@@ -1,25 +1,51 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import NotifyStylist from "@/components/NotifyStylist";
-import { catalog } from "@/data/catalog";
-import { LINEN_UPCHARGE } from "@/data/colors";
+import type { CartItem } from "@/lib/CartContext";
 
-export default async function OrderConfirmedPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | undefined>>;
-}) {
-  const params = await searchParams;
-  const item = catalog.find((i) => i.slug === params.slug);
-  if (!item) notFound();
+const LAST_ORDER_KEY = "shaklek-last-order";
 
-  const fabric = params.fabric === "linen" ? "linen" : "cotton";
-  const size = params.size ?? "M";
-  const color = params.color ?? "Ivory";
-  const request = params.request ?? "";
-  const method = params.method ?? "card";
-  const total = item.price + (fabric === "linen" ? LINEN_UPCHARGE : 0);
+type LastOrder = { items: CartItem[]; method: string; total: number };
+
+export default function OrderConfirmedPage() {
+  const [order, setOrder] = useState<LastOrder | null | undefined>(undefined);
+
+  // Deferred to an effect (not a lazy initializer) for the same SSR/hydration
+  // reason as CartContext — window.localStorage isn't available server-side.
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(LAST_ORDER_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setOrder(raw ? (JSON.parse(raw) as LastOrder) : null);
+    } catch {
+      setOrder(null);
+    }
+  }, []);
+
+  if (order === undefined) return null;
+
+  if (!order || order.items.length === 0) {
+    return (
+      <div className="flex flex-1 flex-col bg-bg">
+        <Header />
+        <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
+          <h1 className="text-[26px] text-text">No recent order found</h1>
+          <p className="subtitle mt-2">
+            If you just placed an order, check your email — otherwise head back to the catalog.
+          </p>
+          <Link
+            href="/"
+            className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
+          >
+            Back to catalog
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-1 flex-col bg-bg">
@@ -39,36 +65,29 @@ export default async function OrderConfirmedPage({
 
         <h1 className="text-[26px] text-text">Order confirmed</h1>
         <p className="subtitle mx-auto max-w-sm">
-          Thank you — your {item.name.toLowerCase()} is on its way to being
-          made, just for you.
+          Thank you — your {order.items.length === 1 ? "piece is" : "pieces are"} on{" "}
+          {order.items.length === 1 ? "its" : "their"} way to being made, just for you.
         </p>
 
-        <div className="mt-8 rounded-shaklek-sm border border-border bg-surface p-5 text-left">
-          <p className="text-[15px] font-medium text-text">{item.name}</p>
-          <p className="mt-1 text-xs text-text-2">
-            {fabric === "cotton" ? "Cotton" : "Linen"} · {color} · Size {size}
-          </p>
-          {request && (
-            <p className="mt-1 text-xs text-text-2">
-              Requested: &ldquo;{request}&rdquo;
-            </p>
-          )}
-          <p className="mt-3 font-display text-lg text-text">AED {total}</p>
+        <div className="mt-8 space-y-3 text-left">
+          {order.items.map((item) => (
+            <div key={item.id} className="rounded-shaklek-sm border border-border bg-surface p-5">
+              <p className="text-[15px] font-medium text-text">{item.name}</p>
+              <p className="mt-1 text-xs text-text-2">
+                {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size {item.size}
+              </p>
+              {item.changes.length > 0 && (
+                <p className="mt-1 text-xs text-text-2">{item.changes.join(", ")}</p>
+              )}
+              <p className="mt-3 font-display text-lg text-text">AED {item.price}</p>
+            </div>
+          ))}
         </div>
 
+        <p className="mt-4 text-right font-display text-xl text-text">Total AED {order.total}</p>
+
         <div className="mt-6">
-          <NotifyStylist
-            order={{
-              slug: item.slug,
-              name: item.name,
-              size,
-              fabric,
-              color,
-              request,
-              total,
-              method,
-            }}
-          />
+          <NotifyStylist order={order} />
         </div>
 
         <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">

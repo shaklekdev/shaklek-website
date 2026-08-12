@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/CartContext";
 
 type PaymentMethod = "apple-pay" | "card" | "tabby";
 
@@ -11,23 +12,23 @@ const methods: { id: PaymentMethod; label: string; sub: string }[] = [
   { id: "tabby", label: "Tabby", sub: "4 payments, no interest" },
 ];
 
-export default function CheckoutForm({
-  orderQuery,
-  total,
-}: {
-  orderQuery: string;
-  total: number;
-}) {
+const LAST_ORDER_KEY = "shaklek-last-order";
+
+export default function CheckoutForm({ total }: { total: number }) {
   const router = useRouter();
+  const { items, clear } = useCart();
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
   const [submitting, setSubmitting] = useState(false);
 
   function handlePay() {
     setSubmitting(true);
     // No payment gateway connected yet — this is a stand-in until a real
-    // provider (Stripe/Telr/PayTabs) is wired up. It still produces a
-    // real order record downstream via the confirmation page.
-    router.push(`/order-confirmed?${orderQuery}&method=${method}`);
+    // provider (Stripe) is wired up. It still produces a real order record
+    // downstream via the confirmation page, stashed in localStorage since
+    // there's no backend/DB yet to persist it to.
+    window.localStorage.setItem(LAST_ORDER_KEY, JSON.stringify({ items, method, total }));
+    clear();
+    router.push("/order-confirmed");
   }
 
   return (

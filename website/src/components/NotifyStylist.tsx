@@ -1,17 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { CartItem } from "@/lib/CartContext";
 
-type OrderPayload = {
-  slug: string;
-  name: string;
-  size: string;
-  fabric: string;
-  color: string;
-  request: string;
-  total: number;
-  method: string;
-};
+type OrderPayload = { items: CartItem[]; method: string; total: number };
 
 export default function NotifyStylist({ order }: { order: OrderPayload }) {
   const [status, setStatus] = useState<"sending" | "sent" | "queued">("sending");
