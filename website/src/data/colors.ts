@@ -12,7 +12,7 @@ export const colors: ColorOption[] = [
   { name: "Gold", hex: "#c9a84c" },
 ];
 
-export const sizes = ["XS", "S", "M", "L", "XL"] as const;
+export const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const;
 export type Size = (typeof sizes)[number];
 
 export const LINEN_UPCHARGE = 60;

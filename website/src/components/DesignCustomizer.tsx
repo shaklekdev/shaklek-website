@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { CatalogItem } from "@/data/catalog";
-import { sizes, LINEN_UPCHARGE } from "@/data/colors";
+import { LINEN_UPCHARGE } from "@/data/colors";
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import CustomizeChat from "@/components/CustomizeChat";
 import FabricColorPicker from "@/components/FabricColorPicker";
+import SizePicker from "@/components/SizePicker";
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
@@ -35,29 +36,14 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           onColorChange={(color) => setSpec((s) => ({ ...s, color }))}
         />
 
-        <div className="mt-8">
-          <p className="mb-3 text-sm text-text">Size</p>
-          <div className="grid grid-cols-5 gap-2">
-            {sizes.map((s) => (
-              <button
-                key={s}
-                onClick={() => setSpec((spec) => ({ ...spec, size: s }))}
-                aria-pressed={s === spec.size}
-                className={`rounded-shaklek-xs border py-3 font-display text-sm transition-colors ${
-                  s === spec.size
-                    ? "border-accent bg-accent text-white"
-                    : "border-border-strong text-text"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-text-3">
-            Free bucket size, no measurement needed. Want a more precise
-            fit? Camera measurement is a free, optional upgrade at checkout.
-          </p>
-        </div>
+        <SizePicker
+          sizeMode={spec.sizeMode}
+          size={spec.size}
+          measurements={spec.measurements}
+          onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
+          onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
+          onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
+        />
 
         <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
           <div>
@@ -70,11 +56,14 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 pathname: "/checkout",
                 query: {
                   slug: item.slug,
-                  size: spec.size,
+                  size: spec.sizeMode === "tailored" ? "Tailored" : spec.size,
                   fabric: spec.fabric,
                   color: spec.color,
                   request: [
                     ...spec.changes.map((c) => c.label),
+                    spec.sizeMode === "tailored" && spec.measurements
+                      ? `Measurements: ${spec.measurements}`
+                      : "",
                     spec.freeformNotes,
                   ]
                     .filter(Boolean)

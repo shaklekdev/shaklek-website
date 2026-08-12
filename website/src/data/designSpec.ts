@@ -39,12 +39,16 @@ export type ConstraintCheck = {
   flagNotes: string[]; // human-readable reasons for any false flag above
 };
 
+export type SizeMode = "standard" | "tailored";
+
 export type DesignSpec = {
   base: BaseSource;
   garmentType: GarmentType;
   fabric: Fabric;
   color: string;
   size: string;
+  sizeMode: SizeMode;
+  measurements: string; // used when sizeMode is "tailored" — no AI needed, just carried to the tailor
   changes: SilhouetteChange[];
   freeformNotes: string; // raw customer text — always kept alongside the structured parse
   constraints: ConstraintCheck;
@@ -65,6 +69,8 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     fabric: "cotton",
     color: "Ivory",
     size: "M",
+    sizeMode: "standard",
+    measurements: "",
     changes: [],
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },
@@ -78,6 +84,8 @@ export function createSpecFromUpload(fileName: string, imageDataUrl: string): De
     fabric: "cotton",
     color: "Ivory",
     size: "M",
+    sizeMode: "standard",
+    measurements: "",
     changes: [],
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },

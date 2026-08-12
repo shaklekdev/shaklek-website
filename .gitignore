@@ -18,3 +18,4 @@ website/coverage/
 # env files — never committed, even if one shows up later
 **/.env*
 !**/.env.example
+photos/

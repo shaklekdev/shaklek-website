@@ -203,8 +203,8 @@ export default function CustomizeChat({
         </button>
       </div>
       <p className="mt-2 text-xs text-text-3">
-        A stylist reviews every request before it goes to the tailor — this preview shows what
-        Shaklek can automatically apply today.
+        Everything above is what gets made — fabric, color, and every change listed on the
+        preview are committed, not a best-effort guess.
       </p>
     </div>
   );

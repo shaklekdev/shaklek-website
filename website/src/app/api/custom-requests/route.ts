@@ -7,8 +7,18 @@ import { NextRequest, NextResponse } from "next/server";
 // Needs RESEND_API_KEY to actually send. Without it, logs instead of
 // throwing, same fallback pattern as /api/orders.
 export async function POST(req: NextRequest) {
-  const { email, notes, fileName, fileDataUrl, garmentType, fabric, color, changes } =
-    await req.json();
+  const {
+    email,
+    notes,
+    fileName,
+    fileDataUrl,
+    garmentType,
+    fabric,
+    color,
+    size,
+    measurements,
+    changes,
+  } = await req.json();
 
   if (!email || !fileDataUrl) {
     return NextResponse.json(
@@ -18,14 +28,14 @@ export async function POST(req: NextRequest) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  const specLine = [garmentType, fabric, color].filter(Boolean).join(", ");
+  const specLine = [garmentType, fabric, color, size].filter(Boolean).join(", ");
   const changesLine =
     Array.isArray(changes) && changes.length ? changes.join(", ") : null;
   const summary = `New "upload your own" request from ${email}${
     specLine ? `\nCustomized as: ${specLine}` : ""
   }${changesLine ? `\nRequested changes: ${changesLine}` : ""}${
-    notes ? `\nNotes: "${notes}"` : ""
-  }`;
+    measurements ? `\nMeasurements: ${measurements}` : ""
+  }${notes ? `\nNotes: "${notes}"` : ""}`;
 
   if (!apiKey) {
     console.log("[custom-requests] RESEND_API_KEY not set — not emailed. Details:");
