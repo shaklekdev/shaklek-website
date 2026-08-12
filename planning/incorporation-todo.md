@@ -1,6 +1,6 @@
 # Incorporation — TODO
 
-Status: **nothing started.** This has been referenced repeatedly across the other planning docs as a blocker (Stripe merchant account, trademark registration, a real business bank account) but never actually scoped until now. You're already a UAE resident with an Emirates ID and setting up in Dubai — that rules out needing an investor/residency visa as part of this, which simplifies things a lot.
+Status: **nothing filed yet, but the licence path is now identified.** This has been referenced repeatedly across the other planning docs as a blocker (Stripe merchant account, trademark registration, a real business bank account). You're already a UAE resident with an Emirates ID and setting up in Dubai — no investor/residency visa needed. Checked directly against the official Invest in Dubai government portal (12 August 2026): the core retail activity ("Ready-made Garments Trading") is confirmed approval-free, meaning the fast ~5-minute **Instant Licence** is very likely available — pending only confirming the "Tailoring" activity clears the same bar. See below.
 
 Not legal or tax advice — this is a researched starting checklist, not a substitute for a real Dubai business-setup consultant or the DED itself confirming specifics before you pay for anything.
 
@@ -12,15 +12,25 @@ Every generic "mainland vs free zone" guide leads with free zone being cheaper a
 
 **So: go Mainland (Dubai DED), not a free zone**, unless a specific reason to prefer free zone shows up later (there's also a hybrid option since 2025 — a free zone company can get a mainland branch permit for ~AED 5,000 for up to 6 months, so free-zone-then-add-mainland isn't a dead end if the cost tradeoff ever matters — but there's no reason to start there given the direct answer is just to go mainland first).
 
+## Which licence type — checked against the official Invest in Dubai portal
+
+Dubai's own portal (Invest in Dubai) lists three mainland trade licence types. This matters a lot for Shaklek specifically:
+
+- **Instant Licence** — issued in ~5 minutes, for activities that don't need external/third-party approval. Includes a **virtual site for the first year** (solves the physical-address requirement below), Dubai Chamber membership, a GDRFA establishment card, and a MOHRE establishment card allowing up to **3 employees**. Available to Sole Establishment, LLC, LLC-SO, and Civil Company structures.
+- **Normal Licence** — needs an MOA and an actual site lease contract (Ejari). Required if the chosen activity needs external approval, or once the business outgrows the Instant Licence's scope.
+- **eTrader Licence** — sole establishment only, home-based, ~AED 1,370 all-in (AED 1,070 licence + AED 300 Chamber fee). Cheapest and fastest, but likely too narrow for where this is headed (no employee allowance, home-based only).
+
+**Confirmed via UAE business-activity classification: "Ready-made Garments Trading" (activity codes 4771.00–4771.95) does not require third-party approval**, and isn't subject to AML regulation. That's the specific condition the Instant Licence requires — so Shaklek's core retail activity is very likely Instant-Licence-eligible.
+
+The one open question: Shaklek isn't *only* ready-made garments trading — it's made-to-order/tailoring plus an e-commerce platform. "Tailoring" as a services activity may sit under a different code with different rules than the pure trading code above. **This is the actual thing to check on the Invest in Dubai portal's activity search before applying** — search both "Ready-made Garments Trading" and "Tailoring," and if both come back approval-free, Instant Licence is the clear fast/cheap starting point; if tailoring needs Normal Licence, that likely governs which route the whole application takes.
+
 ## Checklist, in order
 
 - [ ] **Decide legal structure** — almost certainly a **Mainland Sole Establishment** (single owner, simplest) unless you're bringing on a co-founder/investor soon, in which case an **LLC** structure fits better. Worth deciding this before the next steps since it changes the paperwork.
-- [ ] **Reserve the trade name "Shaklek"** with Dubai DED — check it's not already taken as a UAE trade name (separate from the trademark check below)
-- [ ] **Confirm the business activity code(s)** with DED or a setup consultant — likely something like "Ready-made Garments Trading" plus an e-commerce activity code. Getting this wrong or too narrow can block adding services later (e.g. the tailor-swipe/trend-dashboard side of the business), so worth getting right the first time rather than cheapest-first.
-- [ ] **Initial approval** from DED
-- [ ] **MOA** (Memorandum of Association) if structured as an LLC — not needed for a sole establishment
-- [ ] **Physical address / Ejari** — mainland licenses generally require a real registered address (could be a small office, sometimes a flexi-desk qualifies depending on activity — confirm which applies to this activity code)
-- [ ] **Trade license issuance** — this is the document everything downstream depends on
+- [ ] **Search both "Ready-made Garments Trading" and "Tailoring" activities** on the Invest in Dubai portal's activity list — confirms Instant vs. Normal Licence eligibility before anything else below
+- [ ] **Reserve the trade name "Shaklek"** with Dubai DED (a listed service on the same portal) — check it's not already taken as a UAE trade name (separate from the trademark check below)
+- [ ] If Instant-Licence-eligible: **apply via the Invest in Dubai portal directly** — ~5 minutes, includes the virtual site, Chamber membership, and establishment cards in one step, no separate MOA/Ejari step needed
+- [ ] If not: **Initial approval** from DED, then **MOA** (if LLC), then a real **site lease/Ejari**, then licence issuance via the Normal Licence route
 - [ ] **Corporate bank account** — flag this now: UAE banks are known to be slow and selective with new small e-commerce businesses, often taking several weeks and sometimes multiple bank attempts even with a valid trade license in hand. Start this the moment the license is issued, not after.
 
 ## What this unblocks, once the trade license exists
@@ -57,3 +67,5 @@ Sources checked 2026-08-12:
 - [UAE account activation requirements — Stripe Support](https://support.stripe.com/questions/uae-account-activation-requirements)
 - [Trademark Registration in UAE 2026 — Emirabiz](https://emirabiz.com/trademark-registration-process-uae/)
 - [Register Trademark — UAE Ministry of Economy & Tourism](https://www.moet.gov.ae/en/w/register-trademark%C2%A0)
+- [Request to issue a trade licence — Invest in Dubai (official Government of Dubai portal)](https://invest.dubai.ae) — Instant/Normal/eTrader licence types, confirmed directly against this page
+- [Ready-made Garments Trading License in Dubai — IFZA](https://ifza.com/en/commercial-licence/ready-made-garments-trading-license-dubai/) — activity codes 4771.00–4771.95 confirmed no third-party approval required
