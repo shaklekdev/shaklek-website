@@ -23,8 +23,8 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 - [ ] **AWS Budgets + a billing alarm**, set up on day one, before anything else goes live
 
 ## Database
-- [ ] **RDS Postgres**, `db.t4g.micro`, single-AZ, no read replica — holds the orders/customer/tailor tables from `backend-todo.md`
-- [ ] Don't build this until the backend schema work is actually ready to use it (see Sequencing note below)
+- [ ] **RDS Postgres**, `db.t4g.micro`, single-AZ, no read replica — holds the orders/customer tables from `backend-todo.md`
+- [x] Backend schema + persistence code is now ready (`website/src/db/schema.ts`, wired into `/api/orders`) — the sequencing note below is satisfied; provisioning RDS is now unblocked whenever the cost is approved (see cost-guardrail rule — state the exact monthly figure before creating it)
 
 ## Storage
 - [ ] **S3 bucket** for catalog images and uploaded reference photos — genuinely a small task: create the bucket, attach an IAM permission so Amplify can write to it, swap `/api/custom-requests` from base64-emailing images to uploading them to S3 instead. Not the same scope as the database work.
@@ -44,4 +44,4 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 - [ ] Rough target: still roughly **$30–50/month or less** at pilot scale, likely on the lower end of that given Amplify's usage-based pricing versus a 24/7 EC2 instance. Re-check once real usage exists.
 
 ## Sequencing note
-Don't build the RDS database until `backend-todo.md`'s schema work is actually ready to use it — standing up infrastructure ahead of the code that needs it is exactly the kind of premature spend this whole project has otherwise been careful to avoid. Get Amplify hosting live first; everything else follows from there.
+Originally: don't build the RDS database until `backend-todo.md`'s schema work is actually ready to use it. **Satisfied as of 2026-08-13** — schema and persistence code exist and degrade gracefully without a live database, so the only remaining step is provisioning RDS itself (cost-gated, see Database section above).

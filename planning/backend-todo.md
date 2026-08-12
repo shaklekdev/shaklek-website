@@ -1,21 +1,21 @@
 # Backend — TODO
 
-Status: essentially none exists yet. There are two Next.js API routes (`/api/orders`, `/api/custom-requests`) that email a stylist — no database, no persistence, no admin tooling.
+Status: schema and persistence code exist (2026-08-13), but no RDS instance is provisioned yet — `DATABASE_URL` is unset, so orders still only exist as emails in practice. The upload flow was unified into `/api/orders`/`CustomizeChat` earlier this session; there is no separate `/api/custom-requests` route anymore.
 
 ## Done
 - [x] `/api/orders` — receives checkout data, emails `orders@shaklek.com` via Resend (needs `RESEND_API_KEY` to actually send — currently logs instead)
-- [x] `/api/custom-requests` — receives upload-your-own submissions with image attachment, same email pipeline
 - [x] `/dashboard/trends` — trend review dashboard UI (approve/reject/revert candidates, filter by status). Real interaction logic, but running entirely on mock data in `src/data/trends.ts` — no database, no real Bedrock trend-intake job feeding it yet, no auth guarding it. This is the frontend half of the "Tailor swipe tool" / "Admin dashboard" items below; the AI pipeline and persistence still need building.
+- [x] **Order schema + persistence code** — `website/src/db/schema.ts` (Drizzle): `customers`, `orders`, `order_items` tables; migration generated at `website/drizzle/0000_quiet_fallen_one.sql`. `/api/orders` now writes to the DB via `getDb()` (`website/src/db/client.ts`) before emailing — no-ops with a log line when `DATABASE_URL` is unset, same degrade-gracefully pattern as the Resend key, so this shipped without needing RDS to exist first.
 
 ## To build, roughly in order
 
 ### 1. A real database
-Nothing is persisted right now — every order only exists as an email, if that. This is the most urgent gap.
-- [ ] Stand up Postgres (see `aws-infrastructure-todo.md` for hosting choice)
-- [ ] **Orders table** — every checkout should be a durable record, not just an email
-- [ ] **Customer table** — the business dossier's "customer database" (§5): style preferences, measurements, order history
-- [ ] **Tailor table** — the dossier's "tailor database": skills by garment type, spec-compliance history, reliability
-- [ ] **Catalog table** — move catalog items out of the hardcoded `src/data/catalog.ts` file into the database once there's an admin tool to manage it
+Schema and write path are ready (see above) but nothing actually persists until RDS exists — that's a billable AWS resource, provisioned separately per the cost-guardrail rule, not bundled into this code change.
+- [ ] Stand up RDS Postgres (`db.t4g.micro`, single-AZ — see `aws-infrastructure-todo.md`), set `DATABASE_URL` in Amplify env vars, run `npx drizzle-kit migrate` (or apply `drizzle/0000_quiet_fallen_one.sql` directly) against it
+- [x] **Orders + order_items tables** — schema written, not yet applied to a real database
+- [x] **Customers table** — schema written (email only for now; style preferences/measurement history from dossier §5 not modeled yet), not yet applied to a real database
+- [ ] **Tailor table** — the dossier's "tailor database": skills by garment type, spec-compliance history, reliability — not started, waits on the tailor swipe tool actually needing it
+- [ ] **Catalog table** — move catalog items out of the hardcoded `src/data/catalog.ts` file into the database once there's an admin tool to manage it — not started, waits on that admin tool
 
 ### 2. Tailor swipe tool
 From dossier §5 — the mechanism that builds the catalog and validates producibility. The AI-trend-candidate half of this now has a working UI at `/dashboard/trends` (mock data) — still needs: real candidates from the Bedrock trend-intake job (`ai-integration-todo.md`), a database instead of hardcoded mock data, and tailor-specific producibility review distinct from the stylist's originality/quality review.
