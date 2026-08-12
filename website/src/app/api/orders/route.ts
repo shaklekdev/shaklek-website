@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
+import { getDb, schema } from "@/db/client";
 
 type OrderItem = {
   name: string;
+  category?: string;
   fabric: string;
   color: string;
   size: string;
@@ -11,6 +14,53 @@ type OrderItem = {
   price: number;
   previewImage?: string; // uploaded reference photo (data URL), if this item came from /upload
 };
+
+// Persists the order to Postgres. No RDS instance exists yet
+// (aws-infrastructure-todo.md) — DATABASE_URL is unset until then, so
+// getDb() returns null and this just logs, same as the email path below
+// when RESEND_API_KEY is missing.
+async function persistOrder(items: OrderItem[], method: string, total: number, email: string) {
+  const db = getDb();
+  if (!db) {
+    console.log("[orders] DATABASE_URL not set — order not persisted to DB.");
+    return;
+  }
+
+  const [customer] = await db
+    .insert(schema.customers)
+    .values({ email })
+    .onConflictDoNothing({ target: schema.customers.email })
+    .returning();
+
+  const customerRow =
+    customer ??
+    (await db.select().from(schema.customers).where(eq(schema.customers.email, email)))[0];
+
+  const [orderRow] = await db
+    .insert(schema.orders)
+    .values({
+      customerId: customerRow.id,
+      totalAed: String(total),
+      paymentMethod: method,
+    })
+    .returning();
+
+  await db.insert(schema.orderItems).values(
+    items.map((item) => ({
+      orderId: orderRow.id,
+      name: item.name,
+      category: item.category,
+      fabric: item.fabric,
+      color: item.color,
+      size: item.size,
+      measurements: item.measurements,
+      changes: item.changes ?? [],
+      freeformNotes: item.freeformNotes,
+      priceAed: String(item.price),
+      hasReferenceImage: Boolean(item.previewImage),
+    })),
+  );
+}
 
 // Sends the stylist-handoff notification for a new order (one or more
 // items from the cart, from the catalog and/or uploaded references).
@@ -30,6 +80,14 @@ export async function POST(req: NextRequest) {
 
   if (!Array.isArray(items) || items.length === 0) {
     return NextResponse.json({ ok: false, error: "No items in order" }, { status: 400 });
+  }
+
+  try {
+    await persistOrder(items, method, total, email);
+  } catch (err) {
+    // A DB write failure shouldn't block the order from being emailed —
+    // the email is still the source of truth until this is fully proven out.
+    console.error("[orders] Failed to persist order to DB:", err);
   }
 
   const itemLines = items
