@@ -20,12 +20,6 @@ export default function Header() {
             Catalog
           </Link>
           <Link
-            href="/upload"
-            className="hidden hover:text-text transition-colors sm:inline"
-          >
-            Upload your own
-          </Link>
-          <Link
             href="/how-it-works"
             className="hidden hover:text-text transition-colors sm:inline"
           >
