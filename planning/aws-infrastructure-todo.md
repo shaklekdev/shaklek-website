@@ -9,12 +9,13 @@ This plan is deliberately sized for a pre-revenue pilot, not a scaled business �
 ## Revision note
 Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead — it's AWS's own managed hosting product, purpose-built for apps like this one (automatic HTTPS, CDN, CI/CD from git, no manual server/Nginx/process-manager setup). Gets the same "real AWS, cost-optimized" goal with close to none of raw EC2's manual operational overhead, and likely cheaper at near-zero traffic since it's usage-priced rather than a server running 24/7.
 
-## AI: Amazon Bedrock, not the direct Anthropic API
-Decided **Amazon Bedrock** over calling Anthropic directly. Reasoning:
-- Pricing is roughly at parity — Bedrock doesn't add a real discount at pilot scale (only kicks in with Provisioned Throughput at high committed volume), so this isn't a cost call.
-- The real reason is **multi-model access**: two distinct AI needs exist — Claude for text/reasoning, and image generation for design previews and trend-candidate regeneration. Claude doesn't generate images. Bedrock hosts both Claude *and* Titan Image Generator behind one AWS-native API, so both needs are met without adding a second, non-AWS vendor.
-- Practical upside: shows up on the one AWS bill, shares IAM with everything else Amplify/Lambda already touch, no separate vendor account/API key to manage outside AWS.
-- Two callers, same service: Amplify calls Bedrock synchronously for live customization parsing + preview generation during a customer session; the weekly Lambda trend-intake job calls Bedrock to analyze trend signals and regenerate an inspired (not copied) candidate image. See `aws-architecture-diagram.html` for the full flow, and `ai-integration-todo.md` for the product-level detail.
+## AI: Google Gemini API (Nano Banana), not Amazon Bedrock
+**Superseded 12 August 2026.** Previously decided Amazon Bedrock (Claude + Nova Canvas, itself a correction from an earlier Titan Image Generator reference) — now moved to the **Google Gemini API** for both text and image, external to AWS entirely. Reasoning:
+- Nano Banana's specific strength is consistent, targeted image edits — change one thing on a garment photo, keep everything else identical — a better technical fit for the live customization preview than Nova Canvas was. Not a lateral swap, a real capability upgrade for the core product loop.
+- Text parsing moved too, for operational simplicity: one external AI vendor (Google) instead of splitting across AWS Bedrock (Claude) and Google (images). Consistent with this project's running pattern of favoring least ongoing maintenance for a solo founder (same logic as Clerk over Cognito, Stripe over Telr).
+- The real cost of this move: AI no longer shares AWS's bill or IAM. It's a genuine external dependency now, same category as Clerk and Stripe — own account, own outage surface, own bill. That's a real trade-off, not a free upgrade.
+- Two callers, same API: Amplify calls Gemini synchronously for live customization parsing + preview generation during a customer session; the weekly Lambda trend-intake job calls Gemini to analyze trend signals and regenerate an inspired (not copied) candidate image. See `aws-architecture-diagram.html` for the full flow, and `ai-integration-todo.md` for the product-level detail.
+- Open item: confirm exactly which Gemini image model/tier is in use (Nano Banana vs. Nano Banana Pro have different free-tier terms) before this becomes a real cost line.
 
 ## Immediate: get the site live at all
 - [ ] **AWS Amplify Hosting** — connect the Next.js project (`~/Desktop/Shaklek/website`), deploys automatically on every push, HTTPS and CDN handled automatically

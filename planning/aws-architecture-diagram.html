@@ -80,9 +80,10 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
   <p class="dek">
     Every service the product needs, how they connect, and — just as
     important — which ones are actually AWS versus third-party APIs that
-    happen to be called from AWS. This now includes the AI layer as a real
-    part of the architecture, not a footnote: it's actually two distinct
-    flows with different AWS services behind them, not one box.
+    happen to be called from AWS. The AI layer is a real part of this, not
+    a footnote: two distinct flows (live customization, weekly trend
+    intake) that both call the same external Google Gemini API, not an
+    AWS service.
   </p>
 
   <div class="legend">
@@ -96,7 +97,7 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
   </div>
 
   <figure>
-    <svg viewBox="0 0 1100 660" role="img" aria-label="Architecture diagram inside an AWS Cloud boundary: customer and staff browsers reach shaklek.com via DNS, which routes to AWS Amplify. Amplify reads and writes Amazon RDS, stores files in Amazon S3, checks sessions against Clerk, and calls Amazon Bedrock — which hosts both Claude for reasoning and Titan Image Generator for image-to-image generation — to parse live customization requests and generate a constrained preview image during a customer session. Separately, Amazon EventBridge triggers an AWS Lambda function on a weekly schedule; that Lambda also calls Bedrock to analyze trend signals and regenerate an inspired, non-copied design image, then writes the candidate to RDS with a pending-review status for a human stylist to approve through the same Amplify-hosted dashboard before anything reaches a tailor. Outside the AWS boundary, the remaining external dependencies are Clerk for authentication, the Stripe payment gateway, and the Resend email service.">
+    <svg viewBox="0 0 1100 680" role="img" aria-label="Architecture diagram inside an AWS Cloud boundary: customer and staff browsers reach shaklek.com via DNS, which routes to AWS Amplify. Amplify reads and writes Amazon RDS and stores files in Amazon S3, both inside AWS. Everything AI-related is now external to AWS: Amplify calls the Google Gemini API, specifically the Nano Banana model, synchronously to parse a live customization request and generate a constrained preview image during a customer session. Separately, Amazon EventBridge triggers an AWS Lambda function on a weekly schedule; that Lambda also calls Gemini to analyze trend signals and regenerate an inspired, non-copied design image, then writes the candidate to RDS with a pending-review status for a human stylist to approve through the same Amplify-hosted dashboard before anything reaches a tailor. Outside the AWS boundary sit three external dependencies: the Google Gemini API for all AI, Clerk for authentication, and the Stripe payment gateway plus Resend for email.">
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="currentColor" />
@@ -113,25 +114,25 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
         <text x="860" y="41" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="currentColor">Staff / tailor</text>
         <text x="860" y="57" text-anchor="middle" fill="currentColor" opacity="0.6">browser — review dashboard</text>
 
-        <path d="M240,70 L240,90 L500,90 L500,110" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
-        <path d="M860,70 L860,90 L600,90 L600,110" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M240,70 L240,90 L370,90 L370,110" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M860,70 L860,90 L450,90 L450,110" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
 
         <!-- DNS -->
-        <rect x="450" y="110" width="200" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
-        <text x="550" y="131" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="currentColor">DNS</text>
-        <text x="550" y="147" text-anchor="middle" fill="currentColor" opacity="0.6">shaklek.com</text>
+        <rect x="310" y="110" width="200" height="50" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <text x="410" y="131" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="currentColor">DNS</text>
+        <text x="410" y="147" text-anchor="middle" fill="currentColor" opacity="0.6">shaklek.com</text>
 
-        <path d="M550,160 L550,190" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <path d="M410,160 L410,190" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
 
         <!-- AWS Cloud boundary -->
-        <rect x="60" y="190" width="980" height="330" rx="6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.55"/>
+        <rect x="60" y="190" width="800" height="330" rx="6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="6 4" opacity="0.55"/>
         <text x="82" y="212" font-size="10" letter-spacing="1.5" opacity="0.6" fill="currentColor">AWS CLOUD</text>
 
         <!-- Amplify hub -->
-        <rect x="360" y="200" width="300" height="65" rx="4" fill="var(--c-compute)" fill-opacity="0.12" stroke="var(--c-compute)" stroke-width="1.6"/>
-        <text x="510" y="223" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="currentColor">AWS Amplify</text>
-        <text x="510" y="239" text-anchor="middle" opacity="0.75" fill="currentColor">Next.js app — storefront + review dashboard</text>
-        <text x="510" y="252" text-anchor="middle" opacity="0.6" fill="currentColor" font-size="9">auto HTTPS · CDN · CI/CD from git</text>
+        <rect x="260" y="200" width="300" height="65" rx="4" fill="var(--c-compute)" fill-opacity="0.12" stroke="var(--c-compute)" stroke-width="1.6"/>
+        <text x="410" y="223" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="currentColor">AWS Amplify</text>
+        <text x="410" y="239" text-anchor="middle" opacity="0.75" fill="currentColor">Next.js app — storefront + review dashboard</text>
+        <text x="410" y="252" text-anchor="middle" opacity="0.6" fill="currentColor" font-size="9">auto HTTPS · CDN · CI/CD from git</text>
 
         <!-- Row B: data -->
         <rect x="90" y="300" width="230" height="60" rx="4" fill="var(--c-db)" fill-opacity="0.1" stroke="var(--c-db)" stroke-width="1.4"/>
@@ -144,26 +145,14 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
         <text x="465" y="336" text-anchor="middle" opacity="0.7" fill="currentColor">catalog + generated</text>
         <text x="465" y="349" text-anchor="middle" opacity="0.7" fill="currentColor">preview images</text>
 
-        <!-- Bedrock, spans the AI need for both live + scheduled flows -->
-        <rect x="770" y="285" width="240" height="105" rx="4" fill="var(--c-ai)" fill-opacity="0.12" stroke="var(--c-ai)" stroke-width="1.6"/>
-        <text x="890" y="306" text-anchor="middle" font-family="Georgia,serif" font-size="12.5" fill="currentColor">Amazon Bedrock</text>
-        <text x="890" y="322" text-anchor="middle" opacity="0.75" fill="currentColor">Claude — parses text,</text>
-        <text x="890" y="335" text-anchor="middle" opacity="0.75" fill="currentColor">analyzes trend images</text>
-        <text x="890" y="351" text-anchor="middle" opacity="0.75" fill="currentColor">Titan Image Generator —</text>
-        <text x="890" y="364" text-anchor="middle" opacity="0.75" fill="currentColor">image-to-image, inspired not copied</text>
-
         <!-- connectors Amplify -> row B -->
-        <path d="M430,265 L430,278 L205,278 L205,300" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
-        <text x="317" y="273" text-anchor="middle" opacity="0.7" fill="currentColor">reads / writes</text>
+        <path d="M330,265 L330,278 L205,278 L205,300" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="267" y="273" text-anchor="middle" opacity="0.7" fill="currentColor">reads / writes</text>
 
-        <path d="M490,265 L490,286 L465,286 L465,300" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
-        <text x="478" y="298" text-anchor="middle" opacity="0.7" fill="currentColor">stores files</text>
+        <path d="M390,265 L390,286 L465,286 L465,300" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="427" y="298" text-anchor="middle" opacity="0.7" fill="currentColor">stores files</text>
 
-        <path d="M660,225 L740,225 L740,315 L770,315" fill="none" stroke="var(--c-ai)" stroke-width="1.3" marker-end="url(#arrow)"/>
-        <text x="705" y="218" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">parses request + generates</text>
-        <text x="705" y="230" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">preview, synchronously</text>
-
-        <!-- Row C: scheduled AI pipeline (trend intake) -->
+        <!-- Row C: scheduled trend-intake job -->
         <text x="90" y="393" font-size="9.5" letter-spacing="0.5" opacity="0.6" fill="currentColor">SCHEDULED — TREND INTAKE (DOSSIER §5)</text>
 
         <rect x="90" y="400" width="180" height="55" rx="4" fill="var(--c-integration)" fill-opacity="0.1" stroke="var(--c-integration)" stroke-width="1.4"/>
@@ -180,47 +169,61 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
         <path d="M380,400 L380,388 L180,388 L180,360" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
         <text x="270" y="385" text-anchor="middle" opacity="0.7" fill="currentColor" font-size="9.5">writes candidate, pending review</text>
 
-        <path d="M470,420 L740,420 L740,355 L770,355" fill="none" stroke="var(--c-ai)" stroke-width="1.3" marker-end="url(#arrow)"/>
-        <text x="600" y="413" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">analyzes trends + regenerates</text>
-        <text x="600" y="425" text-anchor="middle" opacity="0.85" fill="var(--c-ai)">inspired design image</text>
+        <!-- Gemini: both AI flows, external — exits Amplify's right edge, well above row B -->
+        <path d="M560,220 L730,220 L730,535 L180,535 L180,570" fill="none" stroke="var(--c-ai)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="600" y="213" opacity="0.85" fill="var(--c-ai)">parses request + generates</text>
+        <text x="600" y="225" opacity="0.85" fill="var(--c-ai)">preview, synchronously</text>
 
-        <!-- Auth: Clerk is decided but is NOT AWS, so it lives in the external row, not row B -->
-        <path d="M600,265 L600,540 L280,540 L280,570" fill="none" stroke="var(--c-security)" stroke-width="1.3" marker-end="url(#arrow)"/>
-        <text x="608" y="472" opacity="0.85" fill="var(--c-security)">verifies session</text>
-        <text x="608" y="484" opacity="0.85" fill="var(--c-security)">(Clerk, external)</text>
+        <path d="M470,427 L710,427 L710,560 L300,560 L300,570" fill="none" stroke="var(--c-ai)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="490" y="410" opacity="0.85" fill="var(--c-ai)">analyzes trends + regenerates</text>
+        <text x="490" y="422" opacity="0.85" fill="var(--c-ai)">inspired design image</text>
 
-        <!-- External row: Clerk, payment, email — none of these are AWS -->
-        <text x="150" y="558" font-size="10" letter-spacing="1.5" opacity="0.55" fill="currentColor">EXTERNAL — NOT AWS</text>
+        <!-- Clerk: auth, external -->
+        <path d="M560,240 L610,240 L610,535 L560,535 L560,570" fill="none" stroke="var(--c-security)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="618" y="345" opacity="0.85" fill="var(--c-security)">verifies session</text>
+        <text x="618" y="357" opacity="0.85" fill="var(--c-security)">(Clerk, external)</text>
 
-        <path d="M660,255 L1030,255 L1030,540 L640,540 L640,570" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
-        <text x="960" y="248" text-anchor="middle" opacity="0.7" fill="currentColor">checkout + stylist notifications</text>
+        <!-- checkout, external -->
+        <path d="M560,260 L800,260 L800,535 L840,535 L840,570" fill="none" stroke="currentColor" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="700" y="253" text-anchor="middle" opacity="0.7" fill="currentColor">checkout + stylist notifications</text>
 
-        <rect x="150" y="570" width="260" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
-        <text x="280" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Clerk</text>
-        <text x="280" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">customer + staff auth — decided</text>
+        <!-- External row: Gemini, Clerk, payment+email — none of these are AWS -->
+        <text x="90" y="558" font-size="10" letter-spacing="1.5" opacity="0.55" fill="currentColor">EXTERNAL — NOT AWS</text>
 
-        <rect x="470" y="570" width="340" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
-        <text x="640" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Payment gateway + Resend</text>
-        <text x="640" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">Stripe — decided · Resend — built</text>
+        <rect x="90" y="570" width="340" height="66" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="260" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Google Gemini API</text>
+        <text x="260" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">Nano Banana — text parsing +</text>
+        <text x="260" y="621" text-anchor="middle" opacity="0.7" fill="currentColor">image generation, both flows</text>
+
+        <rect x="460" y="570" width="200" height="66" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="560" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Clerk</text>
+        <text x="560" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">customer + staff</text>
+        <text x="560" y="621" text-anchor="middle" opacity="0.7" fill="currentColor">auth — decided</text>
+
+        <rect x="690" y="570" width="300" height="66" rx="4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="840" y="592" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="currentColor">Payment + Resend</text>
+        <text x="840" y="608" text-anchor="middle" opacity="0.7" fill="currentColor">Stripe — decided ·</text>
+        <text x="840" y="621" text-anchor="middle" opacity="0.7" fill="currentColor">Resend — built</text>
 
       </g>
     </svg>
     <figcaption>
-      Bedrock moved inside the AWS boundary — it's an AWS service, unlike
-      calling Anthropic directly — which means Claude and image generation
-      no longer require a separate external dependency at all. Both AI
-      flows share the same Bedrock component for different reasons: the
-      live path (teal, top) calls it synchronously mid-conversation for
-      text parsing and a constrained, image-to-image preview generated
-      from the base catalog photo — never generated from scratch, which is
-      what keeps it close to buildable. The scheduled path (teal, bottom)
-      analyzes trend signals and regenerates an inspired image weekly, then
-      writes it to RDS as pending review, not directly to the catalog — a
-      human stylist has to approve it through the same Amplify-hosted
-      dashboard before it ever reaches a tailor. Auth, payment, and email
-      remain outside AWS entirely — Clerk (rust-red arrow) was chosen over
-      Cognito specifically because it isn't AWS: a managed service was
-      worth more than staying inside the boundary for a solo maintainer.
+      AI moved fully outside AWS. Bedrock (and its in-boundary story) is
+      gone — both AI flows now call the <strong>Google Gemini API, Nano
+      Banana model</strong>, for text parsing and image generation alike.
+      That was a deliberate trade: Nano Banana's specific strength is
+      consistent, targeted image edits — change one thing on a garment
+      photo, keep everything else identical — which is a better technical
+      fit for the live customization preview than Nova Canvas was, and
+      consolidating text + image onto one external vendor is simpler to
+      run than splitting AI across AWS Bedrock and Google, even though it
+      means AI no longer shares AWS's bill or IAM. The live path (teal,
+      top) calls Gemini synchronously mid-conversation; the scheduled path
+      (teal, bottom) analyzes trend signals weekly and writes a candidate
+      to RDS as pending review, not directly to the catalog — a human
+      stylist still has to approve it through the dashboard before it
+      reaches a tailor. Gemini, Clerk, and Stripe/Resend are now the three
+      external dependencies AWS-hosted code calls.
     </figcaption>
   </figure>
 
@@ -234,24 +237,25 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <tr><td>Clerk (auth)</td><td>Customer accounts, plus separate staff logins for the tailor swipe tool and trend review dashboard. Decided over Cognito and Auth.js — see below</td><td><span class="status tbd">Decided — not built. Dashboard is unauthenticated today</span></td></tr>
     <tr><td>Stripe (payment)</td><td>Actually taking money at checkout — the UI exists, nothing real is behind it. Decided over Telr/PayTabs — see below</td><td><span class="status tbd">Decided — merchant account blocked on incorporation</span></td></tr>
     <tr><td>Resend</td><td>Emails the stylist when an order or upload comes in</td><td><span class="status built">Code built</span> — needs an API key to actually send</td></tr>
-    <tr><td>AWS Lambda</td><td>Runs the weekly trend-intake job — pulls trend signals, calls Bedrock to analyze them and regenerate an inspired candidate image, writes it to RDS as pending review (dossier §5)</td><td><span class="status tbd">Deliberately not yet — Phase 2</span></td></tr>
+    <tr><td>AWS Lambda</td><td>Runs the weekly trend-intake job — pulls trend signals, calls Gemini to analyze them and regenerate an inspired candidate image, writes it to RDS as pending review (dossier §5)</td><td><span class="status tbd">Deliberately not yet — Phase 2</span></td></tr>
     <tr><td>Amazon EventBridge</td><td>Triggers the Lambda job on a weekly schedule, matching the catalog's weekly refresh</td><td><span class="status tbd">Deliberately not yet — Phase 2</span></td></tr>
-    <tr><td>Amazon Bedrock (Claude + Titan Image Generator)</td><td>Called two distinct ways: synchronously from Amplify to parse a live customization request and generate a constrained preview image during a session, and by the scheduled Lambda job to analyze trend signals and regenerate an inspired (never copied) candidate image — same AWS service, two callers and cadences. Every trend-sourced candidate lands as pending review, never straight into the catalog — a human stylist approves it through the dashboard first</td><td><span class="status tbd">Deliberately not yet — Phase 1 validates the human-run version first</span></td></tr>
+    <tr><td>Google Gemini API (Nano Banana)</td><td>Called two distinct ways: synchronously from Amplify to parse a live customization request and generate a constrained preview image during a session, and by the scheduled Lambda job to analyze trend signals and regenerate an inspired (never copied) candidate image — same external API, two callers and cadences. Handles text parsing <em>and</em> image generation, replacing what used to be split across Claude + Nova Canvas on Bedrock. Every trend-sourced candidate lands as pending review, never straight into the catalog — a human stylist approves it through the dashboard first</td><td><span class="status tbd">Deliberately not yet — Phase 1 validates the human-run version first</span></td></tr>
   </table>
 
   <div class="callout">
-    <strong>Why Bedrock lives inside the AWS boundary and Anthropic doesn't:</strong>
-    Calling Anthropic's API directly would mean a third-party dependency
-    outside AWS entirely — its own bill, its own outage surface, no shared
-    IAM. Amazon Bedrock hosts the same Claude models (plus Titan Image
-    Generator, which Anthropic doesn't offer) as a first-party AWS service,
-    so it shows up on the one AWS bill, inherits the same IAM permissions
-    as everything else in the diagram, and needed a separate box at all
-    only because it's genuinely a different capability — reasoning versus
-    image generation — not because it's a different vendor. Clerk, payment,
-    and Resend are the real external dependencies: third-party products
-    that AWS-hosted code happens to call over the internet, don't show up
-    on the AWS bill, and an AWS outage doesn't take them down — but a
+    <strong>Why Gemini is external, and why that's an acceptable trade-off:</strong>
+    AI used to live inside the AWS boundary via Amazon Bedrock — Claude for
+    text, Nova Canvas for images, both on the AWS bill. That changed:
+    Nano Banana's specific strength is consistent, targeted image edits —
+    change one thing on a garment photo, keep everything else identical —
+    which is a better technical fit for live customization previews than
+    Nova Canvas was, and running text + image through one external vendor
+    is simpler than splitting AI across two providers (AWS and Google).
+    The cost is real: Gemini doesn't share AWS's bill or IAM, it's its own
+    account, its own outage surface, same as Clerk and Stripe already are.
+    Gemini, Clerk, payment, and Resend are now the full list of external
+    dependencies AWS-hosted code calls — none of them show up on the AWS
+    bill, and an AWS outage doesn't take any of them down, but a Gemini,
     Clerk, Resend, or Stripe outage isn't something AWS support can fix
     either.
   </div>
@@ -280,8 +284,8 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <li><span class="flow-status built">built</span> Browser requests <code>shaklek.com</code> → DNS resolves to AWS Amplify → Amplify serves the pre-rendered catalog page (<code>src/app/page.tsx</code>) from its CDN edge cache.</li>
     <li><span class="flow-status built">built</span> Customer opens a catalog item → <code>/design/[slug]</code>, statically generated per item at build time from <code>src/data/catalog.ts</code> via <code>generateStaticParams()</code>.</li>
     <li><span class="flow-status tbd">not built</span> Customer types a customization request (or taps Quick Customize) → browser <code>POST</code>s to a new Amplify API route, e.g. <code>/api/customize</code>. Today, Quick Customize just cycles a hardcoded local color list — no network call at all.</li>
-    <li><span class="flow-status tbd">not built</span> That route calls <strong>Claude on Bedrock</strong> to parse the free-text request into the structured design-spec schema (garment id, requested changes, notes), and to run the hard constraint checks: one fabric, one layer, no logos, and the originality-distance rule against any brand reference.</li>
-    <li><span class="flow-status tbd">not built</span> If the spec passes, the same route calls <strong>Titan Image Generator on Bedrock</strong> — image-to-image, conditioned on the base item's photo pulled from S3 plus the structured spec — producing a constrained preview. Never generated from a blank canvas; that's what keeps the preview close to something a tailor could actually cut.</li>
+    <li><span class="flow-status tbd">not built</span> That route calls the <strong>Google Gemini API (Nano Banana)</strong> to parse the free-text request into the structured design-spec schema (garment id, requested changes, notes), and to run the hard constraint checks: one fabric, one layer, no logos, and the originality-distance rule against any brand reference.</li>
+    <li><span class="flow-status tbd">not built</span> If the spec passes, the same route calls <strong>Nano Banana</strong> again for image generation — image-to-image, conditioned on the base item's photo pulled from S3 plus the structured spec — producing a constrained preview. Never generated from a blank canvas; that's what keeps the preview close to something a tailor could actually cut, and it's specifically what Nano Banana is strong at: a targeted edit that keeps everything else about the photo identical.</li>
     <li><span class="flow-status tbd">not built</span> If the spec fails a constraint check instead, no preview is generated — the request routes to a human stylist by email, exactly like today's Phase 1 flow (<code>/api/custom-requests</code>). The AI only ever adds a preview on top of that; it doesn't replace the human fallback.</li>
     <li><span class="flow-status tbd">not built</span> The preview image is written to S3; its URL and the structured spec return to the browser and render next to the catalog photo.</li>
     <li><span class="flow-status built">built</span> Customer proceeds to <code>/checkout</code> → fills in size, color, notes → total computed client-side from <code>src/data/colors.ts</code> pricing rules.</li>
@@ -294,13 +298,13 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
   <ol class="flow">
     <li><span class="flow-status tbd">not built</span> <strong>Amazon EventBridge</strong> fires on a weekly schedule (e.g. Monday, early hours Gulf time), invoking an <strong>AWS Lambda</strong> trend-intake function.</li>
     <li><span class="flow-status tbd">not built</span> Lambda pulls trend <em>signals</em> from configured sources — recurring silhouettes, colors, construction details — explicitly not full images or listings. This is the concrete mechanism behind the "not scraping and reproducing" rule in dossier §11, not just a policy statement.</li>
-    <li><span class="flow-status tbd">not built</span> Lambda calls <strong>Claude on Bedrock</strong> to turn the aggregated signals into a short list of candidate concepts: title, garment type, a description of the pattern being chased, source count, weeks running — the same shape already modeled in <code>src/data/trends.ts</code>.</li>
-    <li><span class="flow-status tbd">not built</span> For each candidate, Lambda calls <strong>Titan Image Generator on Bedrock</strong> — image-to-image, conditioned on a same-category base catalog photo from S3 — to produce an inspired, non-copied preview image, stored back to S3.</li>
+    <li><span class="flow-status tbd">not built</span> Lambda calls the <strong>Google Gemini API (Nano Banana)</strong> to turn the aggregated signals into a short list of candidate concepts: title, garment type, a description of the pattern being chased, source count, weeks running — the same shape already modeled in <code>src/data/trends.ts</code>.</li>
+    <li><span class="flow-status tbd">not built</span> For each candidate, Lambda calls <strong>Nano Banana</strong> again — image-to-image, conditioned on a same-category base catalog photo from S3 — to produce an inspired, non-copied preview image, stored back to S3.</li>
     <li><span class="flow-status tbd">not built</span> Lambda writes each candidate to <strong>Amazon RDS</strong> with <code>status = pending</code>. Never directly into the live catalog table — this is the row that makes the human-review step non-optional rather than a suggestion.</li>
     <li><span class="flow-status built">built</span> A stylist opens <code>/dashboard/trends</code> (real UI, ships today) — sees each candidate's preview, signal description, source count, and weeks-running, and clicks Approve or Reject. Currently runs entirely on the mock data in <code>src/data/trends.ts</code>; nothing persists on reload yet.</li>
     <li><span class="flow-status tbd">not built</span> Approve should write <code>status = approved</code> back to RDS and copy the candidate into the live catalog table, making it purchasable. Reject should mark it <code>rejected</code> and stop there. Today, both actions only update local component state in the browser.</li>
     <li><span class="flow-status tbd">not built</span> The dashboard itself needs Clerk-based staff auth in front of it — right now <code>/dashboard/trends</code> is a public URL with no login at all.</li>
   </ol>
 
-  <p class="footnote">Shaklek — technical architecture · prepared 10 August 2026, updated 11 August 2026 · companion to planning/aws-infrastructure-todo.md and planning/payment-auth-todo.md</p>
+  <p class="footnote">Shaklek — technical architecture · prepared 10 August 2026, updated 12 August 2026 (AI moved from AWS Bedrock to the external Google Gemini API) · companion to planning/aws-infrastructure-todo.md and planning/payment-auth-todo.md</p>
 </div>
