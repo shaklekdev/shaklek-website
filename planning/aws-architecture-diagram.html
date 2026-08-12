@@ -260,8 +260,8 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     either.
   </div>
 
-  <h2>Auth and payment: decided</h2>
-  <p class="section-note">Both were open as of the last revision of this doc. One constraint settled both: this gets maintained by one person, so the option with the least ongoing operational surface won even where a "more AWS-native" or "more local" option existed.</p>
+  <h2>Auth, payment, and AI: decided</h2>
+  <p class="section-note">All three were open at some point in this doc's history. The same constraint settled all of them: this gets maintained by one person, so the option with the least ongoing operational surface won even where a "more AWS-native" or technically-purer option existed.</p>
   <table>
     <tr><th>Decision</th><th>Chosen</th><th>Passed over</th></tr>
     <tr>
@@ -274,7 +274,36 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       <td><strong>Stripe</strong> — best documentation and developer experience by a wide margin. Stripe Checkout is a hosted page, so Shaklek's code never touches card details (near-zero PCI burden). Settles in AED, operates in the UAE directly.</td>
       <td><strong>Telr / PayTabs</strong> are UAE-local and may integrate more natively with some local banks and bundle Tabby/Tamara BNPL — but cost more integration and maintenance effort without a clear offsetting advantage at pilot scale. Tabby still gets added as a separate direct integration later; Stripe doesn't block it.</td>
     </tr>
+    <tr>
+      <td>AI (text + image)</td>
+      <td><strong>Google Gemini API (Nano Banana)</strong> — one external vendor for both text parsing and image generation. Nano Banana's specific strength is consistent, targeted image edits: change one detail on a garment photo, keep everything else identical — a closer technical fit for the live customization preview than Nova Canvas. See pricing below.</td>
+      <td><strong>Amazon Bedrock (Claude + Nova Canvas)</strong> stayed inside AWS's bill/IAM but split image quality was the weaker fit, and it was itself a correction from an earlier, now-outdated Titan Image Generator reference. <strong>Direct Anthropic API</strong> was never image-capable at all — ruled out from the start, same reasoning as the original Bedrock decision.</td>
+    </tr>
   </table>
+
+  <h2>What Gemini actually costs</h2>
+  <p class="section-note">Researched 12 August 2026 against Google's published rates and AI Studio — worth re-checking directly before it becomes a real line item, AI pricing moves fast and this wasn't verified against a live console.</p>
+  <table>
+    <tr><th>Model / tier</th><th>Free tier</th><th>Paid rate</th></tr>
+    <tr>
+      <td>Nano Banana (base)</td>
+      <td>~500 images/day free in AI Studio</td>
+      <td>~$0.039–0.05 per 1024×1024 image, pay-per-request, no commitment</td>
+    </tr>
+    <tr>
+      <td>Nano Banana Pro</td>
+      <td>None — not in the free tier at all</td>
+      <td>$0.134 per image at 1K/2K resolution, $0.24 at 4K</td>
+    </tr>
+    <tr>
+      <td>Google AI subscription</td>
+      <td>—</td>
+      <td>~$20/month flat, higher limits — a recurring commitment regardless of usage, worse fit than pay-per-request for pilot-stage, spiky usage</td>
+    </tr>
+  </table>
+  <div class="callout">
+    <strong>Recommendation: pay-per-request, base Nano Banana, not the Pro tier or the monthly subscription</strong> — at pilot volume (a handful of previews and one weekly trend batch), the free tier likely covers most usage, and paid overage stays in single-digit dollars, not a recurring bill. This still needs one open item resolved: confirm in the actual codebase which tier (base vs. Pro) is being called — they're priced completely differently, and "Nano Banana" alone doesn't specify which.
+  </div>
 
   <h2>How a request actually flows, step by step</h2>
   <p class="section-note">The boxes above show what talks to what. This is what happens, in order, inside each of the two flows — deliberately detailed enough to show exactly which steps are real code today and which are still a sketch.</p>
