@@ -90,3 +90,11 @@ h3 {
   margin-top: 6px;
   line-height: 1.5;
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
