@@ -9,10 +9,11 @@ type OrderItem = {
   changes?: string[];
   freeformNotes?: string;
   price: number;
+  previewImage?: string; // uploaded reference photo (data URL), if this item came from /upload
 };
 
 // Sends the stylist-handoff notification for a new order (one or more
-// items from the cart).
+// items from the cart, from the catalog and/or uploaded references).
 //
 // Needs RESEND_API_KEY to actually send (sign up at resend.com, verify
 // the shaklek.com domain, and set the key as an env var). Without it,
@@ -20,7 +21,12 @@ type OrderItem = {
 // but no one actually gets notified until a real key is set.
 export async function POST(req: NextRequest) {
   const order = await req.json();
-  const { items, method, total } = order as { items: OrderItem[]; method: string; total: number };
+  const { items, method, total, email } = order as {
+    items: OrderItem[];
+    method: string;
+    total: number;
+    email: string;
+  };
 
   if (!Array.isArray(items) || items.length === 0) {
     return NextResponse.json({ ok: false, error: "No items in order" }, { status: 400 });
@@ -32,11 +38,19 @@ export async function POST(req: NextRequest) {
       if (item.measurements) parts.push(`   Measurements: ${item.measurements}`);
       if (item.changes && item.changes.length) parts.push(`   Changes: ${item.changes.join(", ")}`);
       if (item.freeformNotes) parts.push(`   Note: "${item.freeformNotes}"`);
+      if (item.previewImage) parts.push(`   (reference photo attached)`);
       return parts.join("\n");
     })
     .join("\n");
 
-  const summary = `New order (${items.length} ${items.length === 1 ? "item" : "items"}), AED ${total} via ${method}\n${itemLines}`;
+  const summary = `New order (${items.length} ${items.length === 1 ? "item" : "items"}) from ${email}, AED ${total} via ${method}\n${itemLines}`;
+
+  const attachments = items
+    .filter((item) => item.previewImage)
+    .map((item, i) => ({
+      filename: `reference-${i + 1}.jpg`,
+      content: item.previewImage!.split(",")[1] ?? "",
+    }));
 
   const apiKey = process.env.RESEND_API_KEY;
 
@@ -55,8 +69,10 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       from: "Shaklek Orders <orders@shaklek.com>",
       to: "orders@shaklek.com",
+      reply_to: email,
       subject: `New order — ${items.length} ${items.length === 1 ? "item" : "items"}`,
       text: summary,
+      ...(attachments.length ? { attachments } : {}),
     }),
   });
 

@@ -8,7 +8,7 @@ import type { CartItem } from "@/lib/CartContext";
 
 const LAST_ORDER_KEY = "shaklek-last-order";
 
-type LastOrder = { items: CartItem[]; method: string; total: number };
+type LastOrder = { items: CartItem[]; method: string; total: number; email: string };
 
 export default function OrderConfirmedPage() {
   const [order, setOrder] = useState<LastOrder | null | undefined>(undefined);
@@ -71,7 +71,19 @@ export default function OrderConfirmedPage() {
 
         <div className="mt-8 space-y-3 text-left">
           {order.items.map((item) => (
-            <div key={item.id} className="rounded-shaklek-sm border border-border bg-surface p-5">
+            <div
+              key={item.id}
+              className="flex gap-4 rounded-shaklek-sm border border-border bg-surface p-5"
+            >
+              {item.previewImage && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.previewImage}
+                  alt=""
+                  className="h-16 w-12 shrink-0 rounded-shaklek-xs object-cover"
+                />
+              )}
+              <div className="flex-1">
               <p className="text-[15px] font-medium text-text">{item.name}</p>
               <p className="mt-1 text-xs text-text-2">
                 {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size {item.size}
@@ -80,6 +92,7 @@ export default function OrderConfirmedPage() {
                 <p className="mt-1 text-xs text-text-2">{item.changes.join(", ")}</p>
               )}
               <p className="mt-3 font-display text-lg text-text">AED {item.price}</p>
+              </div>
             </div>
           ))}
         </div>

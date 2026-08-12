@@ -40,9 +40,17 @@ export default function CheckoutPage() {
           {items.map((item) => (
             <div
               key={item.id}
-              className="rounded-shaklek-sm border border-border bg-surface p-5"
+              className="flex gap-4 rounded-shaklek-sm border border-border bg-surface p-5"
             >
-              <div className="flex items-start justify-between gap-4">
+              {item.previewImage && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.previewImage}
+                  alt=""
+                  className="h-16 w-12 shrink-0 rounded-shaklek-xs object-cover"
+                />
+              )}
+              <div className="flex flex-1 items-start justify-between gap-4">
                 <div>
                   <p className="text-[15px] font-medium text-text">{item.name}</p>
                   <p className="mt-1 text-xs text-text-2">

@@ -42,13 +42,22 @@ export default function CartPage() {
               key={item.id}
               className="flex gap-4 rounded-shaklek-sm border border-border bg-surface p-4"
             >
-              <div
-                className="h-20 w-16 shrink-0 rounded-shaklek-xs"
-                style={{
-                  background: `linear-gradient(135deg, ${item.gradient[0]}, ${item.gradient[1]})`,
-                }}
-                aria-hidden
-              />
+              {item.previewImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.previewImage}
+                  alt=""
+                  className="h-20 w-16 shrink-0 rounded-shaklek-xs object-cover"
+                />
+              ) : (
+                <div
+                  className="h-20 w-16 shrink-0 rounded-shaklek-xs"
+                  style={{
+                    background: `linear-gradient(135deg, ${item.gradient[0]}, ${item.gradient[1]})`,
+                  }}
+                  aria-hidden
+                />
+              )}
               <div className="flex-1">
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-[15px] font-medium text-text">{item.name}</p>

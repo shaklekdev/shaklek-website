@@ -18,6 +18,7 @@ export default function CheckoutForm({ total }: { total: number }) {
   const router = useRouter();
   const { items, clear } = useCart();
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
+  const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   function handlePay() {
@@ -26,13 +27,28 @@ export default function CheckoutForm({ total }: { total: number }) {
     // provider (Stripe) is wired up. It still produces a real order record
     // downstream via the confirmation page, stashed in localStorage since
     // there's no backend/DB yet to persist it to.
-    window.localStorage.setItem(LAST_ORDER_KEY, JSON.stringify({ items, method, total }));
+    window.localStorage.setItem(
+      LAST_ORDER_KEY,
+      JSON.stringify({ items, method, total, email }),
+    );
     clear();
     router.push("/order-confirmed");
   }
 
   return (
     <div className="mt-8">
+      <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
+        Your email
+      </label>
+      <input
+        id="checkout-email"
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="you@example.com"
+        className="mb-6 w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+      />
       <p className="mb-3 text-sm text-text">Pay as guest</p>
       <div className="space-y-2">
         {methods.map((m) => (
@@ -60,7 +76,7 @@ export default function CheckoutForm({ total }: { total: number }) {
 
       <button
         onClick={handlePay}
-        disabled={submitting}
+        disabled={submitting || !email}
         className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {submitting ? "Processing…" : `Pay AED ${total}`}

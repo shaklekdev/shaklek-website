@@ -8,6 +8,7 @@ export type CartItem = {
   name: string;
   category: string;
   gradient: [string, string];
+  previewImage?: string; // uploaded reference photo, shown instead of the gradient when present
   price: number;
   fabric: "cotton" | "linen";
   color: string;

@@ -13,6 +13,15 @@ export type CatalogItem = {
 
 // Pricing locked from the Shaklek business dossier (Section 9):
 // Shirt 290 · Skirt 320 · Pants 350 · Dress 490 · Dress — Elaborate ~670 AED
+// Same fixed tiers apply to uploaded designs, by category — no separate
+// stylist quote needed, matching how catalog items are priced.
+export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
+  Shirt: 290,
+  Skirt: 320,
+  Pants: 350,
+  Dress: 490,
+};
+
 export const catalog: CatalogItem[] = [
   {
     slug: "oversized-shirt",

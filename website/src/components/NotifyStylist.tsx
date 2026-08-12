@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { CartItem } from "@/lib/CartContext";
 
-type OrderPayload = { items: CartItem[]; method: string; total: number };
+type OrderPayload = { items: CartItem[]; method: string; total: number; email: string };
 
 export default function NotifyStylist({ order }: { order: OrderPayload }) {
   const [status, setStatus] = useState<"sending" | "sent" | "queued">("sending");
