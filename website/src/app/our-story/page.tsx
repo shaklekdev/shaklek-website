@@ -99,12 +99,12 @@ export default function OurStoryPage() {
       </div>
 
       {/* Tenets — alternating image + text rows */}
-      <div className="mx-auto w-full max-w-5xl px-6 pb-20">
-        <div className="flex flex-col gap-20 sm:gap-28">
+      <div className="mx-auto w-full max-w-5xl px-6 pb-16">
+        <div className="flex flex-col gap-10 sm:gap-14">
           {tenets.map((t, i) => (
             <div
               key={t.title}
-              className={`flex flex-col items-center gap-8 sm:gap-14 ${
+              className={`flex flex-col items-center gap-6 sm:gap-14 ${
                 i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
               }`}
             >
@@ -112,10 +112,7 @@ export default function OurStoryPage() {
                 <ImagePlaceholder aspect="aspect-[4/5]" caption={t.caption} />
               </div>
               <div className="w-full sm:w-1/2">
-                <p className="text-xs tracking-wide text-text-3 uppercase">
-                  0{i + 1}
-                </p>
-                <h2 className="mt-2 font-display text-2xl text-gold sm:text-[28px]">
+                <h2 className="font-display text-2xl text-gold sm:text-[28px]">
                   {t.title}
                 </h2>
                 <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-text-2">
