@@ -42,6 +42,29 @@ const materials = [
   },
 ];
 
+const tenets = [
+  {
+    title: "Materials that respect your skin",
+    body: "Cotton or linen, always — nothing synthetic, nothing that fights your skin.",
+  },
+  {
+    title: "Tailoring for your shape",
+    body: "Standard sizing or your exact measurements — cut for your body, not a size chart.",
+  },
+  {
+    title: "An AI fashion assistant",
+    body: "See the color that matches your tone and the fit that flatters your shape, before you commit to anything.",
+  },
+  {
+    title: "No over-production",
+    body: "Nothing is made until you order it — no stock, no waste, nothing sitting in a warehouse.",
+  },
+  {
+    title: "Fixed prices",
+    body: "From AED 290, always. Healthy, well-made clothing shouldn't be a luxury exception.",
+  },
+];
+
 export default function OurStoryPage() {
   return (
     <div className="flex flex-1 flex-col bg-bg">
@@ -77,11 +100,19 @@ export default function OurStoryPage() {
           for the person who ordered it.
         </p>
         <p className="subtitle mt-4 max-w-md">
-          There&apos;s no stock here. Nothing is made until someone chooses it. That&apos;s
-          slower than a warehouse, and it&apos;s the entire point: your skin matters to
-          us, your shape matters, and your uniqueness isn&apos;t a problem a size chart
-          needs to solve.
+          There&apos;s no stock here. Nothing is made until someone chooses it. Your
+          skin matters to us, your shape matters, and your uniqueness isn&apos;t a
+          problem a size chart needs to solve. That comes down to five things:
         </p>
+
+        <div className="mt-8 space-y-5">
+          {tenets.map((t) => (
+            <div key={t.title} className="border-t border-border pt-4">
+              <h2 className="font-display text-base text-gold">{t.title}</h2>
+              <p className="mt-1 text-sm text-text-2">{t.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Alternating block: materials */}
