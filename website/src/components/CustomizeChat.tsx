@@ -123,7 +123,10 @@ export default function CustomizeChat({
       </div>
 
       {!spec.constraints.passed && (
-        <div className="mt-3 rounded-shaklek-xs border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
+        <div
+          role="alert"
+          className="mt-3 rounded-shaklek-xs border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700"
+        >
           <p className="font-medium">This request needs adjusting before it can be made:</p>
           <ul className="mt-1 list-disc pl-4">
             {spec.constraints.flagNotes.map((n, i) => (
@@ -140,7 +143,7 @@ export default function CustomizeChat({
       )}
 
       {/* Chat log */}
-      <div className="mt-4 flex flex-col gap-2">
+      <div role="log" aria-live="polite" aria-label="Customization conversation" className="mt-4 flex flex-col gap-2">
         {messages.map((m, i) =>
           m.role === "ai" ? (
             <div
@@ -176,7 +179,11 @@ export default function CustomizeChat({
 
       {/* Input */}
       <div className="mt-3 flex gap-2">
+        <label htmlFor="customize-input" className="sr-only">
+          Describe your change
+        </label>
         <input
+          id="customize-input"
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}

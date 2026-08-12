@@ -42,6 +42,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <button
                 key={s}
                 onClick={() => setSpec((spec) => ({ ...spec, size: s }))}
+                aria-pressed={s === spec.size}
                 className={`rounded-shaklek-xs border py-3 font-display text-sm transition-colors ${
                   s === spec.size
                     ? "border-accent bg-accent text-white"
