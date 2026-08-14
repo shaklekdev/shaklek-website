@@ -1,6 +1,6 @@
 # Incorporation — TODO
 
-Status: **trade name reserved — first real step done.** "shaklek" reserved under Trading & Services / Ready-made Garments Group, Application No. **BL-20260812026191**, **valid 7 days from 12 August 2026** (i.e. expires ~19 August). Certificate emailed to hello@shaklek.com. This is just the name reservation, not the trade license itself — the license application is the next actual step, and it needs to happen inside that 7-day window or the name reservation lapses.
+Status: **trade license issued** (as of 2026-08-14) — the Instant Licence application referenced below went through. Next real step is the corporate bank account: founder has identified **Wio Bank** (UAE digital-first business bank) as the path for the business account needed to unlock Stripe. Trade license details/number not yet logged here — worth pasting in once handy for future reference.
 
 You're already a UAE resident with an Emirates ID and setting up in Dubai — no investor/residency visa needed. Checked directly against the official Invest in Dubai government portal (12 August 2026): the core retail activity ("Ready-made Garments Trading") is confirmed approval-free, meaning the fast ~5-minute **Instant Licence** is very likely available. Decision: apply now with Ready-made Garments Trading only — don't wait on confirming whether "Tailoring" also qualifies, that can be added later by amending the license once the business is running. Getting a real license issued matters more right now than getting the activity list perfectly complete on day one.
 
@@ -29,9 +29,9 @@ The one open question: Shaklek isn't *only* ready-made garments trading — it's
 ## Checklist, in order
 
 - [x] **Decide legal structure** — Mainland Sole Establishment (single owner, simplest, no MOA needed)
-- [x] **Reserve the trade name "Shaklek"** with Dubai DED via the Invest in Dubai portal — done 12 August 2026, Application No. BL-20260812026191, **expires ~19 August 2026**
-- [ ] **Apply for the Instant Licence** via the same portal, activity = Ready-made Garments Trading — must happen before the name reservation expires. This is the actual next step, not yet done.
-- [ ] **Corporate bank account** — flag this now: UAE banks are known to be slow and selective with new small e-commerce businesses, often taking several weeks and sometimes multiple bank attempts even with a valid trade license in hand. Start this the moment the license is issued, not after.
+- [x] **Reserve the trade name "Shaklek"** with Dubai DED via the Invest in Dubai portal — done 12 August 2026, Application No. BL-20260812026191
+- [x] **Apply for the Instant Licence** — trade license issued as of 14 August 2026
+- [ ] **Corporate bank account** — founder is opening with **Wio Bank**. UAE banks are generally slow/selective with new small e-commerce businesses, but Wio specifically markets itself as fast digital-first onboarding for SMEs, which fits here. This is what actually unlocks Stripe below.
 - [ ] *(Deferred, not blocking)* Confirm whether "Tailoring" also qualifies as approval-free — add as a second activity later via a license amendment once the business is running, not before
 
 ## What this unblocks, once the trade license exists
