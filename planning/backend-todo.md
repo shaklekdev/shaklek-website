@@ -31,7 +31,8 @@ From dossier §5 — the mechanism that builds the catalog and validates produci
 - [ ] Uploaded reference images are currently base64-encoded and emailed directly — fine at near-zero volume, won't scale. Needs an S3 bucket (see AWS doc) once volume picks up.
 
 ### 5. Payment webhooks
-- [ ] Handler for payment confirmation/failure events from whichever gateway gets chosen (`payment-auth-todo.md`)
+- [x] Handler for `checkout.session.completed` — `website/src/app/api/webhooks/stripe/route.ts`, done 2026-08-14 (see `payment-auth-todo.md`)
+- [ ] Handler for payment *failure* events (`checkout.session.expired`, etc.) — not built, currently an order just sits at `pending_payment` forever if the customer abandons checkout
 - [ ] Handler for the refund case — dossier policy is refund-only-if-never-produced, needs to trigger through the real payment provider's refund API
 
 ### 6. Ops basics
