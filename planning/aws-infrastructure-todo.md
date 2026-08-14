@@ -23,8 +23,9 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 - [ ] **AWS Budgets + a billing alarm**, set up on day one, before anything else goes live
 
 ## Database
-- [ ] **RDS Postgres**, `db.t4g.micro`, single-AZ, no read replica — holds the orders/customer tables from `backend-todo.md`
-- [x] Backend schema + persistence code is now ready (`website/src/db/schema.ts`, wired into `/api/orders`) — the sequencing note below is satisfied; provisioning RDS is now unblocked whenever the cost is approved (see cost-guardrail rule — state the exact monthly figure before creating it)
+- [x] **Neon Postgres** (not RDS) — decided 2026-08-14, ~$0/month at pilot scale vs. RDS's flat ~$15/month, since Neon auto-suspends when idle instead of billing for an always-on instance. Project `shaklek`, Postgres 18, region Frankfurt (`eu-central-1` — Neon doesn't offer Ireland, and Frankfurt is the nearest region to Amplify's `eu-west-1` compute). Neon's own "Backend Services" (built-in auth) was deliberately left off — Clerk is still the decided auth provider, see below.
+- [x] Schema + persistence code (`website/src/db/schema.ts`, wired into `/api/orders`) — done, migrated onto the real Neon instance, verified with real inserts.
+- [x] **Amplify + Next.js SSR gotcha, hit and fixed 2026-08-14**: environment variables set in the Amplify Console are only injected at *build* time by default — a Next.js server route reading `process.env.X` at runtime sees nothing, even after a redeploy, until the build spec explicitly writes them into `.env.production`. Confirmed via AWS's own docs (`docs.aws.amazon.com/amplify/.../ssr-environment-variables.html`). Fixed by updating the app's build spec (`aws amplify update-app --build-spec ...`, since this app has no repo-committed `amplify.yml` — the spec lives on the App resource itself) to add `env | grep -e DATABASE_URL -e STRIPE_SECRET_KEY -e STRIPE_WEBHOOK_SECRET -e RESEND_API_KEY >> .env.production` before `npm run build`. **Any future secret env var added in the Amplify Console must also be added to that grep list**, or it silently won't reach the running site — this is genuinely non-obvious and easy to lose an hour to again.
 
 ## Storage
 - [ ] **S3 bucket** for catalog images and uploaded reference photos — genuinely a small task: create the bucket, attach an IAM permission so Amplify can write to it, swap `/api/custom-requests` from base64-emailing images to uploading them to S3 instead. Not the same scope as the database work.
@@ -44,4 +45,4 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 - [ ] Rough target: still roughly **$30–50/month or less** at pilot scale, likely on the lower end of that given Amplify's usage-based pricing versus a 24/7 EC2 instance. Re-check once real usage exists.
 
 ## Sequencing note
-Originally: don't build the RDS database until `backend-todo.md`'s schema work is actually ready to use it. **Satisfied as of 2026-08-13** — schema and persistence code exist and degrade gracefully without a live database, so the only remaining step is provisioning RDS itself (cost-gated, see Database section above).
+Originally: don't build the database until `backend-todo.md`'s schema work is actually ready to use it. **Fully done as of 2026-08-14** — Neon is provisioned, migrated, and confirmed persisting real orders in production (see Database section above).
