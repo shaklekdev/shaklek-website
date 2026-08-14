@@ -25,7 +25,10 @@ export const orders = pgTable("orders", {
     .references(() => customers.id),
   totalAed: numeric("total_aed", { precision: 10, scale: 2 }).notNull(),
   paymentMethod: text("payment_method").notNull(),
-  status: text("status").notNull().default("received"),
+  // pending_payment -> paid (set by the Stripe webhook on checkout.session.completed).
+  // Stays pending_payment forever if Stripe isn't configured -- see /api/orders.
+  status: text("status").notNull().default("pending_payment"),
+  stripeSessionId: text("stripe_session_id"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

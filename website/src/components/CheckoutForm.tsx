@@ -21,18 +21,34 @@ export default function CheckoutForm({ total }: { total: number }) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  function handlePay() {
+  async function handlePay() {
     setSubmitting(true);
-    // No payment gateway connected yet — this is a stand-in until a real
-    // provider (Stripe) is wired up. It still produces a real order record
-    // downstream via the confirmation page, stashed in localStorage since
-    // there's no backend/DB yet to persist it to.
-    window.localStorage.setItem(
-      LAST_ORDER_KEY,
-      JSON.stringify({ items, method, total, email }),
-    );
-    clear();
-    router.push("/order-confirmed");
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items, method, total, email }),
+      });
+      const data = await res.json();
+
+      if (data.checkoutUrl) {
+        // Full pipeline: hand off to Stripe. Don't clear the cart here --
+        // if the customer abandons at Stripe, they should still have it.
+        // /order-confirmed clears it once Stripe actually redirects back.
+        window.location.href = data.checkoutUrl;
+        return;
+      }
+
+      // Fallback: Stripe isn't configured yet, same demo flow as before.
+      window.localStorage.setItem(
+        LAST_ORDER_KEY,
+        JSON.stringify({ items, method, total, email, emailed: data.emailed }),
+      );
+      clear();
+      router.push("/order-confirmed");
+    } catch {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -74,13 +90,19 @@ export default function CheckoutForm({ total }: { total: number }) {
         ))}
       </div>
 
-      <button
-        onClick={handlePay}
-        disabled={submitting || !email}
-        className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-      >
-        {submitting ? "Processing…" : `Pay AED ${total}`}
-      </button>
+      {method === "tabby" ? (
+        <p className="mt-6 rounded-shaklek-sm border border-border-strong bg-surface-2 px-4 py-3.5 text-center text-sm text-text-2">
+          Tabby is coming soon — choose Apple Pay or Card for now.
+        </p>
+      ) : (
+        <button
+          onClick={handlePay}
+          disabled={submitting || !email}
+          className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        >
+          {submitting ? "Processing…" : `Pay AED ${total}`}
+        </button>
+      )}
       <p className="mt-3 text-center text-xs text-text-3">
         Secure payment · One free alteration or remake within 14 days
       </p>

@@ -1,30 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { getStripe } from "@/lib/stripe";
+import { sendOrderNotificationEmail, type NotifyOrderItem } from "@/lib/orderEmail";
 
-type OrderItem = {
-  name: string;
-  category?: string;
-  fabric: string;
-  color: string;
-  size: string;
-  measurements?: string;
-  changes?: string[];
-  freeformNotes?: string;
-  price: number;
-  previewImage?: string; // uploaded reference photo (data URL), if this item came from /upload
-};
+type OrderItem = NotifyOrderItem & { category?: string };
 
-// Persists the order to Postgres. No RDS instance exists yet
-// (aws-infrastructure-todo.md) — DATABASE_URL is unset until then, so
-// getDb() returns null and this just logs, same as the email path below
-// when RESEND_API_KEY is missing.
+// Persists the order to Postgres and returns the new order id. No RDS/Neon
+// instance exists yet in every environment -- DATABASE_URL unset means
+// getDb() returns null and the caller falls back to the pre-DB demo flow.
 async function persistOrder(items: OrderItem[], method: string, total: number, email: string) {
   const db = getDb();
-  if (!db) {
-    console.log("[orders] DATABASE_URL not set — order not persisted to DB.");
-    return;
-  }
+  if (!db) return null;
 
   const [customer] = await db
     .insert(schema.customers)
@@ -60,15 +47,21 @@ async function persistOrder(items: OrderItem[], method: string, total: number, e
       hasReferenceImage: Boolean(item.previewImage),
     })),
   );
+
+  return orderRow.id as string;
 }
 
-// Sends the stylist-handoff notification for a new order (one or more
-// items from the cart, from the catalog and/or uploaded references).
+// Receives checkout data from CheckoutForm. Two modes:
 //
-// Needs RESEND_API_KEY to actually send (sign up at resend.com, verify
-// the shaklek.com domain, and set the key as an env var). Without it,
-// this logs the order instead of throwing, so checkout still works —
-// but no one actually gets notified until a real key is set.
+// - Full pipeline (DB + Stripe both configured): persists a pending_payment
+//   order, creates a Stripe Checkout Session against it, and returns
+//   { checkoutUrl } for the client to redirect to. Nothing is emailed here
+//   -- /api/webhooks/stripe does that once Stripe actually confirms payment,
+//   which is the only trustworthy signal that money moved.
+// - Fallback (Stripe not configured yet, e.g. still waiting on the Wio
+//   business account / Stripe merchant approval): behaves exactly like
+//   before Stripe existed -- persists to DB if available, emails
+//   orders@shaklek.com immediately, returns { emailed }.
 export async function POST(req: NextRequest) {
   const order = await req.json();
   const { items, method, total, email } = order as {
@@ -82,62 +75,48 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "No items in order" }, { status: 400 });
   }
 
+  let orderId: string | null = null;
   try {
-    await persistOrder(items, method, total, email);
+    orderId = await persistOrder(items, method, total, email);
   } catch (err) {
-    // A DB write failure shouldn't block the order from being emailed —
-    // the email is still the source of truth until this is fully proven out.
     console.error("[orders] Failed to persist order to DB:", err);
   }
 
-  const itemLines = items
-    .map((item, i) => {
-      const parts = [`${i + 1}. ${item.name} — ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
-      if (item.measurements) parts.push(`   Measurements: ${item.measurements}`);
-      if (item.changes && item.changes.length) parts.push(`   Changes: ${item.changes.join(", ")}`);
-      if (item.freeformNotes) parts.push(`   Note: "${item.freeformNotes}"`);
-      if (item.previewImage) parts.push(`   (reference photo attached)`);
-      return parts.join("\n");
-    })
-    .join("\n");
+  const stripe = getStripe();
 
-  const summary = `New order (${items.length} ${items.length === 1 ? "item" : "items"}) from ${email}, AED ${total} via ${method}\n${itemLines}`;
+  if (orderId && stripe) {
+    const origin = req.headers.get("origin") ?? "https://www.shaklek.com";
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      integration_identifier: "shaklek-checkout-rqkazmjg",
+      customer_email: email,
+      client_reference_id: orderId,
+      line_items: items.map((item) => ({
+        quantity: 1,
+        price_data: {
+          currency: "aed",
+          unit_amount: Math.round(item.price * 100),
+          product_data: { name: item.name },
+        },
+      })),
+      success_url: `${origin}/order-confirmed?order_id=${orderId}`,
+      cancel_url: `${origin}/checkout`,
+    });
 
-  const attachments = items
-    .filter((item) => item.previewImage)
-    .map((item, i) => ({
-      filename: `reference-${i + 1}.jpg`,
-      content: item.previewImage!.split(",")[1] ?? "",
-    }));
+    const db = getDb();
+    if (db) {
+      await db
+        .update(schema.orders)
+        .set({ stripeSessionId: session.id })
+        .where(eq(schema.orders.id, orderId));
+    }
 
-  const apiKey = process.env.RESEND_API_KEY;
-
-  if (!apiKey) {
-    console.log("[orders] RESEND_API_KEY not set — order not emailed. Details:");
-    console.log(summary);
-    return NextResponse.json({ ok: true, emailed: false });
+    if (!session.url) {
+      return NextResponse.json({ ok: false, error: "Stripe session had no URL" }, { status: 502 });
+    }
+    return NextResponse.json({ ok: true, checkoutUrl: session.url });
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Shaklek Orders <orders@shaklek.com>",
-      to: "orders@shaklek.com",
-      reply_to: email,
-      subject: `New order — ${items.length} ${items.length === 1 ? "item" : "items"}`,
-      text: summary,
-      ...(attachments.length ? { attachments } : {}),
-    }),
-  });
-
-  if (!res.ok) {
-    console.error("[orders] Resend API call failed:", await res.text());
-    return NextResponse.json({ ok: true, emailed: false });
-  }
-
-  return NextResponse.json({ ok: true, emailed: true });
+  const { emailed } = await sendOrderNotificationEmail(items, method, total, email);
+  return NextResponse.json({ ok: true, emailed });
 }
