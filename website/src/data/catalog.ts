@@ -57,6 +57,12 @@ export const catalog: CatalogItem[] = [
     gradient: ["#efeae4", "#e2ded8"],
     image: "/catalog/structured-blouse-front.png",
     backImage: "/catalog/structured-blouse-back.png",
+    colorImages: {
+      Ivory: { front: "/catalog/structured-blouse-front.png", back: "/catalog/structured-blouse-back.png" },
+      White: { front: "/catalog/structured-blouse-white-front.png", back: "/catalog/structured-blouse-white-back.png" },
+      Navy: { front: "/catalog/structured-blouse-navy-front.png", back: "/catalog/structured-blouse-navy-back.png" },
+      Burgundy: { front: "/catalog/structured-blouse-burgundy-front.png", back: "/catalog/structured-blouse-burgundy-back.png" },
+    },
   },
   {
     slug: "wrap-skirt",
@@ -64,7 +70,6 @@ export const catalog: CatalogItem[] = [
     category: "Skirt",
     price: 320,
     descriptor: "Asymmetric",
-    badge: "NEW",
     gradient: ["#f2efe8", "#e6e2dc"],
   },
   {
@@ -81,6 +86,20 @@ export const catalog: CatalogItem[] = [
       White: { front: "/catalog/wide-leg-trousers-white-front.png", back: "/catalog/wide-leg-trousers-white-back.png" },
       Navy: { front: "/catalog/wide-leg-trousers-navy-front.png", back: "/catalog/wide-leg-trousers-navy-back.png" },
       Burgundy: { front: "/catalog/wide-leg-trousers-burgundy-front.png", back: "/catalog/wide-leg-trousers-burgundy-back.png" },
+    },
+  },
+  {
+    slug: "banded-trousers",
+    name: "Banded Trousers",
+    category: "Pants",
+    price: 350,
+    descriptor: "Tapered, cuffed hem",
+    badge: "NEW",
+    gradient: ["#f0ece4", "#e2ddd4"],
+    image: "/catalog/banded-trousers-ivory-front.png",
+    backImage: "/catalog/banded-trousers-ivory-back.png",
+    colorImages: {
+      Ivory: { front: "/catalog/banded-trousers-ivory-front.png", back: "/catalog/banded-trousers-ivory-back.png" },
     },
   },
   {
