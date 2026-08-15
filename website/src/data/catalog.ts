@@ -55,6 +55,8 @@ export const catalog: CatalogItem[] = [
     price: 290,
     descriptor: "Minimal dart",
     gradient: ["#efeae4", "#e2ded8"],
+    image: "/catalog/structured-blouse-front.png",
+    backImage: "/catalog/structured-blouse-back.png",
   },
   {
     slug: "wrap-skirt",
