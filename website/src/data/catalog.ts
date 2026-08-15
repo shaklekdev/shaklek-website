@@ -93,13 +93,16 @@ export const catalog: CatalogItem[] = [
     name: "Banded Trousers",
     category: "Pants",
     price: 350,
-    descriptor: "Tapered, cuffed hem",
+    descriptor: "Tailored, cuffed hem",
     badge: "NEW",
     gradient: ["#f0ece4", "#e2ddd4"],
     image: "/catalog/banded-trousers-ivory-front.png",
     backImage: "/catalog/banded-trousers-ivory-back.png",
     colorImages: {
       Ivory: { front: "/catalog/banded-trousers-ivory-front.png", back: "/catalog/banded-trousers-ivory-back.png" },
+      White: { front: "/catalog/banded-trousers-white-front.png", back: "/catalog/banded-trousers-white-back.png" },
+      Navy: { front: "/catalog/banded-trousers-navy-front.png", back: "/catalog/banded-trousers-navy-back.png" },
+      Burgundy: { front: "/catalog/banded-trousers-burgundy-front.png", back: "/catalog/banded-trousers-burgundy-back.png" },
     },
   },
   {
