@@ -43,6 +43,7 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/oversized-shirt-back.png",
     colorImages: {
       Ivory: { front: "/catalog/oversized-shirt-front.png", back: "/catalog/oversized-shirt-back.png" },
+      White: { front: "/catalog/oversized-shirt-white-front.png", back: "/catalog/oversized-shirt-white-back.png" },
       Navy: { front: "/catalog/oversized-shirt-navy-front.png", back: "/catalog/oversized-shirt-navy-back.png" },
       Burgundy: { front: "/catalog/oversized-shirt-burgundy-front.png", back: "/catalog/oversized-shirt-burgundy-back.png" },
     },
@@ -75,6 +76,7 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/wide-leg-trousers-ivory-back.png",
     colorImages: {
       Ivory: { front: "/catalog/wide-leg-trousers-ivory-front.png", back: "/catalog/wide-leg-trousers-ivory-back.png" },
+      White: { front: "/catalog/wide-leg-trousers-white-front.png", back: "/catalog/wide-leg-trousers-white-back.png" },
       Navy: { front: "/catalog/wide-leg-trousers-navy-front.png", back: "/catalog/wide-leg-trousers-navy-back.png" },
       Burgundy: { front: "/catalog/wide-leg-trousers-burgundy-front.png", back: "/catalog/wide-leg-trousers-burgundy-back.png" },
     },
