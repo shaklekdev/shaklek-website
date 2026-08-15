@@ -25,12 +25,14 @@ export default function CustomizeChat({
   spec,
   onSpecChange,
   previewImage,
+  previewBackImage,
   previewGradient,
   suggestions = DEFAULT_SUGGESTIONS,
 }: {
   spec: DesignSpec;
   onSpecChange: (spec: DesignSpec) => void;
   previewImage?: string | null;
+  previewBackImage?: string | null;
   previewGradient: [string, string];
   suggestions?: string[];
 }) {
@@ -39,6 +41,8 @@ export default function CustomizeChat({
   ]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
+  const [view, setView] = useState<"front" | "back">("front");
+  const activeImage = view === "back" && previewBackImage ? previewBackImage : previewImage;
 
   const colorHex = colors.find((c) => c.name === spec.color)?.hex ?? previewGradient[0];
 
@@ -92,18 +96,42 @@ export default function CustomizeChat({
       <div
         className="relative aspect-[3/4] w-full overflow-hidden rounded-shaklek border border-border"
         style={
-          previewImage
+          activeImage
             ? undefined
             : { background: `linear-gradient(135deg, ${colorHex}, ${previewGradient[1]})` }
         }
       >
-        {previewImage && (
+        {activeImage && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={previewImage} alt="Your uploaded reference" className="h-full w-full object-cover" />
+          <img
+            src={activeImage}
+            alt={view === "back" ? "Back view" : "Your uploaded reference"}
+            className="h-full w-full object-cover"
+          />
         )}
         <span className="absolute top-4 right-4 rounded-full bg-accent px-3 py-1 text-[10px] font-medium tracking-wide text-white">
           LIVE PREVIEW
         </span>
+        {previewBackImage && (
+          <div className="absolute top-4 left-4 flex overflow-hidden rounded-full border border-white/60 bg-white/80 backdrop-blur-sm">
+            <button
+              onClick={() => setView("front")}
+              className={`px-3 py-1 text-[10px] font-medium tracking-wide transition-colors ${
+                view === "front" ? "bg-text text-white" : "text-text-2"
+              }`}
+            >
+              FRONT
+            </button>
+            <button
+              onClick={() => setView("back")}
+              className={`px-3 py-1 text-[10px] font-medium tracking-wide transition-colors ${
+                view === "back" ? "bg-text text-white" : "text-text-2"
+              }`}
+            >
+              BACK
+            </button>
+          </div>
+        )}
         <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2">
           <span className="rounded-full border border-border bg-white/90 px-3 py-1 text-xs text-text-2 backdrop-blur-sm">
             {spec.color}

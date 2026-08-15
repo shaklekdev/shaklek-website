@@ -38,7 +38,13 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     <div className="mx-auto grid w-full max-w-5xl gap-10 px-6 py-10 lg:grid-cols-2">
       {/* Preview + chat */}
       <div>
-        <CustomizeChat spec={spec} onSpecChange={setSpec} previewGradient={item.gradient} />
+        <CustomizeChat
+          spec={spec}
+          onSpecChange={setSpec}
+          previewImage={item.image}
+          previewBackImage={item.backImage}
+          previewGradient={item.gradient}
+        />
       </div>
 
       {/* Options */}

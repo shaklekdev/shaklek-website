@@ -9,6 +9,10 @@ export type CatalogItem = {
   badge?: "TRENDING" | "NEW";
   gradient: [string, string];
   dressTier?: DressTier;
+  // Real photography, once generated -- falls back to the gradient when
+  // absent so items can be migrated one at a time.
+  image?: string;
+  backImage?: string;
 };
 
 // Pricing locked from the Shaklek business dossier (Section 9):
@@ -31,6 +35,8 @@ export const catalog: CatalogItem[] = [
     descriptor: "Relaxed fit",
     badge: "TRENDING",
     gradient: ["#f5f0e8", "#e8e4dc"],
+    image: "/catalog/oversized-shirt-front.png",
+    backImage: "/catalog/oversized-shirt-back.png",
   },
   {
     slug: "structured-blouse",
