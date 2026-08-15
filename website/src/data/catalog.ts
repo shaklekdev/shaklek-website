@@ -131,6 +131,23 @@ export const catalog: CatalogItem[] = [
     },
   },
   {
+    slug: "cargo-trousers",
+    name: "Cargo Trousers",
+    category: "Pants",
+    price: 350,
+    descriptor: "Wide leg, side pockets",
+    badge: "NEW",
+    gradient: ["#e9e2d2", "#ddd3bd"],
+    image: "/catalog/cargo-trousers-ivory-front.png",
+    backImage: "/catalog/cargo-trousers-ivory-back.png",
+    colorImages: {
+      Ivory: { front: "/catalog/cargo-trousers-ivory-front.png", back: "/catalog/cargo-trousers-ivory-back.png" },
+      White: { front: "/catalog/cargo-trousers-white-front.png", back: "/catalog/cargo-trousers-white-back.png" },
+      Navy: { front: "/catalog/cargo-trousers-navy-front.png", back: "/catalog/cargo-trousers-navy-back.png" },
+      Burgundy: { front: "/catalog/cargo-trousers-burgundy-front.png", back: "/catalog/cargo-trousers-burgundy-back.png" },
+    },
+  },
+  {
     slug: "utility-shirt",
     name: "Utility Shirt",
     category: "Shirt",
