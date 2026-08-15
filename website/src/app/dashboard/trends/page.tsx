@@ -76,12 +76,20 @@ export default function TrendDashboardPage() {
               stylist approves it.
             </p>
           </div>
-          <Link
-            href="/"
-            className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
-          >
-            ← Back to site
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/orders"
+              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
+            >
+              Orders
+            </Link>
+            <Link
+              href="/"
+              className="rounded-md border border-slate-300 px-3 py-1.5 text-sm text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
+            >
+              ← Back to site
+            </Link>
+          </div>
         </div>
       </header>
 
