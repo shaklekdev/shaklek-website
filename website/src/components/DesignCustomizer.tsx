@@ -16,6 +16,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const router = useRouter();
 
   const price = item.price + (spec.fabric === "linen" ? LINEN_UPCHARGE : 0);
+  const colorVariant = item.colorImages?.[spec.color];
+  const previewImage = colorVariant?.front ?? item.image;
+  const previewBackImage = colorVariant?.back ?? item.backImage;
 
   function handleAddToCart() {
     addItem({
@@ -41,8 +44,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         <CustomizeChat
           spec={spec}
           onSpecChange={setSpec}
-          previewImage={item.image}
-          previewBackImage={item.backImage}
+          previewImage={previewImage}
+          previewBackImage={previewBackImage}
           previewGradient={item.gradient}
         />
       </div>
