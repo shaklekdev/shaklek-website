@@ -1,19 +1,24 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 // Replaces the DASHBOARD_PASSWORD Basic Auth stopgap -- see payment-auth-todo.md.
-// Requires a signed-in Clerk session for every /dashboard/* route. Which
-// signed-in emails are actually allowed in is checked separately in
+// /dashboard/* requires a signed-in Clerk session; which signed-in emails
+// are actually allowed in is checked separately in
 // src/app/dashboard/layout.tsx, per Clerk's own guidance to not centralize
 // fine-grained checks in proxy (Next.js 16 Server Functions aren't covered
 // by proxy matchers, so it can't be the only gate).
+//
+// /account requires a signed-in session too, but with no email allowlist --
+// any customer who signs up gets in, since it's just their own order
+// history (matched by email in account/page.tsx).
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
+const isAccountRoute = createRouteMatcher(["/account(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isDashboardRoute(req)) {
+  if (isDashboardRoute(req) || isAccountRoute(req)) {
     await auth.protect();
   }
 });
 
 export const config = {
-  matcher: "/dashboard/:path*",
+  matcher: ["/dashboard/:path*", "/account/:path*"],
 };

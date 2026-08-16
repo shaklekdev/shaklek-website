@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
-import { sendOrderNotificationEmail, type NotifyOrderItem } from "@/lib/orderEmail";
+import {
+  sendOrderNotificationEmail,
+  sendCustomerConfirmationEmail,
+  type NotifyOrderItem,
+} from "@/lib/orderEmail";
 
 type OrderItem = NotifyOrderItem & { category?: string };
 
@@ -118,5 +122,6 @@ export async function POST(req: NextRequest) {
   }
 
   const { emailed } = await sendOrderNotificationEmail(items, method, total, email);
+  await sendCustomerConfirmationEmail(items, total, email);
   return NextResponse.json({ ok: true, emailed });
 }

@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 import Header from "@/components/Header";
 import { useCart } from "@/lib/CartContext";
 import type { CartItem } from "@/lib/CartContext";
@@ -25,6 +26,7 @@ type DisplayOrder = {
   total: number;
   status?: string; // only set for Stripe/DB-backed orders
   emailed?: boolean; // only set for the fallback/demo path
+  email?: string; // only set for Stripe/DB-backed orders
 };
 
 function fromLocalStorage(): DisplayOrder | null {
@@ -43,6 +45,7 @@ function OrderConfirmedContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
   const { clear } = useCart();
+  const { isSignedIn } = useUser();
   const [order, setOrder] = useState<DisplayOrder | null | undefined>(undefined);
 
   // Stripe/DB path: the webhook that marks the order "paid" runs async and
@@ -69,7 +72,12 @@ function OrderConfirmedContent() {
           return;
         }
 
-        setOrder({ items: data.order.items, total: data.order.total, status: data.order.status });
+        setOrder({
+          items: data.order.items,
+          total: data.order.total,
+          status: data.order.status,
+          email: data.order.email,
+        });
 
         if (data.order.status === "paid") {
           clear(); // Stripe already confirmed payment by redirecting here
@@ -173,6 +181,26 @@ function OrderConfirmedContent() {
         or email — within 24 hours to confirm the details before it goes
         to your tailor. Expect delivery in about 7 days from confirmation.
       </div>
+
+      {!isSignedIn && (
+        <div className="mt-4 rounded-shaklek-sm border border-border bg-surface p-5 text-left">
+          <p className="text-sm text-text">Want to track this order in one place?</p>
+          <p className="mt-1 text-xs text-text-2">
+            A free account saves your order history, sizing, and preferences for next time.
+          </p>
+          <Link
+            href="/sign-up"
+            className="mt-3 inline-block rounded-full bg-accent px-6 py-2.5 text-xs text-white transition-opacity hover:opacity-90"
+          >
+            Create a free account
+          </Link>
+          {order.email && (
+            <p className="mt-2 text-[11px] text-text-3">
+              Sign up with {order.email} and this order will already be there.
+            </p>
+          )}
+        </div>
+      )}
 
       <Link href="/" className="mt-8 inline-block text-sm text-text-2 underline">
         Back to catalog

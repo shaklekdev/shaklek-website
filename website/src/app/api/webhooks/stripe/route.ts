@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
-import { sendOrderNotificationEmail } from "@/lib/orderEmail";
+import { sendOrderNotificationEmail, sendCustomerConfirmationEmail } from "@/lib/orderEmail";
 
 // Stripe calls this once it has actually confirmed a payment -- this is the
 // only trustworthy point to mark an order paid and notify the stylist,
@@ -74,18 +74,29 @@ export async function POST(req: NextRequest) {
     .where(eq(schema.orderItems.orderId, orderId));
 
   if (order) {
+    const emailItems = items.map((item) => ({
+      name: item.name,
+      fabric: item.fabric,
+      color: item.color,
+      size: item.size,
+      measurements: item.measurements,
+      changes: item.changes,
+      freeformNotes: item.freeformNotes,
+      price: Number(item.priceAed),
+    }));
+
     await sendOrderNotificationEmail(
-      items.map((item) => ({
-        name: item.name,
-        fabric: item.fabric,
-        color: item.color,
-        size: item.size,
-        measurements: item.measurements,
-        changes: item.changes,
-        freeformNotes: item.freeformNotes,
-        price: Number(item.priceAed),
-      })),
+      emailItems,
       order.orders.paymentMethod,
+      Number(order.orders.totalAed),
+      order.customers.email,
+    );
+
+    // Guest customers get no login space -- this email plus the sign-up
+    // offer inside it is the entire "did I place this order" record they
+    // have unless they create an account.
+    await sendCustomerConfirmationEmail(
+      emailItems,
       Number(order.orders.totalAed),
       order.customers.email,
     );

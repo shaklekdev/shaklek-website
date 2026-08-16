@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
 
 export default function Header() {
   const { items } = useCart();
+  const { isSignedIn } = useUser();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/90 backdrop-blur-xl">
@@ -38,6 +40,18 @@ export default function Header() {
           >
             Our story
           </Link>
+          {isSignedIn ? (
+            <>
+              <Link href="/account" className="hidden hover:text-text transition-colors sm:inline">
+                My orders
+              </Link>
+              <UserButton />
+            </>
+          ) : (
+            <Link href="/sign-in" className="hidden hover:text-text transition-colors sm:inline">
+              Sign in
+            </Link>
+          )}
           <Link
             href="/cart"
             aria-label={`Cart, ${items.length} ${items.length === 1 ? "item" : "items"}`}
