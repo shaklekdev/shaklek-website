@@ -41,12 +41,25 @@ export default function Header() {
             Our story
           </Link>
           {isSignedIn ? (
-            <>
-              <Link href="/account" className="hidden hover:text-text transition-colors sm:inline">
-                My orders
-              </Link>
-              <UserButton />
-            </>
+            <UserButton>
+              <UserButton.MenuItems>
+                <UserButton.Link
+                  label="My orders"
+                  href="/account"
+                  labelIcon={
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM9 21a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  }
+                />
+              </UserButton.MenuItems>
+            </UserButton>
           ) : (
             <Link href="/sign-in" className="hidden hover:text-text transition-colors sm:inline">
               Sign in

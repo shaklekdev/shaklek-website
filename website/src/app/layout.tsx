@@ -12,7 +12,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorPrimary: "#1a1a1a",
+          fontFamily: "-apple-system, 'Segoe UI', Roboto, sans-serif",
+        },
+        elements: {
+          avatarBox: { backgroundColor: "#1a1a1a", color: "#ffffff" },
+        },
+      }}
+    >
       <html lang="en" className="h-full antialiased">
         <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />

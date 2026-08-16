@@ -1,5 +1,4 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { UserButton } from "@clerk/nextjs";
 import { desc, eq } from "drizzle-orm";
 import Header from "@/components/Header";
 import { getDb, schema } from "@/db/client";
@@ -41,13 +40,8 @@ export default async function AccountPage() {
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs tracking-wide text-text-3 uppercase">My account</p>
-            <h1 className="mt-1 text-[26px] text-text">Your orders</h1>
-          </div>
-          <UserButton />
-        </div>
+        <p className="text-xs tracking-wide text-text-3 uppercase">My account</p>
+        <h1 className="mt-1 text-[26px] text-text">Your orders</h1>
 
         {orders === null ? (
           <p className="subtitle mt-6">Nothing to show yet — database not configured.</p>

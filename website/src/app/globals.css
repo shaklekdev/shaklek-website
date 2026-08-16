@@ -100,3 +100,12 @@ h3 {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Clerk's default UserButton avatar is a remotely-generated img.clerk.com
+   image (fixed purple gradient) -- not themeable via the appearance prop,
+   since it's a raster image, not a styleable DOM element. Hide it so the
+   userButtonAvatarBox's own background (set via appearance.elements in
+   Header.tsx) shows through as a plain brand-black circle instead. */
+.cl-avatarImage {
+  display: none;
+}
