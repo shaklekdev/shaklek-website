@@ -25,8 +25,12 @@ export const orders = pgTable("orders", {
     .references(() => customers.id),
   totalAed: numeric("total_aed", { precision: 10, scale: 2 }).notNull(),
   paymentMethod: text("payment_method").notNull(),
-  // pending_payment -> paid (set by the Stripe webhook on checkout.session.completed).
-  // Stays pending_payment forever if Stripe isn't configured -- see /api/orders.
+  // pending_payment -> paid (checkout.session.completed) or -> payment_failed
+  // (checkout.session.expired, ~24h checkout timeout) -- both set by the
+  // Stripe webhook, api/webhooks/stripe/route.ts. Stays pending_payment
+  // forever if Stripe isn't configured -- see /api/orders. Fulfillment
+  // statuses (in progress, shipped, canceled) don't exist yet -- no
+  // external system can set those automatically, needs a staff UI.
   status: text("status").notNull().default("pending_payment"),
   stripeSessionId: text("stripe_session_id"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),

@@ -31,7 +31,7 @@ From dossier §5 — the mechanism that builds the catalog and validates produci
 
 ### 5. Payment webhooks
 - [x] Handler for `checkout.session.completed` — `website/src/app/api/webhooks/stripe/route.ts`, done 2026-08-14 (see `payment-auth-todo.md`)
-- [ ] Handler for payment *failure* events (`checkout.session.expired`, etc.) — not built, currently an order just sits at `pending_payment` forever if the customer abandons checkout
+- [x] **Handler for payment failure — built 2026-08-16.** `checkout.session.expired` (~24h checkout timeout) now flips the order to `payment_failed` instead of sitting at `pending_payment` forever — same route, `api/webhooks/stripe/route.ts`. Subscribed the live webhook endpoint (`we_1U4NbRFDCtKouREXsqU49nJY`) to the new event via Stripe's API directly (no dashboard UI touched). `/dashboard/orders` shows it with a red status pill. No stylist email on this path — nothing was made, nothing to notify about. Other failure modes (e.g. a declined card retried within the same still-open Checkout Session) don't need a handler — the customer just retries, no separate Stripe event to react to.
 - [ ] Handler for the refund case — dossier policy is refund-only-if-never-produced, needs to trigger through the real payment provider's refund API
 
 ### 6. Ops basics

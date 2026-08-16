@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 const STATUS_STYLE: Record<string, string> = {
   paid: "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200",
   pending_payment: "bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-200",
+  payment_failed: "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200",
 };
 
 async function getOrders() {

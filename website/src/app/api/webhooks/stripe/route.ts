@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Invalid signature" }, { status: 400 });
   }
 
-  if (event.type !== "checkout.session.completed") {
+  if (event.type !== "checkout.session.completed" && event.type !== "checkout.session.expired") {
     return NextResponse.json({ ok: true, skipped: event.type });
   }
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
   const orderId = session.client_reference_id;
 
   if (!orderId) {
-    console.error("[webhooks/stripe] checkout.session.completed with no client_reference_id");
+    console.error(`[webhooks/stripe] ${event.type} with no client_reference_id`);
     return NextResponse.json({ ok: false, error: "Missing order id" }, { status: 400 });
   }
 
@@ -47,6 +47,17 @@ export async function POST(req: NextRequest) {
   if (!db) {
     console.error("[webhooks/stripe] DATABASE_URL not set — cannot finalize order", orderId);
     return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 500 });
+  }
+
+  // A session expiring (customer abandoned checkout, ~24h timeout) just means
+  // the order stops sitting at pending_payment forever -- nothing was made,
+  // so no stylist notification, unlike the paid path below.
+  if (event.type === "checkout.session.expired") {
+    await db
+      .update(schema.orders)
+      .set({ status: "payment_failed" })
+      .where(eq(schema.orders.id, orderId));
+    return NextResponse.json({ ok: true });
   }
 
   await db.update(schema.orders).set({ status: "paid" }).where(eq(schema.orders.id, orderId));
