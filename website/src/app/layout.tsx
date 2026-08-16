@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import "./globals.css";
@@ -11,25 +12,27 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-full flex flex-col bg-bg text-text">
-        <CartProvider>
-          {children}
-          <Footer />
-        </CartProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className="h-full antialiased">
+        <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="anonymous"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+        <body className="min-h-full flex flex-col bg-bg text-text">
+          <CartProvider>
+            {children}
+            <Footer />
+          </CartProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

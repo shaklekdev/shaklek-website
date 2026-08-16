@@ -19,12 +19,14 @@ Per dossier §11, the refund mechanic itself doesn't need custom engineering —
 
 ### Customer accounts — decided: Clerk
 - [ ] Currently there are none — checkout is fully guest. Needed for: order history, the "digital wardrobe" retention feature (dossier §10), saved measurements, Shaklek+ subscription state
-- [x] **Clerk**, chosen over Cognito and over Auth.js/NextAuth. Reasoning: Cognito is the "stays inside AWS" option but has real, well-known developer-experience friction for custom flows — not worth it for a solo maintainer. Auth.js is free and flexible but self-hosted: you own the session logic, the database adapter tables, and keeping it patched. Clerk is a fully managed service — prebuilt sign-in UI, session handling, and magic-link/social login all done for you — which means the least ongoing maintenance of the three, and its free tier (currently ~10k monthly active users) comfortably covers pilot scale. "Easiest" and "cheapest" point the same direction here, which is why it won over Auth.js despite Auth.js being nominally free.
-- [ ] Magic link as the primary sign-in method — fits the low-friction brand positioning best, and is a built-in Clerk flow, not custom code
+- [x] **Clerk**, chosen over Cognito and over Auth.js/NextAuth. Reasoning: Cognito is the "stays inside AWS" option but has real, well-known developer-experience friction for custom flows — not worth it for a solo maintainer. Auth.js is free and flexible but self-hosted: you own the session logic, the database adapter tables, and keeping it patched. Clerk is a fully managed service — prebuilt sign-in UI, session handling, and magic-link/social login all done for you — which means the least ongoing maintenance of the three, and its free tier (50,000 monthly retained users, corrected 2026-08-16) comfortably covers pilot scale. "Easiest" and "cheapest" point the same direction here, which is why it won over Auth.js despite Auth.js being nominally free.
+- [ ] Magic link as the primary sign-in method for *customer* accounts — not yet built, only the staff side exists so far (see below)
 
-### Staff accounts (separate system)
-- [ ] Tailors need their own lightweight login for the swipe tool (`backend-todo.md`) — different permissions from customer accounts, should not share the same auth flow
-- [ ] Admin/stylist accounts for the ops dashboard
+### Staff accounts — built 2026-08-16
+- [x] Clerk provisioned via Stripe Projects (free Hobby plan), wired into the real app: `src/proxy.ts` requires a signed-in Clerk session for every `/dashboard/*` route (replaces the `DASHBOARD_PASSWORD` HTTP Basic Auth stopgap from 2026-08-15's `7e212ab`), and `src/app/dashboard/layout.tsx` checks the signed-in email against a `STAFF_EMAILS` allowlist env var before rendering `/dashboard/trends` or `/dashboard/orders` — closes the gap where those pages were reachable by anyone with the link. Custom sign-in page at `src/app/sign-in/[[...sign-in]]` (Clerk's hosted Account Portal 404'd for this instance, so built a local `<SignIn />` page instead — works, verified with Google OAuth + email-code options rendering correctly).
+- [ ] `STAFF_EMAILS` only set locally (`.env.local`) so far — still needs adding to Amplify env vars before this works in production, same as the other secrets.
+- [ ] Tailors need their own lightweight login for the swipe tool (`backend-todo.md`) — same Clerk setup, just a different allowlist/permission level, not built yet
+- [ ] No sign-out/account UI in the site's own chrome yet — `SignOutButton` only appears on the "not on the staff list" denial screen right now
 
 ### Data privacy tie-in
 - [ ] Whatever auth system is chosen needs to handle the PDPL consent requirements already documented for body-measurement data (dossier §11, also covered in `/legal/privacy` on the live site) — this isn't a separate concern, it has to be built into the account/consent flow from the start.

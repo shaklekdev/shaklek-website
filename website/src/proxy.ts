@@ -1,28 +1,18 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Stopgap staff gate for /dashboard until real auth (Clerk) is built --
-// see payment-auth-todo.md. Fails closed: if DASHBOARD_PASSWORD isn't set,
-// the dashboard is unreachable rather than silently public.
-export function proxy(request: NextRequest) {
-  const password = process.env.DASHBOARD_PASSWORD;
+// Replaces the DASHBOARD_PASSWORD Basic Auth stopgap -- see payment-auth-todo.md.
+// Requires a signed-in Clerk session for every /dashboard/* route. Which
+// signed-in emails are actually allowed in is checked separately in
+// src/app/dashboard/layout.tsx, per Clerk's own guidance to not centralize
+// fine-grained checks in proxy (Next.js 16 Server Functions aren't covered
+// by proxy matchers, so it can't be the only gate).
+const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 
-  if (!password) {
-    return new NextResponse("Dashboard not configured", { status: 503 });
+export default clerkMiddleware(async (auth, req) => {
+  if (isDashboardRoute(req)) {
+    await auth.protect();
   }
-
-  const auth = request.headers.get("authorization");
-  const expected = "Basic " + Buffer.from(`staff:${password}`).toString("base64");
-
-  if (auth === expected) {
-    return NextResponse.next();
-  }
-
-  return new NextResponse("Authentication required", {
-    status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="Shaklek staff"' },
-  });
-}
+});
 
 export const config = {
   matcher: "/dashboard/:path*",
