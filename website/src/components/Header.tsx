@@ -9,11 +9,18 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link
-          href="/"
-          className="font-display text-2xl font-light tracking-[3px] text-text"
-        >
-          Shaklek
+        <Link href="/" className="flex flex-col items-start leading-none">
+          <span className="font-display text-2xl font-light tracking-[3px] text-text">
+            Shaklek
+          </span>
+          <span className="my-1.5 h-px w-9 bg-gold" aria-hidden="true" />
+          <span
+            dir="rtl"
+            lang="ar"
+            className="font-arabic text-sm tracking-[1px] text-text"
+          >
+            شكلك
+          </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-text-2 sm:gap-8">
           <Link href="/" className="hidden hover:text-text transition-colors sm:inline">

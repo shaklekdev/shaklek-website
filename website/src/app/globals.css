@@ -22,6 +22,7 @@
   --font-display: "Georgia", "Times New Roman", serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
+  --font-arabic: "Reem Kufi", sans-serif;
 }
 
 @theme inline {
@@ -43,6 +44,7 @@
   --radius-shaklek-xs: var(--radius-xs);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
+  --font-arabic: var(--font-arabic);
 }
 
 * {
