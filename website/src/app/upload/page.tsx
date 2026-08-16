@@ -7,7 +7,6 @@ import CustomizeChat from "@/components/CustomizeChat";
 import SizePicker from "@/components/SizePicker";
 import { createSpecFromUpload, type DesignSpec, type GarmentType } from "@/data/designSpec";
 import { BASE_PRICE_BY_CATEGORY } from "@/data/catalog";
-import { LINEN_UPCHARGE } from "@/data/colors";
 import { useCart } from "@/lib/CartContext";
 
 const GARMENT_TYPES: GarmentType[] = ["Shirt", "Skirt", "Pants", "Dress"];
@@ -43,8 +42,7 @@ export default function UploadPage() {
 
   function handleAddToCart() {
     if (!spec || spec.garmentType === "Unspecified" || !preview) return;
-    const price =
-      BASE_PRICE_BY_CATEGORY[spec.garmentType] + (spec.fabric === "linen" ? LINEN_UPCHARGE : 0);
+    const price = BASE_PRICE_BY_CATEGORY[spec.garmentType];
     addItem({
       slug: "",
       name: `Custom ${spec.garmentType}`,
@@ -64,8 +62,7 @@ export default function UploadPage() {
 
   if (stage === "customize" && spec) {
     const price =
-      BASE_PRICE_BY_CATEGORY[spec.garmentType === "Unspecified" ? "Shirt" : spec.garmentType] +
-      (spec.fabric === "linen" ? LINEN_UPCHARGE : 0);
+      BASE_PRICE_BY_CATEGORY[spec.garmentType === "Unspecified" ? "Shirt" : spec.garmentType];
     return (
       <div className="flex flex-1 flex-col bg-bg">
         <Header />

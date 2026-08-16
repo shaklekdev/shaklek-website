@@ -1,4 +1,5 @@
 import type { CatalogItem } from "@/data/catalog";
+import { defaultChangesForCategory } from "@/data/parameterSliders";
 
 // The shared format the customize chat, preview, and (eventually) tailor spec
 // sheet all read from — same object whether the customer started from a
@@ -20,7 +21,11 @@ export type SilhouetteChangeType =
   | "pocket"
   | "cuff_detail"
   | "fit"
-  | "neckline";
+  | "neckline"
+  | "closure"
+  | "garment_length"
+  | "leg_width"
+  | "waist_rise";
 
 export type SilhouetteChange = {
   type: SilhouetteChangeType;
@@ -66,12 +71,12 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
   return {
     base: { kind: "catalog", slug: item.slug },
     garmentType: item.category,
-    fabric: "cotton",
+    fabric: "linen",
     color: "Ivory",
     size: "M",
     sizeMode: "standard",
     measurements: "",
-    changes: [],
+    changes: defaultChangesForCategory(item.category),
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },
   };

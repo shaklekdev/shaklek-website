@@ -13,5 +13,4 @@ export const colors: ColorOption[] = [
 export const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const;
 export type Size = (typeof sizes)[number];
 
-export const LINEN_UPCHARGE = 60;
 export const FREE_QUICK_CUSTOMIZE_TAPS = 5;
