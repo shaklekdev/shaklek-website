@@ -1,18 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import { useCart } from "@/lib/CartContext";
 import CustomizeParameters from "@/components/CustomizeParameters";
 import SizePicker from "@/components/SizePicker";
 
+type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
+
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
   const [step, setStep] = useState<2 | 3>(2);
+  const [savedMeasurements, setSavedMeasurements] = useState<SavedMeasurements | undefined>();
   const { addItem } = useCart();
+  const { isSignedIn } = useUser();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isSignedIn) return;
+    fetch("/api/account/measurements")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.ok && data.measurements) setSavedMeasurements(data.measurements);
+      })
+      .catch(() => {});
+  }, [isSignedIn]);
 
   const price = item.price;
   const colorVariant = item.colorImages?.[spec.color];
@@ -89,6 +104,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             sizeMode={spec.sizeMode}
             size={spec.size}
             measurements={spec.measurements}
+            initialMeasurements={savedMeasurements}
             onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
             onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
             onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}

@@ -10,6 +10,13 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 // /account requires a signed-in session too, but with no email allowlist --
 // any customer who signs up gets in, since it's just their own order
 // history (matched by email in account/page.tsx).
+//
+// /api/account/* is included in the matcher below (so clerkMiddleware runs
+// and currentUser() works at all -- without this, every call throws "auth()
+// was called but Clerk can't detect usage of clerkMiddleware()") but is
+// deliberately NOT in the protected list: auth.protect() redirects to the
+// sign-in page, which is wrong for a fetch()-called JSON API. Those routes
+// check currentUser() themselves and return a 401 JSON body instead.
 const isDashboardRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isAccountRoute = createRouteMatcher(["/account(.*)"]);
 
@@ -20,5 +27,5 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/account/:path*"],
+  matcher: ["/dashboard/:path*", "/account/:path*", "/api/account/:path*"],
 };

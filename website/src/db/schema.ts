@@ -16,6 +16,21 @@ export const customers = pgTable("customers", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").notNull().unique(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  // Set from /account. Not stored on the Clerk user itself -- Clerk
+  // rejects writes to first_name/last_name unless the "Name" personal
+  // information attribute is turned on for the instance, which is a
+  // Dashboard-only toggle with no Backend API equivalent. Keeping this in
+  // our own customers row instead avoids needing that Dashboard change.
+  name: text("name"),
+  // Saved from /account so a signed-in customer doesn't re-enter the same
+  // numbers on every order -- same fields as SizePicker's Tailored mode
+  // (order_items.measurements), just persisted once per customer instead
+  // of once per order.
+  measurementBust: text("measurement_bust"),
+  measurementWaist: text("measurement_waist"),
+  measurementHip: text("measurement_hip"),
+  measurementHeight: text("measurement_height"),
+  measurementNotes: text("measurement_notes"),
 });
 
 export const orders = pgTable("orders", {

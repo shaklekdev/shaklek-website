@@ -1,6 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { desc, eq } from "drizzle-orm";
 import Header from "@/components/Header";
+import AccountNameForm from "@/components/AccountNameForm";
+import MeasurementsForm from "@/components/MeasurementsForm";
 import { getDb, schema } from "@/db/client";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -8,6 +10,13 @@ const STATUS_LABEL: Record<string, string> = {
   pending_payment: "Awaiting payment",
   payment_failed: "Payment didn't go through",
 };
+
+async function getNameForEmail(email: string) {
+  const db = getDb();
+  if (!db) return null;
+  const [customer] = await db.select().from(schema.customers).where(eq(schema.customers.email, email));
+  return customer?.name ?? null;
+}
 
 async function getOrdersForEmail(email: string) {
   const db = getDb();
@@ -34,7 +43,7 @@ async function getOrdersForEmail(email: string) {
 export default async function AccountPage() {
   const user = await currentUser();
   const email = user?.primaryEmailAddress?.emailAddress;
-  const name = [user?.firstName, user?.lastName].filter(Boolean).join(" ");
+  const name = email ? await getNameForEmail(email) : null;
   const orders = email ? await getOrdersForEmail(email) : null;
 
   return (
@@ -54,6 +63,12 @@ export default async function AccountPage() {
             </a>
             .
           </p>
+        </div>
+
+        {!name && <AccountNameForm />}
+
+        <div className="mt-4">
+          <MeasurementsForm />
         </div>
 
         <h2 className="mt-8 text-lg text-text">Your orders</h2>

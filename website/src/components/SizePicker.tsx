@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { sizes } from "@/data/colors";
 import type { SizeMode } from "@/data/designSpec";
 
@@ -32,6 +32,7 @@ function composeMeasurements(fields: MeasurementFields): string {
 export default function SizePicker({
   sizeMode,
   size,
+  initialMeasurements,
   onSizeModeChange,
   onSizeChange,
   onMeasurementsChange,
@@ -39,11 +40,23 @@ export default function SizePicker({
   sizeMode: SizeMode;
   size: string;
   measurements: string;
+  initialMeasurements?: Partial<MeasurementFields>;
   onSizeModeChange: (mode: SizeMode) => void;
   onSizeChange: (size: string) => void;
   onMeasurementsChange: (measurements: string) => void;
 }) {
   const [fields, setFields] = useState<MeasurementFields>(EMPTY_FIELDS);
+
+  // Saved measurements load async (fetched from /account's data by the
+  // parent) -- arrive after this component's first render, so seed the
+  // fields once they show up rather than only on initial mount.
+  useEffect(() => {
+    if (!initialMeasurements) return;
+    const next = { ...EMPTY_FIELDS, ...initialMeasurements };
+    setFields(next);
+    onMeasurementsChange(composeMeasurements(next));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialMeasurements]);
 
   function updateField(key: keyof MeasurementFields, value: string) {
     const next = { ...fields, [key]: value };
