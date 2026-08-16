@@ -7,7 +7,6 @@ import { LINEN_UPCHARGE } from "@/data/colors";
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import { useCart } from "@/lib/CartContext";
 import CustomizeChat from "@/components/CustomizeChat";
-import FabricColorPicker from "@/components/FabricColorPicker";
 import SizePicker from "@/components/SizePicker";
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
@@ -38,55 +37,57 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-5xl gap-10 px-6 py-10 lg:grid-cols-2">
-      {/* Preview + chat */}
-      <div>
-        <CustomizeChat
-          spec={spec}
-          onSpecChange={setSpec}
-          previewImage={previewImage}
-          previewBackImage={previewBackImage}
-          previewGradient={item.gradient}
-        />
-      </div>
+    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
+      <p className="text-xs tracking-wide text-text-3 uppercase">{item.category}</p>
+      <h1 className="mt-1 font-display text-2xl text-text sm:text-[26px]">{item.name}</h1>
+      <p className="subtitle">{item.descriptor}</p>
 
-      {/* Options */}
-      <div>
-        <p className="text-xs tracking-wide text-text-3 uppercase">
-          {item.category}
-        </p>
-        <h1 className="mt-1 text-[26px] text-text">{item.name}</h1>
-        <p className="subtitle">{item.descriptor}</p>
+      <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-2 lg:gap-12">
+        {/* Step 2 */}
+        <div>
+          <p className="text-xs tracking-wide text-text-3 uppercase">Step 2</p>
+          <h2 className="mt-1 text-lg text-text">Make it yours</h2>
 
-        <FabricColorPicker
-          fabric={spec.fabric}
-          color={spec.color}
-          onFabricChange={(fabric) => setSpec((s) => ({ ...s, fabric }))}
-          onColorChange={(color) => setSpec((s) => ({ ...s, color }))}
-        />
-
-        <SizePicker
-          sizeMode={spec.sizeMode}
-          size={spec.size}
-          measurements={spec.measurements}
-          onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
-          onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
-          onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
-        />
-
-        <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
-          <div>
-            <p className="text-xs text-text-3">Total</p>
-            <p className="font-display text-2xl text-text">AED {price}</p>
+          <div className="mt-5">
+            <CustomizeChat
+              spec={spec}
+              onSpecChange={setSpec}
+              itemName={item.name}
+              previewImage={previewImage}
+              previewBackImage={previewBackImage}
+              previewGradient={item.gradient}
+            />
           </div>
-          <button
-            onClick={handleAddToCart}
-            disabled={!spec.constraints.passed}
-            className="rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
-            title={spec.constraints.passed ? undefined : "Resolve the flagged request above before continuing"}
-          >
-            Add to cart
-          </button>
+        </div>
+
+        {/* Step 3 */}
+        <div>
+          <p className="text-xs tracking-wide text-text-3 uppercase">Step 3</p>
+          <h2 className="mt-1 text-lg text-text">Choose the size</h2>
+
+          <SizePicker
+            sizeMode={spec.sizeMode}
+            size={spec.size}
+            measurements={spec.measurements}
+            onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
+            onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
+            onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
+          />
+
+          <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs text-text-3">Total</p>
+              <p className="font-display text-2xl text-text">AED {price}</p>
+            </div>
+            <button
+              onClick={handleAddToCart}
+              disabled={!spec.constraints.passed}
+              className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
+              title={spec.constraints.passed ? undefined : "Resolve the flagged request above before continuing"}
+            >
+              Add to cart
+            </button>
+          </div>
         </div>
       </div>
     </div>

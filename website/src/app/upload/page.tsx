@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import CustomizeChat from "@/components/CustomizeChat";
-import FabricColorPicker from "@/components/FabricColorPicker";
 import SizePicker from "@/components/SizePicker";
 import { createSpecFromUpload, type DesignSpec, type GarmentType } from "@/data/designSpec";
 import { BASE_PRICE_BY_CATEGORY } from "@/data/catalog";
@@ -82,6 +81,7 @@ export default function UploadPage() {
             <CustomizeChat
               spec={spec}
               onSpecChange={setSpec}
+              itemName="Your upload"
               previewImage={preview}
               previewGradient={["#f5f0e8", "#e8e4dc"]}
               suggestions={["Add side slits", "Add a front pocket", "Shorter sleeves"]}
@@ -91,13 +91,6 @@ export default function UploadPage() {
           <div>
             <p className="text-xs tracking-wide text-text-3 uppercase">Custom {spec.garmentType}</p>
             <h1 className="mt-1 text-[26px] text-text">Customize it</h1>
-
-            <FabricColorPicker
-              fabric={spec.fabric}
-              color={spec.color}
-              onFabricChange={(fabric) => setSpec((s) => (s ? { ...s, fabric } : s))}
-              onColorChange={(color) => setSpec((s) => (s ? { ...s, color } : s))}
-            />
 
             <SizePicker
               sizeMode={spec.sizeMode}

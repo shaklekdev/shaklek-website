@@ -3,12 +3,9 @@ import type { CatalogItem } from "@/data/catalog";
 
 export default function CatalogCard({ item }: { item: CatalogItem }) {
   return (
-    <Link
-      href={`/design/${item.slug}`}
-      className="group block overflow-hidden rounded-shaklek-sm border border-border bg-card shadow-[var(--shadow)] transition-all hover:shadow-[var(--shadow-lg)] hover:-translate-y-0.5"
-    >
+    <Link href={`/design/${item.slug}`} className="group block">
       <div
-        className="relative aspect-[3/4] w-full"
+        className="relative aspect-[3/4] w-full overflow-hidden rounded-shaklek-sm bg-card"
         style={
           item.image
             ? undefined
@@ -22,7 +19,7 @@ export default function CatalogCard({ item }: { item: CatalogItem }) {
           <img
             src={item.image}
             alt={item.name}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         )}
         {item.badge && (
@@ -35,12 +32,13 @@ export default function CatalogCard({ item }: { item: CatalogItem }) {
             ELABORATE
           </span>
         )}
-        <div className="absolute inset-x-3 bottom-3 rounded-lg bg-white/92 px-3 py-2 backdrop-blur-sm">
-          <p className="text-[13px] font-medium text-text">{item.name}</p>
-          <p className="text-xs text-text-2">
-            AED {item.price} · {item.descriptor}
-          </p>
-        </div>
+      </div>
+      <div className="mt-4 text-center">
+        <p className="font-display text-[15px] text-text">{item.name}</p>
+        <p className="mt-1 text-[11px] tracking-wide text-text-3 uppercase">
+          {item.descriptor}
+        </p>
+        <p className="mt-1.5 text-xs text-text-2">AED {item.price}</p>
       </div>
     </Link>
   );

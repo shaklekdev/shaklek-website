@@ -52,8 +52,7 @@ export default function SizePicker({
   }
 
   return (
-    <div className="mt-8">
-      <p className="mb-3 text-sm text-text">Size</p>
+    <div className="mt-5">
       <div className="flex gap-3">
         <button
           onClick={() => onSizeModeChange("standard")}

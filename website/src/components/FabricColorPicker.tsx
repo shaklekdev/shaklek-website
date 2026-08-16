@@ -15,50 +15,42 @@ export default function FabricColorPicker({
   onColorChange: (color: string) => void;
 }) {
   return (
-    <>
-      <div className="mt-8">
-        <p className="mb-3 text-sm text-text">Fabric</p>
-        <div className="flex gap-3">
+    <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center gap-3">
+        {colors.map((c) => (
           <button
-            onClick={() => onFabricChange("cotton")}
-            aria-pressed={fabric === "cotton"}
-            className={`flex-1 rounded-shaklek-xs border px-4 py-3 text-left text-sm transition-colors ${
-              fabric === "cotton" ? "border-accent bg-surface-2" : "border-border-strong"
+            key={c.name}
+            aria-label={c.name}
+            aria-pressed={c.name === color}
+            onClick={() => onColorChange(c.name)}
+            className={`h-8 w-8 rounded-full border-2 transition-all ${
+              c.name === color ? "border-accent scale-110" : "border-transparent"
             }`}
-          >
-            <span className="block font-medium text-text">Cotton</span>
-            <span className="text-xs text-text-3">Included</span>
-          </button>
-          <button
-            onClick={() => onFabricChange("linen")}
-            aria-pressed={fabric === "linen"}
-            className={`flex-1 rounded-shaklek-xs border px-4 py-3 text-left text-sm transition-colors ${
-              fabric === "linen" ? "border-accent bg-surface-2" : "border-border-strong"
-            }`}
-          >
-            <span className="block font-medium text-text">Linen</span>
-            <span className="text-xs text-gold">+AED {LINEN_UPCHARGE}</span>
-          </button>
-        </div>
+            style={{ background: c.hex }}
+          />
+        ))}
       </div>
 
-      <div className="mt-8">
-        <p className="mb-3 text-sm text-text">Color</p>
-        <div className="flex flex-wrap gap-3">
-          {colors.map((c) => (
-            <button
-              key={c.name}
-              aria-label={c.name}
-              aria-pressed={c.name === color}
-              onClick={() => onColorChange(c.name)}
-              className={`h-9 w-9 rounded-full border-2 transition-all ${
-                c.name === color ? "border-accent scale-110" : "border-transparent"
-              }`}
-              style={{ background: c.hex }}
-            />
-          ))}
-        </div>
+      <div className="flex shrink-0 gap-1.5 rounded-full border border-border-strong p-1">
+        <button
+          onClick={() => onFabricChange("cotton")}
+          aria-pressed={fabric === "cotton"}
+          className={`rounded-full px-3 py-1.5 text-xs transition-colors ${
+            fabric === "cotton" ? "bg-text text-white" : "text-text-2"
+          }`}
+        >
+          Cotton
+        </button>
+        <button
+          onClick={() => onFabricChange("linen")}
+          aria-pressed={fabric === "linen"}
+          className={`rounded-full px-3 py-1.5 text-xs transition-colors ${
+            fabric === "linen" ? "bg-text text-white" : "text-text-2"
+          }`}
+        >
+          Linen <span className={fabric === "linen" ? "text-gold" : "text-text-3"}>+{LINEN_UPCHARGE}</span>
+        </button>
       </div>
-    </>
+    </div>
   );
 }
