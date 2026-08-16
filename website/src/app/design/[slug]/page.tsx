@@ -21,7 +21,7 @@ export default async function DesignPage({
   return (
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
-      <div className="mx-auto w-full max-w-5xl px-6 pt-4">
+      <div className="mx-auto w-full max-w-xl px-6 pt-4">
         <Link href="/" className="text-xs text-text-3 hover:text-text-2">
           ← Back to catalog
         </Link>

@@ -10,6 +10,7 @@ import SizePicker from "@/components/SizePicker";
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
+  const [step, setStep] = useState<2 | 3>(2);
   const { addItem } = useCart();
   const router = useRouter();
 
@@ -36,28 +37,51 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-10">
-      <div className="grid gap-10 lg:grid-cols-2 lg:gap-12">
-        {/* Step 2 */}
-        <div>
-          <p className="text-xs tracking-wide text-text-3 uppercase">Step 2</p>
-          <h2 className="mt-1 text-lg text-text">Make it yours</h2>
+    <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10">
+      <div className="flex w-fit gap-1 rounded-full border border-border-strong p-1">
+        <button
+          onClick={() => setStep(2)}
+          aria-pressed={step === 2}
+          className={`rounded-full px-4 py-2 text-xs transition-colors ${
+            step === 2 ? "bg-text text-white" : "text-text-2 hover:text-text"
+          }`}
+        >
+          Step 2 · Make it yours
+        </button>
+        <button
+          onClick={() => setStep(3)}
+          aria-pressed={step === 3}
+          className={`rounded-full px-4 py-2 text-xs transition-colors ${
+            step === 3 ? "bg-text text-white" : "text-text-2 hover:text-text"
+          }`}
+        >
+          Step 3 · Size
+        </button>
+      </div>
 
-          <div className="mt-5">
-            <CustomizeParameters
-              spec={spec}
-              onSpecChange={setSpec}
-              itemName={item.name}
-              category={item.category}
-              previewImage={previewImage}
-              previewBackImage={previewBackImage}
-              previewGradient={item.gradient}
-            />
-          </div>
+      {step === 2 && (
+        <div className="mt-6">
+          <CustomizeParameters
+            spec={spec}
+            onSpecChange={setSpec}
+            itemName={item.name}
+            category={item.category}
+            previewImage={previewImage}
+            previewBackImage={previewBackImage}
+            previewGradient={item.gradient}
+          />
+
+          <button
+            onClick={() => setStep(3)}
+            className="mt-6 w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
+          >
+            Continue to size
+          </button>
         </div>
+      )}
 
-        {/* Step 3 */}
-        <div>
+      {step === 3 && (
+        <div className="mt-6">
           <p className="text-xs tracking-wide text-text-3 uppercase">Step 3</p>
           <h2 className="mt-1 text-lg text-text">Choose the size</h2>
 
@@ -85,7 +109,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

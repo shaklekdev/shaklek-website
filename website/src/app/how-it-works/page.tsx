@@ -10,12 +10,12 @@ const steps = [
   {
     n: "02",
     title: "Make it yours",
-    body: "Try a Quick Customize variation with one tap, or tell us exactly what you'd like changed — sleeve length, fit, color, details. A stylist reviews every request personally.",
+    body: "Dial in the fit with sliders — sleeve length, pockets, closure, and more — then choose linen or organic cotton and your color. No price difference between fabrics, and the preview always shows exactly what gets made. Uploaded your own reference instead? Tell us what to change and a stylist reviews it personally.",
   },
   {
     n: "03",
-    title: "Choose cotton or linen",
-    body: "Every piece is made in real cotton or linen — no synthetics. Pick your size, or use the optional camera measurement for a more precise fit.",
+    title: "Shape it to your body",
+    body: "Pick a standard size, or switch to Tailored and enter your own measurements for a precise fit — cut to those numbers by your tailor, no AI involved.",
   },
   {
     n: "04",
