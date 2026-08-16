@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import OrderStatusButtons from "@/components/OrderStatusButtons";
 
 export const dynamic = "force-dynamic";
 
@@ -8,6 +9,9 @@ const STATUS_STYLE: Record<string, string> = {
   paid: "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200",
   pending_payment: "bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-200",
   payment_failed: "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200",
+  in_progress: "bg-blue-50 text-blue-800 ring-1 ring-inset ring-blue-200",
+  shipped: "bg-violet-50 text-violet-800 ring-1 ring-inset ring-violet-200",
+  canceled: "bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-300",
 };
 
 async function getOrders() {
@@ -83,6 +87,7 @@ export default async function OrdersDashboardPage() {
                   <th className="px-4 py-3 font-medium">Items</th>
                   <th className="px-4 py-3 font-medium">Method</th>
                   <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium">Update</th>
                   <th className="px-4 py-3 text-right font-medium">Total</th>
                 </tr>
               </thead>
@@ -115,6 +120,9 @@ export default async function OrdersDashboardPage() {
                       >
                         {order.status}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <OrderStatusButtons orderId={order.id} status={order.status} />
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-medium">
                       AED {order.total}

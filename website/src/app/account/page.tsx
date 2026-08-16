@@ -9,6 +9,9 @@ const STATUS_LABEL: Record<string, string> = {
   paid: "Confirmed",
   pending_payment: "Awaiting payment",
   payment_failed: "Payment didn't go through",
+  in_progress: "Being tailored",
+  shipped: "Shipped",
+  canceled: "Canceled",
 };
 
 async function getNameForEmail(email: string) {
