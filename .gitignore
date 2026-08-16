@@ -19,3 +19,15 @@ website/coverage/
 **/.env*
 !**/.env.example
 photos/
+
+# local working/reference material, not site source — lives at repo root,
+# not under website/, so keep it off git entirely (large, non-code, personal)
+/brand-assets/
+/branding/
+/insparation/
+/top/
+/shaklek_logo_*.html
+
+# legal/incorporation documents — reference copies only, not for version control
+/DCCI-*.pdf
+/LicenseCertificateReport_*.pdf

@@ -1,16 +1,16 @@
 # Web Design — TODO
 
-Status: a real, consistent design system exists and is in production use (Georgia serif display type, cream/gold palette, ported directly from the original brand prototype). What's missing is mostly *content* — real imagery — and the polish layer.
+Status: a real, consistent design system exists and is in production use (Georgia serif display type, cream/gold palette, ported directly from the original brand prototype). Real catalog photography closed the biggest content gap as of 2026-08-16 — what's left is mostly the polish layer and states nothing has been designed for yet.
 
 ## Done
 - [x] Color and type system ported into Tailwind theme tokens (`globals.css`)
-- [x] Consistent header/footer across all pages
+- [x] Consistent header/footer across all pages, including an Arabic wordmark lockup in the header (2026-08-16)
 - [x] Catalog cards, form styling, button/badge system
 
 ## To do
 
-### Imagery — the biggest gap
-- [ ] Every catalog item is currently a CSS gradient block, not a real photo or illustration. This needs a real decision: commission flat-sketch illustrations now (cheap, fast, matches the "technical spec" feel), or wait for the pilot to produce real photography (more authentic, slower). A sample illustrated catalog has been produced separately for tailor/AI reference — see the shared artifact — which could double as a starting point for real site imagery.
+### Imagery — closed as of 2026-08-16
+- [x] All 8 catalog items now have real AI-generated photography with per-color front/back image variants (`website/public/catalog/`) — the CSS-gradient-placeholder gap is closed. Gradient values remain in `catalog.ts` only as a fallback background, not the primary display.
 - [ ] Favicon and app icons — currently using Next.js defaults
 - [ ] Open Graph / social share images per page
 
@@ -18,7 +18,7 @@ Status: a real, consistent design system exists and is in production use (Georgi
 - [ ] Empty states (e.g. no search results, if search gets added)
 - [ ] Error states beyond the one basic message on `/upload`
 - [ ] Loading skeletons for async actions (checkout submission, upload)
-- [ ] 404 page — currently the Next.js default, not brand-styled
+- [x] 404 page — brand-styled (header, serif "Nothing here" heading, "Back to catalog" button), not the Next.js default
 
 ### Not designed at all
 - [ ] Account pages (login, order history, "my wardrobe")

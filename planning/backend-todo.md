@@ -1,6 +1,6 @@
 # Backend — TODO
 
-Status: schema and persistence code exist (2026-08-13), but no RDS instance is provisioned yet — `DATABASE_URL` is unset, so orders still only exist as emails in practice. The upload flow was unified into `/api/orders`/`CustomizeChat` earlier this session; there is no separate `/api/custom-requests` route anymore.
+Status: schema and persistence code exist (2026-08-13), and as of 2026-08-14 a real database is live — Neon Postgres, not RDS (chosen for cost, see `aws-infrastructure-todo.md`) — with `DATABASE_URL` set and orders confirmed persisting for real. The upload flow was unified into `/api/orders`/`CustomizeChat` earlier this session; there is no separate `/api/custom-requests` route anymore.
 
 ## Done
 - [x] `/api/orders` — receives checkout data, emails `orders@shaklek.com` via Resend (needs `RESEND_API_KEY` to actually send — currently logs instead)
@@ -9,11 +9,10 @@ Status: schema and persistence code exist (2026-08-13), but no RDS instance is p
 
 ## To build, roughly in order
 
-### 1. A real database
-Schema and write path are ready (see above) but nothing actually persists until RDS exists — that's a billable AWS resource, provisioned separately per the cost-guardrail rule, not bundled into this code change.
-- [ ] Stand up RDS Postgres (`db.t4g.micro`, single-AZ — see `aws-infrastructure-todo.md`), set `DATABASE_URL` in Amplify env vars, run `npx drizzle-kit migrate` (or apply `drizzle/0000_quiet_fallen_one.sql` directly) against it
-- [x] **Orders + order_items tables** — schema written, not yet applied to a real database
-- [x] **Customers table** — schema written (email only for now; style preferences/measurement history from dossier §5 not modeled yet), not yet applied to a real database
+### 1. A real database — done
+- [x] Neon Postgres provisioned, `DATABASE_URL` set in Amplify env vars, migration applied — confirmed persisting real orders in production as of 2026-08-14
+- [x] **Orders + order_items tables** — schema written and live
+- [x] **Customers table** — schema written and live (email only for now; style preferences/measurement history from dossier §5 not modeled yet)
 - [ ] **Tailor table** — the dossier's "tailor database": skills by garment type, spec-compliance history, reliability — not started, waits on the tailor swipe tool actually needing it
 - [ ] **Catalog table** — move catalog items out of the hardcoded `src/data/catalog.ts` file into the database once there's an admin tool to manage it — not started, waits on that admin tool
 
