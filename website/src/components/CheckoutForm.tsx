@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
 
 type PaymentMethod = "apple-pay" | "card" | "tabby";
@@ -17,9 +19,19 @@ const LAST_ORDER_KEY = "shaklek-last-order";
 export default function CheckoutForm({ total }: { total: number }) {
   const router = useRouter();
   const { items, clear } = useCart();
+  const { isSignedIn, user } = useUser();
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Signed-in customers checkout under their account email, not whatever
+  // they happen to type -- orders are matched to /account by email, so
+  // letting it drift would silently strand an order outside their history.
+  useEffect(() => {
+    if (isSignedIn && user?.primaryEmailAddress?.emailAddress) {
+      setEmail(user.primaryEmailAddress.emailAddress);
+    }
+  }, [isSignedIn, user]);
 
   async function handlePay() {
     setSubmitting(true);
@@ -53,6 +65,15 @@ export default function CheckoutForm({ total }: { total: number }) {
 
   return (
     <div className="mt-8">
+      {!isSignedIn && (
+        <div className="mb-6 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-sm text-text-2">
+          <Link href="/sign-in?redirect_url=/checkout" className="font-medium text-text underline">
+            Sign in
+          </Link>{" "}
+          to save your measurements and track this order — or continue as a guest below.
+        </div>
+      )}
+
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
         Your email
       </label>
@@ -60,12 +81,20 @@ export default function CheckoutForm({ total }: { total: number }) {
         id="checkout-email"
         type="email"
         required
+        readOnly={isSignedIn}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
-        className="mb-6 w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+        className={`mb-1 w-full rounded-shaklek-xs border border-border-strong p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none ${
+          isSignedIn ? "bg-surface-2" : "bg-white"
+        }`}
       />
-      <p className="mb-3 text-sm text-text">Pay as guest</p>
+      <p className="mb-5 text-xs text-text-3">
+        {isSignedIn
+          ? "Using your account email so this order shows up in your history."
+          : "We'll send your order confirmation here."}
+      </p>
+      <p className="mb-3 text-sm text-text">{isSignedIn ? "Payment method" : "Pay as guest"}</p>
       <div className="space-y-2">
         {methods.map((m) => (
           <button
