@@ -34,6 +34,7 @@ async function getOrdersForEmail(email: string) {
 export default async function AccountPage() {
   const user = await currentUser();
   const email = user?.primaryEmailAddress?.emailAddress;
+  const name = [user?.firstName, user?.lastName].filter(Boolean).join(" ");
   const orders = email ? await getOrdersForEmail(email) : null;
 
   return (
@@ -41,7 +42,21 @@ export default async function AccountPage() {
       <Header />
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
         <p className="text-xs tracking-wide text-text-3 uppercase">My account</p>
-        <h1 className="mt-1 text-[26px] text-text">Your orders</h1>
+        <h1 className="mt-1 text-[26px] text-text">{name || "Your account"}</h1>
+
+        <div className="mt-4 rounded-shaklek-sm border border-border bg-surface p-5">
+          <p className="text-xs text-text-3">Email</p>
+          <p className="mt-0.5 text-sm text-text">{email}</p>
+          <p className="mt-3 text-xs text-text-3">
+            Forgot your password? You can reset it from the{" "}
+            <a href="/sign-in" className="underline hover:text-text-2">
+              sign-in page
+            </a>
+            .
+          </p>
+        </div>
+
+        <h2 className="mt-8 text-lg text-text">Your orders</h2>
 
         {orders === null ? (
           <p className="subtitle mt-6">Nothing to show yet — database not configured.</p>

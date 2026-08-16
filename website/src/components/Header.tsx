@@ -41,7 +41,7 @@ export default function Header() {
             Our story
           </Link>
           {isSignedIn ? (
-            <UserButton>
+            <UserButton userProfileMode="navigation" userProfileUrl="/account">
               <UserButton.MenuItems>
                 <UserButton.Link
                   label="My orders"
