@@ -14,8 +14,8 @@ export default function Home() {
           your way.
         </h1>
         <p className="subtitle mx-auto mt-3 max-w-md">
-          Elegant fashion essentials — customizable to your taste,
-          friendly to your skin, shaped to your body.
+          Elegant fashion essentials. Customizable to your taste, friendly
+          to your skin, shaped to your body.
         </p>
       </section>
 
