@@ -2,27 +2,57 @@ import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
 import { getDb, schema } from "@/db/client";
+import { catalog } from "@/data/catalog";
 
 const STAFF_EMAILS = (process.env.STAFF_EMAILS ?? "")
   .split(",")
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
 
+type SpecItem = {
+  name: string;
+  category: string | null;
+  fabric: string | null;
+  color: string | null;
+  size: string | null;
+  measurements: string | null;
+  changes: string[] | null;
+  freeformNotes: string | null;
+};
+
+// Order items store the catalog display name + color as plain text, not a
+// slug reference, so this re-derives the matching front/back photos the
+// same way the design page does (colorImages keyed by color name) --
+// falls back to the item's default (Ivory) image pair if the ordered
+// color isn't in colorImages (shouldn't happen, but a spec sheet with the
+// wrong-color photo would be worse than one with no photo).
+function imagesFor(item: SpecItem): { front?: string; back?: string } {
+  const catalogItem = catalog.find((c) => c.name === item.name);
+  if (!catalogItem) return {};
+  const byColor = item.color ? catalogItem.colorImages?.[item.color] : undefined;
+  return {
+    front: byColor?.front ?? catalogItem.image,
+    back: byColor?.back ?? catalogItem.backImage,
+  };
+}
+
+function readPublicImage(publicPath: string | undefined): Buffer | null {
+  if (!publicPath) return null;
+  try {
+    return fs.readFileSync(path.join(process.cwd(), "public", publicPath));
+  } catch {
+    return null;
+  }
+}
+
 function buildPdf(order: {
   id: string;
   createdAt: Date;
   customerEmail: string;
-  items: {
-    name: string;
-    category: string | null;
-    fabric: string | null;
-    color: string | null;
-    size: string | null;
-    measurements: string | null;
-    changes: string[] | null;
-    freeformNotes: string | null;
-  }[];
+  items: SpecItem[];
 }): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 50 });
@@ -42,8 +72,57 @@ function buildPdf(order: {
     doc.fillColor("#000");
 
     order.items.forEach((item, i) => {
-      doc.moveDown(1.2);
-      doc.fontSize(14).text(`${i + 1}. ${item.name}`);
+      if (i > 0) doc.addPage();
+      else doc.moveDown(1.2);
+
+      doc.fontSize(16).text(`${i + 1}. ${item.name}`);
+      doc.moveDown(0.5);
+
+      const { front, back } = imagesFor(item);
+      const frontBuf = readPublicImage(front);
+      const backBuf = readPublicImage(back);
+      const imageTop = doc.y;
+      const imageWidth = 220;
+
+      // pdfkit scales by width alone, so the real rendered height depends
+      // on each photo's aspect ratio -- openImage() (untyped in
+      // @types/pdfkit, but real at runtime) reads that before drawing, so
+      // the "Front"/"Back" captions land right under the actual image
+      // instead of at a guessed fixed offset.
+      const openImage = doc as unknown as {
+        openImage: (buf: Buffer) => { width: number; height: number };
+      };
+      const scaledHeight = (buf: Buffer) => {
+        const { width, height } = openImage.openImage(buf);
+        return (imageWidth / width) * height;
+      };
+
+      let tallest = 0;
+      if (frontBuf) {
+        const h = scaledHeight(frontBuf);
+        tallest = Math.max(tallest, h);
+        doc.image(frontBuf, doc.page.margins.left, imageTop, { width: imageWidth });
+        doc
+          .fontSize(9)
+          .fillColor("#666")
+          .text("Front", doc.page.margins.left, imageTop + h + 4, { width: imageWidth, align: "center" });
+        doc.fillColor("#000");
+      }
+      if (backBuf) {
+        const h = scaledHeight(backBuf);
+        tallest = Math.max(tallest, h);
+        const x = doc.page.margins.left + imageWidth + 30;
+        doc.image(backBuf, x, imageTop, { width: imageWidth });
+        doc
+          .fontSize(9)
+          .fillColor("#666")
+          .text("Back", x, imageTop + h + 4, { width: imageWidth, align: "center" });
+        doc.fillColor("#000");
+      }
+      if (frontBuf || backBuf) {
+        doc.y = imageTop + tallest + 24;
+      }
+
       doc.fontSize(11);
       if (item.category) doc.text(`Category: ${item.category}`);
       if (item.fabric) doc.text(`Fabric: ${item.fabric}`);
@@ -54,7 +133,10 @@ function buildPdf(order: {
         doc.text(`Customization: ${item.changes.join(", ")}`);
       }
       if (item.freeformNotes) doc.text(`Notes: ${item.freeformNotes}`);
-      doc.moveTo(doc.x, doc.y + 8).lineTo(545, doc.y + 8).strokeColor("#ddd").stroke();
+      if (!frontBuf && !backBuf) {
+        doc.moveDown(0.5).fontSize(9).fillColor("#999").text("No reference photo available for this item.");
+        doc.fillColor("#000");
+      }
     });
 
     doc.end();
@@ -101,7 +183,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename="shaklek-spec-${id.slice(0, 8)}.pdf"`,
+      "Content-Disposition": `attachment; filename="shaklek-spec-${id.slice(0, 8)}.pdf"`,
     },
   });
 }

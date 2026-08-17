@@ -144,11 +144,9 @@ export default async function OrdersDashboardPage() {
                       <div className="flex flex-col items-start gap-1">
                         <a
                           href={`/api/dashboard/orders/${order.id}/spec-sheet`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-slate-600 underline hover:text-slate-900"
+                          className="text-xs font-medium text-slate-600 underline hover:text-slate-900"
                         >
-                          Spec sheet
+                          1. Download PDF
                         </a>
                         {tailorNumber ? (
                           <a
@@ -159,13 +157,14 @@ export default async function OrdersDashboardPage() {
                             rel="noopener noreferrer"
                             className="text-xs font-medium text-emerald-700 underline hover:text-emerald-900"
                           >
-                            Send to tailor
+                            2. Open WhatsApp chat
                           </a>
                         ) : (
                           <span className="text-xs text-slate-400" title="Set TAILOR_WHATSAPP_NUMBER">
-                            Send to tailor
+                            2. Open WhatsApp chat
                           </span>
                         )}
+                        <span className="text-[10px] text-slate-400">3. Attach the PDF, send</span>
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-medium">
