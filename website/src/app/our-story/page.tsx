@@ -74,9 +74,9 @@ export default function OurStoryPage() {
             Our story
           </p>
           <h1 className="mt-4 max-w-lg text-[30px] leading-tight text-text">
-            You don&apos;t fit fashion.
+            Your look,
             <br />
-            Fashion fits you.
+            your way.
           </h1>
         </div>
       </ImagePlaceholder>
