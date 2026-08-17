@@ -31,26 +31,32 @@ function ImagePlaceholder({
   );
 }
 
-const tenets = [
+const tenetGroups = [
   {
-    title: "Materials that respect your skin",
-    body: "Cotton or linen, always, nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
-    caption: "Close up: raw cotton or linen fiber, natural texture",
+    caption: "A finished piece: natural fabric texture, a personal detail visible",
+    items: [
+      {
+        title: "Materials that respect your skin",
+        body: "Cotton or linen, always, nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
+      },
+      {
+        title: "Pieces customised by you, for you",
+        body: "Those lovely shirts you wished had longer sleeves. Those comfy pants you wish had pockets. We believe in uniqueness, and in making fashion accessible to everyone, so the things you'd normally just live with, you can actually change.",
+      },
+    ],
   },
   {
-    title: "Pieces customised by you, for you",
-    body: "Those lovely shirts you wished had longer sleeves. Those comfy pants you wish had pockets. We believe in uniqueness, and in making fashion accessible to everyone, so the things you'd normally just live with, you can actually change.",
-    caption: "A customer's own notes next to their finished, customized piece",
-  },
-  {
-    title: "Tailoring for your shape",
-    body: "Standard sizing or your exact measurements, cut for your body, not a size chart. Nothing is made until you order it, and we use AI to plan exactly what's needed instead of guessing at demand, so there's no stock sitting on a shelf and no waste. The most sustainable thing a clothing brand can do is not make what nobody asked for.",
-    caption: "A tailor taking measurements, or a piece mid-construction",
-  },
-  {
-    title: "Fixed prices",
-    body: "We committed to making sustainable and trendy fashion accessible to everyone. You customise your pieces, the price stays the same per piece type either way.",
-    caption: "Clean product shot with the price clearly shown",
+    caption: "A tailor at work on a single piece, price tag visible",
+    items: [
+      {
+        title: "Tailoring for your shape",
+        body: "Standard sizing or your exact measurements, cut for your body, not a size chart. Nothing is made until you order it, and we use AI to plan exactly what's needed instead of guessing at demand, so there's no stock sitting on a shelf and no waste. The most sustainable thing a clothing brand can do is not make what nobody asked for.",
+      },
+      {
+        title: "Fixed prices",
+        body: "We committed to making sustainable and trendy fashion accessible to everyone. You customise your pieces, the price stays the same per piece type either way.",
+      },
+    ],
   },
 ];
 
@@ -94,22 +100,33 @@ export default function OurStoryPage() {
         </p>
       </div>
 
-      {/* Tenets — symmetric grid, centered */}
-      <div className="mx-auto w-full max-w-4xl px-6 pb-16">
-        <div className="grid grid-cols-1 gap-x-12 gap-y-14 sm:grid-cols-2">
-          {tenets.map((t) => (
-            <div key={t.title} className="text-center">
-              <div className="mx-auto w-full max-w-[280px]">
-                <ImagePlaceholder aspect="aspect-square" caption={t.caption} />
+      {/* Tenets — grouped by theme, one image per pair, alternating sides */}
+      <div className="mx-auto w-full max-w-5xl px-6 pb-16">
+        <div className="flex flex-col gap-14 sm:gap-16">
+          {tenetGroups.map((group, i) => (
+            <div
+              key={group.caption}
+              className={`flex flex-col items-center gap-8 sm:gap-14 ${
+                i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
+              }`}
+            >
+              <div className="w-full sm:w-1/2">
+                <ImagePlaceholder aspect="aspect-[4/5]" caption={group.caption} />
               </div>
-              <h2 className="mt-5 font-display text-xl text-gold">{t.title}</h2>
-              <span
-                className="mx-auto mt-2 block h-px w-8 bg-gold"
-                aria-hidden="true"
-              />
-              <p className="mx-auto mt-3 max-w-xs text-[14px] leading-relaxed text-text-2">
-                {t.body}
-              </p>
+              <div className="w-full space-y-8 sm:w-1/2">
+                {group.items.map((t) => (
+                  <div key={t.title}>
+                    <h2 className="font-display text-xl text-gold">{t.title}</h2>
+                    <span
+                      className="mt-2 block h-px w-8 bg-gold"
+                      aria-hidden="true"
+                    />
+                    <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-text-2">
+                      {t.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
