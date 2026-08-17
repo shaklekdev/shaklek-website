@@ -88,8 +88,8 @@ export default function OurStoryPage() {
         </p>
         <p className="subtitle mt-3 max-w-md">
           We make elegant fashion essentials, not fast trends: pieces
-          friendly to your skin and shaped to your body, not the other way
-          around.
+          customizable to your taste, friendly to your skin, and shaped to
+          your body — not the other way around.
         </p>
         <p className="subtitle mt-4 max-w-md">
           Every piece here starts as an idea, not a rack of stock waiting for
