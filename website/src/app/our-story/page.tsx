@@ -83,12 +83,13 @@ export default function OurStoryPage() {
 
       <div className="mx-auto w-full max-w-2xl px-6 py-14">
         <p className="text-xs text-text-3">
-          Shaklek means &ldquo;your shape&rdquo; — that&apos;s not a coincidence.
+          Shaklek means your way in Arabic — your vision, your style, your
+          shape, your skin.
         </p>
         <p className="subtitle mt-3 max-w-md">
-          Trendy fashion usually costs you something — your skin, your
-          budget, your actual shape, or the planet it came from. We started
-          Shaklek because we got tired of choosing.
+          We make elegant fashion essentials, not fast trends: pieces
+          friendly to your skin and shaped to your body, not the other way
+          around.
         </p>
         <p className="subtitle mt-4 max-w-md">
           Every piece here starts as an idea, not a rack of stock waiting for

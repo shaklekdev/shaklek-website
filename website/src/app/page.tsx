@@ -9,13 +9,13 @@ export default function Home() {
 
       <section className="mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
         <h1 className="text-[28px] leading-tight text-text">
-          Your look,
+          You don&apos;t fit fashion.
           <br />
-          your way.
+          Fashion fits you.
         </h1>
-        <p className="subtitle mx-auto mt-3 max-w-sm">
-          Every piece is made to order — no stock, cut for you in cotton or
-          linen, at a fixed price.
+        <p className="subtitle mx-auto mt-3 max-w-md">
+          Elegant fashion essentials — friendly to your skin, shaped to
+          your body. Made to order in cotton or linen, at a fixed price.
         </p>
       </section>
 
