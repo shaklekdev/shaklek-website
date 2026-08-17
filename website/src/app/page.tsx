@@ -24,10 +24,10 @@ export default function Home() {
         <div className="flex items-end justify-between">
           <div>
             <p className="text-xs tracking-wide text-text-3 uppercase">Step 1</p>
-            <h2 className="mt-1 text-lg text-text">Start with an idea</h2>
+            <h2 className="mt-1 text-lg text-text">Choose an inspiration</h2>
           </div>
           <p className="hidden text-[13px] text-text-3 sm:block">
-            From AED 290 · Fixed prices · 7 days
+            From AED 290 · Fixed prices · 10 days
           </p>
         </div>
       </section>

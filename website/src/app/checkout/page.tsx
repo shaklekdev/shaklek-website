@@ -60,7 +60,7 @@ export default function CheckoutPage() {
                   {item.changes.length > 0 && (
                     <p className="mt-1 text-xs text-text-2">{item.changes.join(", ")}</p>
                   )}
-                  <p className="mt-1 text-xs text-text-2">7 days delivery</p>
+                  <p className="mt-1 text-xs text-text-2">10 days delivery</p>
                 </div>
                 <p className="font-display text-xl text-text whitespace-nowrap">
                   AED {item.price}

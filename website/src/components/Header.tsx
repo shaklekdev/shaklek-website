@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex flex-col items-start leading-none">
+        <Link href="/" className="flex flex-col items-center leading-none">
           <span className="font-display text-2xl font-light tracking-[3px] text-text">
             Shaklek
           </span>

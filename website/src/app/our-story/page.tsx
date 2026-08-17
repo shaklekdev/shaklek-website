@@ -20,7 +20,7 @@ function ImagePlaceholder({
 }) {
   return (
     <div
-      className={`relative ${aspect} w-full overflow-hidden rounded-shaklek border border-dashed border-gold/40 bg-surface-2`}
+      className={`relative ${aspect} w-full overflow-hidden border border-dashed border-gold/40 bg-surface-2`}
     >
       {children}
       <div className="absolute inset-x-0 bottom-0 flex items-start gap-2 p-3">
@@ -34,28 +34,28 @@ function ImagePlaceholder({
 const tenets = [
   {
     title: "Materials that respect your skin",
-    body: "Cotton or linen, always — nothing synthetic, sustainably sourced, and nothing that fights your skin.",
+    body: "Cotton or linen, always — nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health: tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
     caption: "Close-up — raw cotton or linen fiber, natural texture",
   },
   {
+    title: "Pieces customised by you, for you",
+    body: "Those lovely shirts you wished had longer sleeves. Those comfy pants you wish had pockets. We believe in uniqueness, and in making fashion accessible to everyone — so the things you'd normally just live with, you can actually change.",
+    caption: "A customer's own notes next to their finished, customized piece",
+  },
+  {
     title: "Tailoring for your shape",
-    body: "Standard sizing or your exact measurements — cut for your body, not a size chart.",
+    body: "Standard sizing or your exact measurements — cut for your body, not a size chart. And because nothing is made until you order it, there's no stock sitting on a shelf and no overproduction. The most sustainable thing a clothing brand can do is not make what nobody asked for.",
     caption: "A tailor taking measurements, or a piece mid-construction",
   },
   {
-    title: "An AI fashion assistant",
-    body: "See the color that matches your tone and the fit that flatters your shape, before you commit to anything.",
-    caption: "The color/fit assistant in use, on a real customer's screen",
-  },
-  {
-    title: "No over-production",
-    body: "Nothing is made until you order it. No stock, no waste — the most sustainable thing a clothing brand can do is not make what nobody asked for.",
-    caption: "A single finished piece, not a warehouse rail of stock",
-  },
-  {
     title: "Fixed prices",
-    body: "From AED 290, always. Healthy, sustainable, well-made clothing shouldn't be a luxury exception.",
+    body: "We committed to making sustainable and trendy fashion accessible to everyone. You customise your pieces — the price stays the same per piece type either way.",
     caption: "Clean product shot with the price clearly shown",
+  },
+  {
+    title: "AI for good",
+    body: "We use AI to make better decisions for the planet and your skin — lower-impact fabrics, cutting exactly what's needed instead of guessing at demand, keeping waste out of the process from the start. Technology, pointed at something that actually matters.",
+    caption: "Something evoking AI + sustainability — subtle, not literal",
   },
 ];
 
@@ -101,11 +101,11 @@ export default function OurStoryPage() {
 
       {/* Tenets — alternating image + text rows */}
       <div className="mx-auto w-full max-w-5xl px-6 pb-16">
-        <div className="flex flex-col gap-10 sm:gap-14">
+        <div className="flex flex-col gap-8 sm:gap-10">
           {tenets.map((t, i) => (
             <div
               key={t.title}
-              className={`flex flex-col items-center gap-6 sm:gap-14 ${
+              className={`flex flex-col items-center gap-6 sm:gap-12 ${
                 i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
               }`}
             >

@@ -18,6 +18,14 @@ export default function Footer() {
           <a href="mailto:hello@shaklek.com" className="hover:text-text-2">
             hello@shaklek.com
           </a>
+          <a
+            href="https://wa.me/971504766769"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-text-2"
+          >
+            WhatsApp
+          </a>
         </div>
       </div>
     </footer>

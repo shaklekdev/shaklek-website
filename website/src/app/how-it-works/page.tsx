@@ -20,7 +20,7 @@ const steps = [
   {
     n: "04",
     title: "A real tailor makes it",
-    body: "Your piece is cut and sewn by a tailor, not a factory line. About 7 days from order to delivery.",
+    body: "Your piece is cut and sewn by a tailor, not a factory line. About 10 days from order to delivery.",
   },
 ];
 

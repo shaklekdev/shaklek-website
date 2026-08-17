@@ -114,7 +114,7 @@ export async function sendCustomerConfirmationEmail(
       <p style="text-align:right;font-size:16px;font-weight:600;margin-top:12px;">Total AED ${total}</p>
       <p style="font-size:13px;color:#6b6b6b;line-height:1.6;">
         A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor.
-        Expect delivery in about 7 days from confirmation.
+        Expect delivery in about 10 days from confirmation.
       </p>
       <div style="margin-top:24px;padding:16px;background:#faf7f2;border-radius:12px;">
         <p style="font-size:13px;margin:0 0 10px;color:#1a1a1a;">
