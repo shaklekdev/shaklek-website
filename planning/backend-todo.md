@@ -25,6 +25,7 @@ From dossier §5 — the mechanism that builds the catalog and validates produci
 - [ ] View incoming orders (currently only visible via email)
 - [ ] Manage catalog items
 - [ ] View upload-your-own requests
+- [ ] **Auto-generate a tailor spec sheet and send it over WhatsApp when an order is marked paid** — requested 2026-08-17. Not a quick fix: this needs the WhatsApp Business Platform (Meta Cloud API, or a wrapper like Twilio), which requires business verification and an approved message template before it can send anything programmatically — different from the plain `wa.me` link already in the footer, which just opens a chat for a human to type into, no API or approval needed. Realistic scope: business verification + template approval (can take 24-48h+), then wiring the send into the existing `paid` status transition (`api/dashboard/orders/[id]/status/route.ts` already has the hook point). The spec-sheet content itself (fabric, color, size/measurements, customization choices per `order_items`) is trivial, all the data already exists.
 
 ### 4. File storage
 - [ ] Uploaded reference images are currently base64-encoded and emailed directly — fine at near-zero volume, won't scale. Needs an S3 bucket (see AWS doc) once volume picks up.
