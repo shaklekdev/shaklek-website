@@ -168,8 +168,8 @@ export default function OurStoryPage() {
                 your vision, simply you. I wanted prices everyone can afford,
                 and customization for everyone, because we&apos;re all
                 different. On Shaklek, you can customize the same shirt in
-                36 different ways, the same trousers in 72. That&apos;s what
-                I built.
+                288 different ways, the same trousers in 576. That&apos;s
+                what I built.
               </p>
               <p>
                 I wanted this to be the personal wardrobe of everyone who
