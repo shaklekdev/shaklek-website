@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^7.7.6",
     "drizzle-orm": "^0.45.2",
     "next": "16.3.0",
+    "pdfkit": "^0.19.1",
     "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pdfkit": "^0.17.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.10",

@@ -40,11 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.env
-.env.*
-!.env.example
 
 # Stripe Projects CLI bookkeeping -- solo-maintainer project, nothing else
 # needs this versioned; see payment-auth-todo.md for what's actually
-# provisioned instead.
+# provisioned instead. The CLI narrows this on its own each time it edits
+# this file (most recently to just cache/vault/test-state) -- keeping the
+# whole directory ignored is the deliberate call, not an oversight.
 .projects/
+.env
+.env.*
+!.env.example

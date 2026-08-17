@@ -14,6 +14,21 @@ const STATUS_STYLE: Record<string, string> = {
   canceled: "bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-300",
 };
 
+// TAILOR_WHATSAPP_NUMBER is the tailor's own number (E.164, no "+", e.g.
+// "9715XXXXXXXX") -- separate from the customer-facing wa.me link in
+// Footer.tsx, which goes to the business number instead. "Send to tailor"
+// only opens a chat with a prefilled text summary; it doesn't attach the
+// PDF (wa.me has no file-attach param) -- staff download "Spec sheet"
+// first, then manually attach it once the chat opens.
+const tailorNumber = (process.env.TAILOR_WHATSAPP_NUMBER ?? "").trim();
+
+function tailorMessage(order: { id: string; items: { name: string; fabric: string | null; color: string | null; size: string | null }[] }) {
+  const itemsLine = order.items
+    .map((i) => `${i.name} (${i.fabric ?? "?"}, ${i.color ?? "?"}, ${i.size ?? "?"})`)
+    .join("; ");
+  return `Shaklek order ${order.id.slice(0, 8)}: ${itemsLine}. Spec sheet attached.`;
+}
+
 async function getOrders() {
   const db = getDb();
   if (!db) return null;
@@ -88,6 +103,7 @@ export default async function OrdersDashboardPage() {
                   <th className="px-4 py-3 font-medium">Method</th>
                   <th className="px-4 py-3 font-medium">Status</th>
                   <th className="px-4 py-3 font-medium">Update</th>
+                  <th className="px-4 py-3 font-medium">Tailor</th>
                   <th className="px-4 py-3 text-right font-medium">Total</th>
                 </tr>
               </thead>
@@ -123,6 +139,34 @@ export default async function OrdersDashboardPage() {
                     </td>
                     <td className="px-4 py-3">
                       <OrderStatusButtons orderId={order.id} status={order.status} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col items-start gap-1">
+                        <a
+                          href={`/api/dashboard/orders/${order.id}/spec-sheet`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-slate-600 underline hover:text-slate-900"
+                        >
+                          Spec sheet
+                        </a>
+                        {tailorNumber ? (
+                          <a
+                            href={`https://wa.me/${tailorNumber}?text=${encodeURIComponent(
+                              tailorMessage(order),
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-emerald-700 underline hover:text-emerald-900"
+                          >
+                            Send to tailor
+                          </a>
+                        ) : (
+                          <span className="text-xs text-slate-400" title="Set TAILOR_WHATSAPP_NUMBER">
+                            Send to tailor
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-right font-medium">
                       AED {order.total}
