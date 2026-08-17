@@ -99,29 +99,69 @@ export default function OurStoryPage() {
         </p>
       </div>
 
-      {/* Tenets — alternating image + text rows */}
+      {/* Tenets — compact grid, scannable at a glance */}
       <div className="mx-auto w-full max-w-5xl px-6 pb-16">
-        <div className="flex flex-col gap-8 sm:gap-10">
-          {tenets.map((t, i) => (
-            <div
-              key={t.title}
-              className={`flex flex-col items-center gap-6 sm:gap-12 ${
-                i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
-              }`}
-            >
-              <div className="w-full sm:w-1/2">
-                <ImagePlaceholder aspect="aspect-[4/5]" caption={t.caption} />
-              </div>
-              <div className="w-full sm:w-1/2">
-                <h2 className="font-display text-2xl text-gold sm:text-[28px]">
-                  {t.title}
-                </h2>
-                <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-text-2">
-                  {t.body}
-                </p>
-              </div>
+        <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {tenets.map((t) => (
+            <div key={t.title}>
+              <ImagePlaceholder aspect="aspect-square" caption={t.caption} />
+              <h2 className="mt-4 font-display text-xl text-gold">{t.title}</h2>
+              <p className="mt-2 text-[14px] leading-relaxed text-text-2">
+                {t.body}
+              </p>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Founder's note */}
+      <div className="mx-auto w-full max-w-2xl px-6 pb-16">
+        <div className="border-t border-border pt-14">
+          <p className="text-xs tracking-wide text-text-3 uppercase">
+            From our founder
+          </p>
+          <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-10">
+            <div className="flex aspect-square w-28 shrink-0 items-center justify-center border border-dashed border-gold/40 bg-surface-2 text-center sm:w-32">
+              <p className="px-2 text-[10px] leading-snug text-text-3">
+                Portrait — Nada, founder of Shaklek
+              </p>
+            </div>
+            <div className="space-y-4 text-[15px] leading-relaxed text-text-2">
+              <p>
+                I spent more than half my life trying to understand my own
+                skin — endometriosis, acne, endocrine disruptors, and a long
+                journey of changing everything that touched my body, day and
+                night. The clothes I wore eight hours at work, then sixteen
+                more after that, couldn&apos;t possibly be neutral.
+              </p>
+              <p>
+                I still wanted to wear something trendy, classy, put
+                together — without paying for it in money or in my skin. And
+                once you actually find those pieces, they&apos;re either too
+                expensive, not quite your taste, or not your size.
+              </p>
+              <p>
+                I&apos;m a tech girl who happens to love fashion, and I kept
+                asking myself: why couldn&apos;t AI solve this — for me, and
+                for everyone like me?
+              </p>
+              <p>
+                Shaklek means &ldquo;your way&rdquo; in Arabic — your look,
+                your vision, simply you. I wanted prices everyone can afford,
+                and customization for everyone, because we&apos;re all
+                different: the same pair of trousers can be worn 144
+                different ways, a shirt 255 more. That&apos;s what I built.
+              </p>
+              <p>
+                I wanted this to be the personal wardrobe of everyone who
+                believes what I believe: less overproduction, fewer
+                materials that can harm our health, more comfort.
+              </p>
+              <p className="pt-1 text-sm font-medium text-text">
+                — Nada, founder of Shaklek
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

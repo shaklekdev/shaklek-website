@@ -15,8 +15,7 @@ export default function Home() {
         </h1>
         <p className="subtitle mx-auto mt-3 max-w-md">
           Elegant fashion essentials — customizable to your taste,
-          friendly to your skin, shaped to your body. Made to order in
-          cotton or linen, at a fixed price.
+          friendly to your skin, shaped to your body.
         </p>
       </section>
 
