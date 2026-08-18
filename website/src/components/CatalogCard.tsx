@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { CatalogItem } from "@/data/catalog";
 
 export default function CatalogCard({ item }: { item: CatalogItem }) {
@@ -15,11 +16,12 @@ export default function CatalogCard({ item }: { item: CatalogItem }) {
         }
       >
         {item.image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={item.image}
             alt={item.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            fill
+            sizes="(min-width: 640px) 248px, 220px"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         )}
         {item.badge && (

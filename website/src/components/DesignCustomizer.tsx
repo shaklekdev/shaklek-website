@@ -34,6 +34,21 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const previewImage = colorVariant?.front ?? item.image;
   const previewBackImage = colorVariant?.back ?? item.backImage;
 
+  // Every color/view the customer could switch to for this item, so
+  // CustomizeParameters can preload all of them up front -- switching color
+  // or flipping front/back should hit the browser cache instantly instead
+  // of triggering a fresh fetch each time (the actual source of the
+  // "bugging when I switch photos" complaint, not a logic bug).
+  const preloadImages = Array.from(
+    new Set(
+      [
+        item.image,
+        item.backImage,
+        ...Object.values(item.colorImages ?? {}).flatMap((v) => [v?.front, v?.back]),
+      ].filter((src): src is string => Boolean(src)),
+    ),
+  );
+
   function handleAddToCart() {
     addItem({
       slug: item.slug,
@@ -84,6 +99,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewImage={previewImage}
             previewBackImage={previewBackImage}
             previewGradient={item.gradient}
+            preloadImages={preloadImages}
           />
 
           <button

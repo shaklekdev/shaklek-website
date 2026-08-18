@@ -1,10 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
 import { paramsForCategory } from "@/data/parameterSliders";
 import FabricColorPicker from "@/components/FabricColorPicker";
+
+const PREVIEW_SIZES = "(min-width: 640px) 576px, 100vw";
 
 export default function CustomizeParameters({
   spec,
@@ -14,6 +17,7 @@ export default function CustomizeParameters({
   previewImage,
   previewBackImage,
   previewGradient,
+  preloadImages = [],
 }: {
   spec: DesignSpec;
   onSpecChange: (spec: DesignSpec) => void;
@@ -22,6 +26,7 @@ export default function CustomizeParameters({
   previewImage?: string | null;
   previewBackImage?: string | null;
   previewGradient: [string, string];
+  preloadImages?: string[];
 }) {
   function handleFabricChange(fabric: Fabric) {
     onSpecChange({ ...spec, fabric });
@@ -67,11 +72,13 @@ export default function CustomizeParameters({
         onTouchEnd={handleTouchEnd}
       >
         {activeImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={activeImage}
             alt={view === "back" ? "Back view" : "Front view"}
-            className="h-full w-full object-cover"
+            fill
+            sizes={PREVIEW_SIZES}
+            className="object-cover"
+            priority
             draggable={false}
           />
         )}
@@ -116,6 +123,22 @@ export default function CustomizeParameters({
             </div>
           </>
         )}
+      </div>
+
+      {/* Preloads every other color/view so switching hits the browser
+          cache instead of a fresh fetch -- same `sizes` as the visible
+          image above so next/image resolves to the same cached URL.
+          `priority` is what actually matters here: it skips next/image's
+          IntersectionObserver-based lazy loading, which would otherwise
+          never fire for an always-invisible 0x0 element. */}
+      <div aria-hidden="true" className="pointer-events-none h-0 w-0 overflow-hidden opacity-0">
+        {preloadImages
+          .filter((src) => src !== activeImage)
+          .map((src) => (
+            <div key={src} className="relative h-1 w-1">
+              <Image src={src} alt="" fill sizes={PREVIEW_SIZES} priority />
+            </div>
+          ))}
       </div>
 
       <FabricColorPicker
