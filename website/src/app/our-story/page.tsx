@@ -44,7 +44,7 @@ function ImagePlaceholder({
 const tenetGroups = [
   {
     caption: "A finished piece: natural fabric texture, a personal detail visible",
-    image: "/marketing/story-materials.png",
+    image: "/marketing/story-materials-v2.png",
     items: [
       {
         title: "Materials that respect your skin",
