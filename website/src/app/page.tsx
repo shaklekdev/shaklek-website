@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Header from "@/components/Header";
 import CatalogCard from "@/components/CatalogCard";
 import { catalog } from "@/data/catalog";
@@ -7,16 +8,29 @@ export default function Home() {
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
 
-      <section className="mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
-        <h1 className="text-[28px] leading-tight text-text">
-          Your look,
-          <br />
-          your way.
-        </h1>
-        <p className="subtitle mx-auto mt-3 max-w-md">
-          Elegant fashion essentials. Customizable to your taste, friendly
-          to your skin, shaped to your body.
-        </p>
+      <section className="relative w-full overflow-hidden">
+        <div className="hero-ken-burns absolute inset-0">
+          <Image
+            src="/marketing/hero-banner.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
+        <div className="absolute inset-0 bg-white/55" />
+        <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
+          <h1 className="text-[28px] leading-tight text-text">
+            Your look,
+            <br />
+            your way.
+          </h1>
+          <p className="subtitle mx-auto mt-3 max-w-md">
+            Elegant fashion essentials. Customizable to your taste, friendly
+            to your skin, shaped to your body.
+          </p>
+        </div>
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-6 pb-4">

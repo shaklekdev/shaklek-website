@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Header from "@/components/Header";
 import Link from "next/link";
 
@@ -12,21 +13,30 @@ const PlaceholderIcon = () => (
 function ImagePlaceholder({
   caption,
   aspect = "aspect-[4/5]",
+  src,
+  sizes,
   children,
 }: {
   caption: string;
   aspect?: string;
+  src?: string;
+  sizes?: string;
   children?: React.ReactNode;
 }) {
   return (
     <div
-      className={`relative ${aspect} w-full overflow-hidden border border-dashed border-gold/40 bg-surface-2`}
+      className={`relative ${aspect} w-full overflow-hidden ${src ? "bg-surface-2" : "border border-dashed border-gold/40 bg-surface-2"}`}
     >
+      {src && (
+        <Image src={src} alt={caption} fill sizes={sizes ?? "(min-width: 640px) 50vw, 100vw"} className="object-cover" />
+      )}
       {children}
-      <div className="absolute inset-x-0 bottom-0 flex items-start gap-2 p-3">
-        <PlaceholderIcon />
-        <p className="max-w-[28ch] text-[11px] leading-snug text-text-3">{caption}</p>
-      </div>
+      {!src && (
+        <div className="absolute inset-x-0 bottom-0 flex items-start gap-2 p-3">
+          <PlaceholderIcon />
+          <p className="max-w-[28ch] text-[11px] leading-snug text-text-3">{caption}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -34,6 +44,7 @@ function ImagePlaceholder({
 const tenetGroups = [
   {
     caption: "A finished piece: natural fabric texture, a personal detail visible",
+    image: "/marketing/story-materials.png",
     items: [
       {
         title: "Materials that respect your skin",
@@ -47,6 +58,7 @@ const tenetGroups = [
   },
   {
     caption: "A tailor at work on a single piece, price tag visible",
+    image: "/marketing/story-tailoring.png",
     items: [
       {
         title: "Tailoring for your shape",
@@ -66,21 +78,26 @@ export default function OurStoryPage() {
       <Header />
 
       {/* Hero */}
-      <ImagePlaceholder
-        aspect="aspect-auto"
-        caption="Full-bleed photography: a Shaklek piece worn outdoors, natural light"
-      >
-        <div className="flex h-[52vh] max-h-[440px] min-h-[320px] flex-col items-center justify-center px-6 pb-10 text-center">
+      <div className="relative h-[52vh] max-h-[440px] min-h-[320px] w-full overflow-hidden">
+        <Image
+          src="/marketing/story-hero.png"
+          alt="A Shaklek piece worn outdoors, natural light"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 pb-10 text-center">
           <p className="rounded-full bg-white/90 px-3 py-1 text-[11px] tracking-wide text-text-3 uppercase backdrop-blur-sm">
             Our story
           </p>
-          <h1 className="mt-4 max-w-lg text-[30px] leading-tight text-text">
+          <h1 className="mt-4 max-w-lg text-[30px] leading-tight text-text drop-shadow-[0_1px_12px_rgba(255,255,255,0.8)]">
             Your look,
             <br />
             your way.
           </h1>
         </div>
-      </ImagePlaceholder>
+      </div>
 
       <div className="mx-auto w-full max-w-2xl px-6 py-14">
         <p className="text-xs text-text-3">
@@ -111,7 +128,7 @@ export default function OurStoryPage() {
               }`}
             >
               <div className="w-full sm:w-1/2">
-                <ImagePlaceholder aspect="aspect-[4/5]" caption={group.caption} />
+                <ImagePlaceholder aspect="aspect-[4/5]" caption={group.caption} src={group.image} />
               </div>
               <div className="w-full space-y-8 sm:w-1/2">
                 {group.items.map((t) => (
