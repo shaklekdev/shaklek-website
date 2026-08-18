@@ -174,6 +174,32 @@ export const catalog: CatalogItem[] = [
       Navy: { front: "/catalog/wrap-top-navy-front-v3.png", back: "/catalog/wrap-top-navy-back-v3.png" },
       Burgundy: { front: "/catalog/wrap-top-burgundy-front-v3.png", back: "/catalog/wrap-top-burgundy-back-v3.png" },
     },
+    // "short:normal" isn't generated -- it's identical to colorImages above
+    // (the existing photo's short sleeve is the "short" option for this item).
+    comboImages: {
+      Ivory: {
+        "long:normal": { front: "/catalog/wrap-top-ivory-combo-long-normal-front.png", back: "/catalog/wrap-top-ivory-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-ivory-combo-long-longer-front.png", back: "/catalog/wrap-top-ivory-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/wrap-top-ivory-combo-short-longer-front.png", back: "/catalog/wrap-top-ivory-combo-short-longer-back.png" },
+      },
+      White: {
+        "long:normal": { front: "/catalog/wrap-top-white-combo-long-normal-front.png", back: "/catalog/wrap-top-white-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-white-combo-long-longer-front.png", back: "/catalog/wrap-top-white-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/wrap-top-white-combo-short-longer-front.png", back: "/catalog/wrap-top-white-combo-short-longer-back.png" },
+      },
+      Navy: {
+        "long:normal": { front: "/catalog/wrap-top-navy-combo-long-normal-front.png", back: "/catalog/wrap-top-navy-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-navy-combo-long-longer-front.png", back: "/catalog/wrap-top-navy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/wrap-top-navy-combo-short-longer-front.png", back: "/catalog/wrap-top-navy-combo-short-longer-back.png" },
+      },
+      Burgundy: {
+        "long:normal": { front: "/catalog/wrap-top-burgundy-combo-long-normal-front.png", back: "/catalog/wrap-top-burgundy-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-burgundy-combo-long-longer-front.png", back: "/catalog/wrap-top-burgundy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/wrap-top-burgundy-combo-short-longer-front.png", back: "/catalog/wrap-top-burgundy-combo-short-longer-back.png" },
+      },
+    },
+    // The base photo is a short sleeve, not SHIRT_PARAMS' "long" default.
+    defaultChanges: { sleeve_length: "short" },
   },
   {
     slug: "pleated-trousers",
