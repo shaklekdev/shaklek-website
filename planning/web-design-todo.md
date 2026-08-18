@@ -35,26 +35,27 @@ Status: a real, consistent design system exists and is in production use (Georgi
 Founder walked the live site and gave a batch of corrections in one sitting. All the straightforward text/UI items are done — what's left below is either an open creative decision, or cost-gated (Bedrock/Gemini image-gen calls) per the cost guardrail — state exact cost and get explicit go-ahead before running any of those.
 
 ### Catalog page (`/`, `src/app/page.tsx`)
-- [ ] **Hero banner** — add a nature-inspired moving visual behind the "Your look, your way." headline. No video asset exists yet. Open decision: a still photo with an ambient CSS pan/zoom (cheap, fast) vs. a real video file (bigger scope, needs a sourced or generated asset). Not picked yet.
-- [x] **Slogan — decided 2026-08-17: "Your look, your way."**, unified on both `/` and `/our-story` (both hero `<h1>`s match now). Tried "You don't fit fashion. Fashion fits you." first per marketing recommendation, shipped it, founder saw it live and preferred the shorter original — reverted. Both pages also got a new subhead under the headline carrying the essentials positioning: "Elegant fashion essentials — friendly to your skin, shaped to your body" (`/`) and the matching "We make elegant fashion essentials, not fast trends..." paragraph plus "Shaklek means your way in Arabic..." opening line (`/our-story`). That positioning wasn't reverted, only the headline was. Hero banner *visual* (the moving/nature background) is still open, see the line above — headline/copy is settled now, only the visual treatment is left.
-- [x] Eyebrow copy — done 2026-08-17: heading changed to "Choose an inspiration" (kept the existing "Step 1" eyebrow label above it rather than duplicating "Step 1" in both places).
-- [x] Delivery timeline copy — done 2026-08-17: "7 days" → "10 days" in all five spots (`page.tsx`, `how-it-works`, `order-confirmed`, `checkout`, `orderEmail.ts`).
-- [x] WhatsApp contact — done 2026-08-17: footer link to `https://wa.me/971504766769`, opens in a new tab. Only in the footer for now, not a floating chat bubble — that's a bigger design call if wanted later.
+- [x] **Hero banner — done 2026-08-18.** A real photo (`public/marketing/hero-banner.png`, linen fabric on a coastal dune, nature/pure themed per the founder's direction) behind the headline, with a slow ambient CSS pan/zoom (`hero-ken-burns` keyframe in `globals.css`, respects `prefers-reduced-motion`) standing in for video — the cheap option, no video asset needed.
+- [x] **Slogan — decided 2026-08-17: "Your look, your way."**, unified on both `/` and `/our-story`.
+- [x] Eyebrow copy — "Choose an inspiration".
+- [x] Delivery timeline copy — "10 days" everywhere.
+- [x] WhatsApp contact — footer link to `https://wa.me/971504766769`.
 
-### Catalog photography corrections (cost-gated — Gemini image-gen, get go-ahead + state cost first)
-- [ ] **Structured Blouse** — white and maroon front images are inconsistent with the ivory version: the waist band is missing/not visible on white and maroon. Regenerate or fix.
-- [ ] **Pants items generally** — can crop from full-body generations instead of separate close-up generations, founder's call, cheaper if it works visually.
-- [ ] **Cargo Trousers** — back-view pockets are inconsistent; remove the back pockets entirely to match the White Cargo Pants reference image (which has none).
-- [ ] **Pleated Trousers** — use full-body images, not the current crop.
+### Catalog photography corrections — done 2026-08-18
+All fixed and verified against the real images before generating (Gemini `gemini-3.1-flash-image`, using the correct-looking color variant as an edit reference so model/pose/lighting stayed identical and only the flagged detail changed):
+- [x] **Structured Blouse** — `structured-blouse-white-front-v2.png` and `-burgundy-front-v2.png` now have the fitted waist band that was missing.
+- [x] **Cargo Trousers, ivory-front** — button placket removed, now a smooth zip-front matching navy/burgundy/white (`cargo-trousers-ivory-front-v2.png`).
+- [x] **Cargo Trousers, white-back** — added the two flap back pockets that were missing, matching ivory/navy/burgundy (`cargo-trousers-white-back-v2.png`).
+- [x] **Pleated Trousers** — full regeneration, all 4 colors × front+back (8 images). Previous crop was mid-thigh only; now full body waist-to-feet, with more pronounced double box pleats (Zara-inspired, not copied) and back pockets styled to match the burgundy cargo trousers. Files renamed from the legacy `wrap-bottom-*` naming to `pleated-trousers-*` to match the catalog slug.
+- Along the way, an unrelated real bug got found and fixed: catalog/design preview images were plain `<img>` tags (average ~793KB PNGs, no compression, no preloading) — switched to `next/image` with all color/view combinations preloaded, so switching colors or flipping front/back is now instant instead of a visible stall. See `frontend-todo.md`.
 
 ### Logo/wordmark symmetry (`src/components/Header.tsx:14`)
-- [x] Done 2026-08-17: `items-start` → `items-center` on the header logo's flex column — "Shaklek", the gold bar, and "شكلك" now share a center axis. No other changes needed, the bar's `w-9` width reads fine centered.
+- [x] Done 2026-08-17: `items-start` → `items-center`, "Shaklek"/gold bar/"شكلك" now share a center axis.
 
 ### Favicon / app icon
-- [x] Done 2026-08-17: replaced `src/app/icon.png` (bare "S") with code-generated `src/app/icon.tsx` + `src/app/apple-icon.tsx` (`next/og` `ImageResponse`, no image-gen cost) — an "SK" monogram in the same serif + gold-underline style as the header wordmark.
+- [x] Done 2026-08-17: code-generated "SK" monogram (`next/og` `ImageResponse`), no image-gen cost.
 
-### Our Story page (`src/app/our-story/page.tsx`) — content + layout rewrite done 2026-08-17, real photography still pending
-- [x] Opening line — now "Shaklek means your way in Arabic — your vision, your style, your shape, your skin."
-- [x] Tenets rewritten, still five: **Materials that respect your skin** (now covers breathability + the hormone/skin-health angle), **Pieces customised by you, for you** (new — the "wished had longer sleeves / wish had pockets" framing), **Tailoring for your shape** (now folds in the no-overproduction point instead of a separate tenet), **Fixed prices** (rewritten per founder's line), **AI for good** (new). "An AI fashion assistant" tenet removed entirely — that's Shaklek+, not initial launch.
-- [x] Layout — square corners (dropped `rounded-shaklek` off `ImagePlaceholder`), row spacing tightened (`gap-10 sm:gap-14` → `gap-8 sm:gap-10`).
-- [ ] **Real photography still open** — every image on the page is still the dashed-border `ImagePlaceholder`, captions updated to describe what each shot should be but no actual photos exist yet. This is the one piece of the Our Story rewrite that wasn't a "quick fix" — needs real photography or cost-gated image generation.
+### Our Story page (`src/app/our-story/page.tsx`) — fully done 2026-08-18
+- [x] Opening line, tenets (now 4, not 5 — merged "AI for good" into "Tailoring for your shape" since they overlapped on the no-overproduction point; removed the AI-assistant tenet entirely, that's Shaklek+), square corners.
+- [x] Tenets grouped 2-per-image instead of 1-per-image (materials+customization share one photo, tailoring+pricing share another), alternating sides — more editorial than four small repeated squares.
+- [x] **Real photography — done 2026-08-18.** Hero (`story-hero.png`) and both tenet-group images (`story-materials.png`, `story-tailoring.png`) are real generated photos now, not placeholders. Two problems caught and fixed before shipping: the first materials pass invented a fake handwritten customer note ("For Sarah... — E.M. '24"), and the first tailoring pass showed a price tag in GBP at a price nowhere near Shaklek's actual AED 290-350 — both regenerated with an explicit "no readable text" instruction. Founder portrait is still the dashed-border placeholder on purpose — generating a photo of a real named person (the founder) isn't something to fabricate; that slot needs an actual photo from her.
