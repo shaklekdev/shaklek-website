@@ -68,8 +68,8 @@ export const catalog: CatalogItem[] = [
       },
       Navy: {
         "short:normal": { front: "/catalog/oversized-shirt-navy-combo-short-normal-front.png", back: "/catalog/oversized-shirt-navy-combo-short-normal-back.png" },
-        "long:longer": { front: "/catalog/oversized-shirt-navy-combo-long-longer-front.png", back: "/catalog/oversized-shirt-navy-combo-long-longer-back.png" },
-        "short:longer": { front: "/catalog/oversized-shirt-navy-combo-short-longer-front.png", back: "/catalog/oversized-shirt-navy-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/oversized-shirt-navy-combo-long-longer-front-v2.png", back: "/catalog/oversized-shirt-navy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/oversized-shirt-navy-combo-short-longer-front-v2.png", back: "/catalog/oversized-shirt-navy-combo-short-longer-back-v2.png" },
       },
       Burgundy: {
         "short:normal": { front: "/catalog/oversized-shirt-burgundy-combo-short-normal-front.png", back: "/catalog/oversized-shirt-burgundy-combo-short-normal-back.png" },
