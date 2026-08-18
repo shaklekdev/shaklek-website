@@ -76,7 +76,7 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     size: "M",
     sizeMode: "standard",
     measurements: "",
-    changes: defaultChangesForCategory(item.category),
+    changes: defaultChangesForCategory(item.category, item.defaultChanges),
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },
   };

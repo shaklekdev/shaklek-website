@@ -147,11 +147,17 @@ export function premiumParamsForCategory(category: string): SliderParam[] {
   return (paramsForCategory(category) ?? []).filter((p) => p.tier === "premium");
 }
 
-export function defaultChangesForCategory(category: string): SilhouetteChange[] {
+export function defaultChangesForCategory(
+  category: string,
+  overrides?: Partial<Record<string, string>>,
+): SilhouetteChange[] {
   const params = paramsForCategory(category);
   if (!params) return [];
   return params.map((param) => {
-    const option = param.options[param.defaultIndex];
+    const overrideValue = overrides?.[param.type];
+    const option =
+      (overrideValue && param.options.find((o) => o.value === overrideValue)) ||
+      param.options[param.defaultIndex];
     return { type: param.type, value: option.value, label: param.labelFor(option.text) };
   });
 }

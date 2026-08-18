@@ -22,6 +22,12 @@ export type CatalogItem = {
   // Falls back to colorImages when a combo hasn't been generated yet, so
   // items can be migrated one at a time same as colorImages itself.
   comboImages?: Partial<Record<string, Partial<Record<string, { front: string; back: string }>>>>;
+  // Overrides parameterSliders.ts's defaultIndex per slider type, for items
+  // whose base photo doesn't match the category-wide default -- e.g.
+  // Structured Blouse's photo is a half sleeve, not SHIRT_PARAMS' "long"
+  // default, so its initial slider position/preview would otherwise be
+  // wrong on first load.
+  defaultChanges?: Partial<Record<string, string>>;
 };
 
 // Pricing locked from the Shaklek business dossier (Section 9):
@@ -109,6 +115,32 @@ export const catalog: CatalogItem[] = [
       Navy: { front: "/catalog/structured-blouse-navy-front.png", back: "/catalog/structured-blouse-navy-back.png" },
       Burgundy: { front: "/catalog/structured-blouse-burgundy-front-v2.png", back: "/catalog/structured-blouse-burgundy-back.png" },
     },
+    // "short:normal" isn't generated -- it's identical to colorImages above
+    // (the existing photo's half sleeve is the "short" option for this item).
+    comboImages: {
+      Ivory: {
+        "long:normal": { front: "/catalog/structured-blouse-ivory-combo-long-normal-front.png", back: "/catalog/structured-blouse-ivory-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/structured-blouse-ivory-combo-long-longer-front.png", back: "/catalog/structured-blouse-ivory-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/structured-blouse-ivory-combo-short-longer-front.png", back: "/catalog/structured-blouse-ivory-combo-short-longer-back.png" },
+      },
+      White: {
+        "long:normal": { front: "/catalog/structured-blouse-white-combo-long-normal-front.png", back: "/catalog/structured-blouse-white-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/structured-blouse-white-combo-long-longer-front.png", back: "/catalog/structured-blouse-white-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/structured-blouse-white-combo-short-longer-front.png", back: "/catalog/structured-blouse-white-combo-short-longer-back.png" },
+      },
+      Navy: {
+        "long:normal": { front: "/catalog/structured-blouse-navy-combo-long-normal-front.png", back: "/catalog/structured-blouse-navy-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/structured-blouse-navy-combo-long-longer-front.png", back: "/catalog/structured-blouse-navy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/structured-blouse-navy-combo-short-longer-front.png", back: "/catalog/structured-blouse-navy-combo-short-longer-back.png" },
+      },
+      Burgundy: {
+        "long:normal": { front: "/catalog/structured-blouse-burgundy-combo-long-normal-front.png", back: "/catalog/structured-blouse-burgundy-combo-long-normal-back.png" },
+        "long:longer": { front: "/catalog/structured-blouse-burgundy-combo-long-longer-front.png", back: "/catalog/structured-blouse-burgundy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/structured-blouse-burgundy-combo-short-longer-front.png", back: "/catalog/structured-blouse-burgundy-combo-short-longer-back.png" },
+      },
+    },
+    // The base photo is a half sleeve, not SHIRT_PARAMS' "long" default.
+    defaultChanges: { sleeve_length: "short" },
   },
   {
     slug: "banded-trousers",
