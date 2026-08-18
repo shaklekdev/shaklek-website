@@ -17,6 +17,11 @@ export type CatalogItem = {
   image?: string;
   backImage?: string;
   colorImages?: Partial<Record<string, { front: string; back: string }>>;
+  // Real per-combo renders for the "render" tier sliders (see
+  // parameterSliders.ts) -- keyed by color, then by comboKeyForCategory().
+  // Falls back to colorImages when a combo hasn't been generated yet, so
+  // items can be migrated one at a time same as colorImages itself.
+  comboImages?: Partial<Record<string, Partial<Record<string, { front: string; back: string }>>>>;
 };
 
 // Pricing locked from the Shaklek business dossier (Section 9):
@@ -46,6 +51,31 @@ export const catalog: CatalogItem[] = [
       White: { front: "/catalog/oversized-shirt-white-front.png", back: "/catalog/oversized-shirt-white-back.png" },
       Navy: { front: "/catalog/oversized-shirt-navy-front.png", back: "/catalog/oversized-shirt-navy-back.png" },
       Burgundy: { front: "/catalog/oversized-shirt-burgundy-front.png", back: "/catalog/oversized-shirt-burgundy-back.png" },
+    },
+    // Pilot for real per-combo rendering (Sleeves x Length) -- see
+    // [[project_shaklek_customization_params]] and parameterSliders.ts.
+    // "long:normal" isn't generated -- it's identical to colorImages above.
+    comboImages: {
+      Ivory: {
+        "short:normal": { front: "/catalog/oversized-shirt-ivory-combo-short-normal-front.png", back: "/catalog/oversized-shirt-ivory-combo-short-normal-back.png" },
+        "long:longer": { front: "/catalog/oversized-shirt-ivory-combo-long-longer-front.png", back: "/catalog/oversized-shirt-ivory-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/oversized-shirt-ivory-combo-short-longer-front.png", back: "/catalog/oversized-shirt-ivory-combo-short-longer-back.png" },
+      },
+      White: {
+        "short:normal": { front: "/catalog/oversized-shirt-white-combo-short-normal-front.png", back: "/catalog/oversized-shirt-white-combo-short-normal-back.png" },
+        "long:longer": { front: "/catalog/oversized-shirt-white-combo-long-longer-front.png", back: "/catalog/oversized-shirt-white-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/oversized-shirt-white-combo-short-longer-front.png", back: "/catalog/oversized-shirt-white-combo-short-longer-back.png" },
+      },
+      Navy: {
+        "short:normal": { front: "/catalog/oversized-shirt-navy-combo-short-normal-front.png", back: "/catalog/oversized-shirt-navy-combo-short-normal-back.png" },
+        "long:longer": { front: "/catalog/oversized-shirt-navy-combo-long-longer-front.png", back: "/catalog/oversized-shirt-navy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/oversized-shirt-navy-combo-short-longer-front.png", back: "/catalog/oversized-shirt-navy-combo-short-longer-back.png" },
+      },
+      Burgundy: {
+        "short:normal": { front: "/catalog/oversized-shirt-burgundy-combo-short-normal-front.png", back: "/catalog/oversized-shirt-burgundy-combo-short-normal-back.png" },
+        "long:longer": { front: "/catalog/oversized-shirt-burgundy-combo-long-longer-front.png", back: "/catalog/oversized-shirt-burgundy-combo-long-longer-back.png" },
+        "short:longer": { front: "/catalog/oversized-shirt-burgundy-combo-short-longer-front.png", back: "/catalog/oversized-shirt-burgundy-combo-short-longer-back.png" },
+      },
     },
   },
   {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
+import { comboKeyForCategory } from "@/data/parameterSliders";
 import { useCart } from "@/lib/CartContext";
 import CustomizeParameters from "@/components/CustomizeParameters";
 import SizePicker from "@/components/SizePicker";
@@ -31,20 +32,31 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
 
   const price = item.price;
   const colorVariant = item.colorImages?.[spec.color];
-  const previewImage = colorVariant?.front ?? item.image;
-  const previewBackImage = colorVariant?.back ?? item.backImage;
+  const comboKey = comboKeyForCategory(item.category, spec.changes);
+  const comboVariant = comboKey ? item.comboImages?.[spec.color]?.[comboKey] : undefined;
+  const previewImage = comboVariant?.front ?? colorVariant?.front ?? item.image;
+  const previewBackImage = comboVariant?.back ?? colorVariant?.back ?? item.backImage;
 
   // Every color/view the customer could switch to for this item, so
   // CustomizeParameters can preload all of them up front -- switching color
   // or flipping front/back should hit the browser cache instantly instead
   // of triggering a fresh fetch each time (the actual source of the
-  // "bugging when I switch photos" complaint, not a logic bug).
+  // "bugging when I switch photos" complaint, not a logic bug). For combo
+  // items this would balloon (up to 9 combos x 4 colors), so combo variants
+  // only preload for the currently selected color -- switching sliders
+  // within a color is instant, switching color falls back to that color's
+  // default combo photo until its own combos preload in behind it.
+  const currentColorCombos = Object.values(item.comboImages?.[spec.color] ?? {}).flatMap((v) => [
+    v?.front,
+    v?.back,
+  ]);
   const preloadImages = Array.from(
     new Set(
       [
         item.image,
         item.backImage,
         ...Object.values(item.colorImages ?? {}).flatMap((v) => [v?.front, v?.back]),
+        ...currentColorCombos,
       ].filter((src): src is string => Boolean(src)),
     ),
   );

@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
-import { paramsForCategory } from "@/data/parameterSliders";
+import { renderParamsForCategory, premiumParamsForCategory } from "@/data/parameterSliders";
 import FabricColorPicker from "@/components/FabricColorPicker";
 
 const PREVIEW_SIZES = "(min-width: 640px) 576px, 100vw";
@@ -56,7 +56,8 @@ export default function CustomizeParameters({
   }
 
   const colorHex = colors.find((c) => c.name === spec.color)?.hex ?? previewGradient[0];
-  const params = paramsForCategory(category);
+  const params = renderParamsForCategory(category);
+  const premiumParams = premiumParamsForCategory(category);
 
   return (
     <div>
@@ -149,7 +150,7 @@ export default function CustomizeParameters({
       />
 
       {/* Sliders */}
-      {params && (
+      {params.length > 0 && (
         <div className="mt-6 flex flex-col gap-6">
           {params.map((param) => {
             const current = spec.changes.find((c) => c.type === param.type);
@@ -189,6 +190,47 @@ export default function CustomizeParameters({
               </div>
             );
           })}
+        </div>
+      )}
+
+      {premiumParams.length > 0 && (
+        <div className="mt-6 rounded-shaklek-sm border border-dashed border-gold/40 bg-surface-2 p-4">
+          <div className="flex items-center gap-1.5">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 text-gold" aria-hidden="true">
+              <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+            <p className="text-xs text-text">Unlock more on Shaklek+</p>
+          </div>
+          <p className="mt-1 text-[11px] text-text-3">
+            Coming soon: {premiumParams.map((p) => p.name.toLowerCase()).join(", ")}, fit, and more colours.
+          </p>
+          <div className="mt-4 flex flex-col gap-4 opacity-50">
+            {premiumParams.map((param) => (
+              <div key={param.type}>
+                <p className="text-xs text-text">{param.name}</p>
+                <div className="mt-1.5 flex justify-between">
+                  {param.options.map((option, i) => (
+                    <span
+                      key={option.value}
+                      className={`text-[11px] text-text-3 ${
+                        i === 0 ? "text-left" : i === param.options.length - 1 ? "text-right" : ""
+                      }`}
+                    >
+                      {option.text}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            disabled
+            className="mt-4 w-full cursor-not-allowed rounded-full border border-gold/40 py-2 text-[11px] text-gold"
+          >
+            Subscribe to get access in preview
+          </button>
         </div>
       )}
 
