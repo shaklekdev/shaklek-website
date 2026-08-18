@@ -124,8 +124,8 @@ export const catalog: CatalogItem[] = [
         "short:longer": { front: "/catalog/structured-blouse-ivory-combo-short-longer-front.png", back: "/catalog/structured-blouse-ivory-combo-short-longer-back.png" },
       },
       White: {
-        "long:normal": { front: "/catalog/structured-blouse-white-combo-long-normal-front.png", back: "/catalog/structured-blouse-white-combo-long-normal-back.png" },
-        "long:longer": { front: "/catalog/structured-blouse-white-combo-long-longer-front.png", back: "/catalog/structured-blouse-white-combo-long-longer-back.png" },
+        "long:normal": { front: "/catalog/structured-blouse-white-combo-long-normal-front-v2.png", back: "/catalog/structured-blouse-white-combo-long-normal-back-v2.png" },
+        "long:longer": { front: "/catalog/structured-blouse-white-combo-long-longer-front-v2.png", back: "/catalog/structured-blouse-white-combo-long-longer-back-v2.png" },
         "short:longer": { front: "/catalog/structured-blouse-white-combo-short-longer-front.png", back: "/catalog/structured-blouse-white-combo-short-longer-back.png" },
       },
       Navy: {
