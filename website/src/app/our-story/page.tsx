@@ -85,7 +85,7 @@ export default function OurStoryPage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-top"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 pb-10 text-center">
           <p className="rounded-full bg-white/90 px-3 py-1 text-[11px] tracking-wide text-text-3 uppercase backdrop-blur-sm">
