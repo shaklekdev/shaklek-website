@@ -189,8 +189,8 @@ export const catalog: CatalogItem[] = [
       },
       Navy: {
         "long:normal": { front: "/catalog/wrap-top-navy-combo-long-normal-front.png", back: "/catalog/wrap-top-navy-combo-long-normal-back.png" },
-        "long:longer": { front: "/catalog/wrap-top-navy-combo-long-longer-front.png", back: "/catalog/wrap-top-navy-combo-long-longer-back.png" },
-        "short:longer": { front: "/catalog/wrap-top-navy-combo-short-longer-front.png", back: "/catalog/wrap-top-navy-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-navy-combo-long-longer-front.png", back: "/catalog/wrap-top-navy-combo-long-longer-back-v2.png" },
+        "short:longer": { front: "/catalog/wrap-top-navy-combo-short-longer-front.png", back: "/catalog/wrap-top-navy-combo-short-longer-back-v2.png" },
       },
       Burgundy: {
         "long:normal": { front: "/catalog/wrap-top-burgundy-combo-long-normal-front.png", back: "/catalog/wrap-top-burgundy-combo-long-normal-back.png" },
