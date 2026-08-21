@@ -10,11 +10,12 @@ Working documents covering everything left to build, organized by workstream. Ea
 - [`aws-infrastructure-todo.md`](./aws-infrastructure-todo.md) — hosting plan; **live in production**, see status below
 - [`trend-sourcing.md`](./trend-sourcing.md) — where trend-intake candidates actually come from, source by source: what's real, what's legally risky, what's built and tested
 - [`incorporation-todo.md`](./incorporation-todo.md) — the real-world (non-code) blocker behind Stripe and the trademark: trade license is issued, Wio business bank account is next.
+- [`catalog-images-todo.md`](./catalog-images-todo.md) — per-item/per-colour status of the customizer photography, remaining trouser work, and the decisions behind how these images are produced
 
 ## The honest priority order
 
 1. **Get the site live** — **done**. `shaklek.com`/`www.shaklek.com` live on AWS Amplify with HTTPS.
-2. **Payment gateway** — **done in test mode as of 2026-08-14**. Full pipeline verified end-to-end in production: cart → Stripe Checkout → webhook confirms payment → order persisted as `paid` in the real database → notification email confirmed delivered to `orders@shaklek.com`. Going live (real money) still needs the Wio-backed Stripe merchant account approved — see `incorporation-todo.md` — but that's an account-verification step, not more code.
+2. **Payment gateway** — **done in test mode as of 2026-08-14**, and the **Stripe merchant account is now verified and live as of 2026-08-20**: `charges_enabled` and `payouts_enabled` both true, Wio bank account attached, no outstanding requirements. The remaining step to take real money is swapping the Stripe test keys for live keys in Amplify's env vars — a credential change, not code. See `payment-auth-todo.md`.
 3. **A real database** — **done**. Neon Postgres (not RDS — chosen for cost, see `aws-infrastructure-todo.md`), schema for customers/orders/order_items, migrated and confirmed persisting real orders.
 4. Everything else — auth (decided: Clerk, not built), AI image generation, deeper design work, admin dashboard — builds on top of those three, which are now all live.
 5. **Incorporation** — trade license issued 2026-08-14; corporate bank account (Wio) is the current step, which is what unlocks the real Stripe merchant account.
@@ -26,5 +27,8 @@ Working documents covering everything left to build, organized by workstream. Ea
 - **Catalog imagery gap closed** (2026-08-15/16) — all 8 catalog items (including the newly added Cargo Trousers) now have real AI-generated photography with per-color front/back variants, replacing the CSS-gradient placeholders. See `web-design-todo.md`.
 - **Arabic wordmark added to the site header** (2026-08-16) — `شكلك` set in Reem Kufi under the "Shaklek" logotype, see `web-design-todo.md`.
 - **Step 2 customizer redesign finalized** (2026-08-16, not yet built) — slider-based parameters per garment type replace the freeform chat customizer, so every combination is known in advance and pre-renderable; see `frontend-todo.md`. Also decided: only linen gets pre-rendered, cotton is a no-price-difference preference (the `LINEN_UPCHARGE` removal is tracked in `frontend-todo.md`).
+- **Stripe merchant account verified** (2026-08-20) — live account approved, charges and payouts enabled, Wio bank account attached. See `payment-auth-todo.md`.
+- **Per-combo customizer photography** (2026-08-18/21) — all four shirt items now have real photos for every sleeve/length combination in all four colours, and Wide-leg/Banded Trousers have their Navy and Ivory leg-width/length combos. The method that made this consistent — generate one master per lightness family, then derive the sibling colour — plus the tooling and the failure modes are documented in the root `CLAUDE.md`. Remaining trouser work is in `catalog-images-todo.md`.
+- **Catalog images re-encoded as JPEG** (2026-08-21) — an Amplify deploy failed because the build output hit 291MB against a 230MB cap, with the catalog alone at 185MB. Now 17MB. Keep new catalog images in this format.
 
-Last updated 16 August 2026.
+Last updated 21 August 2026.
