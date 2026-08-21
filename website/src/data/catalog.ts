@@ -99,6 +99,21 @@ export const catalog: CatalogItem[] = [
       Navy: { front: "/catalog/wide-leg-trousers-navy-front.png", back: "/catalog/wide-leg-trousers-navy-back.png" },
       Burgundy: { front: "/catalog/wide-leg-trousers-burgundy-front.png", back: "/catalog/wide-leg-trousers-burgundy-back.png" },
     },
+    // "wide:full" isn't generated -- it's identical to colorImages above.
+    // Navy and Ivory are the generated masters; Burgundy/White are derived
+    // from them by recolour and not wired up yet.
+    comboImages: {
+      Ivory: {
+        "normal:cropped": { front: "/catalog/wide-leg-trousers-ivory-combo-normal-cropped-front.png", back: "/catalog/wide-leg-trousers-ivory-combo-normal-cropped-back.png" },
+        "normal:full": { front: "/catalog/wide-leg-trousers-ivory-combo-normal-full-front.png", back: "/catalog/wide-leg-trousers-ivory-combo-normal-full-back.png" },
+        "wide:cropped": { front: "/catalog/wide-leg-trousers-ivory-combo-wide-cropped-front.png", back: "/catalog/wide-leg-trousers-ivory-combo-wide-cropped-back.png" },
+      },
+      Navy: {
+        "normal:cropped": { front: "/catalog/wide-leg-trousers-navy-combo-normal-cropped-front.png", back: "/catalog/wide-leg-trousers-navy-combo-normal-cropped-back.png" },
+        "normal:full": { front: "/catalog/wide-leg-trousers-navy-combo-normal-full-front.png", back: "/catalog/wide-leg-trousers-navy-combo-normal-full-back.png" },
+        "wide:cropped": { front: "/catalog/wide-leg-trousers-navy-combo-wide-cropped-front.png", back: "/catalog/wide-leg-trousers-navy-combo-wide-cropped-back.png" },
+      },
+    },
   },
   {
     slug: "structured-blouse",
@@ -156,6 +171,19 @@ export const catalog: CatalogItem[] = [
       White: { front: "/catalog/banded-trousers-white-front.png", back: "/catalog/banded-trousers-white-back.png" },
       Navy: { front: "/catalog/banded-trousers-navy-front.png", back: "/catalog/banded-trousers-navy-back.png" },
       Burgundy: { front: "/catalog/banded-trousers-burgundy-front.png", back: "/catalog/banded-trousers-burgundy-back.png" },
+    },
+    // "wide:full" isn't generated -- it's identical to colorImages above.
+    comboImages: {
+      Ivory: {
+        "normal:cropped": { front: "/catalog/banded-trousers-ivory-combo-normal-cropped-front.png", back: "/catalog/banded-trousers-ivory-combo-normal-cropped-back.png" },
+        "normal:full": { front: "/catalog/banded-trousers-ivory-combo-normal-full-front.png", back: "/catalog/banded-trousers-ivory-combo-normal-full-back.png" },
+        "wide:cropped": { front: "/catalog/banded-trousers-ivory-combo-wide-cropped-front.png", back: "/catalog/banded-trousers-ivory-combo-wide-cropped-back.png" },
+      },
+      Navy: {
+        "normal:cropped": { front: "/catalog/banded-trousers-navy-combo-normal-cropped-front.png", back: "/catalog/banded-trousers-navy-combo-normal-cropped-back.png" },
+        "normal:full": { front: "/catalog/banded-trousers-navy-combo-normal-full-front.png", back: "/catalog/banded-trousers-navy-combo-normal-full-back.png" },
+        "wide:cropped": { front: "/catalog/banded-trousers-navy-combo-wide-cropped-front.png", back: "/catalog/banded-trousers-navy-combo-wide-cropped-back.png" },
+      },
     },
   },
   {
@@ -250,6 +278,31 @@ export const catalog: CatalogItem[] = [
       White: { front: "/catalog/utility-shirt-white-front-v3.png", back: "/catalog/utility-shirt-white-back-v3.png" },
       Navy: { front: "/catalog/utility-shirt-navy-front-v3.png", back: "/catalog/utility-shirt-navy-back-v4.png" },
       Burgundy: { front: "/catalog/utility-shirt-burgundy-front-v3.png", back: "/catalog/utility-shirt-burgundy-back-v3.png" },
+    },
+    // "short:normal" isn't generated -- it's identical to colorImages above
+    // (the existing photo's short sleeve + tie-waist length is the "short:normal"
+    // option for this item).
+    comboImages: {
+      Ivory: {
+        "long:normal": { front: "/catalog/utility-shirt-ivory-combo-long-normal-front.png", back: "/catalog/utility-shirt-ivory-combo-long-normal-back.png" },
+        "short:longer": { front: "/catalog/utility-shirt-ivory-combo-short-longer-front.png", back: "/catalog/utility-shirt-ivory-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/utility-shirt-ivory-combo-long-longer-front.png", back: "/catalog/utility-shirt-ivory-combo-long-longer-back.png" },
+      },
+      White: {
+        "long:normal": { front: "/catalog/utility-shirt-white-combo-long-normal-front.png", back: "/catalog/utility-shirt-white-combo-long-normal-back.png" },
+        "short:longer": { front: "/catalog/utility-shirt-white-combo-short-longer-front.png", back: "/catalog/utility-shirt-white-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/utility-shirt-white-combo-long-longer-front.png", back: "/catalog/utility-shirt-white-combo-long-longer-back.png" },
+      },
+      Navy: {
+        "long:normal": { front: "/catalog/utility-shirt-navy-combo-long-normal-front.png", back: "/catalog/utility-shirt-navy-combo-long-normal-back.png" },
+        "short:longer": { front: "/catalog/utility-shirt-navy-combo-short-longer-front.png", back: "/catalog/utility-shirt-navy-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/utility-shirt-navy-combo-long-longer-front.png", back: "/catalog/utility-shirt-navy-combo-long-longer-back.png" },
+      },
+      Burgundy: {
+        "long:normal": { front: "/catalog/utility-shirt-burgundy-combo-long-normal-front.png", back: "/catalog/utility-shirt-burgundy-combo-long-normal-back.png" },
+        "short:longer": { front: "/catalog/utility-shirt-burgundy-combo-short-longer-front.png", back: "/catalog/utility-shirt-burgundy-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/utility-shirt-burgundy-combo-long-longer-front.png", back: "/catalog/utility-shirt-burgundy-combo-long-longer-back.png" },
+      },
     },
   },
 ];
