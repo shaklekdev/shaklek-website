@@ -10,22 +10,39 @@ on push to `main`. Planning docs in `planning/`.
 wrong on this project was scope creep or claiming success without checking —
 not missing knowledge. Read it before doing anything that costs money.
 
-## Where the project stands (2026-08-21)
+## Where the project stands (2026-08-22)
 
-Live at `shaklek.com` on AWS Amplify. Commerce works end to end: Stripe
-Checkout → webhook → order persisted in Neon Postgres → notification email via
-Resend. Auth is Clerk (staff `/dashboard`, customers `/account`).
+Live at `www.shaklek.com` on AWS Amplify (the apex `shaklek.com` 404s — use
+www). Commerce works end to end: Stripe Checkout → webhook → order persisted in
+Neon Postgres → notification email via Resend. Auth is Clerk (staff
+`/dashboard`, customers `/account`).
 
-- **Stripe merchant account is verified** (2026-08-20) — charges and payouts
-  enabled, Wio bank account attached, no outstanding requirements. Still
-  running **test keys**; taking real money is a key swap in Amplify env vars,
-  not a code change.
-- **Clerk is still on development keys in production** — has hard usage caps.
-  Needs a production instance and a key swap. See `planning/payment-auth-todo.md`.
-- **Customizer photography** is the active workstream — all four shirt items are
-  complete across four colours; trousers are partly done. Status table and
-  remaining work: `planning/catalog-images-todo.md`. **This is what most
-  sessions are about — sections 1–5 below are the working knowledge for it.**
+**The two things standing between this and real revenue, both credential swaps,
+no code:**
+
+- **Stripe is still on test keys.** The merchant account is verified (2026-08-20)
+  — charges and payouts enabled, Wio bank attached, no outstanding requirements.
+  Going live is swapping the keys in Amplify env vars.
+- **Clerk is still on development keys in production.** Dev instances have a hard
+  monthly active-user cap; when it trips, sign-in breaks for every customer at
+  once. Needs a production instance created, then a key swap. See
+  `planning/payment-auth-todo.md`.
+
+**Customizer photography is complete for all eight catalog items** as of
+2026-08-22 (commit `f4f1864`). Four shirts on `sleeve:length`, four trousers on
+`straight/wide` × `full/cropped` — 64 trouser combination photos, front and
+back, in four colours each. Twelve base photos were corrected along the way.
+
+- **The method is written down: §4b below.** It was proven across cargo and
+  banded and it generalises to new pants, shirts and dresses. Read it before
+  generating anything — it is a full day of trial and error distilled, and it is
+  the difference between an item taking one hour and taking six.
+- Remaining photography work and known defects: `planning/catalog-images-todo.md`.
+
+**Why this mattered:** the customizer *is* the product. Made-to-order only sells
+if choosing an option visibly changes the garment; four items with static photos
+is a small brand with no reason to exist. Every silhouette decision on this
+project is judged against that.
 
 Zero real AI exists in the product itself; that is deliberate (Phase 1 is a
 human-run concierge model). The image generation described here is a build-time
@@ -75,7 +92,13 @@ from the **"render"-tier sliders only**, joined by `:` in declared order.
 | Category | Key format | Combos | Default (= base photo, not generated) |
 |---|---|---|---|
 | Shirt | `sleeve:length` | short/long × normal/longer | usually `long:normal` |
-| Pants | `legwidth:length` | normal/wide/wider × cropped/ankle/full | `wide:full` |
+| Pants | `legwidth:length` | **straight/wide × cropped/full** | **`straight:full`** |
+
+The pants vocabulary changed on 2026-08-22 (was normal/wide/wider ×
+cropped/ankle/full). `comboKeyForCategory` builds keys from the slider option
+**values**, so `PANTS_PARAMS` must use exactly `straight`/`wide` and
+`cropped`/`full` or the photos become unreachable. Every pants item now has all
+three non-default cells in all four colours.
 
 The default combo is deliberately **not** generated — it falls back to
 `colorImages`. Only generate the non-default ones.
