@@ -53,6 +53,8 @@ const [, , inputPath, outputPath, seedXStr, seedYStr, targetHex, minLStr] = proc
 // saturation test alone lets the fill walk hair -> face -> arms. Fabric stays
 // bright even in shadow, while hair and skin sit well below it.
 const minL = minLStr ? parseFloat(minLStr) : 0;
+const minYFrac = parseFloat(process.env.REGION_MIN_Y || "0");
+const maxYFrac = parseFloat(process.env.REGION_MAX_Y || "1");
 const seedX = parseInt(seedXStr, 10);
 const seedY = parseInt(seedYStr, 10);
 
@@ -73,6 +75,8 @@ function remapLightness(l, fromL, toL) {
 
 const { data, info } = await sharp(inputPath).raw().toBuffer({ resolveWithObject: true });
 const { width, height, channels } = info;
+const minYpx = Math.round(minYFrac * height);
+const maxYpx = Math.round(maxYFrac * height);
 
 const px = (x, y) => {
   const i = (y * width + x) * channels;
@@ -101,6 +105,11 @@ while (stack.length) {
     const nidx = ny * width + nx;
     if (inRegion[nidx]) continue;
     const [h, s, l] = px(nx, ny);
+    // Optional vertical bounds (fractions of height). Flood fill only knows
+    // colour and connectivity, so on a trouser photo it will happily climb
+    // through the waistband into the model top or skin, which are close in
+    // tone to pale linen. Bounding the region below the waist stops that.
+    if (ny < minYpx || ny > maxYpx) continue;
     if (l < minL) continue;
     if (isBackground(h, s, l) || isSkin(h, s, l)) continue;
     inRegion[nidx] = 1;

@@ -183,6 +183,152 @@ before large batches and tell the user the expected cost first.
 
 ---
 
+## 4b. The trouser combo recipe (proven on Cargo + Banded, 2026-08-22)
+
+The matrix is **2x2**: leg width `straight | wide`, length `full | cropped`.
+`straight:full` is the base photo and is never generated. The slider option
+*values* in `PANTS_PARAMS` must be `straight`/`wide` and `cropped`/`full` --
+`comboKeyForCategory` builds keys from them, so anything else makes the images
+unreachable.
+
+### Order of generation -- this is the whole trick
+
+Build each cell **from the cell that already has the property**:
+
+1. `straight:cropped` <- from the **base** (already straight). Shorten only.
+2. `wide:full` <- from the **base**. Widen only. **Approve this one image before
+   generating anything else** -- everything below inherits from it.
+3. `wide:cropped` <- from **`wide:full`**, never from the base. Shorten only.
+
+Generating `wide:cropped` from the base makes the model shorten and quietly skip
+the widening, so `straight:cropped` and `wide:cropped` come out identical. That
+is what happened to Wide-leg: 3 of 4 colours ended up with `wide:cropped`
+*narrower* than `straight:cropped`.
+
+### Colour order
+
+Navy master -> approve -> Ivory using the **same prompt string with only the
+colour word changed** -> Burgundy by generative recolour of the approved Navy
+files -> White generated from the White base (recolouring pale fabric greys the
+skin, see section 5). Re-tuning the prompt between colours is what produced the
+over-wide Ivory on 2026-08-21.
+
+### Model tier -- Flash vs Pro
+
+Flash for everything **except reshaping a silhouette**, which it cannot do:
+
+| Edit | Model |
+|---|---|
+| Shorten / crop | Flash |
+| Recolour | Flash |
+| Widen a **front** | Flash |
+| Widen a **back** | **Pro** |
+| Remove a taper (either view) | **Pro** |
+
+Evidence: widening Cargo navy's back moved leg width 0.258 -> 0.244 -> 0.254 on
+three Flash attempts (one with a reference image), then 0.470 on one Pro call.
+De-tapering the three Banded fronts failed on Flash and worked on Pro first try.
+Budget ~1 Pro call per colour per item ($0.134 each).
+
+### References beat descriptions -- always
+
+Pass an approved image via `edit2.mjs` (`EDIT2_INPUT_LABEL` /
+`EDIT2_REF_LABEL` set the two labels). Hem height, heel style, leg width and
+burgundy shade all landed first try this way and repeatedly failed as prose.
+
+- **Cross-colour references are safe** -- referencing a navy image from an ivory
+  or white job did not drag colour across (verify with mean lightness anyway).
+- For colour consistency, reference the **base photo of that colour**, not a hex
+  target. A hex let Banded burgundy drift to h=357 with a 30-point lightness
+  spread; the base as reference pulled it to h=350-355, spread 23.
+- **A bad reference propagates silently.** Banded white's back was widened
+  against a front that was itself un-widened, so it faithfully copied a straight
+  leg. Check the reference is correct before using it.
+- For pale colours, reference the **navy** wide image and **drop any "do not
+  overdo it" wording** -- that restraint left Cargo ivory/white only 5-9% wider.
+
+### Always pin, in every prompt
+
+The shoes by name ("nude heeled sandals" / "high-heeled shoes, never flat
+shoes"), "one single smooth seamless studio backdrop with NO visible panel
+edges, vertical lines, seams or dark bands", the pockets that must survive
+(cargo side pockets; simple welt back pockets, no flaps, no buttons), the hem
+detail (flat turned-up cuff; NOT gathered/elasticated/tapered), the exact colour
+word, and the framing/camera angle.
+
+### Backs framed above the hem (Cargo, Pleated)
+
+Extend them before use, or `cropped` and `full` look identical from behind.
+Pad the canvas ~30% with the sampled bottom-edge colour, ask the model to
+complete the figure and shoes into it, then **trim deterministically**: find the
+lowest row with real contrast (the shoes) and keep ~4% of height below it.
+Trimming by "uniform rows" instead eats the floor and clips the shoes.
+
+### Check the base photos first
+
+Banded cost roughly double Cargo because eight *shipped* base photos were
+internally inconsistent -- all four backs tapered at the ankle while their
+fronts fell straight, then three fronts turned out tapered too. Every combo
+built on them inherited it. **Do one low-res read of each master, front and
+back together, before generating anything from it.**
+
+### Never delete a generated image
+
+**Every generation is money already spent.** Images that were rejected, superseded
+or simply not chosen still get archived -- a rejected shape is often the right
+answer for a different item, and a "previous version" was needed twice on
+2026-08-22 to undo a bad regeneration.
+
+- `gen-verified.mjs` keeps rejected attempts as `<output>.rejected-<n>.png`
+  instead of unlinking them. Do not re-add the delete.
+- When replacing an image, move the old one to a `rejected/` subfolder. Never
+  `rm` it -- `rm` has no undo and cost a paid regeneration on 2026-08-21.
+- **The scratchpad is wiped when the session ends.** Before wrapping up, archive
+  everything generated to `catalog-archive/<date>-session/` as JPEG q92. That
+  directory sits at the repo root, outside `website/`, so it is committed for
+  safekeeping but never reaches the Amplify build output.
+
+### Measuring -- and the instruments that lie
+
+The only width measure that works on **both** dark and pale garments: for each
+row, estimate that row's own background from its outer 6% of columns, then
+measure the span of pixels differing from it by >14. Take the widest row in the
+lower leg zone. (Even this saturates when the backdrop has a floor line across
+the frame, as Banded's does -- check the base reads sensibly before trusting it.)
+
+Everything else failed at some point today:
+
+- `measure-pants.mjs` counts dark shoes as hem -- reported `hem=0.999` for
+  cropped *and* full-length.
+- Hue masks catch the floor on ivory/white.
+- `normalize-colour.mjs --measure` locks onto **skin** on pale garments -- that
+  is why the White base reads h=17.
+- `minDiff` cannot catch a missing widening: Banded white's `wide:full` scored
+  2.2 against a threshold of 2 and was a pixel-identical duplicate of the
+  straight version. Raising the threshold would reject good pale results.
+
+**So: verify the specific thing that was asked for, and on pale colourways look
+at the image.** Every pale-fabric defect this session was caught by eye, never
+by a metric.
+
+Two rules that keep being re-learned:
+
+- Never verify with a metric that shares the transform's own thresholds -- a
+  "0% residual navy" check built from the same hue window is circular. Use an
+  independent test (e.g. "blue exceeds red" for burgundy).
+- Exposure drift between combos is real (Burgundy spread 45 lightness points on
+  Wide-leg) but **do not post-process it**: a +/-45 degree hue window around
+  burgundy wraps past 360 into skin hues and tints hands and feet. Regenerate
+  the offending cell instead.
+
+### Cost shape
+
+Cargo: ~34 Flash + 6 Pro ~= $2.10. Banded: ~40 Flash + 11 Pro ~= $2.30 (higher
+only because its base photos needed fixing). A clean item is roughly **30
+generations, ~$1.50**. Fixing one cell in the wide column always cascades --
+`wide:cropped` derives from `wide:full`, and the back mirrors the front -- so
+settle `wide:full` front first, get it approved, then generate the rest from it.
+
 ## 5. Hard-won gotchas
 
 **Prompting**

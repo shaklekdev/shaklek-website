@@ -13,9 +13,9 @@ const body = {
   contents: [{
     role: "user",
     parts: [
-      { text: "IMAGE 1 -- this is the photo to edit (back view):" },
+      { text: process.env.EDIT2_INPUT_LABEL || "IMAGE 1 -- this is the photo to edit:" },
       { inline_data: { mime_type: "image/png", data: fs.readFileSync(inputPath).toString("base64") } },
-      { text: "IMAGE 2 -- reference only, do NOT edit this one. It is the FRONT view of the same garment, showing where the wrap tie sits:" },
+      { text: process.env.EDIT2_REF_LABEL || "IMAGE 2 -- reference only, do NOT edit this one. It shows the detail to copy:" },
       { inline_data: { mime_type: "image/png", data: fs.readFileSync(refPath).toString("base64") } },
       { text: prompt },
     ],

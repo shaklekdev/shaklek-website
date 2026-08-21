@@ -133,9 +133,14 @@ export async function generateVerified({
       return true;
     }
 
-    fs.unlinkSync(tmp);
+    // Keep rejected attempts instead of deleting them. A reject is the most
+    // useful image in a failed batch: it is the only way to tell a bad
+    // generation apart from a bad verifier setting. Deleting them cost a real
+    // batch on 2026-08-21 -- four paid images destroyed by a wrong hue target.
+    const rejectPath = `${outputPath}.rejected-${attempt}.png`;
+    fs.renameSync(tmp, rejectPath);
     const why = !changed ? `unchanged (diff=${diff.toFixed(1)})` : `colour drift (${drift.toFixed(0)}deg)`;
-    console.error(`  attempt ${attempt} rejected: ${why}`);
+    console.error(`  attempt ${attempt} rejected: ${why} -> ${rejectPath}`);
   }
   console.error(`  FAILED after ${maxAttempts} attempts`);
   return false;

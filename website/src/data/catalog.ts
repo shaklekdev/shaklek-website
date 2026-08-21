@@ -104,14 +104,24 @@ export const catalog: CatalogItem[] = [
     // from them by recolour and not wired up yet.
     comboImages: {
       Ivory: {
-        "normal:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-cropped-back.png" },
-        "normal:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-full-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-full-back.png" },
+        "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-straight-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-full-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-full-back.png" },
         "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-back.png" },
       },
+      Burgundy: {
+        "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-straight-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-full-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-cropped-back.png" },
+      },
+      White: {
+        "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-straight-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-full-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-cropped-back.png" },
+      },
       Navy: {
-        "normal:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-normal-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-normal-cropped-back.png" },
-        "normal:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-normal-full-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-normal-full-back.png" },
-        "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-back.png" },
+        "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-straight-cropped-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-full-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-full-back-v2.png" },
+        "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-front-v2.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-back-v2.png" },
       },
     },
   },
@@ -167,22 +177,31 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/banded-trousers/banded-trousers-ivory-front.png",
     backImage: "/catalog/banded-trousers/banded-trousers-ivory-back.png",
     colorImages: {
-      Ivory: { front: "/catalog/banded-trousers/banded-trousers-ivory-front.png", back: "/catalog/banded-trousers/banded-trousers-ivory-back.png" },
-      White: { front: "/catalog/banded-trousers/banded-trousers-white-front.png", back: "/catalog/banded-trousers/banded-trousers-white-back.png" },
-      Navy: { front: "/catalog/banded-trousers/banded-trousers-navy-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-back.png" },
-      Burgundy: { front: "/catalog/banded-trousers/banded-trousers-burgundy-front.png", back: "/catalog/banded-trousers/banded-trousers-burgundy-back.png" },
+      Ivory: { front: "/catalog/banded-trousers/banded-trousers-ivory-front-v2.png", back: "/catalog/banded-trousers/banded-trousers-ivory-back-v2.png" },
+      White: { front: "/catalog/banded-trousers/banded-trousers-white-front-v2.png", back: "/catalog/banded-trousers/banded-trousers-white-back-v2.png" },
+      Navy: { front: "/catalog/banded-trousers/banded-trousers-navy-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-back-v2.png" },
+      Burgundy: { front: "/catalog/banded-trousers/banded-trousers-burgundy-front-v2.png", back: "/catalog/banded-trousers/banded-trousers-burgundy-back-v2.png" },
     },
-    // "wide:full" isn't generated -- it's identical to colorImages above.
     comboImages: {
       Ivory: {
-        "normal:cropped": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-normal-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-normal-cropped-back.png" },
-        "normal:full": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-normal-full-front.png", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-normal-full-back.png" },
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-straight-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-full-front.png", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-full-back.png" },
         "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-back.png" },
       },
+      White: {
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-white-combo-straight-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-white-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-white-combo-wide-full-front.png", back: "/catalog/banded-trousers/banded-trousers-white-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-white-combo-wide-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-white-combo-wide-cropped-back.png" },
+      },
       Navy: {
-        "normal:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-normal-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-combo-normal-cropped-back.png" },
-        "normal:full": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-normal-full-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-combo-normal-full-back.png" },
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-back.png" },
         "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-cropped-back.png" },
+      },
+      Burgundy: {
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-straight-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-full-front.png", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-back.png" },
       },
     },
   },
@@ -245,6 +264,28 @@ export const catalog: CatalogItem[] = [
       Navy: { front: "/catalog/pleated-trousers/pleated-trousers-navy-front-v3.png", back: "/catalog/pleated-trousers/pleated-trousers-navy-back-v2.png" },
       Burgundy: { front: "/catalog/pleated-trousers/pleated-trousers-burgundy-front-v2.png", back: "/catalog/pleated-trousers/pleated-trousers-burgundy-back-v2.png" },
     },
+    comboImages: {
+      Ivory: {
+        "straight:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-straight-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-full-front.png", back: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-cropped-back.png" },
+      },
+      White: {
+        "straight:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-white-combo-straight-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-white-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/pleated-trousers/pleated-trousers-white-combo-wide-full-front.png", back: "/catalog/pleated-trousers/pleated-trousers-white-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-white-combo-wide-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-white-combo-wide-cropped-back.png" },
+      },
+      Navy: {
+        "straight:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-navy-combo-straight-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-navy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/pleated-trousers/pleated-trousers-navy-combo-wide-full-front.png", back: "/catalog/pleated-trousers/pleated-trousers-navy-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-navy-combo-wide-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-navy-combo-wide-cropped-back.png" },
+      },
+      Burgundy: {
+        "straight:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-straight-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-wide-full-front.png", back: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-wide-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-wide-cropped-back.png" },
+      },
+    },
   },
   {
     slug: "cargo-trousers",
@@ -257,10 +298,32 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/cargo-trousers/cargo-trousers-ivory-front-v2.png",
     backImage: "/catalog/cargo-trousers/cargo-trousers-ivory-back-v2.png",
     colorImages: {
-      Ivory: { front: "/catalog/cargo-trousers/cargo-trousers-ivory-front-v2.png", back: "/catalog/cargo-trousers/cargo-trousers-ivory-back-v2.png" },
-      White: { front: "/catalog/cargo-trousers/cargo-trousers-white-front.png", back: "/catalog/cargo-trousers/cargo-trousers-white-back-v3.png" },
-      Navy: { front: "/catalog/cargo-trousers/cargo-trousers-navy-front.png", back: "/catalog/cargo-trousers/cargo-trousers-navy-back-v3.png" },
-      Burgundy: { front: "/catalog/cargo-trousers/cargo-trousers-burgundy-front.png", back: "/catalog/cargo-trousers/cargo-trousers-burgundy-back-v2.png" },
+      Navy: { front: "/catalog/cargo-trousers/cargo-trousers-navy-front.png", back: "/catalog/cargo-trousers/cargo-trousers-navy-back-v4.png" },
+      Ivory: { front: "/catalog/cargo-trousers/cargo-trousers-ivory-front-v2.png", back: "/catalog/cargo-trousers/cargo-trousers-ivory-back-v3.png" },
+      Burgundy: { front: "/catalog/cargo-trousers/cargo-trousers-burgundy-front.png", back: "/catalog/cargo-trousers/cargo-trousers-burgundy-back-v3.png" },
+      White: { front: "/catalog/cargo-trousers/cargo-trousers-white-front.png", back: "/catalog/cargo-trousers/cargo-trousers-white-back-v4.png" },
+    },
+    comboImages: {
+      Navy: {
+        "straight:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-straight-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-full-front.png", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-cropped-back.png" },
+      },
+      Ivory: {
+        "straight:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-straight-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-full-front.png", back: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-cropped-back.png" },
+      },
+      Burgundy: {
+        "straight:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-burgundy-combo-straight-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-burgundy-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/cargo-trousers/cargo-trousers-burgundy-combo-wide-full-front.png", back: "/catalog/cargo-trousers/cargo-trousers-burgundy-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-burgundy-combo-wide-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-burgundy-combo-wide-cropped-back.png" },
+      },
+      White: {
+        "straight:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-white-combo-straight-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-white-combo-straight-cropped-back.png" },
+        "wide:full": { front: "/catalog/cargo-trousers/cargo-trousers-white-combo-wide-full-front.png", back: "/catalog/cargo-trousers/cargo-trousers-white-combo-wide-full-back.png" },
+        "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-white-combo-wide-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-white-combo-wide-cropped-back.png" },
+      },
     },
   },
   {

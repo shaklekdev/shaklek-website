@@ -79,11 +79,10 @@ export const PANTS_PARAMS: SliderParam[] = [
     type: "leg_width",
     tier: "render",
     options: [
-      { value: "normal", text: "Normal" },
+      { value: "straight", text: "Straight" },
       { value: "wide", text: "Wide" },
-      { value: "wider", text: "Wider" },
     ],
-    defaultIndex: 1,
+    defaultIndex: 0,
     labelFor: (text) => `${text} leg`,
   },
   {
@@ -92,10 +91,9 @@ export const PANTS_PARAMS: SliderParam[] = [
     tier: "render",
     options: [
       { value: "cropped", text: "Cropped" },
-      { value: "ankle", text: "Ankle" },
       { value: "full", text: "Full length" },
     ],
-    defaultIndex: 2,
+    defaultIndex: 1,
     labelFor: (text) => (text === "Full length" ? text : `${text} length`),
   },
   {
