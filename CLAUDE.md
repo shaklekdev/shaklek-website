@@ -6,6 +6,27 @@ on push to `main`. Planning docs in `planning/`.
 **Read this file only. Do not go read the whole catalog or planning folder to
 "get oriented" — everything load-bearing is here.**
 
+## Where the project stands (2026-08-21)
+
+Live at `shaklek.com` on AWS Amplify. Commerce works end to end: Stripe
+Checkout → webhook → order persisted in Neon Postgres → notification email via
+Resend. Auth is Clerk (staff `/dashboard`, customers `/account`).
+
+- **Stripe merchant account is verified** (2026-08-20) — charges and payouts
+  enabled, Wio bank account attached, no outstanding requirements. Still
+  running **test keys**; taking real money is a key swap in Amplify env vars,
+  not a code change.
+- **Clerk is still on development keys in production** — has hard usage caps.
+  Needs a production instance and a key swap. See `planning/payment-auth-todo.md`.
+- **Customizer photography** is the active workstream — all four shirt items are
+  complete across four colours; trousers are partly done. Status table and
+  remaining work: `planning/catalog-images-todo.md`. **This is what most
+  sessions are about — sections 1–5 below are the working knowledge for it.**
+
+Zero real AI exists in the product itself; that is deliberate (Phase 1 is a
+human-run concierge model). The image generation described here is a build-time
+tool for producing catalog photos, not a product feature.
+
 ---
 
 ## 1. Token discipline (read this before touching images)
@@ -54,6 +75,10 @@ from the **"render"-tier sliders only**, joined by `:` in declared order.
 
 The default combo is deliberately **not** generated — it falls back to
 `colorImages`. Only generate the non-default ones.
+
+Filenames carry a `-v2`/`-v3` suffix. That is **cache-busting, not versioning** —
+see the deploy traps in §6. Changing an image's content means changing its
+filename.
 
 Colours (`src/data/colors.ts`): Ivory `#f5f0e8`, White `#fafafa`,
 Navy `#0a2d4a`, Burgundy `#4a1a2d`.
@@ -109,12 +134,45 @@ All take `GEMINI_API_KEY` from `website/.env.local`.
 | `region-recolor.mjs` | Flood-fill recolour from a seed point. For pale garments where hue alone can't separate fabric from skin. |
 | `measure-pants.mjs` | Hem height and leg width as frame fractions. |
 
+### Running a batch
+
+`run-batch.mjs` takes a JSON array of jobs and handles verify + retry +
+Flash→Pro escalation. Generate the JSON with `node -e` rather than writing it by
+hand — prompts are long and shell quoting will bite you.
+
+```bash
+cd website/scripts/catalog
+node run-batch.mjs "$(node -e '
+const C="../../public/catalog", S="/tmp/out";
+console.log(JSON.stringify([{
+  label:"wrap navy short back",
+  inputPath:  C+"/wrap-top-ivory-combo-short-longer-back-v2.png",
+  outputPath: S+"/navy-sl.png",
+  expectedHex:"#0a2d4a",   // verifier checks the result lands near this hue
+  maxAttempts:3,
+  minDiff:0.5,             // lower for pure recolours (see gotcha below)
+  maxHueDrift:25,
+  prompt:"Change the colour of ... "
+}]));
+')"
+```
+
+`minDiff` guards against "the model returned the source unchanged". It compares
+**greyscale**, so for a pure recolour (navy→burgundy barely changes lightness)
+set it low — otherwise correct results get rejected. For structural edits
+(sleeve/hem length) leave it around 2.
+
+**Generated images live in a temp dir and die with the session.** Install them
+into `public/catalog/` as soon as they're approved. A batch of 12 trouser
+images was lost this way.
+
 ### Models and cost
 
 - `gemini-2.5-flash-image` — **$0.039/image. Default to this.**
 - `gemini-3-pro-image` — $0.134/image. Only when Flash fails or 503s.
 
-Flash handles nearly everything. Escalate, don't start at Pro.
+Flash handles nearly everything. Escalate, don't start at Pro. Flash 503s under
+load — that's transient, back off and retry rather than switching model.
 
 Google AI Studio budget is capped — check https://aistudio.google.com/usage
 before large batches and tell the user the expected cost first.
@@ -180,8 +238,51 @@ rm -rf .next/dev/cache/images   # then restart dev server
 
 The user still needs a hard refresh (Cmd+Shift+R) — that cache is theirs.
 
-**Deploying:** push to `main`; Amplify builds automatically. Run `npm run build`
-first.
+### Deploying — two traps, both hit on 2026-08-21
+
+Push to `main`; Amplify builds automatically. Always `npm run build` first.
+
+**Trap 1 — build size cap.** Amplify rejects build output over **230MB**. The
+catalog is the bulk of it. Keep catalog images as **JPEG q92** (mozjpeg) *under
+their `.png` filenames* — that is the existing convention here, and PNG blew
+past the cap (291MB) and failed the deploy. To re-encode:
+
+```js
+await sharp(p).jpeg({quality:92,mozjpeg:true}).toBuffer()  // write back over the .png
+```
+
+**Trap 2 — replacing an image in place does not change what users see.**
+Catalog photos are served through Next's optimizer
+(`/_next/image?url=/catalog/foo.png&…`), and CloudFront caches *that* response
+for 4 hours (`max-age=14400`). The cache key is the URL, so overwriting the
+file changes nothing for visitors even after a green deploy — and Amplify owns
+the distribution, so there is no invalidation available.
+
+**If you change an image's content, you must change its filename.** That is
+what the `-v2` / `-v3` suffixes throughout `public/catalog/` are for. Bump the
+suffix and update the reference in `catalog.ts`. New files need no bump — their
+URLs are already new.
+
+### Checking a deploy (AWS CLI is available)
+
+```bash
+export PATH="$PATH:/Users/nadatlohi/Library/Python/3.8/bin"
+APP=dqcptedylrif0   # shaklek-website, eu-west-1
+aws amplify list-jobs --app-id $APP --branch-name main --max-results 3 \
+  --query 'jobSummaries[].{id:jobId,status:status,commit:commitId}' --output table
+# on failure, read the build log:
+aws amplify get-job --app-id $APP --branch-name main --job-id <ID> \
+  --query 'job.steps[0].logUrl' --output text | xargs curl -s | grep -iE "error|exceed"
+```
+
+**A failed build is silent** — the site just keeps serving the old version. If
+the user says a change isn't live, check the job status *before* assuming
+caching.
+
+To prove what production actually serves, compare pixels rather than guessing:
+fetch the `/_next/image?...` URL and diff it against the local file and against
+`git show <old-commit>:website/public/catalog/<file>`. Byte size alone is
+misleading.
 
 ⚠️ **The repo root contains untracked personal documents** — passport, Emirates
 ID, visa, bank letters. **Never `git add -A` or `git add .`** from the repo
