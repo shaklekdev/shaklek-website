@@ -75,7 +75,7 @@ export const catalog: CatalogItem[] = [
       Navy: {
         "short:normal": { front: "/catalog/oversized-shirt-navy-combo-short-normal-front.png", back: "/catalog/oversized-shirt-navy-combo-short-normal-back.png" },
         "long:longer": { front: "/catalog/oversized-shirt-navy-combo-long-longer-front-v2.png", back: "/catalog/oversized-shirt-navy-combo-long-longer-back.png" },
-        "short:longer": { front: "/catalog/oversized-shirt-navy-combo-short-longer-front-v2.png", back: "/catalog/oversized-shirt-navy-combo-short-longer-back-v2.png" },
+        "short:longer": { front: "/catalog/oversized-shirt-navy-combo-short-longer-front-v3.png", back: "/catalog/oversized-shirt-navy-combo-short-longer-back-v2.png" },
       },
       Burgundy: {
         "short:normal": { front: "/catalog/oversized-shirt-burgundy-combo-short-normal-front.png", back: "/catalog/oversized-shirt-burgundy-combo-short-normal-back.png" },
@@ -96,7 +96,7 @@ export const catalog: CatalogItem[] = [
     colorImages: {
       Ivory: { front: "/catalog/wide-leg-trousers-ivory-front.png", back: "/catalog/wide-leg-trousers-ivory-back.png" },
       White: { front: "/catalog/wide-leg-trousers-white-front.png", back: "/catalog/wide-leg-trousers-white-back.png" },
-      Navy: { front: "/catalog/wide-leg-trousers-navy-front.png", back: "/catalog/wide-leg-trousers-navy-back.png" },
+      Navy: { front: "/catalog/wide-leg-trousers-navy-front-v2.png", back: "/catalog/wide-leg-trousers-navy-back.png" },
       Burgundy: { front: "/catalog/wide-leg-trousers-burgundy-front.png", back: "/catalog/wide-leg-trousers-burgundy-back.png" },
     },
     // "wide:full" isn't generated -- it's identical to colorImages above.
@@ -207,23 +207,23 @@ export const catalog: CatalogItem[] = [
     comboImages: {
       Ivory: {
         "long:normal": { front: "/catalog/wrap-top-ivory-combo-long-normal-front.png", back: "/catalog/wrap-top-ivory-combo-long-normal-back.png" },
-        "long:longer": { front: "/catalog/wrap-top-ivory-combo-long-longer-front.png", back: "/catalog/wrap-top-ivory-combo-long-longer-back.png" },
-        "short:longer": { front: "/catalog/wrap-top-ivory-combo-short-longer-front.png", back: "/catalog/wrap-top-ivory-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-ivory-combo-long-longer-front.png", back: "/catalog/wrap-top-ivory-combo-long-longer-back-v2.png" },
+        "short:longer": { front: "/catalog/wrap-top-ivory-combo-short-longer-front.png", back: "/catalog/wrap-top-ivory-combo-short-longer-back-v2.png" },
       },
       White: {
         "long:normal": { front: "/catalog/wrap-top-white-combo-long-normal-front.png", back: "/catalog/wrap-top-white-combo-long-normal-back.png" },
-        "long:longer": { front: "/catalog/wrap-top-white-combo-long-longer-front.png", back: "/catalog/wrap-top-white-combo-long-longer-back.png" },
-        "short:longer": { front: "/catalog/wrap-top-white-combo-short-longer-front.png", back: "/catalog/wrap-top-white-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-white-combo-long-longer-front.png", back: "/catalog/wrap-top-white-combo-long-longer-back-v2.png" },
+        "short:longer": { front: "/catalog/wrap-top-white-combo-short-longer-front.png", back: "/catalog/wrap-top-white-combo-short-longer-back-v2.png" },
       },
       Navy: {
         "long:normal": { front: "/catalog/wrap-top-navy-combo-long-normal-front.png", back: "/catalog/wrap-top-navy-combo-long-normal-back.png" },
-        "long:longer": { front: "/catalog/wrap-top-navy-combo-long-longer-front.png", back: "/catalog/wrap-top-navy-combo-long-longer-back-v2.png" },
-        "short:longer": { front: "/catalog/wrap-top-navy-combo-short-longer-front.png", back: "/catalog/wrap-top-navy-combo-short-longer-back-v2.png" },
+        "long:longer": { front: "/catalog/wrap-top-navy-combo-long-longer-front.png", back: "/catalog/wrap-top-navy-combo-long-longer-back-v3.png" },
+        "short:longer": { front: "/catalog/wrap-top-navy-combo-short-longer-front.png", back: "/catalog/wrap-top-navy-combo-short-longer-back-v3.png" },
       },
       Burgundy: {
         "long:normal": { front: "/catalog/wrap-top-burgundy-combo-long-normal-front.png", back: "/catalog/wrap-top-burgundy-combo-long-normal-back.png" },
-        "long:longer": { front: "/catalog/wrap-top-burgundy-combo-long-longer-front.png", back: "/catalog/wrap-top-burgundy-combo-long-longer-back.png" },
-        "short:longer": { front: "/catalog/wrap-top-burgundy-combo-short-longer-front.png", back: "/catalog/wrap-top-burgundy-combo-short-longer-back.png" },
+        "long:longer": { front: "/catalog/wrap-top-burgundy-combo-long-longer-front.png", back: "/catalog/wrap-top-burgundy-combo-long-longer-back-v2.png" },
+        "short:longer": { front: "/catalog/wrap-top-burgundy-combo-short-longer-front.png", back: "/catalog/wrap-top-burgundy-combo-short-longer-back-v2.png" },
       },
     },
     // The base photo is a short sleeve, not SHIRT_PARAMS' "long" default.
