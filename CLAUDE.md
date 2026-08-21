@@ -6,6 +6,10 @@ on push to `main`. Planning docs in `planning/`.
 **Read this file only. Do not go read the whole catalog or planning folder to
 "get oriented" — everything load-bearing is here.**
 
+**§7 matters more than the technical sections.** Nearly everything that has gone
+wrong on this project was scope creep or claiming success without checking —
+not missing knowledge. Read it before doing anything that costs money.
+
 ## Where the project stands (2026-08-21)
 
 Live at `shaklek.com` on AWS Amplify. Commerce works end to end: Stripe
@@ -294,13 +298,68 @@ git add website/public/catalog/ website/src/data/catalog.ts
 
 ---
 
-## 7. Working with this user
+## 7. How to work here — the expensive lessons
 
-- They review visually and catch real defects — take the feedback literally.
-- Confirm scope before a batch. Broad unrequested passes have caused most of
-  the damage here; a catalog-wide "improvement" nobody asked for is worse than
-  doing nothing.
-- Report cost honestly, before spending.
-- When something breaks, `git checkout` the affected files individually — per
-  file in a loop, since a single `git checkout -- $LIST` treats the whole
-  string as one pathspec and silently fails.
+These cost more than any technical problem in this project. Every one is from
+a real failure on 2026-08-20/21.
+
+### Verify before you claim it worked
+
+The worst habit, by far, was announcing success and being corrected. Every
+time, a cheap check would have caught it first.
+
+- A masked edit was called "a real success" — it had silently regenerated the
+  whole frame at a different aspect ratio, changing the model's face and skin.
+  It was judged on appearance alone, never diffed against the source.
+- "Both sleeves are now full length" — one was still short.
+- A pocket fix was approved with the pocket still plainly visible.
+
+**Before saying a change worked: check the specific thing that was asked for,
+with the narrowest instrument available.** Measure it, crop into it, or diff it
+against the source. "It looks right" is not verification, and this user *will*
+spot what you missed.
+
+### Stay inside the ask
+
+The single most damaging action was a catalog-wide burgundy normalisation
+nobody requested. Burgundy had been uniform; the unasked-for pass broke it and
+cost a full audit plus a 41-file revert.
+
+- Fix **only** the item, colour and combo named. Do not "while I'm here".
+- If you notice something else wrong, **say so and let them decide.**
+- Re-read which garment the feedback was about. Wrap Top feedback was once
+  applied to the Oversized Shirt, and paid for.
+
+### Ask instead of engineering around it
+
+Faced with an ambiguous "the tie shouldn't be on the back", the response was
+three new scripts and several generations. One question — *"is a thin band
+acceptable, or must it be invisible?"* — would have resolved it immediately.
+
+**A clarifying question costs nothing. A wrong batch costs twice.**
+
+### Stop after two failures
+
+The same back image was regenerated six times with near-identical prompts, all
+failing the same way. Two identical failures means the approach is wrong, not
+the wording. Stop, say what's failing, and propose something different.
+
+### Pick the right instrument
+
+- Verifying a recolour with a greyscale pixel-diff → correct results rejected
+  as "unchanged" (navy→burgundy barely moves lightness). Check **hue**.
+- Verifying a deploy by byte size → misleading. Compare **pixels** against both
+  the local file and the previous committed version.
+
+### Money
+
+Every generation is real money against a capped budget, and the user watches it.
+State the expected cost before a batch, and report what was actually spent —
+including what was wasted. Prefer the free deterministic tools; reach for
+generation only when new pixels genuinely have to be invented.
+
+### Reverting
+
+`git checkout -- $LIST` with a shell-expanded list silently fails — git reads
+the whole string as one pathspec. Loop and revert **per file**, then confirm
+with `git status`.
