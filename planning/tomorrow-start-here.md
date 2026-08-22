@@ -1,76 +1,81 @@
-# Start here — 2026-08-23
+# Start here — evening session, 2026-08-22
 
-One page. Read this, then go. Detail lives in the linked docs.
+## Where things stand: Shaklek takes real money
 
-## What happened yesterday (2026-08-22)
+Live on real Stripe keys and a real Clerk production instance since this
+afternoon. **One real payment ran end to end and was verified**: AED 390 on a
+live card → webhook fired → order marked `paid` in Neon → visible on
+`/dashboard/orders` with the tailor handoff ready.
 
-Customizer photography finished for **all eight catalog items**. 64 trouser
-combination photos shipped, plus twelve base photos corrected. Live on
-`www.shaklek.com` (commit `f4f1864`, Amplify job 109, verified serving).
-
-The generation method is written down as **`CLAUDE.md` §4b** and it works —
-cargo took about an hour, banded and pleated followed the same path. Use it for
-any new pants, shirts or dresses. Do not re-derive it.
-
-Spend: ~$11.40 on image generation. Check https://aistudio.google.com/usage.
+`www.shaklek.com` · Amplify `dqcptedylrif0` (eu-west-1) · deploys on push to `main`.
 
 ---
 
-## Today, in order
+## Do these first — they are the founder's, not Claude's
 
-### 1. Go live on real money (~1 hour, no code)
+- [ ] **Refund the AED 390 test order.** It is a real charge on a real card.
+- [ ] **Turn Stripe Link off** — Settings → Payment methods, **live mode**. Link
+      is what forced the extra page before Apple Pay. Apple Pay itself now works.
+- [ ] **Download the new spec sheet and say what the tailor still needs.** The
+      structure is rebuilt; only the tailor knows what is missing from it.
 
-Two credential swaps in the Amplify console env vars, then a redeploy:
+## The queue for tonight — the cart batch
 
-- [ ] **Stripe:** test keys → live keys. Merchant account already verified
-      (`acct_1U4N2wFG6ccJjMKM`), charges and payouts enabled, Wio attached.
-- [ ] **Clerk:** create a **production instance**, then swap
-      `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`. Dev keys have a
-      hard monthly active-user cap — when it trips, sign-in breaks for everyone
-      at once. This is a live hazard, not cosmetic.
-- [ ] **Prove it:** one real card payment end to end, confirm the order lands in
-      Neon and the email arrives, then refund it via Stripe.
+All five are one workflow and should ship together, not as five deploys.
 
-Detail: `payment-auth-todo.md`.
+1. [ ] **Continue shopping.** Adding to cart dead-ends on `/cart`. No way to go
+       back and add a second piece — e.g. the same trouser in another colour.
+2. [ ] **Edit from the cart.** No route from a cart line back to its design page
+       to change anything. Should return to `/design/<slug>?color=<colour>`.
+3. [ ] **Real thumbnail in the cart.** Currently a blank square. The cart line
+       already stores slug, colour and the change labels, and
+       `comboKeyFromLabels()` already resolves those to the exact photo.
+4. [ ] **Quantity.** No way to order two of the same shirt. Touches CartContext,
+       the cart UI, the order payload and the Stripe line items — the biggest of
+       the five.
+5. [ ] **Checkout email.** Customers do not realise the email field must be
+       filled before payment is possible.
 
-### 2. Marketing content (the weekend goal)
+## Known and unresolved
 
-There are **no followers and no organic customers yet**, and no acquisition plan
-in any doc. This is the real gap now that the shop is finished.
+- [ ] **The customizer's arrow keys are unverified.** The option buttons are now
+      native radios, which should give arrow-key navigation for free, but two
+      attempts to deliver real key events failed (zero keydown events captured).
+      Needs the other session's CDP harness. Not a blocker — tap, click, Tab and
+      Space all work.
+- [ ] **Clerk still loads on every route** — 188.7kb raw / 54.7kb gzipped, 24% of
+      homepage JS, all from `ClerkProvider` in the root layout. Plan written in
+      `clerk-migration-plan.md`. **Do not start it** until production sign-in has
+      been exercised for a while; never change the auth layer in the same window
+      as auth credentials.
+- [ ] **Founder's note claims 288 shirt / 576 trouser combinations.** What ships
+      is 32 per garment (192 with sizes); the larger numbers count locked
+      Shaklek+ sliders. Founder's copy, founder's call — but it is checkable.
+- [ ] **`/upload` is built but unlinked** from the nav. Link it or leave it.
+- [ ] Wide-leg photo defects and three headless trouser crops —
+      `catalog-images-todo.md`. Costs money to fix, nothing is broken.
 
-- [ ] Marketing strategy for a UAE made-to-order linen label
-- [ ] Ad content for **Snapchat, Instagram, Facebook**
-- [ ] The finished customizer is the hook — "see your exact combination before
-      it's made" is now a true claim, and it wasn't before yesterday
+## Decided today, do not relitigate
 
-Goal: MVP test with real traffic next week.
+- **Prices**: Shirt 390 · Skirt 420 · Pants 450 · Dress 620. Model and reasoning
+  in `pricing-todo.md`. No blazers, simple dresses only.
+- **Welcome offer is 20%, not 25%** — at a 390 shirt, 25% goes underwater at the
+  pessimistic end of the CAC range.
+- **Never cap ordering.** No stock counts, no waitlist, no "sold out". If demand
+  outruns the bench, add a tailor. Thresholds in `tailor-capacity.md`.
+- **Keep WhatsApp** alongside email. In the UAE it is the customer service
+  channel and a trust signal for a brand with no history.
+- **The tailor never sees customer identity.** Spec sheets carry the garment and
+  `SHK-XXXXXXXX`, nothing else.
 
-### 3. Tailor
+## Traps
 
-Founder met the tailor 2026-08-22 to walk through the designs. Whatever came out
-of that — fabric, turnaround, unit cost, who cuts — **write it down**, because
-the fulfilment loop is still undocumented anywhere in this repo and it decides
-whether the unit economics work.
-
----
-
-## If there is time left: wide-leg cleanup
-
-~8 generations, ~$0.60. Black heels in the `wide:full` column, a frame mismatch,
-and burgundy's base photo being from a different shoot. Full list in
-`catalog-images-todo.md` §1. Not urgent — the item is complete and shipping.
-
----
-
-## Things that will bite you
-
-- **The site is `www.shaklek.com`.** The apex `shaklek.com` 404s.
-- **Never `git add -A` from the repo root** — passport, Emirates ID, visa and
-  bank letters are sitting there untracked. Stage explicit paths.
-- **Overwriting an image doesn't change what visitors see** — CloudFront caches
-  the optimizer response for 4 hours and Amplify offers no invalidation. Change
-  the filename (`-v2`, `-v3`) when content changes.
-- **Never delete a generated image.** Archive to `catalog-archive/<date>-session/`
-  before the session ends; the scratchpad is wiped on exit.
-- **A failed Amplify build is silent** — the site just keeps serving the old
-  version. Check the job status before blaming caching.
+- **Two sessions share one working tree.** `git diff <file>` before `git add
+  <file>` — an uncommitted change of the other session's was swept into an
+  unrelated commit this way. Pin dev-server ports and confirm they bound.
+- **CloudFront caches HTML and the CSS reference in it.** A change can be live
+  and still invisible in a browser that is holding the old page. Verify by
+  fetching the CSS the *fresh* HTML points at, not the one a cached page names.
+- **Never `git add -A`** from the repo root — passport, Emirates ID and visa sit
+  there untracked.
+- A **failed Amplify build is silent**; the site keeps serving the old version.

@@ -130,12 +130,12 @@ export default function OurStoryPage() {
           Shaklek means your way in Arabic: your vision, your style, your
           shape, your skin.
         </p>
-        <p className="subtitle mt-3 max-w-md">
+        <p className="subtitle mt-3 max-w-md text-justify hyphens-auto">
           We make elegant fashion essentials, not fast trends. Pieces
           customizable to your taste, friendly to your skin, and shaped to
           your body, not the other way around.
         </p>
-        <p className="subtitle mt-4 max-w-md">
+        <p className="subtitle mt-4 max-w-md text-justify hyphens-auto">
           Every piece here starts as an idea, not a rack of stock waiting for
           someone your size to walk in. A real tailor makes it, one piece at
           a time, sustainably, for the person who ordered it. That comes down
