@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "verify": "node scripts/verify-catalog.mjs",
     "start": "next start",
     "lint": "eslint"
   },

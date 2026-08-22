@@ -18,7 +18,7 @@ live only in a conversation.
 | Shipping | 21 AED/shipment | Founder, 2026-08-22 |
 | Packaging | 2 AED/package (1,000 per 500) | Founder, 2026-08-22 |
 | Tailoring | Shirt **40** · Skirt **60** · Pants **60** · Dress **85** | Founder, 2026-08-22 |
-| Make time | 1–2 per piece — **units unconfirmed, days assumed** | Founder, 2026-08-22 |
+| Make time | **1–2 days per piece — confirmed by the tailor** | Founder, 2026-08-22 |
 | Metres per garment | Shirt 2.0 · Skirt 1.5 · Pants 2.0 · Dress 3.0 | **Assumption — confirm** |
 | Payment fees | ~2.9% + 1 AED | **Verify** against Stripe UAE pricing |
 | Remake allowance | 5% of orders | Assumption; made-to-order's "returns" |
@@ -91,7 +91,7 @@ tailor down is a rounding error next to a badly run ad account.
 
 ## The constraint that actually governs this business
 
-One tailor, 1–2 days per piece, ~22 working days:
+One tailor, **1–2 days per piece (confirmed with the tailor, 2026-08-22)**, ~22 working days:
 
 | | Pieces/month | Revenue ceiling @ ~420 avg |
 |---|---|---|
@@ -112,8 +112,9 @@ nothing per send. That is what the welcome code is really for.
 
 ## Open
 
-- [ ] **Confirm "1–2 per piece" is days, not hours** — changes the ceiling by 8×
-      and decides how much ad spend is even useful
+- [x] ~~Confirm "1–2 per piece" is days, not hours~~ — **days, confirmed
+      2026-08-22.** The 11–22 pieces/month ceiling stands, and with it the case
+      for optimising ads on signups rather than purchases.
 - [ ] Confirm metres per garment with the tailor
 - [ ] Verify Stripe's UAE fee (assumed 2.9% + 1 AED)
 - [ ] Verify whether a DET permit is needed for the welcome offer as advertised
