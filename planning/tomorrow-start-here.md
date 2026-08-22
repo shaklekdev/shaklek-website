@@ -14,8 +14,14 @@ live card → webhook fired → order marked `paid` in Neon → visible on
 ## Do these first — they are the founder's, not Claude's
 
 - [ ] **Refund the AED 390 test order.** It is a real charge on a real card.
-- [ ] **Turn Stripe Link off** — Settings → Payment methods, **live mode**. Link
-      is what forced the extra page before Apple Pay. Apple Pay itself now works.
+- [x] ~~Turn Stripe Link off~~ — **done 2026-08-22**, on the account's own config
+      `pmc_1U4N3TFG6ccJjMKMnWzuqAdz` (live). Link was what forced the extra screen
+      before Apple Pay. Stripe argues hard against disabling it, but its case rests
+      on returning customers and Shaklek has none yet; revisit once there is a
+      repeat base. Reversible in the same place.
+- [ ] **Confirm it on a phone.** Start a checkout on iPhone/Safari and stop at the
+      payment step: Apple Pay should be the top button with no Link screen. Apple
+      Pay never renders in desktop Chrome, so testing there proves nothing.
 - [ ] **Download the new spec sheet and say what the tailor still needs.** The
       structure is rebuilt; only the tailor knows what is missing from it.
 
