@@ -26,7 +26,7 @@ function tailorMessage(order: { id: string; items: { name: string; fabric: strin
   const itemsLine = order.items
     .map((i) => `${i.name} (${i.fabric ?? "?"}, ${i.color ?? "?"}, ${i.size ?? "?"})`)
     .join("; ");
-  return `Shaklek order ${order.id.slice(0, 8)}: ${itemsLine}. Spec sheet attached.`;
+  return `Shaklek order SHK-${order.id.slice(0, 8).toUpperCase()}: ${itemsLine}. Spec sheet attached.`;
 }
 
 async function getOrders() {
@@ -48,6 +48,16 @@ async function getOrders() {
     method: row.orders.paymentMethod,
     email: row.customers.email,
     createdAt: row.orders.createdAt,
+    shipping: {
+      name: row.orders.shippingName,
+      phone: row.orders.shippingPhone,
+      line1: row.orders.shippingLine1,
+      line2: row.orders.shippingLine2,
+      city: row.orders.shippingCity,
+      state: row.orders.shippingState,
+      postalCode: row.orders.shippingPostalCode,
+      country: row.orders.shippingCountry,
+    },
     items: items.filter((i) => i.orderId === row.orders.id),
   }));
 }
@@ -97,8 +107,9 @@ export default async function OrdersDashboardPage() {
             <table className="w-full min-w-[720px] text-left text-sm">
               <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                 <tr>
+                  <th className="px-4 py-3 font-medium">Ref</th>
                   <th className="px-4 py-3 font-medium">Date</th>
-                  <th className="px-4 py-3 font-medium">Customer</th>
+                  <th className="px-4 py-3 font-medium">Customer &amp; delivery</th>
                   <th className="px-4 py-3 font-medium">Items</th>
                   <th className="px-4 py-3 font-medium">Method</th>
                   <th className="px-4 py-3 font-medium">Status</th>
@@ -110,13 +121,39 @@ export default async function OrdersDashboardPage() {
               <tbody className="divide-y divide-slate-100">
                 {orders.map((order) => (
                   <tr key={order.id}>
+                    {/* Short, quotable, and the same reference printed on the
+                        tailor's spec sheet -- so a WhatsApp message about
+                        SHK-BC7BBB09 matches a row here without pasting a UUID. */}
+                    <td className="px-4 py-3 font-mono text-xs whitespace-nowrap text-slate-900">
+                      SHK-{order.id.slice(0, 8).toUpperCase()}
+                    </td>
                     <td className="whitespace-nowrap px-4 py-3 text-slate-500">
                       {new Date(order.createdAt).toLocaleString("en-AE", {
                         dateStyle: "medium",
                         timeStyle: "short",
                       })}
                     </td>
-                    <td className="px-4 py-3">{order.email}</td>
+                    <td className="px-4 py-3 align-top">
+                      <div className="text-slate-700">{order.email}</div>
+                      {order.shipping.line1 ? (
+                        <div className="mt-1 text-xs leading-snug text-slate-500">
+                          {order.shipping.name ? <div>{order.shipping.name}</div> : null}
+                          <div>{order.shipping.line1}</div>
+                          {order.shipping.line2 ? <div>{order.shipping.line2}</div> : null}
+                          <div>
+                            {[order.shipping.city, order.shipping.state, order.shipping.postalCode]
+                              .filter(Boolean)
+                              .join(", ")}
+                            {order.shipping.country ? ` · ${order.shipping.country}` : ""}
+                          </div>
+                          {order.shipping.phone ? <div>{order.shipping.phone}</div> : null}
+                        </div>
+                      ) : (
+                        <div className="mt-1 text-xs font-medium text-amber-700">
+                          No delivery address — contact the customer
+                        </div>
+                      )}
+                    </td>
                     <td className="px-4 py-3">
                       {order.items.map((item) => (
                         <div key={item.id} className="text-slate-700">

@@ -35,7 +35,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, skipped: event.type });
   }
 
-  const session = event.data.object as { client_reference_id: string | null };
+  type StripeAddress = {
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postal_code?: string | null;
+    country?: string | null;
+  };
+  type ShippingDetails = { name?: string | null; address?: StripeAddress | null };
+
+  const session = event.data.object as {
+    client_reference_id: string | null;
+    // The 2026-07-29 API nests this under collected_information; older
+    // versions put it at the top level. Read both so a future API version
+    // bump on the account cannot silently drop the delivery address.
+    collected_information?: { shipping_details?: ShippingDetails | null } | null;
+    shipping_details?: ShippingDetails | null;
+    customer_details?: { phone?: string | null; name?: string | null } | null;
+  };
   const orderId = session.client_reference_id;
 
   if (!orderId) {
@@ -60,7 +78,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  await db.update(schema.orders).set({ status: "paid" }).where(eq(schema.orders.id, orderId));
+  const shipping = session.collected_information?.shipping_details ?? session.shipping_details ?? null;
+  const address = shipping?.address ?? null;
+  if (!address?.line1) {
+    // Loud, because a paid order with nowhere to send it needs a human.
+    console.error(`[webhooks/stripe] order ${orderId} paid with NO shipping address`);
+  }
+
+  await db
+    .update(schema.orders)
+    .set({
+      status: "paid",
+      shippingName: shipping?.name ?? session.customer_details?.name ?? null,
+      shippingPhone: session.customer_details?.phone ?? null,
+      shippingLine1: address?.line1 ?? null,
+      shippingLine2: address?.line2 ?? null,
+      shippingCity: address?.city ?? null,
+      shippingState: address?.state ?? null,
+      shippingPostalCode: address?.postal_code ?? null,
+      shippingCountry: address?.country ?? null,
+    })
+    .where(eq(schema.orders.id, orderId));
 
   const [order] = await db
     .select()

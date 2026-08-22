@@ -57,7 +57,6 @@ function readPublicImage(publicPath: string | undefined): Buffer | null {
 function buildPdf(order: {
   id: string;
   createdAt: Date;
-  customerEmail: string;
   items: SpecItem[];
 }): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -67,21 +66,41 @@ function buildPdf(order: {
     doc.on("end", () => resolve(Buffer.concat(chunks)));
     doc.on("error", reject);
 
-    doc.fontSize(18).text("Shaklek — Tailor Spec Sheet", { align: "left" });
-    doc.moveDown(0.3);
+    // The tailor gets what to make and which order it belongs to. Nothing
+    // else. No name, no email, no address -- the customer's identity is
+    // Shaklek's, and this PDF leaves the building over WhatsApp.
+    const ref = `SHK-${order.id.slice(0, 8).toUpperCase()}`;
+
+    doc.fontSize(9).fillColor("#888").text("SHAKLEK", { characterSpacing: 2 });
+    doc.moveDown(0.2);
+    doc.fontSize(22).fillColor("#000").text(ref);
+    doc.moveDown(0.15);
     doc
       .fontSize(10)
       .fillColor("#666")
-      .text(`Order ${order.id}`)
-      .text(`Placed ${order.createdAt.toLocaleDateString("en-AE", { dateStyle: "medium" })}`)
-      .text(`Customer ${order.customerEmail}`);
+      .text(
+        `${order.items.length} item${order.items.length === 1 ? "" : "s"} · placed ${order.createdAt.toLocaleDateString("en-AE", { dateStyle: "medium" })}`,
+      );
+    doc.moveDown(0.6);
+    doc
+      .fontSize(9)
+      .fillColor("#999")
+      .text("Quote this reference on every message about this order.");
     doc.fillColor("#000");
+    doc.moveDown(0.5);
+    doc
+      .moveTo(doc.page.margins.left, doc.y)
+      .lineTo(doc.page.width - doc.page.margins.right, doc.y)
+      .strokeColor("#ddd")
+      .stroke();
 
     order.items.forEach((item, i) => {
       if (i > 0) doc.addPage();
       else doc.moveDown(1.2);
 
-      doc.fontSize(16).text(`${i + 1}. ${item.name}`);
+      doc.moveDown(0.8);
+      doc.fontSize(9).fillColor("#888").text(`ITEM ${i + 1} OF ${order.items.length}`, { characterSpacing: 1 });
+      doc.fontSize(16).fillColor("#000").text(item.name);
       doc.moveDown(0.5);
 
       const { front, back } = imagesFor(item);
@@ -129,16 +148,34 @@ function buildPdf(order: {
         doc.y = imageTop + tallest + 24;
       }
 
-      doc.fontSize(11);
-      if (item.category) doc.text(`Category: ${item.category}`);
-      if (item.fabric) doc.text(`Fabric: ${item.fabric}`);
-      if (item.color) doc.text(`Color: ${item.color}`);
-      if (item.size) doc.text(`Size: ${item.size}`);
-      if (item.measurements) doc.text(`Measurements: ${item.measurements}`);
-      if (item.changes && item.changes.length > 0) {
-        doc.text(`Customization: ${item.changes.join(", ")}`);
+      // Label/value rows rather than a run of "Key: value" lines -- the
+      // tailor is reading this on a phone, and the cut and the measurements
+      // are the two things that must not be skimmed past.
+      const row = (label: string, value: string, emphasis = false) => {
+        const left = doc.page.margins.left;
+        const labelW = 110;
+        const y = doc.y;
+        doc.fontSize(9).fillColor("#888").text(label.toUpperCase(), left, y + 2, { width: labelW });
+        doc
+          .fontSize(emphasis ? 13 : 11)
+          .fillColor("#000")
+          .text(value, left + labelW, y, {
+            width: doc.page.width - doc.page.margins.right - left - labelW,
+          });
+        doc.moveDown(0.45);
+      };
+
+      if (item.fabric) row("Fabric", item.fabric);
+      if (item.color) row("Colour", item.color);
+      if (item.changes && item.changes.length > 0) row("Cut", item.changes.join(" · "), true);
+      if (item.measurements) {
+        row("Measurements", item.measurements, true);
+      } else if (item.size) {
+        row("Size", `Standard ${item.size}`, true);
       }
-      if (item.freeformNotes) doc.text(`Notes: ${item.freeformNotes}`);
+      if (item.size && item.measurements) row("Nearest size", item.size);
+      if (item.freeformNotes) row("Customer request", item.freeformNotes, true);
+      if (item.category) row("Category", item.category);
       if (!frontBuf && !backBuf) {
         doc.moveDown(0.5).fontSize(9).fillColor("#999").text("No reference photo available for this item.");
         doc.fillColor("#000");
@@ -182,7 +219,6 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const pdf = await buildPdf({
     id: row.orders.id,
     createdAt: row.orders.createdAt,
-    customerEmail: row.customers.email,
     items,
   });
 

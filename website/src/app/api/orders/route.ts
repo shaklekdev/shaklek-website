@@ -95,6 +95,11 @@ export async function POST(req: NextRequest) {
       integration_identifier: "shaklek-checkout-rqkazmjg",
       customer_email: email,
       client_reference_id: orderId,
+      // Nothing was collecting a delivery address -- orders were being paid
+      // for with no idea where the garment should go. Stripe collects and
+      // validates it on the hosted page; the webhook persists it.
+      shipping_address_collection: { allowed_countries: ["AE"] },
+      phone_number_collection: { enabled: true },
       line_items: items.map((item) => ({
         quantity: 1,
         price_data: {

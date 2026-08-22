@@ -48,6 +48,19 @@ export const orders = pgTable("orders", {
   // external system can set those automatically, needs a staff UI.
   status: text("status").notNull().default("pending_payment"),
   stripeSessionId: text("stripe_session_id"),
+  // Where the garment actually goes. Collected by Stripe Checkout and written
+  // by the webhook, not by the checkout form -- Stripe already validates and
+  // autocompletes addresses, and it keeps the address out of our form POST.
+  // All nullable: orders placed before 2026-08-22 have none, and the
+  // no-Stripe fallback path never collects one.
+  shippingName: text("shipping_name"),
+  shippingPhone: text("shipping_phone"),
+  shippingLine1: text("shipping_line1"),
+  shippingLine2: text("shipping_line2"),
+  shippingCity: text("shipping_city"),
+  shippingState: text("shipping_state"),
+  shippingPostalCode: text("shipping_postal_code"),
+  shippingCountry: text("shipping_country"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
