@@ -18,7 +18,8 @@ live only in a conversation.
 | Shipping | 21 AED/shipment | Founder, 2026-08-22 |
 | Packaging | 2 AED/package (1,000 per 500) | Founder, 2026-08-22 |
 | Tailoring | Shirt **40** · Skirt **60** · Pants **60** · Dress **85** | Founder, 2026-08-22 |
-| Make time | **1–2 days per piece — confirmed by the tailor** | Founder, 2026-08-22 |
+| Make time | **1–2 days per piece, per tailor — confirmed** | Founder, 2026-08-22 |
+| Tailor bench | **More than one tailor available** | Founder, 2026-08-22 |
 | Metres per garment | Shirt 2.0 · Skirt 1.5 · Pants 2.0 · Dress 3.0 | **Assumption — confirm** |
 | Payment fees | ~2.9% + 1 AED | **Verify** against Stripe UAE pricing |
 | Remake allowance | 5% of orders | Assumption; made-to-order's "returns" |
@@ -55,14 +56,13 @@ a broken margin.
 
 ## Why 390 and not 290
 
-1. **Capacity, not demand, is the binding constraint** — see below. When
-   capacity binds you maximise contribution *per piece*: a thin-margin order
-   burns a slot a better-priced one could have used.
-2. **Positioning.** Dubai's tailoring trade will make a shirt for well under
+1. **Positioning.** Dubai's tailoring trade will make a shirt for well under
    150 AED. At 290 Shaklek invited a comparison it loses on price and
    turnaround. At 390 it is a designed label that happens to be made to
    measure — judged on design and the customizer instead.
-3. **Price is the only quality signal available.** No reviews, no press, no
+3. **CAC.** The ladder clears a 20% welcome offer with 23–37% contribution at
+   an estimated 134 AED CAC, and stays non-negative even at 200.
+2. **Price is the only quality signal available.** No reviews, no press, no
    social proof. In that vacuum 290 for "made to order" reads as *too cheap to
    be real*.
 
@@ -89,32 +89,52 @@ Estimated cold-traffic CAC for a new UAE label: **~134 AED** — CPM 30, CTR 1.5
 Ad efficiency is worth roughly twice what the tailor charges. Negotiating the
 tailor down is a rounding error next to a badly run ad account.
 
-## The constraint that actually governs this business
+## Throughput — a lead-time input, not a ceiling
 
-One tailor, **1–2 days per piece (confirmed with the tailor, 2026-08-22)**, ~22 working days:
+**Correction, 2026-08-22.** An earlier version of this file called Shaklek
+"supply-constrained, not demand-constrained" and concluded there was no point
+generating more demand than 11–22 garments a month. **That was wrong.** There is
+more than one tailor available, so capacity scales with the bench.
 
-| | Pieces/month | Revenue ceiling @ ~420 avg |
+**Never cap ordering.** Nothing in the codebase limits orders, and nothing should
+— no stock counts, no waitlists, no "sold out". A made-to-order brand that turns
+away demand has given up the one structural advantage it has over stocked
+retail. Verified 2026-08-22: no inventory, stock or quantity limit exists
+anywhere in `src/`.
+
+What per-tailor throughput actually governs is **lead time**, which is a promise
+on the live site ("10 days"), not a revenue ceiling:
+
+| Tailors | Pieces/month @ 1 day each | @ 2 days each |
 |---|---|---|
-| 1 day/piece | ~22 | **9,240 AED** |
-| 2 days/piece | ~11 | **4,620 AED** |
+| 1 | ~22 | ~11 |
+| 2 | ~44 | ~22 |
+| 3 | ~66 | ~33 |
 
-**Shaklek is supply-constrained, not demand-constrained.** Two consequences:
+The number to watch is orders per week against the bench available that week. If
+that ratio pushes the promised turnaround past 10 days, the answer is another
+tailor, never a slower site or a closed order form.
 
-- Price for margin per piece, not for volume.
-- **There is no point generating more demand than 11–22 garments a month.**
-  Grow the tailor bench before the ad budget.
+**What this changes about the pricing above: nothing.** The ladder rests on
+positioning, quality signalling and CAC economics — all three hold regardless of
+how many tailors are on the bench.
 
-This also decides the ad strategy. Meta and TikTok need roughly **50 conversions
-a week** to leave the learning phase. At 11–22 orders a *month* a purchase-
-optimised campaign will never get there. Optimise for **email signups** instead —
-they happen at many times the rate — and convert the list by email, which costs
-nothing per send. That is what the welcome code is really for.
+**What it changes about ads:** the earlier version said to hold spend down to
+match capacity. Scrap that. The real constraint on early spend is that Meta and
+TikTok need roughly **50 conversions a week** to leave the learning phase, and a
+new brand will not hit that on purchases alone at first. Optimising for **email
+signups** gets there far sooner, and the list converts by email at no cost per
+send. That is a ramp tactic for the cold-start problem — not a way of rationing
+demand.
 
 ## Open
 
-- [x] ~~Confirm "1–2 per piece" is days, not hours~~ — **days, confirmed
-      2026-08-22.** The 11–22 pieces/month ceiling stands, and with it the case
-      for optimising ads on signups rather than purchases.
+- [x] ~~Confirm "1–2 per piece" is days, not hours~~ — **days per tailor,
+      confirmed 2026-08-22.** Not a ceiling: the bench is more than one tailor.
+- [ ] **How many tailors are available, and at what combined throughput?**
+      Decides whether the live "10 days" promise survives a good ad week
+- [ ] Confirm each tailor works to the same spec sheet and quality bar — a
+      second maker is only capacity if the output is indistinguishable
 - [ ] Confirm metres per garment with the tailor
 - [ ] Verify Stripe's UAE fee (assumed 2.9% + 1 AED)
 - [ ] Verify whether a DET permit is needed for the welcome offer as advertised
