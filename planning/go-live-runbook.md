@@ -30,8 +30,32 @@ Env vars currently set in Amplify: `CLERK_SECRET_KEY`, `DATABASE_URL`,
 
 ## Part A — Stripe: test → live
 
-1. Stripe Dashboard → flip the **Test mode** toggle off (top right). Everything
-   below must be done with live mode showing, or you will copy test values again.
+1. **Get into live mode.** Stripe replaced the old top-right "Test mode" toggle
+   with **sandboxes**, switched from the **account picker at the top left**.
+   Skip the navigation entirely and use the account-scoped link:
+
+   > **API keys (live): https://dashboard.stripe.com/acct_1U4N2wFG6ccJjMKM/apikeys**
+   > **Webhooks (live): https://dashboard.stripe.com/acct_1U4N2wFG6ccJjMKM/webhooks**
+
+   **How to know which mode you are in: read the URL.** A `/test/` segment in
+   the path means test mode. No `/test/` means live. That is unambiguous, and it
+   does not change when Stripe redesigns the dashboard chrome.
+
+   ⚠️ **There are three entries in your account picker**, and only one is right:
+
+   | Picker entry | Account | Mode |
+   |---|---|---|
+   | **shaklek** | `acct_1U4N2wFG6ccJjMKM` | **live — use this** |
+   | shaklek | `acct_1U4N2wFG6ccJjMKM` | test-mode sandbox |
+   | shaklek sandbox | `acct_1U4N3HFDCtKouREX` | a **separate account** |
+
+   "shaklek sandbox" is a different account, not a different mode of the same
+   one. If the current test keys came from there, nothing configured on it —
+   including any webhook — exists on the live account. Either way step 3 stands.
+
+   One Stripe caveat worth knowing: settings changed while in the *test mode
+   sandbox* can also change live mode, because the two share some settings.
+   Sandboxes proper are fully isolated; the test-mode sandbox is not.
 
 2. **Developers → API keys** → reveal and copy the **Secret key** (`sk_live_…`).
    There is no publishable key to change: this integration uses Checkout
@@ -42,7 +66,7 @@ Env vars currently set in Amplify: `CLERK_SECRET_KEY`, `DATABASE_URL`,
    events are signed with a different secret — miss this and payments succeed
    while orders never flip to `paid` and no email is sent.
 
-   - Developers → **Event destinations** → Add endpoint
+   - Go to the live webhooks link above → **Add endpoint**
    - URL: `https://www.shaklek.com/api/webhooks/stripe`
    - Events: **`checkout.session.completed`** and **`checkout.session.expired`**
      (those are the only two the code acts on; anything else is acknowledged
