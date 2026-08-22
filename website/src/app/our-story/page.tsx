@@ -105,14 +105,14 @@ export default function OurStoryPage() {
           className="object-cover object-top"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 pb-10 text-center">
-          <p className="rounded-full bg-white/90 px-3 py-1 text-[11px] tracking-wide text-text-3 uppercase backdrop-blur-sm">
-            Our story
-          </p>
-          <h1 className="mt-4 max-w-lg text-[30px] leading-tight text-text drop-shadow-[0_1px_12px_rgba(255,255,255,0.8)]">
+          {/* The hero carries the slogan only. The page title moved below it:
+              a floating "Our story" chip over the photograph read as a stray
+              button rather than a heading. */}
+          <p className="max-w-lg font-display text-[30px] leading-tight text-text drop-shadow-[0_1px_12px_rgba(255,255,255,0.8)]">
             Your look,
             <br />
             your way.
-          </h1>
+          </p>
           {/* The founder's note is the most personal thing on the site and it
               sits at the very bottom. This is the shortcut to it. */}
           <a
@@ -125,6 +125,7 @@ export default function OurStoryPage() {
       </div>
 
       <div className="mx-auto w-full max-w-2xl px-6 py-14">
+        <h1 className="mb-5 text-[26px] text-text">Our story</h1>
         <p className="text-xs text-text-3">
           Shaklek means your way in Arabic: your vision, your style, your
           shape, your skin.

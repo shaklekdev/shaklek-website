@@ -123,14 +123,15 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewBackImage={previewBackImage}
             previewGradient={item.gradient}
             preloadImages={preloadImages}
+            primaryAction={
+              <button
+                onClick={() => setStep(3)}
+                className="mt-6 w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
+              >
+                Continue to size
+              </button>
+            }
           />
-
-          <button
-            onClick={() => setStep(3)}
-            className="mt-6 w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
-          >
-            Continue to size
-          </button>
         </div>
       )}
 

@@ -41,13 +41,14 @@ export default function Home() {
         <div className="absolute inset-0 bg-white/55" />
         <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
           <h1 className="text-[28px] leading-tight text-text">
-            Change it. See it.
+            Your look,
             <br />
-            Then we make it.
+            your way.
           </h1>
           <p className="subtitle mx-auto mt-3 max-w-md">
             Elegant essentials — customizable to your taste, friendly to your
-            skin, shaped to your body.
+            skin, shaped to your body. See every change on the real piece
+            before it&apos;s made.
           </p>
         </div>
       </section>

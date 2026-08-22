@@ -157,8 +157,8 @@ export default function SizePicker({
           </div>
 
           <p className="mt-2 text-xs text-text-3">
-            Cut to these measurements by your tailor — no AI involved, just sent straight
-            through. A stylist will confirm anything unclear before it&apos;s made.
+            Cut to these measurements by your tailor. A stylist will confirm anything
+            unclear before it&apos;s made.
           </p>
         </div>
       )}

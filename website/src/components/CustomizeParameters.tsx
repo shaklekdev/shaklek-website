@@ -9,6 +9,16 @@ import FabricColorPicker from "@/components/FabricColorPicker";
 
 const PREVIEW_SIZES = "(min-width: 640px) 576px, 100vw";
 
+// Examples have to match the garment in front of you -- "no chest pocket" on a
+// pair of trousers reads as a page that isn't paying attention. Anything not
+// listed gets an empty placeholder rather than a wrong one.
+const NOTE_EXAMPLES: Record<string, string> = {
+  Shirt: "e.g. a wider collar, no chest pocket, sleeves a little shorter",
+  Pants: "e.g. deeper pockets, a higher waist, no turn-up on the hem",
+  Skirt: "e.g. a longer hem, a side slit, a flatter waistband",
+  Dress: "e.g. a higher neckline, a looser waist, longer sleeves",
+};
+
 export default function CustomizeParameters({
   spec,
   onSpecChange,
@@ -18,6 +28,7 @@ export default function CustomizeParameters({
   previewBackImage,
   previewGradient,
   preloadImages = [],
+  primaryAction,
 }: {
   spec: DesignSpec;
   onSpecChange: (spec: DesignSpec) => void;
@@ -27,6 +38,10 @@ export default function CustomizeParameters({
   previewBackImage?: string | null;
   previewGradient: [string, string];
   preloadImages?: string[];
+  // Rendered directly beneath the choices, above the Shaklek+ note. The CTA
+  // used to sit after everything, so getting to checkout meant scrolling past
+  // an upsell for features that are not purchasable yet.
+  primaryAction?: React.ReactNode;
 }) {
   function handleFabricChange(fabric: Fabric) {
     onSpecChange({ ...spec, fabric });
@@ -61,9 +76,13 @@ export default function CustomizeParameters({
 
   return (
     <div>
-      {/* Preview */}
+      {/* Preview. Sticky under the 98px header and shortened to 40vh, so the
+          garment stays on screen while the options below are changed --
+          previously it was 704px of a 2028px page and scrolled away
+          immediately, which meant tapping an option then scrolling back up to
+          see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="relative aspect-[3/4] w-full touch-pan-y select-none overflow-hidden border border-border"
+        className="sticky top-[98px] z-10 h-[40vh] min-h-[220px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white"
         style={
           activeImage
             ? undefined
@@ -78,7 +97,7 @@ export default function CustomizeParameters({
             alt={view === "back" ? "Back view" : "Front view"}
             fill
             sizes={PREVIEW_SIZES}
-            className="object-cover"
+            className="object-contain"
             priority
             draggable={false}
           />
@@ -205,7 +224,7 @@ export default function CustomizeParameters({
           Carried through to the tailor's spec sheet via spec.freeformNotes. */}
       <div className="mt-6">
         <label htmlFor="customization-notes" className="mb-1 block text-xs text-text">
-          Anything else you&apos;d like changed? (optional)
+          Anything you&apos;d like to specify to your tailor? (optional)
         </label>
         <textarea
           id="customization-notes"
@@ -213,7 +232,7 @@ export default function CustomizeParameters({
           onChange={(e) => onSpecChange({ ...spec, freeformNotes: e.target.value })}
           rows={3}
           maxLength={500}
-          placeholder="e.g. a wider collar, no chest pocket, sleeves a little shorter"
+          placeholder={NOTE_EXAMPLES[category] ?? ""}
           className="w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
         />
         <p className="mt-1.5 text-[11px] text-text-3">
@@ -222,45 +241,22 @@ export default function CustomizeParameters({
         </p>
       </div>
 
+      {primaryAction}
+
+      {/* Shaklek+ is a list, not a demo. It previously rendered every locked
+          slider plus a dead subscribe button -- a wall of controls nobody can
+          use, sitting between the customer and checkout. */}
       {premiumParams.length > 0 && (
-        <div className="mt-6 rounded-shaklek-sm border border-dashed border-gold/40 bg-surface-2 p-4">
-          <div className="flex items-center gap-1.5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="shrink-0 text-gold" aria-hidden="true">
-              <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-            <p className="text-xs text-text">Unlock more on Shaklek+</p>
-          </div>
-          <p className="mt-1 text-[11px] text-text-3">
-            Coming soon: {premiumParams.map((p) => p.name.toLowerCase()).join(", ")}, fit, and more colours.
+        <div className="mt-6 flex items-start gap-2 border border-dashed border-gold/40 bg-surface-2 p-3">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="mt-0.5 shrink-0 text-gold" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+          <p className="text-[11px] leading-relaxed text-text-3">
+            <span className="text-text">Shaklek+</span> — coming soon:{" "}
+            {premiumParams.map((p) => p.name.toLowerCase()).join(", ")}, fit, and
+            more colours.
           </p>
-          <div className="mt-4 flex flex-col gap-4 opacity-50">
-            {premiumParams.map((param) => (
-              <div key={param.type}>
-                <p className="text-xs text-text">{param.name}</p>
-                <div
-                  className="mt-2 grid gap-2"
-                  style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
-                >
-                  {param.options.map((option) => (
-                    <span
-                      key={option.value}
-                      className="min-h-11 rounded-shaklek-xs border border-border px-2 py-2.5 text-center text-xs text-text-3"
-                    >
-                      {option.text}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            disabled
-            className="mt-4 w-full cursor-not-allowed rounded-full border border-gold/40 py-2 text-[11px] text-gold"
-          >
-            Subscribe to get access in preview
-          </button>
         </div>
       )}
 
