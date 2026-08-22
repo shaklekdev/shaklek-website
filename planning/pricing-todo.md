@@ -1,9 +1,12 @@
-# Pricing — model, assumptions, and the one missing number
+# Pricing — the model behind the numbers in `catalog.ts`
 
-Written 2026-08-22. **This file exists because the margin work was done in a
-chat session and never written down** — nothing about unit cost survived
-anywhere in the repo, and it had to be redone from scratch. Do not let the
-next revision live only in a conversation.
+Last revised **2026-08-22**, after the real unit costs arrived. Prices in this
+file are live in `website/src/data/catalog.ts`.
+
+**This file exists because the first round of margin work was done in a chat
+session and never written down** — nothing about unit cost survived anywhere in
+the repo and it had to be rebuilt from scratch. Do not let the next revision
+live only in a conversation.
 
 ---
 
@@ -11,122 +14,109 @@ next revision live only in a conversation.
 
 | Input | Value | Source |
 |---|---|---|
-| Fabric | **10–20 AED/metre** | Founder, 2026-08-22 |
-| Shipping | **21 AED/shipment** | Founder, 2026-08-22 |
-| Packaging | **2 AED/package** (1,000 AED per 500) | Founder, 2026-08-22 |
-| **Tailoring per piece** | Shirt **40** · Skirt **60** · Pants **60** · Dress **85–300** | Founder, 2026-08-22 |
-| Blazer tailoring | **UNKNOWN** — estimated 150–250 | ⚠️ ask the tailor |
-| Make time | 1–2 **(units unconfirmed — days assumed)** per piece | Founder, 2026-08-22 |
-| Metres per garment | Shirt 2.0 · Pants 2.0 · Dress 3.0 | **My assumption — confirm with the tailor** |
-| Payment fees | ~2.9% + 1 AED | Verify against Stripe's UAE pricing page |
-| Remake allowance | 5% of orders | My assumption; made-to-order's version of returns |
+| Fabric | 10–20 AED/metre (15 used) | Founder, 2026-08-22 |
+| Shipping | 21 AED/shipment | Founder, 2026-08-22 |
+| Packaging | 2 AED/package (1,000 per 500) | Founder, 2026-08-22 |
+| Tailoring | Shirt **40** · Skirt **60** · Pants **60** · Dress **85** | Founder, 2026-08-22 |
+| Make time | 1–2 per piece — **units unconfirmed, days assumed** | Founder, 2026-08-22 |
+| Metres per garment | Shirt 2.0 · Skirt 1.5 · Pants 2.0 · Dress 3.0 | **Assumption — confirm** |
+| Payment fees | ~2.9% + 1 AED | **Verify** against Stripe UAE pricing |
+| Remake allowance | 5% of orders | Assumption; made-to-order's "returns" |
 
-**Fabric is not the lever.** At 2 metres it is 20–40 AED per garment. Tailoring
-labour dominates COGS, which is why the missing number is the whole model.
+**Scope decisions (founder, 2026-08-22):**
 
-## Current prices
+- **No blazers.** The tailor does not make them, so structured tailoring is out.
+  The `CatalogItem` category union already reads Shirt | Skirt | Pants | Dress.
+- **Simple dresses only.** The elaborate tier (300 AED of tailoring, 670 price)
+  is dropped. It was the one item that could not hold the margin band anyway.
 
-Shirt 290 · Skirt 320 · Pants 350 · Dress 490 (dossier §9, `catalog.ts:32`).
+**Fabric is not the lever.** At 2 metres it is 20–40 AED against a ~100–160 AED
+COGS. Tailoring labour dominates.
 
-## 1. Where the prices actually stand
+---
 
-Fabric at 15/m, 5% remake allowance, Stripe 2.9% + 1.
+## The ladder, and what it earns
 
-| Item | Fabric | Tailoring | COGS | Price today | Gross | GM% | Break-even CAC |
-|---|---|---|---|---|---|---|---|
-| Shirt | 30 | 40 | 98 | 290 | 183 | **63%** | 183 |
-| Skirt | 23 | 60 | 111 | 320 | 199 | **62%** | 199 |
-| Pants | 30 | 60 | 119 | 350 | 220 | **63%** | 220 |
-| Dress (simple) | 45 | 85 | 161 | 490 | 314 | **64%** | 314 |
-| Dress (elaborate) | 53 | 300 | 394 | 670 | 255 | **38%** | 255 |
-| Blazer (estimated) | 45 | ~200 | 281 | — | — | — | — |
+| Item | Fabric | Tailoring | COGS | **List** | Gross | GM | **With 20% welcome** | Gross | GM | vs CAC 134 | vs CAC 200 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Shirt | 30 | 40 | 98 | **390** | 280 | 72% | 312 | 204 | 65% | +70 | +4 |
+| Skirt | 23 | 60 | 111 | **420** | 296 | 70% | 336 | 214 | 64% | +80 | +14 |
+| Pants | 30 | 60 | 119 | **450** | 317 | 71% | 360 | 230 | 64% | +96 | +30 |
+| Dress | 45 | 85 | 161 | **620** | 440 | 71% | 496 | 320 | 65% | +186 | +120 |
 
-**Current pricing is healthy, not broken.** 62–64% gross margin is squarely in the
-DTC target band. An earlier version of this file said a 290 shirt loses money on
-every acquired customer — that was computed against an assumed 100 AED tailoring
-cost, before the real figures existed. It was wrong. The real cost is 40.
+Previously 290 / 320 / 350 / 490.
 
-**The one genuinely mispriced item is the elaborate dress**: at 300 AED of
-tailoring it carries a 38% margin, roughly half the rest of the range.
+**A correction worth keeping.** An earlier version of this file concluded that a
+290 shirt lost money on every acquired customer. That was computed against an
+*assumed* 100 AED tailoring cost, before the real figures existed. At the actual
+40 AED the old shirt carried a 63% margin and broke even at a CAC of 183. The
+claim was wrong. The reprice rests on positioning and capacity, not on rescuing
+a broken margin.
 
-## 2. CAC, and why it sets the price more than cost does
+## Why 390 and not 290
 
-Estimated cold-traffic CAC for a new UAE label: **~134 AED** (CPM 30, CTR 1.5%,
-1.5% purchase rate → ~67 clicks per order; plausible range 80–250). Industry-
-typical assumptions, **not measurements** — spend 2–3k AED and count.
+1. **Capacity, not demand, is the binding constraint** — see below. When
+   capacity binds you maximise contribution *per piece*: a thin-margin order
+   burns a slot a better-priced one could have used.
+2. **Positioning.** Dubai's tailoring trade will make a shirt for well under
+   150 AED. At 290 Shaklek invited a comparison it loses on price and
+   turnaround. At 390 it is a designed label that happens to be made to
+   measure — judged on design and the customizer instead.
+3. **Price is the only quality signal available.** No reviews, no press, no
+   social proof. In that vacuum 290 for "made to order" reads as *too cheap to
+   be real*.
 
-Price needed for a 25% contribution margin after ads:
+## Why the welcome offer is 20%, not 25%
 
-| Item | Today | CAC 80 | CAC 134 | CAC 200 |
-|---|---|---|---|---|
-| Shirt | 290 | 250 | **330** | 420 |
-| Skirt | 320 | 270 | **350** | 440 |
-| Pants | 350 | 280 | **360** | 450 |
-| Dress (simple) | 490 | 340 | **420** | 510 |
-| Dress (elaborate) | 670 | 660 | **740** | 830 |
-| Blazer (est.) | — | 510 | **580** | 670 |
+At a 390 shirt, 25% off leaves **−15 AED** per order at the pessimistic end of
+the CAC range. 20% stays positive across the whole range (+70 at CAC 134, +4 at
+200) while still being a real incentive to hand over an email.
 
-Sensitivity, and this is the strategic point:
+**It is applied as a Stripe promotion code at checkout, never by discounting the
+list price.** No struck-through price that nobody ever paid — that is fake
+reference pricing, and Dubai separately requires a DET permit to advertise a
+discount campaign (**verify before running one**).
+
+## CAC, and why it sets the price more than cost does
+
+Estimated cold-traffic CAC for a new UAE label: **~134 AED** — CPM 30, CTR 1.5%,
+1.5% purchase rate, so ~67 clicks per order. Plausible range 80–250.
+**Industry-typical assumptions, not measurements.** Spend 2–3k AED and count.
 
 - **+50 AED of tailoring → +70 AED of price**
 - **+100 AED of CAC → +140 AED of price**
 
-**Marketing efficiency is worth about twice as much as tailoring cost.** Negotiating
-the tailor down is a rounding error next to a bad ad account.
+Ad efficiency is worth roughly twice what the tailor charges. Negotiating the
+tailor down is a rounding error next to a badly run ad account.
 
-## 3. The constraint that actually governs this business
+## The constraint that actually governs this business
 
 One tailor, 1–2 days per piece, ~22 working days:
 
-| | Pieces/month | Revenue ceiling @ ~350 |
+| | Pieces/month | Revenue ceiling @ ~420 avg |
 |---|---|---|
-| 1 day/piece | ~22 | **7,700 AED** |
-| 2 days/piece | ~11 | **3,850 AED** |
+| 1 day/piece | ~22 | **9,240 AED** |
+| 2 days/piece | ~11 | **4,620 AED** |
 
-**Shaklek is supply-constrained, not demand-constrained.** That inverts the usual
-pricing logic. When capacity is the binding limit, the goal is to maximise
-contribution *per piece*, not volume — every order you take at a thin margin
-consumes a slot that a better-priced order could have used.
+**Shaklek is supply-constrained, not demand-constrained.** Two consequences:
 
-It also caps ad spend: there is no point generating more demand than 11–22
-garments a month until there is a second tailor. Scale the tailor bench first,
-then the ad budget.
+- Price for margin per piece, not for volume.
+- **There is no point generating more demand than 11–22 garments a month.**
+  Grow the tailor bench before the ad budget.
 
-## 4. Recommended ladder
-
-Rounded up from the CAC 134 column, with the supply constraint arguing for the
-higher end of each range:
-
-| Item | Today | Proposed |
-|---|---|---|
-| Shirt | 290 | **350** |
-| Skirt | 320 | **370** |
-| Pants | 350 | **390** |
-| Dress (simple) | 490 | **520** |
-| Dress (elaborate) | 670 | **780** |
-| Blazer | — | **650** (pending a real tailoring quote) |
-
-## 5. Launch discount — the right way round
-
-Do **not** discount today's prices. Raise list, then sell a founding-customer
-discount back to roughly where you are now:
-
-- Shirt list 350 → founding 20% → **280**, essentially today's 290.
-- First buyers pay what they would have paid anyway; everyone after anchors on 350.
-- It gives a real reason to capture an email, which nothing on the site does today.
-
-Stripe Checkout supports promotion codes natively (`allow_promotion_codes`);
-there is no discount mechanism anywhere in the codebase (grepped 2026-08-22).
-
-**Now is the cheapest moment to reprice — there are no customers to upset.**
+This also decides the ad strategy. Meta and TikTok need roughly **50 conversions
+a week** to leave the learning phase. At 11–22 orders a *month* a purchase-
+optimised campaign will never get there. Optimise for **email signups** instead —
+they happen at many times the rate — and convert the list by email, which costs
+nothing per send. That is what the welcome code is really for.
 
 ## Open
 
-- [ ] **Blazer tailoring cost** — needed before a blazer can be listed
-- [ ] **Confirm "1–2 per piece" is days, not hours** — it changes the revenue
-      ceiling by a factor of 8 and decides how much ad spend is even useful
-- [ ] Confirm metres per garment with the tailor (Shirt 2.0 / Pants 2.0 /
-      Dress 3.0 are my assumptions)
+- [ ] **Confirm "1–2 per piece" is days, not hours** — changes the ceiling by 8×
+      and decides how much ad spend is even useful
+- [ ] Confirm metres per garment with the tailor
 - [ ] Verify Stripe's UAE fee (assumed 2.9% + 1 AED)
-- [ ] Re-run once real CAC data exists (after ~2–3k AED of ad spend)
-- [ ] Reprice the elaborate dress first — it is the only item outside the band
+- [ ] Verify whether a DET permit is needed for the welcome offer as advertised
+- [ ] Build the capture flow: `subscribers` table, unique promotion codes,
+      Resend email, `allow_promotion_codes` on the Checkout session
+- [ ] Re-run this once real CAC data exists (~2–3k AED of ad spend)
