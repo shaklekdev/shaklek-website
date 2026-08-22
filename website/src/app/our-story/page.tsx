@@ -164,7 +164,7 @@ export default function OurStoryPage() {
                       className="mt-2 block h-px w-8 bg-gold"
                       aria-hidden="true"
                     />
-                    <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-text-2">
+                    <p className="mt-3 max-w-sm text-justify text-[14px] leading-relaxed text-text-2 hyphens-auto">
                       {t.body}
                     </p>
                   </div>
@@ -183,7 +183,7 @@ export default function OurStoryPage() {
             From our founder
           </p>
           <div className="mt-6">
-            <div className="space-y-4 text-[15px] leading-relaxed text-text-2">
+            <div className="space-y-4 text-justify text-[15px] leading-relaxed text-text-2 hyphens-auto">
               <p>
                 I spent more than half my life trying to understand my own
                 skin. Endometriosis, acne, endocrine disruptors, and a long
@@ -192,28 +192,30 @@ export default function OurStoryPage() {
                 more after that, couldn&apos;t possibly be neutral.
               </p>
               <p>
-                I still wanted to wear something trendy, classy, put
-                together. And once you actually find those pieces,
-                they&apos;re either too expensive, not quite your taste, or
-                not your size.
+                I still wanted to wear something trendy, classy, put together.
+                And once I actually find those pieces, they&apos;re either too
+                expensive, not quite my taste, or not my fit.
               </p>
               <p>
                 I&apos;m a tech girl who happens to love fashion, and I kept
-                asking myself: why couldn&apos;t AI solve this, for me and
-                for everyone like me?
+                asking myself: why couldn&apos;t AI solve this, for me and for
+                everyone like me?
               </p>
               <p>
-                Shaklek means &ldquo;your way&rdquo; in Arabic. Your look,
-                your vision, simply you. I wanted prices everyone can afford,
-                and customization for everyone, because we&apos;re all
-                different. On Shaklek, you can customize the same shirt in
-                288 different ways, the same trousers in 576. That&apos;s
-                what I built.
+                Shaklek means &ldquo;your way&rdquo; in Arabic. Your look, your
+                vision, simply you. I wanted customization for our taste and
+                shape, because we&apos;re all different. On Shaklek, you can
+                customize the same shirt in 288 different ways, the same
+                trousers in 576. That&apos;s what I built.
               </p>
               <p>
                 I wanted this to be the personal wardrobe of everyone who
-                believes what I believe: less overproduction, fewer
-                materials that can harm our health, more comfort.
+                believes what I believe: less overproduction, fewer materials
+                that can harm our health, more comfort.
+              </p>
+              <p>
+                If you have an idea or feedback to improve Shaklek, please
+                reach out. This is not just a brand — it&apos;s your brand.
               </p>
               <p className="pt-1 text-sm font-medium text-text">
                 Nada, founder of Shaklek

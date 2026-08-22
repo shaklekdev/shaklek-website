@@ -15,7 +15,7 @@ export default function LegalPage({
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-14">
         <h1 className="text-[26px] text-text">{title}</h1>
         <p className="mt-1 text-xs text-text-3">Last updated {updated}</p>
-        <div className="prose-legal mt-8 space-y-5 text-[14px] leading-relaxed text-text-2">
+        <div className="prose-legal mt-8 space-y-5 text-justify text-[14px] leading-relaxed text-text-2 hyphens-auto">
           {children}
         </div>
       </div>
