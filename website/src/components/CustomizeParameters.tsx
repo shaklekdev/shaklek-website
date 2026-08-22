@@ -82,7 +82,7 @@ export default function CustomizeParameters({
           immediately, which meant tapping an option then scrolling back up to
           see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="sticky top-[98px] z-10 h-[40vh] min-h-[220px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white"
+        className="sticky top-[98px] z-10 mx-auto h-[54vh] max-h-[560px] w-[40.5vh] max-w-full touch-pan-y select-none overflow-hidden border border-border bg-white"
         style={
           activeImage
             ? undefined
@@ -97,14 +97,11 @@ export default function CustomizeParameters({
             alt={view === "back" ? "Back view" : "Front view"}
             fill
             sizes={PREVIEW_SIZES}
-            className="object-contain"
+            className="object-cover"
             priority
             draggable={false}
           />
         )}
-        <span className="absolute top-4 right-4 rounded-full bg-accent px-3 py-1 text-[10px] font-medium tracking-wide text-white">
-          LIVE PREVIEW
-        </span>
         <span className="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-medium tracking-wide text-text backdrop-blur-sm">
           {itemName}
         </span>
@@ -278,10 +275,6 @@ export default function CustomizeParameters({
         </div>
       )}
 
-      <p className="mt-4 text-xs text-text-3">
-        Fabric, colour and every option selected above is committed — that is exactly what
-        gets made. Anything written in the box is a request we will confirm with you first.
-      </p>
     </div>
   );
 }
