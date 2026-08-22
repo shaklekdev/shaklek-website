@@ -30,6 +30,17 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       .catch(() => {});
   }, [isSignedIn]);
 
+  // Deep link from a catalog card's colour swatch (/design/x?color=Navy).
+  // Read on the client instead of via the page's searchParams: adding
+  // searchParams to the server component would opt all eight design pages
+  // out of static prerendering, which would cost more than this is worth.
+  useEffect(() => {
+    const color = new URLSearchParams(window.location.search).get("color");
+    if (color && item.colorImages?.[color]) {
+      setSpec((prev) => (prev.color === color ? prev : { ...prev, color }));
+    }
+  }, [item]);
+
   const price = item.price;
   const colorVariant = item.colorImages?.[spec.color];
   const comboKey = comboKeyForCategory(item.category, spec.changes);

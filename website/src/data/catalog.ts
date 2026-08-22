@@ -91,8 +91,8 @@ export const catalog: CatalogItem[] = [
     price: 350,
     descriptor: "High waist",
     gradient: ["#ede8e4", "#e0dcd8"],
-    image: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front.png",
-    backImage: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-back.png",
+    image: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-front.png",
+    backImage: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-back.png",
     colorImages: {
       Ivory: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-back.png" },
       White: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-front.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-back.png" },
@@ -124,6 +124,7 @@ export const catalog: CatalogItem[] = [
         "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-front-v2.png", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-back-v2.png" },
       },
     },
+    defaultChanges: { leg_width: "wide", garment_length: "cropped" },
   },
   {
     slug: "structured-blouse",
@@ -132,8 +133,8 @@ export const catalog: CatalogItem[] = [
     price: 290,
     descriptor: "Minimal dart",
     gradient: ["#efeae4", "#e2ded8"],
-    image: "/catalog/structured-blouse/structured-blouse-front.png",
-    backImage: "/catalog/structured-blouse/structured-blouse-back.png",
+    image: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.png",
+    backImage: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-back.png",
     colorImages: {
       Ivory: { front: "/catalog/structured-blouse/structured-blouse-front.png", back: "/catalog/structured-blouse/structured-blouse-back.png" },
       White: { front: "/catalog/structured-blouse/structured-blouse-white-front-v2.png", back: "/catalog/structured-blouse/structured-blouse-white-back.png" },
@@ -165,7 +166,6 @@ export const catalog: CatalogItem[] = [
       },
     },
     // The base photo is a half sleeve, not SHIRT_PARAMS' "long" default.
-    defaultChanges: { sleeve_length: "short" },
   },
   {
     slug: "banded-trousers",
@@ -174,8 +174,8 @@ export const catalog: CatalogItem[] = [
     price: 350,
     descriptor: "Tailored, cuffed hem",
     gradient: ["#f0ece4", "#e2ddd4"],
-    image: "/catalog/banded-trousers/banded-trousers-ivory-front.png",
-    backImage: "/catalog/banded-trousers/banded-trousers-ivory-back.png",
+    image: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-front.png",
+    backImage: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-back.png",
     colorImages: {
       Ivory: { front: "/catalog/banded-trousers/banded-trousers-ivory-front-v2.png", back: "/catalog/banded-trousers/banded-trousers-ivory-back-v2.png" },
       White: { front: "/catalog/banded-trousers/banded-trousers-white-front-v2.png", back: "/catalog/banded-trousers/banded-trousers-white-back-v2.png" },
@@ -204,6 +204,7 @@ export const catalog: CatalogItem[] = [
         "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-front.png", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-back.png" },
       },
     },
+    defaultChanges: { leg_width: "wide", garment_length: "cropped" },
   },
   {
     slug: "wrap-top",
@@ -213,8 +214,8 @@ export const catalog: CatalogItem[] = [
     descriptor: "Soft drape, tie waist",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
-    image: "/catalog/wrap-top/wrap-top-ivory-front-v3.png",
-    backImage: "/catalog/wrap-top/wrap-top-ivory-back-v3.png",
+    image: "/catalog/wrap-top/wrap-top-ivory-combo-long-normal-front.png",
+    backImage: "/catalog/wrap-top/wrap-top-ivory-combo-long-normal-back.png",
     colorImages: {
       Ivory: { front: "/catalog/wrap-top/wrap-top-ivory-front-v3.png", back: "/catalog/wrap-top/wrap-top-ivory-back-v3.png" },
       White: { front: "/catalog/wrap-top/wrap-top-white-front-v3.png", back: "/catalog/wrap-top/wrap-top-white-back-v3.png" },
@@ -246,7 +247,6 @@ export const catalog: CatalogItem[] = [
       },
     },
     // The base photo is a short sleeve, not SHIRT_PARAMS' "long" default.
-    defaultChanges: { sleeve_length: "short" },
   },
   {
     slug: "pleated-trousers",
@@ -256,8 +256,8 @@ export const catalog: CatalogItem[] = [
     descriptor: "Relaxed leg, pleated",
     badge: "NEW",
     gradient: ["#efe9df", "#e2ddd2"],
-    image: "/catalog/pleated-trousers/pleated-trousers-ivory-front-v3.png",
-    backImage: "/catalog/pleated-trousers/pleated-trousers-ivory-back-v2.png",
+    image: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-cropped-front.png",
+    backImage: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-cropped-back.png",
     colorImages: {
       Ivory: { front: "/catalog/pleated-trousers/pleated-trousers-ivory-front-v3.png", back: "/catalog/pleated-trousers/pleated-trousers-ivory-back-v2.png" },
       White: { front: "/catalog/pleated-trousers/pleated-trousers-white-front-v2.png", back: "/catalog/pleated-trousers/pleated-trousers-white-back-v2.png" },
@@ -286,6 +286,7 @@ export const catalog: CatalogItem[] = [
         "wide:cropped": { front: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-wide-cropped-front.png", back: "/catalog/pleated-trousers/pleated-trousers-burgundy-combo-wide-cropped-back.png" },
       },
     },
+    defaultChanges: { leg_width: "wide", garment_length: "cropped" },
   },
   {
     slug: "cargo-trousers",
@@ -295,8 +296,8 @@ export const catalog: CatalogItem[] = [
     descriptor: "Wide leg, side pockets",
     badge: "NEW",
     gradient: ["#e9e2d2", "#ddd3bd"],
-    image: "/catalog/cargo-trousers/cargo-trousers-ivory-front-v2.png",
-    backImage: "/catalog/cargo-trousers/cargo-trousers-ivory-back-v2.png",
+    image: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-full-front.png",
+    backImage: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-full-back.png",
     colorImages: {
       Navy: { front: "/catalog/cargo-trousers/cargo-trousers-navy-front.png", back: "/catalog/cargo-trousers/cargo-trousers-navy-back-v4.png" },
       Ivory: { front: "/catalog/cargo-trousers/cargo-trousers-ivory-front-v2.png", back: "/catalog/cargo-trousers/cargo-trousers-ivory-back-v3.png" },
@@ -325,6 +326,7 @@ export const catalog: CatalogItem[] = [
         "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-white-combo-wide-cropped-front.png", back: "/catalog/cargo-trousers/cargo-trousers-white-combo-wide-cropped-back.png" },
       },
     },
+    defaultChanges: { leg_width: "wide" },
   },
   {
     slug: "utility-shirt",
@@ -334,8 +336,8 @@ export const catalog: CatalogItem[] = [
     descriptor: "Chest pockets, tie waist",
     badge: "NEW",
     gradient: ["#ede6d9", "#ddd4c4"],
-    image: "/catalog/utility-shirt/utility-shirt-ivory-front-v3.png",
-    backImage: "/catalog/utility-shirt/utility-shirt-ivory-back-v3.png",
+    image: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-front.png",
+    backImage: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-back.png",
     colorImages: {
       Ivory: { front: "/catalog/utility-shirt/utility-shirt-ivory-front-v3.png", back: "/catalog/utility-shirt/utility-shirt-ivory-back-v3.png" },
       White: { front: "/catalog/utility-shirt/utility-shirt-white-front-v3.png", back: "/catalog/utility-shirt/utility-shirt-white-back-v3.png" },
@@ -367,5 +369,6 @@ export const catalog: CatalogItem[] = [
         "long:longer": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-longer-front.png", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-longer-back.png" },
       },
     },
+    defaultChanges: { sleeve_length: "short", garment_length: "longer" },
   },
 ];
