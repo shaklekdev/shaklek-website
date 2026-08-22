@@ -75,14 +75,18 @@ export default function CustomizeParameters({
   const premiumParams = premiumParamsForCategory(category);
 
   return (
-    <div>
+    // Width is pinned to the preview's (40.5vh = 3/4 of its 54vh height, the
+    // portrait ratio). The sticky preview is narrower than the page column, so
+    // a full-width control stack scrolled visibly past its edges -- the
+    // controls have to share its width, not the container's.
+    <div className="mx-auto w-[40.5vh] max-w-full min-w-0">
       {/* Preview. Sticky under the 98px header and shortened to 40vh, so the
           garment stays on screen while the options below are changed --
           previously it was 704px of a 2028px page and scrolled away
           immediately, which meant tapping an option then scrolling back up to
           see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="sticky top-[98px] z-10 mx-auto h-[54vh] max-h-[560px] w-[40.5vh] max-w-full touch-pan-y select-none overflow-hidden border border-border bg-white"
+        className="sticky top-[98px] z-10 h-[54vh] max-h-[560px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white"
         style={
           activeImage
             ? undefined
