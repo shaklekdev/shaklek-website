@@ -4,6 +4,10 @@ import Header from "@/components/Header";
 import AccountNameForm from "@/components/AccountNameForm";
 import MeasurementsForm from "@/components/MeasurementsForm";
 import { getDb, schema } from "@/db/client";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo";
+
+export const metadata: Metadata = NOINDEX;
 
 const STATUS_LABEL: Record<string, string> = {
   paid: "Confirmed",

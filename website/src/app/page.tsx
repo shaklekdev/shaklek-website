@@ -2,6 +2,24 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import CatalogCard from "@/components/CatalogCard";
 import { catalog } from "@/data/catalog";
+import type { Metadata } from "next";
+import {
+  pageMetadata,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+} from "@/lib/seo";
+
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    path: "/",
+  }),
+  // Absolute so the root layout's "%s — Shaklek" template doesn't append a
+  // second "Shaklek" to a title that already carries the brand.
+  title: { absolute: `${SITE_NAME} — ${SITE_TAGLINE}` },
+};
 
 export default function Home() {
   return (
@@ -15,6 +33,7 @@ export default function Home() {
             alt=""
             fill
             priority
+            quality={55}
             sizes="100vw"
             className="object-cover"
           />

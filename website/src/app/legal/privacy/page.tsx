@@ -1,4 +1,13 @@
 import LegalPage from "@/components/LegalPage";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Privacy Policy",
+  description:
+    "What personal data Shaklek collects, why we collect it, and how to have it removed.",
+  path: "/legal/privacy",
+});
 
 export default function PrivacyPage() {
   return (

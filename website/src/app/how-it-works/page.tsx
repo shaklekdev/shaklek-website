@@ -1,5 +1,14 @@
 import Header from "@/components/Header";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "How it works",
+  description:
+    "Pick a piece, customize the cut and colour, send us your measurements — then a tailor makes it to order and ships it across the UAE.",
+  path: "/how-it-works",
+});
 
 const steps = [
   {

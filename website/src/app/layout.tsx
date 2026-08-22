@@ -1,13 +1,45 @@
 import type { Metadata } from "next";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+} from "@/lib/seo";
 import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Shaklek — Your look, your way",
-  description:
-    "Design your own unique piece with Shaklek, cut by a real tailor in sustainable cotton and linen.",
+  // Pins every relative URL below -- and every per-page canonical, OG and
+  // sitemap URL -- to the www. host. The apex 404s, so it must never be
+  // emitted.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s — ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  // No canonical here on purpose: it would be inherited by every page that
+  // doesn't set one -- pointing the noindex pages at the homepage. The home
+  // page declares its own via pageMetadata().
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_AE",
+    url: "/",
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE.url],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

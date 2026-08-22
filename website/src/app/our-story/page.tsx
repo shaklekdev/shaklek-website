@@ -1,6 +1,23 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Our story",
+  description:
+    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in sustainable cotton and linen — made in the UAE.",
+  path: "/our-story",
+  images: [
+    {
+      url: "/marketing/story-hero.png",
+      width: 1584,
+      height: 672,
+      alt: "Shaklek tailoring studio.",
+    },
+  ],
+});
 
 const PlaceholderIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0 text-gold/70">

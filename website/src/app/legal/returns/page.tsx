@@ -1,4 +1,13 @@
 import LegalPage from "@/components/LegalPage";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Returns, Alterations & Refunds",
+  description:
+    "How alterations, returns and refunds work on made-to-order Shaklek pieces.",
+  path: "/legal/returns",
+});
 
 export default function ReturnsPage() {
   return (

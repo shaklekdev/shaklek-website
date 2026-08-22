@@ -1,4 +1,13 @@
 import LegalPage from "@/components/LegalPage";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Terms of Service",
+  description:
+    "The terms covering Shaklek orders, made-to-order production and customer accounts.",
+  path: "/legal/terms",
+});
 
 export default function TermsPage() {
   return (

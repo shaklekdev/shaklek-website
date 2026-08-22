@@ -8,8 +8,13 @@ export default function Header() {
   const { items } = useCart();
   const { isSignedIn } = useUser();
 
+  // Opaque rather than bg-white/90 + backdrop-blur-xl. A full-width sticky
+  // element with a 24px backdrop blur is re-sampled and re-blurred on every
+  // frame that anything moves underneath it -- which, thanks to the 20s
+  // hero-ken-burns loop, meant every frame even when idle. The page
+  // background is #ffffff, so at rest the two render the same pixels.
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-white/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex flex-col items-center leading-none">
           <span className="font-display text-2xl font-light tracking-[3px] text-text">

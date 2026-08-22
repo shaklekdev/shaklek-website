@@ -1,5 +1,9 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { SignOutButton } from "@clerk/nextjs";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo";
+
+export const metadata: Metadata = NOINDEX;
 
 // proxy.ts already requires a signed-in Clerk session for every /dashboard
 // route. This layer checks *which* signed-in emails are actually allowed
