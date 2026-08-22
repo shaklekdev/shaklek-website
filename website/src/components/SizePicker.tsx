@@ -138,14 +138,14 @@ export default function SizePicker({
 
           <div className="mt-4">
             <label htmlFor="measurement-notes" className="mb-1 block text-xs text-text-2">
-              Anything else the tailor should know (optional)
+              Anything about your measurements or fit (optional)
             </label>
             <textarea
               id="measurement-notes"
               value={fields.notes}
               onChange={(e) => updateField("notes", e.target.value)}
               rows={2}
-              placeholder="e.g. shoulder width, inseam, a fit you liked before"
+              placeholder="e.g. shoulder width, inseam, longer in the body than most"
               className="w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
             />
           </div>

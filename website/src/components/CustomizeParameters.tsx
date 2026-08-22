@@ -193,6 +193,29 @@ export default function CustomizeParameters({
         </div>
       )}
 
+      {/* Free-text requests. The sliders only cover what we can pre-render;
+          this is the escape hatch for everything else, and unlike the
+          measurement notes in SizePicker it is available in both size modes.
+          Carried through to the tailor's spec sheet via spec.freeformNotes. */}
+      <div className="mt-6">
+        <label htmlFor="customization-notes" className="mb-1 block text-xs text-text">
+          Anything else you&apos;d like changed? (optional)
+        </label>
+        <textarea
+          id="customization-notes"
+          value={spec.freeformNotes}
+          onChange={(e) => onSpecChange({ ...spec, freeformNotes: e.target.value })}
+          rows={3}
+          maxLength={500}
+          placeholder="e.g. a wider collar, no chest pocket, sleeves a little shorter"
+          className="w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+        />
+        <p className="mt-1.5 text-[11px] text-text-3">
+          Tell us and we&apos;ll do our best. A stylist confirms what&apos;s possible
+          before anything is cut.
+        </p>
+      </div>
+
       {premiumParams.length > 0 && (
         <div className="mt-6 rounded-shaklek-sm border border-dashed border-gold/40 bg-surface-2 p-4">
           <div className="flex items-center gap-1.5">
@@ -248,8 +271,8 @@ export default function CustomizeParameters({
       )}
 
       <p className="mt-4 text-xs text-text-3">
-        Everything above is what gets made — fabric, color, and every option selected here is
-        committed, not a best-effort guess.
+        Fabric, colour and every option selected above is committed — that is exactly what
+        gets made. Anything written in the box is a request we will confirm with you first.
       </p>
     </div>
   );
