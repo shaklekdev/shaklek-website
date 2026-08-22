@@ -5,6 +5,7 @@ import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
 import { getDb, schema } from "@/db/client";
+import { comboKeyFromLabels } from "@/data/parameterSliders";
 import { catalog } from "@/data/catalog";
 
 const STAFF_EMAILS = (process.env.STAFF_EMAILS ?? "")
@@ -25,17 +26,22 @@ type SpecItem = {
 
 // Order items store the catalog display name + color as plain text, not a
 // slug reference, so this re-derives the matching front/back photos the
-// same way the design page does (colorImages keyed by color name) --
-// falls back to the item's default (Ivory) image pair if the ordered
-// color isn't in colorImages (shouldn't happen, but a spec sheet with the
-// wrong-color photo would be worse than one with no photo).
+// same way the design page does: the per-combination photo first, then the
+// plain colour photo, then the item's default pair.
+//
+// Resolving the combination matters -- without it a customer who ordered
+// wide cropped trousers got a spec sheet showing the straight full-length
+// photo, contradicting the "Customization:" line printed right below it.
 function imagesFor(item: SpecItem): { front?: string; back?: string } {
   const catalogItem = catalog.find((c) => c.name === item.name);
   if (!catalogItem) return {};
+  const comboKey = comboKeyFromLabels(catalogItem.category, item.changes);
+  const byCombo =
+    item.color && comboKey ? catalogItem.comboImages?.[item.color]?.[comboKey] : undefined;
   const byColor = item.color ? catalogItem.colorImages?.[item.color] : undefined;
   return {
-    front: byColor?.front ?? catalogItem.image,
-    back: byColor?.back ?? catalogItem.backImage,
+    front: byCombo?.front ?? byColor?.front ?? catalogItem.image,
+    back: byCombo?.back ?? byColor?.back ?? catalogItem.backImage,
   };
 }
 

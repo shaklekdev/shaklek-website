@@ -173,3 +173,20 @@ export function comboKeyForCategory(category: string, changes: SilhouetteChange[
   });
   return values.join(":");
 }
+
+// Orders persist customizations as human-readable labels ("Wide leg",
+// "Cropped length") rather than {type, value} pairs -- see order_items.changes.
+// The tailor spec sheet needs the combo photo the customer actually saw, so
+// this maps those labels back to a comboKey. Any render slider whose label is
+// missing falls back to that slider's own default, which is what the customer
+// would have been looking at.
+export function comboKeyFromLabels(category: string, labels: string[] | null): string | null {
+  const renderParams = renderParamsForCategory(category);
+  if (renderParams.length === 0) return null;
+  const changes: SilhouetteChange[] = renderParams.map((param) => {
+    const match = param.options.find((o) => labels?.includes(param.labelFor(o.text)));
+    const option = match ?? param.options[param.defaultIndex];
+    return { type: param.type, value: option.value, label: param.labelFor(option.text) };
+  });
+  return comboKeyForCategory(category, changes);
+}
