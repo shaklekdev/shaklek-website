@@ -66,17 +66,19 @@ export default function CatalogCard({
           // TRENDING/NEW badge already sits at top-right. No container --
           // each dot carries its own white ring and soft shadow so it lifts
           // off the photograph on its own.
-          <div className="absolute right-3 bottom-3 flex flex-col items-center gap-0.5">
+          <div className="absolute right-2 bottom-2 flex flex-col items-center gap-1">
             {swatches.map((c) => (
               <Link
                 key={c.name}
                 href={`${href}?color=${encodeURIComponent(c.name)}`}
                 aria-label={`${item.name} in ${c.name}`}
                 title={c.name}
-                // The link is a 20px touch target; the visible dot inside it
-                // is 10px. Keeps the swatch delicate without making it a
-                // fiddly tap on a phone.
-                className="group/swatch grid h-5 w-5 place-items-center"
+                // 24x24 is the WCAG 2.5.8 AA minimum, with a 4px gap so
+                // adjacent colours are 28px apart centre to centre -- these
+                // are four links that each go somewhere different, so a
+                // mis-tap is not a no-op, it is the wrong colourway. The
+                // visible dot stays 10px; only the target grew.
+                className="group/swatch grid h-6 w-6 place-items-center"
               >
                 <span
                   className="h-2.5 w-2.5 rounded-full border border-black/10 shadow-[0_1px_3px_rgba(0,0,0,0.18)] ring-2 ring-white/90 transition-transform duration-200 group-hover/swatch:scale-110"
@@ -88,7 +90,7 @@ export default function CatalogCard({
         )}
       </div>
 
-      <Link href={href} className="mt-4 block text-center">
+      <Link href={href} tabIndex={-1} className="mt-4 block text-center">
         <p className="font-display text-[15px] text-text">{item.name}</p>
         <p className="mt-1 text-[11px] tracking-wide text-text-3 uppercase">
           {item.descriptor}

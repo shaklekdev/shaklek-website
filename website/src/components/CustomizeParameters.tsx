@@ -161,31 +161,37 @@ export default function CustomizeParameters({
             return (
               <div key={param.type}>
                 <p className="text-xs text-text">{param.name}</p>
-                <input
-                  type="range"
-                  min={0}
-                  max={param.options.length - 1}
-                  step={1}
-                  value={activeIndex}
-                  onChange={(e) => {
-                    const option = param.options[Number(e.target.value)];
-                    setChange(param.type, option.value, param.labelFor(option.text));
-                  }}
-                  className="mt-3 h-1 w-full cursor-pointer accent-gold"
-                />
-                <div className="mt-1.5 flex justify-between">
-                  {param.options.map((option, i) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setChange(param.type, option.value, param.labelFor(option.text))}
-                      className={`text-[11px] transition-colors ${
-                        i === activeIndex ? "text-text-2" : "text-text-3 hover:text-text-2"
-                      } ${i === 0 ? "text-left" : i === param.options.length - 1 ? "text-right" : ""}`}
-                    >
-                      {option.text}
-                    </button>
-                  ))}
+                {/* Segmented buttons, not a slider. Every render param is a
+                    two-way choice, and a drag gesture to pick between two
+                    options is pure friction -- worse on a phone, where the
+                    thumb covers the thing it is selecting. Each button is a
+                    44px-tall full-width target. radiogroup semantics rather
+                    than aria-pressed, because these are one-of-N, not toggles. */}
+                <div
+                  role="radiogroup"
+                  aria-label={param.name}
+                  className="mt-2 grid gap-2"
+                  style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
+                >
+                  {param.options.map((option, i) => {
+                    const selected = i === activeIndex;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() => setChange(param.type, option.value, param.labelFor(option.text))}
+                        className={`min-h-11 rounded-shaklek-xs border px-2 py-2.5 text-xs transition-colors ${
+                          selected
+                            ? "border-text bg-text text-white"
+                            : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
+                        }`}
+                      >
+                        {option.text}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -232,13 +238,14 @@ export default function CustomizeParameters({
             {premiumParams.map((param) => (
               <div key={param.type}>
                 <p className="text-xs text-text">{param.name}</p>
-                <div className="mt-1.5 flex justify-between">
-                  {param.options.map((option, i) => (
+                <div
+                  className="mt-2 grid gap-2"
+                  style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
+                >
+                  {param.options.map((option) => (
                     <span
                       key={option.value}
-                      className={`text-[11px] text-text-3 ${
-                        i === 0 ? "text-left" : i === param.options.length - 1 ? "text-right" : ""
-                      }`}
+                      className="min-h-11 rounded-shaklek-xs border border-border px-2 py-2.5 text-center text-xs text-text-3"
                     >
                       {option.text}
                     </span>
