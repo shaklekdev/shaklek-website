@@ -55,7 +55,7 @@ export default async function DesignPage({
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <div className="mx-auto w-full max-w-xl px-6 pt-4">
-        <Link href="/" className="text-xs text-text-3 hover:text-text-2">
+        <Link href="/" className="inline-flex min-h-6 items-center text-xs text-text-3 hover:text-text-2">
           ← Back to catalog
         </Link>
       </div>

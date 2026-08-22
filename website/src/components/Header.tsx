@@ -73,7 +73,9 @@ export default function Header() {
           <Link
             href="/cart"
             aria-label={`Cart, ${items.length} ${items.length === 1 ? "item" : "items"}`}
-            className="relative flex items-center text-text hover:text-text-2 transition-colors"
+            /* h-6 w-6 gives the link a 24x24 hit area (WCAG 2.5.8 minimum);
+               the glyph stays 20x20, centred inside it. */
+            className="relative flex h-6 w-6 items-center justify-center text-text hover:text-text-2 transition-colors"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path

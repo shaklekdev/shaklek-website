@@ -179,39 +179,44 @@ export default function CustomizeParameters({
             );
             return (
               <div key={param.type}>
-                <p className="text-xs text-text">{param.name}</p>
-                {/* Segmented buttons, not a slider. Every render param is a
-                    two-way choice, and a drag gesture to pick between two
-                    options is pure friction -- worse on a phone, where the
-                    thumb covers the thing it is selecting. Each button is a
-                    44px-tall full-width target. radiogroup semantics rather
-                    than aria-pressed, because these are one-of-N, not toggles. */}
-                <div
-                  role="radiogroup"
-                  aria-label={param.name}
-                  className="mt-2 grid gap-2"
-                  style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
-                >
-                  {param.options.map((option, i) => {
-                    const selected = i === activeIndex;
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        role="radio"
-                        aria-checked={selected}
-                        onClick={() => setChange(param.type, option.value, param.labelFor(option.text))}
-                        className={`min-h-11 rounded-shaklek-xs border px-2 py-2.5 text-xs transition-colors ${
-                          selected
-                            ? "border-text bg-text text-white"
-                            : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
-                        }`}
-                      >
-                        {option.text}
-                      </button>
-                    );
-                  })}
-                </div>
+                {/* Native radios behind styled labels, not buttons with
+                    role="radio". ARIA radiogroup semantics tell a screen
+                    reader to press arrow keys; buttons do not implement them,
+                    so the page was promising an interaction it did not honour.
+                    The browser supplies arrow keys, roving focus, grouping and
+                    the accessibility tree here for free, and none of it can
+                    drift. Each label is a 44px-tall full-width target. */}
+                <fieldset>
+                  <legend className="text-xs text-text">{param.name}</legend>
+                  <div
+                    className="mt-2 grid gap-2"
+                    style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
+                  >
+                    {param.options.map((option, i) => {
+                      const selected = i === activeIndex;
+                      return (
+                        <label
+                          key={option.value}
+                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-shaklek-xs border px-2 py-2.5 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 ${
+                            selected
+                              ? "border-text bg-text text-white"
+                              : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name={param.type}
+                            value={option.value}
+                            checked={selected}
+                            onChange={() => setChange(param.type, option.value, param.labelFor(option.text))}
+                            className="sr-only"
+                          />
+                          {option.text}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
               </div>
             );
           })}
