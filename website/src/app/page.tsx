@@ -41,25 +41,27 @@ export default function Home() {
         <div className="absolute inset-0 bg-white/55" />
         <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
           <h1 className="text-[28px] leading-tight text-text">
-            Your look,
+            Change it. See it.
             <br />
-            your way.
+            Then we make it.
           </h1>
           <p className="subtitle mx-auto mt-3 max-w-md">
-            Elegant fashion essentials. Customizable to your taste, friendly
-            to your skin, shaped to your body.
+            Elegant essentials — customizable to your taste, friendly to your
+            skin, shaped to your body.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-6 pb-4">
+      <section className="mx-auto w-full max-w-6xl px-6 pt-12 pb-5">
         <div className="flex items-end justify-between">
           <div>
-            <p className="text-xs tracking-wide text-text-3 uppercase">Step 1</p>
-            <h2 className="mt-1 text-lg text-text">Choose an inspiration</h2>
+            <h2 className="text-lg text-text">Start with a piece</h2>
+            <p className="mt-1 text-[13px] text-text-3">
+              Make it yours in the next step.
+            </p>
           </div>
           <p className="hidden text-[13px] text-text-3 sm:block">
-            From AED 390 · Fixed prices · 10 days
+            From AED 390 · one price per piece · made in 10 days
           </p>
         </div>
       </section>

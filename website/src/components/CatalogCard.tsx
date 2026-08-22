@@ -30,7 +30,7 @@ export default function CatalogCard({
             which breaks the swatch click. They're a sibling instead. */}
         <Link
           href={href}
-          className="relative block aspect-[3/4] w-full overflow-hidden rounded-shaklek-sm bg-card"
+          className="relative block aspect-[3/4] w-full overflow-hidden bg-card"
           style={
             item.image
               ? undefined

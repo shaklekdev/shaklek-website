@@ -63,7 +63,7 @@ export default function CustomizeParameters({
     <div>
       {/* Preview */}
       <div
-        className="relative aspect-[3/4] w-full touch-pan-y select-none overflow-hidden rounded-shaklek border border-border"
+        className="relative aspect-[3/4] w-full touch-pan-y select-none overflow-hidden border border-border"
         style={
           activeImage
             ? undefined

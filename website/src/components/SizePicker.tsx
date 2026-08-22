@@ -75,7 +75,7 @@ export default function SizePicker({
           }`}
         >
           <span className="block font-medium text-text">Standard</span>
-          <span className="text-xs text-text-3">Free bucket size</span>
+          <span className="text-xs text-text-3">Pick XS–XXL</span>
         </button>
         <button
           onClick={() => onSizeModeChange("tailored")}
@@ -88,6 +88,12 @@ export default function SizePicker({
           <span className="text-xs text-gold">Made to your measurements</span>
         </button>
       </div>
+
+      {/* Said outright, because the old "Free bucket size" label implied the
+          opposite -- that having it tailored costs extra. It never has. */}
+      <p className="mt-2 text-[11px] text-text-3">
+        Same price either way — tailoring is included.
+      </p>
 
       {sizeMode === "standard" ? (
         <>

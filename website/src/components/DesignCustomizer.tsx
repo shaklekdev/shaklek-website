@@ -108,7 +108,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             step === 3 ? "bg-text text-white" : "text-text-2 hover:text-text"
           }`}
         >
-          Step 3 · Size
+          Step 3 · Fit
         </button>
       </div>
 
@@ -137,7 +137,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       {step === 3 && (
         <div className="mt-6">
           <p className="text-xs tracking-wide text-text-3 uppercase">Step 3</p>
-          <h2 className="mt-1 text-lg text-text">Choose the size</h2>
+          <h2 className="mt-1 text-lg text-text">Let&apos;s tailor it</h2>
 
           <SizePicker
             sizeMode={spec.sizeMode}

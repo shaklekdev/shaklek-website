@@ -113,6 +113,14 @@ export default function OurStoryPage() {
             <br />
             your way.
           </h1>
+          {/* The founder's note is the most personal thing on the site and it
+              sits at the very bottom. This is the shortcut to it. */}
+          <a
+            href="#from-our-founder"
+            className="mt-5 inline-block border-b border-text/30 pb-0.5 text-[13px] text-text transition-colors hover:border-text"
+          >
+            From our founder ↓
+          </a>
         </div>
       </div>
 
@@ -166,18 +174,14 @@ export default function OurStoryPage() {
         </div>
       </div>
 
-      {/* Founder's note */}
-      <div className="mx-auto w-full max-w-2xl px-6 pb-16">
+      {/* Founder's note. No portrait: an empty dashed box reads as an
+          unfinished page, and the words carry this section on their own. */}
+      <div id="from-our-founder" className="mx-auto w-full max-w-2xl px-6 pb-16">
         <div className="border-t border-border pt-14">
           <p className="text-xs tracking-wide text-text-3 uppercase">
             From our founder
           </p>
-          <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-10">
-            <div className="flex aspect-square w-28 shrink-0 items-center justify-center border border-dashed border-gold/40 bg-surface-2 text-center sm:w-32">
-              <p className="px-2 text-[10px] leading-snug text-text-3">
-                Portrait: Nada, founder of Shaklek
-              </p>
-            </div>
+          <div className="mt-6">
             <div className="space-y-4 text-[15px] leading-relaxed text-text-2">
               <p>
                 I spent more than half my life trying to understand my own
