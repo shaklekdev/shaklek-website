@@ -1,4 +1,4 @@
-# Start here — evening session, 2026-08-22
+# Start here — 2026-08-22, evening session
 
 ## Where things stand: Shaklek takes real money
 
@@ -11,60 +11,93 @@ live card → webhook fired → order marked `paid` in Neon → visible on
 
 ---
 
-## Do these first — they are the founder's, not Claude's
+## Do these first — founder's, not Claude's
 
-- [ ] **Refund the AED 390 test order.** It is a real charge on a real card.
-- [x] ~~Turn Stripe Link off~~ — **done 2026-08-22**, on the account's own config
-      `pmc_1U4N3TFG6ccJjMKMnWzuqAdz` (live). Link was what forced the extra screen
-      before Apple Pay. Stripe argues hard against disabling it, but its case rests
-      on returning customers and Shaklek has none yet; revisit once there is a
-      repeat base. Reversible in the same place.
-- [ ] **Confirm it on a phone.** Start a checkout on iPhone/Safari and stop at the
-      payment step: Apple Pay should be the top button with no Link screen. Apple
-      Pay never renders in desktop Chrome, so testing there proves nothing.
+- [ ] **Refund the AED 390 test order.** Real charge on a real card.
+- [ ] **Confirm Apple Pay on a phone.** Start a checkout on iPhone/Safari and
+      stop at the payment step: Apple Pay should be the top button with no Link
+      screen. Apple Pay never renders in desktop Chrome — testing there proves
+      nothing.
 - [ ] **Download the new spec sheet and say what the tailor still needs.** The
       structure is rebuilt; only the tailor knows what is missing from it.
 
-## The queue for tonight — the cart batch
+## The queue — the cart batch
 
-All five are one workflow and should ship together, not as five deploys.
+All five are one workflow. Ship together, not as five deploys.
 
-1. [ ] **Continue shopping.** Adding to cart dead-ends on `/cart`. No way to go
-       back and add a second piece — e.g. the same trouser in another colour.
-2. [ ] **Edit from the cart.** No route from a cart line back to its design page
-       to change anything. Should return to `/design/<slug>?color=<colour>`.
+1. [ ] **Continue shopping.** Adding to cart dead-ends on `/cart`. No way back to
+       add a second piece — e.g. the same trouser in another colour.
+2. [ ] **Edit from the cart.** No route from a cart line back to its design page.
+       Should return to `/design/<slug>?color=<colour>`.
 3. [ ] **Real thumbnail in the cart.** Currently a blank square. The cart line
-       already stores slug, colour and the change labels, and
-       `comboKeyFromLabels()` already resolves those to the exact photo.
+       already stores slug, colour and change labels, and `comboKeyFromLabels()`
+       already resolves those to the exact photo.
 4. [ ] **Quantity.** No way to order two of the same shirt. Touches CartContext,
-       the cart UI, the order payload and the Stripe line items — the biggest of
-       the five.
+       the cart UI, the order payload and the Stripe line items — biggest of the
+       five.
 5. [ ] **Checkout email.** Customers do not realise the email field must be
        filled before payment is possible.
 
+## Shipped today
+
+**Going live** — Stripe test → live keys, live webhook endpoint created and
+verified (`checkout.session.completed` + `.expired`); Clerk development →
+production instance on `clerk.shaklek.com` with DNS and SSL; Stripe Link
+disabled so Apple Pay is the direct path.
+
+**Commerce correctness** — delivery address and phone now collected by Stripe
+Checkout and persisted (migration `0004`, applied); customer email removed from
+the tailor's spec sheet; `SHK-XXXXXXXX` reference shared by the spec sheet,
+the WhatsApp handoff and a new dashboard column; spec sheet rebuilt as a proper
+tech pack; dashboard shows the delivery address inline or warns when missing;
+spec sheet now resolves the *ordered* combination photo — it was sending the
+wrong silhouette on 96 of 128 possible orders.
+
+**Storefront** — new price ladder (390/420/450/620); hero photo per item is now
+its best combination, with `defaultChanges` matched so the design page opens on
+the same look; clickable colour swatches deep-linking to `?color=`; sliders
+replaced with native radio buttons; sticky preview; free-text request field with
+per-category examples; square corners; justified prose; revised founder's note;
+"Free bucket size" and the AI mention removed.
+
+**Plumbing** — sitemap, robots, per-page metadata and OG images; header blur
+removed (scroll jank); hero image weight cut; `npm run verify` catalog integrity
+check; `eager` loading for above-the-fold cards; WCAG tap-target fixes.
+
 ## Known and unresolved
 
-- [ ] **The customizer's arrow keys are unverified.** The option buttons are now
-      native radios, which should give arrow-key navigation for free, but two
-      attempts to deliver real key events failed (zero keydown events captured).
-      Needs the other session's CDP harness. Not a blocker — tap, click, Tab and
-      Space all work.
-- [ ] **Clerk still loads on every route** — 188.7kb raw / 54.7kb gzipped, 24% of
-      homepage JS, all from `ClerkProvider` in the root layout. Plan written in
+- [ ] **Apple Pay still opens on Stripe's page, not ours.** Turning Link off
+      removed the extra screen, but checkout still redirects to
+      `checkout.stripe.com`. A true in-page Apple Pay sheet means switching to
+      **embedded checkout** — a few hours, and it touches the one flow currently
+      proven to work with real money. Do it on its own, after the cart batch,
+      with a real test payment to prove it.
+- [ ] **Customizer arrow keys unverified.** The options are native radios now,
+      which should give arrow-key navigation for free, but two attempts to
+      deliver real key events failed (zero keydown events captured). Needs the
+      other session's CDP harness. Not a blocker — tap, click, Tab and Space all
+      work.
+- [ ] **Clerk loads on every route** — 188.7kb raw / 54.7kb gzipped, 24% of
+      homepage JS, all from `ClerkProvider` in the root layout. Plan in
       `clerk-migration-plan.md`. **Do not start it** until production sign-in has
       been exercised for a while; never change the auth layer in the same window
       as auth credentials.
 - [ ] **Founder's note claims 288 shirt / 576 trouser combinations.** What ships
-      is 32 per garment (192 with sizes); the larger numbers count locked
-      Shaklek+ sliders. Founder's copy, founder's call — but it is checkable.
+      is 32 per garment (192 with sizes); the rest count locked Shaklek+
+      sliders. Founder's copy, founder's call — but it is checkable.
 - [ ] **`/upload` is built but unlinked** from the nav. Link it or leave it.
+- [ ] **Welcome-offer capture flow not built** — `subscribers` table, unique
+      promotion codes, Resend email, `allow_promotion_codes` on the session.
+      This is what makes ads work: at Shaklek's order volume a purchase-optimised
+      campaign never leaves the learning phase, so ads should optimise for email
+      signups instead.
 - [ ] Wide-leg photo defects and three headless trouser crops —
-      `catalog-images-todo.md`. Costs money to fix, nothing is broken.
+      `catalog-images-todo.md`. Costs money; nothing is broken.
 
-## Decided today, do not relitigate
+## Decided today — do not relitigate
 
-- **Prices**: Shirt 390 · Skirt 420 · Pants 450 · Dress 620. Model and reasoning
-  in `pricing-todo.md`. No blazers, simple dresses only.
+- **Prices**: Shirt 390 · Skirt 420 · Pants 450 · Dress 620. Reasoning in
+  `pricing-todo.md`. No blazers, simple dresses only.
 - **Welcome offer is 20%, not 25%** — at a 390 shirt, 25% goes underwater at the
   pessimistic end of the CAC range.
 - **Never cap ordering.** No stock counts, no waitlist, no "sold out". If demand
@@ -73,15 +106,23 @@ All five are one workflow and should ship together, not as five deploys.
   channel and a trust signal for a brand with no history.
 - **The tailor never sees customer identity.** Spec sheets carry the garment and
   `SHK-XXXXXXXX`, nothing else.
+- **Link stays off** until there is a real repeat-customer base.
+- **Homepage headline stays "Your look, your way."** A sharper alternative was
+  written and rejected: it broke with the story page, the site title, and the
+  meaning of the word Shaklek.
 
 ## Traps
 
 - **Two sessions share one working tree.** `git diff <file>` before `git add
   <file>` — an uncommitted change of the other session's was swept into an
   unrelated commit this way. Pin dev-server ports and confirm they bound.
-- **CloudFront caches HTML and the CSS reference in it.** A change can be live
-  and still invisible in a browser that is holding the old page. Verify by
-  fetching the CSS the *fresh* HTML points at, not the one a cached page names.
+- **CloudFront caches the HTML *and* the stylesheet reference inside it.** A
+  change can be live and still invisible in a browser holding the old page —
+  this cost time twice today. Verify by fetching the CSS that a *fresh* HTML
+  response points at, never the one a cached page names.
 - **Never `git add -A`** from the repo root — passport, Emirates ID and visa sit
   there untracked.
 - A **failed Amplify build is silent**; the site keeps serving the old version.
+- **macOS/iCloud creates "file 2.ext" duplicates.** Two appeared inside
+  `.next/types` and broke a typecheck with phantom duplicate-identifier errors.
+  Generated files only, never committed — delete and re-run.
