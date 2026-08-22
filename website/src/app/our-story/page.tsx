@@ -222,7 +222,7 @@ export default function OurStoryPage() {
       <div className="mx-auto w-full max-w-2xl px-6 pb-20">
         <div className="rounded-shaklek-sm border border-gold/30 bg-gold/10 p-5">
           <p className="text-sm text-text">
-            <strong>From AED 290, fixed.</strong> Accessible by design, not
+            <strong>From AED 390, fixed.</strong> Accessible by design, not
             an afterthought. Made-to-order shouldn&apos;t mean a luxury
             markup.
           </p>

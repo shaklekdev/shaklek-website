@@ -30,15 +30,20 @@ export type CatalogItem = {
   defaultChanges?: Partial<Record<string, string>>;
 };
 
-// Pricing locked from the Shaklek business dossier (Section 9):
-// Shirt 290 · Skirt 320 · Pants 350 · Dress 490 · Dress — Elaborate ~670 AED
+// Pricing set 2026-08-22 from real unit costs -- see planning/pricing-todo.md
+// for the model, the CAC assumptions and the capacity constraint behind it.
+// Shirt 390 · Skirt 420 · Pants 450 · Dress 620 AED.
+// These are LIST prices. The welcome offer (20% off a first order) is applied
+// as a Stripe promotion code at checkout, never by discounting these.
+// Supersedes the dossier's Section 9 ladder (290/320/350/490 + elaborate 670);
+// the elaborate dress tier is dropped -- simple designs only.
 // Same fixed tiers apply to uploaded designs, by category — no separate
 // stylist quote needed, matching how catalog items are priced.
 export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
-  Shirt: 290,
-  Skirt: 320,
-  Pants: 350,
-  Dress: 490,
+  Shirt: 390,
+  Skirt: 420,
+  Pants: 450,
+  Dress: 620,
 };
 
 export const catalog: CatalogItem[] = [
@@ -46,7 +51,7 @@ export const catalog: CatalogItem[] = [
     slug: "oversized-shirt",
     name: "Oversized Shirt",
     category: "Shirt",
-    price: 290,
+    price: 390,
     descriptor: "Relaxed fit",
     badge: "TRENDING",
     gradient: ["#f5f0e8", "#e8e4dc"],
@@ -88,7 +93,7 @@ export const catalog: CatalogItem[] = [
     slug: "wide-leg-trousers",
     name: "Wide-leg Trousers",
     category: "Pants",
-    price: 350,
+    price: 450,
     descriptor: "High waist",
     gradient: ["#ede8e4", "#e0dcd8"],
     image: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-front.png",
@@ -130,7 +135,7 @@ export const catalog: CatalogItem[] = [
     slug: "structured-blouse",
     name: "Structured Blouse",
     category: "Shirt",
-    price: 290,
+    price: 390,
     descriptor: "Minimal dart",
     gradient: ["#efeae4", "#e2ded8"],
     image: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.png",
@@ -171,7 +176,7 @@ export const catalog: CatalogItem[] = [
     slug: "banded-trousers",
     name: "Banded Trousers",
     category: "Pants",
-    price: 350,
+    price: 450,
     descriptor: "Tailored, cuffed hem",
     gradient: ["#f0ece4", "#e2ddd4"],
     image: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-front.png",
@@ -210,7 +215,7 @@ export const catalog: CatalogItem[] = [
     slug: "wrap-top",
     name: "Wrap Top",
     category: "Shirt",
-    price: 290,
+    price: 390,
     descriptor: "Soft drape, tie waist",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -252,7 +257,7 @@ export const catalog: CatalogItem[] = [
     slug: "pleated-trousers",
     name: "Pleated Trousers",
     category: "Pants",
-    price: 350,
+    price: 450,
     descriptor: "Relaxed leg, pleated",
     badge: "NEW",
     gradient: ["#efe9df", "#e2ddd2"],
@@ -292,7 +297,7 @@ export const catalog: CatalogItem[] = [
     slug: "cargo-trousers",
     name: "Cargo Trousers",
     category: "Pants",
-    price: 350,
+    price: 450,
     descriptor: "Wide leg, side pockets",
     badge: "NEW",
     gradient: ["#e9e2d2", "#ddd3bd"],
@@ -332,7 +337,7 @@ export const catalog: CatalogItem[] = [
     slug: "utility-shirt",
     name: "Utility Shirt",
     category: "Shirt",
-    price: 290,
+    price: 390,
     descriptor: "Chest pockets, tie waist",
     badge: "NEW",
     gradient: ["#ede6d9", "#ddd4c4"],

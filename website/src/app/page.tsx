@@ -59,7 +59,7 @@ export default function Home() {
             <h2 className="mt-1 text-lg text-text">Choose an inspiration</h2>
           </div>
           <p className="hidden text-[13px] text-text-3 sm:block">
-            From AED 290 · Fixed prices · 10 days
+            From AED 390 · Fixed prices · 10 days
           </p>
         </div>
       </section>
@@ -67,9 +67,13 @@ export default function Home() {
       {/* Carousel — edge fade hints there's more to scroll */}
       <section className="relative w-full pb-20">
         <div className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-3 sm:px-[max(1.5rem,calc((100vw-72rem)/2))]">
-          {catalog.map((item) => (
+          {catalog.map((item, i) => (
             <div key={item.slug} className="w-[220px] shrink-0 snap-start sm:w-[248px]">
-              <CatalogCard item={item} />
+              {/* The first two cards are above the fold at every width, so
+                  they shouldn't wait for the lazy-load intersection check.
+                  `eager`, not `priority` -- priority would inject a preload
+                  that competes with the hero, which is the LCP element. */}
+              <CatalogCard item={item} eager={i < 2} />
             </div>
           ))}
         </div>
