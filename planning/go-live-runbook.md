@@ -8,9 +8,9 @@
 > webhook endpoint, and step 8 tells staff to re-register on an instance they are
 > already on. Kept as the record of how the swap was done.
 >
-> **Still outstanding from Part D: the AED 390 test charge has NOT been refunded.**
-> Verified against the Stripe API on 2026-08-23 — `refunded: false`,
-> `amount_refunded: 0` on charge `ch_3U7GbOFG6ccJjMKM0i0cgAZD`.
+> Part D is complete too: the AED 390 test charge was refunded in full on
+> 2026-08-23. Verified against the Stripe API — `refunded: true`,
+> `amount_refunded: 39000` on charge `ch_3U7GbOFG6ccJjMKM0i0cgAZD`.
 
 ---
 

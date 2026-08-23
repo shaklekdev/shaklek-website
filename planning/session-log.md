@@ -210,7 +210,9 @@ created `cs_test_` sessions and wrote 2 orders / 11 `order_items` into the
 would have written into the live orders table — which is exactly how the 7
 stale `cs_test_` rows got there.
 
-**Not pushed.** Three commits sit unpushed on `main`. Pushing deploys the live
-checkout flow, so it is the founder's call. Before pushing: refund the AED 390
-test charge (`ch_3U7GbOFG6ccJjMKM0i0cgAZD`, confirmed `refunded: false` on
-2026-08-23), and do a real payment test after the deploy lands.
+**Pushed 2026-08-23** after the AED 390 test charge was refunded in full
+(`ch_3U7GbOFG6ccJjMKM0i0cgAZD`, `refunded: true`, `amount_refunded: 39000`,
+verified against the Stripe API rather than taken on trust). The cart-edit,
+stepper, thumbnail and quantity work is live. **A real payment test on a real
+phone is still the outstanding verification** — this batch changes the flow
+where money moves, and no synthetic check substitutes for that.
