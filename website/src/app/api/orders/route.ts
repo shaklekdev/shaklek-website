@@ -213,6 +213,14 @@ export async function POST(req: NextRequest) {
       // validates it on the hosted page; the webhook persists it.
       shipping_address_collection: { allowed_countries: ["AE"] },
       phone_number_collection: { enabled: true },
+      // Lets a customer enter a promotion code on Stripe's hosted page. The
+      // codes themselves live in Stripe, so nothing about a discount is
+      // decided here and nothing about one can be asserted by the caller --
+      // the amount actually collected comes back on the signed webhook
+      // payload (see api/webhooks/stripe). The order row is written with the
+      // catalog total *before* any discount, because at this point no
+      // discount exists yet; the webhook corrects it to what Stripe charged.
+      allow_promotion_codes: true,
       line_items: priced.map((item) => ({
         quantity: item.quantity,
         price_data: {

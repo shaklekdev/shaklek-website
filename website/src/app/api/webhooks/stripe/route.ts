@@ -47,6 +47,17 @@ export async function POST(req: NextRequest) {
 
   const session = event.data.object as {
     client_reference_id: string | null;
+    // What Stripe actually collected, in the currency's smallest unit (fils
+    // for AED), AFTER any promotion code. The order row was written at
+    // checkout with the catalog total, before a discount could exist -- so
+    // without this a 99%-off welcome-offer order records AED 390 when 3.90
+    // was collected, and every discounted order overstates revenue.
+    //
+    // This is the only trustworthy source for the figure: it arrives on a
+    // Stripe-signed payload that constructEvent() has already verified. The
+    // discount is never read from, or asserted by, the request body.
+    amount_total?: number | null;
+    currency?: string | null;
     // The 2026-07-29 API nests this under collected_information; older
     // versions put it at the top level. Read both so a future API version
     // bump on the account cannot silently drop the delivery address.
@@ -80,6 +91,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
+  // AED is a two-decimal currency, so amount_total is in fils. Guard the
+  // currency rather than assuming: if the account ever charges a zero-decimal
+  // currency (JPY has no minor unit), dividing by 100 would under-record the
+  // charge by 100x. Anything unexpected leaves the total untouched and says
+  // so, which is recoverable -- a silently wrong revenue figure is not.
+  let chargedAed: string | null = null;
+  if (typeof session.amount_total === "number") {
+    const currency = (session.currency ?? "aed").toLowerCase();
+    if (currency === "aed") {
+      chargedAed = (session.amount_total / 100).toFixed(2);
+    } else {
+      console.error(
+        `[webhooks/stripe] order ${orderId} settled in unexpected currency ${currency} — total left as booked`,
+      );
+    }
+  }
+
   const shipping = session.collected_information?.shipping_details ?? session.shipping_details ?? null;
   const address = shipping?.address ?? null;
   if (!address?.line1) {
@@ -98,6 +126,9 @@ export async function POST(req: NextRequest) {
     .update(schema.orders)
     .set({
       status: "paid",
+      // Only overwrite when Stripe told us a figure. Falling back to the
+      // booked total is right for a session that carries no amount_total.
+      ...(chargedAed !== null ? { totalAed: chargedAed } : {}),
       shippingName: shipping?.name ?? session.customer_details?.name ?? null,
       shippingPhone: session.customer_details?.phone ?? null,
       shippingLine1: address?.line1 ?? null,

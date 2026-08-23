@@ -34,6 +34,35 @@ Shipped:
 - **Quantity**, with the cart and header badge counting garments not lines.
 - **Checkout email** — the Pay button no longer sits greyed out unexplained.
 
+### Session B — promotion codes & charged-amount recording (2026-08-23)
+
+**Status: DONE. No files held.**
+
+- `allow_promotion_codes: true` on the Checkout Session.
+- The webhook now records `session.amount_total` as the order total, so a
+  discounted order stops reporting the pre-discount figure. Previously a
+  99%-off order recorded AED 390 against AED 3.90 collected, and every
+  welcome-offer order would have overstated revenue.
+
+The discount is only ever read from Stripe's signed webhook payload, after
+`constructEvent()` has verified it — never from the request body, and never
+asserted by the caller. `amount_total` arrives in fils (AED is two-decimal
+per docs.stripe.com/currencies), and the conversion is guarded on
+`session.currency`: an unexpected currency leaves the total as booked and
+logs loudly, rather than silently under-recording by 100x.
+
+Knock-on, fixed in the same commit: the confirmation emails would otherwise
+have listed items summing to AED 390 above a total of AED 3.90, which reads
+as a broken email. Both emails now name the discount. It is derived from
+the gap between subtotal and total, so nothing extra had to be persisted.
+
+`scripts/test-promo-discount.mjs` covers both calculations.
+
+**Not verified end to end.** Creating a discounted Checkout Session would
+mean a live Stripe session against production, which CLAUDE.md forbids. A
+real discounted payment is the founder's to run — which enabling promotion
+codes was partly meant to make cheap.
+
 ### Session A — security & infrastructure
 
 Holding (per its own commits): `src/db/client.ts`, `src/lib/envGuard.ts`,

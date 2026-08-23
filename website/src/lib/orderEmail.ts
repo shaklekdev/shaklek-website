@@ -3,6 +3,22 @@
 // Needs RESEND_API_KEY to actually send — logs instead when it's unset, so
 // neither caller ever throws just because email isn't wired up yet.
 
+
+// With promotion codes enabled, the total persisted against an order is what
+// Stripe actually collected, while the item rows still carry catalog prices.
+// Without naming the gap, a discounted confirmation lists items summing to
+// AED 390 and then a total of AED 3.90 -- which reads as a broken email to
+// the customer and as a pricing error to the stylist. Derived, not stored:
+// nothing new has to be persisted to say it truthfully.
+export function discountLine(items: { price: number; quantity?: number }[], total: number): number {
+  const subtotal = items.reduce((sum, i) => sum + i.price * (i.quantity ?? 1), 0);
+  const discount = subtotal - total;
+  // Only a real reduction counts. Rounding noise and any case where the
+  // charge exceeds the subtotal (shipping, tax) is left unannotated rather
+  // than shown as a negative discount.
+  return discount > 0.005 ? discount : 0;
+}
+
 export type NotifyOrderItem = {
   name: string;
   // Units of this line. Server-resolved before it reaches here (see
@@ -52,7 +68,10 @@ export async function sendOrderNotificationEmail(
     })
     .join("\n");
 
-  const summary = `New order (${items.length} ${items.length === 1 ? "item" : "items"}) from ${email}, AED ${total} via ${method}\n${itemLines}`;
+  const notifyDiscount = discountLine(items, total);
+  const summary = `New order (${items.length} ${items.length === 1 ? "item" : "items"}) from ${email}, AED ${total}${
+    notifyDiscount > 0 ? ` (after -AED ${notifyDiscount.toFixed(2)} discount)` : ""
+  } via ${method}\n${itemLines}`;
 
   // Reference photos arrive as base64 data URLs in the request body. Resend
   // caps a message at 40MB total; more to the point, an uncapped attachment
@@ -139,6 +158,8 @@ export async function sendCustomerConfirmationEmail(
     )
     .join("");
 
+  const discount = discountLine(items, total);
+
   const html = `
     <div style="font-family:-apple-system,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;color:#1a1a1a;">
       <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:300;font-size:24px;margin-bottom:4px;">Order confirmed</h1>
@@ -146,7 +167,14 @@ export async function sendCustomerConfirmationEmail(
         Thank you — your ${items.length === 1 ? "piece is" : "pieces are"} on ${items.length === 1 ? "its" : "their"} way to being made.
       </p>
       <table style="width:100%;border-collapse:collapse;margin-top:16px;">${itemRows}</table>
-      <p style="text-align:right;font-size:16px;font-weight:600;margin-top:12px;">Total AED ${esc(total)}</p>
+      ${
+        discount > 0
+          ? `<p style="text-align:right;font-size:13px;color:#6b6b6b;margin:12px 0 0;">Discount &minus;AED ${esc(
+              discount.toFixed(2),
+            )}</p>`
+          : ""
+      }
+      <p style="text-align:right;font-size:16px;font-weight:600;margin-top:${discount > 0 ? "4" : "12"}px;">Total AED ${esc(total)}</p>
       <p style="font-size:13px;color:#6b6b6b;line-height:1.6;">
         A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor.
         Expect delivery in about 10 days from confirmation.
@@ -164,7 +192,9 @@ export async function sendCustomerConfirmationEmail(
       </div>
     </div>`;
 
-  const text = `Order confirmed — thank you! Total AED ${total}. A stylist will reach out within 24 hours. Track this and future orders by creating a free account with this same email at ${appUrl}/sign-up`;
+  const text = `Order confirmed — thank you!${
+    discount > 0 ? ` Discount -AED ${discount.toFixed(2)}.` : ""
+  } Total AED ${total}. A stylist will reach out within 24 hours. Track this and future orders by creating a free account with this same email at ${appUrl}/sign-up`;
 
   if (!apiKey) {
     console.log(`[orders] RESEND_API_KEY not set — customer confirmation not emailed to ${email}.`);
