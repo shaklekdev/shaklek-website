@@ -2,6 +2,7 @@
 
 Working documents covering everything left to build, organized by workstream. Each one is grounded in what actually exists in the codebase today, not generic advice — cross-reference the live site's code at `../website` and the business dossier for the decisions behind each item.
 
+- [`marketing/instagram-launch.md`](./marketing/instagram-launch.md) — the 9-post launch grid, captions, reels, bio, and verified licence-clear photography with links
 - [`founder-notes-triage.md`](./founder-notes-triage.md) — the founder's raw notes, checked against what the code actually does. Three were already fixed; the rest have evidence and an owner
 - [`session-log.md`](./session-log.md) — **read this first**: more than one Claude session works this repo against one working tree. Who is holding which files, what shipped, what is open.
 - [`security/`](./security/) — the 2026-08-23 external audit, and `rca-2026-08-23.md`: why a live price vulnerability shipped, and the rules that came out of it
