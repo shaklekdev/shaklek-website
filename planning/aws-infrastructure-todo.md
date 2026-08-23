@@ -22,7 +22,7 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 ## Immediate: get the site live at all
 - [x] **AWS Amplify Hosting** — connected, deploys on every push to `main`, HTTPS and CDN handled automatically
 - [x] Point `shaklek.com`'s DNS at the Amplify app — done, DNS stayed at GoDaddy. `www` is a CNAME to CloudFront and works fully. The apex has a caveat, see "Nice to have" below.
-- [ ] **AWS Budgets + a billing alarm**, set up on day one, before anything else goes live
+- [ ] **AWS Budgets + a billing alarm** — ⚠️ **now overdue, not sequenced.** This was meant to land before go-live; the site has been live and taking real money since 2026-08-22. Confirm whether one exists: `aws budgets describe-budgets --account-id <id>`
 
 ## Nice to have — NOT required for MVP
 
@@ -77,16 +77,16 @@ Rollback: switch the nameservers back at GoDaddy. Allow for propagation delay, s
 - [x] **Amplify + Next.js SSR gotcha, hit and fixed 2026-08-14 — hit again 2026-08-16**: environment variables set in the Amplify Console are only injected at *build* time by default — a Next.js server route (or `proxy.ts`) reading `process.env.X` at runtime sees nothing, even after a redeploy, until the build spec explicitly writes them into `.env.production`. Confirmed via AWS's own docs (`docs.aws.amazon.com/amplify/.../ssr-environment-variables.html`). Fixed by updating the app's build spec (`aws amplify update-app --build-spec ...`, since this app has no repo-committed `amplify.yml` — the spec lives on the App resource itself). **Recurred 2026-08-16**: adding Clerk (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, `STAFF_EMAILS`, `NEXT_PUBLIC_CLERK_SIGN_IN_URL`) to the Console env vars wasn't enough on its own — `/dashboard/*` 500'd in production (worked fine locally) until those 4 names were also added to the grep list. Current full list: `env | grep -e DATABASE_URL -e STRIPE_SECRET_KEY -e STRIPE_WEBHOOK_SECRET -e RESEND_API_KEY -e NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY -e CLERK_SECRET_KEY -e STAFF_EMAILS -e NEXT_PUBLIC_CLERK_SIGN_IN_URL >> .env.production` before `npm run build` (also dropped the now-unused `DASHBOARD_PASSWORD` from the list). **Any future secret env var added in the Amplify Console must also be added to that grep list**, or it silently won't reach the running site — confirmed twice now to be genuinely easy to lose time to.
 
 ## Storage
-- [ ] **S3 bucket** for catalog images and uploaded reference photos — genuinely a small task: create the bucket, attach an IAM permission so Amplify can write to it, swap `/api/custom-requests` from base64-emailing images to uploading them to S3 instead. Not the same scope as the database work.
+- [ ] **S3 bucket** for catalog images and uploaded reference photos — genuinely a small task: create the bucket, attach an IAM permission so Amplify can write to it, swap the base64-emailing of reference photos for an S3 upload (note: `/api/custom-requests` no longer exists — it was unified into `/api/orders`). Not the same scope as the database work.
 
-## Authentication — decided: Clerk, not yet built
+## Authentication — Clerk, BUILT and on production keys
 - [x] **Clerk** over Cognito and Auth.js — outside the AWS umbrella, but the least ongoing maintenance of the three for a solo maintainer (managed sign-in UI, sessions, magic link all handled), and its free tier covers pilot scale. See `payment-auth-todo.md` for the full reasoning. Needed for customer accounts and separate staff logins (tailor swipe tool, admin dashboard, trend review dashboard).
 
-## Payment gateway — decided: Stripe, likely blocked on incorporation
+## Payment gateway — Stripe, LIVE and taking real money
 - [x] **Stripe** over Telr/PayTabs — best docs, Stripe Checkout removes most PCI burden, settles in AED. See `payment-auth-todo.md` for the full reasoning. Most gateways require a registered business entity for a real merchant account, so account creation is still gated on the incorporation decision, not a purely technical one.
 
 ## Email
-- [x] Already handled outside AWS — Microsoft 365 (`hello@`, `orders@`, `support@shaklek.com`) is already purchased and configured. No need for SES unless/until transactional volume from the app itself gets large — **Resend is already wired into the code** (`backend-todo.md`), just needs an API key.
+- [x] Already handled outside AWS — Microsoft 365 (`hello@`, `orders@`, `support@shaklek.com`) is already purchased and configured. No need for SES unless/until transactional volume from the app itself gets large — **Resend is wired in and live** — the key is set and both the stylist notification and the customer confirmation send from the Stripe webhook.
 
 ## Cost discipline
 - [ ] On-demand / usage-based pricing only — no Reserved Instance or Savings Plan commitment until there's a real, predictable traffic pattern to commit against

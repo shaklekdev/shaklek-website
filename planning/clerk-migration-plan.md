@@ -1,6 +1,8 @@
 # Getting Clerk off the public routes
 
-**Status: plan only. Nothing here is implemented.**
+**Status: plan only. Nothing here is implemented.
+
+⚠️ **The measurements below were taken against the Clerk *development* instance (`clerk.accounts.dev`).** Production moved to `clerk.shaklek.com` on 2026-08-22, so the verification recipe targets a hostname that no longer appears in production traffic, and the latency/request counts must be re-measured before this plan is acted on. The architectural argument is unaffected.**
 
 ## The measurement
 

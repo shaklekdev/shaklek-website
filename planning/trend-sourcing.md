@@ -40,7 +40,7 @@ The AWS architecture doc's Lambda trend-intake job (`aws-architecture-diagram.ht
 ## Next, in order
 1. Retest `google-interest` from a non-datacenter connection to know if this is really a permanent blocker or just this environment
 2. Build the Namshi/Ounass "trending now" page checker (structured signal extraction, not scraping full listings) — ToS check per site first
-3. Only once both of the above are real: wire actual results into `/dashboard/trends` instead of the mock data in `src/data/trends.ts`, and have the Lambda-equivalent step call Claude on Bedrock to turn raw signals into the candidate-concept shape the dashboard expects
+3. Only once both of the above are real: wire actual results into `/dashboard/trends` instead of the mock data in `src/data/trends.ts`, and have the Lambda-equivalent step call Google Gemini (~~Claude on Bedrock~~ — superseded 2026-08-12) to turn raw signals into the candidate-concept shape the dashboard expects
 
 ---
 *This file, `ai-integration-todo.md`, and the rest of `planning/` are the shared source of truth across every session working on this project — keep them current rather than letting decisions live only in chat history.*

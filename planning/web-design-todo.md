@@ -11,8 +11,8 @@ Status: a real, consistent design system exists and is in production use (Georgi
 
 ### Imagery — closed as of 2026-08-16
 - [x] All 8 catalog items now have real AI-generated photography with per-color front/back image variants (`website/public/catalog/`) — the CSS-gradient-placeholder gap is closed. Gradient values remain in `catalog.ts` only as a fallback background, not the primary display.
-- [ ] Favicon and app icons — currently using Next.js defaults
-- [ ] Open Graph / social share images per page
+- [x] Favicon and app icons — done 2026-08-17, code-generated "SK" monogram (see the Favicon section below, which this line contradicted)
+- [x] Open Graph / social share images per page — done 2026-08-22
 
 ### States nothing has been designed for yet
 - [ ] Empty states (e.g. no search results, if search gets added)
@@ -21,7 +21,7 @@ Status: a real, consistent design system exists and is in production use (Georgi
 - [x] 404 page — brand-styled (header, serif "Nothing here" heading, "Back to catalog" button), not the Next.js default
 
 ### Not designed at all
-- [ ] Account pages (login, order history, "my wardrobe")
+- [x] Account pages — `/sign-in` and `/account` (order history, saved measurements, name) built and styled 2026-08-16. Only "my wardrobe" remains
 - [ ] Shaklek+ subscription — pricing page, avatar try-on UI
 - [ ] Admin/tailor-facing tools (swipe interface, order dashboard) — these need their own, more utilitarian design language, not the consumer brand system
 

@@ -1,3 +1,19 @@
+> # ⚠️ ALREADY EXECUTED — 2026-08-22. DO NOT RE-RUN.
+>
+> Parts A–C were carried out and verified: Stripe live keys, live webhook registered
+> for both events, Clerk production instance on `clerk.shaklek.com`, and a real
+> AED 390 Apple Pay payment that settled and flowed through the webhook.
+>
+> Re-running this would do damage — step 3 would register a **duplicate** live
+> webhook endpoint, and step 8 tells staff to re-register on an instance they are
+> already on. Kept as the record of how the swap was done.
+>
+> **Still outstanding from Part D: the AED 390 test charge has NOT been refunded.**
+> Verified against the Stripe API on 2026-08-23 — `refunded: false`,
+> `amount_refunded: 0` on charge `ch_3U7GbOFG6ccJjMKM0i0cgAZD`.
+
+---
+
 # Go-live runbook — Stripe live keys + Clerk production
 
 Written 2026-08-22. Do these **in order**, then push. Nothing here needs a code
@@ -16,7 +32,7 @@ once you say the swap is done.
 | Amplify app | `dqcptedylrif0`, region `eu-west-1`, branch `main` |
 | Live site | `https://www.shaklek.com` (the apex `shaklek.com` 404s) |
 | Stripe account | `acct_1U4N2wFG6ccJjMKM` — verified, charges and payouts enabled |
-| Unpushed work | 15 commits on `main`, including the new prices |
+| Unpushed work | ~~15 commits on `main`~~ — stale snapshot; that work is pushed and live |
 
 Env vars currently set in Amplify: `CLERK_SECRET_KEY`, `DATABASE_URL`,
 `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `NEXT_PUBLIC_CLERK_SIGN_IN_URL`,

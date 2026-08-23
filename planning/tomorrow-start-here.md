@@ -1,3 +1,15 @@
+> ⚠️ **Written 2026-08-22 evening. Superseded for anything after that date —
+> read `session-log.md` first.** This file predates the 2026-08-23 external
+> security audit and the 13 fixes that followed it, the mobile nav, the size
+> chart, measurement validation, and the Neon dev-branch split. It also
+> predates a second Claude session working this repo concurrently.
+>
+> Two items below are now claimed by that session and must not be
+> double-assigned: **"Edit from the cart"** and **"Quantity"** are built and
+> uncommitted — see `session-log.md`.
+
+---
+
 # Start here — 2026-08-22, evening session
 
 ## Where things stand: Shaklek takes real money

@@ -1,6 +1,6 @@
 # Incorporation — TODO
 
-Status: **trade license issued** (as of 2026-08-14) — the Instant Licence application referenced below went through. Corporate bank account application is **submitted to Wio Bank and under review as of 2026-08-17** — this is what unlocks the real Stripe merchant account (live payments) once approved. Trade license details/number not yet logged here — worth pasting in once handy for future reference.
+Status (2026-08-23): trade license issued, **Wio corporate bank account is open**, and the **Stripe merchant account is verified and taking live payments** (since 2026-08-22, payouts weekly on Mondays). Still genuinely open: trademark registration, and confirming the "Tailoring" activity on the licence.
 
 You're already a UAE resident with an Emirates ID and setting up in Dubai — no investor/residency visa needed. Checked directly against the official Invest in Dubai government portal (12 August 2026): the core retail activity ("Ready-made Garments Trading") is confirmed approval-free, meaning the fast ~5-minute **Instant Licence** is very likely available. Decision: apply now with Ready-made Garments Trading only — don't wait on confirming whether "Tailoring" also qualifies, that can be added later by amending the license once the business is running. Getting a real license issued matters more right now than getting the activity list perfectly complete on day one.
 
@@ -31,12 +31,12 @@ The one open question: Shaklek isn't *only* ready-made garments trading — it's
 - [x] **Decide legal structure** — Mainland Sole Establishment (single owner, simplest, no MOA needed)
 - [x] **Reserve the trade name "Shaklek"** with Dubai DED via the Invest in Dubai portal — done 12 August 2026, Application No. BL-20260812026191
 - [x] **Apply for the Instant Licence** — trade license issued as of 14 August 2026
-- [ ] **Corporate bank account** — application submitted to **Wio Bank**, **under review as of 2026-08-17**. UAE banks are generally slow/selective with new small e-commerce businesses, but Wio specifically markets itself as fast digital-first onboarding for SMEs, which fits here. This is what actually unlocks Stripe below.
+- [x] **Corporate bank account** — DONE. Wio account open and attached to Stripe as the payout destination (weekly, Mondays). Original note: — application submitted to **Wio Bank**, **under review as of 2026-08-17**. UAE banks are generally slow/selective with new small e-commerce businesses, but Wio specifically markets itself as fast digital-first onboarding for SMEs, which fits here. This is what actually unlocks Stripe below.
 - [ ] *(Deferred, not blocking)* Confirm whether "Tailoring" also qualifies as approval-free — add as a second activity later via a license amendment once the business is running, not before
 
 ## What this unblocks, once the trade license exists
 
-- [ ] **Stripe merchant account** — Stripe UAE accepts a mainland trade license directly (also accepts free zone, for reference, so this specific piece wasn't actually the reason to go mainland — the direct-to-consumer restriction above was). Needs: trade license, MOA (if applicable), active UAE business bank account, and passport/Emirates ID/visa copies for any owner with 25%+ ownership. See `payment-auth-todo.md`.
+- [x] **Stripe merchant account** — DONE, verified 2026-08-20; live payments since 2026-08-22. Original note: — Stripe UAE accepts a mainland trade license directly (also accepts free zone, for reference, so this specific piece wasn't actually the reason to go mainland — the direct-to-consumer restriction above was). Needs: trade license, MOA (if applicable), active UAE business bank account, and passport/Emirates ID/visa copies for any owner with 25%+ ownership. See `payment-auth-todo.md`.
 - [ ] **UAE trademark registration for "Shaklek"** — start this in parallel, not after, since it's the slow one:
   - Filed once with the Ministry of Economy & Tourism's federal system — covers all 7 emirates, no separate per-emirate filing
   - Cost: roughly **AED 6,500** for application/examination/publication, plus a further **AED 5,000** final registration fee after the opposition period clears — call it **~AED 11,000–12,000 all-in per class** (a class = a category of goods/services; confirm which class(es) actually cover made-to-order clothing + a digital platform, may need two)
