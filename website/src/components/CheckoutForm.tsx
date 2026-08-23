@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
+import { previewDiscountAed, previewTotalAed } from "@/lib/promoPreview";
 import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
 
@@ -24,8 +25,22 @@ export default function CheckoutForm({ total }: { total: number }) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [promoInput, setPromoInput] = useState("");
+  const [promoChecking, setPromoChecking] = useState(false);
+  const [promoError, setPromoError] = useState<string | null>(null);
+  // What Stripe said this code is worth. Display only -- the real discount
+  // is applied by Stripe against the code itself, and the amount finally
+  // charged is read back off the signed webhook. Nothing here moves money.
+  const [promo, setPromo] = useState<{
+    code: string;
+    percentOff: number | null;
+    amountOffAed: number | null;
+  } | null>(null);
 
 
+
+  const previewDiscount = promo ? previewDiscountAed(total, promo) : 0;
+  const previewTotal = promo ? previewTotalAed(total, promo) : total;
 
   // Signed-in customers checkout under their account email, not whatever
   // they happen to type -- orders are matched to /account by email, so
@@ -36,6 +51,36 @@ export default function CheckoutForm({ total }: { total: number }) {
     }
   }, [isSignedIn, user]);
 
+  async function applyPromo() {
+    const code = promoInput.trim();
+    if (!code) return;
+    setPromoChecking(true);
+    setPromoError(null);
+    try {
+      const res = await fetch("/api/promo/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setPromo(null);
+        setPromoError(data.error ?? "That code isn't valid");
+        return;
+      }
+      setPromo({
+        code: data.code,
+        percentOff: data.percentOff,
+        amountOffAed: data.amountOffAed,
+      });
+      setPromoInput("");
+    } catch {
+      setPromoError("Could not check that code. Please try again.");
+    } finally {
+      setPromoChecking(false);
+    }
+  }
+
   async function handlePay() {
     setSubmitting(true);
     setError(null);
@@ -43,7 +88,7 @@ export default function CheckoutForm({ total }: { total: number }) {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, method, total, email }),
+        body: JSON.stringify({ items, method, total, email, promotionCode: promo?.code ?? null }),
       });
 
       // Every failure path below used to fall through to the success page:
@@ -98,11 +143,81 @@ export default function CheckoutForm({ total }: { total: number }) {
         </div>
       )}
 
-      {/* The discount field lived here as well as on Stripe's page. Asking
-          for the same code twice, two screens apart, reads as a bug -- and it
-          was the one on Stripe that actually applied it. Removed; Stripe now
-          collects it once, where it takes effect. /api/promo/validate and
-          promoPreview.ts are kept for a future in-page summary. */}
+      {/* Discounts used to be reachable only after the redirect, on Stripe's
+          page -- so someone arriving from a campaign with a code in hand saw
+          the full price here and had to trust it would be honoured. */}
+      <div className="mb-5">
+        <label htmlFor="promo-code" className="mb-2 block text-sm text-text">
+          Discount code <span className="text-text-3">(optional)</span>
+        </label>
+        {promo ? (
+          <div className="flex items-center justify-between rounded-shaklek-xs border border-accent bg-surface-2 px-3 py-2.5">
+            <p className="text-sm text-text">
+              <span className="font-medium">{promo.code}</span>{" "}
+              <span className="text-text-2">
+                {promo.percentOff != null
+                  ? `— ${promo.percentOff}% off`
+                  : `— AED ${promo.amountOffAed} off`}
+              </span>
+            </p>
+            <button
+              onClick={() => {
+                setPromo(null);
+                setPromoError(null);
+              }}
+              className="text-xs text-text-3 underline hover:text-text-2"
+            >
+              Remove
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <input
+              id="promo-code"
+              value={promoInput}
+              onChange={(e) => {
+                setPromoInput(e.target.value);
+                setPromoError(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applyPromo();
+                }
+              }}
+              placeholder="Enter a code"
+              autoComplete="off"
+              autoCapitalize="characters"
+              className="flex-1 rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text uppercase placeholder:text-text-3 placeholder:normal-case focus:border-accent focus:outline-none"
+            />
+            <button
+              onClick={applyPromo}
+              disabled={promoChecking || !promoInput.trim()}
+              className="rounded-shaklek-xs border border-border-strong px-5 text-sm text-text transition-colors hover:bg-surface-2 disabled:opacity-40"
+            >
+              {promoChecking ? "Checking…" : "Apply"}
+            </button>
+          </div>
+        )}
+        {promoError && (
+          <p role="alert" aria-live="polite" className="mt-1.5 text-xs text-red-700">
+            {promoError}
+          </p>
+        )}
+        {promo && (
+          <div className="mt-3 border-t border-border pt-3 text-sm">
+            <div className="flex justify-between text-text-2">
+              <span>Discount</span>
+              <span>&minus;AED {previewDiscount.toFixed(2)}</span>
+            </div>
+            <div className="mt-1 flex justify-between font-medium text-text">
+              <span>New total</span>
+              <span>AED {previewTotal.toFixed(2)}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
         Your email <span className="text-text-3">(required)</span>
       </label>
@@ -172,7 +287,12 @@ export default function CheckoutForm({ total }: { total: number }) {
                 most prominent price on the page was the only wrong one.
                 Only shows fils when discounted, so an undiscounted checkout
                 still reads "Pay AED 389" rather than "389.00". */}
-            {submitting ? "Processing…" : `Pay AED ${total}`}
+            {/* Follows the discount, so the most prominent price on the page
+                is never the wrong one. Only shows fils when discounted, so an
+                undiscounted checkout still reads "Pay AED 389". */}
+            {submitting
+              ? "Processing…"
+              : `Pay AED ${promo ? previewTotal.toFixed(2) : total}`}
           </button>
           {/* Without this the button just sits greyed out and the customer is
               left guessing -- the commonest reason checkout stalls here. */}

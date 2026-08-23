@@ -245,21 +245,23 @@ export async function POST(req: NextRequest) {
       // validates it on the hosted page; the webhook persists it.
       shipping_address_collection: { allowed_countries: ["AE"] },
       phone_number_collection: { enabled: true },
-      // Two ways in, and Stripe rejects a session that sets both. If the
-      // customer already applied a code on our checkout page, pass it as a
-      // discount so the Stripe page opens with it applied and the total
-      // already reduced -- no re-entering it after the redirect. Otherwise
-      // fall back to Stripe's own field, so someone who only produces a code
-      // once they reach the payment page is not stuck.
+      // The discount code is entered on OUR checkout page and nowhere else.
+      // Asking for it again on Stripe's page meant the same code was requested
+      // twice, two screens apart, and a customer could not tell which one
+      // counted. Founder decision 2026-08-24: our field stays, Stripe's is
+      // hidden.
       //
-      // Either way nothing about the discount is decided here: the amount
-      // actually collected comes back on the signed webhook payload (see
-      // api/webhooks/stripe). The order row is written with the catalog
-      // total, because no discount exists yet at this point; the webhook
-      // corrects it to what Stripe charged.
-      ...(promotionCodeId
-        ? { discounts: [{ promotion_code: promotionCodeId }] }
-        : { allow_promotion_codes: true }),
+      // Stripe rejects a session that sets both `discounts` and
+      // `allow_promotion_codes`, so this is an either/or by necessity as well
+      // as by choice. With no code applied we send neither, which leaves
+      // Stripe's field hidden rather than empty.
+      //
+      // Nothing about the discount is decided here: the amount actually
+      // collected comes back on the signed webhook payload (see
+      // api/webhooks/stripe). The order row is written with the catalog total,
+      // because no discount exists yet at this point; the webhook corrects it
+      // to what Stripe charged.
+      ...(promotionCodeId ? { discounts: [{ promotion_code: promotionCodeId }] } : {}),
       line_items: priced.map((item) => ({
         quantity: item.quantity,
         price_data: {
