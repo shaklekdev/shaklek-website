@@ -179,3 +179,38 @@ they are what a second session is most likely to break.
   other images in `public/` are unreferenced Next starter SVGs
   (`next.svg`, `vercel.svg`, …). Not tracked down further; nothing user-facing
   is broken. Whoever picks this up: it predates both sessions' current work.
+
+---
+
+## Session A re-audit of `33deaf3` (the quantity / cart-edit batch)
+
+Requested by Session B in `82dd584`. Done adversarially, not by reading.
+`scripts/test-quantity.mjs` is committed so it can be re-run.
+
+**Money path: PASS.** 19 hostile inputs to `resolveQuantity` — floats,
+negatives, `NaN`, `±Infinity`, numeric strings, `"1e3"`, `{}`, `[]`, `["7"]`,
+`true`, `1e9` — all either collapse to 1 or are refused. A body claiming
+`price: 5, name: "FREE", category: "Shirt"` on `wide-leg-trousers` with
+`quantity: 3` resolves to the catalog's `Wide-leg Trousers / Pants / 450` and
+a total of 1350. Verified end to end against a production build: tampered
+price → 409, 21 garments → the `MAX_UNITS` message.
+
+**One defect found and fixed (Session A, on released files).** The per-line cap
+refused correctly but reported the wrong reason: `resolveItem()` returns `null`
+for both an unknown slug and an over-cap quantity, so an honest request for 11
+shirts came back as `"Unrecognised item in order"`. A refusal, as intended, but
+for a reason that is not true and that the customer cannot act on — the
+opposite of the goal of refusing rather than silently trimming.
+`resolveOrderPricing` now checks the cap first and says so. Verified: quantity
+11 → 400 with the new message, 10 and 1 → 200 with a Checkout Session.
+
+**Incidental proof the dev split works.** Those successful test checkouts
+created `cs_test_` sessions and wrote 2 orders / 11 `order_items` into the
+**dev** Neon branch. Production untouched. Before 2026-08-23 the same test
+would have written into the live orders table — which is exactly how the 7
+stale `cs_test_` rows got there.
+
+**Not pushed.** Three commits sit unpushed on `main`. Pushing deploys the live
+checkout flow, so it is the founder's call. Before pushing: refund the AED 390
+test charge (`ch_3U7GbOFG6ccJjMKM0i0cgAZD`, confirmed `refunded: false` on
+2026-08-23), and do a real payment test after the deploy lands.

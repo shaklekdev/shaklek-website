@@ -89,6 +89,18 @@ export function resolveOrderPricing(items: IncomingItem[]):
   const priced: PricedItem[] = [];
 
   for (const item of items) {
+    // Check the quantity cap first so the customer is told the real reason.
+    // resolveItem() returns null for both an unknown slug and an over-cap
+    // quantity, so without this an honest request for 11 shirts came back as
+    // "Unrecognised item in order" -- a refusal, as intended, but for a
+    // reason that is not true and that the customer cannot act on.
+    if (resolveQuantity(item.quantity) === null) {
+      return {
+        ok: false,
+        error: `You can order up to ${MAX_QUANTITY_PER_ITEM} of one piece. Please reduce the quantity or add it as a second line.`,
+      };
+    }
+
     const resolved = resolveItem(item);
     if (!resolved) {
       return { ok: false, error: "Unrecognised item in order" };
