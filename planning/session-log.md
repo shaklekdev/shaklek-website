@@ -394,3 +394,36 @@ the discount flow can be exercised locally without touching live money.
 Also note: the dev-only origin allowance in `requestGuards.ts` is hardcoded
 to port 3000, so any dev server on another port needs
 `NEXT_PUBLIC_APP_URL=http://localhost:<port>` or every write route 403s.
+
+
+---
+
+## Founder decisions, 2026-08-24 — settled, do not re-raise
+
+**Stripe Adaptive Pricing is OFF.** Turned off in the Dashboard by the founder.
+It was converting prices to the customer's local currency — a French billing
+address saw EUR 94.56 instead of AED 390 — which is what produced the "paid 390
+but refunded 390.20" confusion. Stripe refunded exactly what was charged
+(`refunded: true`, `amount_refunded: 39000`); the 20 fils was the customer's
+own bank converting EUR back to AED at a different rate hours later. Adaptive
+Pricing also adds a 2–4% conversion fee the customer pays, and we only ship to
+the UAE, so showing a marked-up foreign price served nobody.
+
+**Verification note:** this cannot be confirmed from the repo. It will show on
+the next real order — a session with no `presentment_details`, or one whose
+presentment currency is AED, means it is off.
+
+**Licence number is 1645657.** Confirmed by the founder. The other number on
+the trade licence (2084779) sits beside the owner's name and is *not* the
+licence number. 1645657 is what is published in `/legal/terms` and
+`/legal/privacy`.
+
+**The WhatsApp number stays as the founder's personal mobile** (+971504766769,
+the same number printed on the trade licence). Raised as something to decide
+deliberately rather than leave by default; the founder has decided to keep it
+for now. Appropriate for a concierge brand at this stage. Revisit if volume
+makes a separate business line worthwhile.
+
+**Tailoring is not a Shaklek activity.** The tailor is an independent third
+party, not an employee. The licence's "Active Seller Online" is correct and
+sufficient — see `incorporation-todo.md`.

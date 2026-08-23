@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | Trade name | **Shaklek For Online Selling** — شكلك للبيع عبر الإنترنت |
-| Licence no. | **1645657** |
+| Licence no. | **1645657** — confirmed by the founder 2026-08-24 (the other number on the document, 2084779, is not the licence number) |
 | Legal form | Sole establishment (مؤسسة), owner 100% |
 | Emirate | Dubai |
 | Activity | Active Seller Online — بائع عبر الإنترنت |
