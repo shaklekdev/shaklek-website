@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 
 // Every origin below was traced to a specific thing that breaks without it,
 // so do not prune this list by eye:
@@ -36,9 +37,18 @@ import type { NextConfig } from "next";
 const CLERK_HOSTS = "https://clerk.shaklek.com https://*.clerk.accounts.dev";
 const CLERK_PROTECT = "https://*.protect.clerk.com";
 
-const CSP = [
+// React uses eval() in development to reconstruct callstacks and power other
+// debugging features. The CSP applies to `next dev` too, so without this the
+// dev server logs "eval() is not supported in this environment" and those
+// features silently stop working. Next's own CSP guide calls this out.
+//
+// Keyed off the config PHASE, not NODE_ENV. NODE_ENV was tried first and
+// leaked 'unsafe-eval' into the production header -- it is not reliably
+// "production" at the moment this module is evaluated, and a security header
+// must not depend on something that loose.
+const buildCsp = (isDev: boolean) => [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${CLERK_HOSTS} ${CLERK_PROTECT} https://challenges.cloudflare.com`,
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${CLERK_HOSTS} ${CLERK_PROTECT} https://challenges.cloudflare.com`,
   `connect-src 'self' ${CLERK_HOSTS} ${CLERK_PROTECT} https://clerk-telemetry.com https://*.clerk-telemetry.com https://img.clerk.com`,
   "img-src 'self' data: blob: https://img.clerk.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -52,7 +62,7 @@ const CSP = [
   "upgrade-insecure-requests",
 ].join("; ");
 
-const nextConfig: NextConfig = {
+const buildConfig = (isDev: boolean): NextConfig => ({
   // pdfkit reads its font .afm files relative to its own package dir at
   // runtime -- bundling it silently breaks that lookup (ENOENT on
   // Helvetica.afm). Keeping it external preserves the real node_modules
@@ -88,7 +98,7 @@ const nextConfig: NextConfig = {
           },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
-          { key: "Content-Security-Policy", value: CSP },
+          { key: "Content-Security-Policy", value: buildCsp(isDev) },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
             key: "Permissions-Policy",
@@ -119,6 +129,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-};
+});
 
-export default nextConfig;
+export default (phase: string): NextConfig => buildConfig(phase === PHASE_DEVELOPMENT_SERVER);

@@ -22,7 +22,7 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 ## Immediate: get the site live at all
 - [x] **AWS Amplify Hosting** — connected, deploys on every push to `main`, HTTPS and CDN handled automatically
 - [x] Point `shaklek.com`'s DNS at the Amplify app — done, DNS stayed at GoDaddy. `www` is a CNAME to CloudFront and works fully. The apex has a caveat, see "Nice to have" below.
-- [ ] **AWS Budgets + a billing alarm** — ⚠️ **now overdue, not sequenced.** This was meant to land before go-live; the site has been live and taking real money since 2026-08-22. Confirm whether one exists: `aws budgets describe-budgets --account-id <id>`
+- [x] **AWS Budgets + a billing alarm** — verified 2026-08-23, it exists and is wired: `shaklek-monthly-budget`, USD 50/month on account `793168138974`, with four notifications (ACTUAL at $10 and $25 absolute, plus ACTUAL and FORECASTED at 100%). Re-check with `aws budgets describe-budgets --account-id 793168138974` and `aws budgets describe-notifications-for-budget --account-id 793168138974 --budget-name shaklek-monthly-budget`.
 
 ## Nice to have — NOT required for MVP
 

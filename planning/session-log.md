@@ -216,3 +216,35 @@ verified against the Stripe API rather than taken on trust). The cart-edit,
 stepper, thumbnail and quantity work is live. **A real payment test on a real
 phone is still the outstanding verification** — this batch changes the flow
 where money moves, and no synthetic check substitutes for that.
+
+
+---
+
+## Closed: the "unsupported image format" error
+
+Left open by Session B after two passes. It is **not the image optimizer and not
+any catalog image** — which is why checking all 286 of them found nothing.
+
+It is `GET /icon` — the code-generated "SK" favicon (`src/app/icon.tsx`, an
+`ImageResponse`) — returning **500** under `next dev`. Caught by running the dev
+server with its output captured, driving the pages in headless Chrome so the
+browser actually requested the icon, and reading the log around the error rather
+than guessing at candidates.
+
+**Dev only. Production serves `/icon` and `/apple-icon` as 200.** Session B's
+call that nothing user-facing was broken was right. Not worth chasing further.
+
+## Fixed: the CSP was breaking React's dev tooling
+
+Found in the same log. `next dev` was logging *"eval() is not supported in this
+environment"* — React uses `eval()` in development to reconstruct callstacks and
+power other debugging features, and the CSP added on 2026-08-23 applies to the
+dev server too. Next's own CSP guide calls this out.
+
+`script-src` now includes `'unsafe-eval'` **in development only**.
+
+⚠️ **Keyed off the config `phase`, not `NODE_ENV`.** `NODE_ENV` was tried first
+and leaked `'unsafe-eval'` into the *production* header — it is not reliably
+`"production"` at the moment `next.config.ts` is evaluated. Verified both ways
+after the change: `next start` has no `unsafe-eval`, `next dev` has it. A
+security header must not depend on a signal that loose.
