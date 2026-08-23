@@ -6,6 +6,10 @@ on push to `main`. Planning docs in `planning/`.
 **Read this file only. Do not go read the whole catalog or planning folder to
 "get oriented" — everything load-bearing is here.**
 
+**One exception: `planning/session-log.md`.** More than one Claude session works
+on this repo at once. Read it before you start so you do not edit a file another
+session is holding uncommitted, and update it before you finish.
+
 **§7 matters more than the technical sections.** Nearly everything that has gone
 wrong on this project was scope creep or claiming success without checking —
 not missing knowledge. Read it before doing anything that costs money.
