@@ -202,16 +202,20 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewGradient={item.gradient}
             preloadImages={preloadImages}
             primaryAction={
-              <div className="mt-6">
+              // Back to the catalog was an 11px grey whisper under a full
+              // black button -- present, but not reading as a way out. Same
+              // size and shape as Next now, just grey on white, so the two
+              // read as a pair: the obvious next step, and the way back.
+              <div className="mt-5">
                 <button
                   onClick={() => setStep(3)}
-                  className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
+                  className="w-full rounded-full bg-accent px-8 py-3 text-sm text-white transition-opacity hover:opacity-90"
                 >
                   Next: get the fit →
                 </button>
                 <button
                   onClick={() => router.push("/")}
-                  className="mt-3 w-full text-xs text-text-3 hover:text-text-2"
+                  className="mt-2 w-full rounded-full border border-border px-8 py-3 text-sm text-text-2 transition-colors hover:border-border-strong hover:text-text"
                 >
                   ← Back to the catalog
                 </button>

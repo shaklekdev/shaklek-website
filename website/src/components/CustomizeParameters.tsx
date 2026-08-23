@@ -96,7 +96,7 @@ export default function CustomizeParameters({
           immediately, which meant tapping an option then scrolling back up to
           see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="sticky top-[98px] z-10 h-[54vh] max-h-[560px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)] lg:static lg:h-auto lg:aspect-[3/4] lg:max-h-none lg:shadow-none"
+        className="sticky top-[98px] z-10 h-[46vh] max-h-[480px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)] lg:static lg:h-auto lg:aspect-[3/4] lg:max-h-none lg:shadow-none"
         style={
           activeImage
             ? undefined
@@ -187,7 +187,7 @@ export default function CustomizeParameters({
 
       {/* Sliders */}
       {params.length > 0 && (
-        <div className="mt-6 flex flex-col gap-6">
+        <div className="mt-5 flex flex-col gap-4">
           {params.map((param) => {
             const current = spec.changes.find((c) => c.type === param.type);
             const activeIndex = Math.max(
@@ -214,7 +214,7 @@ export default function CustomizeParameters({
                       full width, where it is the only way to hold a 44px
                       target. */}
                   <div
-                    className="mt-2 grid gap-2 lg:max-w-sm"
+                    className="mt-1.5 grid gap-1.5 lg:max-w-xs"
                     style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
                   >
                     {param.options.map((option, i) => {
@@ -222,7 +222,7 @@ export default function CustomizeParameters({
                       return (
                         <label
                           key={option.value}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-shaklek-xs border px-2 py-2.5 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 lg:min-h-0 lg:py-2 lg:text-[11px] ${
+                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-shaklek-xs border px-2 py-2 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
                             selected
                               ? "border-text bg-text text-white"
                               : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
@@ -252,15 +252,18 @@ export default function CustomizeParameters({
           this is the escape hatch for everything else, and unlike the
           measurement notes in SizePicker it is available in both size modes.
           Carried through to the tailor's spec sheet via spec.freeformNotes. */}
-      <div className="mt-6">
-        <label htmlFor="customization-notes" className="mb-1 block text-xs text-text">
-          Anything you&apos;d like to specify to your tailor? (optional)
+      <div className="mt-5">
+        <label
+          htmlFor="customization-notes"
+          className="mb-1 block text-[11px] tracking-wide text-text-3 uppercase"
+        >
+          Anything to specify to your tailor? (optional)
         </label>
         <textarea
           id="customization-notes"
           value={spec.freeformNotes}
           onChange={(e) => onSpecChange({ ...spec, freeformNotes: e.target.value })}
-          rows={3}
+          rows={2}
           maxLength={500}
           placeholder={NOTE_EXAMPLES[category] ?? ""}
           className="w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
@@ -277,7 +280,7 @@ export default function CustomizeParameters({
           slider plus a dead subscribe button -- a wall of controls nobody can
           use, sitting between the customer and checkout. */}
       {premiumParams.length > 0 && (
-        <div className="mt-6 flex items-start gap-2 border border-dashed border-gold/40 bg-surface-2 p-3">
+        <div className="mt-5 flex items-start gap-2 border border-dashed border-gold/30 bg-surface-2 p-2.5">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="mt-0.5 shrink-0 text-gold" aria-hidden="true">
             <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
             <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -290,18 +293,6 @@ export default function CustomizeParameters({
         </div>
       )}
 
-      {spec.changes.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {spec.changes.map((c) => (
-            <span
-              key={c.type}
-              className="rounded-full border border-border bg-surface px-3 py-1 text-xs text-text-2"
-            >
-              {c.label}
-            </span>
-          ))}
-        </div>
-      )}
       </div>
     </div>
   );
