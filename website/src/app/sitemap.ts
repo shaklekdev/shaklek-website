@@ -14,6 +14,9 @@ const STATIC_ROUTES: {
   { path: "/how-it-works", changeFrequency: "monthly", priority: 0.8 },
   { path: "/our-story", changeFrequency: "monthly", priority: 0.7 },
   { path: "/upload", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/faq", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/size-guide", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/shipping", changeFrequency: "monthly", priority: 0.5 },
   { path: "/legal/terms", changeFrequency: "yearly", priority: 0.3 },
   { path: "/legal/privacy", changeFrequency: "yearly", priority: 0.3 },
 ];

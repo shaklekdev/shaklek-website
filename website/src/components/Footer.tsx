@@ -5,12 +5,21 @@ export default function Footer() {
     <footer className="border-t border-border px-6 py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-xs text-text-3 sm:flex-row">
         <p>© 2026 Shaklek</p>
-        <div className="flex gap-5">
-          <Link href="/legal/terms" className="hover:text-text-2">
-            Terms
+        <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 sm:justify-end">
+          <Link href="/faq" className="hover:text-text-2">
+            Questions
+          </Link>
+          <Link href="/size-guide" className="hover:text-text-2">
+            Size guide
+          </Link>
+          <Link href="/shipping" className="hover:text-text-2">
+            Delivery
           </Link>
           <Link href="/legal/terms#returns" className="hover:text-text-2">
             Returns &amp; Alterations
+          </Link>
+          <Link href="/legal/terms" className="hover:text-text-2">
+            Terms
           </Link>
           <Link href="/legal/privacy" className="hover:text-text-2">
             Privacy &amp; Cookies

@@ -241,7 +241,12 @@ export default function SizePicker({
               <p className="mt-3 text-xs text-text-3">
                 Measure your body, not a garment: bust at the fullest point, waist at
                 the narrowest, hip at the fullest. Between two sizes, or not close to
-                any of them? Switch to Tailored and give us your numbers instead.
+                any of them? Switch to Tailored and give us your numbers instead —
+                or read the{" "}
+                <a href="/size-guide" className="underline" target="_blank" rel="noopener noreferrer">
+                  full size guide
+                </a>
+                .
               </p>
             </div>
           </details>
