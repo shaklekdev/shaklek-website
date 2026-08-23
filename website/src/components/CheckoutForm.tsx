@@ -172,7 +172,15 @@ export default function CheckoutForm({ total }: { total: number }) {
           {error}
         </p>
       )}
+      {/* The founder built this page and still concluded we never ask for a
+          delivery address -- Stripe collects it on the next screen, before the
+          payment completes, but nothing here said so. A customer reaching the
+          last step and thinking "why am I paying before saying where it
+          goes?" is a lost sale, and it costs one sentence to prevent. */}
       <p className="mt-3 text-center text-xs text-text-3">
+        Delivery address and card details are taken on the next screen, secured by Stripe.
+      </p>
+      <p className="mt-1 text-center text-xs text-text-3">
         Secure payment · One free alteration or remake within 14 days
       </p>
     </div>
