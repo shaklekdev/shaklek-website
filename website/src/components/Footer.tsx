@@ -13,7 +13,7 @@ export default function Footer() {
             Returns &amp; Alterations
           </Link>
           <Link href="/legal/privacy" className="hover:text-text-2">
-            Privacy
+            Privacy &amp; Cookies
           </Link>
           <a href="mailto:hello@shaklek.com" className="hover:text-text-2">
             hello@shaklek.com
