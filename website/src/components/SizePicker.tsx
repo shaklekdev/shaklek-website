@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { sizes } from "@/data/colors";
+import { SIZE_CHART } from "@/data/sizeChart";
 import type { SizeMode } from "@/data/designSpec";
 
 type MeasurementFields = {
@@ -166,6 +167,57 @@ export default function SizePicker({
               </button>
             ))}
           </div>
+          {/* XS-XXL was offered with nothing behind it, while the returns
+              policy referred to a size chart that did not exist. Put it at the
+              decision point rather than on a separate page nobody opens. */}
+          <details className="mt-3 rounded-shaklek-xs border border-border-strong">
+            <summary className="cursor-pointer list-none px-4 py-3 text-sm text-text marker:hidden">
+              <span className="underline decoration-gold underline-offset-4">Size chart</span>
+              <span className="ml-2 text-xs text-text-3">— body measurements in cm</span>
+            </summary>
+            <div className="overflow-x-auto border-t border-border px-4 py-3">
+              <table className="w-full min-w-[420px] text-left text-xs">
+                <caption className="sr-only">
+                  Body measurements in centimetres for each standard size
+                </caption>
+                <thead>
+                  <tr className="text-text-3">
+                    <th scope="col" className="py-2 pr-3 font-normal">Size</th>
+                    <th scope="col" className="py-2 pr-3 font-normal">UK</th>
+                    <th scope="col" className="py-2 pr-3 font-normal">EU</th>
+                    <th scope="col" className="py-2 pr-3 font-normal">Bust</th>
+                    <th scope="col" className="py-2 pr-3 font-normal">Waist</th>
+                    <th scope="col" className="py-2 font-normal">Hip</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SIZE_CHART.map((row) => (
+                    <tr
+                      key={row.size}
+                      className={`border-t border-border ${
+                        row.size === size ? "bg-surface-2 text-text" : "text-text-2"
+                      }`}
+                    >
+                      <th scope="row" className="py-2 pr-3 font-medium text-text">
+                        {row.size}
+                      </th>
+                      <td className="py-2 pr-3">{row.uk}</td>
+                      <td className="py-2 pr-3">{row.eu}</td>
+                      <td className="py-2 pr-3">{row.bust}</td>
+                      <td className="py-2 pr-3">{row.waist}</td>
+                      <td className="py-2">{row.hip}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="mt-3 text-xs text-text-3">
+                Measure your body, not a garment: bust at the fullest point, waist at
+                the narrowest, hip at the fullest. Between two sizes, or not close to
+                any of them? Switch to Tailored and give us your numbers instead.
+              </p>
+            </div>
+          </details>
+
           <p className="mt-2 text-xs text-text-3">
             No measurement needed. Want a more precise fit? Switch to Tailored above.
           </p>
