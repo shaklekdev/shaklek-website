@@ -140,12 +140,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Malformed request" }, { status: 400 });
   }
 
-  const { items, method, total, email } = (order ?? {}) as {
+  const { items, method, total, email, promotionCode } = (order ?? {}) as {
     items: OrderItem[];
     method: string;
     total: number;
     email: string;
+    promotionCode?: unknown;
   };
+
+  // Only ever a code *string* from the client. It is looked up against
+  // Stripe below and the discount comes from there -- a caller cannot assert
+  // a discount, a percentage, or an amount. Same rule as price and quantity.
+  const requestedCode =
+    typeof promotionCode === "string" && promotionCode.trim().length > 0
+      ? promotionCode.trim().slice(0, 64)
+      : null;
 
   if (!Array.isArray(items) || items.length === 0) {
     return NextResponse.json({ ok: false, error: "No items in order" }, { status: 400 });
@@ -195,6 +204,29 @@ export async function POST(req: NextRequest) {
 
   const stripe = getStripe();
 
+  // Resolve the customer's code to a real Stripe promotion code id. A code
+  // that has expired or been archived between the cart and here simply drops
+  // out: the order is still placed, at full price, which is the honest
+  // outcome -- refusing the whole checkout over a bad code would lose a sale
+  // the customer still wants to make. The total they were shown is the
+  // catalog total either way; the discount only ever reduces it.
+  let promotionCodeId: string | null = null;
+  if (requestedCode && stripe) {
+    try {
+      const found = await stripe.promotionCodes.list({
+        code: requestedCode.toUpperCase(),
+        active: true,
+        limit: 1,
+      });
+      promotionCodeId = found.data[0]?.id ?? null;
+      if (!promotionCodeId) {
+        console.warn("[orders] promotion code not active at checkout");
+      }
+    } catch (err) {
+      console.error("[orders] promotion code lookup failed:", err);
+    }
+  }
+
   if (orderId && stripe) {
     // Don't trust the Origin header for the redirect target. An attacker
     // controls it, and it becomes the URL Stripe sends the customer to after
@@ -213,14 +245,21 @@ export async function POST(req: NextRequest) {
       // validates it on the hosted page; the webhook persists it.
       shipping_address_collection: { allowed_countries: ["AE"] },
       phone_number_collection: { enabled: true },
-      // Lets a customer enter a promotion code on Stripe's hosted page. The
-      // codes themselves live in Stripe, so nothing about a discount is
-      // decided here and nothing about one can be asserted by the caller --
-      // the amount actually collected comes back on the signed webhook
-      // payload (see api/webhooks/stripe). The order row is written with the
-      // catalog total *before* any discount, because at this point no
-      // discount exists yet; the webhook corrects it to what Stripe charged.
-      allow_promotion_codes: true,
+      // Two ways in, and Stripe rejects a session that sets both. If the
+      // customer already applied a code on our checkout page, pass it as a
+      // discount so the Stripe page opens with it applied and the total
+      // already reduced -- no re-entering it after the redirect. Otherwise
+      // fall back to Stripe's own field, so someone who only produces a code
+      // once they reach the payment page is not stuck.
+      //
+      // Either way nothing about the discount is decided here: the amount
+      // actually collected comes back on the signed webhook payload (see
+      // api/webhooks/stripe). The order row is written with the catalog
+      // total, because no discount exists yet at this point; the webhook
+      // corrects it to what Stripe charged.
+      ...(promotionCodeId
+        ? { discounts: [{ promotion_code: promotionCodeId }] }
+        : { allow_promotion_codes: true }),
       line_items: priced.map((item) => ({
         quantity: item.quantity,
         price_data: {

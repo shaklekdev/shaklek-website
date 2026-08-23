@@ -10,6 +10,7 @@
 // Pure functions only -- touches no database, creates no Stripe session,
 // sends no email.
 import { discountLine } from "../src/lib/orderEmail.ts";
+import { previewDiscountAed, previewTotalAed } from "../src/lib/promoPreview.ts";
 
 let bad = 0;
 const eq = (name, got, want) => {
@@ -40,6 +41,21 @@ eq("multi-line undiscounted", discountLine([{ price: 390 }, { price: 450, quanti
 console.log("\nnothing is presented as a negative discount");
 eq("charge exceeds subtotal", discountLine([{ price: 390 }], 400), 0);
 eq("sub-fil rounding noise", discountLine([{ price: 390 }], 389.999), 0);
+
+console.log("\ncheckout preview shown before the redirect");
+const pct = (p) => ({ percentOff: p, amountOffAed: null });
+const amt = (a) => ({ percentOff: null, amountOffAed: a });
+eq("99% off 390", previewDiscountAed(390, pct(99)), 386.1);
+eq("99% off 390 -> new total (no float tail)", previewTotalAed(390, pct(99)), 3.9);
+eq("20% off 390", previewDiscountAed(390, pct(20)), 78);
+eq("20% off 390 -> new total", previewTotalAed(390, pct(20)), 312);
+eq("100% off", previewTotalAed(390, pct(100)), 0);
+eq("fixed AED 50 off", previewDiscountAed(390, amt(50)), 50);
+eq("fixed coupon larger than basket is capped", previewDiscountAed(390, amt(1000)), 390);
+eq("...and never goes negative", previewTotalAed(390, amt(1000)), 0);
+eq("negative amount ignored", previewDiscountAed(390, amt(-50)), 0);
+eq("empty cart", previewDiscountAed(0, pct(99)), 0);
+eq("no discount fields", previewDiscountAed(390, { percentOff: null, amountOffAed: null }), 0);
 
 console.log(
   bad === 0

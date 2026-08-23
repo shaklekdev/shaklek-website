@@ -63,6 +63,42 @@ mean a live Stripe session against production, which CLAUDE.md forbids. A
 real discounted payment is the founder's to run — which enabling promotion
 codes was partly meant to make cheap.
 
+### Session B — on-site promo code + handoff note (2026-08-23)
+
+**Status: DONE. No files held.**
+
+A discount code can now be applied on our own `/checkout`, so someone
+arriving from a campaign sees the reduced total before the redirect instead
+of having to trust that Stripe will honour it.
+
+The customer only ever sends a code *string*. `/api/promo/validate` looks it
+up in Stripe to show the discount, and `/api/orders` resolves it again
+server-side before passing the promotion code id into the Session. A caller
+cannot assert a discount, a percentage or an amount, and the figure finally
+recorded still comes off the signed webhook.
+
+`allow_promotion_codes` and `discounts` are mutually exclusive in the
+Checkout Session API, so it is now conditional: a code applied on our page
+is passed as `discounts` (Stripe opens already-discounted), and Stripe's own
+field is kept as the fallback when no code was entered. Nobody is stuck
+either way.
+
+Session A's `1c1a141` note already covers the address handoff, and it is
+better than the one drafted here (it names card details too) — so no second
+note was added.
+
+**Untested: the success path.** The live Stripe account has zero coupons and
+zero promotion codes, so only the invalid-code path could be exercised
+end to end (verified: "That code isn't valid"). Once a real code exists this
+needs one run through to confirm the discount preview and the pre-applied
+Stripe page.
+
+**Minor, for Session A:** the dev-only origin allowance in `requestGuards.ts`
+is hardcoded to port 3000, but the two-session convention is to pin other
+ports. Any dev server not on 3000 gets 403s from every write route unless
+`NEXT_PUBLIC_APP_URL` is set to match. Not changed here — it is a security
+guard and it is your file.
+
 ### Session A — security & infrastructure
 
 Holding (per its own commits): `src/db/client.ts`, `src/lib/envGuard.ts`,
