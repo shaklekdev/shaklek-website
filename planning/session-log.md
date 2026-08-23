@@ -87,11 +87,23 @@ Session A's `1c1a141` note already covers the address handoff, and it is
 better than the one drafted here (it names card details too) — so no second
 note was added.
 
-**Untested: the success path.** The live Stripe account has zero coupons and
-zero promotion codes, so only the invalid-code path could be exercised
-end to end (verified: "That code isn't valid"). Once a real code exists this
-needs one run through to confirm the discount preview and the pre-applied
-Stripe page.
+**`TEST99` now exists and is correctly configured** — verified against the
+live Stripe API on 2026-08-23: `active: true`, `duration: "once"`,
+`percent_off: 99`, no expiry, no redemption cap, and
+`first_time_transaction: false` (so a repeat payer can still use it).
+
+**Still untested: the success path.** Only the invalid-code path was
+exercised end to end (verified: "That code isn't valid" — that run predates
+the code existing). The success run was cut short when the session wrapped.
+What still needs one pass:
+
+1. Apply `TEST99` on `/checkout` → preview should read
+   *Discount −AED 386.10 / New total AED 3.90*.
+2. Pay → Stripe's page should open **already discounted** at AED 3.90, with
+   no promotion-code field (that is correct: `discounts` and
+   `allow_promotion_codes` are mutually exclusive).
+3. After payment → the order row, `/order-confirmed` and both emails should
+   all read **3.90**, not 390.
 
 **Minor, for Session A:** the dev-only origin allowance in `requestGuards.ts`
 is hardcoded to port 3000, but the two-session convention is to pin other
@@ -313,3 +325,37 @@ and leaked `'unsafe-eval'` into the *production* header — it is not reliably
 `"production"` at the moment `next.config.ts` is evaluated. Verified both ways
 after the change: `next start` has no `unsafe-eval`, `next dev` has it. A
 security header must not depend on a signal that loose.
+
+---
+
+## Break point — 2026-08-23
+
+**Decision waiting on the founder: whether to push.**
+
+`0f48268` (the on-site discount-code field) is committed locally and **not
+pushed**. Everything before it is deployed and live.
+
+That gap has a practical consequence worth knowing:
+
+- **On production right now**, `TEST99` works — but only on Stripe's hosted
+  page after the redirect, via `allow_promotion_codes`. That path is live and
+  can be tested today.
+- **The field on our own `/checkout` is not live** until `0f48268` is pushed.
+
+Pushing deploys, and it changes the checkout flow on a site taking real
+cards, so it should go out alongside the three-step verification above rather
+than unattended.
+
+**Not touched, belongs to someone else:** `website/src/data/catalog.ts` is
+modified and uncommitted, and `website/scripts/delete-old-test-rows.mjs` is
+untracked — neither is Session B's. `shaklek-spec-bc7bbb09.pdf` at the repo
+root is a generated artefact and deliberately unstaged.
+
+**Still open for the founder** (carried over, not done by either session):
+
+- Refund the AED 390 test order.
+- Run the Neon cleanup of the 7 old test rows — production DB access exists
+  only in the Amplify console by design, so no session can do it.
+- Confirm Apple Pay on a real iPhone. **When testing with a discount, apply
+  the code before tapping Apple Pay** — it pays immediately, and tapping it
+  first buys a full-price garment on a real card.
