@@ -97,7 +97,7 @@ export default function CheckoutForm({ total }: { total: number }) {
       )}
 
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
-        Your email
+        Your email <span className="text-text-3">(required)</span>
       </label>
       <input
         id="checkout-email"
@@ -146,13 +146,22 @@ export default function CheckoutForm({ total }: { total: number }) {
           Tabby is coming soon — choose Apple Pay or Card for now.
         </p>
       ) : (
-        <button
-          onClick={handlePay}
-          disabled={submitting || !email}
-          className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
-          {submitting ? "Processing…" : `Pay AED ${total}`}
-        </button>
+        <>
+          <button
+            onClick={handlePay}
+            disabled={submitting || !email}
+            className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          >
+            {submitting ? "Processing…" : `Pay AED ${total}`}
+          </button>
+          {/* Without this the button just sits greyed out and the customer is
+              left guessing -- the commonest reason checkout stalls here. */}
+          {!email && (
+            <p aria-live="polite" className="mt-2 text-center text-xs text-text-3">
+              Enter your email above to continue.
+            </p>
+          )}
+        </>
       )}
       {error && (
         <p

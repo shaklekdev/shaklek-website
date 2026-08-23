@@ -48,6 +48,7 @@ export default function UploadPage() {
     const price = BASE_PRICE_BY_CATEGORY[spec.garmentType];
     addItem({
       slug: "",
+      quantity: 1,
       name: `Custom ${spec.garmentType}`,
       category: spec.garmentType,
       gradient: ["#f5f0e8", "#e8e4dc"],

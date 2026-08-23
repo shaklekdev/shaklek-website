@@ -14,6 +14,9 @@ const NAV_LINKS = [
 
 export default function Header() {
   const { items } = useCart();
+  // Garments, not cart lines -- the cart page counts the same way, and a
+  // badge reading "2" over a cart saying "4 pieces" reads as a bug.
+  const units = items.reduce((sum, item) => sum + item.quantity, 0);
   const { isSignedIn } = useUser();
   const pathname = usePathname();
 
@@ -102,7 +105,7 @@ export default function Header() {
           )}
           <Link
             href="/cart"
-            aria-label={`Cart, ${items.length} ${items.length === 1 ? "item" : "items"}`}
+            aria-label={`Cart, ${units} ${units === 1 ? "item" : "items"}`}
             /* h-6 w-6 gives the link a 24x24 hit area (WCAG 2.5.8 minimum);
                the glyph stays 20x20, centred inside it. */
             className="relative flex h-6 w-6 items-center justify-center text-text hover:text-text-2 transition-colors"
@@ -116,9 +119,9 @@ export default function Header() {
                 strokeLinejoin="round"
               />
             </svg>
-            {items.length > 0 && (
+            {units > 0 && (
               <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] text-white">
-                {items.length}
+                {units}
               </span>
             )}
           </Link>

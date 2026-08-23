@@ -1,28 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
-import { comboKeyForCategory } from "@/data/parameterSliders";
+import { changesFromLabels, comboKeyForCategory } from "@/data/parameterSliders";
 import { useCart } from "@/lib/CartContext";
 import CustomizeParameters from "@/components/CustomizeParameters";
-import SizePicker from "@/components/SizePicker";
+import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
+
+// Step 1 is choosing the piece, which happens back on the catalog. The count
+// is shown on every step because the honest answer -- three, and one of them
+// is already done -- is the reassuring one: the main reason people abandon a
+// made-to-order flow is not knowing how much more of it there is.
+const TOTAL_STEPS = 3;
+const STEP_TITLES = { 2: "Make it yours", 3: "Get the fit" } as const;
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
   const [step, setStep] = useState<2 | 3>(2);
   const [savedMeasurements, setSavedMeasurements] = useState<SavedMeasurements | undefined>();
+  // Set when the customer arrived from a cart line's Edit link. Saving then
+  // overwrites that line instead of appending a second one.
+  const [editingId, setEditingId] = useState<string | null>(null);
+  // Captured once, when a cart line is restored. This must be state rather
+  // than a value derived during render: SizePicker seeds its fields from an
+  // effect keyed on this object's identity, so handing it a freshly parsed
+  // object every render re-fires that effect, which calls back up into
+  // setSpec here and renders again -- an infinite loop that wedges the page
+  // (and silently swallowed the redirect to /cart).
+  const [restoredMeasurements, setRestoredMeasurements] = useState<SavedMeasurements | undefined>();
   // Tailored orders used to be placeable with no measurements at all -- the
   // constraints gate only covered the fabric/layer/logo rules and never looked
   // at the numbers. Each unmakeable order costs a manual stylist round-trip.
   const [measurementsValid, setMeasurementsValid] = useState(true);
-  const { addItem } = useCart();
+  const { items, addItem, updateItem } = useCart();
   const { isSignedIn } = useUser();
   const router = useRouter();
+  // Restoring a cart line must happen exactly once. The effect below depends
+  // on `items`, which changes on every later edit -- without this the restore
+  // would re-run and throw away whatever the customer had just changed.
+  const restored = useRef(false);
 
   useEffect(() => {
     if (!isSignedIn) return;
@@ -34,16 +55,49 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       .catch(() => {});
   }, [isSignedIn]);
 
-  // Deep link from a catalog card's colour swatch (/design/x?color=Navy).
-  // Read on the client instead of via the page's searchParams: adding
-  // searchParams to the server component would opt all eight design pages
-  // out of static prerendering, which would cost more than this is worth.
+  // Two entry points, both read on the client instead of via the page's
+  // searchParams: adding searchParams to the server component would opt all
+  // eight design pages out of static prerendering, which would cost more than
+  // this is worth.
+  //
+  // ?color=Navy  -- deep link from a catalog card's colour swatch.
+  // ?edit=<id>   -- reopening a line already in the cart. Adding to the cart
+  //                 used to be a one-way door: the only way to change a colour
+  //                 you'd just picked was to build the whole garment again.
   useEffect(() => {
-    const color = new URLSearchParams(window.location.search).get("color");
+    if (restored.current) return;
+    const params = new URLSearchParams(window.location.search);
+    const editId = params.get("edit");
+
+    if (editId) {
+      // The cart hydrates from localStorage in an effect, so on the first
+      // pass `items` is still empty. Bail without latching and this runs
+      // again when the cart arrives. A stale id (cart cleared, line removed)
+      // simply never matches, and the page stays a normal new design.
+      const line = items.find((i) => i.id === editId);
+      if (!line) return;
+      restored.current = true;
+      setEditingId(editId);
+      setRestoredMeasurements(parseMeasurements(line.measurements));
+      setSpec((prev) => ({
+        ...prev,
+        fabric: line.fabric,
+        color: item.colorImages?.[line.color] ? line.color : prev.color,
+        sizeMode: line.size === "Tailored" ? "tailored" : "standard",
+        size: line.size === "Tailored" ? prev.size : line.size,
+        measurements: line.measurements,
+        changes: changesFromLabels(item.category, line.changes, item.defaultChanges),
+        freeformNotes: line.freeformNotes,
+      }));
+      return;
+    }
+
+    restored.current = true;
+    const color = params.get("color");
     if (color && item.colorImages?.[color]) {
       setSpec((prev) => (prev.color === color ? prev : { ...prev, color }));
     }
-  }, [item]);
+  }, [item, items]);
 
   const price = item.price;
   const colorVariant = item.colorImages?.[spec.color];
@@ -76,9 +130,18 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     ),
   );
 
-  function handleAddToCart() {
-    addItem({
+  // A reopened line's own measurements win over the ones saved on the
+  // account: the /account fetch resolves later and would otherwise overwrite
+  // what the customer actually ordered. Both sides are state, so the identity
+  // handed to SizePicker stays stable across renders.
+  const measurementSeed = restoredMeasurements ?? savedMeasurements;
+
+  function handleSave() {
+    const line = {
       slug: item.slug,
+      // Editing a line must not silently reset how many were ordered -- the
+      // customer came back to change a colour, not the count.
+      quantity: (editingId && items.find((i) => i.id === editingId)?.quantity) || 1,
       name: item.name,
       category: item.category,
       gradient: item.gradient,
@@ -89,35 +152,42 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       measurements: spec.sizeMode === "tailored" ? spec.measurements : "",
       changes: spec.changes.map((c) => c.label),
       freeformNotes: spec.freeformNotes,
-    });
+    };
+    if (editingId) updateItem(editingId, line);
+    else addItem(line);
     router.push("/cart");
   }
 
   return (
     <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10">
-      <div className="flex w-fit gap-1 rounded-full border border-border-strong p-1">
-        <button
-          onClick={() => setStep(2)}
-          aria-pressed={step === 2}
-          className={`rounded-full px-4 py-2 text-xs transition-colors ${
-            step === 2 ? "bg-text text-white" : "text-text-2 hover:text-text"
-          }`}
-        >
-          Step 2 · Make it yours
-        </button>
-        <button
-          onClick={() => setStep(3)}
-          aria-pressed={step === 3}
-          className={`rounded-full px-4 py-2 text-xs transition-colors ${
-            step === 3 ? "bg-text text-white" : "text-text-2 hover:text-text"
-          }`}
-        >
-          Step 3 · Fit
-        </button>
-      </div>
+      {editingId && (
+        <p className="mb-4 rounded-shaklek-xs border border-border-strong bg-surface-2 px-4 py-3 text-xs text-text-2">
+          Editing a piece already in your cart. Your changes replace it — you won&apos;t
+          end up with two.
+        </p>
+      )}
+
+      <nav aria-label="Design steps" className="flex w-fit gap-1 rounded-full border border-border-strong p-1">
+        {([2, 3] as const).map((n) => (
+          <button
+            key={n}
+            onClick={() => setStep(n)}
+            aria-current={step === n ? "step" : undefined}
+            className={`rounded-full px-4 py-2 text-xs transition-colors ${
+              step === n ? "bg-text text-white" : "text-text-2 hover:text-text"
+            }`}
+          >
+            {STEP_TITLES[n]}
+          </button>
+        ))}
+      </nav>
+
+      <p className="mt-3 text-xs tracking-wide text-text-3 uppercase">
+        Step {step} of {TOTAL_STEPS} · {STEP_TITLES[step]}
+      </p>
 
       {step === 2 && (
-        <div className="mt-6">
+        <div className="mt-4">
           <CustomizeParameters
             spec={spec}
             onSpecChange={setSpec}
@@ -128,27 +198,34 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewGradient={item.gradient}
             preloadImages={preloadImages}
             primaryAction={
-              <button
-                onClick={() => setStep(3)}
-                className="mt-6 w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
-              >
-                Continue to size
-              </button>
+              <div className="mt-6">
+                <button
+                  onClick={() => setStep(3)}
+                  className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
+                >
+                  Next: get the fit →
+                </button>
+                <button
+                  onClick={() => router.push("/")}
+                  className="mt-3 w-full text-xs text-text-3 hover:text-text-2"
+                >
+                  ← Back to the catalog
+                </button>
+              </div>
             }
           />
         </div>
       )}
 
       {step === 3 && (
-        <div className="mt-6">
-          <p className="text-xs tracking-wide text-text-3 uppercase">Step 3</p>
+        <div className="mt-4">
           <h2 className="mt-1 text-lg text-text">Let&apos;s tailor it</h2>
 
           <SizePicker
             sizeMode={spec.sizeMode}
             size={spec.size}
             measurements={spec.measurements}
-            initialMeasurements={savedMeasurements}
+            initialMeasurements={measurementSeed}
             onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
             onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
             onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
@@ -161,7 +238,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <p className="font-display text-2xl text-text">AED {price}</p>
             </div>
             <button
-              onClick={handleAddToCart}
+              onClick={handleSave}
               disabled={!spec.constraints.passed || !measurementsValid}
               className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
               title={
@@ -172,9 +249,16 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     : undefined
               }
             >
-              Add to cart
+              {editingId ? "Save changes" : "Add to cart"}
             </button>
           </div>
+
+          <button
+            onClick={() => setStep(2)}
+            className="mt-4 text-xs text-text-3 hover:text-text-2"
+          >
+            ← Back to make it yours
+          </button>
         </div>
       )}
     </div>

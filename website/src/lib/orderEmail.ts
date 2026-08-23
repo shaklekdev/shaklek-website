@@ -5,6 +5,11 @@
 
 export type NotifyOrderItem = {
   name: string;
+  // Units of this line. Server-resolved before it reaches here (see
+  // src/lib/pricing.ts) -- shown so a two-garment line doesn't read to the
+  // stylist as one. Optional because the /upload path builds this shape
+  // directly and pre-quantity orders have none.
+  quantity?: number;
   fabric: string | null;
   color: string | null;
   size: string | null;
@@ -37,7 +42,8 @@ export async function sendOrderNotificationEmail(
 ): Promise<{ emailed: boolean }> {
   const itemLines = items
     .map((item, i) => {
-      const parts = [`${i + 1}. ${item.name} — ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
+      const qty = item.quantity && item.quantity > 1 ? ` x${item.quantity}` : "";
+      const parts = [`${i + 1}. ${item.name}${qty} — ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
       if (item.measurements) parts.push(`   Measurements: ${item.measurements}`);
       if (item.changes && item.changes.length) parts.push(`   Changes: ${item.changes.join(", ")}`);
       if (item.freeformNotes) parts.push(`   Note: "${item.freeformNotes}"`);
@@ -118,7 +124,9 @@ export async function sendCustomerConfirmationEmail(
       (item) => `
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #eee;">
-            <div style="font-size:14px;color:#1a1a1a;">${esc(item.name)}</div>
+            <div style="font-size:14px;color:#1a1a1a;">${esc(item.name)}${
+              item.quantity && item.quantity > 1 ? ` &times;${esc(item.quantity)}` : ""
+            }</div>
             <div style="font-size:12px;color:#6b6b6b;margin-top:2px;">
               ${esc(item.fabric ?? "")} · ${esc(item.color ?? "")} · Size ${esc(item.size ?? "")}
               ${item.changes && item.changes.length ? `<br/>${esc(item.changes.join(", "))}` : ""}

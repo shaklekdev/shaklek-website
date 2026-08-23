@@ -190,3 +190,34 @@ export function comboKeyFromLabels(category: string, labels: string[] | null): s
   });
   return comboKeyForCategory(category, changes);
 }
+
+// The inverse of the label-flattening that happens on the way into the cart.
+// A cart line stores customizations as human-readable labels ("Wide leg",
+// "Short sleeves") because that is what the order payload, the DB and the
+// tailor's spec sheet consume -- the structured {type, value} pairs are
+// dropped. To let a customer reopen a cart line and keep editing it, we have
+// to rebuild the full change set from those labels.
+//
+// Unlike comboKeyFromLabels this covers premium sliders too, not just the
+// render tier: a reopened design has to come back with *every* slider where
+// the customer left it, otherwise editing the colour would silently reset
+// the pocket count. Any label that doesn't match falls back to that
+// slider's own default (or the item's defaultChanges override), which is
+// what the customer would have been looking at.
+export function changesFromLabels(
+  category: string,
+  labels: string[] | null,
+  overrides?: Partial<Record<string, string>>,
+): SilhouetteChange[] {
+  const params = paramsForCategory(category);
+  if (!params) return [];
+  return params.map((param) => {
+    const matched = param.options.find((o) => labels?.includes(param.labelFor(o.text)));
+    const overrideValue = overrides?.[param.type];
+    const fallback =
+      (overrideValue && param.options.find((o) => o.value === overrideValue)) ||
+      param.options[param.defaultIndex];
+    const option = matched ?? fallback;
+    return { type: param.type, value: option.value, label: param.labelFor(option.text) };
+  });
+}

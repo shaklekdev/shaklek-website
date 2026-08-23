@@ -52,7 +52,12 @@ export default function CheckoutPage() {
               )}
               <div className="flex flex-1 items-start justify-between gap-4">
                 <div>
-                  <p className="text-[15px] font-medium text-text">{item.name}</p>
+                  <p className="text-[15px] font-medium text-text">
+                    {item.name}
+                    {item.quantity > 1 && (
+                      <span className="text-text-2"> &times;{item.quantity}</span>
+                    )}
+                  </p>
                   <p className="mt-1 text-xs text-text-2">
                     {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size{" "}
                     {item.size}
@@ -63,7 +68,7 @@ export default function CheckoutPage() {
                   <p className="mt-1 text-xs text-text-2">10 days delivery</p>
                 </div>
                 <p className="font-display text-xl text-text whitespace-nowrap">
-                  AED {item.price}
+                  AED {item.price * item.quantity}
                 </p>
               </div>
             </div>

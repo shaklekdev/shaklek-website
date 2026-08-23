@@ -63,6 +63,29 @@ function composeMeasurements(fields: MeasurementFields): string {
   return parts.join(", ");
 }
 
+// The inverse of composeMeasurements. A cart line stores the flattened
+// string ("Bust / chest: 90cm, Waist: 74cm, ..."), because that is the form
+// the tailor's spec sheet reads -- but reopening a line to edit it has to put
+// the numbers back in their own inputs. Kept directly below the composer so
+// the two cannot drift apart. Anything that doesn't parse as a known
+// measurement is treated as the customer's free-text note rather than
+// discarded.
+export function parseMeasurements(measurements: string): MeasurementFields | undefined {
+  if (!measurements.trim()) return undefined;
+  const fields: MeasurementFields = { ...EMPTY_FIELDS };
+  const leftovers: string[] = [];
+
+  for (const part of measurements.split(",").map((p) => p.trim()).filter(Boolean)) {
+    const field = FIELD_LABELS.find((f) => part.startsWith(`${f.label}: `));
+    const value = field ? part.slice(field.label.length + 2).replace(/cm$/, "").trim() : "";
+    if (field && value) fields[field.key] = value;
+    else leftovers.push(part);
+  }
+
+  fields.notes = leftovers.join(", ");
+  return fields;
+}
+
 export default function SizePicker({
   sizeMode,
   size,

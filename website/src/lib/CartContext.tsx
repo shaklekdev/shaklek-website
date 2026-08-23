@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { MAX_QUANTITY_PER_ITEM } from "@/lib/pricing";
 
 export type CartItem = {
   id: string;
@@ -16,6 +17,10 @@ export type CartItem = {
   measurements: string;
   changes: string[];
   freeformNotes: string;
+  // How many of this exact garment to make. Display and cart maths only --
+  // the server re-resolves it from the request before it can touch
+  // unit_amount or the database (src/lib/pricing.ts).
+  quantity: number;
 };
 
 const STORAGE_KEY = "shaklek-cart";
@@ -23,6 +28,8 @@ const STORAGE_KEY = "shaklek-cart";
 type CartContextValue = {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "id">) => void;
+  updateItem: (id: string, item: Omit<CartItem, "id">) => void;
+  setQuantity: (id: string, quantity: number) => void;
   removeItem: (id: string) => void;
   clear: () => void;
   total: number;
@@ -46,6 +53,13 @@ function isValidCartItem(value: unknown): value is CartItem {
     typeof item.price === "number" &&
     Number.isFinite(item.price) &&
     item.price >= 0 &&
+    // Older carts predate quantity, so a missing value is valid and
+    // normalised to 1 on read rather than discarding the whole line.
+    (item.quantity === undefined ||
+      (typeof item.quantity === "number" &&
+        Number.isInteger(item.quantity) &&
+        item.quantity >= 1 &&
+        item.quantity <= MAX_QUANTITY_PER_ITEM)) &&
     (item.previewImage === undefined ||
       (typeof item.previewImage === "string" && item.previewImage.startsWith("data:image/")))
   );
@@ -58,7 +72,9 @@ function readStoredCart(): CartItem[] {
     if (!raw) return [];
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isValidCartItem);
+    return parsed
+      .filter(isValidCartItem)
+      .map((item) => ({ ...item, quantity: item.quantity ?? 1 }));
   } catch {
     return [];
   }
@@ -98,16 +114,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prev) => [...prev, { ...item, id }]);
   }, []);
 
+  // Reopening a cart line to change something has to overwrite that line, not
+  // append a second one -- the customer who goes back to swap a colour is
+  // editing one garment, not ordering two. Keeps the original id so the line
+  // stays in place in the cart rather than jumping to the end.
+  const updateItem = useCallback((id: string, item: Omit<CartItem, "id">) => {
+    setItems((prev) => prev.map((existing) => (existing.id === id ? { ...item, id } : existing)));
+  }, []);
+
+  // Clamped here as well as on the server: the stepper can't go out of range,
+  // but a hand-edited localStorage entry shouldn't render a broken cart
+  // either. The server still re-resolves it -- this is display, not money.
+  const setQuantity = useCallback((id: string, quantity: number) => {
+    const next = Math.min(MAX_QUANTITY_PER_ITEM, Math.max(1, Math.floor(quantity)));
+    setItems((prev) => prev.map((item) => (item.id === id ? { ...item, quantity: next } : item)));
+  }, []);
+
   const removeItem = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
   const clear = useCallback(() => setItems([]), []);
 
-  const total = items.reduce((sum, i) => sum + i.price, 0);
+  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, clear, total }}>
+    <CartContext.Provider
+      value={{ items, addItem, updateItem, setQuantity, removeItem, clear, total }}
+    >
       {children}
     </CartContext.Provider>
   );

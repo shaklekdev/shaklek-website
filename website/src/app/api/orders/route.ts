@@ -19,6 +19,11 @@ type OrderItem = NotifyOrderItem & { category?: string; slug?: string };
 const MAX_ITEMS = 20;
 const MAX_TEXT = 2000;
 const MAX_CHANGES = 40;
+// MAX_ITEMS caps cart *lines*; quantity means one line can now be many
+// garments, so the real bench load needs its own ceiling. Without this,
+// 20 lines x 10 units is a 200-garment order against a solo tailor -- and
+// 200 order_items rows written from a single request.
+const MAX_UNITS = 20;
 
 function text(value: unknown, max = MAX_TEXT): string {
   return typeof value === "string" ? value.slice(0, max) : "";
@@ -34,6 +39,11 @@ function isEmail(value: unknown): value is string {
 //
 // `priced` is the server-resolved pricing, positionally aligned with `items`.
 // The prices written here are always the catalog's, never the request's.
+//
+// A line ordered twice becomes two order_items rows rather than one row with
+// a count. Each row is one garment to cut, which is what the tailor's spec
+// sheet and the dashboard already assume -- so quantity needs no schema
+// change, and no migration has to land before this can deploy.
 async function persistOrder(
   items: OrderItem[],
   priced: PricedItem[],
@@ -64,21 +74,23 @@ async function persistOrder(
     .returning();
 
   await db.insert(schema.orderItems).values(
-    items.map((item, index) => ({
-      orderId: orderRow.id,
-      name: priced[index].name,
-      category: priced[index].category,
-      fabric: text(item.fabric, 40),
-      color: text(item.color, 40),
-      size: text(item.size, 40),
-      measurements: text(item.measurements),
-      changes: Array.isArray(item.changes)
-        ? item.changes.slice(0, MAX_CHANGES).map((change) => text(change, 200))
-        : [],
-      freeformNotes: text(item.freeformNotes),
-      priceAed: String(priced[index].price),
-      hasReferenceImage: Boolean(item.previewImage),
-    })),
+    items.flatMap((item, index) =>
+      Array.from({ length: priced[index].quantity }, () => ({
+        orderId: orderRow.id,
+        name: priced[index].name,
+        category: priced[index].category,
+        fabric: text(item.fabric, 40),
+        color: text(item.color, 40),
+        size: text(item.size, 40),
+        measurements: text(item.measurements),
+        changes: Array.isArray(item.changes)
+          ? item.changes.slice(0, MAX_CHANGES).map((change) => text(change, 200))
+          : [],
+        freeformNotes: text(item.freeformNotes),
+        priceAed: String(priced[index].price),
+        hasReferenceImage: Boolean(item.previewImage),
+      })),
+    ),
   );
 
   return orderRow.id as string;
@@ -151,6 +163,15 @@ export async function POST(req: NextRequest) {
   }
   const { priced, total: serverTotal } = pricing;
 
+  // Checked against the server-resolved quantities, never the request's.
+  const units = priced.reduce((sum, item) => sum + item.quantity, 0);
+  if (units > MAX_UNITS) {
+    return NextResponse.json(
+      { ok: false, error: `Orders are limited to ${MAX_UNITS} garments. Please split this into two orders.` },
+      { status: 400 },
+    );
+  }
+
   // The client's total is advisory only. A mismatch means the cart and the
   // catalog disagree (a stale tab after a price change, or tampering), and
   // either way the customer should re-read the price before paying rather
@@ -193,7 +214,7 @@ export async function POST(req: NextRequest) {
       shipping_address_collection: { allowed_countries: ["AE"] },
       phone_number_collection: { enabled: true },
       line_items: priced.map((item) => ({
-        quantity: 1,
+        quantity: item.quantity,
         price_data: {
           currency: "aed",
           unit_amount: Math.round(item.price * 100),
@@ -222,6 +243,7 @@ export async function POST(req: NextRequest) {
     ...item,
     name: priced[index].name,
     price: priced[index].price,
+    quantity: priced[index].quantity,
   }));
   const { emailed } = await sendOrderNotificationEmail(
     emailItems,
