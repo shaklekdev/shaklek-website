@@ -26,8 +26,11 @@ const steps = [
   },
   {
     n: "03",
-    title: "Ask for anything else",
-    body: "A wider collar, no chest pocket, sleeves a little shorter. Write it in your own words and we will tell you what is possible before anything is cut.",
+    title: "Add a detail",
+    // "Ask for anything else" invited requests a solo tailor cannot take, and
+    // every one of those costs a stylist round-trip to decline. Framed as a
+    // detail to focus on, the answer is usually yes.
+    body: "Anything you would like us to focus on while your piece is made — a wider collar, a shorter sleeve. Tell us in your own words and a stylist confirms what is possible before anything is cut.",
   },
   {
     n: "04",

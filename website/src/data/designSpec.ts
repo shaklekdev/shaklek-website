@@ -74,7 +74,11 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     fabric: "linen",
     color: "Ivory",
     size: "M",
-    sizeMode: "standard",
+    // Tailored by default. Made-to-order only justifies its price if the
+    // garment is cut to the customer, and defaulting to a standard size makes
+    // the whole proposition opt-in. Standard is still one tap away for anyone
+    // who would rather not measure.
+    sizeMode: "tailored",
     measurements: "",
     changes: defaultChangesForCategory(item.category, item.defaultChanges),
     freeformNotes: "",
@@ -89,7 +93,11 @@ export function createSpecFromUpload(fileName: string, imageDataUrl: string): De
     fabric: "cotton",
     color: "Ivory",
     size: "M",
-    sizeMode: "standard",
+    // Tailored by default. Made-to-order only justifies its price if the
+    // garment is cut to the customer, and defaulting to a standard size makes
+    // the whole proposition opt-in. Standard is still one tap away for anyone
+    // who would rather not measure.
+    sizeMode: "tailored",
     measurements: "",
     changes: [],
     freeformNotes: "",

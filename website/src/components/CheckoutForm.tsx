@@ -309,6 +309,13 @@ export default function CheckoutForm({ total }: { total: number }) {
       <p className="mt-3 text-center text-xs text-text-3">
         Delivery address and card details are taken on the next screen, secured by Stripe.
       </p>
+      {/* Delivery time is on the catalog and on how-it-works, but not here --
+          the one screen where someone is deciding whether to commit. Made-to-
+          order means a wait, and a customer who only discovers that after
+          paying is a customer who feels misled. */}
+      <p className="mt-1 text-center text-xs text-text-3">
+        Made to order · about 10 days from stylist confirmation
+      </p>
       <p className="mt-1 text-center text-xs text-text-3">
         Secure payment · One free alteration or remake within 14 days
       </p>

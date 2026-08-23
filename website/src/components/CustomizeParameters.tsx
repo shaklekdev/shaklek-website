@@ -257,7 +257,7 @@ export default function CustomizeParameters({
           htmlFor="customization-notes"
           className="mb-1 block text-[11px] tracking-wide text-text-3 uppercase"
         >
-          Anything to specify to your tailor? (optional)
+          Any detail to focus on? (optional)
         </label>
         <textarea
           id="customization-notes"
@@ -269,8 +269,7 @@ export default function CustomizeParameters({
           className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
         />
         <p className="mt-1.5 text-[11px] text-text-3">
-          Tell us and we&apos;ll do our best. A stylist confirms what&apos;s possible
-          before anything is cut.
+          A stylist confirms what&apos;s possible before anything is cut.
         </p>
       </div>
 

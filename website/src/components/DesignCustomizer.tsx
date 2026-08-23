@@ -187,7 +187,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       </nav>
 
       <p className="mt-3 text-xs tracking-wide text-text-3 uppercase">
-        Step {step} of {TOTAL_STEPS} · {STEP_TITLES[step]}
+        {/* The name is already on the active pill directly above this line;
+            printing it again was pure repetition. The count stays, because
+            "of 3" is what tells a customer the flow is short. */}
+        Step {step} of {TOTAL_STEPS}
       </p>
 
       {step === 2 && (

@@ -38,17 +38,20 @@ export default function Home() {
             className="object-cover"
           />
         </div>
-        <div className="absolute inset-0 bg-white/55" />
+        <div className="absolute inset-0 bg-white/70" />
         <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
           <h1 className="text-[28px] leading-tight text-text">
             Your look,
             <br />
             your way.
           </h1>
-          <p className="subtitle mx-auto mt-3 max-w-md">
-            Elegant essentials — customizable to your taste, friendly to your
-            skin, shaped to your body. See every change on the real piece
-            before it&apos;s made.
+          {/* Was three clauses at 14px in --text-2 over a photograph behind a
+              55% wash -- legible on a laptop, hard work on a phone in daylight.
+              One sentence, a step up in size and weight, and the full text
+              colour rather than the muted one. */}
+          <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed font-medium text-text">
+            Timeless essentials in cotton and linen, cut to your shape — and you
+            see every change before it&apos;s made.
           </p>
         </div>
       </section>

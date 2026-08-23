@@ -143,26 +143,31 @@ export default function SizePicker({
 
   return (
     <div className="mt-5">
+      {/* Tailored first and selected by default. Made-to-order only justifies
+          its price if the garment is cut to the customer -- putting Standard
+          first made the whole proposition opt-in. Standard stays one tap away
+          for anyone who would rather not measure. Corners squared to match the
+          rest of the customizer and the catalog. */}
       <div className="flex gap-3">
+        <button
+          onClick={() => onSizeModeChange("tailored")}
+          aria-pressed={sizeMode === "tailored"}
+          className={`flex-1 border px-4 py-3 text-left text-sm transition-colors ${
+            sizeMode === "tailored" ? "border-accent bg-surface-2" : "border-border-strong"
+          }`}
+        >
+          <span className="block font-medium text-text">Tailored</span>
+          <span className="text-xs text-gold">Cut to your measurements</span>
+        </button>
         <button
           onClick={() => onSizeModeChange("standard")}
           aria-pressed={sizeMode === "standard"}
-          className={`flex-1 rounded-shaklek-xs border px-4 py-3 text-left text-sm transition-colors ${
+          className={`flex-1 border px-4 py-3 text-left text-sm transition-colors ${
             sizeMode === "standard" ? "border-accent bg-surface-2" : "border-border-strong"
           }`}
         >
           <span className="block font-medium text-text">Standard</span>
           <span className="text-xs text-text-3">Pick XS–XXL</span>
-        </button>
-        <button
-          onClick={() => onSizeModeChange("tailored")}
-          aria-pressed={sizeMode === "tailored"}
-          className={`flex-1 rounded-shaklek-xs border px-4 py-3 text-left text-sm transition-colors ${
-            sizeMode === "tailored" ? "border-accent bg-surface-2" : "border-border-strong"
-          }`}
-        >
-          <span className="block font-medium text-text">Tailored</span>
-          <span className="text-xs text-gold">Made to your measurements</span>
         </button>
       </div>
 
@@ -193,7 +198,7 @@ export default function SizePicker({
           {/* XS-XXL was offered with nothing behind it, while the returns
               policy referred to a size chart that did not exist. Put it at the
               decision point rather than on a separate page nobody opens. */}
-          <details className="mt-3 rounded-shaklek-xs border border-border-strong">
+          <details className="mt-3 border border-border-strong">
             <summary className="cursor-pointer list-none px-4 py-3 text-sm text-text marker:hidden">
               <span className="underline decoration-gold underline-offset-4">Size chart</span>
               <span className="ml-2 text-xs text-text-3">— body measurements in cm</span>
@@ -271,7 +276,7 @@ export default function SizePicker({
                     onChange={(e) => updateField(f.key, e.target.value)}
                     onBlur={() => setTouched((t) => ({ ...t, [f.key]: true }))}
                     placeholder={f.placeholder}
-                    className="w-full rounded-shaklek-xs bg-transparent p-3 text-sm text-text placeholder:text-text-3 focus:outline-none"
+                    className="w-full bg-transparent p-3 text-sm text-text placeholder:text-text-3 focus:outline-none"
                   />
                   <span className="pr-3 text-xs text-text-3">cm</span>
                 </div>
@@ -294,7 +299,7 @@ export default function SizePicker({
               onChange={(e) => updateField("notes", e.target.value)}
               rows={2}
               placeholder="e.g. shoulder width, inseam, longer in the body than most"
-              className="w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+              className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
             />
           </div>
 
