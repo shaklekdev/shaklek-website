@@ -272,7 +272,16 @@ export default function CheckoutForm({ total }: { total: number }) {
             disabled={submitting || !email}
             className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
-            {submitting ? "Processing…" : `Pay AED ${total}`}
+            {/* Follows the discount. This read the raw cart total until a
+                real 99%-off payment showed the button saying "Pay AED 389"
+                directly beneath a summary saying the new total was 3.89 --
+                and beside an Apple Pay sheet that correctly said 3.89. The
+                most prominent price on the page was the only wrong one.
+                Only shows fils when discounted, so an undiscounted checkout
+                still reads "Pay AED 389" rather than "389.00". */}
+            {submitting
+              ? "Processing…"
+              : `Pay AED ${promo ? previewTotal.toFixed(2) : total}`}
           </button>
           {/* Without this the button just sits greyed out and the customer is
               left guessing -- the commonest reason checkout stalls here. */}

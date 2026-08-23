@@ -359,3 +359,38 @@ root is a generated artefact and deliberately unstaged.
 - Confirm Apple Pay on a real iPhone. **When testing with a discount, apply
   the code before tapping Apple Pay** — it pays immediately, and tapping it
   first buys a full-price garment on a real card.
+
+---
+
+## 2026-08-24 — discount path proven, and one bug it exposed
+
+**The full discounted path works on production.** A real payment ran at
+AED 3.89 with `TEST99` applied, and Stripe confirms `times_redeemed: 1`.
+Apple Pay showed the discounted amount correctly.
+
+**Bug found by that payment, now fixed:** the Pay button read the raw cart
+total, so it said **"Pay AED 389"** directly beneath a summary saying the new
+total was 3.89, and beside an Apple Pay sheet that correctly said 3.89. The
+most prominent price on the page was the only wrong one. It now follows the
+discount, and still shows a clean integer when no code is applied.
+
+**Not verified in a browser.** Two attempts were cut short — coordinates
+drifting as the window resized, then the browser extension disconnecting. The
+underlying arithmetic is covered by `scripts/test-promo-discount.mjs` and the
+change is one expression, but the rendered button has not been seen with a
+code applied. Worth one look on the next real test.
+
+### Local testing now works — read this before testing discounts locally
+
+**Local dev runs on Stripe TEST keys; production runs on LIVE.** The
+`sk_test_51U4N3HF...` key belongs to the **sandbox** account
+(`acct_1U4N3HFDCtKouREX`), not the live account. A code created in the
+Dashboard's live mode is invisible to a local dev server, which reports
+"That code isn't valid" — correctly, and confusingly.
+
+A matching **`TEST99` (99% off, once) now exists in the sandbox account**, so
+the discount flow can be exercised locally without touching live money.
+
+Also note: the dev-only origin allowance in `requestGuards.ts` is hardcoded
+to port 3000, so any dev server on another port needs
+`NEXT_PUBLIC_APP_URL=http://localhost:<port>` or every write route 403s.
