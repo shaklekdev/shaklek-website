@@ -16,7 +16,6 @@ const STATIC_ROUTES: {
   { path: "/upload", changeFrequency: "monthly", priority: 0.8 },
   { path: "/legal/terms", changeFrequency: "yearly", priority: 0.3 },
   { path: "/legal/privacy", changeFrequency: "yearly", priority: 0.3 },
-  { path: "/legal/returns", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

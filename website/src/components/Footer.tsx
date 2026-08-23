@@ -9,7 +9,7 @@ export default function Footer() {
           <Link href="/legal/terms" className="hover:text-text-2">
             Terms
           </Link>
-          <Link href="/legal/returns" className="hover:text-text-2">
+          <Link href="/legal/terms#returns" className="hover:text-text-2">
             Returns &amp; Alterations
           </Link>
           <Link href="/legal/privacy" className="hover:text-text-2">

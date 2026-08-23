@@ -50,8 +50,8 @@ export default function Home() {
               One sentence, a step up in size and weight, and the full text
               colour rather than the muted one. */}
           <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed font-medium text-text">
-            Timeless essentials in cotton and linen, cut to your shape — and you
-            see every change before it&apos;s made.
+            Timeless essentials in organic cotton and linen — customise the cut,
+            watch it change, and we make it to your shape.
           </p>
         </div>
       </section>
