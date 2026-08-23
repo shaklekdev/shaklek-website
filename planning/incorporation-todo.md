@@ -1,6 +1,6 @@
 # Incorporation — TODO
 
-Status (2026-08-23): trade license issued, **Wio corporate bank account is open**, and the **Stripe merchant account is verified and taking live payments** (since 2026-08-22, payouts weekly on Mondays). Still genuinely open: trademark registration, and confirming the "Tailoring" activity on the licence.
+Status (2026-08-23): trade license issued, **Wio corporate bank account is open**, and the **Stripe merchant account is verified and taking live payments** (since 2026-08-22, payouts weekly on Mondays). Still genuinely open: trademark registration. The licence activity question is closed — see below.
 
 You're already a UAE resident with an Emirates ID and setting up in Dubai — no investor/residency visa needed. Checked directly against the official Invest in Dubai government portal (12 August 2026): the core retail activity ("Ready-made Garments Trading") is confirmed approval-free, meaning the fast ~5-minute **Instant Licence** is very likely available. Decision: apply now with Ready-made Garments Trading only — don't wait on confirming whether "Tailoring" also qualifies, that can be added later by amending the license once the business is running. Getting a real license issued matters more right now than getting the activity list perfectly complete on day one.
 
@@ -24,7 +24,7 @@ Dubai's own portal (Invest in Dubai) lists three mainland trade licence types. T
 
 **Confirmed via UAE business-activity classification: "Ready-made Garments Trading" (activity codes 4771.00–4771.95) does not require third-party approval**, and isn't subject to AML regulation. That's the specific condition the Instant Licence requires — so Shaklek's core retail activity is very likely Instant-Licence-eligible.
 
-The one open question: Shaklek isn't *only* ready-made garments trading — it's made-to-order/tailoring plus an e-commerce platform. "Tailoring" as a services activity may sit under a different code with different rules than the pure trading code above. **This is the actual thing to check on the Invest in Dubai portal's activity search before applying** — search both "Ready-made Garments Trading" and "Tailoring," and if both come back approval-free, Instant Licence is the clear fast/cheap starting point; if tailoring needs Normal Licence, that likely governs which route the whole application takes.
+~~The one open question: Shaklek isn't *only* ready-made garments trading — it's made-to-order/tailoring plus an e-commerce platform.~~ **Resolved 2026-08-24: the tailoring is subcontracted to an independent tailor, so Shaklek's own activity is online selling. The licence issued as "Active Seller Online" is correct.** Original reasoning kept below for the record. "Tailoring" as a services activity may sit under a different code with different rules than the pure trading code above. **This is the actual thing to check on the Invest in Dubai portal's activity search before applying** — search both "Ready-made Garments Trading" and "Tailoring," and if both come back approval-free, Instant Licence is the clear fast/cheap starting point; if tailoring needs Normal Licence, that likely governs which route the whole application takes.
 
 ## Checklist, in order
 
@@ -32,7 +32,13 @@ The one open question: Shaklek isn't *only* ready-made garments trading — it's
 - [x] **Reserve the trade name "Shaklek"** with Dubai DED via the Invest in Dubai portal — done 12 August 2026, Application No. BL-20260812026191
 - [x] **Apply for the Instant Licence** — trade license issued as of 14 August 2026
 - [x] **Corporate bank account** — DONE. Wio account open and attached to Stripe as the payout destination (weekly, Mondays). Original note: — application submitted to **Wio Bank**, **under review as of 2026-08-17**. UAE banks are generally slow/selective with new small e-commerce businesses, but Wio specifically markets itself as fast digital-first onboarding for SMEs, which fits here. This is what actually unlocks Stripe below.
-- [ ] *(Deferred, not blocking)* Confirm whether "Tailoring" also qualifies as approval-free — add as a second activity later via a license amendment once the business is running, not before
+- [x] **CLOSED 2026-08-24 — a Tailoring activity is NOT needed.** Founder
+  decision: Shaklek does not do the tailoring. The tailor is an independent
+  third party, not an employee and not on the payroll. Shaklek designs, sells
+  online and handles the customer; the making is subcontracted. The licence's
+  existing **"Active Seller Online"** activity is the right one, and adding a
+  services/tailoring activity would describe work the business does not
+  perform. Do not re-raise this.
 
 ## What this unblocks, once the trade license exists
 
