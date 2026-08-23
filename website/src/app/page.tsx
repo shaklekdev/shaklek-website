@@ -62,7 +62,7 @@ export default function Home() {
             </p>
           </div>
           <p className="hidden text-[13px] text-text-3 sm:block">
-            From AED 390 · one price per piece · made in 10 days
+            From AED 389 · one price per piece · made in 10 days
           </p>
         </div>
       </section>

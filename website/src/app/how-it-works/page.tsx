@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "How it works",
   description:
-    "Pick a piece, change the cut and colour and watch the photo change, then a tailor makes that exact piece to your size. From AED 390, made in about 10 days across the UAE.",
+    "Pick a piece, change the cut and colour and watch the photo change, then a tailor makes that exact piece to your size. From AED 389, made in about 10 days across the UAE.",
   path: "/how-it-works",
 });
 
@@ -42,7 +42,7 @@ const steps = [
 ];
 
 const promises = [
-  { k: "From AED 390", v: "One price per piece type. Fabric and every option included." },
+  { k: "From AED 389", v: "One price per piece type. Fabric and every option included." },
   { k: "Nothing on a shelf", v: "Your piece does not exist until you ask for it. No overproduction, no waste." },
   { k: "Cotton and linen only", v: "Breathable natural fabric against your skin. Never synthetic." },
 ];
