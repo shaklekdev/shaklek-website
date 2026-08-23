@@ -18,6 +18,9 @@ export const metadata: Metadata = pageMetadata({
 // deciding to trust a new brand with AED 389. Cold phrasing like "change of
 // mind" costs more than it protects.
 //
+// Entity filled in 2026-08-24 from the trade licence: Shaklek For Online
+// Selling, sole establishment, Dubai, licence 1645657.
+//
 // ⚠️ NOT LEGALLY REVIEWED. This is a careful commercial draft, not advice. A
 // UAE-qualified lawyer should review it before it is relied on -- in particular
 // the interaction with Federal Law No. 15 of 2020 on Consumer Protection and
@@ -38,9 +41,11 @@ export default function TermsPage() {
       </p>
 
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
-        Shaklek is operated by [legal entity, to be added once incorporation is
-        complete]. Until that is filled in, treat this as a working draft rather
-        than a final legal document. Questions:{" "}
+        Shaklek is a trading name of{" "}
+        <strong className="text-text-2">Shaklek For Online Selling</strong>{" "}
+        (شكلك للبيع عبر الإنترنت), a sole establishment licensed in Dubai,
+        United Arab Emirates under commercial licence no.{" "}
+        <strong className="text-text-2">1645657</strong>. Questions:{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>

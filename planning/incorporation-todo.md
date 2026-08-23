@@ -1,5 +1,20 @@
 # Incorporation — TODO
 
+**Trade licence details (recorded 2026-08-24, from the licence itself):**
+
+| Field | Value |
+|---|---|
+| Trade name | **Shaklek For Online Selling** — شكلك للبيع عبر الإنترنت |
+| Licence no. | **1645657** |
+| Legal form | Sole establishment (مؤسسة), owner 100% |
+| Emirate | Dubai |
+| Activity | Active Seller Online — بائع عبر الإنترنت |
+
+This is the contracting party. It is now published in `/legal/terms` and
+`/legal/privacy`; a set of terms with no named entity is not enforceable
+against anyone. Do not put the owner's personal Gmail on the site — customer
+contact is `hello@shaklek.com`.
+
 Status (2026-08-23): trade license issued, **Wio corporate bank account is open**, and the **Stripe merchant account is verified and taking live payments** (since 2026-08-22, payouts weekly on Mondays). Still genuinely open: trademark registration. The licence activity question is closed — see below.
 
 You're already a UAE resident with an Emirates ID and setting up in Dubai — no investor/residency visa needed. Checked directly against the official Invest in Dubai government portal (12 August 2026): the core retail activity ("Ready-made Garments Trading") is confirmed approval-free, meaning the fast ~5-minute **Instant Licence** is very likely available. Decision: apply now with Ready-made Garments Trading only — don't wait on confirming whether "Tailoring" also qualifies, that can be added later by amending the license once the business is running. Getting a real license issued matters more right now than getting the activity list perfectly complete on day one.

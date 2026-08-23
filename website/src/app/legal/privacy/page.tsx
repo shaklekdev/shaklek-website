@@ -36,9 +36,11 @@ export default function PrivacyPage() {
       </p>
 
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
-        Shaklek is operated by [legal entity, to be added once incorporation is
-        complete], United Arab Emirates, which is the data controller. Reach a
-        person at{" "}
+        The data controller is{" "}
+        <strong className="text-text-2">Shaklek For Online Selling</strong>{" "}
+        (شكلك للبيع عبر الإنترنت), a sole establishment licensed in Dubai,
+        United Arab Emirates under commercial licence no.{" "}
+        <strong className="text-text-2">1645657</strong>. Reach a person at{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>
