@@ -207,3 +207,63 @@ social accounts get filled with aspirational copy fastest.
 4. **C1** re-check on the live site, fix the layering bug
 5. **D1** profile picture, then the rest of marketing
 6. **B4 / C2 / C3** as capacity allows
+
+---
+
+# Status at 2026-08-23 end of day
+
+## Done and live
+
+- **A1 checkout copy** — "Delivery address and card details are taken on the
+  next screen, secured by Stripe." The founder built this page and still
+  concluded we never ask; a customer would too.
+- **A2 prices** — 389 / 419 / 429 / 619, everywhere. Margin table in commit
+  `3f2969e`.
+- **7 pre-launch test orders removed from production.** 13 → 6. The real live
+  order was protected by id and verified in the keep set first.
+- **Address question closed** — Stripe has collected address and phone since
+  `78db150`, the webhook persists them, and `dashboard/orders` displays them.
+  The founder's own live test genuinely had no address because it ran 18
+  minutes before that commit; confirmed it was only a test, so nothing to
+  chase.
+- **AWS billing alarm** — already existed. `shaklek-monthly-budget`, USD 50,
+  four notifications. The "overdue" flag was based on stale information.
+- **Image-optimizer error** — closed. It is `GET /icon` (the generated favicon)
+  500-ing under `next dev` only; production serves it 200.
+- **Instagram launch kit** — `marketing/instagram-launch.md`. Nine posts,
+  captions, three reels, bio, and 18 verified licence-clear photographs.
+
+## Two decisions waiting on the founder
+
+**Pants at 429.** Every other price dropped by 1; pants dropped by 21. 389 is
+the shirt minus one, but 429 is 21 below 450 — possibly remembered as 430. At
+429, pants earn a lower margin (69%) than skirt (70%) despite costing more to
+make (COGS 119 vs 111). If 449 was intended it is a one-line change.
+
+**The welcome code stacks.** 20% off applies to these new list prices, so pants
+land at AED 343 against the original 450 — a 24% reduction, not 20. That may be
+exactly the intent for a launch offer; it should be a decision rather than an
+accident.
+
+## Still open
+
+| Item | Owner | Note |
+|---|---|---|
+| Real payment test on the new checkout | Session B | In progress. Promo codes are live, so a 99%-off code makes this ~AED 4 rather than 390. |
+| Saved addresses | unassigned | Returning customers retype every time. Blocked while Session B holds `CheckoutForm.tsx`. |
+| Customizer parameters too wide | unassigned | ⚠️ Escalated by the founder: UX friends read the scroll-behind-the-panel as an actual bug. Not taste — treat as a defect. |
+| Catalog cannot be swiped on desktop | unassigned | ⚠️ New. Non-touch users have no way to page the catalog — needs visible left/right arrows. |
+| Feedback button | agreed | Link to `hello@shaklek.com` + WhatsApp. No form: the copy promises every message is read, so only ship what can be kept. |
+| "Skip customisation" | agreed | Frame as *"I'll take it as shown"* — `CLAUDE.md` holds that the customizer **is** the product. |
+| Spec sheet → real tech pack | unassigned | Flat sketch, measurement table, construction notes. |
+| Fabric photos instead of colour swatches | unassigned | Also makes the Instagram fabric posts honest — see the marketing kit. |
+| SEO structured data | unassigned | `Product`/`Offer` schema on catalog pages. |
+| Packaging | founder | Offline. |
+| Clerk page weight | deferred | 353 KB of a 674 KB homepage, but the fix costs signed-in header state on public pages. Not worth it at zero customers. |
+| Apex deep links 404 | deferred | Nice-to-have, not MVP. Write `www.shaklek.com` everywhere. |
+
+## Note for whoever picks this up
+
+The three agents in `.claude/agents/` — `shaklek-security`, `shaklek-ui`,
+`shaklek-marketing` — need a **session restart** to register. They carry the
+specific failures in each area, so use them rather than starting cold.
