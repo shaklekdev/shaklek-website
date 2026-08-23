@@ -20,22 +20,19 @@ Rules that make this work:
 
 ### Session B — cart & customizer UX (2026-08-23)
 
-**Status: IN PROGRESS — holding the files below uncommitted.**
+**Status: DONE — committed as `33deaf3`. No files held. Not pushed.**
 
-Held:
+Shipped:
 
-- `src/lib/CartContext.tsx`
-- `src/app/cart/page.tsx`
-- `src/app/checkout/page.tsx`
-- `src/components/CheckoutForm.tsx`
-- `src/components/DesignCustomizer.tsx`
-- `src/components/SizePicker.tsx`
-- `src/data/parameterSliders.ts`
-- `src/lib/cartThumbnail.ts` (new)
-- `src/lib/pricing.ts` ⚠️ *shared with Session A's area — see note below*
-- `src/app/api/orders/route.ts` ⚠️ *shared with Session A's area*
-- `src/lib/orderEmail.ts`
-- `src/app/upload/page.tsx`
+- **Editable cart lines.** `/design/<slug>?edit=<lineId>` restores colour,
+  fabric, every slider, notes and measurements, and saves over that line
+  instead of appending a second one.
+- **The design page is a real stepper** — "Make it yours" / "Get the fit",
+  each showing `step N of 3`, with back and next on both. Step 1 is choosing
+  the piece on the catalog.
+- **Real cart thumbnails** — resolves the ordered combination photo.
+- **Quantity**, with the cart and header badge counting garments not lines.
+- **Checkout email** — the Pay button no longer sits greyed out unexplained.
 
 ### Session A — security & infrastructure
 
@@ -46,10 +43,10 @@ Holding (per its own commits): `src/db/client.ts`, `src/lib/envGuard.ts`,
 
 ## Notes across sessions
 
-**Session A: Session B has touched `/api/orders` and `pricing.ts`** — the
-handler with the history. Worth a re-audit. What changed: cart lines now carry
-a `quantity`, so `line_items[].quantity` and the `order_items` insert are no
-longer hardcoded to 1.
+**Session A: Session B has touched `/api/orders` and `pricing.ts`** in
+`33deaf3` — the handler with the history. Worth a re-audit. What changed: cart
+lines now carry a `quantity`, so `line_items[].quantity` and the `order_items`
+insert are no longer hardcoded to 1.
 
 **Quantity is money** and is treated as such. It multiplies `unit_amount`, so
 it is resolved server-side in `src/lib/pricing.ts` (`resolveQuantity`) exactly
@@ -168,3 +165,17 @@ they are what a second session is most likely to break.
 - **Never create test orders against production.** That is what left real Stripe
   sessions and order rows behind. Use the `dev` Neon branch with the sandbox
   key, or test pure functions directly with `npx tsx --eval`.
+
+---
+
+## Open, not owned by either session
+
+- **`33deaf3` is committed but not pushed.** Pushing deploys. Nothing in it
+  needs a migration first (see the quantity note above), but it does change
+  the live checkout, so it deserves a real payment test after deploy.
+- **Dev-server image error, pre-existing.** `next dev` logs `Input buffer
+  contains unsupported image format` from the image optimizer. All 286 catalog
+  images and all 4 marketing PNGs decode cleanly under sharp, and the only
+  other images in `public/` are unreferenced Next starter SVGs
+  (`next.svg`, `vercel.svg`, …). Not tracked down further; nothing user-facing
+  is broken. Whoever picks this up: it predates both sessions' current work.
