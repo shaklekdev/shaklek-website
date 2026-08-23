@@ -96,7 +96,7 @@ export default function CustomizeParameters({
           immediately, which meant tapping an option then scrolling back up to
           see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="sticky top-[98px] z-10 h-[46vh] max-h-[480px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)] lg:static lg:h-auto lg:aspect-[3/4] lg:max-h-none lg:shadow-none"
+        className="sticky top-[98px] z-10 h-[50vh] max-h-[520px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)] lg:static lg:h-auto lg:aspect-[5/6] lg:max-h-none lg:shadow-none"
         style={
           activeImage
             ? undefined
@@ -111,7 +111,7 @@ export default function CustomizeParameters({
             alt={view === "back" ? "Back view" : "Front view"}
             fill
             sizes={PREVIEW_SIZES}
-            className="object-cover"
+            className="object-contain"
             priority
             draggable={false}
           />
