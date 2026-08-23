@@ -1,6 +1,8 @@
 # AWS Cloud Infrastructure — TODO
 
-Status: **nothing is deployed anywhere yet.** The site only exists as code on this machine. `shaklek.com` is purchased and protected, but currently shows nothing (or a registrar parking page) — this is the most urgent item on this whole list if the goal is to actually show people something live.
+Status (2026-08-23): **live and taking real card payments** at `www.shaklek.com` on AWS Amplify (app `dqcptedylrif0`, `eu-west-1`). Stripe on live keys, Clerk on production keys, Neon Postgres for orders, Resend for mail.
+
+⚠️ The line above used to read "nothing is deployed anywhere yet" long after the site was live. Stale status text in a planning doc is not harmless — a stale credential claim in `CLAUDE.md` caused a live price vulnerability to be assessed as "test mode, no real money" on 2026-08-23. Verify state, don't read it: see `planning/security/rca-2026-08-23.md`.
 
 **See [`aws-architecture-diagram.html`](./aws-architecture-diagram.html) for the full visual architecture** — every component, what's built vs. decided vs. open, and which pieces are genuinely AWS versus external APIs AWS-hosted code happens to call.
 
@@ -18,9 +20,56 @@ Originally scoped around a raw EC2 instance. Switched to **AWS Amplify** instead
 - Open item: confirm exactly which Gemini image model/tier is in use (Nano Banana vs. Nano Banana Pro have different free-tier terms) before this becomes a real cost line.
 
 ## Immediate: get the site live at all
-- [ ] **AWS Amplify Hosting** — connect the Next.js project (`~/Desktop/Shaklek/website`), deploys automatically on every push, HTTPS and CDN handled automatically
-- [ ] Point `shaklek.com`'s DNS at the Amplify app (Route 53, or keep DNS at GoDaddy and just add the record — doesn't require moving registrars)
+- [x] **AWS Amplify Hosting** — connected, deploys on every push to `main`, HTTPS and CDN handled automatically
+- [x] Point `shaklek.com`'s DNS at the Amplify app — done, DNS stayed at GoDaddy. `www` is a CNAME to CloudFront and works fully. The apex has a caveat, see "Nice to have" below.
 - [ ] **AWS Budgets + a billing alarm**, set up on day one, before anything else goes live
+
+## Nice to have — NOT required for MVP
+
+### Move DNS to Route 53 so the apex domain preserves paths
+**Not blocking anything. Do this on a calm morning, never in a hurry.**
+
+The problem, precisely — three of four URL shapes already work:
+
+| URL | Result |
+|---|---|
+| `shaklek.com` | ✅ 301 → www, works |
+| `www.shaklek.com` | ✅ works |
+| `www.shaklek.com/design/oversized-shirt` | ✅ works |
+| `shaklek.com/design/oversized-shirt` | ❌ 404 |
+
+Only a hand-typed apex **deep link** breaks. Anything copied from a browser already carries `www`, and typing the bare domain works. So the practical fix is simply to **always publish the address as `www.shaklek.com`** — bio, WhatsApp, print. That costs nothing and closes the real-world gap.
+
+**Why GoDaddy cannot fix it.** The apex A-records point at GoDaddy's forwarding service (`15.197.225.128`, `3.33.251.168`), which forwards the root and discards the path. Its dialog offers only 301, 302 and *forward with masking* — no path-preserving option. Masking must **not** be used: it frames the site and wrecks SEO. This is not a settings oversight — the DNS spec forbids a CNAME at a zone apex, and CloudFront can only be targeted by CNAME or an ALIAS-type record. GoDaddy offers no ALIAS. Route 53 does. That is the entire reason this needs a registrar-side move.
+
+**Why it is deliberately deferred.** The migration means recreating every record, and this domain carries live business email. Getting MX or SPF wrong takes down mail — a far worse outcome than a 404 on a URL shape nobody types. The website risk is near zero; the email risk is not.
+
+**Records that must be recreated exactly (captured 2026-08-23):**
+
+```
+shaklek.com        MX    0 shaklek-com.mail.protection.outlook.com.   # Microsoft 365 — DO NOT LOSE
+shaklek.com        TXT   "v=spf1 include:secureserver.net -all"
+shaklek.com        TXT   "NETORGFT21015113.onmicrosoft.com"           # MS domain verification
+_dmarc             TXT   "v=DMARC1; p=quarantine; adkim=r; aspf=r; rua=mailto:dmarc_rua@onsecureserver.net;"
+send               TXT   "v=spf1 include:dc-fd741b8612._spfm.send.shaklek.com ~all"   # Resend
+send               MX    10 feedback-smtp.eu-west-1.amazonses.com.                    # Resend
+www                CNAME dpe3ldtzdjeo5.cloudfront.net.               # Amplify
+clerk              CNAME frontend-api.clerk.services.                # Clerk — sign-in breaks without it
+accounts           CNAME accounts.clerk.services.                    # Clerk
+autodiscover       CNAME autodiscover.outlook.com.                   # Outlook
+_55d0a0b6fb6877d59f43893b29272a90  CNAME _f4cb8edcc66756b68800358652efbd7a.jkddzztszm.acm-validations.aws.   # ACM cert validation
+```
+
+**Order of work when it is finally done:**
+1. Re-capture the live records first (they may have changed): `for t in A MX TXT CNAME NS; do dig +short shaklek.com $t; done`
+2. Create the Route 53 hosted zone for `shaklek.com` and recreate every record above **before** touching nameservers
+3. Verify against Route 53's nameservers directly, without switching: `dig @<route53-ns> shaklek.com MX`
+4. Only then change nameservers at GoDaddy
+5. Send and receive a test email to prove Microsoft 365 still works
+6. Amplify → Domain management → remove and re-add `shaklek.com`; it creates the apex ALIAS itself and flips `verified` to true
+7. Confirm: `curl -sI https://shaklek.com/design/oversized-shirt` returns 301 to the www equivalent, path intact
+
+Rollback: switch the nameservers back at GoDaddy. Allow for propagation delay, so do not attempt this immediately before anything that matters.
 
 ## Database
 - [x] **Neon Postgres** (not RDS) — decided 2026-08-14, ~$0/month at pilot scale vs. RDS's flat ~$15/month, since Neon auto-suspends when idle instead of billing for an always-on instance. Project `shaklek`, Postgres 18, region Frankfurt (`eu-central-1` — Neon doesn't offer Ireland, and Frankfurt is the nearest region to Amplify's `eu-west-1` compute). Neon's own "Backend Services" (built-in auth) was deliberately left off — Clerk is still the decided auth provider, see below.
