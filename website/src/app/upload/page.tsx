@@ -18,6 +18,9 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [spec, setSpec] = useState<DesignSpec | null>(null);
+  // Same gate as the catalog customizer: Tailored requires complete,
+  // plausible measurements before Add to cart is enabled.
+  const [measurementsValid, setMeasurementsValid] = useState(true);
   const { addItem } = useCart();
   const router = useRouter();
 
@@ -98,6 +101,7 @@ export default function UploadPage() {
               onMeasurementsChange={(measurements) =>
                 setSpec((s) => (s ? { ...s, measurements } : s))
               }
+              onMeasurementsValidChange={setMeasurementsValid}
             />
 
             <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
@@ -107,10 +111,14 @@ export default function UploadPage() {
               </div>
               <button
                 onClick={handleAddToCart}
-                disabled={!spec.constraints.passed}
+                disabled={!spec.constraints.passed || !measurementsValid}
                 className="rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
                 title={
-                  spec.constraints.passed ? undefined : "Resolve the flagged request in the chat above"
+                  !spec.constraints.passed
+                    ? "Resolve the flagged request in the chat above"
+                    : !measurementsValid
+                      ? "Add your measurements above before continuing"
+                      : undefined
                 }
               >
                 Add to cart

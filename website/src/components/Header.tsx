@@ -1,12 +1,48 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
+
+const NAV_LINKS = [
+  { href: "/", label: "Catalog" },
+  { href: "/how-it-works", label: "How it works" },
+  { href: "/our-story", label: "Our story" },
+];
 
 export default function Header() {
   const { items } = useCart();
   const { isSignedIn } = useUser();
+  const pathname = usePathname();
+
+  // Every nav link used to be `hidden sm:inline` with no hamburger anywhere in
+  // the markup, so below 640px the header was a logo and a cart icon: Catalog,
+  // How it works, Our story and Sign in were all unreachable. Signed-in users
+  // were unaffected because Clerk's <UserButton> carries no `hidden` class --
+  // so the breakage hit exactly the mobile visitors who had not converted yet,
+  // which is why it survived to production.
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Navigating with the panel open would otherwise leave it covering the new
+  // page. Adjusted during render rather than in an effect -- React's own
+  // recommended pattern for "reset state when a prop changes", and it avoids
+  // the extra commit an effect would cause.
+  const [menuPathname, setMenuPathname] = useState(pathname);
+  if (pathname !== menuPathname) {
+    setMenuPathname(pathname);
+    setMenuOpen(false);
+  }
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
   // Opaque rather than bg-white/90 + backdrop-blur-xl. A full-width sticky
   // element with a 24px backdrop blur is re-sampled and re-blurred on every
@@ -30,21 +66,15 @@ export default function Header() {
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-text-2 sm:gap-8">
-          <Link href="/" className="hidden hover:text-text transition-colors sm:inline">
-            Catalog
-          </Link>
-          <Link
-            href="/how-it-works"
-            className="hidden hover:text-text transition-colors sm:inline"
-          >
-            How it works
-          </Link>
-          <Link
-            href="/our-story"
-            className="hidden hover:text-text transition-colors sm:inline"
-          >
-            Our story
-          </Link>
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="hidden hover:text-text transition-colors sm:inline"
+            >
+              {link.label}
+            </Link>
+          ))}
           {isSignedIn ? (
             <UserButton userProfileMode="navigation" userProfileUrl="/account">
               <UserButton.MenuItems>
@@ -92,8 +122,66 @@ export default function Header() {
               </span>
             )}
           </Link>
+
+          {/* Below sm this is the only way to reach the rest of the site.
+              44x44 tap target per WCAG 2.5.8. */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="-mr-2 flex h-11 w-11 items-center justify-center text-text transition-colors hover:text-text-2 sm:hidden"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              {menuOpen ? (
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+              ) : (
+                <path
+                  d="M4 7h16M4 12h16M4 17h16"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+              )}
+            </svg>
+          </button>
         </nav>
       </div>
+
+      {menuOpen && (
+        <nav
+          id="mobile-nav"
+          aria-label="Main"
+          className="border-t border-border bg-white px-6 py-2 sm:hidden"
+        >
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block border-b border-border py-3.5 text-sm text-text-2 transition-colors hover:text-text"
+            >
+              {link.label}
+            </Link>
+          ))}
+          {/* Signed-in users get /account through Clerk's <UserButton>, which
+              renders on mobile already -- so only the signed-out entry point
+              was missing. */}
+          {!isSignedIn && (
+            <Link
+              href="/sign-in"
+              className="block py-3.5 text-sm text-text-2 transition-colors hover:text-text"
+            >
+              Sign in
+            </Link>
+          )}
+        </nav>
+      )}
     </header>
   );
 }

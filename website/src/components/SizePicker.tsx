@@ -14,12 +14,45 @@ type MeasurementFields = {
 
 const EMPTY_FIELDS: MeasurementFields = { bust: "", waist: "", hip: "", height: "", notes: "" };
 
-const FIELD_LABELS: { key: keyof Omit<MeasurementFields, "notes">; label: string; placeholder: string }[] = [
-  { key: "bust", label: "Bust / chest", placeholder: "90" },
-  { key: "waist", label: "Waist", placeholder: "74" },
-  { key: "hip", label: "Hip", placeholder: "98" },
-  { key: "height", label: "Height", placeholder: "165" },
+// These carried only `min="0"`, so a Tailored order could be placed with no
+// measurements at all, or with `height: 5` / `waist: 9999`. Every unmakeable
+// order costs a manual stylist round-trip against a fixed price, so the ranges
+// are deliberately wide enough to fit any real adult body and narrow enough to
+// catch a typo or an empty field.
+const FIELD_LABELS: {
+  key: keyof Omit<MeasurementFields, "notes">;
+  label: string;
+  placeholder: string;
+  min: number;
+  max: number;
+}[] = [
+  { key: "bust", label: "Bust / chest", placeholder: "90", min: 60, max: 160 },
+  { key: "waist", label: "Waist", placeholder: "74", min: 50, max: 150 },
+  { key: "hip", label: "Hip", placeholder: "98", min: 60, max: 170 },
+  { key: "height", label: "Height", placeholder: "165", min: 130, max: 210 },
 ];
+
+// Returns a human-readable problem per field, or null when the field is good.
+function fieldError(
+  field: (typeof FIELD_LABELS)[number],
+  rawValue: string,
+): string | null {
+  const value = rawValue.trim();
+  if (!value) return "Required for a tailored fit";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "Enter a number";
+  if (n < field.min || n > field.max) return `Expected ${field.min}–${field.max}cm`;
+  return null;
+}
+
+export function measurementErrors(fields: MeasurementFields): Partial<Record<string, string>> {
+  const errors: Partial<Record<string, string>> = {};
+  for (const field of FIELD_LABELS) {
+    const error = fieldError(field, fields[field.key]);
+    if (error) errors[field.key] = error;
+  }
+  return errors;
+}
 
 function composeMeasurements(fields: MeasurementFields): string {
   const parts = FIELD_LABELS.filter((f) => fields[f.key].trim()).map(
@@ -36,6 +69,7 @@ export default function SizePicker({
   onSizeModeChange,
   onSizeChange,
   onMeasurementsChange,
+  onMeasurementsValidChange,
 }: {
   sizeMode: SizeMode;
   size: string;
@@ -44,8 +78,27 @@ export default function SizePicker({
   onSizeModeChange: (mode: SizeMode) => void;
   onSizeChange: (size: string) => void;
   onMeasurementsChange: (measurements: string) => void;
+  // Lets the parent gate Add to cart on complete, plausible measurements.
+  // Optional so callers that don't gate don't have to care.
+  onMeasurementsValidChange?: (valid: boolean) => void;
 }) {
   const [fields, setFields] = useState<MeasurementFields>(EMPTY_FIELDS);
+  // Errors only surface once a field has been visited, so the form doesn't
+  // open covered in red before anyone has typed anything.
+  const [touched, setTouched] = useState<Partial<Record<string, boolean>>>({});
+
+  const errors = measurementErrors(fields);
+  const shownErrors: Partial<Record<string, string>> = Object.fromEntries(
+    Object.entries(errors).filter(([key]) => touched[key]),
+  );
+
+  // Standard sizing needs no measurements, so validity only depends on the
+  // fields while Tailored is selected.
+  const measurementsValid = sizeMode !== "tailored" || Object.keys(errors).length === 0;
+  useEffect(() => {
+    onMeasurementsValidChange?.(measurementsValid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [measurementsValid]);
 
   // Saved measurements load async (fetched from /account's data by the
   // parent) -- arrive after this component's first render, so seed the
@@ -125,19 +178,33 @@ export default function SizePicker({
                 <label htmlFor={`measurement-${f.key}`} className="mb-1 block text-xs text-text-2">
                   {f.label}
                 </label>
-                <div className="flex items-center rounded-shaklek-xs border border-border-strong bg-white focus-within:border-accent">
+                <div
+                  className={`flex items-center rounded-shaklek-xs border bg-white focus-within:border-accent ${
+                    shownErrors[f.key] ? "border-red-400" : "border-border-strong"
+                  }`}
+                >
                   <input
                     id={`measurement-${f.key}`}
                     type="number"
                     inputMode="decimal"
-                    min="0"
+                    min={f.min}
+                    max={f.max}
+                    required
+                    aria-invalid={Boolean(shownErrors[f.key])}
+                    aria-describedby={shownErrors[f.key] ? `measurement-${f.key}-error` : undefined}
                     value={fields[f.key]}
                     onChange={(e) => updateField(f.key, e.target.value)}
+                    onBlur={() => setTouched((t) => ({ ...t, [f.key]: true }))}
                     placeholder={f.placeholder}
                     className="w-full rounded-shaklek-xs bg-transparent p-3 text-sm text-text placeholder:text-text-3 focus:outline-none"
                   />
                   <span className="pr-3 text-xs text-text-3">cm</span>
                 </div>
+                {shownErrors[f.key] && (
+                  <p id={`measurement-${f.key}-error`} className="mt-1 text-xs text-red-700">
+                    {shownErrors[f.key]}
+                  </p>
+                )}
               </div>
             ))}
           </div>

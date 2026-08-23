@@ -16,6 +16,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
   const [step, setStep] = useState<2 | 3>(2);
   const [savedMeasurements, setSavedMeasurements] = useState<SavedMeasurements | undefined>();
+  // Tailored orders used to be placeable with no measurements at all -- the
+  // constraints gate only covered the fabric/layer/logo rules and never looked
+  // at the numbers. Each unmakeable order costs a manual stylist round-trip.
+  const [measurementsValid, setMeasurementsValid] = useState(true);
   const { addItem } = useCart();
   const { isSignedIn } = useUser();
   const router = useRouter();
@@ -148,6 +152,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
             onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
             onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
+            onMeasurementsValidChange={setMeasurementsValid}
           />
 
           <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -157,9 +162,15 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             </div>
             <button
               onClick={handleAddToCart}
-              disabled={!spec.constraints.passed}
+              disabled={!spec.constraints.passed || !measurementsValid}
               className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
-              title={spec.constraints.passed ? undefined : "Resolve the flagged request above before continuing"}
+              title={
+                !spec.constraints.passed
+                  ? "Resolve the flagged request above before continuing"
+                  : !measurementsValid
+                    ? "Add your measurements above before continuing"
+                    : undefined
+              }
             >
               Add to cart
             </button>
