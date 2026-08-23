@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { getVerifiedEmail } from "@/lib/authEmail";
 import { desc, eq } from "drizzle-orm";
 import Header from "@/components/Header";
 import AccountNameForm from "@/components/AccountNameForm";
@@ -48,8 +48,7 @@ async function getOrdersForEmail(email: string) {
 }
 
 export default async function AccountPage() {
-  const user = await currentUser();
-  const email = user?.primaryEmailAddress?.emailAddress;
+  const email = await getVerifiedEmail();
   const name = email ? await getNameForEmail(email) : null;
   const orders = email ? await getOrdersForEmail(email) : null;
 

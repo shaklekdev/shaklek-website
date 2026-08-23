@@ -15,6 +15,20 @@ export type NotifyOrderItem = {
   previewImage?: string; // uploaded reference photo (data URL) -- only ever present in the fallback path's raw request body, never persisted to the DB
 };
 
+// Everything below the garment name is customer-supplied free text (fabric,
+// colour, size, the changes list, notes). It was being interpolated straight
+// into an HTML email body, so a cart item could inject arbitrary markup --
+// including a link -- into a mail we send from orders@shaklek.com. Escape
+// every interpolated value.
+function esc(value: unknown): string {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function sendOrderNotificationEmail(
   items: NotifyOrderItem[],
   method: string,
@@ -34,18 +48,31 @@ export async function sendOrderNotificationEmail(
 
   const summary = `New order (${items.length} ${items.length === 1 ? "item" : "items"}) from ${email}, AED ${total} via ${method}\n${itemLines}`;
 
+  // Reference photos arrive as base64 data URLs in the request body. Resend
+  // caps a message at 40MB total; more to the point, an uncapped attachment
+  // is a free way to make us buffer and forward arbitrary data. Anything
+  // that isn't a plausible base64 image of sane size is dropped rather than
+  // failing the whole notification.
+  const MAX_ATTACHMENT_BASE64 = 4_000_000; // ~3MB decoded
   const attachments = items
     .filter((item) => item.previewImage)
-    .map((item, i) => ({
-      filename: `reference-${i + 1}.jpg`,
-      content: item.previewImage!.split(",")[1] ?? "",
-    }));
+    .map((item, i) => {
+      const [header, data] = item.previewImage!.split(",");
+      if (!data || !/^data:image\/(jpeg|jpg|png|webp);base64$/i.test(header)) return null;
+      if (data.length > MAX_ATTACHMENT_BASE64) return null;
+      return { filename: `reference-${i + 1}.jpg`, content: data };
+    })
+    .filter((a): a is { filename: string; content: string } => a !== null);
 
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    console.log("[orders] RESEND_API_KEY not set — order not emailed. Details:");
-    console.log(summary);
+    // Do NOT log `summary` -- it carries the customer's email address,
+    // body measurements and free-text notes, and these lines land in
+    // CloudWatch where they long outlive the order.
+    console.error(
+      `[orders] RESEND_API_KEY not set — order of ${items.length} item(s) NOT emailed. Details withheld (PII).`,
+    );
     return { emailed: false };
   }
 
@@ -91,14 +118,14 @@ export async function sendCustomerConfirmationEmail(
       (item) => `
         <tr>
           <td style="padding:10px 0;border-bottom:1px solid #eee;">
-            <div style="font-size:14px;color:#1a1a1a;">${item.name}</div>
+            <div style="font-size:14px;color:#1a1a1a;">${esc(item.name)}</div>
             <div style="font-size:12px;color:#6b6b6b;margin-top:2px;">
-              ${item.fabric ?? ""} · ${item.color ?? ""} · Size ${item.size ?? ""}
-              ${item.changes && item.changes.length ? `<br/>${item.changes.join(", ")}` : ""}
+              ${esc(item.fabric ?? "")} · ${esc(item.color ?? "")} · Size ${esc(item.size ?? "")}
+              ${item.changes && item.changes.length ? `<br/>${esc(item.changes.join(", "))}` : ""}
             </div>
           </td>
           <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-size:14px;color:#1a1a1a;white-space:nowrap;">
-            AED ${item.price}
+            AED ${esc(item.price)}
           </td>
         </tr>`,
     )
@@ -111,7 +138,7 @@ export async function sendCustomerConfirmationEmail(
         Thank you — your ${items.length === 1 ? "piece is" : "pieces are"} on ${items.length === 1 ? "its" : "their"} way to being made.
       </p>
       <table style="width:100%;border-collapse:collapse;margin-top:16px;">${itemRows}</table>
-      <p style="text-align:right;font-size:16px;font-weight:600;margin-top:12px;">Total AED ${total}</p>
+      <p style="text-align:right;font-size:16px;font-weight:600;margin-top:12px;">Total AED ${esc(total)}</p>
       <p style="font-size:13px;color:#6b6b6b;line-height:1.6;">
         A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor.
         Expect delivery in about 10 days from confirmation.
@@ -120,11 +147,11 @@ export async function sendCustomerConfirmationEmail(
         <p style="font-size:13px;margin:0 0 10px;color:#1a1a1a;">
           Want to track this order and any future ones in one place?
         </p>
-        <a href="${appUrl}/sign-up" style="display:inline-block;background:#1a1a1a;color:#fff;text-decoration:none;padding:10px 20px;border-radius:999px;font-size:13px;">
+        <a href="${esc(appUrl)}/sign-up" style="display:inline-block;background:#1a1a1a;color:#fff;text-decoration:none;padding:10px 20px;border-radius:999px;font-size:13px;">
           Create a free account
         </a>
         <p style="font-size:11px;color:#a0a0a0;margin:10px 0 0;">
-          Sign up with this same email address (${email}) and this order will already be there.
+          Sign up with this same email address (${esc(email)}) and this order will already be there.
         </p>
       </div>
     </div>`;

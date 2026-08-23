@@ -23,6 +23,7 @@ export default function CheckoutForm({ total }: { total: number }) {
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Signed-in customers checkout under their account email, not whatever
   // they happen to type -- orders are matched to /account by email, so
@@ -35,13 +36,32 @@ export default function CheckoutForm({ total }: { total: number }) {
 
   async function handlePay() {
     setSubmitting(true);
+    setError(null);
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ items, method, total, email }),
       });
-      const data = await res.json();
+
+      // Every failure path below used to fall through to the success page:
+      // there was no res.ok check, so a 400 or 409 cleared the cart and
+      // rendered "Order confirmed" for an order that was never created,
+      // and an empty-body 500 threw in .json() and showed nothing at all.
+      // Nothing is cleared or navigated until the server has actually
+      // confirmed the order.
+      let data: { ok?: boolean; error?: string; checkoutUrl?: string; emailed?: boolean } = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
+      if (!res.ok || data.ok === false) {
+        setError(data.error ?? "We couldn't place your order. Please try again.");
+        setSubmitting(false);
+        return;
+      }
 
       if (data.checkoutUrl) {
         // Full pipeline: hand off to Stripe. Don't clear the cart here --
@@ -59,6 +79,8 @@ export default function CheckoutForm({ total }: { total: number }) {
       clear();
       router.push("/order-confirmed");
     } catch {
+      // Network failure / offline. The cart is untouched, so retrying works.
+      setError("We couldn't reach the payment service. Please check your connection and try again.");
       setSubmitting(false);
     }
   }
@@ -131,6 +153,15 @@ export default function CheckoutForm({ total }: { total: number }) {
         >
           {submitting ? "Processing…" : `Pay AED ${total}`}
         </button>
+      )}
+      {error && (
+        <p
+          role="alert"
+          aria-live="assertive"
+          className="mt-4 rounded-shaklek-sm border border-red-300 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
+        >
+          {error}
+        </p>
       )}
       <p className="mt-3 text-center text-xs text-text-3">
         Secure payment · One free alteration or remake within 14 days

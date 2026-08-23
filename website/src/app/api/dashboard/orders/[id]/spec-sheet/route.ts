@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
+import { isUuid } from "@/lib/requestGuards";
 import { eq } from "drizzle-orm";
 import PDFDocument from "pdfkit";
 import fs from "fs";
@@ -187,8 +188,7 @@ function buildPdf(order: {
 }
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const user = await currentUser();
-  const email = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+  const email = await getVerifiedEmailLower();
   if (!email || !STAFF_EMAILS.includes(email)) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
@@ -199,6 +199,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   }
 
   const { id } = await params;
+  // A non-uuid id makes Postgres throw a cast error, surfacing as a 500.
+  if (!isUuid(id)) {
+    return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  }
 
   const rows = await db
     .select()

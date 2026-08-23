@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
 import { sendOrderNotificationEmail, sendCustomerConfirmationEmail } from "@/lib/orderEmail";
@@ -71,10 +71,12 @@ export async function POST(req: NextRequest) {
   // the order stops sitting at pending_payment forever -- nothing was made,
   // so no stylist notification, unlike the paid path below.
   if (event.type === "checkout.session.expired") {
+    // Same gate: an expiry event arriving after a successful payment (or a
+    // replay of one) must not flip a paid order to failed.
     await db
       .update(schema.orders)
       .set({ status: "payment_failed" })
-      .where(eq(schema.orders.id, orderId));
+      .where(and(eq(schema.orders.id, orderId), eq(schema.orders.status, "pending_payment")));
     return NextResponse.json({ ok: true });
   }
 
@@ -85,7 +87,14 @@ export async function POST(req: NextRequest) {
     console.error(`[webhooks/stripe] order ${orderId} paid with NO shipping address`);
   }
 
-  await db
+  // Stripe delivers events AT LEAST ONCE -- it retries any non-2xx, and staff
+  // can resend an event by hand from the Dashboard. This update used to be
+  // unconditional, so a retry re-sent both the stylist notification and the
+  // customer confirmation, and could drag an already-canceled order back to
+  // "paid". Gating on the pending_payment -> paid transition makes the whole
+  // handler idempotent without needing an events table: the second delivery
+  // updates zero rows, returns nothing, and skips the emails.
+  const [transitioned] = await db
     .update(schema.orders)
     .set({
       status: "paid",
@@ -98,7 +107,13 @@ export async function POST(req: NextRequest) {
       shippingPostalCode: address?.postal_code ?? null,
       shippingCountry: address?.country ?? null,
     })
-    .where(eq(schema.orders.id, orderId));
+    .where(and(eq(schema.orders.id, orderId), eq(schema.orders.status, "pending_payment")))
+    .returning({ id: schema.orders.id });
+
+  if (!transitioned) {
+    console.log(`[webhooks/stripe] order ${orderId} already finalized — duplicate delivery ignored`);
+    return NextResponse.json({ ok: true, duplicate: true });
+  }
 
   const [order] = await db
     .select()

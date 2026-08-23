@@ -17,16 +17,20 @@ www). Commerce works end to end: Stripe Checkout → webhook → order persisted
 Neon Postgres → notification email via Resend. Auth is Clerk (staff
 `/dashboard`, customers `/account`).
 
-**The two things standing between this and real revenue, both credential swaps,
-no code:**
+**This is LIVE and taking real card payments** as of 2026-08-22. Both key swaps
+are done — Stripe is on live keys, Clerk is on production keys
+(`pk_live_`, `clerk.shaklek.com`). A full payment has been made with a real
+card.
 
-- **Stripe is still on test keys.** The merchant account is verified (2026-08-20)
-  — charges and payouts enabled, Wio bank attached, no outstanding requirements.
-  Going live is swapping the keys in Amplify env vars.
-- **Clerk is still on development keys in production.** Dev instances have a hard
-  monthly active-user cap; when it trips, sign-in breaks for every customer at
-  once. Needs a production instance created, then a key swap. See
-  `planning/payment-auth-todo.md`.
+⚠️ **Never read credential state out of this file.** It lives in the Amplify
+console, so a swap leaves no git trace and this doc goes stale silently — which
+is exactly what happened on 2026-08-22 and caused a live price vulnerability to
+be assessed as "test mode, no real money". Verify it:
+
+```bash
+aws amplify get-app --app-id dqcptedylrif0 --query 'app.environmentVariables' --output json
+curl -s https://www.shaklek.com/ | grep -oE 'pk_(live|test)_[A-Za-z0-9]+'
+```
 
 **Customizer photography is complete for all eight catalog items** as of
 2026-08-22 (commit `f4f1864`). Four shirts on `sleeve:length`, four trousers on
@@ -47,6 +51,60 @@ project is judged against that.
 Zero real AI exists in the product itself; that is deliberate (Phase 1 is a
 human-run concierge model). The image generation described here is a build-time
 tool for producing catalog photos, not a product feature.
+
+---
+
+## 0. Security — this site takes live card payments
+
+**Read this before touching payments, auth, a route handler, the webhook, or
+anything that reads a request body.**
+
+On 2026-08-23 an external audit found that anyone could buy an AED 450 garment
+for **AED 5** against live cards, plus three more Critical/High issues. A
+follow-up source audit found nine more. Full record and root-cause analysis:
+`planning/security/rca-2026-08-23.md`. Read it once; it is short and it is the
+reason this section exists.
+
+The cause was not missing knowledge. It was that this file — the project's
+operating manual — had a detailed §7 on image-generation discipline and **not
+one word about security**, so security was never on any session's checklist
+while a payment flow was built over nine days.
+
+### The rule that would have prevented all of it
+
+`/api/orders` was written when `items[].price` was harmless display data for an
+email. Stripe was later bolted onto **the same handler**, turning that same
+untrusted field into `unit_amount`. The trust boundary moved; the input
+handling didn't.
+
+> **When a value starts being used for something new — money, identity,
+> authorization — re-audit every place it enters the system.** Extending a
+> handler is a new threat model for every field it already read.
+
+### Non-negotiables
+
+- **The server owns every price.** `src/lib/pricing.ts` recomputes from
+  `catalog.ts` by slug. Nothing from the request body may reach `unit_amount`
+  or the DB. The client's `total` is advisory and only used as a mismatch check.
+- **Authorization goes through `getVerifiedEmail()`** (`src/lib/authEmail.ts`).
+  Customers are keyed by email, so an unverified address must never authorize.
+- **Every write route** gets `rejectCrossOrigin` + `rejectOversizedBody` +
+  per-field caps from `src/lib/requestGuards.ts`, and `isUuid()` before any id
+  reaches a query.
+- **Webhook state transitions are gated**, never unconditional — Stripe
+  delivers at-least-once.
+- **Never reflect a request header** into a redirect target.
+- **Never log PII** (email, measurements, notes). CloudWatch outlives the order.
+- **Never create test orders against production.** The external audit left real
+  Stripe sessions and order rows in the live Neon DB doing exactly that. Test
+  pure functions with `npx tsx --eval`, or probe a local production build.
+
+### Before shipping anything in that blast radius
+
+Run the security agent: `.claude/agents/shaklek-security.md`. There are also
+`shaklek-ui` and `shaklek-marketing` agents, each carrying the specific
+failures in its own area. They exist so the lessons survive the session that
+learned them.
 
 ---
 

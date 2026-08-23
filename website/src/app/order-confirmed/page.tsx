@@ -44,6 +44,10 @@ function fromLocalStorage(): DisplayOrder | null {
 function OrderConfirmedContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
+  // Signed access token minted with the Checkout Session and carried back in
+  // Stripe's success_url. /api/orders/:id needs it (or a Clerk session that
+  // owns the order) -- an order id alone no longer authorizes a read.
+  const accessToken = searchParams.get("t");
   const { clear } = useCart();
   const { isSignedIn } = useUser();
   const [order, setOrder] = useState<DisplayOrder | null | undefined>(undefined);
@@ -63,7 +67,11 @@ function OrderConfirmedContent() {
 
     async function poll() {
       try {
-        const res = await fetch(`/api/orders/${orderId}`);
+        const res = await fetch(
+          `/api/orders/${encodeURIComponent(orderId!)}${
+            accessToken ? `?t=${encodeURIComponent(accessToken)}` : ""
+          }`,
+        );
         const data = await res.json();
         if (cancelled) return;
 
@@ -95,7 +103,7 @@ function OrderConfirmedContent() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [orderId, accessToken]);
 
   if (order === undefined) return null;
 

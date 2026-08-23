@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { rejectCrossOrigin } from "@/lib/requestGuards";
+import { isUuid } from "@/lib/requestGuards";
 
 // Fulfillment statuses a staff member can set by hand -- payment statuses
 // (pending_payment/paid/payment_failed) stay webhook-only, see schema.ts.
@@ -13,14 +15,21 @@ const STAFF_EMAILS = (process.env.STAFF_EMAILS ?? "")
   .filter(Boolean);
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const user = await currentUser();
-  const email = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+  const crossOrigin = rejectCrossOrigin(req);
+  if (crossOrigin) return crossOrigin;
+
+  const email = await getVerifiedEmailLower();
   if (!email || !STAFF_EMAILS.includes(email)) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
 
-  const { status } = await req.json();
-  if (!ALLOWED_STATUSES.includes(status)) {
+  let status: unknown;
+  try {
+    ({ status } = await req.json());
+  } catch {
+    return NextResponse.json({ error: "Malformed request" }, { status: 400 });
+  }
+  if (typeof status !== "string" || !ALLOWED_STATUSES.includes(status)) {
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
@@ -30,7 +39,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
 
   const { id } = await params;
-  await db.update(schema.orders).set({ status }).where(eq(schema.orders.id, id));
+  // An id that isn't a uuid makes Postgres throw a cast error, which surfaces
+  // as a 500. Reject the shape first, and report a miss honestly rather than
+  // returning ok:true for an order that doesn't exist.
+  if (!isUuid(id)) {
+    return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  }
+
+  const [updated] = await db
+    .update(schema.orders)
+    .set({ status })
+    .where(eq(schema.orders.id, id))
+    .returning({ id: schema.orders.id });
+
+  if (!updated) {
+    return NextResponse.json({ error: "Order not found" }, { status: 404 });
+  }
 
   return NextResponse.json({ ok: true });
 }

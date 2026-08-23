@@ -11,6 +11,15 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 // any customer who signs up gets in, since it's just their own order
 // history (matched by email in account/page.tsx).
 //
+// /api/trends/* is in the matcher because those two routes are staff-only
+// (they fan out to Google on every call) and check STAFF_EMAILS themselves.
+//
+// /api/orders/* is in the matcher for the same reason -- /api/orders/:id
+// authorizes with currentUser() as one of its two accepted proofs, and
+// currentUser() throws outright if clerkMiddleware never ran for the
+// request. It is NOT protected: guest checkout must be able to POST an
+// order and read back its own confirmation with a signed token.
+//
 // /api/account/* and /api/dashboard/* are included in the matcher below (so
 // clerkMiddleware runs and currentUser() works at all -- without this,
 // every call throws "auth() was called but Clerk can't detect usage of
@@ -29,5 +38,12 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/account/:path*", "/api/account/:path*", "/api/dashboard/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/account/:path*",
+    "/api/account/:path*",
+    "/api/dashboard/:path*",
+    "/api/orders/:path*",
+    "/api/trends/:path*",
+  ],
 };

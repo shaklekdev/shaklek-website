@@ -30,11 +30,35 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
+// localStorage is attacker-writable in the sense that anything on the page --
+// or the customer themselves -- can put arbitrary JSON here. Money is not at
+// risk (src/lib/pricing.ts re-prices every order server-side), but a
+// malformed entry used to flow straight into the UI as `NaN` totals and
+// arbitrary strings. Validate the shape on the way in.
+function isValidCartItem(value: unknown): value is CartItem {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.id === "string" &&
+    typeof item.slug === "string" &&
+    typeof item.name === "string" &&
+    typeof item.category === "string" &&
+    typeof item.price === "number" &&
+    Number.isFinite(item.price) &&
+    item.price >= 0 &&
+    (item.previewImage === undefined ||
+      (typeof item.previewImage === "string" && item.previewImage.startsWith("data:image/")))
+  );
+}
+
 function readStoredCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as CartItem[]) : [];
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(isValidCartItem);
   } catch {
     return [];
   }
@@ -57,7 +81,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!hydrated) return;
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      // QuotaExceededError -- an uploaded reference photo held as a data URL
+      // can push the cart past the ~5MB origin quota. This used to throw
+      // inside the effect and take the tree down on the highest-intent
+      // flow. The in-memory cart still works for this session; only
+      // persistence across a reload is lost.
+      console.warn("[cart] could not persist cart to localStorage");
+    }
   }, [items, hydrated]);
 
   const addItem = useCallback((item: Omit<CartItem, "id">) => {

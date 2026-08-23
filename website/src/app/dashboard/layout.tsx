@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { SignOutButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { NOINDEX } from "@/lib/seo";
@@ -15,8 +15,7 @@ const STAFF_EMAILS = (process.env.STAFF_EMAILS ?? "")
   .filter(Boolean);
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user = await currentUser();
-  const email = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+  const email = await getVerifiedEmailLower();
   const allowed = Boolean(email && STAFF_EMAILS.includes(email));
 
   if (!allowed) {
