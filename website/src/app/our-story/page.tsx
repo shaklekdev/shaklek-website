@@ -3,6 +3,8 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { renderParamsForCategory } from "@/data/parameterSliders";
+import { colors, sizes } from "@/data/colors";
 
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
@@ -88,6 +90,18 @@ const tenetGroups = [
     ],
   },
 ];
+
+// The founder's note claimed 288 ways for a shirt and 576 for trousers.
+// Neither is right, and both are the same number as each other in reality:
+// 2 sleeve/leg options x 2 lengths x 4 colours x 2 fabrics x 6 standard sizes
+// = 192. The higher figures appear to have counted the Shaklek+ sliders, which
+// are locked and cannot be chosen. Computed here rather than typed, so it
+// follows parameterSliders.ts and colors.ts instead of drifting away from them.
+const SHIRT_WAYS =
+  renderParamsForCategory("Shirt").reduce((n, p) => n * p.options.length, 1) *
+  colors.length *
+  2 *
+  sizes.length;
 
 export default function OurStoryPage() {
   return (
@@ -186,27 +200,29 @@ export default function OurStoryPage() {
             <div className="space-y-4 text-justify text-[15px] leading-relaxed text-text-2 hyphens-auto">
               <p>
                 I spent more than half my life trying to understand my own
-                skin. Endometriosis, acne, endocrine disruptors, and a long
-                journey of changing everything that touched my body, day and
-                night. The clothes I wore eight hours at work, then sixteen
-                more after that, couldn&apos;t possibly be neutral.
+                body. Endometriosis, acne, endocrine disruptors, and a long
+                journey of changing everything that touched my skin, day and
+                night. The clothes I wore all day, filled with polyester and
+                chemical materials, couldn&apos;t possibly be neutral.
               </p>
               <p>
-                I still wanted to wear something trendy, classy, put together.
-                And once I actually find those pieces, they&apos;re either too
-                expensive, not quite my taste, or not my fit.
+                I wanted to wear something trendy, classy, put together and yet
+                friendly to my health. And once I actually find those pieces,
+                they&apos;re either too expensive, not quite my taste, or not my
+                fit.
               </p>
               <p>
                 I&apos;m a tech girl who happens to love fashion, and I kept
-                asking myself: why couldn&apos;t AI solve this, for me and for
-                everyone like me?
+                asking myself: why couldn&apos;t technology solve this, for me
+                and for everyone like me?
               </p>
               <p>
                 Shaklek means &ldquo;your way&rdquo; in Arabic. Your look, your
                 vision, simply you. I wanted customization for our taste and
-                shape, because we&apos;re all different. On Shaklek, you can
-                customize the same shirt in 288 different ways, the same
-                trousers in 576. That&apos;s what I built.
+                shape, because we&apos;re all different. On Shaklek the same
+                shirt can be made {SHIRT_WAYS} different ways before we even
+                take your measurements &mdash; and then it&apos;s cut to those.
+                That&apos;s what I built.
               </p>
               <p>
                 I wanted this to be the personal wardrobe of everyone who
@@ -215,7 +231,8 @@ export default function OurStoryPage() {
               </p>
               <p>
                 If you have an idea or feedback to improve Shaklek, please
-                reach out. This is not just a brand — it&apos;s your brand.
+                reach out. This is not just a brand &mdash; it&apos;s your
+                brand.
               </p>
               <p className="pt-1 text-sm font-medium text-text">
                 Nada, founder of Shaklek
@@ -227,17 +244,9 @@ export default function OurStoryPage() {
 
       {/* Closing */}
       <div className="mx-auto w-full max-w-2xl px-6 pb-20">
-        <div className="rounded-shaklek-sm border border-gold/30 bg-gold/10 p-5">
-          <p className="text-sm text-text">
-            <strong>From AED 389, fixed.</strong> Accessible by design, not
-            an afterthought. Made-to-order shouldn&apos;t mean a luxury
-            markup.
-          </p>
-        </div>
-
         <Link
           href="/"
-          className="mt-8 inline-block rounded-full bg-accent px-6 py-3 text-sm text-white"
+          className="inline-block bg-accent px-6 py-3 text-sm text-white transition-opacity hover:opacity-90"
         >
           Start designing
         </Link>

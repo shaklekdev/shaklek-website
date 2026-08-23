@@ -45,11 +45,14 @@ export default function Home() {
             <br />
             your way.
           </h1>
-          {/* Was three clauses at 14px in --text-2 over a photograph behind a
-              55% wash -- legible on a laptop, hard work on a phone in daylight.
-              One sentence, a step up in size and weight, and the full text
-              colour rather than the muted one. */}
-          <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed font-medium text-text">
+          {/* Readability here came out of two rounds and one overcorrection.
+              Originally 14px in --text-2 over a 55% wash: legible on a laptop,
+              hard work on a phone in daylight. Then medium weight in the full
+              text colour, which fixed the legibility and read far too heavy --
+              a bold sans paragraph under a light serif headline is not this
+              brand. The wash now does the work at 70%, so the type can go back
+              to normal weight and the softer colour, one step up in size. */}
+          <p className="font-display mx-auto mt-3 max-w-md text-[16px] leading-relaxed font-normal text-text-2">
             Timeless essentials in organic cotton and linen. Customise the cut,
             watch it change, and we make it to your shape.
           </p>
