@@ -209,13 +209,13 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <div className="mt-5">
                 <button
                   onClick={() => setStep(3)}
-                  className="w-full rounded-full bg-accent px-8 py-3 text-sm text-white transition-opacity hover:opacity-90"
+                  className="w-full bg-accent px-8 py-3 text-sm text-white transition-opacity hover:opacity-90"
                 >
                   Next: get the fit →
                 </button>
                 <button
                   onClick={() => router.push("/")}
-                  className="mt-2 w-full rounded-full border border-border px-8 py-3 text-sm text-text-2 transition-colors hover:border-border-strong hover:text-text"
+                  className="mt-2 w-full border border-border px-8 py-3 text-sm text-text-2 transition-colors hover:border-border-strong hover:text-text"
                 >
                   ← Back to the catalog
                 </button>

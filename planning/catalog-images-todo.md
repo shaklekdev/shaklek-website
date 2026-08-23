@@ -113,3 +113,44 @@ and `PANTS_PARAMS` -- likely `sleeve` x `length`, mirroring the shirts.
   has twice turned out to be the one needed. Archive to
   `catalog-archive/<date>-session/` before the session ends -- the scratchpad is
   wiped on exit.
+
+---
+
+## ⚠️ The photography is not one aspect ratio (found 2026-08-24)
+
+Surveying all 286 files in `public/catalog/` turned up **at least eight
+different dimensions**, spanning portrait to landscape:
+
+```
+848x1264   x82   ratio 0.671
+832x1248   x66   ratio 0.667
+864x1184   x29   ratio 0.730
+896x1200   x25   ratio 0.747
+1111x960   x21   ratio 1.157   <- landscape
+848x733    x12   ratio 1.157   <- landscape
+1088x960   x12   ratio 1.133   <- landscape
+896x1152    x9   ratio 0.778
+```
+
+This is why the customizer preview looked wrong. No single box fits them all:
+`object-cover` crops (it was cutting the hem off trousers on phones, i.e. the
+exact thing the customer is choosing), and `object-contain` letterboxes, which
+the founder correctly read as ugly "square lines" once the box had a border.
+
+Mitigated in the UI on 2026-08-24 — the box is `aspect-[2/3]`, matching the
+dominant format, with the border removed so any remaining letterbox reads as
+margin rather than a frame. **That is a workaround, not a fix.** The ~45 files
+that are landscape or near-square still sit inside a portrait box with visible
+space around them.
+
+**The real fix is normalising the source images to one ratio.** This is
+deterministic padding/cropping, not generation — no model cost, no
+`GEMINI_API_KEY`, and it can be done with `sharp` alone. Pad to 2:3 on the
+sampled background colour rather than cropping, so nothing is lost: the
+landscape combo shots are the ones most likely to lose a hem or a sleeve if
+cropped.
+
+Note the deploy trap in `CLAUDE.md` §6 before doing it: image content changes
+need a **filename change** (`-v3`), or CloudFront keeps serving the old file
+for four hours, and the build must stay under 230MB with JPEG q92 under `.png`
+filenames.

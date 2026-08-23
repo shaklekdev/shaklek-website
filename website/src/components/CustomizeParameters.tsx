@@ -96,7 +96,7 @@ export default function CustomizeParameters({
           immediately, which meant tapping an option then scrolling back up to
           see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="sticky top-[98px] z-10 h-[50vh] max-h-[520px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)] lg:static lg:h-auto lg:aspect-[5/6] lg:max-h-none lg:shadow-none"
+        className="sticky top-[98px] z-10 mx-auto aspect-[2/3] max-h-[54vh] w-auto touch-pan-y select-none overflow-hidden bg-white shadow-[0_10px_18px_-16px_rgba(0,0,0,0.4)] lg:static lg:max-h-none lg:w-full lg:shadow-none"
         style={
           activeImage
             ? undefined
@@ -222,7 +222,7 @@ export default function CustomizeParameters({
                       return (
                         <label
                           key={option.value}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-shaklek-xs border px-2 py-2 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
+                          className={`flex min-h-11 cursor-pointer items-center justify-center border px-2 py-2 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
                             selected
                               ? "border-text bg-text text-white"
                               : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
@@ -266,7 +266,7 @@ export default function CustomizeParameters({
           rows={2}
           maxLength={500}
           placeholder={NOTE_EXAMPLES[category] ?? ""}
-          className="w-full rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+          className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
         />
         <p className="mt-1.5 text-[11px] text-text-3">
           Tell us and we&apos;ll do our best. A stylist confirms what&apos;s possible
