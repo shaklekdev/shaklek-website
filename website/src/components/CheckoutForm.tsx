@@ -3,16 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
-import { previewDiscountAed, previewTotalAed } from "@/lib/promoPreview";
 
-type PaymentMethod = "apple-pay" | "card" | "tabby";
+type PaymentMethod = "apple-pay" | "card";
 
 const methods: { id: PaymentMethod; label: string; sub: string }[] = [
   { id: "apple-pay", label: "Apple Pay", sub: "Fastest checkout" },
   { id: "card", label: "Card", sub: "Visa, Mastercard" },
-  { id: "tabby", label: "Tabby", sub: "4 payments, no interest" },
 ];
 
 const LAST_ORDER_KEY = "shaklek-last-order";
@@ -25,50 +24,8 @@ export default function CheckoutForm({ total }: { total: number }) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [promoInput, setPromoInput] = useState("");
-  const [promoChecking, setPromoChecking] = useState(false);
-  const [promoError, setPromoError] = useState<string | null>(null);
-  // What Stripe said this code is worth. Display only -- the real discount
-  // is applied by Stripe against the code itself, and the amount finally
-  // charged is read back off the signed webhook. Nothing here moves money.
-  const [promo, setPromo] = useState<{
-    code: string;
-    percentOff: number | null;
-    amountOffAed: number | null;
-  } | null>(null);
 
-  const previewDiscount = promo ? previewDiscountAed(total, promo) : 0;
-  const previewTotal = promo ? previewTotalAed(total, promo) : total;
 
-  async function applyPromo() {
-    const code = promoInput.trim();
-    if (!code) return;
-    setPromoChecking(true);
-    setPromoError(null);
-    try {
-      const res = await fetch("/api/promo/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        setPromo(null);
-        setPromoError(data.error ?? "That code isn't valid");
-        return;
-      }
-      setPromo({
-        code: data.code,
-        percentOff: data.percentOff,
-        amountOffAed: data.amountOffAed,
-      });
-      setPromoInput("");
-    } catch {
-      setPromoError("Could not check that code. Please try again.");
-    } finally {
-      setPromoChecking(false);
-    }
-  }
 
   // Signed-in customers checkout under their account email, not whatever
   // they happen to type -- orders are matched to /account by email, so
@@ -86,7 +43,7 @@ export default function CheckoutForm({ total }: { total: number }) {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, method, total, email, promotionCode: promo?.code ?? null }),
+        body: JSON.stringify({ items, method, total, email }),
       });
 
       // Every failure path below used to fall through to the success page:
@@ -141,81 +98,11 @@ export default function CheckoutForm({ total }: { total: number }) {
         </div>
       )}
 
-      {/* Discounts used to be reachable only after the redirect, on Stripe's
-          page -- so someone arriving from a campaign with a code in hand saw
-          the full price here and had to trust it would be honoured. */}
-      <div className="mb-5">
-        <label htmlFor="promo-code" className="mb-2 block text-sm text-text">
-          Discount code <span className="text-text-3">(optional)</span>
-        </label>
-        {promo ? (
-          <div className="flex items-center justify-between rounded-shaklek-xs border border-accent bg-surface-2 px-3 py-2.5">
-            <p className="text-sm text-text">
-              <span className="font-medium">{promo.code}</span>{" "}
-              <span className="text-text-2">
-                {promo.percentOff != null
-                  ? `— ${promo.percentOff}% off`
-                  : `— AED ${promo.amountOffAed} off`}
-              </span>
-            </p>
-            <button
-              onClick={() => {
-                setPromo(null);
-                setPromoError(null);
-              }}
-              className="text-xs text-text-3 underline hover:text-text-2"
-            >
-              Remove
-            </button>
-          </div>
-        ) : (
-          <div className="flex gap-2">
-            <input
-              id="promo-code"
-              value={promoInput}
-              onChange={(e) => {
-                setPromoInput(e.target.value);
-                setPromoError(null);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  applyPromo();
-                }
-              }}
-              placeholder="Enter a code"
-              autoComplete="off"
-              autoCapitalize="characters"
-              className="flex-1 rounded-shaklek-xs border border-border-strong bg-white p-3 text-sm text-text uppercase placeholder:text-text-3 placeholder:normal-case focus:border-accent focus:outline-none"
-            />
-            <button
-              onClick={applyPromo}
-              disabled={promoChecking || !promoInput.trim()}
-              className="rounded-shaklek-xs border border-border-strong px-5 text-sm text-text transition-colors hover:bg-surface-2 disabled:opacity-40"
-            >
-              {promoChecking ? "Checking…" : "Apply"}
-            </button>
-          </div>
-        )}
-        {promoError && (
-          <p role="alert" aria-live="polite" className="mt-1.5 text-xs text-red-700">
-            {promoError}
-          </p>
-        )}
-        {promo && (
-          <div className="mt-3 border-t border-border pt-3 text-sm">
-            <div className="flex justify-between text-text-2">
-              <span>Discount</span>
-              <span>&minus;AED {previewDiscount.toFixed(2)}</span>
-            </div>
-            <div className="mt-1 flex justify-between font-medium text-text">
-              <span>New total</span>
-              <span>AED {previewTotal.toFixed(2)}</span>
-            </div>
-          </div>
-        )}
-      </div>
-
+      {/* The discount field lived here as well as on Stripe's page. Asking
+          for the same code twice, two screens apart, reads as a bug -- and it
+          was the one on Stripe that actually applied it. Removed; Stripe now
+          collects it once, where it takes effect. /api/promo/validate and
+          promoPreview.ts are kept for a future in-page summary. */}
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
         Your email <span className="text-text-3">(required)</span>
       </label>
@@ -261,11 +148,17 @@ export default function CheckoutForm({ total }: { total: number }) {
         ))}
       </div>
 
-      {method === "tabby" ? (
-        <p className="mt-6 rounded-shaklek-sm border border-border-strong bg-surface-2 px-4 py-3.5 text-center text-sm text-text-2">
-          Tabby is coming soon — choose Apple Pay or Card for now.
-        </p>
-      ) : (
+      {/* These three answer the questions a customer has BEFORE pressing Pay --
+          where does it ship, when does it arrive, what if it does not fit.
+          Underneath the button they were reassurance nobody read until after
+          they had already decided. */}
+      <div className="mt-5 space-y-1 text-center text-xs text-text-3">
+        <p>Delivery address and card details are taken on the next screen, secured by Stripe.</p>
+        <p>Made to order · about 10 days from stylist confirmation · delivery included</p>
+        <p>One free alteration or remake within 14 days</p>
+      </div>
+
+      {(
         <>
           <button
             onClick={handlePay}
@@ -279,9 +172,7 @@ export default function CheckoutForm({ total }: { total: number }) {
                 most prominent price on the page was the only wrong one.
                 Only shows fils when discounted, so an undiscounted checkout
                 still reads "Pay AED 389" rather than "389.00". */}
-            {submitting
-              ? "Processing…"
-              : `Pay AED ${promo ? previewTotal.toFixed(2) : total}`}
+            {submitting ? "Processing…" : `Pay AED ${total}`}
           </button>
           {/* Without this the button just sits greyed out and the customer is
               left guessing -- the commonest reason checkout stalls here. */}
@@ -301,24 +192,11 @@ export default function CheckoutForm({ total }: { total: number }) {
           {error}
         </p>
       )}
-      {/* The founder built this page and still concluded we never ask for a
-          delivery address -- Stripe collects it on the next screen, before the
-          payment completes, but nothing here said so. A customer reaching the
-          last step and thinking "why am I paying before saying where it
-          goes?" is a lost sale, and it costs one sentence to prevent. */}
-      <p className="mt-3 text-center text-xs text-text-3">
-        Delivery address and card details are taken on the next screen, secured by Stripe.
-      </p>
-      {/* Delivery time is on the catalog and on how-it-works, but not here --
-          the one screen where someone is deciding whether to commit. Made-to-
-          order means a wait, and a customer who only discovers that after
-          paying is a customer who feels misled. */}
-      <p className="mt-1 text-center text-xs text-text-3">
-        Made to order · about 10 days from stylist confirmation
-      </p>
-      <p className="mt-1 text-center text-xs text-text-3">
-        Secure payment · One free alteration or remake within 14 days
-      </p>
+      {/* Shaklek+ sits after the decision, not before it -- it must never
+          compete with the Pay button. */}
+      <div className="mt-6">
+        <ShaklekPlusSignup source="checkout" compact />
+      </div>
     </div>
   );
 }

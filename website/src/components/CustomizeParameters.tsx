@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
 import { renderParamsForCategory, premiumParamsForCategory } from "@/data/parameterSliders";
@@ -278,17 +279,13 @@ export default function CustomizeParameters({
       {/* Shaklek+ is a list, not a demo. It previously rendered every locked
           slider plus a dead subscribe button -- a wall of controls nobody can
           use, sitting between the customer and checkout. */}
+      {/* Was a dashed box listing locked sliders -- an advert for something
+          the customer cannot have, with nothing to do about it. Now it takes
+          an email for early access, which is the only useful thing it can do
+          before the features exist. */}
       {premiumParams.length > 0 && (
-        <div className="mt-5 flex items-start gap-2 border border-dashed border-gold/30 bg-surface-2 p-2.5">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" className="mt-0.5 shrink-0 text-gold" aria-hidden="true">
-            <rect x="5" y="11" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
-            <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-          </svg>
-          <p className="text-[11px] leading-relaxed text-text-3">
-            <span className="text-text">Shaklek+</span> — coming soon:{" "}
-            {premiumParams.map((p) => p.name.toLowerCase()).join(", ")}, fit, and
-            more colours.
-          </p>
+        <div className="mt-5">
+          <ShaklekPlusSignup source="customizer" />
         </div>
       )}
 
