@@ -159,7 +159,11 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10">
+    // max-w-xl here is the real cap on the customizer -- the page wrapper has
+    // one too, but this inner one is narrower and wins. Widened from lg up so
+    // the two-column layout in CustomizeParameters actually has room; below lg
+    // the original single-column width is unchanged.
+    <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10 lg:max-w-5xl">
       {editingId && (
         <p className="mb-4 rounded-shaklek-xs border border-border-strong bg-surface-2 px-4 py-3 text-xs text-text-2">
           Editing a piece already in your cart. Your changes replace it — you won&apos;t

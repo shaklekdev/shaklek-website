@@ -54,7 +54,11 @@ export default async function DesignPage({
   return (
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
-      <div className="mx-auto w-full max-w-xl px-6 pt-4">
+      {/* max-w-xl kept the whole customizer in a 576px column on a 1440px
+          screen, leaving ~60% of the viewport empty. Widened from lg up so the
+          two-column customizer has room; the narrower cap still applies on
+          phones and tablets. */}
+      <div className="mx-auto w-full max-w-xl px-6 pt-4 lg:max-w-5xl">
         <Link href="/" className="inline-flex min-h-6 items-center text-xs text-text-3 hover:text-text-2">
           ← Back to catalog
         </Link>

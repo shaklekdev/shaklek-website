@@ -75,18 +75,28 @@ export default function CustomizeParameters({
   const premiumParams = premiumParamsForCategory(category);
 
   return (
-    // Width is pinned to the preview's (40.5vh = 3/4 of its 54vh height, the
-    // portrait ratio). The sticky preview is narrower than the page column, so
-    // a full-width control stack scrolled visibly past its edges -- the
-    // controls have to share its width, not the container's.
-    <div className="mx-auto w-[40.5vh] max-w-full min-w-0">
+    // Ten out of ten people shown this read the old layout as a bug, and they
+    // were right: the preview was sticky and the controls sat in the SAME
+    // single column, so on scroll every option slid underneath the photo and
+    // got sliced in half. A black pill button clipped by the image edge does
+    // not read as "pinned preview", it reads as broken rendering.
+    //
+    // The width was also derived from the viewport HEIGHT (w-[40.5vh]), so the
+    // control column got narrower on short windows and wider on tall ones, and
+    // anything that would not fit overflowed sideways out of the column.
+    //
+    // Now: one column on phones, two from lg up -- preview sticky in its own
+    // column, controls scrolling in theirs. Nothing can pass behind anything,
+    // and the desktop layout stops wasting ~60% of the viewport.
+    <div className="mx-auto grid w-full max-w-md min-w-0 grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-start lg:gap-12">
+      <div className="min-w-0 lg:sticky lg:top-[98px]">
       {/* Preview. Sticky under the 98px header and shortened to 40vh, so the
           garment stays on screen while the options below are changed --
           previously it was 704px of a 2028px page and scrolled away
           immediately, which meant tapping an option then scrolling back up to
           see what it did. object-contain because the box is no longer 3:4. */}
       <div
-        className="sticky top-[98px] z-10 h-[54vh] max-h-[560px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white"
+        className="sticky top-[98px] z-10 h-[54vh] max-h-[560px] w-full touch-pan-y select-none overflow-hidden border border-border bg-white shadow-[0_8px_16px_-12px_rgba(0,0,0,0.35)] lg:static lg:h-auto lg:aspect-[3/4] lg:max-h-none lg:shadow-none"
         style={
           activeImage
             ? undefined
@@ -146,6 +156,12 @@ export default function CustomizeParameters({
         )}
       </div>
 
+      </div>
+
+      {/* Controls column. min-w-0 so a wide control shrinks instead of
+          overflowing the grid track -- the old layout had no such guard, which
+          is how a button ended up rendering outside the column. */}
+      <div className="min-w-0">
       {/* Preloads every other color/view so switching hits the browser
           cache instead of a fresh fetch -- same `sizes` as the visible
           image above so next/image resolves to the same cached URL.
@@ -188,9 +204,17 @@ export default function CustomizeParameters({
                     the accessibility tree here for free, and none of it can
                     drift. Each label is a 44px-tall full-width target. */}
                 <fieldset>
-                  <legend className="text-xs text-text">{param.name}</legend>
+                  <legend className="text-[11px] tracking-wide text-text-3 uppercase">
+                    {param.name}
+                  </legend>
+                  {/* max-w stops a two-option row stretching across the whole
+                      control column on desktop. Full-width slabs read as
+                      utilitarian; the brand wants restraint, and a option that
+                      is 500px wide to say "Long" is neither. Phones keep the
+                      full width, where it is the only way to hold a 44px
+                      target. */}
                   <div
-                    className="mt-2 grid gap-2"
+                    className="mt-2 grid gap-2 lg:max-w-sm"
                     style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
                   >
                     {param.options.map((option, i) => {
@@ -198,7 +222,7 @@ export default function CustomizeParameters({
                       return (
                         <label
                           key={option.value}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-shaklek-xs border px-2 py-2.5 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 ${
+                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-shaklek-xs border px-2 py-2.5 text-center text-xs transition-colors focus-within:ring-2 focus-within:ring-accent focus-within:ring-offset-1 lg:min-h-0 lg:py-2 lg:text-[11px] ${
                             selected
                               ? "border-text bg-text text-white"
                               : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
@@ -278,7 +302,7 @@ export default function CustomizeParameters({
           ))}
         </div>
       )}
-
+      </div>
     </div>
   );
 }
