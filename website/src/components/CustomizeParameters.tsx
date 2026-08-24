@@ -96,13 +96,23 @@ export default function CustomizeParameters({
     // and the desktop layout stops wasting ~60% of the viewport.
     <div className="mx-auto grid w-full max-w-md min-w-0 grid-cols-1 gap-6 lg:max-w-none lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:items-start lg:gap-12">
       <div className="min-w-0 lg:sticky lg:top-[98px]">
-      {/* Preview. Sticky under the 98px header and shortened to 40vh, so the
-          garment stays on screen while the options below are changed --
-          previously it was 704px of a 2028px page and scrolled away
-          immediately, which meant tapping an option then scrolling back up to
-          see what it did. object-contain because the box is no longer 3:4. */}
+      {/* Preview.
+          NOT STICKY ON PHONES. It was, and it was the "ten out of ten people
+          read this as a bug" complaint all over again in a smaller form: the
+          photo pinned under the header while everything below scrolled
+          UNDERNEATH it, so the footnote rendered as "* Images" ... photo ...
+          "is hand-cu", and the missing-combination notice was sliced into
+          fragments around the image. Screenshots from the founder's phone,
+          2026-08-25.
+          The earlier fix only split the layout into two columns at `lg`, which
+          cured the desktop overlap and left the phone exactly as it was --
+          one column with a sticky element painting over its own siblings.
+          A pinned preview is worth having on a wide screen, where it lives in
+          its OWN column and cannot cover anything. On a phone there is only
+          one column, so nothing may be sticky in it. object-contain because
+          the box is not 3:4. */}
       <div
-        className="sticky top-[98px] z-10 mx-auto aspect-[2/3] max-h-[54vh] w-auto touch-pan-y select-none overflow-hidden bg-white shadow-[0_10px_18px_-16px_rgba(0,0,0,0.4)] lg:static lg:max-h-none lg:w-full lg:shadow-none"
+        className="relative mx-auto aspect-[2/3] max-h-[54vh] w-auto touch-pan-y select-none overflow-hidden bg-white lg:max-h-none lg:w-full"
         style={
           activeImage
             ? undefined
