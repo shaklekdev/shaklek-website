@@ -5,7 +5,12 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
-import { changesFromLabels, comboKeyForCategory } from "@/data/parameterSliders";
+import {
+  changesFromLabels,
+  comboKeyForCategory,
+  defaultChangesForCategory,
+  renderParamsForCategory,
+} from "@/data/parameterSliders";
 import { useCart } from "@/lib/CartContext";
 import CustomizeParameters from "@/components/CustomizeParameters";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
@@ -17,6 +22,21 @@ type SavedMeasurements = { bust: string; waist: string; hip: string; height: str
 // is already done -- is the reassuring one: the main reason people abandon a
 // made-to-order flow is not knowing how much more of it there is.
 const TOTAL_STEPS = 3;
+
+// `item.colorImages?.[name]` was used as the colour gate, and a plain property
+// lookup walks the prototype chain: "constructor", "toString", "valueOf" and
+// "__proto__" all come back truthy. So /design/<slug>?color=constructor set
+// spec.color = "constructor", the preview quietly fell back to the base photo,
+// and if the customer went on to pay, "constructor" was written to the cart
+// line and then to order_items.color -- straight onto the tailor's sheet, with
+// no allowlist anywhere downstream to catch it.
+//
+// Own-property check only. Found by the pre-deploy security review,
+// 2026-08-25; pre-existing on the ?color= path and on cart restore, not
+// introduced by the URL work, but carried by it.
+function isKnownColor(item: CatalogItem, name: string | null | undefined) {
+  return Boolean(name) && Object.hasOwn(item.colorImages ?? {}, name as string);
+}
 const STEP_TITLES = { 2: "Make it yours", 3: "Get the fit" } as const;
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
@@ -82,7 +102,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       setSpec((prev) => ({
         ...prev,
         fabric: line.fabric,
-        color: item.colorImages?.[line.color] ? line.color : prev.color,
+        color: isKnownColor(item, line.color) ? line.color : prev.color,
         sizeMode: line.size === "Tailored" ? "tailored" : "standard",
         size: line.size === "Tailored" ? prev.size : line.size,
         measurements: line.measurements,
@@ -94,8 +114,39 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
 
     restored.current = true;
     const color = params.get("color");
-    if (color && item.colorImages?.[color]) {
-      setSpec((prev) => (prev.color === color ? prev : { ...prev, color }));
+
+    // Render-slider values can also arrive in the URL, so a choice made on the
+    // home-page demo is still made when the visitor lands here. Added
+    // 2026-08-25: previously the demo could only hand over a colour, so
+    // picking short sleeves and pressing the button produced a long-sleeved
+    // shirt, which is a worse first impression than not offering the choice.
+    //
+    // Nothing here trusts the URL. Values are matched against each slider's
+    // own option list by defaultChangesForCategory, which falls back to the
+    // slider default for anything it does not recognise, so a hand-typed
+    // ?sleeve_length=banana is simply the default rather than an error state.
+    // Premium sliders are excluded: they are not customer-editable yet, and a
+    // URL must not be a way around that.
+    const sliderOverrides: Record<string, string> = {};
+    for (const param of renderParamsForCategory(item.category)) {
+      const raw = params.get(param.type);
+      if (raw && param.options.some((o) => o.value === raw)) {
+        sliderOverrides[param.type] = raw;
+      }
+    }
+    const hasSliderOverride = Object.keys(sliderOverrides).length > 0;
+
+    if (color || hasSliderOverride) {
+      setSpec((prev) => ({
+        ...prev,
+        color: color && isKnownColor(item, color) ? color : prev.color,
+        changes: hasSliderOverride
+          ? defaultChangesForCategory(item.category, {
+              ...item.defaultChanges,
+              ...sliderOverrides,
+            })
+          : prev.changes,
+      }));
     }
   }, [item, items]);
 
@@ -105,6 +156,36 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const comboVariant = comboKey ? item.comboImages?.[spec.color]?.[comboKey] : undefined;
   const previewImage = comboVariant?.front ?? colorVariant?.front ?? item.image;
   const previewBackImage = comboVariant?.back ?? colorVariant?.back ?? item.backImage;
+
+  // Does the photo on screen actually depict the combination selected?
+  //
+  // The default combination has no photo of its own by design -- it IS the
+  // base photo (CLAUDE.md section 2). But seven of the eight catalog items are
+  // additionally missing exactly one NON-default combination in all four
+  // colours, and for those the two ?? fallbacks above quietly serve the base
+  // photo instead. The customer then sees, say, a wide cropped trouser while
+  // the labels, the cart, the order and the tailor's sheet all correctly say
+  // straight and full length. Only the picture disagrees, which is the one
+  // part of it they are actually looking at when they decide to pay.
+  //
+  // Found by the pre-deploy security review, 2026-08-25, and it predates this
+  // work -- but the footnote added the same day asserts the images are
+  // "illustrative of the combination you chose", which is untrue precisely
+  // here. Rather than let that stand, say so on the page until the missing
+  // cells are photographed.
+  const defaultComboKey = comboKeyForCategory(
+    item.category,
+    defaultChangesForCategory(item.category, item.defaultChanges),
+  );
+  const photoMatchesCombo =
+    !comboKey || comboKey === defaultComboKey || Boolean(comboVariant);
+  // The render-tier labels only -- what the customer picked that the photo
+  // cannot show. Premium sliders never affect the photo.
+  const unshownChoices = photoMatchesCombo
+    ? []
+    : renderParamsForCategory(item.category)
+        .map((param) => spec.changes.find((c) => c.type === param.type)?.label)
+        .filter((l): l is string => Boolean(l));
 
   // Every color/view the customer could switch to for this item, so
   // CustomizeParameters can preload all of them up front -- switching color
@@ -202,6 +283,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             category={item.category}
             previewImage={previewImage}
             previewBackImage={previewBackImage}
+            unshownChoices={unshownChoices}
             previewGradient={item.gradient}
             preloadImages={preloadImages}
             primaryAction={

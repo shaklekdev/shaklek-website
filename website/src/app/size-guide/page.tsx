@@ -20,7 +20,7 @@ export default function SizeGuidePage() {
   return (
     <LegalPage
       title="Size Guide"
-      intro="Body measurements, in centimetres — not the finished garment."
+      intro="Body measurements, in centimetres, not the finished garment."
     >
       <div className="overflow-x-auto">
         <table className="w-full min-w-[460px] text-left text-sm">
@@ -61,9 +61,9 @@ export default function SizeGuidePage() {
         clothing than over none.
       </p>
       <p>
-        <strong>Bust</strong> — around the fullest part, tape level under the
-        arms. <strong>Waist</strong> — the narrowest part of your torso, usually
-        just above the navel. <strong>Hip</strong> — around the fullest part,
+        <strong>Bust</strong>: around the fullest part, tape level under the
+        arms. <strong>Waist</strong>: the narrowest part of your torso, usually
+        just above the navel. <strong>Hip</strong>: around the fullest part,
         roughly 20cm below the waist.
       </p>
 
@@ -72,7 +72,7 @@ export default function SizeGuidePage() {
       </h2>
       <p>
         Then a standard size is the wrong tool. Choose <strong>Tailored</strong>{" "}
-        when you order and send your own numbers instead — it costs exactly the
+        when you order and send your own numbers instead. It costs exactly the
         same, and it is the reason made-to-order exists. Most people are between
         sizes somewhere; a size chart is an average of thousands of bodies and
         exact for almost none of them.

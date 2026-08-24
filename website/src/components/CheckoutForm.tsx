@@ -271,6 +271,32 @@ export default function CheckoutForm({ total }: { total: number }) {
         <p>Delivery address and card details are taken on the next screen, secured by Stripe.</p>
         <p>Made to order · about 10 days from stylist confirmation · delivery included</p>
         <p>One free alteration or remake within 14 days</p>
+        {/* The LIMIT, not just the promise. Added 2026-08-25.
+            UAE consumer law makes a refund mandatory for goods that are
+            faulty, unsafe, or not as described, and those cannot be signed
+            away. A change-of-mind refund is NOT mandatory -- a retailer may
+            decline it, but only where the policy is clearly displayed.
+            Until now the restriction lived solely in /legal/terms, behind a
+            footer link, while checkout showed only the generous half. For a
+            made-to-order business, where a returned piece cannot be resold,
+            the change-of-mind rule is the one that matters commercially, and
+            displaying it here is the condition on being able to rely on it.
+            Both halves are stated, because showing the limit without the
+            statutory remedy beside it would read as "no refunds", which is
+            not true and is not lawful. */}
+        <p>
+          Each piece is made for you, so we don&apos;t offer change-of-mind
+          refunds. Anything faulty or not as ordered is always remade or
+          refunded.{" "}
+          <a
+            href="/legal/terms#returns"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            Returns policy
+          </a>
+        </p>
       </div>
 
       {(

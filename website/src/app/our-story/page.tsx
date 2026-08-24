@@ -9,7 +9,7 @@ import { colors, sizes } from "@/data/colors";
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
   description:
-    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in sustainable cotton and linen — made in the UAE.",
+    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in sustainable cotton and linen, made in the UAE.",
   path: "/our-story",
   images: [
     {
@@ -70,8 +70,13 @@ const tenetGroups = [
         body: "Cotton or linen, always, nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
       },
       {
-        title: "Pieces customised by you, for you",
-        body: "Those lovely shirts you wished had longer sleeves. Those comfy pants you wish had pockets. We believe in uniqueness, and in making fashion accessible to everyone, so the things you'd normally just live with, you can actually change.",
+        // "Timeless" folded in here at the founder's direction rather than
+        // given a tenet of its own, so the page does not grow a fifth item
+        // for one idea. It matters more than its size suggests: timeless
+        // essentials is the brand's stated niche, and until now the site
+        // never said so anywhere a customer would read it.
+        title: "Timeless pieces, customised by you, for you",
+        body: "Those lovely shirts you wished had longer sleeves. Those comfy pants you wish had pockets. We believe in uniqueness, and in making fashion accessible to everyone, so the things you'd normally just live with, you can actually change. And they are essentials, not this season's: chosen to still be worn in five years, cut properly, in fabric that softens instead of wearing out.",
       },
     ],
   },
@@ -81,7 +86,7 @@ const tenetGroups = [
     items: [
       {
         title: "Tailoring for your shape",
-        body: "Standard sizing or your exact measurements, cut for your body, not a size chart. Nothing is made until you order it, and we use AI to plan exactly what's needed instead of guessing at demand, so there's no stock sitting on a shelf and no waste. The most sustainable thing a clothing brand can do is not make what nobody asked for.",
+        body: "Standard sizing or your exact measurements, cut for your body, not a size chart. Nothing is made until you order it, so there is no stock sitting on a shelf and no waste. The most sustainable thing a clothing brand can do is not make what nobody asked for.",
       },
       {
         title: "Fixed prices",
@@ -198,43 +203,57 @@ export default function OurStoryPage() {
           </p>
           <div className="mt-6">
             <div className="space-y-4 text-justify text-[15px] leading-relaxed text-text-2 hyphens-auto">
+              {/* The founder's note, rewritten by her on 2026-08-25 and used
+                  verbatim. Two changes worth not "improving" back:
+
+                  She removed the naming of her own conditions from the opening
+                  line. That was her call about her own medical history and it
+                  is not an omission to be helpfully restored.
+
+                  She kept the technology framing after an outside reviewer
+                  argued for dropping it in favour of artisans and craft. The
+                  reviewer's concern was specifically the word "AI", which is
+                  now gone from the whole site; "technology" in a founder's own
+                  account of why she built the thing is hers to keep.
+
+                  The one thing NOT taken literally: she wrote "192 different
+                  ways". It stays as {SHIRT_WAYS}, computed from
+                  parameterSliders.ts and colors.ts, because this sentence has
+                  already gone stale twice with a typed number in it. The
+                  computed value is 192 today, so the page reads exactly as she
+                  wrote it. */}
               <p>
-                I spent more than half my life trying to understand my own
-                body. Endometriosis, acne, endocrine disruptors, and a long
-                journey of changing everything that touched my skin, day and
-                night. The clothes I wore all day, filled with polyester and
-                chemical materials, couldn&apos;t possibly be neutral.
+                I&apos;ve spent more than half my life trying to understand my
+                own body, and a long stretch of it changing everything that
+                touched my skin, day and night. The clothes I wore all day,
+                full of polyester and chemical finishes, couldn&apos;t possibly
+                be neutral.
               </p>
               <p>
-                I wanted to wear something trendy, classy, put together and yet
-                friendly to my health. And once I actually find those pieces,
-                they&apos;re either too expensive, not quite my taste, or not my
-                fit.
+                I wanted something timelessly elegant, comfortable, and kind to
+                my skin. And whenever I finally found the piece, it was too
+                expensive, not quite my taste, or not my fit.
               </p>
-              {/* "Why couldn't technology solve this" on its own says nothing
-                  -- a reader cannot tell what is being solved. Naming it is
-                  also the honest version: what the technology does here is
-                  show you the real piece in every combination before a metre
-                  of fabric is cut, and make only the one you chose. */}
               <p>
                 I&apos;m a tech girl who happens to love fashion, and I kept
-                asking myself: why couldn&apos;t technology solve this? Show me
-                every version before it exists, so I can see it rather than
-                imagine it. Then make only the one I chose &mdash; nothing
-                sitting in a warehouse waiting for a body it happens to fit.
+                asking: why can&apos;t technology solve this? Show me every
+                version of a piece before it exists. Then make only the one I
+                chose. Nothing sitting in a warehouse waiting for a body it
+                happens to fit.
               </p>
               <p>
                 We all have our own taste and our own proportions. Clothes
                 should be cut to flatter the body wearing them, and to sit
-                kindly on the skin underneath &mdash; not the other way round.
+                kindly on the skin underneath.
               </p>
               <p>
                 Shaklek means &ldquo;your way&rdquo; in Arabic. Your look, your
-                vision, simply you. I wanted customization for our taste and
-                shape, because we&apos;re all different. On Shaklek the same
-                shirt can be made {SHIRT_WAYS} different ways before we even
-                take your measurements &mdash; and then it&apos;s cut to those.
-                That&apos;s what I built.
+                vision, simply you.
+              </p>
+              <p>
+                On Shaklek, the same shirt can be made {SHIRT_WAYS} different
+                ways before we even take your measurements, and then it&apos;s
+                cut to those. That&apos;s what I built.
               </p>
               <p>
                 I wanted this to be the personal wardrobe of everyone who
@@ -242,9 +261,8 @@ export default function OurStoryPage() {
                 that can harm our health, more comfort.
               </p>
               <p>
-                If you have an idea or feedback to improve Shaklek, please
-                reach out. This is not just a brand &mdash; it&apos;s your
-                brand.
+                If you have an idea or feedback to make Shaklek better, please
+                reach out. This isn&apos;t just a brand. It&apos;s yours.
               </p>
               <p className="pt-1 text-sm font-medium text-text">
                 Nada, founder of Shaklek

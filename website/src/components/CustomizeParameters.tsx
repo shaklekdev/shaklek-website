@@ -29,6 +29,7 @@ export default function CustomizeParameters({
   previewBackImage,
   previewGradient,
   preloadImages = [],
+  unshownChoices = [],
   primaryAction,
 }: {
   spec: DesignSpec;
@@ -39,6 +40,10 @@ export default function CustomizeParameters({
   previewBackImage?: string | null;
   previewGradient: [string, string];
   preloadImages?: string[];
+  // Non-empty when the catalog has no photograph of the exact combination
+  // chosen, so the image on screen shows a different cut. Carries the labels
+  // the photo cannot show.
+  unshownChoices?: string[];
   // Rendered directly beneath the choices, above the Shaklek+ note. The CTA
   // used to sit after everything, so getting to checkout meant scrolling past
   // an upsell for features that are not purchasable yet.
@@ -156,6 +161,42 @@ export default function CustomizeParameters({
           </>
         )}
       </div>
+
+      {/* What the picture is, and is not.
+
+          Added 2026-08-25, because /how-it-works had been telling customers
+          every combination was "a real photograph ... the actual piece you
+          will receive". The images are generated, so that was a false claim,
+          sitting where a customer decides to spend AED 389.
+
+          DELIBERATELY SHORT, and deliberately carries NO remedy. A first
+          version ended with "we remake or refund it" and the founder cut it:
+          this is a made-to-order business where a returned piece cannot be
+          resold, and advertising a refund at the moment of purchase invites
+          the claim it describes. The remedy ladder belongs in /legal/terms,
+          which is where it is, and where it is properly qualified. Say what
+          the image is; do not make promises about what happens if it is
+          wrong. */}
+      {unshownChoices.length > 0 && (
+        // Shown only for the combinations with no photograph of their own.
+        // Deliberately not styled as an error: the choice is valid, orderable
+        // and will be made exactly as stated. It is the picture that cannot
+        // keep up, and saying so is the difference between a caveat and a
+        // misrepresentation.
+        <p className="mt-3 border border-border-strong bg-surface p-2.5 text-[11px] leading-relaxed text-text-2">
+          We have not photographed this exact combination yet, so the picture
+          shows our standard cut. Your piece will be made{" "}
+          <strong className="font-medium">
+            {unshownChoices.join(", ").toLowerCase()}
+          </strong>
+          , as chosen.
+        </p>
+      )}
+
+      <p className="mt-3 px-1 text-[11px] leading-relaxed text-text-3">
+        * Images are illustrative of the combination you chose. Every piece is
+        hand-cut, so fabric fall and shade vary slightly.
+      </p>
 
       </div>
 

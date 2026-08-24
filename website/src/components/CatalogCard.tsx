@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
 import type { CatalogItem } from "@/data/catalog";
 import { colors } from "@/data/colors";
+import CatalogCardPhoto, { type CardPhoto } from "./CatalogCardPhoto";
 
 export default function CatalogCard({
   item,
@@ -15,80 +15,52 @@ export default function CatalogCard({
   // lazy-load delay without reordering anything ahead of the hero.
   eager?: boolean;
 }) {
-  // The grid is deliberately all-Ivory for a consistent look, so without
-  // these the other colourways are invisible until the design page. Built
-  // from colorImages so a card can never advertise a colour we can't show,
-  // and each one deep-links straight into that colour on the design page.
-  const swatches = colors.filter((c) => item.colorImages?.[c.name]);
+  // Built from colorImages so a card can never advertise a colour we have no
+  // photograph for. Order follows colors.ts, not the catalog entry, so every
+  // card's dots read in the same sequence.
+  const photos: CardPhoto[] = colors.flatMap((c) => {
+    const src = item.colorImages?.[c.name]?.front;
+    return src ? [{ name: c.name, hex: c.hex, src }] : [];
+  });
+
+  // item.image is one of the colourways (Ivory, in every current entry). Match
+  // on the file rather than assuming, so the dot that starts selected is
+  // genuinely the photo on screen -- if a base photo is ever swapped to another
+  // colour, this follows it instead of lying about which colour is showing.
+  const initial =
+    photos.find((p) => p.src === item.image)?.name ?? photos[0]?.name ?? "";
+
   const href = `/design/${item.slug}`;
 
   return (
     <div className="group block">
-      <div className="relative">
-        {/* The swatches below must not be nested inside this link -- an <a>
-            inside an <a> is invalid HTML and browsers silently unnest it,
-            which breaks the swatch click. They're a sibling instead. */}
+      {photos.length > 0 && initial ? (
+        <CatalogCardPhoto
+          href={href}
+          name={item.name}
+          photos={photos}
+          initial={initial}
+          badge={item.badge}
+          elaborate={item.dressTier === "elaborate"}
+          eager={eager}
+        />
+      ) : (
+        // No photography yet -- the gradient placeholder, with nothing to
+        // switch between.
         <Link
           href={href}
           className="relative block aspect-[3/4] w-full overflow-hidden bg-card"
-          style={
-            item.image
-              ? undefined
-              : {
-                  background: `linear-gradient(135deg, ${item.gradient[0]}, ${item.gradient[1]})`,
-                }
-          }
+          style={{
+            background: `linear-gradient(135deg, ${item.gradient[0]}, ${item.gradient[1]})`,
+          }}
         >
-          {item.image && (
-            <Image
-              src={item.image}
-              alt={item.name}
-              fill
-              sizes="(min-width: 640px) 248px, 220px"
-              loading={eager ? "eager" : "lazy"}
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-            />
-          )}
           {item.badge && (
             <span className="absolute top-3 right-3 rounded-full bg-accent px-2.5 py-1 text-[9px] font-medium tracking-wide text-white">
               {item.badge}
             </span>
           )}
-          {item.dressTier === "elaborate" && (
-            <span className="absolute top-3 left-3 rounded-full bg-gold px-2.5 py-1 text-[9px] font-medium tracking-wide text-white">
-              ELABORATE
-            </span>
-          )}
         </Link>
-
-        {swatches.length > 1 && (
-          // Vertical, anchored bottom-right and growing upward: the
-          // TRENDING/NEW badge already sits at top-right. No container --
-          // each dot carries its own white ring and soft shadow so it lifts
-          // off the photograph on its own.
-          <div className="absolute right-2 bottom-2 flex flex-col items-center gap-1">
-            {swatches.map((c) => (
-              <Link
-                key={c.name}
-                href={`${href}?color=${encodeURIComponent(c.name)}`}
-                aria-label={`${item.name} in ${c.name}`}
-                title={c.name}
-                // 24x24 is the WCAG 2.5.8 AA minimum, with a 4px gap so
-                // adjacent colours are 28px apart centre to centre -- these
-                // are four links that each go somewhere different, so a
-                // mis-tap is not a no-op, it is the wrong colourway. The
-                // visible dot stays 10px; only the target grew.
-                className="group/swatch grid h-6 w-6 place-items-center"
-              >
-                <span
-                  className="h-2.5 w-2.5 rounded-full border border-black/10 shadow-[0_1px_3px_rgba(0,0,0,0.18)] ring-2 ring-white/90 transition-transform duration-200 group-hover/swatch:scale-110"
-                  style={{ backgroundColor: c.hex }}
-                />
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
 
       <Link href={href} tabIndex={-1} className="mt-4 block text-center">
         <p className="font-display text-[15px] text-text">{item.name}</p>

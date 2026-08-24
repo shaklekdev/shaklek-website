@@ -19,8 +19,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is cut until you order it. There is no warehouse and no stock —
-        your piece is made for you, which is why it takes about ten days rather
+        Nothing is cut until you order it. There is no warehouse and no stock.
+        Your piece is made for you, which is why it takes about ten days rather
         than arriving the next morning, and why it can be cut to your
         measurements rather than an average.
       </>
@@ -42,7 +42,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       <>
         No. You can pick a standard size from XS to XXL and we will cut to that.
         Sending your own measurements is the more accurate option and costs the
-        same — see the{" "}
+        same. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide
         </Link>{" "}
@@ -68,7 +68,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         A made-to-order piece is cut for one person and cannot be restocked, so
         we do not offer cash refunds once it has been made. If the fit is wrong
         the alteration or remake above covers it. If a piece arrives faulty or
-        is not what you ordered, we remake or refund it in full — see the{" "}
+        is not what you ordered, we remake or refund it in full. See the{" "}
         <Link href="/legal/terms#returns" className="underline">
           full terms
         </Link>
@@ -81,8 +81,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         Organic cotton and linen, and nothing else. Both are natural fibres that
-        breathe in Gulf heat. Linen creases — that is the fibre behaving
-        normally, not a fault — and both soften with washing.
+        breathe in Gulf heat. Linen creases. That is the fibre behaving
+        normally, not a fault. Both soften with washing.
       </>
     ),
   },
@@ -102,7 +102,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Can I ask for a change that isn't one of the options?",
     a: (
       <>
-        Write it in the note field when you customise — a shorter sleeve, a
+        Write it in the note field when you customise: a shorter sleeve, a
         wider collar. A stylist reads every order and confirms what is possible
         before anything is cut. We are a small studio with one tailor, so the
         answer is sometimes no, but you will always be told before you are
@@ -115,8 +115,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         Yes. Every order is read and confirmed by a stylist before it goes to
-        the tailor — there is no AI deciding anything about your garment. You
-        can reach us at{" "}
+        the tailor. A person checks what you asked for, and a person makes it.
+        You can reach us at{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>{" "}
@@ -143,7 +143,7 @@ export default function FaqPage() {
   return (
     <LegalPage
       title="Questions"
-      intro="If yours isn't here, write to us — a person reads every message."
+      intro="If yours isn't here, write to us. A person reads every message."
     >
       {FAQS.map(({ q, a }) => (
         <div key={q}>

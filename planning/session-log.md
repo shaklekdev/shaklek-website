@@ -18,6 +18,316 @@ Rules that make this work:
 
 ## Active claims
 
+### Session D — reviewer feedback: home page, voice, colour dots (2026-08-25)
+
+**Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**
+
+- `website/src/components/CatalogCard.tsx`
+- `website/src/app/page.tsx`
+- `website/src/app/our-story/page.tsx`, `website/src/app/faq/page.tsx`
+- `website/src/app/how-it-works/page.tsx`
+- `website/src/app/size-guide/page.tsx`, `website/src/app/shipping/page.tsx`
+- any new component under `website/src/components/home/`
+- `website/src/data/homeContent.ts` (new)
+- `website/src/components/DesignCustomizer.tsx` (URL handoff for slider choices)
+- `website/src/app/preview/` (new, dev-only variant comparison)
+
+No overlap with Session C's tech-pack files. Source: two outside reviewers'
+feedback relayed by the founder, 2026-08-25. `npm run build` passes;
+`npx tsc --noEmit` clean.
+
+The feedback was ~14 separate complaints that collapsed into three problems.
+
+**1. Colour dots navigated away instead of changing the photo.** Every dot on a
+catalog card was a `<Link>` to `/design/<slug>?color=`, so four colourways were
+on screen and none could be SEEN without committing to a product page first.
+Now the dot swaps the photo in place and the picture links through carrying
+whatever colour is showing. New `CatalogCardPhoto.tsx` is the client half;
+`CatalogCard.tsx` stays a server component deliberately, because a client
+boundary there would serialise every `comboImages` path (24+ per item, 8 items)
+into the payload of the page most of this brand's traffic loads on a phone.
+Colours nobody taps are never downloaded.
+
+Verified in real headless Chrome at 390px, 8/8: stays on the home page, exactly
+one photo visible, it is the navy file, it changed, the right dot reads pressed,
+only one pressed, the link gained `?color=Navy`, untapped colours not fetched.
+Then the handoff itself: `/design/oversized-shirt?color=Navy` hydrates with the
+navy photo and the Navy control pressed. Script kept at
+`scratchpad/check-dots.mjs` (scratchpad dies with the session — move it into
+`scripts/` if this needs re-running).
+
+**2. The home page never said what Shaklek is.** It was a hero and a carousel.
+A visitor could not tell what the site was, what they were about to do, what
+the steps were, or why this was not just another linen shop.
+
+⚠️ **A first attempt got this wrong and the founder corrected it.** It pasted a
+reviewer's suggested slogan into the hero VERBATIM, displacing her own line.
+The reviewers found real problems; the fix is those problems answered in
+Shaklek's voice, not the reviewer's wording. Her correction, kept here because
+it is the brand definition: *"timeless fashion essentials. This is the brand,
+this is our niche. People need to understand that these are fashion essentials:
+timeless, elegant, customizable, very skin-friendly, organic cotton or linen."*
+The hero subtitle is hers and has now been restored twice. **It is not a copy
+improvement target.** All home copy is in `src/data/homeContent.ts` with that
+warning attached.
+
+**Three layouts were built to compare, not one to accept.** `/preview/a`,
+`/preview/b`, `/preview/c` in development, with a switcher bar. They share the
+same copy module, so comparing them compares layout and not two different sets
+of words. Dev-only: `notFound()` unless NODE_ENV is development, **verified
+against a real `next start`** (home 200, all three preview routes 404, absent
+from sitemap.xml) — not assumed, because a crawlable second copy of the home
+page would be an SEO problem.
+
+Measured on a true 390x844 viewport, where the first product card lands:
+
+    A "Explained"      y=946   below the fold, no demo
+    B "Least friction" y=770   VISIBLE on the opening screen   <- live on /
+    C "Show, don't tell" y=1748  far below
+
+**B ships** because it is the only one where a garment is on screen at load.
+
+**The demo is the piece worth keeping** (bottom of B, top of C). A real
+Oversized Shirt on the home page with a sleeve toggle and the four colours;
+tapping swaps to the real photograph of that combination, because all eight
+already exist. It demonstrates the one claim that matters and is least
+believable — every option is a real photograph — instead of asserting it, and
+it REMOVES a step: the choice travels to the design page.
+
+`DesignCustomizer.tsx` was extended to accept render-slider values in the URL
+(`?color=Burgundy&sleeve_length=short`). Nothing trusts the URL: values are
+matched against each slider's own option list, unknown values fall back to the
+default, and **premium sliders are excluded on purpose** so a hand-typed URL
+cannot unlock Shaklek+ options. Verified: valid combo resolves to
+`oversized-shirt-burgundy-combo-short-normal-front.png`; `sleeve_length=banana`
+and `color=NotAColour` both fall back cleanly.
+
+**The funnel is 3 steps + an outcome, and the 3 is load-bearing.** The design
+page prints "Step N of 3" (`TOTAL_STEPS` in `DesignCustomizer.tsx`). The first
+draft of the home funnel announced four, so the site contradicted itself about
+the single thing the visitor was trying to learn. What the tailor does is now
+rendered as "Then", not "04" — real, on the page, but not a step the customer
+takes. **If TOTAL_STEPS ever changes, homeContent.ts must change with it.**
+
+Also: the product rail subtitle now reads "Tap a colour to see it on the
+piece", which teaches the new colour dots exactly where they are, at zero
+vertical cost.
+
+Browser-verified, 6/6: the demo starts on the ivory base photo, preloads all 8
+combinations on idle, Short swaps to the short-sleeve photograph, exactly one
+image visible, Burgundy swaps correctly, and the CTA carries both choices.
+
+**3. It read as AI-written, and said "AI" out loud.** Removed the claim on
+/our-story that "we use AI to plan exactly what's needed instead of guessing at
+demand" — off-brand per the reviewer, and **also simply false**: CLAUDE.md
+states zero real AI exists in the product. Removed the defensive "there is no
+AI deciding anything about your garment" from /faq. Every rendered em dash on
+the six customer-facing pages is gone (a reviewer: "ça fait très texte généré
+par l'IA"); verified by stripping tags from the served HTML, all six 200 and
+clean. SEO title separators (`Shaklek — tagline`) were left alone on purpose —
+that is a title convention, not prose.
+
+**The founder rewrote her own note** and it is used verbatim (diffed against her
+text: exact match, 1330 chars). Two things not to "improve" back: she removed
+the naming of her own medical conditions from the opening line, and she KEPT the
+technology framing after a reviewer argued for dropping it — the reviewer's
+actual objection was the word "AI", which is now gone sitewide. She typed "192
+different ways"; the code keeps `{SHIRT_WAYS}` computed from
+`parameterSliders.ts`, which evaluates to 192 today, because that sentence has
+already gone stale twice with a number typed into it.
+
+**Not done, still open:**
+
+- **Reduce clicks to purchase** — the reviewer's "plus tu rajoutes des cliques,
+  plus tu décourages le client à faire l'achat" cuts against the 3-step stepper
+  Session B shipped in `33deaf3`. Not touched; wants the real flow walked first.
+- **Maternity as a market** — the reviewer's strongest idea (bodies change
+  monthly, made-to-measure plus 10-day turnaround plus loose cuts). Founder's
+  call, not a code task.
+- **Catalog cards still use `object-cover`** in a 3:4 box, so tall garments are
+  cropped — the same defect fixed on the customizer on 2026-08-24, still live on
+  the home page. Out of scope for this batch and NOT part of the feedback.
+- **The mobile customizer sticky preview.** The founder tested on a real phone
+  and judged it fine, so it was dropped from the list. Note the `sticky
+  top-[98px] z-10` with `lg:static` at `CustomizeParameters.tsx:100` still means
+  the phone layout pins the photo over a single column of controls. If the
+  complaint recurs, that is the line.
+
+
+### Session C — spec sheet -> real tech pack (2026-08-24)
+
+**Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**
+
+- `website/src/lib/techPack.ts` (new -- the document itself)
+- `website/src/app/api/dashboard/orders/[id]/spec-sheet/route.ts` (now auth + DB only)
+- `website/src/lib/measurements.ts` (new -- extracted from SizePicker)
+- `website/src/components/SizePicker.tsx` (imports the extracted module)
+- `website/src/data/construction.ts`, `website/src/data/flats.ts` (new)
+- `website/src/app/dashboard/orders/page.tsx` (copy: "spec sheet" -> "tech pack")
+- `website/scripts/catalog/{gen-flat,run-flats,audit-flats,contact-sheet}.mjs` (new)
+- `website/scripts/{render-techpack,test-construction,test-measurements,test-techpack,test-flats}.mjs` (new)
+- `website/public/catalog/flats/` (new, 60 files, 3.7MB)
+- `catalog-archive/2026-08-24-flats/` (new, 8 rejected generations)
+
+Founder decision: **every design shows both the photograph and a technical
+flat**, "as reliable as possible".
+
+**What the document gained.** Standard sizes print the real bust/waist/hip and
+EU/UK/US from `sizeChart.ts` instead of the bare letter "M" -- the weakest line
+on the old sheet, since it assumed the tailor already knew Shaklek's M.
+Identical order lines group as `CUT 3` rather than printing the same page three
+times. Premium slider choices (pocket count, closure) reach the tailor at all
+for the first time -- they were committed at their defaults and shown to
+nobody. Bill of materials with a printed colour chip. Making-standard and
+sign-off fields as ruled blanks.
+
+**Nothing is invented.** No seam allowance, stitch density or tolerance is
+stated, because Shaklek has no house standard for them; they print as blanks
+for the workshop to fill and return. `scripts/test-techpack.mjs` asserts that
+no such number ever appears. Same reasoning as the provenance warning at the
+top of `sizeChart.ts`, whose "body, not garment" caveat is now printed on every
+measurement page.
+
+### The flats -- all 64 done
+
+One flat per (item, combination, view), generated from the **Navy** photo of
+that exact combination. Colour is not part of the key: a line drawing has no
+colourway, so this was 64 images, not the 256 the photography needed. The flat
+is looked up with the same `comboKeyFromLabels()` as the photograph, so the two
+on a page cannot disagree about what was ordered.
+
+**Cost: ~$2.65 for 68 Flash generations. Zero Pro escalations** -- Flash draws
+flats reliably, unlike the silhouette reshaping in section 4b.
+
+**Complete: 64 of 64.** Two Banded Trousers flats were generated, inspected,
+found wrong and archived rather than shipped (see the defect notes below), then
+regenerated against the corrected prompt and verified. The tech pack still
+carries the missing-flat warning for any combination that lacks one -- it just
+has nothing to report today.
+
+**Credit ran out three times** during this work. `run-flats.mjs` regenerates
+only what is missing, so re-running it after a top-up is always safe and never
+repeats paid work. A 429 is not billed, so failed retries cost nothing. Top-ups
+at https://ai.studio/projects.
+
+### Two defect classes no image check could see
+
+**A flat can draw the wrong garment.** `banded-trousers straight:cropped back`
+came back with a whole peplum top -- sleeves and all -- above the trousers.
+Faithfully: **every Banded Trousers photograph has the model wearing that top**,
+and nothing in the prompt said to ignore it. A second garment is achromatic, on
+white, symmetric, and sits in the normal ink band, so all four image checks pass
+it. Only words fix this, and the prompt now carries an explicit "draw ONLY the
+trousers / ONLY the upper garment" clause for both categories.
+`scripts/catalog/detect-extra-garment.mjs` finds it geometrically -- a trouser
+alone never pinches in at the waist, a trouser under a top does. It swept all 32
+and found exactly the one already spotted by eye.
+
+**The advisory proportion numbers caught a true positive that was dismissed.**
+The "cropped is longer than full" flag on that same flat was real -- the extra
+top made the drawing taller. It was written off as instrument noise. The lesson
+is not to re-add a hard gate (three rulers were tried and all three disagree),
+it is that a flagged pair has to be looked at before it is dismissed.
+
+### What the verifier had to learn -- read before generating more flats
+
+`gen-verified.mjs` cannot check a flat: its two tests are colour drift and
+greyscale pixel-diff, and a flat is deliberately achromatic and deliberately
+enormous-diff. `gen-flat.mjs` uses four independent tests instead -- achromatic,
+white border, ink coverage, bilateral symmetry.
+
+**A grey-filled drawing passes every test except ink.** Four flats came back as
+solid grey silhouettes rather than outlines; fill has no saturation, so the
+achromatic check is blind to it. The original `inkMax` of 0.35 was picked in the
+abstract and let them through. Real line art clusters at **1.6-4.3%, median
+2.3%**, so the ceiling is now 0.08, set from 64 observations. Those four were
+archived, not deleted, and regenerated.
+
+**Proportion measurement was tried three ways and gates on none of them.**
+height/frame (each flat fills its own canvas, so size is a framing choice),
+height/width (conflates length with the leg-width option), height/hip (the hip
+band lands on waistbands and pockets, and reported cropped as 44% *longer* than
+full). Checked by eye against the source photographs: pairs the second ruler
+failed were correct. `audit-flats.mjs` therefore prints numbers and exits 0 --
+a check that cries wolf gets ignored when it is finally right. The real
+verification is `contact-sheet.mjs` plus eyes, which is what section 4b already
+says about pale images, and a line drawing on white is the palest case there is.
+
+**Three pairs are still flagged for a human look**, all trousers, front wide
+cropped-vs-full on Wide-leg and Banded, plus Banded back straight. Wide-leg's
+was inspected against its source and looked right.
+
+### Open for the founder
+
+- **Review the contact sheets** -- `npx tsx scripts/catalog/contact-sheet.mjs <slug> /tmp/x.png`.
+- **Nothing is committed or pushed.** No deploy has happened. Total generation
+  spend ~$2.93 across 74 Flash calls, zero Pro escalations.
+- The customer's free-text request prints verbatim, so a phone number typed
+  into it reaches the tailor. Everything else is stripped by design. Left alone
+  deliberately -- redacting a customer's own words could remove real making
+  instructions. Founder's call.
+- The construction text in `src/data/construction.ts` is derived from the
+  photography and the descriptors, **not from patterns**. The tailor should
+  read it once and correct it.
+
+### Pre-deploy security review — 2026-08-25 (Session D)
+
+Run against the uncommitted home-page / customizer / checkout work before
+pushing, because `DesignCustomizer` and `CheckoutForm` are the blast radius
+that produced the AED 5 bug and paid ads were about to point at them.
+**No Critical or High findings. Nothing in this batch can affect price.**
+Confirmed by simulation: a URL slider value has no path to `unit_amount`; the
+option-list filter rejects unknown values twice over; premium sliders cannot
+be set from a URL.
+
+**Finding 1 (Medium) — the preview photo can show a different cut, and it is
+now deep-linkable.** Independently re-verified by enumerating every render
+combination against `comboImages`:
+
+    wide-leg / banded / pleated trousers   missing straight:full   (4/4 colours)
+    cargo-trousers                         missing straight:full   (4/4 colours)
+    wrap-top / structured-blouse           missing short:normal    (4/4 colours)
+    utility-shirt                          missing short:normal    (4/4 colours)
+    oversized-shirt                        complete
+
+**7 combinations, 4 colours, front and back = 56 images not yet generated.**
+The default combination legitimately has no photo of its own (it IS the base
+photo, section 2). These seven are *non-default* and fall through the same two
+`??` fallbacks, so the customer sees the base photo of a different cut while
+the labels, cart, order and tailor's sheet are all correct. Pre-existing and
+reachable by clicking sliders; the URL work made it shareable, and the footnote
+added the same day claims images are "illustrative of the combination you
+chose", which is untrue in exactly these cells.
+
+**Mitigated, not fixed.** `DesignCustomizer` now computes `photoMatchesCombo`
+and the page says so plainly: *"We have not photographed this exact
+combination yet, so the picture shows our standard cut. Your piece will be made
+straight leg, full length, as chosen."* Browser-verified 5/5: appears on
+`banded-trousers?leg_width=straight&garment_length=full` and
+`wrap-top?sleeve_length=short&garment_length=normal`, absent on combinations
+that do have photos.
+
+⚠️ **The real fix is the 56 images**, and until they exist **do not run ads that
+deep-link into those seven combinations.** Method is section 4b; these are
+silhouette reshapes (de-taper / shorten sleeves), so budget Pro calls for the
+backs. Gemini credit was exhausted on 2026-08-24 and the founder is topping it
+up for Session C's flats.
+
+**Finding 2 (Low) — FIXED.** The colour gate was `item.colorImages?.[name]`, a
+truthy lookup that walks the prototype chain: `constructor`, `toString`,
+`valueOf`, `__proto__` and `hasOwnProperty` were all accepted. So
+`?color=constructor` set `spec.color = "constructor"`, the preview fell back to
+Ivory, and on payment `"constructor"` was written to the cart line and then to
+`order_items.color` — onto the tailor's sheet, with no allowlist downstream.
+Now `Object.hasOwn`, applied on both the `?color=` path and cart restore.
+Verified: five prototype names rejected, four real colours still accepted.
+
+**Informational — the premium tier is client-side only.** A URL cannot set a
+premium slider, but `/api/orders` accepts any `changes` labels from the body
+and `changesFromLabels` will restore premium labels from an edited
+`shaklek-cart` localStorage entry. Price-neutral and pre-existing, recorded so
+nobody later assumes the tier is server-enforced.
+
 ### Session B — cart & customizer UX (2026-08-23)
 
 **Status: DONE — committed as `33deaf3`. No files held. Not pushed.**

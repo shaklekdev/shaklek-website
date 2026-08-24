@@ -24,14 +24,14 @@ export default function ShippingPage() {
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
         About <strong>ten days</strong>, counted from the moment a stylist
-        confirms your details rather than from checkout — confirmation usually
+        confirms your details rather than from checkout. Confirmation usually
         happens within a day of ordering. Nothing is cut before that
         conversation, which is the point of made-to-order and also the reason it
         is not next-day.
       </p>
       <p>
-        Ten days is an estimate, not a guarantee. If anything moves — fabric
-        supply, a courier delay, an unusually busy week at the bench — we
+        Ten days is an estimate, not a guarantee. If anything moves, whether fabric
+        supply, a courier delay or an unusually busy week at the bench, we
         contact you directly rather than letting the date slip quietly.
       </p>
 
@@ -44,7 +44,7 @@ export default function ShippingPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Where we deliver</h2>
       <p>
-        Across the <strong>United Arab Emirates</strong> — all seven emirates.
+        Across the <strong>United Arab Emirates</strong>, all seven emirates.
         We do not ship internationally yet.
       </p>
 
@@ -52,7 +52,7 @@ export default function ShippingPage() {
       <p>
         Your delivery address and phone number are collected on the secure
         payment page, after you press Pay, not before. Please check them
-        carefully — if a parcel comes back to us because the address was wrong
+        carefully. If a parcel comes back to us because the address was wrong
         or nobody could receive it, we will arrange redelivery and may ask you
         to cover the extra courier cost.
       </p>
@@ -62,8 +62,8 @@ export default function ShippingPage() {
         Try it on promptly. If the fit is not right you have{" "}
         <strong>one free alteration or remake within 14 days</strong> of
         delivery. If a piece arrives damaged or is not what you ordered, tell us
-        within 14 days and we remake or refund it in full, including delivery —
-        that is separate from the fit guarantee and does not use it up. The{" "}
+        within 14 days and we remake or refund it in full, including delivery.
+        That is separate from the fit guarantee and does not use it up. The{" "}
         <Link href="/legal/terms#returns" className="underline">
           full terms
         </Link>{" "}

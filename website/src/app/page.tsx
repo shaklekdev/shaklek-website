@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Header from "@/components/Header";
-import CatalogCard from "@/components/CatalogCard";
-import { catalog } from "@/data/catalog";
 import type { Metadata } from "next";
+import Header from "@/components/Header";
+import Hero from "@/components/home/Hero";
+import FunnelSteps from "@/components/home/FunnelSteps";
+import ProductRail from "@/components/home/ProductRail";
 import {
   pageMetadata,
   SITE_DESCRIPTION,
@@ -21,80 +21,32 @@ export const metadata: Metadata = {
   title: { absolute: `${SITE_NAME} — ${SITE_TAGLINE}` },
 };
 
+/**
+ * The home page: say what this is, show the three steps, show the clothes.
+ *
+ * Two things were built here on 2026-08-25 and then removed by the founder,
+ * both deliberately, and neither should be reinstated without her:
+ *
+ * 1. A live customizer (sleeve toggle + colour dots on a real shirt). Her
+ *    call: "I don't like the make it yours on the first one, it shows too
+ *    messy. Customization on second page." Customizing belongs on /design,
+ *    where there is room to do it properly and where the customer has already
+ *    chosen a garment to customize.
+ *
+ * 2. A value band repeating the brand tenets under the catalog. Her call: it
+ *    duplicates what the top of the page and /our-story already say. The
+ *    components still exist (TryItDemo, ValueBand) but nothing imports them.
+ *
+ * What is left is the shortest path that still answers the feedback: a visitor
+ * learns what Shaklek is, what the three steps are, and sees the clothes.
+ */
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
-
-      <section className="relative w-full overflow-hidden">
-        <div className="hero-ken-burns absolute inset-0">
-          <Image
-            src="/marketing/hero-banner.png"
-            alt=""
-            fill
-            priority
-            quality={55}
-            sizes="100vw"
-            className="object-cover"
-          />
-        </div>
-        <div className="absolute inset-0 bg-white/70" />
-        <div className="relative mx-auto w-full max-w-3xl px-6 pt-14 pb-8 text-center">
-          <h1 className="text-[28px] leading-tight text-text">
-            Your look,
-            <br />
-            your way.
-          </h1>
-          {/* Readability here came out of two rounds and one overcorrection.
-              Originally 14px in --text-2 over a 55% wash: legible on a laptop,
-              hard work on a phone in daylight. Then medium weight in the full
-              text colour, which fixed the legibility and read far too heavy --
-              a bold sans paragraph under a light serif headline is not this
-              brand. The wash now does the work at 70%, so the type can go back
-              to normal weight and the softer colour, one step up in size.
-
-              The wording is the founder's original signature line, restored
-              2026-08-24 after two rewrites she did not recognise as the brand.
-              The problem with it was never the words -- it was that 14px of
-              muted grey over a photograph is hard to read on a phone in
-              daylight. That is a contrast problem, and it is fixed above. */}
-          <p className="font-display mx-auto mt-3 max-w-md text-[16px] leading-relaxed font-normal text-text-2">
-            Elegant essentials &mdash; customizable to your taste, friendly to
-            your skin, shaped to your body.
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-6 pt-12 pb-5">
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="text-lg text-text">Start with a piece</h2>
-            <p className="mt-1 text-[13px] text-text-3">
-              Make it yours in the next step.
-            </p>
-          </div>
-          <p className="hidden text-[13px] text-text-3 sm:block">
-            From AED 389 · one price per piece · made in 10 days
-          </p>
-        </div>
-      </section>
-
-      {/* Carousel — edge fade hints there's more to scroll */}
-      <section className="relative w-full pb-20">
-        <div className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-3 sm:px-[max(1.5rem,calc((100vw-72rem)/2))]">
-          {catalog.map((item, i) => (
-            <div key={item.slug} className="w-[220px] shrink-0 snap-start sm:w-[248px]">
-              {/* The first two cards are above the fold at every width, so
-                  they shouldn't wait for the lazy-load intersection check.
-                  `eager`, not `priority` -- priority would inject a preload
-                  that competes with the hero, which is the LCP element. */}
-              <CatalogCard item={item} eager={i < 2} />
-            </div>
-          ))}
-        </div>
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-bg to-transparent sm:hidden" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-bg to-transparent sm:hidden" />
-      </section>
+      <Hero />
+      <FunnelSteps dense />
+      <ProductRail />
     </div>
   );
 }

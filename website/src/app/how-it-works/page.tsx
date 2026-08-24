@@ -22,7 +22,16 @@ const steps = [
   {
     n: "02",
     title: "Change it, and watch it change",
-    body: "Sleeve or leg, short or long, cropped or full — in ivory, white, navy or burgundy. Every combination is a real photograph, front and back. Not a swatch, not an illustration: the actual piece you will receive.",
+    // This said "a real photograph, front and back. Not a swatch, not an
+    // illustration: the actual piece you will receive" and shipped to
+    // production in that state. The catalog images are generated, not
+    // photographed, so it was a false claim about the product -- and
+    // "the actual piece you will receive" is the version a customer would
+    // reasonably rely on when deciding to buy. Removed 2026-08-25 on the
+    // founder's instruction. The honest version still makes the same point:
+    // every combination has its own image, so the choice is visible rather
+    // than imagined. What is NOT claimed is how those images were made.
+    body: "Sleeve or leg, short or long, cropped or full, in ivory, white, navy or burgundy. Every combination has its own image, front and back, so you can see what you are choosing instead of imagining it.",
   },
   {
     n: "03",
@@ -30,12 +39,12 @@ const steps = [
     // "Ask for anything else" invited requests a solo tailor cannot take, and
     // every one of those costs a stylist round-trip to decline. Framed as a
     // detail to focus on, the answer is usually yes.
-    body: "Anything you would like us to focus on while your piece is made — a wider collar, a shorter sleeve. Tell us in your own words and a stylist confirms what is possible before anything is cut.",
+    body: "Anything you would like us to focus on while your piece is made: a wider collar, a shorter sleeve. Tell us in your own words and a stylist confirms what is possible before anything is cut.",
   },
   {
     n: "04",
     title: "Your size, or your measurements",
-    body: "Pick XS–XXL, or give us your own numbers and it is cut to those. Same price either way — tailoring is never an upgrade here.",
+    body: "Pick XS–XXL, or give us your own numbers and it is cut to those. Same price either way. Tailoring is never an upgrade here.",
   },
   {
     n: "05",
