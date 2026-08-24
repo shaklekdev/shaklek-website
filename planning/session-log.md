@@ -36,9 +36,9 @@ Founder brief: a "kinda chic" caption campaign, iterated hard for the most
 captivating lines and the best IG/TikTok typography; plus two reels re-cut to
 a specific shot list.
 
-### Session D — catalog image reframe (2026-08-25)
+### Session D — catalog reframe + Meta ads prep (2026-08-25)
 
-**Status: IN PROGRESS. Claiming BEFORE generating, per the release review.**
+**Status: DONE. All committed, deployed and verified on production. No files held.**
 
 - `website/src/data/catalog.ts` (image path references only)
 - `website/public/catalog/utility-shirt/`, `website/public/catalog/wrap-top/`
@@ -48,6 +48,94 @@ a specific shot list.
 
 Do not run `git add website/public/catalog/` while this is open -- it would
 swallow another session's uncommitted work in that tree. Stage explicit paths.
+
+**Catalog: every image is now 2:3.** 252 referenced images between 0.666 and
+0.685, from 23 distinct pixel sizes and a 0.667-1.390 range that morning.
+Utility Shirt was landscape throughout and Wrap Top mixed four ratios, so its
+preview box resized while the customer moved the sliders.
+
+CROPPED, not padded. Padding adds a band in a sampled backdrop colour that
+does not match the studio white, and a release review measured it would also
+leave 41% of the home-page card empty (the card is `object-cover` in a 3:4
+box). Cropping only ever removes backdrop.
+
+⚠️ **The subject-width instrument saturates on the studio backdrop gradient**
+and reported all 56 images as clipping the subject. It is wrong. Every batch
+here was verified by eye on a contact sheet, which is what section 4b says is
+the only reliable channel. Do not trust that measure.
+
+**Wrap Top's 8 "normal length" backs were a POSE defect, not a framing one** --
+over-the-shoulder close-ups, hand to hair, with the hem not in frame. Moving
+the Length slider on the back view changed the pose instead of the length.
+Each replacement was derived from that colour's approved LONGER back by
+shortening the hem, so model, pose and backdrop match by construction. Same
+prompt, only the colour word changed. **5 Flash generations, no Pro, ~$0.20.**
+`colorImages[c].back` and `comboImages[c]["long:normal"].back` depict the same
+combination and now share one file, which is why the check reports 252 paths
+rather than 256.
+
+**113 files now carry a true .jpg extension.** The deployed optimizer picks its
+output format from the extension, not the magic bytes, so a client without webp
+was served **248,667 bytes of PNG** where a webp client got 18,390. Measured on
+production, before and after: 9.4x smaller. Renaming was already required for
+cache-busting, so this cost nothing. **Any future image rename should use .jpg,
+not the old JPEG-under-.png convention.**
+
+⚠️ **`npm run build` now runs `verify-catalog.mjs` first.** A catalog.ts entry
+pointing at a missing file used to build GREEN and deploy broken images -- Next
+does not validate image paths and there is no `onError` on any catalog image.
+It exits 1 now. It caught a real mistake within the hour (a `-v4`->`-v5` bump a
+glob missed).
+
+**Four reviews were run before the image work and they did not agree.** Fable
+argued me out of a $4-8 plan to regenerate 64 images as full-body: the items
+use visibly different models, so cross-item uniformity was unachievable, and
+64 independent lower-half inventions is the exact anti-pattern section 3
+exists to prevent. Actual spend: ~$0.20. Performance separately vetoed padding
+and measured CLS at 0.0000 everywhere -- standardising the ratio has ZERO
+performance benefit and is a brand fix only.
+
+### Meta ads preparation (same session)
+
+Full checklist: `planning/marketing/meta-ads-setup.md`.
+
+**Everything ships INERT.** Without `NEXT_PUBLIC_META_PIXEL_ID` no script
+loads, no cookie is set, nothing reaches Meta. Enabling ads is an Amplify
+environment variable plus a redeploy, not a code change.
+
+⚠️ **The CSP was the silent blocker.** `script-src` had no
+`connect.facebook.net`, `connect-src` had no `www.facebook.com`. The pixel
+would have loaded, fired nothing, and reported zero conversions with no
+visible error. Added and verified in a real browser: fbq defined, Meta's
+library fetched, **0 CSP violations**, and `unsafe-eval` still absent from the
+production header.
+
+Events verified end to end against a production build: ViewContent, AddToCart
+(not on edit), InitiateCheckout, Purchase. **Purchase is guarded in
+localStorage by order id** -- the confirmation page polls up to five times and
+a refresh or return visit would each count again.
+
+**No PII leaves the site.** Verified by typing an email into checkout and
+confirming it appears in no payload. Advanced Matching is OFF deliberately.
+`track()` cannot throw; it sits on the add-to-cart and pay paths.
+
+⚠️ **The privacy policy is tied to the same env var as the pixel.** It claimed
+"no advertising trackers" in two places, which would have become false the
+moment ads went on. **If Advanced Matching or CAPI is ever enabled, the
+paragraph about not sending personal data STOPS BEING TRUE and must be
+rewritten first.**
+
+Product feed at `/feed/meta.xml`: 32 entries, one per item and colour, built
+from catalog.ts. All 96 URLs in it fetched as Meta's crawler, zero failures.
+
+**Conversions API deliberately NOT done** -- it means editing the payments
+webhook, the AED 5 blast radius, and should not happen unreviewed overnight.
+Biggest remaining accuracy win before scaling spend.
+
+**Ad policy, from Session C:** Meta rejects creative implying knowledge of a
+viewer's body. `h01` and `h03` in social-playbook.md are organic-only;
+`h01ad`/`h03ad` are the ad-safe rewrites.
+
 
 
 ### Session D — reviewer feedback: home page, voice, colour dots (2026-08-25)
