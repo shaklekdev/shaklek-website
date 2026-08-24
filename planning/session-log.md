@@ -18,6 +18,20 @@ Rules that make this work:
 
 ## Active claims
 
+### Session D — catalog image reframe (2026-08-25)
+
+**Status: IN PROGRESS. Claiming BEFORE generating, per the release review.**
+
+- `website/src/data/catalog.ts` (image path references only)
+- `website/public/catalog/utility-shirt/`, `website/public/catalog/wrap-top/`
+- `website/scripts/catalog/{gen-verified,edit,edit2}.mjs` (API key moved to a header)
+- `website/package.json` (wiring verify-catalog into the build)
+- `catalog-archive/2026-08-25-reframe/` (new)
+
+Do not run `git add website/public/catalog/` while this is open -- it would
+swallow another session's uncommitted work in that tree. Stage explicit paths.
+
+
 ### Session D — reviewer feedback: home page, voice, colour dots (2026-08-25)
 
 **Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**

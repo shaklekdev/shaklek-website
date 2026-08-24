@@ -23,8 +23,13 @@ const body = {
 };
 
 const res = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/${model || "gemini-2.5-flash-image"}:generateContent?key=${GEMINI_API_KEY}`,
-  { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+  // Key in a header, not the URL -- see the note in gen-verified.mjs.
+  `https://generativelanguage.googleapis.com/v1beta/models/${model || "gemini-2.5-flash-image"}:generateContent`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
+    body: JSON.stringify(body),
+  }
 );
 const json = await res.json();
 if (!res.ok) { console.error(JSON.stringify(json, null, 2)); process.exit(1); }

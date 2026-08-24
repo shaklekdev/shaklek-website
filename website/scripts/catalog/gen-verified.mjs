@@ -65,10 +65,19 @@ async function meanAbsDiff(a, b) {
 async function callModel(inputPath, prompt, model) {
   const imgB64 = fs.readFileSync(inputPath).toString("base64");
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`,
+    // The key travels in a header, never in the URL. A URL carrying
+    // `?key=...` ends up in proxy logs, gateway records and any error message
+    // someone pastes into an issue -- and this key bills real money against a
+    // capped budget. gen-flat.mjs already did this; these older scripts were
+    // never brought in line, and they are the ones a catalog batch runs
+    // through. Flagged by the pre-batch security review, 2026-08-25.
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": GEMINI_API_KEY,
+      },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: prompt }, { inline_data: { mime_type: "image/png", data: imgB64 } }] }],
       }),
