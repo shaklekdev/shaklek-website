@@ -25,14 +25,35 @@ export const metadata: Metadata = pageMetadata({
 // Federal Decree-Law No. 45 of 2021 on Personal Data Protection before it is
 // relied on. The processor list must be kept accurate as the stack changes --
 // a named processor that is wrong is worse than none.
+// Whether this deployment actually runs the Meta Pixel.
+//
+// The policy text below is tied to the SAME environment variable that enables
+// the pixel, so it can never be wrong in either direction: it cannot promise
+// "no advertising trackers" on a build that has one, and it cannot describe a
+// pixel on a build that does not. The alternative -- editing the policy by hand
+// around a separate switch -- is precisely how a site ends up making a false
+// statement about itself, which is what happened with the "real photograph"
+// claim on /how-it-works.
+//
+// If Advanced Matching or the Conversions API is ever turned on, the paragraph
+// about not sending personal data STOPS BEING TRUE and must be rewritten first.
+const adsEnabled = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
+
 export default function PrivacyPage() {
   return (
     <LegalPage title="Privacy & Cookies" updated="24 August 2026">
       <p>
         This explains what Shaklek collects, why, and who else touches it. We
         collect what we need to make and deliver your order, and little else. We
-        do not sell personal data, we run no advertising trackers, and there is
-        no analytics on this site.
+        do not sell personal data.{" "}
+        {adsEnabled ? (
+          <>
+            We use one advertising measurement tool, the Meta Pixel, described
+            under Cookies below. There is no other analytics on this site.
+          </>
+        ) : (
+          <>We run no advertising trackers, and there is no analytics on this site.</>
+        )}
       </p>
 
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
@@ -120,12 +141,47 @@ export default function PrivacyPage() {
         not sent anywhere until you check out. <strong>Stripe</strong> sets its
         own cookies on its payment page for fraud prevention.
       </p>
-      <p>
-        There are <strong>no</strong> advertising, behavioural, affiliate or
-        social-media cookies, and no analytics. You can block cookies in your
-        browser; sign-in will stop working, but browsing and ordering as a guest
-        will not.
-      </p>
+      {adsEnabled ? (
+        <>
+          <p>
+            <strong>Meta Pixel.</strong> When we advertise on Instagram or
+            Facebook we use Meta&apos;s pixel to see which ads lead to an order,
+            so we are not paying to show ads that do not work. It records that a
+            browser viewed a piece, added one to the cart, started checkout or
+            completed an order, together with the item and the amount. Meta is a
+            joint controller for this data and may use it to measure and target
+            advertising. See{" "}
+            <a
+              href="https://www.facebook.com/privacy/policy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Meta&apos;s privacy policy
+            </a>
+            .
+          </p>
+          <p>
+            <strong>We do not send Meta your name, email, address, phone number
+            or measurements.</strong> Only the item, the amount and the order
+            reference. Advanced Matching, which would hash and send your email,
+            is switched off.
+          </p>
+          <p>
+            There are no other advertising, behavioural or affiliate cookies. You
+            can block cookies in your browser, or use its Do Not Track or
+            tracking-prevention setting; sign-in will stop working, but browsing
+            and ordering as a guest will not.
+          </p>
+        </>
+      ) : (
+        <p>
+          There are <strong>no</strong> advertising, behavioural, affiliate or
+          social-media cookies, and no analytics. You can block cookies in your
+          browser; sign-in will stop working, but browsing and ordering as a
+          guest will not.
+        </p>
+      )}
 
       <h2 className="pt-2 text-base font-medium text-text">Your rights</h2>
       <p>

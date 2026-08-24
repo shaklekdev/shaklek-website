@@ -7,6 +7,7 @@ import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 import { previewDiscountAed, previewTotalAed } from "@/lib/promoPreview";
 import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
+import { money, track } from "@/lib/metaPixel";
 
 type PaymentMethod = "apple-pay" | "card";
 
@@ -101,6 +102,16 @@ export default function CheckoutForm({ total }: { total: number }) {
   async function handlePay() {
     setSubmitting(true);
     setError(null);
+    // Fired before the network call, so a customer who abandons on Stripe's
+    // hosted page is still counted as having started checkout -- that gap is
+    // the number worth optimising against. Cannot throw; see lib/metaPixel.
+    track("InitiateCheckout", {
+      content_type: "product",
+      content_ids: items.map((i) => i.slug),
+      contents: items.map((i) => ({ id: i.slug, quantity: i.quantity ?? 1 })),
+      num_items: units,
+      ...money(promo ? previewTotal : total),
+    });
     try {
       const res = await fetch("/api/orders", {
         method: "POST",

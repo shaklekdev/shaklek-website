@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import { money, track } from "@/lib/metaPixel";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
@@ -89,6 +90,7 @@ function OrderConfirmedContent() {
 
         if (data.order.status === "paid") {
           clear(); // Stripe already confirmed payment by redirecting here
+          trackPurchaseOnce(orderId!, data.order.total, data.order.items);
         } else if (attempts < 4) {
           attempts += 1;
           setTimeout(poll, 1500);
@@ -215,6 +217,47 @@ function OrderConfirmedContent() {
       </Link>
     </div>
   );
+}
+
+
+// Fires Meta's Purchase event exactly once per order.
+//
+// Three things would otherwise double-count it, and every duplicate corrupts
+// the number the ad account optimises against and the ROAS the founder reads:
+//   - the poll above runs up to five times while Stripe's webhook lands
+//   - the customer refreshes the confirmation page
+//   - the customer returns to the URL later; it stays valid
+//
+// localStorage keyed by order id, so it survives a refresh and a return
+// visit. A cleared browser can re-fire once; that is the safe direction of
+// error compared with counting every poll.
+//
+// Deliberately NO email, name or address in the payload -- Meta's terms
+// prohibit personal data in event parameters, and this is a page that has
+// the customer's email in scope.
+function trackPurchaseOnce(
+  orderId: string,
+  total: number,
+  items: { slug?: string; name?: string; quantity?: number }[],
+) {
+  try {
+    const key = `shaklek-purchase-tracked-${orderId}`;
+    if (window.localStorage.getItem(key)) return;
+    window.localStorage.setItem(key, "1");
+    track("Purchase", {
+      content_type: "product",
+      content_ids: items.map((i) => i.slug ?? i.name ?? "unknown"),
+      contents: items.map((i) => ({
+        id: i.slug ?? i.name ?? "unknown",
+        quantity: i.quantity ?? 1,
+      })),
+      num_items: items.reduce((n, i) => n + (i.quantity ?? 1), 0),
+      order_id: orderId,
+      ...money(total),
+    });
+  } catch {
+    // Never let analytics break the page that confirms someone's order.
+  }
 }
 
 export default function OrderConfirmedPage() {

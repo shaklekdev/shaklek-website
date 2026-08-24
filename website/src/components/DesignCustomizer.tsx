@@ -12,6 +12,7 @@ import {
   renderParamsForCategory,
 } from "@/data/parameterSliders";
 import { useCart } from "@/lib/CartContext";
+import { money, track } from "@/lib/metaPixel";
 import CustomizeParameters from "@/components/CustomizeParameters";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 
@@ -150,6 +151,20 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     }
   }, [item, items]);
 
+  // ViewContent: the customer is looking at a specific garment. This is what
+  // Meta's catalog retargeting keys off, so a browser who leaves without
+  // adding to cart can still be shown the piece they were configuring.
+  // Fires once per item, not on every slider change.
+  useEffect(() => {
+    track("ViewContent", {
+      content_type: "product",
+      content_ids: [item.slug],
+      content_name: item.name,
+      content_category: item.category,
+      ...money(item.price),
+    });
+  }, [item.slug, item.name, item.category, item.price]);
+
   const price = item.price;
   const colorVariant = item.colorImages?.[spec.color];
   const comboKey = comboKeyForCategory(item.category, spec.changes);
@@ -225,6 +240,19 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     };
     if (editingId) updateItem(editingId, line);
     else addItem(line);
+    // Analytics only, and only on a genuine add -- an edit is not a new
+    // intent to buy and would double-count the funnel. track() never throws
+    // (see lib/metaPixel), so this cannot come between the customer and the
+    // cart. No PII: item id, category, value, currency.
+    if (!editingId) {
+      track("AddToCart", {
+        content_ids: [item.slug],
+        content_name: item.name,
+        content_type: "product",
+        contents: [{ id: item.slug, quantity: line.quantity }],
+        ...money(price * line.quantity),
+      });
+    }
     router.push("/cart");
   }
 

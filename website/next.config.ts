@@ -46,11 +46,27 @@ const CLERK_PROTECT = "https://*.protect.clerk.com";
 // leaked 'unsafe-eval' into the production header -- it is not reliably
 // "production" at the moment this module is evaluated, and a security header
 // must not depend on something that loose.
+// Meta Pixel hosts. Named as constants so the CSP reads as a list of vendors
+// rather than a wall of URLs, and so switching advertising off later means
+// deleting three references instead of hunting through directives.
+//
+// connect.facebook.net serves fbevents.js; www.facebook.com receives the
+// event beacons and serves the <noscript> tracking pixel. These are the only
+// two hosts the pixel needs -- Meta's docs list no others for a standard
+// browser-side install.
+//
+// Added ahead of the pixel being switched on, because the pixel fails SILENTLY
+// against a CSP that blocks it: the script 404s in the console, no events are
+// sent, and the ad account simply reports zero conversions with nothing
+// obviously broken. That is a very expensive thing to debug mid-campaign.
+const META_SCRIPT = "https://connect.facebook.net";
+const META_ENDPOINT = "https://www.facebook.com";
+
 const buildCsp = (isDev: boolean) => [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${CLERK_HOSTS} ${CLERK_PROTECT} https://challenges.cloudflare.com`,
-  `connect-src 'self' ${CLERK_HOSTS} ${CLERK_PROTECT} https://clerk-telemetry.com https://*.clerk-telemetry.com https://img.clerk.com`,
-  "img-src 'self' data: blob: https://img.clerk.com",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${CLERK_HOSTS} ${CLERK_PROTECT} https://challenges.cloudflare.com ${META_SCRIPT}`,
+  `connect-src 'self' ${CLERK_HOSTS} ${CLERK_PROTECT} https://clerk-telemetry.com https://*.clerk-telemetry.com https://img.clerk.com ${META_ENDPOINT}`,
+  `img-src 'self' data: blob: https://img.clerk.com ${META_ENDPOINT}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   "worker-src 'self' blob:",

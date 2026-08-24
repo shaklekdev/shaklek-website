@@ -9,6 +9,7 @@ import {
 import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/CartContext";
+import MetaPixel from "@/components/MetaPixel";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -40,6 +41,21 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE.url],
   },
+  // Meta requires the advertising domain to be verified before it will let an
+  // ad account own conversion events for it, and before Aggregated Event
+  // Measurement can be configured. The token comes from Business Manager and
+  // is environment-driven, so the tag simply does not render until the founder
+  // has one -- nothing to remove or forget later.
+  ...(process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION
+    ? {
+        verification: {
+          other: {
+            "facebook-domain-verification":
+              process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION,
+          },
+        },
+      }
+    : {}),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -80,6 +96,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
             <Footer />
           </CartProvider>
+          {/* Renders nothing at all without NEXT_PUBLIC_META_PIXEL_ID, so this
+              ships inert and is switched on with an environment variable
+              rather than a code change on a live storefront. */}
+          <MetaPixel />
         </body>
       </html>
     </ClerkProvider>
