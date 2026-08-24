@@ -29,7 +29,6 @@ export default function CustomizeParameters({
   previewBackImage,
   previewGradient,
   preloadImages = [],
-  unshownChoices = [],
   primaryAction,
 }: {
   spec: DesignSpec;
@@ -40,10 +39,6 @@ export default function CustomizeParameters({
   previewBackImage?: string | null;
   previewGradient: [string, string];
   preloadImages?: string[];
-  // Non-empty when the catalog has no photograph of the exact combination
-  // chosen, so the image on screen shows a different cut. Carries the labels
-  // the photo cannot show.
-  unshownChoices?: string[];
   // Rendered directly beneath the choices, above the Shaklek+ note. The CTA
   // used to sit after everything, so getting to checkout meant scrolling past
   // an upsell for features that are not purchasable yet.
@@ -187,22 +182,6 @@ export default function CustomizeParameters({
           which is where it is, and where it is properly qualified. Say what
           the image is; do not make promises about what happens if it is
           wrong. */}
-      {unshownChoices.length > 0 && (
-        // Shown only for the combinations with no photograph of their own.
-        // Deliberately not styled as an error: the choice is valid, orderable
-        // and will be made exactly as stated. It is the picture that cannot
-        // keep up, and saying so is the difference between a caveat and a
-        // misrepresentation.
-        <p className="mt-3 border border-border-strong bg-surface p-2.5 text-[11px] leading-relaxed text-text-2">
-          We have not photographed this exact combination yet, so the picture
-          shows our standard cut. Your piece will be made{" "}
-          <strong className="font-medium">
-            {unshownChoices.join(", ").toLowerCase()}
-          </strong>
-          , as chosen.
-        </p>
-      )}
-
       <p className="mt-3 px-1 text-[11px] leading-relaxed text-text-3">
         * Images are illustrative of the combination you chose. Every piece is
         hand-cut, so fabric fall and shade vary slightly.

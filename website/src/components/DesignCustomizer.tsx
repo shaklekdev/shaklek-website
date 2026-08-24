@@ -157,35 +157,6 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const previewImage = comboVariant?.front ?? colorVariant?.front ?? item.image;
   const previewBackImage = comboVariant?.back ?? colorVariant?.back ?? item.backImage;
 
-  // Does the photo on screen actually depict the combination selected?
-  //
-  // The default combination has no photo of its own by design -- it IS the
-  // base photo (CLAUDE.md section 2). But seven of the eight catalog items are
-  // additionally missing exactly one NON-default combination in all four
-  // colours, and for those the two ?? fallbacks above quietly serve the base
-  // photo instead. The customer then sees, say, a wide cropped trouser while
-  // the labels, the cart, the order and the tailor's sheet all correctly say
-  // straight and full length. Only the picture disagrees, which is the one
-  // part of it they are actually looking at when they decide to pay.
-  //
-  // Found by the pre-deploy security review, 2026-08-25, and it predates this
-  // work -- but the footnote added the same day asserts the images are
-  // "illustrative of the combination you chose", which is untrue precisely
-  // here. Rather than let that stand, say so on the page until the missing
-  // cells are photographed.
-  const defaultComboKey = comboKeyForCategory(
-    item.category,
-    defaultChangesForCategory(item.category, item.defaultChanges),
-  );
-  const photoMatchesCombo =
-    !comboKey || comboKey === defaultComboKey || Boolean(comboVariant);
-  // The render-tier labels only -- what the customer picked that the photo
-  // cannot show. Premium sliders never affect the photo.
-  const unshownChoices = photoMatchesCombo
-    ? []
-    : renderParamsForCategory(item.category)
-        .map((param) => spec.changes.find((c) => c.type === param.type)?.label)
-        .filter((l): l is string => Boolean(l));
 
   // Every color/view the customer could switch to for this item, so
   // CustomizeParameters can preload all of them up front -- switching color
@@ -283,7 +254,6 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             category={item.category}
             previewImage={previewImage}
             previewBackImage={previewBackImage}
-            unshownChoices={unshownChoices}
             previewGradient={item.gradient}
             preloadImages={preloadImages}
             primaryAction={
