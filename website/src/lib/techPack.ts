@@ -124,7 +124,13 @@ export function buildPdf(
   opts: { compress?: boolean } = {},
 ): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({ ...PAGE, compress: opts.compress ?? true });
+    const doc = new PDFDocument({
+      ...PAGE,
+      compress: opts.compress ?? true,
+      // Metadata travels with the file and nobody sees it on screen, which is
+      // exactly how a brand name gets reintroduced by accident. Pinned blank.
+      info: { Title: `Technical pack ${order.id.slice(0, 8).toUpperCase()}`, Author: "", Subject: "", Keywords: "", Creator: "", Producer: "" },
+    });
     const chunks: Buffer[] = [];
     doc.on("data", (chunk) => chunks.push(chunk));
     doc.on("end", () => resolve(Buffer.concat(chunks)));
@@ -135,10 +141,20 @@ export function buildPdf(
     const width = right - left;
     const bottom = doc.page.height - doc.page.margins.bottom;
 
-    // The tailor gets what to make and which order it belongs to. Nothing
-    // else. No name, no email, no address -- the customer's identity is
-    // Shaklek's, and this PDF leaves the building over WhatsApp.
-    const ref = `SHK-${order.id.slice(0, 8).toUpperCase()}`;
+    // The tailor gets what to make and which order it belongs to. Nothing else.
+    //
+    // No customer identity: no name, no email, no address. And, founder
+    // decision 2026-08-24, no BRAND identity either -- no wordmark, no company
+    // name, no "SHK-" on the reference, nothing naming who commissioned this.
+    // The workshop makes the pieces; it is not being handed the label they
+    // carry. A pack that is forwarded, subcontracted or simply left on a bench
+    // cannot then be traced back, or used to advertise whose line it is.
+    // scripts/test-techpack.mjs fails if any brand string reappears.
+    //
+    // The reference stays, because the tailor still has to be able to say
+    // which order they mean. It is the order id's first 8 characters and
+    // identifies the order to us without naming us.
+    const ref = order.id.slice(0, 8).toUpperCase();
     const groups = groupIdentical(order.items);
     const totalGarments = order.items.length;
 
@@ -153,8 +169,12 @@ export function buildPdf(
       doc.y += 1;
     };
 
-    const section = (title: string) => {
-      space(46);
+    // `needs` is the height of the block that will follow. Without it the
+    // heading gets drawn at the bottom of a page and whatever follows is pushed
+    // to the next one -- which stranded "CUSTOMER REQUEST" on one page and the
+    // customer's actual words, alone, on the next.
+    const section = (title: string, needs = 46) => {
+      space(needs);
       doc.moveDown(0.7);
       doc
         .fontSize(8)
@@ -197,29 +217,24 @@ export function buildPdf(
       }
     };
 
-    // A ruled blank for something Shaklek does not yet have a house standard
-    // for. A blank costs the tailor a question; a plausible invented number
-    // costs a remake -- so these are deliberately empty, not guessed.
-    const blank = (label: string) => {
-      space(22);
-      const y = doc.y;
-      doc.fontSize(8).fillColor(MUTED).font("Helvetica-Bold").text(label.toUpperCase(), left, y + 4, {
-        width: 118,
-      });
-      doc
-        .moveTo(left + 124, y + 14)
-        .lineTo(right, y + 14)
-        .strokeColor("#bbb")
-        .lineWidth(0.5)
-        .stroke();
-      doc.y = y + 22;
-    };
-
     // -------------------------------------------------------------- cover
+    //
+    // Skipped entirely for a single-spec order. Its index would list one item
+    // and then that same item's page would repeat every word of it -- a whole
+    // sheet the tailor has to turn past to reach the garment. The reference and
+    // the no-identity note still have to reach them, so for a one-spec order
+    // they move to the foot of the spec page instead. Multi-item orders keep
+    // the cover, where an index of what to make actually earns its page.
+    const singleSpec = groups.length === 1;
 
-    doc.fontSize(8).fillColor(MUTED).font("Helvetica-Bold").text("SHAKLEK", { characterSpacing: 2.5 });
+    if (!singleSpec) {
+    doc
+      .fontSize(8)
+      .fillColor(MUTED)
+      .font("Helvetica-Bold")
+      .text("TECHNICAL PACK", { characterSpacing: 2.5 });
     doc.moveDown(0.15);
-    doc.fontSize(9).fillColor(MUTED).font("Helvetica").text("TECH PACK", { characterSpacing: 2 });
+    doc.fontSize(9).fillColor(MUTED).font("Helvetica").text("ORDER REFERENCE", { characterSpacing: 2 });
     doc.moveDown(0.5);
     doc.fontSize(30).fillColor(INK).font("Helvetica-Bold").text(ref);
     doc.moveDown(0.2);
@@ -268,14 +283,17 @@ export function buildPdf(
       .fillColor("#999")
       .font("Helvetica")
       .text(
-        "This document carries no customer name, contact or address by design. Every question about this order goes through Shaklek, quoting the reference above.",
+        "This document carries no customer name, contact or address by design. Send every question about this order back to whoever gave you this document, quoting the reference above.",
         { width },
       );
+    }
 
     // ------------------------------------------------------- per garment
 
     for (const [gi, { item, qty }] of groups.entries()) {
-      doc.addPage();
+      // A single-spec pack starts on the document's own first page; there is
+      // no cover to move past.
+      if (!singleSpec || gi > 0) doc.addPage();
       const catalogItem = catalogItemFor(item);
       const category = item.category ?? catalogItem?.category ?? "";
 
@@ -285,7 +303,9 @@ export function buildPdf(
         .fontSize(8)
         .fillColor(MUTED)
         .font("Helvetica-Bold")
-        .text(`SPEC ${gi + 1} OF ${groups.length}`, left, hy, { characterSpacing: 1.4 });
+        .text(singleSpec ? "TECHNICAL PACK" : `SPEC ${gi + 1} OF ${groups.length}`, left, hy, {
+          characterSpacing: 1.4,
+        });
       doc.fontSize(8).fillColor(MUTED).text(ref, left, hy, { width, align: "right" });
       doc.moveDown(0.35);
       doc.fontSize(19).fillColor(INK).font("Helvetica-Bold").text(item.name, left, doc.y, {
@@ -383,10 +403,6 @@ export function buildPdf(
           .text(`${item.color}${hex ? `   ${hex}` : ""}`, left + 152, y + 1, { width: width - 152 });
         doc.y = y + 20;
       }
-      blank("Thread");
-      blank("Buttons / zip");
-      blank("Interfacing");
-      blank("Labels");
 
       // -- measurements --------------------------------------------------
       section("Measurements");
@@ -438,7 +454,7 @@ export function buildPdf(
           doc.y = y + 17;
         }
       } else {
-        doc.font("Helvetica").fontSize(10.5).fillColor("#a33").text("No size or measurements recorded on this order — do not cut until Shaklek confirms.");
+        doc.font("Helvetica").fontSize(10.5).fillColor("#a33").text("No size or measurements recorded on this order — do not cut until this has been confirmed with whoever sent it.");
         doc.fillColor(INK);
       }
 
@@ -448,7 +464,13 @@ export function buildPdf(
         .fontSize(8.5)
         .fillColor(MUTED)
         .text(
-          "These are BODY measurements — the body the garment must fit, not finished garment measurements. Apply the house block and ease. The standard-size figures are consolidated from published UAE market charts, not measured from Shaklek patterns; where they disagree with the workshop's own block, the block wins and Shaklek wants to know.",
+          // The provenance half only applies when a standard size was ordered.
+          // On a tailored order the numbers came off the customer's own body,
+          // so printing a caveat about published market charts is small print
+          // about something that is not on the page.
+          fields
+            ? "These are BODY measurements, taken from the customer — the body the garment must fit, not finished garment measurements. Apply the house block and ease."
+            : "These are BODY measurements — the body the garment must fit, not finished garment measurements. Apply the house block and ease. The figures are consolidated from published UAE market charts, not measured from these patterns; where they disagree with the workshop's own block, the block wins — please say so when you return this page.",
           { width },
         );
       doc.fillColor(INK);
@@ -487,10 +509,14 @@ export function buildPdf(
       }
 
       if (item.freeformNotes) {
-        section("Customer request");
-        space(40);
+        // Measure the box first so the heading and the box are placed as one
+        // unit. This is the customer's own instruction to the tailor -- of
+        // everything on the page it is the worst thing to leave stranded.
+        const noteHeight =
+          doc.font("Helvetica").fontSize(11).heightOfString(item.freeformNotes, { width: width - 20 }) + 16;
+        section("Customer request", noteHeight + 60);
         const y = doc.y;
-        const h = doc.fontSize(11).heightOfString(item.freeformNotes, { width: width - 20 }) + 16;
+        const h = noteHeight;
         doc.rect(left, y, width, h).fillColor("#f6f3ee").fill();
         doc.font("Helvetica").fontSize(11).fillColor(INK).text(item.freeformNotes, left + 10, y + 8, {
           width: width - 20,
@@ -498,26 +524,28 @@ export function buildPdf(
         doc.y = y + h + 4;
       }
 
-      // -- making standard ------------------------------------------------
-      section("Making standard");
+    }
+
+    // The two lines the cover used to carry. Without a cover the tailor would
+    // otherwise have no instruction about what to quote or where to send a
+    // question, and no statement that the missing customer details are missing
+    // on purpose rather than by mistake.
+    if (singleSpec) {
+      doc.moveDown(1);
+      space(46);
+      rule();
+      doc.moveDown(0.4);
       doc
-        .font("Helvetica")
         .fontSize(8.5)
-        .fillColor(MUTED)
+        .fillColor("#999")
+        .font("Helvetica")
         .text(
-          "Shaklek has no house standard for these yet. Fill them in and return this page — they will be printed on every tech pack from then on.",
+          `Quote reference ${ref} on every message about this order. This document carries no customer name, contact or address by design. Send every question back to whoever gave it to you.`,
+          left,
+          doc.y,
           { width },
         );
-      doc.moveDown(0.4);
-      blank("Seam allowance");
-      blank("Hem allowance");
-      blank("Stitch density");
-      blank("Tolerance");
-
-      section("Sign-off");
-      blank("Cut by / date");
-      blank("Sewn by / date");
-      blank("Checked by / date");
+      doc.fillColor(INK);
     }
 
     doc.end();

@@ -52,7 +52,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="shaklek-techpack-${id.slice(0, 8)}.pdf"`,
+      "Content-Disposition": `attachment; filename="techpack-${id.slice(0, 8)}.pdf"`,
     },
   });
 }

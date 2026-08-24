@@ -346,6 +346,60 @@ it was swept in. The reverse already happened once today: this session's log
 section was committed inside `e561249` by whoever ran `git add planning/session-log.md`
 while it was dirty. **`git diff --cached` before every commit in this repo.**
 
+### De-branded and trimmed -- founder decisions, 2026-08-24 (second pass)
+
+**No brand anywhere on the tech pack.** *"They only make the pieces, they don't
+have to get access to the idea."* No wordmark, no company name, and the
+reference lost its `SHK-` prefix -- it is now just the order id's first 8
+characters, which identifies the order to us without naming us. Body copy that
+said "goes through Shaklek" now says "back to whoever gave you this document".
+Filename is `techpack-<id>.pdf`.
+
+**PDF metadata is pinned blank too.** It travels with the file, nobody sees it
+on screen, and defaults are exactly how a name creeps back in later.
+`scripts/test-techpack.mjs` fails if any brand string reappears in the rendered
+text *or* the metadata.
+
+What this does and does not buy: it stops the *document* identifying Shaklek if
+it is forwarded, subcontracted, or left on a bench. It does not make us
+anonymous to the tailor -- we pay them and we send it from our own number.
+
+⚠️ **`dashboard/orders/page.tsx:29` still says "Shaklek order ..." in the
+WhatsApp handoff message.** Same disclosure surface, deliberately left: the
+founder is sending it from their own number, so it is arguably fine. Flagged,
+not changed.
+
+**The 11 ruled blanks are gone.** Thread, buttons/zip, interfacing, labels,
+seam allowance, hem allowance, stitch density, tolerance, and the three sign-off
+lines. They asked the workshop for data Shaklek does not hold, on every order,
+forever -- and no tailor ever asked for them. They were this session's design
+idea, not a requirement. The pack is now only what to make, from data actually
+collected. The "never print an invented seam allowance" assertion was KEPT and
+widened to stitch density: with the prompt to supply a real standard gone, the
+risk shifts from "empty line" to "someone helpfully fills in a plausible one".
+
+**No cover page on a single-spec order.** Its index would list one item and the
+next page would repeat every word of it. The reference instruction and the
+no-identity statement move to the foot of the spec page. Multi-item orders keep
+the cover, where an index earns its page. One tailored garment: 3 pages -> 2.
+
+### Two layout bugs, both found by dumping text per page rather than looking
+
+Worth copying as a technique -- neither was visible in a thumbnail:
+
+- **The customer's own instruction was orphaned.** "CUSTOMER REQUEST" sat at the
+  foot of one page and their words landed alone on the next, because `section()`
+  drew its heading before checking anything fit beneath it. It now takes a
+  `needs` height and moves the whole block together. Of everything on the page,
+  the customer's words are the worst thing to strand.
+- **The standard-size provenance caveat printed on tailored orders**, where the
+  numbers came off the customer's own body -- small print about published market
+  charts, about something not on the page. Now conditional.
+
+Also: `test-techpack.mjs` matched prose with `includes()`, so a sentence that
+WRAPPED in the PDF failed the assertion for a line break rather than for missing
+text. Phrase checks now collapse whitespace first.
+
 ### Open for the founder
 
 - **Review the contact sheets** -- `npx tsx scripts/catalog/contact-sheet.mjs <slug> /tmp/x.png`.
