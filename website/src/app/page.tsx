@@ -51,10 +51,16 @@ export default function Home() {
               text colour, which fixed the legibility and read far too heavy --
               a bold sans paragraph under a light serif headline is not this
               brand. The wash now does the work at 70%, so the type can go back
-              to normal weight and the softer colour, one step up in size. */}
+              to normal weight and the softer colour, one step up in size.
+
+              The wording is the founder's original signature line, restored
+              2026-08-24 after two rewrites she did not recognise as the brand.
+              The problem with it was never the words -- it was that 14px of
+              muted grey over a photograph is hard to read on a phone in
+              daylight. That is a contrast problem, and it is fixed above. */}
           <p className="font-display mx-auto mt-3 max-w-md text-[16px] leading-relaxed font-normal text-text-2">
-            Timeless essentials in organic cotton and linen. Customise the cut,
-            watch it change, and we make it to your shape.
+            Elegant essentials &mdash; customizable to your taste, friendly to
+            your skin, shaped to your body.
           </p>
         </div>
       </section>

@@ -211,10 +211,23 @@ export default function OurStoryPage() {
                 they&apos;re either too expensive, not quite my taste, or not my
                 fit.
               </p>
+              {/* "Why couldn't technology solve this" on its own says nothing
+                  -- a reader cannot tell what is being solved. Naming it is
+                  also the honest version: what the technology does here is
+                  show you the real piece in every combination before a metre
+                  of fabric is cut, and make only the one you chose. */}
               <p>
                 I&apos;m a tech girl who happens to love fashion, and I kept
-                asking myself: why couldn&apos;t technology solve this, for me
-                and for everyone like me?
+                asking myself: why couldn&apos;t technology solve this? Show me
+                every version of a piece before it exists, so I can see it
+                rather than imagine it, and then make only the one I chose
+                &mdash; nothing sitting in a warehouse waiting for a body it
+                happens to fit.
+              </p>
+              <p>
+                We all have our own taste and our own proportions. Clothes
+                should be cut to flatter the body wearing them, and to sit
+                kindly on the skin underneath &mdash; not the other way round.
               </p>
               <p>
                 Shaklek means &ldquo;your way&rdquo; in Arabic. Your look, your
