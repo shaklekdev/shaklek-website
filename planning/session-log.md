@@ -20,21 +20,70 @@ Rules that make this work:
 
 ### Session C — overnight social content (2026-08-25 night)
 
-**Status: IN PROGRESS overnight. Holding:**
+**Status: DONE. No files held. Nothing posted, nothing scheduled, nothing
+deployed. No API spend.**
 
-- `planning/marketing/kinda-chic-*.md` (new)
-- `website/scripts/social/*` (rebuilding the reel builders — only
-  `timeline-example.mjs` was ever committed; the real builders died with the
-  session that wrote them)
-- `brand-assets/INSTA/`, `brand-assets/social/` (gitignored output)
+#### The brief had a trap in it, and it is the main thing to read
 
-**Not touching:** catalog images, `catalog.ts`, the design page, or anything
-under `src/` — Wrap Top reframing and the image-loading work are the other
-session's.
+The founder asked for a "kinda chic" campaign with lines like *"kinda chic to
+customize your own shirt"*. I researched the format before writing.
 
-Founder brief: a "kinda chic" caption campaign, iterated hard for the most
-captivating lines and the best IG/TikTok typography; plus two reels re-cut to
-a specific shot list.
+**It is not a product format.** It began April 2026 as a body-positivity and
+wellbeing format: describing deliberately UNglamorous things as chic, explicitly
+instead of luxury. Soft yellow caption. Drew Barrymore's was "Kinda chic to be
+in your 50s". Others in the wild: "Kinda chic to repeat outfits", "Kinda chic to
+cheer on other women".
+
+Every one of the brief's example lines is a product feature. Posted as written,
+that is a brand taking a body-positivity format and turning it into an ad, on a
+trend whose entire charge comes from refusing the flex.
+
+**There is a fit, and it is stronger than the product angle.** Shaklek's real
+proposition is clothes cut to the body you have instead of you being sorted into
+someone's size chart. That is a body-positivity statement that is also true of
+the product. All copy is written from there. `planning/marketing/kinda-chic.md`
+carries the lines, the rejected ones with reasons, and the Meta organic-only
+marking per line.
+
+**This is the founder's call, not a Claude decision.** Both sets are written up.
+
+#### Shipped to disk
+
+- `brand-assets/INSTA/kinda-chic/` — 20 stills, 10 lines x IG 4:5 and TikTok 9:16
+- `brand-assets/INSTA/VIDEO-9-structured-recut.mp4` — 18.3s
+- `brand-assets/INSTA/VIDEO-10-what-if-recut.mp4` — 24.6s
+
+⚠️ `brand-assets/` is gitignored. **These exist on disk only** and cannot be
+recovered from git. The builders are committed, so they can be regenerated.
+
+#### The reels, against her notes
+
+`VIDEO-9`: all four sleeve/length cuts now visible and distinct, the zoom out
+switches to the banded trousers look rather than the plain one, colourway change
+kept, and the three colour "what if you were the designer" panel added.
+
+`VIDEO-10`: her note was *"you did not show the right parts of the images"*.
+The old cut used one crop for the whole reel, so it announced a sleeve change
+and then showed a frame where nothing moved. Each section now crops to the part
+of the body it is about.
+
+#### The rule that came out of tonight, now in scripts/social/README.md
+
+**The crop follows the subject, not the flattery.** It bit three times in one
+night, in both directions: a single flattering crop hid the sleeves and legs in
+the reel, and a 4:5 crop tuned for a blouse sliced a trouser model's head in
+half in the stills. Sleeves crop to the arms, hems to the hem, legs to the legs.
+
+`kinda-chic.mjs` also lints every caption for em dashes, "photograph" and "AI"
+and refuses to render rather than trusting whoever writes the copy. Those three
+are founder corrections, relayed by Session D, not style preferences.
+
+#### Verified, not assumed
+
+Session D renamed 113 catalog files to `.jpg` mid-session. The tech pack
+resolves flats by constructed filename and reads catalog images through pdfkit,
+so I checked rather than hoped: `test-flats` 64/64, `test-techpack` green, every
+`catalog.ts` reference resolves, against `f6196d3`.
 
 ### Session D — catalog reframe + Meta ads prep (2026-08-25)
 
