@@ -240,6 +240,31 @@ export async function POST(req: NextRequest) {
       integration_identifier: "shaklek-checkout-rqkazmjg",
       customer_email: email,
       client_reference_id: orderId,
+      // Shaklek prices in AED and settles in AED. Adaptive Pricing lets Stripe
+      // present a converted local price instead, at a 2-4% conversion fee paid
+      // by the customer -- so a garment listed at AED 429 can be shown as some
+      // other number in some other currency, and the price on the site stops
+      // being the price at the till.
+      //
+      // This is set here rather than left to the Dashboard toggle on purpose.
+      // The API default IS the Dashboard setting, which means the currency a
+      // customer is charged in would otherwise depend on a checkbox that leaves
+      // no trace in git, differs per account, and nobody reviews -- exactly the
+      // failure mode CLAUDE.md records for credential state.
+      //
+      // What was actually verified, 2026-08-24: the SANDBOX
+      // (acct_1U4N3HFDCtKouREX) already had it OFF. A standing note in
+      // planning/session-log.md claimed it was ON there; that note was stale.
+      // The check is sound -- a session created without the flag came back
+      // `enabled: false`, and the field is responsive, since asking for
+      // `enabled: true` returns true.
+      //
+      // LIVE was NOT verified. Reading it means creating a Checkout Session
+      // against production, which CLAUDE.md forbids. Pinning the value here is
+      // what makes that acceptable: the line decides the presentment currency
+      // regardless of what either Dashboard says, so neither setting has to be
+      // trusted or checked again.
+      adaptive_pricing: { enabled: false },
       // Nothing was collecting a delivery address -- orders were being paid
       // for with no idea where the garment should go. Stripe collects and
       // validates it on the hosted page; the webhook persists it.

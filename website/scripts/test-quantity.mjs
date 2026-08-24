@@ -1,7 +1,25 @@
 // Adversarial check on the quantity path added in 33deaf3. Quantity multiplies
 // unit_amount, so it is money and gets the same treatment price does.
 // Pure functions only -- touches no database and creates no Stripe session.
+//
+// Run: npx tsx scripts/test-quantity.mjs
+//
+// It must be tsx, not plain node. pricing.ts imports "@/data/catalog", and
+// that alias is resolved from tsconfig by tsx; `node scripts/test-quantity.mjs`
+// dies with ERR_MODULE_NOT_FOUND before a single assertion runs. That failure
+// looks exactly like a broken money test and is not one.
 import { resolveQuantity, resolveOrderPricing, MAX_QUANTITY_PER_ITEM } from "../src/lib/pricing.ts";
+import { catalog } from "../src/data/catalog.ts";
+
+// Read the expected price from the catalog rather than hardcoding it. This
+// assertion carried a literal 450, the catalog was repriced to 429 in 3f2969e
+// ("Reprice to charm endings"), and the test then failed for two days over a
+// stale number while the security property it guards was fine throughout.
+// A money test that cries wolf is a money test people stop running.
+const WLT = catalog.find((c) => c.slug === "wide-leg-trousers");
+// Fail loudly rather than with a TypeError three lines later if the slug is
+// ever renamed -- a money test has to say what broke.
+if (!WLT) throw new Error("test fixture gone: no catalog item with slug wide-leg-trousers");
 
 const cases = [
   ["missing", undefined, 1],
@@ -43,7 +61,12 @@ const hostile = resolveOrderPricing([
 ]);
 console.log("  " + JSON.stringify(hostile));
 const h = hostile.ok && hostile.priced[0];
-const hostileOk = h && h.price === 450 && h.name === "Wide-leg Trousers" && h.category === "Pants" && hostile.total === 1350;
+const hostileOk =
+  h &&
+  h.price === WLT.price &&
+  h.name === WLT.name &&
+  h.category === WLT.category &&
+  hostile.total === WLT.price * 3;
 if (!hostileOk) bad++;
 console.log(`  ${hostileOk ? "ok  " : "FAIL"} catalog price/name/category win, total = price x quantity`);
 

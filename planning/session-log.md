@@ -257,6 +257,95 @@ says about pale images, and a line drawing on white is the palest case there is.
 cropped-vs-full on Wide-leg and Banded, plus Banded back straight. Wide-leg's
 was inspected against its source and looked right.
 
+### Adaptive Pricing — pinned in code, and the log entry was wrong
+
+The standing note said Adaptive Pricing was **ON in the sandbox**. Verified
+against the Stripe API on 2026-08-24: **it is off, and was already off.** A
+Checkout Session created in the sandbox without the flag comes back
+`adaptive_pricing: {enabled: false}`, and the field is responsive — asking for
+`enabled: true` returns true — so that is the real account setting, not an
+uninformative default. Exactly the "never read config state out of a doc"
+failure CLAUDE.md records for credentials, in a second place.
+
+`/api/orders` now sets **`adaptive_pricing: { enabled: false }`** explicitly on
+every Checkout Session. The API default IS the Dashboard toggle, which means the
+currency a customer is charged in otherwise depends on a checkbox that leaves no
+git trace, differs per account, and nobody reviews. Stated in code it is
+identical in every environment and a change to it is reviewable. Shaklek prices
+and settles in AED; Adaptive Pricing would present a converted price with a 2-4%
+conversion fee paid by the customer.
+
+⚠️ **This touches `/api/orders`** — the handler with the AED 5 history. It is one
+added field that only restricts behaviour, and `test-promo-discount` and
+`test-quantity` both pass, but CLAUDE.md section 0 asks for the security agent
+before anything in that blast radius ships. Not run.
+
+### Fixed: `scripts/test-quantity.mjs` was failing on a stale number
+
+Pre-existing, unrelated to this session's work. The assertion hardcoded
+`price === 450`; the catalog was repriced to 429 in `3f2969e` and the test was
+never updated, so it had been reporting `1 FAILURE(S)` while the security
+property it guards — a tampered body price losing to the catalog — was fine the
+whole time. It now reads the price from `catalog.ts`, so it cannot go stale
+again. A money test that cries wolf is a money test people stop running.
+
+### Security review — run, clean, and what it proved
+
+`.claude/agents/shaklek-security.md` was run over the whole changeset on
+2026-08-24, as CLAUDE.md section 0 requires for anything touching `/api/orders`.
+**No Critical, High or Medium findings. Verdict: safe to ship.**
+
+It disproved risks by executing them rather than reading for them, which is
+worth copying:
+
+- **Path traversal via `item.changes` is impossible, demonstrated.**
+  `comboKeyFromLabels("Pants", ["../../.env.local"])` returns `straight:full`.
+  Customer labels only *select among* `param.options`; the key is built from
+  fixed option values and never from label text. Prototype keys
+  (`__proto__`, `constructor`) fall back to the catalog default.
+- **`/api/orders`** is one added field; every guard intact and `unit_amount`
+  still server-only. The webhook interaction is *favourable*: with adaptive
+  pricing off `session.currency` is guaranteed `aed`, so the unexpected-currency
+  fallback becomes dead code.
+- **Spec-sheet authorization is byte-for-byte preserved** through the extraction.
+- **No PII**: `buildPdf` receives only `{id, createdAt, items}`; the route joins
+  `customers` and passes none of it.
+
+Two Low findings, both fixed here:
+
+- The **Gemini API key was in the URL query string** (`gen-flat.mjs`). It bills
+  real money and a URL reaches proxy logs and pasted errors. Now sent as
+  `x-goog-api-key`; header auth verified, and one real generation confirmed the
+  POST path rather than assuming it.
+- `test-quantity.mjs` had an **unguarded `catalog.find`** — a renamed slug would
+  crash with a TypeError instead of naming the problem. It now throws.
+
+⚠️ Commits `813339f` and `c135402` landed mid-review and are **not covered**.
+
+### Handed to this session, NOT done -- both need a decision first
+
+The concurrent session passed over two items. Neither is guessable, so neither
+was touched:
+
+1. **The "No measurement needed. Want a more precise fit? Switch to Tailored
+   above." line** (`SizePicker.tsx:207`). Held here for the tech-pack
+   extraction, so handing it over was right. What was NOT said is what to change
+   it to. Note the real defect while deciding: **the same instruction appears
+   twice in the same branch** -- `SizePicker.tsx:196`, inside the collapsed size
+   chart, already says "Between two sizes, or not close to any of them? Switch
+   to Tailored". One of the two should go; which one is a copy decision.
+2. **"Picture sizing"** on the design page -- entirely unspecified. Possibly the
+   standing `catalog-images-todo.md` item about the eight source images being
+   eight different aspect ratios, which `object-contain` currently works around.
+
+⚠️ **Another session had six files STAGED in the shared index** while this work
+was committed (`cart/page.tsx`, `checkout/page.tsx`, `CheckoutForm.tsx`,
+`CustomizeParameters.tsx`, `DesignCustomizer.tsx`, `parameterSliders.ts`) --
+their undeployed batch. This commit used `git commit --only <paths>` so none of
+it was swept in. The reverse already happened once today: this session's log
+section was committed inside `e561249` by whoever ran `git add planning/session-log.md`
+while it was dirty. **`git diff --cached` before every commit in this repo.**
+
 ### Open for the founder
 
 - **Review the contact sheets** -- `npx tsx scripts/catalog/contact-sheet.mjs <slug> /tmp/x.png`.

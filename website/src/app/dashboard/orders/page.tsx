@@ -24,9 +24,9 @@ const tailorNumber = (process.env.TAILOR_WHATSAPP_NUMBER ?? "").trim();
 
 function tailorMessage(order: { id: string; items: { name: string; fabric: string | null; color: string | null; size: string | null }[] }) {
   const itemsLine = order.items
-    .map((i) => `${i.name} (${i.fabric ?? "?"}, ${i.color ?? "?"}, ${i.size ?? "?"})`)
+    .map((i) => `${i.name} (${i.fabric ?? "?"}, ${i.color ?? "?"}, ${i.size ?? "made to measure"})`)
     .join("; ");
-  return `Shaklek order SHK-${order.id.slice(0, 8).toUpperCase()}: ${itemsLine}. Spec sheet attached.`;
+  return `Shaklek order SHK-${order.id.slice(0, 8).toUpperCase()}: ${itemsLine}. Tech pack attached.`;
 }
 
 async function getOrders() {
@@ -183,7 +183,7 @@ export default async function OrdersDashboardPage() {
                           href={`/api/dashboard/orders/${order.id}/spec-sheet`}
                           className="text-xs font-medium text-slate-600 underline hover:text-slate-900"
                         >
-                          1. Download PDF
+                          1. Download tech pack
                         </a>
                         {tailorNumber ? (
                           <a

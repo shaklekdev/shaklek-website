@@ -4,34 +4,17 @@ import { useEffect, useState } from "react";
 import { sizes } from "@/data/colors";
 import { SIZE_CHART } from "@/data/sizeChart";
 import type { SizeMode } from "@/data/designSpec";
+// Shared with the tailor's tech pack, which parses these on the server --
+// see src/lib/measurements.ts for why there is only one copy.
+import {
+  type MeasurementFields,
+  EMPTY_FIELDS,
+  FIELD_LABELS,
+  composeMeasurements,
+  parseMeasurements,
+} from "@/lib/measurements";
 
-type MeasurementFields = {
-  bust: string;
-  waist: string;
-  hip: string;
-  height: string;
-  notes: string;
-};
-
-const EMPTY_FIELDS: MeasurementFields = { bust: "", waist: "", hip: "", height: "", notes: "" };
-
-// These carried only `min="0"`, so a Tailored order could be placed with no
-// measurements at all, or with `height: 5` / `waist: 9999`. Every unmakeable
-// order costs a manual stylist round-trip against a fixed price, so the ranges
-// are deliberately wide enough to fit any real adult body and narrow enough to
-// catch a typo or an empty field.
-const FIELD_LABELS: {
-  key: keyof Omit<MeasurementFields, "notes">;
-  label: string;
-  placeholder: string;
-  min: number;
-  max: number;
-}[] = [
-  { key: "bust", label: "Bust / chest", placeholder: "90", min: 60, max: 160 },
-  { key: "waist", label: "Waist", placeholder: "74", min: 50, max: 150 },
-  { key: "hip", label: "Hip", placeholder: "98", min: 60, max: 170 },
-  { key: "height", label: "Height", placeholder: "165", min: 130, max: 210 },
-];
+export { parseMeasurements };
 
 // Returns a human-readable problem per field, or null when the field is good.
 function fieldError(
@@ -53,37 +36,6 @@ export function measurementErrors(fields: MeasurementFields): Partial<Record<str
     if (error) errors[field.key] = error;
   }
   return errors;
-}
-
-function composeMeasurements(fields: MeasurementFields): string {
-  const parts = FIELD_LABELS.filter((f) => fields[f.key].trim()).map(
-    (f) => `${f.label}: ${fields[f.key].trim()}cm`,
-  );
-  if (fields.notes.trim()) parts.push(fields.notes.trim());
-  return parts.join(", ");
-}
-
-// The inverse of composeMeasurements. A cart line stores the flattened
-// string ("Bust / chest: 90cm, Waist: 74cm, ..."), because that is the form
-// the tailor's spec sheet reads -- but reopening a line to edit it has to put
-// the numbers back in their own inputs. Kept directly below the composer so
-// the two cannot drift apart. Anything that doesn't parse as a known
-// measurement is treated as the customer's free-text note rather than
-// discarded.
-export function parseMeasurements(measurements: string): MeasurementFields | undefined {
-  if (!measurements.trim()) return undefined;
-  const fields: MeasurementFields = { ...EMPTY_FIELDS };
-  const leftovers: string[] = [];
-
-  for (const part of measurements.split(",").map((p) => p.trim()).filter(Boolean)) {
-    const field = FIELD_LABELS.find((f) => part.startsWith(`${f.label}: `));
-    const value = field ? part.slice(field.label.length + 2).replace(/cm$/, "").trim() : "";
-    if (field && value) fields[field.key] = value;
-    else leftovers.push(part);
-  }
-
-  fields.notes = leftovers.join(", ");
-  return fields;
 }
 
 export default function SizePicker({
