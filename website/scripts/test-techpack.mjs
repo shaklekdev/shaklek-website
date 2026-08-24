@@ -5,6 +5,7 @@
 // specific facts a wrong tech pack gets wrong, and each one costs a remake.
 //
 // Run: npx tsx scripts/test-techpack.mjs
+import PDFDocument from "pdfkit";
 import { buildPdf } from "../src/lib/techPack.ts";
 import { SIZE_CHART } from "../src/data/sizeChart.ts";
 
@@ -62,6 +63,16 @@ let t = textOf(await buildPdf({
 }, { compress: false }));
 
 check(t.includes("STANDARD SIZE M"), "standard size heading missing");
+// Fabric arrives lowercase from designSpec's union type; it must not print raw.
+{
+  const lower = textOf(await buildPdf({ ...base, items: [{
+    name: "Oversized Shirt", category: "Shirt", fabric: "linen", color: "Ivory",
+    size: "M", measurements: null,
+    changes: ["Short sleeves", "Longer length", "1 pocket", "Button closure"],
+    freeformNotes: null,
+  }] }, { compress: false }));
+  check(lower.includes("Linen"), "fabric printed lowercase — reads as a typo on the tech pack");
+}
 check(t.includes(`${M.bust} cm`), `bust ${M.bust}cm from the size chart is not printed`);
 check(t.includes(`${M.waist} cm`), `waist ${M.waist}cm from the size chart is not printed`);
 check(t.includes(`${M.hip} cm`), `hip ${M.hip}cm from the size chart is not printed`);
@@ -153,6 +164,61 @@ for (const brand of ["Shaklek", "SHAKLEK", "shaklek", "SHK-"])
 const meta = (await buildPdf({ ...base, items: [shirt] }, { compress: false })).toString("latin1");
 for (const brand of ["Shaklek", "SHAKLEK", "shaklek"])
   check(!meta.includes(brand), `brand name leaked into PDF metadata: ${brand}`);
+
+// --- 6. nothing is clipped off the right edge of the page.
+//
+// The measurement caveat rendered at x=158 because it passed only `{ width }`
+// and inherited doc.x from the positioned measurement rows above it. With
+// width 515 on a 595pt page that ran ~78pt past the edge, and every line lost
+// its tail: "Apply the house block" read as "Apply the ho". The text in the
+// PDF was correct the whole time -- only its origin was wrong, which is why no
+// content assertion caught it. This measures geometry instead.
+{
+  const pdf = await buildPdf({
+    ...base,
+    items: [{
+      name: "Oversized Shirt", category: "Shirt", fabric: "Cotton", color: "Ivory",
+      size: "M", measurements: null,
+      changes: ["Short sleeves", "Longer length", "1 pocket", "Button closure"],
+      freeformNotes: "Please make the sleeves a touch wider at the cuff.",
+    }],
+  }, { compress: false });
+
+  const raw = pdf.toString("latin1");
+  const PAGE_W = 595.28, MARGIN = 40, RIGHT = PAGE_W - MARGIN;
+  // A throwaway doc purely to measure strings in the same fonts.
+  const ruler = new PDFDocument({ size: "A4", margin: MARGIN });
+  const overflow = [];
+  const re = /1 0 0 1 ([\d.]+) ([\d.]+) Tm[\s\S]{0,200}?\/(F\d+) ([\d.]+) Tf[\s\S]{0,200}?\[([^\]]*)\]\s*TJ/g;
+  let m;
+  while ((m = re.exec(raw))) {
+    const x = parseFloat(m[1]), size = parseFloat(m[4]);
+    let str = "";
+    for (const h of m[5].matchAll(/<([0-9a-fA-F]+)>/g))
+      for (let i = 0; i + 1 < h[1].length; i += 2)
+        str += String.fromCharCode(parseInt(h[1].slice(i, i + 2), 16));
+    if (!str.trim()) continue;
+    // Helvetica-Bold is wider; measuring with regular under-estimates, so a
+    // failure here is real rather than a rounding artefact.
+    const w = ruler.font("Helvetica").fontSize(size).widthOfString(str);
+    if (x + w > RIGHT + 2) overflow.push(`x=${Math.round(x)} w=${Math.round(w)} "${str.slice(0, 46)}"`);
+  }
+  check(overflow.length === 0,
+    `${overflow.length} line(s) run past the right margin (text clipped):\n    ${overflow.join("\n    ")}`);
+}
+
+// --- 7. the customer request section is always present, said or not.
+{
+  const withNote = textOf(await buildPdf({ ...base, items: [{ ...shirt, freeformNotes: "wider cuffs please" }] }, { compress: false }));
+  check(withNote.includes("CUSTOMER REQUEST"), "customer request heading missing when a note exists");
+  check(withNote.includes("wider cuffs please"), "the customer's note was dropped");
+  const noNote = textOf(await buildPdf({ ...base, items: [{ ...shirt, freeformNotes: null }] }, { compress: false }));
+  check(noNote.includes("CUSTOMER REQUEST"), "customer request heading vanishes when empty — cannot tell 'none' from 'lost'");
+  check(says(noNote, "the customer added no special request"), "an empty request is not stated explicitly");
+  // Whitespace-only must count as empty, not render a blank tinted box.
+  const blankNote = textOf(await buildPdf({ ...base, items: [{ ...shirt, freeformNotes: "   " }] }, { compress: false }));
+  check(says(blankNote, "the customer added no special request"), "whitespace-only note rendered as a real request");
+}
 
 console.log(fail === 0 ? "ok — tech pack prints the right numbers, groups correctly, invents nothing" : `${fail} failure(s)`);
 process.exit(fail === 0 ? 0 : 1);

@@ -414,6 +414,50 @@ Also: `test-techpack.mjs` matched prose with `includes()`, so a sentence that
 WRAPPED in the PDF failed the assertion for a line break rather than for missing
 text. Phrase checks now collapse whitespace first.
 
+### Text was being clipped off the page -- and no content test could see it
+
+Founder pasted a mangled paragraph from a real order (`4B1E715E`): *"Apply the
+hoThe figures are consolidated ... where they disagworkshop's own block"*.
+
+**The text in the PDF was correct the whole time. Only its origin was wrong.**
+The measurement rows draw at `left + 118`, and the caveat below them passed only
+`{ width }` with no x -- so it inherited `doc.x = 158`, and with `width: 515` on
+a 595pt page every line ran ~78pt past the right edge and lost its tail.
+
+This is why it survived a content assertion suite: `test-techpack.mjs` checked
+what the PDF *said*, and the PDF said the right thing. The check that catches it
+measures geometry -- it parses each text run's `Tm` x and `Tf` size, measures the
+string with pdfkit, and fails if `x + width` crosses the right margin. Verified
+by reintroducing the bug: it flagged both lines with their coordinates.
+
+All small print now goes through one `para()` helper that always anchors to the
+left margin, so a fourth call site cannot repeat it. Three did: the cover note,
+the missing-flat warning and the caveat.
+
+### The customer's special request was invisible when empty
+
+Also founder-reported, same order. The path is intact end to end -- the
+customizer's "Any detail to focus on?" box, the cart line, `/api/orders`, the
+DB, the pack. Nothing drops it.
+
+The flaw was that the section only rendered `if (item.freeformNotes)`, so an
+empty one produced no section at all and there was **no way to tell "the
+customer asked for nothing" from "the pack lost it"**. It now always renders,
+saying so explicitly when there is nothing. Whitespace-only counts as empty.
+
+This is deliberately NOT a return of the 11 removed blanks: those asked the
+workshop for data Shaklek does not hold; this reports a fact about the order.
+
+Also: fabric printed lowercase ("linen") next to "Ivory", because designSpec's
+`Fabric` type is a lowercase union. Capitalised for display.
+
+⚠️ **Wording worth a tailor's eye, not changed:** on Wide-leg Trousers the
+CONSTRUCTION block says *"falling straight from the hip with no taper"* while
+CUT AS ORDERED says *"Wide leg. Widening from the hip through to the hem"*. The
+first describes the base garment and the second the ordered variation, but read
+together they can look contradictory. `construction.ts` is garment language and
+belongs to whoever cuts -- flagged rather than reworded.
+
 ### Open for the founder
 
 - **Review the contact sheets** -- `npx tsx scripts/catalog/contact-sheet.mjs <slug> /tmp/x.png`.

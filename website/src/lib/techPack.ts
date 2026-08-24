@@ -187,6 +187,19 @@ export function buildPdf(
       doc.font("Helvetica").fillColor(INK);
     };
 
+    // Full-width small print. It ALWAYS draws from the left margin.
+    //
+    // Passing only `{ width }` uses whatever doc.x happens to be, and the
+    // positioned draws above (measurement rows write at left + 118) leave it
+    // there. The measurement caveat rendered at x=158 with width=515 on a
+    // 595pt page, so ~78pt of every line was clipped off the right edge and it
+    // read as "Apply the ho" / "where they disag". The text was correct in the
+    // PDF the whole time -- only its origin was wrong.
+    const para = (text: string, color = MUTED, size = 8.5) => {
+      doc.font("Helvetica").fontSize(size).fillColor(color).text(text, left, doc.y, { width });
+      doc.fillColor(INK);
+    };
+
     const row = (label: string, value: string, emphasis = false) => {
       const labelW = 118;
       const valueW = width - labelW;
@@ -278,14 +291,10 @@ export function buildPdf(
     doc.moveDown(0.8);
     rule();
     doc.moveDown(0.4);
-    doc
-      .fontSize(8.5)
-      .fillColor("#999")
-      .font("Helvetica")
-      .text(
-        "This document carries no customer name, contact or address by design. Send every question about this order back to whoever gave you this document, quoting the reference above.",
-        { width },
-      );
+    para(
+      "This document carries no customer name, contact or address by design. Send every question about this order back to whoever gave you this document, quoting the reference above.",
+      "#999",
+    );
     }
 
     // ------------------------------------------------------- per garment
@@ -374,20 +383,20 @@ export function buildPdf(
         ? (["front", "back"] as const).filter((v) => !readPublicImage(flats[v]))
         : [];
       if (missingViews.length) {
-        doc
-          .fontSize(8.5)
-          .fillColor("#a33")
-          .text(
-            `No ${missingViews.join(" or ")} technical flat exists yet for this combination (${comboKey}). Cut from the photograph and the written cut below.`,
-            { width },
-          );
-        doc.fillColor(INK);
+        para(
+          `No ${missingViews.join(" or ")} technical flat exists yet for this combination (${comboKey}). Cut from the photograph and the written cut below.`,
+          "#a33",
+        );
         doc.moveDown(0.3);
       }
 
       // -- bill of materials --------------------------------------------
       section("Bill of materials");
-      if (item.fabric) row("Fabric", item.fabric);
+      // Fabric is stored lowercase ("linen") because designSpec's Fabric type
+      // is a lowercase union. Printed raw it sat next to "Ivory" and read as a
+      // typo on a document the workshop is meant to take seriously.
+      if (item.fabric)
+        row("Fabric", item.fabric.charAt(0).toUpperCase() + item.fabric.slice(1));
       if (item.color) {
         const hex = colors.find((c) => c.name === item.color)?.hex;
         const y = doc.y;
@@ -459,21 +468,15 @@ export function buildPdf(
       }
 
       doc.moveDown(0.3);
-      doc
-        .font("Helvetica")
-        .fontSize(8.5)
-        .fillColor(MUTED)
-        .text(
-          // The provenance half only applies when a standard size was ordered.
-          // On a tailored order the numbers came off the customer's own body,
-          // so printing a caveat about published market charts is small print
-          // about something that is not on the page.
-          fields
-            ? "These are BODY measurements, taken from the customer — the body the garment must fit, not finished garment measurements. Apply the house block and ease."
-            : "These are BODY measurements — the body the garment must fit, not finished garment measurements. Apply the house block and ease. The figures are consolidated from published UAE market charts, not measured from these patterns; where they disagree with the workshop's own block, the block wins — please say so when you return this page.",
-          { width },
-        );
-      doc.fillColor(INK);
+      // The provenance half only applies when a standard size was ordered. On a
+      // tailored order the numbers came off the customer's own body, so a
+      // caveat about published market charts is small print about something
+      // that is not on the page.
+      para(
+        fields
+          ? "These are BODY measurements, taken from the customer — the body the garment must fit, not finished garment measurements. Apply the house block and ease."
+          : "These are BODY measurements — the body the garment must fit, not finished garment measurements. Apply the house block and ease. The figures are consolidated from published UAE market charts, not measured from these patterns; where they disagree with the workshop's own block, the block wins — please say so when you return this page.",
+      );
 
       // -- cut and construction ------------------------------------------
       const typed = catalogItem
@@ -508,20 +511,34 @@ export function buildPdf(
         }
       }
 
-      if (item.freeformNotes) {
-        // Measure the box first so the heading and the box are placed as one
-        // unit. This is the customer's own instruction to the tailor -- of
-        // everything on the page it is the worst thing to leave stranded.
-        const noteHeight =
-          doc.font("Helvetica").fontSize(11).heightOfString(item.freeformNotes, { width: width - 20 }) + 16;
+      // Always shown, even with nothing in it. The field is optional, so an
+      // empty one used to render as no section at all -- and then there is no
+      // way to tell "the customer asked for nothing" from "the pack dropped
+      // it". Founder hit exactly that ambiguity on 2026-08-24. This is not the
+      // same as the ruled blanks that were removed: those asked the workshop
+      // for data Shaklek does not hold, where this reports a fact about the
+      // order.
+      {
+        const note = item.freeformNotes?.trim();
+        const noteHeight = note
+          ? doc.font("Helvetica").fontSize(11).heightOfString(note, { width: width - 20 }) + 16
+          : 26;
         section("Customer request", noteHeight + 60);
         const y = doc.y;
-        const h = noteHeight;
-        doc.rect(left, y, width, h).fillColor("#f6f3ee").fill();
-        doc.font("Helvetica").fontSize(11).fillColor(INK).text(item.freeformNotes, left + 10, y + 8, {
-          width: width - 20,
-        });
-        doc.y = y + h + 4;
+        if (note) {
+          doc.rect(left, y, width, noteHeight).fillColor("#f6f3ee").fill();
+          doc.font("Helvetica").fontSize(11).fillColor(INK).text(note, left + 10, y + 8, {
+            width: width - 20,
+          });
+        } else {
+          doc
+            .font("Helvetica")
+            .fontSize(10.5)
+            .fillColor(MUTED)
+            .text("None — the customer added no special request to this piece.", left, y, { width });
+          doc.fillColor(INK);
+        }
+        doc.y = y + noteHeight + 4;
       }
 
     }
@@ -535,17 +552,10 @@ export function buildPdf(
       space(46);
       rule();
       doc.moveDown(0.4);
-      doc
-        .fontSize(8.5)
-        .fillColor("#999")
-        .font("Helvetica")
-        .text(
-          `Quote reference ${ref} on every message about this order. This document carries no customer name, contact or address by design. Send every question back to whoever gave it to you.`,
-          left,
-          doc.y,
-          { width },
-        );
-      doc.fillColor(INK);
+      para(
+        `Quote reference ${ref} on every message about this order. This document carries no customer name, contact or address by design. Send every question back to whoever gave it to you.`,
+        "#999",
+      );
     }
 
     doc.end();
