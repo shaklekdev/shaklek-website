@@ -18,6 +18,24 @@ Rules that make this work:
 
 ## Active claims
 
+### Session C — overnight social content (2026-08-25 night)
+
+**Status: IN PROGRESS overnight. Holding:**
+
+- `planning/marketing/kinda-chic-*.md` (new)
+- `website/scripts/social/*` (rebuilding the reel builders — only
+  `timeline-example.mjs` was ever committed; the real builders died with the
+  session that wrote them)
+- `brand-assets/INSTA/`, `brand-assets/social/` (gitignored output)
+
+**Not touching:** catalog images, `catalog.ts`, the design page, or anything
+under `src/` — Wrap Top reframing and the image-loading work are the other
+session's.
+
+Founder brief: a "kinda chic" caption campaign, iterated hard for the most
+captivating lines and the best IG/TikTok typography; plus two reels re-cut to
+a specific shot list.
+
 ### Session D — catalog image reframe (2026-08-25)
 
 **Status: IN PROGRESS. Claiming BEFORE generating, per the release review.**
