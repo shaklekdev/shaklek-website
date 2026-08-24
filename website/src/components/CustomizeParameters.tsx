@@ -30,6 +30,7 @@ export default function CustomizeParameters({
   previewBackImage,
   previewGradient,
   preloadImages = [],
+  deferredPreloads = [],
   primaryAction,
 }: {
   spec: DesignSpec;
@@ -41,6 +42,9 @@ export default function CustomizeParameters({
   previewBackImage?: string | null;
   previewGradient: [string, string];
   preloadImages?: string[];
+  // Other colourways. Warmed AFTER the visible preview rather than in front of
+  // it -- see the tiering note in DesignCustomizer.
+  deferredPreloads?: string[];
   // Rendered directly beneath the choices, above the Shaklek+ note. The CTA
   // used to sit after everything, so getting to checkout meant scrolling past
   // an upsell for features that are not purchasable yet.
@@ -212,6 +216,25 @@ export default function CustomizeParameters({
           .map((src) => (
             <div key={src} className="relative h-1 w-1">
               <Image src={src} alt="" fill sizes={PREVIEW_SIZES} priority />
+            </div>
+          ))}
+        {/* Other colourways: no `priority`, and fetchPriority="low", so they
+            queue behind the preview the customer is looking at instead of
+            ahead of it. They still arrive well before anyone taps a swatch.
+            `loading="eager"` is kept because next/image's lazy path uses an
+            IntersectionObserver that never fires for a 0x0 element. */}
+        {deferredPreloads
+          .filter((src) => src !== activeImage && !preloadImages.includes(src))
+          .map((src) => (
+            <div key={src} className="relative h-1 w-1">
+              <Image
+                src={src}
+                alt=""
+                fill
+                sizes={PREVIEW_SIZES}
+                loading="eager"
+                fetchPriority="low"
+              />
             </div>
           ))}
       </div>

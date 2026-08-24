@@ -171,16 +171,34 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     v?.front,
     v?.back,
   ]);
-  const preloadImages = Array.from(
+  // Split into two tiers, because they are not equally urgent.
+  //
+  // EAGER: what the customer can reach without changing colour -- the current
+  // colourway's front and back, and its combo photos. Flipping front/back or
+  // moving a slider stays instant, which is what the original preload was for.
+  //
+  // DEFERRED: the OTHER colourways' base photos. A performance review measured
+  // these at 71-125KB per design page, fetched with `priority`, which tells the
+  // browser they matter MORE than the preview photo the customer is actually
+  // looking at -- and that preview is the LCP element. Six speculative images
+  // were being loaded ahead of the one on screen, for colours most visitors
+  // never tap. They still load, just without jumping the queue.
+  const currentColor = item.colorImages?.[spec.color];
+  const eagerPreloads = Array.from(
     new Set(
-      [
-        item.image,
-        item.backImage,
-        ...Object.values(item.colorImages ?? {}).flatMap((v) => [v?.front, v?.back]),
-        ...currentColorCombos,
-      ].filter((src): src is string => Boolean(src)),
+      [currentColor?.front, currentColor?.back, ...currentColorCombos].filter(
+        (src): src is string => Boolean(src),
+      ),
     ),
   );
+  const deferredPreloads = Array.from(
+    new Set(
+      Object.entries(item.colorImages ?? {})
+        .filter(([name]) => name !== spec.color)
+        .flatMap(([, v]) => [v?.front, v?.back])
+        .filter((src): src is string => Boolean(src)),
+    ),
+  ).filter((src) => !eagerPreloads.includes(src));
 
   // A reopened line's own measurements win over the ones saved on the
   // account: the /account fetch resolves later and would otherwise overwrite
@@ -256,7 +274,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewImage={previewImage}
             previewBackImage={previewBackImage}
             previewGradient={item.gradient}
-            preloadImages={preloadImages}
+            preloadImages={eagerPreloads}
+            deferredPreloads={deferredPreloads}
             primaryAction={
               // Back to the catalog was an 11px grey whisper under a full
               // black button -- present, but not reading as a way out. Same
