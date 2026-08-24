@@ -986,16 +986,52 @@ cannot drift. It had been advertising locked Shaklek+ options nobody can pick.
 
 ## Pick up here
 
-| | Who |
+**Audited 2026-08-25.** Three rows were stale and are corrected below rather
+than left to mislead a third session — the same failure this project keeps
+hitting with docs that outlive the thing they describe.
+
+### Done since this table was last written — do not re-pick
+
+| | |
 |---|---|
-| **Spec sheet → real tech pack** — biggest open item, and the document the garment is actually made from | unassigned |
-| **Cheap live payment test** on the new checkout — a 99%-off code makes it ~AED 4, and confirms AED-only now Adaptive Pricing is off | founder + Session B |
-| **Adaptive Pricing is still ON in the Stripe *sandbox*** — live is off. A test order can show EUR while real customers correctly see AED | founder |
-| Saved addresses for returning customers | unassigned |
-| Catalog cannot be paged on desktop — needs arrows for non-touch | unassigned |
-| Normalise catalog image ratios (deterministic padding, no model cost) | unassigned |
-| Feedback link, "I'll take it as shown", SEO structured data | unassigned |
-| Instagram launch kit is written and ready to post — `planning/marketing/instagram-launch.md` | founder |
+| ~~Spec sheet → real tech pack~~ | **DONE and live** (`0f39959`, `ea9d85e`, `437ae74`). Photo + technical flat per garment, real size numbers, construction text, de-branded, trimmed. 64 flats. |
+| ~~Adaptive Pricing still ON in the sandbox~~ | **The claim was FALSE.** Verified against the Stripe API: it was already off in the sandbox. It is now also pinned `enabled: false` in code on every Checkout Session, so neither Dashboard decides the currency. |
+| ~~The five-item cart batch~~ in `tomorrow-start-here.md` | **All five shipped.** "Add another piece", edit-from-cart, real thumbnails, quantity, checkout email. That whole file is superseded. |
+
+### Actually open
+
+| | Who | Notes |
+|---|---|---|
+| **A real order on a real phone** | founder | The one thing nothing else proves. A 99%-off code makes it ~AED 4. Confirms AED-only end to end, and Apple Pay. |
+| **Show the tech pack to the tailor** | founder | `construction.ts` is derived from the photographs and descriptors, **not from patterns**, and it is now the text a garment is made from. Specifically: Wide-leg's "falling straight from the hip" vs the ordered "Wide leg. Widening from the hip" reads as a contradiction. |
+| **Normalise catalog image ratios** | in progress | Measured 2026-08-25 across the 256 referenced images — see the breakdown below. Free, deterministic, no model cost. |
+| Saved addresses for returning customers | unassigned | |
+| Catalog cannot be paged on desktop | unassigned | Needs arrows for non-touch. |
+| Feedback link | unassigned | A `hello@` link and the WhatsApp number. **Not a form** — a form implies a ticketing system that does not exist. |
+| "I'll take it as shown" | unassigned | Skip-customisation, worded so it does not undercut the thing that justifies the price. |
+| SEO structured data | unassigned | `Product` / `Offer` schema on catalog pages. |
+| The duplicated "Switch to Tailored" line | unassigned | `SizePicker.tsx:196` and `:207` say the same thing in the same branch. |
+| WhatsApp handoff still says "Shaklek order" | founder's call | `dashboard/orders/page.tsx:29`. Same disclosure surface as the now de-branded pack. |
+| Instagram launch kit, written and ready | founder | `planning/marketing/instagram-launch.md` |
+
+### Image ratios — the real numbers, 2026-08-25
+
+256 referenced images, 0 missing. **2 of 8 items are uniform, 6 are not:**
+
+| Item | Distinct ratios | |
+|---|---|---|
+| utility-shirt | 0.666, 0.667 | effectively done — reframed to 2:3 in `1e919cb` |
+| structured-blouse | 0.671 | already uniform |
+| banded-trousers | 0.667, 0.671 | nearly there |
+| oversized-shirt | 0.671, 0.747 | |
+| cargo-trousers | 0.667, 0.671, 0.680, 0.756, 0.778 | |
+| pleated-trousers | 6 distinct | |
+| wide-leg-trousers | 7 distinct | |
+| **wrap-top** | 0.778, 1.157, 1.287, 1.389, 1.390 | **worst — most of its images are LANDSCAPE on a portrait card** |
+
+`scripts/catalog/crop-to-ratio.mjs` exists and did utility-shirt. Wrap Top is
+the one to do next: a 1.39 landscape photo in a portrait frame is not a
+rounding difference, it is a different picture.
 
 ## Two standing warnings
 

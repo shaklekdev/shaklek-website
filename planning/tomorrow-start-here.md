@@ -1,3 +1,10 @@
+> ⛔ **FULLY SUPERSEDED — 2026-08-25. Do not work from this file.** Every item
+> in its queue has shipped: the whole five-item cart batch, and the spec sheet
+> it asks about is now a real tech pack, live. The one thing still open from it
+> is the founder's own line: a real order on a real phone. The live list is the
+> "Pick up here" table in `session-log.md`. Kept only as a record of what
+> 2026-08-22 looked like.
+>
 > ⚠️ **Written 2026-08-22 evening. Superseded for anything after that date —
 > read `session-log.md` first.** This file predates the 2026-08-23 external
 > security audit and the 13 fixes that followed it, the mobile nav, the size
