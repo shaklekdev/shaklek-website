@@ -219,10 +219,9 @@ export default function OurStoryPage() {
               <p>
                 I&apos;m a tech girl who happens to love fashion, and I kept
                 asking myself: why couldn&apos;t technology solve this? Show me
-                every version of a piece before it exists, so I can see it
-                rather than imagine it, and then make only the one I chose
-                &mdash; nothing sitting in a warehouse waiting for a body it
-                happens to fit.
+                every version before it exists, so I can see it rather than
+                imagine it. Then make only the one I chose &mdash; nothing
+                sitting in a warehouse waiting for a body it happens to fit.
               </p>
               <p>
                 We all have our own taste and our own proportions. Clothes
