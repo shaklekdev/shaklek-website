@@ -20,8 +20,15 @@ import { HERO } from "@/data/homeContent";
  * briefly hidden it.)
  *
  * Tying a photograph's height to how many sentences happen to sit on top of
- * it is the actual bug. It is now a deliberate fraction of the viewport, and
- * editing the copy cannot shrink the image again.
+ * it is the actual bug. The height is set here instead, and editing the copy
+ * cannot shrink the image again.
+ *
+ * PHONES GET PIXELS, NOT vh. A first pass used 44vh and the founder said the
+ * hero was taking ~70% of her screen. Measured, it was 56-59% -- because vh
+ * resolves against the LARGE viewport and ignores Safari's URL bar, so the
+ * share of what she could actually see was higher than the number implied.
+ * A px floor on phones is predictable across browser chrome; vh only takes
+ * over from `sm` up, where the URL bar is a rounding error.
  */
 export default function Hero({ compact = false }: { compact?: boolean }) {
   return (
@@ -42,7 +49,9 @@ export default function Hero({ compact = false }: { compact?: boolean }) {
       <div className="absolute inset-0 bg-white/70" />
       <div
         className={`relative mx-auto flex w-full max-w-3xl flex-col justify-center px-6 text-center ${
-          compact ? "min-h-[38vh] py-8" : "min-h-[44vh] py-10 sm:min-h-[48vh]"
+          compact
+            ? "min-h-[200px] py-7 sm:min-h-[34vh] sm:py-8"
+            : "min-h-[240px] py-8 sm:min-h-[40vh] sm:py-10"
         }`}
       >
         <h1 className="text-[28px] leading-tight text-text">

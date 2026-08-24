@@ -87,7 +87,7 @@ export default function Header() {
                   labelIcon={
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path
-                        d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM9 21a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+                        d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM9 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
                         stroke="currentColor"
                         strokeWidth="1.6"
                         strokeLinecap="round"
@@ -110,9 +110,15 @@ export default function Header() {
                the glyph stays 20x20, centred inside it. */
             className="relative flex h-6 w-6 items-center justify-center text-text hover:text-text-2 transition-colors"
           >
+            {/* Both wheels sit centred on y=21, spanning 19-23 inside the
+                24-high viewBox. The left one was "M9 21", which put its centre
+                at y=23 and its outline at y=25 -- two units below its pair and
+                past the bottom of the viewBox, so it rendered visibly sliced
+                off. Two cart icons exist (header bar and mobile menu) and both
+                had it. */}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
-                d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM9 21a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
+                d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM9 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
                 stroke="currentColor"
                 strokeWidth="1.6"
                 strokeLinecap="round"
