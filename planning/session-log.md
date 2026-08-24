@@ -427,3 +427,71 @@ makes a separate business line worthwhile.
 **Tailoring is not a Shaklek activity.** The tailor is an independent third
 party, not an employee. The licence's "Active Seller Online" is correct and
 sufficient — see `incorporation-todo.md`.
+
+---
+
+# START HERE — 2026-08-25
+
+Everything below is committed, pushed and live. Working tree clean apart from
+two untracked marketing drafts belonging to the other session
+(`planning/marketing/instagram-content-pack.md`, `social-playbook.md`) and a
+generated spec-sheet PDF at the repo root.
+
+## What shipped on 2026-08-24
+
+**The customizer bug ten people called a bug — it was one.** The preview was
+sticky and the controls sat in the *same* column, so on scroll every option
+slid under the photo and got sliced mid-button. Two causes beneath it: the
+column width was derived from viewport *height* (`w-[40.5vh]`), so anything
+that did not fit overflowed sideways; and `max-w-xl` capped the whole
+customizer at 576px, leaving ~60% of a 1440px screen empty. Now one column on
+phones, two from `lg` up.
+
+**Photos were cropping the garment on phones.** `object-cover` cut the hem off
+trousers — the exact thing a customer is choosing between. Now `object-contain`
+everywhere with the box matched to the dominant photo ratio. ⚠️ See the aspect-
+ratio note in `catalog-images-todo.md`: the source images are **eight different
+shapes**, and the UI fix is a workaround, not a cure.
+
+**Sharp corners** across the customizer, matching the catalog. **Tailored is the
+default fit** — made-to-order only justifies its price if the garment is cut to
+the customer.
+
+**Legal.** Returns merged into one Terms document (~250 → ~2100 words), with
+the clauses that were missing entirely: right to decline an order, pricing
+errors, risk on delivery, faulty goods as a separate remedy, uploads and IP,
+liability, force majeure, jurisdiction. Privacy rewritten — the old one
+described **camera-based measurement that does not exist**. Both now name the
+real entity: **Shaklek For Online Selling**, licence **1645657**.
+
+**New pages:** `/faq`, `/size-guide`, `/shipping`. **Shaklek+** takes an email
+for early access (`/api/waitlist`, no DB table on purpose). **Tabby removed.**
+**Discount code** on our checkout only — Stripe's field is hidden.
+
+**Copy.** Hero back to the founder's signature line, with readability fixed
+rather than the words rewritten. Founder's note updated, and its "288 ways /
+576 ways" corrected to **192**, computed from `parameterSliders.ts` so it
+cannot drift. It had been advertising locked Shaklek+ options nobody can pick.
+
+## Pick up here
+
+| | Who |
+|---|---|
+| **Spec sheet → real tech pack** — biggest open item, and the document the garment is actually made from | unassigned |
+| **Cheap live payment test** on the new checkout — a 99%-off code makes it ~AED 4, and confirms AED-only now Adaptive Pricing is off | founder + Session B |
+| **Adaptive Pricing is still ON in the Stripe *sandbox*** — live is off. A test order can show EUR while real customers correctly see AED | founder |
+| Saved addresses for returning customers | unassigned |
+| Catalog cannot be paged on desktop — needs arrows for non-touch | unassigned |
+| Normalise catalog image ratios (deterministic padding, no model cost) | unassigned |
+| Feedback link, "I'll take it as shown", SEO structured data | unassigned |
+| Instagram launch kit is written and ready to post — `planning/marketing/instagram-launch.md` | founder |
+
+## Two standing warnings
+
+⚠️ **Neither legal document is lawyer-reviewed.** They name the real entity now,
+which does not change that. A UAE lawyer should read them against Federal Law
+15/2020 (consumer) and Federal Decree-Law 45/2021 (data protection).
+
+⚠️ **Verify on a phone, not a laptop.** Both of the day's real bugs — the sliced
+button and the cropped hem — were invisible at 1440px and obvious at 390px. Most
+of this brand's traffic is mobile. Check there first.
