@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { customerChosenLabels } from "@/data/parameterSliders";
 import Header from "@/components/Header";
 import CheckoutForm from "@/components/CheckoutForm";
 import { useCart } from "@/lib/CartContext";
@@ -62,10 +63,11 @@ export default function CheckoutPage() {
                     {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size{" "}
                     {item.size}
                   </p>
-                  {item.changes.length > 0 && (
-                    <p className="mt-1 text-xs text-text-2">{item.changes.join(", ")}</p>
+                  {customerChosenLabels(item.category, item.changes).length > 0 && (
+                    <p className="mt-1 text-xs text-text-2">
+                      {customerChosenLabels(item.category, item.changes).join(", ")}
+                    </p>
                   )}
-                  <p className="mt-1 text-xs text-text-2">10 days delivery</p>
                 </div>
                 <p className="font-display text-xl text-text whitespace-nowrap">
                   AED {item.price * item.quantity}

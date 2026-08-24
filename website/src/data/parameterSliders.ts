@@ -221,3 +221,30 @@ export function changesFromLabels(
     return { type: param.type, value: option.value, label: param.labelFor(option.text) };
   });
 }
+
+// The options the customer actually chose, for showing back to them.
+//
+// A cart line stores every slider's label, premium ones included. Premium
+// sliders are not customer-editable -- they are committed at their defaults
+// and never rendered in the customizer -- so echoing them into the cart
+// describes decisions the customer never made. A Utility Shirt came back as
+// "... 1 pocket, Button closure" on a page that had offered neither, which
+// reads either as a mistake or as the site putting words in their mouth.
+//
+// The labels still travel to the order and the tailor's tech pack untouched:
+// the workshop does need to know the pocket count. This is a display filter
+// and nothing more.
+//
+// Categories with no fixed sliders (uploaded designs) pass through unchanged,
+// since their changes are freeform and there is no option list to match.
+export function customerChosenLabels(
+  category: string,
+  labels: string[] | null | undefined,
+): string[] {
+  const render = renderParamsForCategory(category);
+  if (render.length === 0) return labels ?? [];
+  const allowed = new Set(
+    render.flatMap((p) => p.options.map((o) => p.labelFor(o.text))),
+  );
+  return (labels ?? []).filter((l) => allowed.has(l));
+}

@@ -24,6 +24,7 @@ export default function CustomizeParameters({
   spec,
   onSpecChange,
   itemName,
+  price,
   category,
   previewImage,
   previewBackImage,
@@ -34,6 +35,7 @@ export default function CustomizeParameters({
   spec: DesignSpec;
   onSpecChange: (spec: DesignSpec) => void;
   itemName: string;
+  price: number;
   category: string;
   previewImage?: string | null;
   previewBackImage?: string | null;
@@ -127,10 +129,6 @@ export default function CustomizeParameters({
             draggable={false}
           />
         )}
-        <span className="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-medium tracking-wide text-text backdrop-blur-sm">
-          {itemName}
-        </span>
-
         {canSlide && (
           <>
             <button
@@ -182,6 +180,15 @@ export default function CustomizeParameters({
           which is where it is, and where it is properly qualified. Say what
           the image is; do not make promises about what happens if it is
           wrong. */}
+      {/* Name and price sit UNDER the photograph, in the catalog's own type,
+          rather than as a pill floating on top of the garment. A label laid
+          over the picture covers the thing the customer came to look at, and
+          the price was only visible two steps later on the fit tab. */}
+      <div className="mt-3 text-center">
+        <p className="font-display text-[15px] text-text">{itemName}</p>
+        <p className="mt-1 text-xs text-text-2">AED {price}</p>
+      </div>
+
       <p className="mt-3 px-1 text-[11px] leading-relaxed text-text-3">
         * Images are illustrative of the combination you chose. Every piece is
         hand-cut, so fabric fall and shade vary slightly.

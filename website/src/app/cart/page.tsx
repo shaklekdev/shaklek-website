@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { customerChosenLabels } from "@/data/parameterSliders";
 import Header from "@/components/Header";
 import { useCart } from "@/lib/CartContext";
 import { cartThumbnail } from "@/lib/cartThumbnail";
@@ -84,8 +85,10 @@ export default function CartPage() {
                 <p className="mt-1 text-xs text-text-2">
                   {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size {item.size}
                 </p>
-                {item.changes.length > 0 && (
-                  <p className="mt-1 text-xs text-text-2">{item.changes.join(", ")}</p>
+                {customerChosenLabels(item.category, item.changes).length > 0 && (
+                  <p className="mt-1 text-xs text-text-2">
+                    {customerChosenLabels(item.category, item.changes).join(", ")}
+                  </p>
                 )}
                 {/* Adding to the cart used to be a one-way door -- changing a
                     colour you'd just picked meant rebuilding the whole

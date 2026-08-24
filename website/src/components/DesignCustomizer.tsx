@@ -251,6 +251,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             spec={spec}
             onSpecChange={setSpec}
             itemName={item.name}
+            price={price}
             category={item.category}
             previewImage={previewImage}
             previewBackImage={previewBackImage}

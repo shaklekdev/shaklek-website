@@ -20,6 +20,23 @@ const LAST_ORDER_KEY = "shaklek-last-order";
 export default function CheckoutForm({ total }: { total: number }) {
   const router = useRouter();
   const { items, clear } = useCart();
+
+  // One delivery estimate for the ORDER, not one per garment.
+  //
+  // The checkout used to print "10 days delivery" under every line, so a
+  // three-piece order showed "10 days" three times and read as a month. That
+  // is the opposite of what happens and it is the kind of arithmetic a
+  // customer does silently, on the last screen, without asking.
+  //
+  // Stated once, and it does not pretend a large order is as quick as a
+  // single piece -- one tailor makes these by hand. What it promises is a
+  // confirmed date before anything is cut, which is true and is already how
+  // the studio works.
+  const units = items.reduce((n, i) => n + (i.quantity ?? 1), 0);
+  const deliveryEstimate =
+    units > 2
+      ? "About 10 days from stylist confirmation. An order this size can take a few days longer, and a stylist confirms the date with you before anything is cut."
+      : "About 10 days from stylist confirmation, delivery included.";
   const { isSignedIn, user } = useUser();
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
   const [email, setEmail] = useState("");
@@ -263,42 +280,6 @@ export default function CheckoutForm({ total }: { total: number }) {
         ))}
       </div>
 
-      {/* These three answer the questions a customer has BEFORE pressing Pay --
-          where does it ship, when does it arrive, what if it does not fit.
-          Underneath the button they were reassurance nobody read until after
-          they had already decided. */}
-      <div className="mt-5 space-y-1 text-center text-xs text-text-3">
-        <p>Delivery address and card details are taken on the next screen, secured by Stripe.</p>
-        <p>Made to order · about 10 days from stylist confirmation · delivery included</p>
-        <p>One free alteration or remake within 14 days</p>
-        {/* The LIMIT, not just the promise. Added 2026-08-25.
-            UAE consumer law makes a refund mandatory for goods that are
-            faulty, unsafe, or not as described, and those cannot be signed
-            away. A change-of-mind refund is NOT mandatory -- a retailer may
-            decline it, but only where the policy is clearly displayed.
-            Until now the restriction lived solely in /legal/terms, behind a
-            footer link, while checkout showed only the generous half. For a
-            made-to-order business, where a returned piece cannot be resold,
-            the change-of-mind rule is the one that matters commercially, and
-            displaying it here is the condition on being able to rely on it.
-            Both halves are stated, because showing the limit without the
-            statutory remedy beside it would read as "no refunds", which is
-            not true and is not lawful. */}
-        <p>
-          Each piece is made for you, so we don&apos;t offer change-of-mind
-          refunds. Anything faulty or not as ordered is always remade or
-          refunded.{" "}
-          <a
-            href="/legal/terms#returns"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            Returns policy
-          </a>
-        </p>
-      </div>
-
       {(
         <>
           <button
@@ -329,6 +310,62 @@ export default function CheckoutForm({ total }: { total: number }) {
           )}
         </>
       )}
+
+      {/* Everything a customer might want to check, out of the way until they
+          want it.
+          It used to be four paragraphs sitting BETWEEN the email field and the
+          Pay button -- a wall of small print pushing the one action on the
+          page further down, on the screen where hesitation is most expensive.
+          The essential line stays visible; the rest opens on demand, and all
+          of it now sits below the button rather than in front of it.
+          The change-of-mind rule stays in the open part: UAE consumer law lets
+          a retailer decline a change-of-mind refund only where the policy is
+          displayed, and something a customer must expand to find is a weak
+          version of displayed. */}
+      <p className="mt-4 text-center text-xs text-text-3">
+        Delivery and card details are taken on the next screen, secured by
+        Stripe. No change-of-mind refunds on made-to-order pieces.
+      </p>
+
+      <details className="group mt-3 border-t border-border pt-3">
+        <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 text-xs text-text-3 hover:text-text-2">
+          <span>Delivery, returns and payment</span>
+          <span aria-hidden className="transition-transform group-open:rotate-180">
+            &#9662;
+          </span>
+        </summary>
+        <div className="mx-auto mt-3 max-w-md space-y-2 text-xs leading-relaxed text-text-3">
+          <p>
+            <strong className="font-medium text-text-2">Delivery.</strong> Your
+            address is collected on the secure payment screen. Delivery is
+            included, anywhere in the UAE.
+          </p>
+          <p>
+            <strong className="font-medium text-text-2">When.</strong>{" "}
+            {deliveryEstimate}
+          </p>
+          <p>
+            <strong className="font-medium text-text-2">If the fit is off.</strong>{" "}
+            One free alteration or remake within 14 days, whether you sent
+            measurements or picked a standard size.
+          </p>
+          <p>
+            <strong className="font-medium text-text-2">Refunds.</strong> Each
+            piece is made for you, so we don&apos;t offer change-of-mind
+            refunds. Anything faulty or not as ordered is always remade or
+            refunded.{" "}
+            <a
+              href="/legal/terms#returns"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Returns policy
+            </a>
+          </p>
+        </div>
+      </details>
+
       {error && (
         <p
           role="alert"
