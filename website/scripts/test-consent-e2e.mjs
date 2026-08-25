@@ -103,6 +103,12 @@ check(barText === true, "the consent bar is shown, with Decline as a real button
 const undercount = await evalJs(`/\\bone cookie\\b/i.test(document.body.innerText)`);
 check(undercount === false, "the bar does not claim a single cookie when Meta sets two");
 
+// Standing founder rule for customer-facing copy, 2026-08-25: no "track" in any
+// form. Asserted rather than remembered, so it survives both the sessions that
+// agreed it.
+const tracky = await evalJs(`/track(s|ing|er|ers)?\\b/i.test(document.body.innerText)`);
+check(tracky === false, "no form of the word track appears in customer-facing copy");
+
 const scriptBefore = await evalJs(`!!document.getElementById('meta-pixel')`);
 check(scriptBefore === false, "the pixel script tag is absent before consent");
 

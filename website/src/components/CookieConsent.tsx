@@ -56,9 +56,23 @@ export default function CookieConsent() {
             policy it links to describing the same thing differently is how a
             site ends up making a statement that is true in one place and not
             the other. */}
+        {/* No form of the word "track" appears here. Founder rule, 2026-08-25,
+            customer-facing copy. The e2e suite asserts it, because a standing
+            brand rule outlives the edit that introduced it.
+
+            "tell us nothing about who you are" is deliberate and verified: the
+            pixel initialises with no Advanced Matching, and every event carries
+            only product slugs, quantities, an order id, value and currency. No
+            name, email, address, phone or measurements. It is a claim about
+            what WE receive; Meta may still recognise a visitor from their own
+            login, which is Meta's data and not something this site sends. The
+            founder's own suggestion, "nothing is collecting any information",
+            was rejected as false: the pixel does collect behaviour, and Meta is
+            a joint controller for it. */}
         <p className="text-sm text-text-2">
           With your permission, we use cookies from Meta to see how our
-          advertising performs. Nothing else on this site tracks you.{" "}
+          advertising performs. They tell us nothing about who you are, and we
+          run no other analytics.{" "}
           <Link href="/legal/privacy" className="underline">
             How we handle data
           </Link>

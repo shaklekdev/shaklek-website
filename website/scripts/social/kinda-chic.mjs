@@ -58,6 +58,7 @@ const BANNED = [
   [/[—–]/, "em or en dash: reads as generated text"],
   [/\bphotograph/i, "calls the imagery a photograph: it is generated"],
   [/\bAI\b/, "no AI mentions customer facing"],
+  [/track(s|ing|er|ers)?\b/i, "founder rule 2026-08-25: no form of \"track\" in customer-facing copy"],
 ];
 
 function lint(line) {
