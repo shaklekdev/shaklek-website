@@ -66,7 +66,14 @@ export default function SaveMeasurements({
     }
   }, [isSignedIn]);
 
-  if (!valid || !measurements.trim()) return null;
+  // ALWAYS RENDERED, disabled until the numbers are complete.
+  //
+  // This used to return null unless the measurements were already valid, which
+  // meant the feature was invisible to anyone who had not finished typing --
+  // there was no sign it existed at all. The founder looked for it twice and
+  // concluded it had not been built. A capture prompt nobody can see captures
+  // nothing.
+  const ready = valid && Boolean(measurements.trim());
 
   if (state === "saved") {
     return (
@@ -80,7 +87,8 @@ export default function SaveMeasurements({
     <div className={className}>
       <button
         type="button"
-        disabled={state === "saving"}
+        disabled={state === "saving" || !ready}
+        title={ready ? undefined : "Fill in your measurements first"}
         onClick={() => {
           if (isSignedIn) {
             void save(measurements);
@@ -91,7 +99,7 @@ export default function SaveMeasurements({
           // lose everything they have configured.
           clerk.openSignUp({});
         }}
-        className="text-[13px] text-text underline underline-offset-4 hover:text-text-2 disabled:opacity-50"
+        className="text-[13px] text-text underline underline-offset-4 hover:text-text-2 disabled:cursor-not-allowed disabled:no-underline disabled:opacity-40"
       >
         {state === "saving"
           ? "Saving…"
@@ -99,12 +107,13 @@ export default function SaveMeasurements({
             ? "Save these measurements to my account"
             : "Save my measurements for next time"}
       </button>
-      {!isSignedIn && (
-        <p className="mt-1 text-[11px] text-text-3">
-          Creates an account with your email. Your piece is cut to these numbers
-          either way.
-        </p>
-      )}
+      <p className="mt-1 text-[11px] text-text-3">
+        {!ready
+          ? "Add your four measurements above to save them."
+          : isSignedIn
+            ? "Kept on your account for next time."
+            : "Creates an account with your email. Your piece is cut to these numbers either way."}
+      </p>
       {state === "error" && (
         <p role="alert" className="mt-1 text-[11px] text-red-700">
           Could not save just now. Your order is unaffected.

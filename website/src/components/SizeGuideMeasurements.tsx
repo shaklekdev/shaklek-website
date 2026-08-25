@@ -84,11 +84,7 @@ export default function SizeGuideMeasurements() {
         valid={complete}
         className="mt-4"
       />
-      {!complete && (
-        <p className="mt-4 text-[11px] text-text-3">
-          Fill all four to save them.
-        </p>
-      )}
+
     </div>
   );
 }
