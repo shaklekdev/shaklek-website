@@ -198,10 +198,6 @@ export default function CustomizeParameters({
         <p className="mt-1 text-xs text-text-2">AED {price}</p>
       </div>
 
-      <p className="mt-3 px-1 text-[11px] leading-relaxed text-text-3">
-        * Images are illustrative of the combination you chose. Every piece is
-        hand-cut, so fabric fall and shade vary slightly.
-      </p>
 
       </div>
 

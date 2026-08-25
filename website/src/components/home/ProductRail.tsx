@@ -16,7 +16,14 @@ export default function ProductRail({
 }) {
   return (
     <>
-      <section className="mx-auto w-full max-w-6xl px-6 pt-14 pb-5">
+      {/* Anchored so "Add another piece" from the cart lands on the clothes
+          rather than at the top of the page, leaving the customer to scroll
+          past the whole explainer they have already read. scroll-mt clears the
+          sticky header, which would otherwise cover the heading. */}
+      <section
+        id="catalog"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-14 pb-5"
+      >
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="text-lg text-text">{title}</h2>

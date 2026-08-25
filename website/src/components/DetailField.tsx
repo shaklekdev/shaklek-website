@@ -31,7 +31,7 @@ export default function DetailField({
   onSpecChange: (spec: DesignSpec) => void;
 }) {
   return (
-    <div className="mt-10 border-t border-border pt-8">
+    <div className="mt-8">
       <label
         htmlFor="customization-notes"
         className="mb-1 block text-lg text-text"

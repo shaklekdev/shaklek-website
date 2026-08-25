@@ -20,7 +20,7 @@ export default function CartPage() {
             Browse the catalog or upload your own design to get started.
           </p>
           <Link
-            href="/"
+            href="/#catalog"
             className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
           >
             Browse catalog
@@ -154,7 +154,7 @@ export default function CartPage() {
                 the only route out of the cart was a grey line of text under
                 the fold. */}
             <Link
-              href="/"
+              href="/#catalog"
               className="rounded-full border border-border-strong px-6 py-3.5 text-sm text-text transition-colors hover:bg-surface-2"
             >
               Add another piece

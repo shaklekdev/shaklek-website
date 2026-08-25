@@ -100,33 +100,30 @@ export default function SizePicker({
           first made the whole proposition opt-in. Standard stays one tap away
           for anyone who would rather not measure. Corners squared to match the
           rest of the customizer and the catalog. */}
-      <div className="flex gap-3">
-        <button
-          onClick={() => onSizeModeChange("tailored")}
-          aria-pressed={sizeMode === "tailored"}
-          className={`flex-1 border px-4 py-3 text-left text-sm transition-colors ${
-            sizeMode === "tailored" ? "border-accent bg-surface-2" : "border-border-strong"
-          }`}
-        >
-          <span className="block font-medium text-text">Tailored</span>
-          <span className="text-xs text-gold">Cut to your measurements</span>
-        </button>
-        <button
-          onClick={() => onSizeModeChange("standard")}
-          aria-pressed={sizeMode === "standard"}
-          className={`flex-1 border px-4 py-3 text-left text-sm transition-colors ${
-            sizeMode === "standard" ? "border-accent bg-surface-2" : "border-border-strong"
-          }`}
-        >
-          <span className="block font-medium text-text">Standard</span>
-          <span className="text-xs text-text-3">Pick XS–XXL</span>
-        </button>
+      {/* Identical to the sliders above -- same grid, same widths, same
+          selected colours. They were a different shape and colour, so the fit
+          read as a separate kind of control when it is just another choice on
+          the same page. The descriptions moved to one line underneath rather
+          than being lost. */}
+      <div className="grid grid-cols-2 gap-1.5 lg:max-w-xs">
+        {(["tailored", "standard"] as const).map((mode) => (
+          <button
+            key={mode}
+            onClick={() => onSizeModeChange(mode)}
+            aria-pressed={sizeMode === mode}
+            className={`flex min-h-11 cursor-pointer items-center justify-center border px-2 py-2 text-center text-xs capitalize transition-colors lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
+              sizeMode === mode
+                ? "border-text bg-text text-white"
+                : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
+            }`}
+          >
+            {mode}
+          </button>
+        ))}
       </div>
-
-      {/* Said outright, because the old "Free bucket size" label implied the
-          opposite -- that having it tailored costs extra. It never has. */}
-      <p className="mt-2 text-[11px] text-text-3">
-        Same price either way — tailoring is included.
+      <p className="mt-1.5 text-[11px] text-text-3">
+        {sizeMode === "tailored" ? "Cut to your measurements." : "Pick XS to XXL."}{" "}
+        Same price either way, tailoring is included.
       </p>
 
       {sizeMode === "standard" ? (
@@ -246,19 +243,11 @@ export default function SizePicker({
             ))}
           </div>
 
-          <div className="mt-4">
-            <label htmlFor="measurement-notes" className="mb-1 block text-xs text-text-2">
-              Anything about your measurements or fit (optional)
-            </label>
-            <textarea
-              id="measurement-notes"
-              value={fields.notes}
-              onChange={(e) => updateField("notes", e.target.value)}
-              rows={2}
-              placeholder="e.g. shoulder width, inseam, longer in the body than most"
-              className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
-            />
-          </div>
+            {/* The free-text box that sat here is gone. "Add a detail" asks
+                the same question once, lower down the same page. Two boxes
+                inviting the same note meant a customer could write making
+                instructions into whichever they happened to see, and only one
+                of them is labelled as the place a stylist reads. */}
 
           <p className="mt-2 text-xs text-text-3">
             Cut to these measurements by your tailor. A stylist will confirm anything

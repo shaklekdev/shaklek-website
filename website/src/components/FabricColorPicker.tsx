@@ -23,7 +23,7 @@ export default function FabricColorPicker({
             aria-label={c.name}
             aria-pressed={c.name === color}
             onClick={() => onColorChange(c.name)}
-            className={`h-8 w-8 rounded-full border-2 transition-all ${
+            className={`h-6 w-6 rounded-full border-2 transition-all ${
               c.name === color ? "border-accent scale-110" : "border-transparent"
             }`}
             style={{ background: c.hex }}

@@ -289,8 +289,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           deliberately: the customer is one decision from buying, and offering
           a return to the catalogue at that moment is an invitation to leave.
           Adding a second piece is offered AFTER the cart instead. */}
-      <div className="mt-10 border-t border-border pt-8">
-          <h2 className="text-lg text-text">Your size</h2>
+      <div className="mt-8">
 
           <SizePicker
             sizeMode={spec.sizeMode}
@@ -340,6 +339,15 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               {editingId ? "Save changes" : "Add to cart"}
             </button>
           </div>
+
+      {/* The illustrative-images note, moved down here from directly under the
+          preview. It was pushing the parameters further from the photo on a
+          phone for a line nobody reads before choosing a colour. It still
+          sits above the fold of the decision, just not in the way of it. */}
+      <p className="mt-8 px-1 text-[11px] leading-relaxed text-text-3">
+        * Images are illustrative of the combination you chose. Every piece is
+        hand-cut, so fabric fall and shade vary slightly.
+      </p>
 
       {/* Shaklek+ sits AFTER the decision. It advertises features nobody can
           buy yet, so it must never stand between the customer and the cart --
