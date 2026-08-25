@@ -1,4 +1,5 @@
 import LegalPage from "@/components/LegalPage";
+import SizeGuideMeasurements from "@/components/SizeGuideMeasurements";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
@@ -53,6 +54,11 @@ export default function SizeGuidePage() {
           </tbody>
         </table>
       </div>
+
+      {/* Capture sits ABOVE "how to measure": someone who already knows their
+          numbers should not have to scroll past instructions to enter them,
+          and someone who does not will read on and come back up. */}
+      <SizeGuideMeasurements />
 
       <h2 className="pt-2 text-base font-medium text-text">How to measure</h2>
       <p>
