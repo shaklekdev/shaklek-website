@@ -96,6 +96,13 @@ check(hits.length === 0, `no request to Meta before any choice (saw ${hits.lengt
 const barText = await evalJs(`document.body.innerText.includes('Decline') && document.body.innerText.includes('Accept')`);
 check(barText === true, "the consent bar is shown, with Decline as a real button");
 
+// The bar must not understate what it asks for. Meta sets TWO cookies, _fbp
+// always and _fbc on an ad click, and lib/consent.ts deletes both. A banner
+// saying "one cookie" contradicted the code behind it and understated the ask
+// on exactly the campaign traffic the pixel exists for.
+const undercount = await evalJs(`/\\bone cookie\\b/i.test(document.body.innerText)`);
+check(undercount === false, "the bar does not claim a single cookie when Meta sets two");
+
 const scriptBefore = await evalJs(`!!document.getElementById('meta-pixel')`);
 check(scriptBefore === false, "the pixel script tag is absent before consent");
 

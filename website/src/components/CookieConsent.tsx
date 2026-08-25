@@ -45,9 +45,20 @@ export default function CookieConsent() {
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-surface px-4 py-4 sm:px-6"
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* "cookies from Meta", not a count. Meta sets TWO: _fbp always, and
+            _fbc when a visitor arrives from an ad click carrying fbclid. The
+            earlier "one cookie" understated what this bar asks permission for,
+            and _fbc is precisely the one an ad campaign sets, so it was the
+            worst one to omit. lib/consent.ts deletes both, so the banner was
+            also contradicting the code behind it.
+
+            Wording matches legal/privacy deliberately. A consent bar and the
+            policy it links to describing the same thing differently is how a
+            site ends up making a statement that is true in one place and not
+            the other. */}
         <p className="text-sm text-text-2">
-          We use one cookie to measure whether our ads lead to an order. Nothing
-          else on this site tracks you.{" "}
+          With your permission, we use cookies from Meta to see how our
+          advertising performs. Nothing else on this site tracks you.{" "}
           <Link href="/legal/privacy" className="underline">
             How we handle data
           </Link>
