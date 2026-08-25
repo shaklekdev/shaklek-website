@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { readConsent, writeConsent } from "@/lib/consent";
+import { CONSENT_REOPEN, readConsent, writeConsent } from "@/lib/consent";
 
 // The consent bar.
 //
@@ -24,6 +24,11 @@ export default function CookieConsent() {
 
   useEffect(() => {
     if (readConsent() === "unset") setState("asking");
+    // The footer link reopens this so a choice can be changed. Consent that
+    // cannot be withdrawn as easily as it was given is not a lawful basis.
+    const reopen = () => setState("asking");
+    window.addEventListener(CONSENT_REOPEN, reopen);
+    return () => window.removeEventListener(CONSENT_REOPEN, reopen);
   }, []);
 
   if (state === "hidden") return null;

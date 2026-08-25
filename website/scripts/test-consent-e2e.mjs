@@ -110,7 +110,34 @@ check(hits.length === 0, `no request to Meta after Decline (saw ${hits.length})`
 await load("granted");
 check(hits.length > 0, `Meta is contacted after Accept (saw ${hits.length})`);
 
-console.log(fail === 0 ? "\nok — the pixel is silent until consent is given" : `\n${fail} failure(s)`);
+// 4. Withdrawal. Consent that cannot be withdrawn as easily as it was given is
+// not a lawful basis, so the footer control and the cookie deletion are part of
+// the claim, not polish.
+await load("granted");
+const hasLink = await evalJs(`Array.from(document.querySelectorAll('button')).some(b=>b.textContent.trim()==='Cookie choices')`);
+check(hasLink === true, "a Cookie choices control exists in the footer");
+
+// Click, then let React flush before reading the DOM. Reading synchronously in
+// the same expression checked the page BEFORE the state update had rendered,
+// which failed while the bar was in fact opening correctly.
+await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Cookie choices');if(b)b.click();})()`);
+await sleep(500);
+const reopened = await evalJs(`document.body.innerText.includes('Decline') && document.body.innerText.includes('Accept')`);
+check(reopened === true, "the control reopens the bar so a choice can be changed");
+
+// Withdrawing must actually remove the identifier, not just stop future events.
+await evalJs(`document.cookie='_fbp=fb.1.test.123; path=/'`);
+const before = await evalJs(`document.cookie.includes('_fbp')`);
+check(before === true, "test cookie was set (control for the check below)");
+await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Decline');if(b)b.click();})()`);
+await sleep(400);
+const after = await evalJs(`document.cookie.includes('_fbp')`);
+check(after === false, "declining DELETES the Meta cookie, so withdrawal removes something");
+
+const stored = await evalJs(`localStorage.getItem('shaklek.consent.marketing.v1')`);
+check(stored === "denied", "the new choice is persisted");
+
+console.log(fail === 0 ? "\nok — silent until consent, and withdrawal actually withdraws" : `\n${fail} failure(s)`);
 ws.close();
 chrome.kill();
 process.exit(fail === 0 ? 0 : 1);

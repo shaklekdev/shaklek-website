@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CookieChoicesLink from "@/components/CookieChoicesLink";
 
 export default function Footer() {
   return (
@@ -24,6 +25,7 @@ export default function Footer() {
           <Link href="/legal/privacy" className="hover:text-text-2">
             Privacy &amp; Cookies
           </Link>
+          <CookieChoicesLink />
           <a href="mailto:hello@shaklek.com" className="hover:text-text-2">
             hello@shaklek.com
           </a>
