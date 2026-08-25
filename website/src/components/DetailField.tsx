@@ -39,8 +39,7 @@ export default function DetailField({
         Add a detail
       </label>
       <p className="mb-3 text-[13px] text-text-2">
-        Anything you would like us to focus on while your piece is made.
-        Optional.
+        Optional. A stylist confirms it before anything is cut.
       </p>
       <textarea
         id="customization-notes"
@@ -53,9 +52,7 @@ export default function DetailField({
         placeholder={NOTE_EXAMPLES[category] ?? ""}
         className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
       />
-      <p className="mt-1.5 text-[11px] text-text-3">
-        A stylist confirms what&apos;s possible before anything is cut.
-      </p>
+
     </div>
   );
 }

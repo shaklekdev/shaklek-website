@@ -93,11 +93,22 @@ export default function SizeGuidePage() {
       </p>
       <p>
         Either way you get one free alteration or remake within 14 days of
-        delivery if the fit is not right. Start with a piece from the{" "}
-        <Link href="/" className="underline">
-          catalogue
+        delivery if the fit is not right.
+      </p>
+
+      {/* A button, not a sentence with a link buried in it. This is the end of
+          the page a customer reaches once they know their size, so the next
+          step should be obvious rather than something to find inside a
+          paragraph. Same button as the close of /our-story, deliberately: two
+          pages, one way onward. Points at the catalogue section so it lands on
+          the clothes. */}
+      <p className="not-prose pt-2">
+        <Link
+          href="/#catalog"
+          className="inline-block bg-accent px-6 py-3 text-sm text-white transition-opacity hover:opacity-90"
+        >
+          Start designing
         </Link>
-        .
       </p>
 
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">

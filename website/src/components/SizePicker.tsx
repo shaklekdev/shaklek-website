@@ -129,7 +129,7 @@ export default function SizePicker({
       </div>
       <p className="mt-1.5 text-[11px] text-text-3">
         {sizeMode === "tailored" ? "Cut to your measurements." : "Pick XS to XXL."}{" "}
-        Same price either way, tailoring is included.
+        Same price either way.
       </p>
 
       {sizeMode === "standard" ? (
@@ -255,10 +255,11 @@ export default function SizePicker({
                 instructions into whichever they happened to see, and only one
                 of them is labelled as the place a stylist reads. */}
 
-          <p className="mt-2 text-xs text-text-3">
-            Cut to these measurements by your tailor. A stylist will confirm anything
-            unclear before it&apos;s made.
-          </p>
+            {/* "Cut to these measurements by your tailor. A stylist will
+                confirm anything unclear before it's made." removed: the same
+                stylist promise is made under "Add a detail" a few lines below,
+                and the size hint above already says it is cut to these
+                numbers. Saying it three times did not make it truer. */}
         </div>
       )}
     </div>
