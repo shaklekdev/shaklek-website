@@ -144,16 +144,18 @@ export default function PrivacyPage() {
       {adsEnabled ? (
         <>
           <p>
-            <strong>Meta Pixel, and only if you agree to it.</strong> Nothing is
-            set and nothing is sent to Meta until you choose. When you first
-            visit we ask, with Accept and Decline given equal weight, and if you
-            do not answer the answer is no. When we advertise on Instagram or
-            Facebook and you have accepted, Meta&apos;s pixel lets us see which
-            ads lead to an order, so we are not paying to show ads that do not
-            work. It records that a browser viewed a piece, added one to the
-            cart, started checkout or completed an order, together with the item
-            and the amount. Meta is a joint controller for this data and may use
-            it to measure and target advertising. See{" "}
+            <strong>Meta Pixel, and only with your agreement.</strong> Nothing
+            is set and nothing reaches Meta until you have chosen. We ask on your
+            first visit, with Accept and Decline weighted equally, and if you do
+            not answer the answer is no.
+          </p>
+          <p>
+            If you accept, Meta&apos;s pixel lets us measure how our advertising
+            on Instagram and Facebook actually performs: which piece was looked
+            at, what reached the cart, what became an order, and the amount. It
+            is how we know whether a campaign earned its place. Meta is a joint
+            controller for this information and uses it to measure and target
+            advertising. See{" "}
             <a
               href="https://www.facebook.com/privacy/policy"
               target="_blank"
