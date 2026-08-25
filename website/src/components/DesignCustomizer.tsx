@@ -15,14 +15,10 @@ import { useCart } from "@/lib/CartContext";
 import { money, track } from "@/lib/metaPixel";
 import CustomizeParameters from "@/components/CustomizeParameters";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
+import DetailField from "@/components/DetailField";
+import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
-
-// Step 1 is choosing the piece, which happens back on the catalog. The count
-// is shown on every step because the honest answer -- three, and one of them
-// is already done -- is the reassuring one: the main reason people abandon a
-// made-to-order flow is not knowing how much more of it there is.
-const TOTAL_STEPS = 3;
 
 // `item.colorImages?.[name]` was used as the colour gate, and a plain property
 // lookup walks the prototype chain: "constructor", "toString", "valueOf" and
@@ -38,11 +34,9 @@ const TOTAL_STEPS = 3;
 function isKnownColor(item: CatalogItem, name: string | null | undefined) {
   return Boolean(name) && Object.hasOwn(item.colorImages ?? {}, name as string);
 }
-const STEP_TITLES = { 2: "Make it yours", 3: "Get the fit" } as const;
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
-  const [step, setStep] = useState<2 | 3>(2);
   const [savedMeasurements, setSavedMeasurements] = useState<SavedMeasurements | undefined>();
   // Set when the customer arrived from a cart line's Edit link. Saving then
   // overwrites that line instead of appending a second one.
@@ -269,30 +263,13 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         </p>
       )}
 
-      <nav aria-label="Design steps" className="flex w-fit gap-1 rounded-full border border-border-strong p-1">
-        {([2, 3] as const).map((n) => (
-          <button
-            key={n}
-            onClick={() => setStep(n)}
-            aria-current={step === n ? "step" : undefined}
-            className={`rounded-full px-4 py-2 text-xs transition-colors ${
-              step === n ? "bg-text text-white" : "text-text-2 hover:text-text"
-            }`}
-          >
-            {STEP_TITLES[n]}
-          </button>
-        ))}
-      </nav>
+      {/* No step tabs, no "Step 2 of 3". Founder's brief: customisation and
+          the fit belong on ONE page. Splitting them added a layer to cross
+          without adding anything the customer needed, and every layer between
+          a decision and a cart is somewhere to lose them. Order is now
+          options, then size, then the optional detail, then add to cart. */}
 
-      <p className="mt-3 text-xs tracking-wide text-text-3 uppercase">
-        {/* The name is already on the active pill directly above this line;
-            printing it again was pure repetition. The count stays, because
-            "of 3" is what tells a customer the flow is short. */}
-        Step {step} of {TOTAL_STEPS}
-      </p>
-
-      {step === 2 && (
-        <div className="mt-4">
+      <div className="mt-4">
           <CustomizeParameters
             spec={spec}
             onSpecChange={setSpec}
@@ -304,33 +281,15 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewGradient={item.gradient}
             preloadImages={eagerPreloads}
             deferredPreloads={deferredPreloads}
-            primaryAction={
-              // Back to the catalog was an 11px grey whisper under a full
-              // black button -- present, but not reading as a way out. Same
-              // size and shape as Next now, just grey on white, so the two
-              // read as a pair: the obvious next step, and the way back.
-              <div className="mt-5">
-                <button
-                  onClick={() => setStep(3)}
-                  className="w-full bg-accent px-8 py-3 text-sm text-white transition-opacity hover:opacity-90"
-                >
-                  Next: get the fit →
-                </button>
-                <button
-                  onClick={() => router.push("/")}
-                  className="mt-2 w-full border border-border px-8 py-3 text-sm text-text-2 transition-colors hover:border-border-strong hover:text-text"
-                >
-                  ← Back to the catalog
-                </button>
-              </div>
-            }
           />
-        </div>
-      )}
+      </div>
 
-      {step === 3 && (
-        <div className="mt-4">
-          <h2 className="mt-1 text-lg text-text">Let&apos;s tailor it</h2>
+      {/* No "Next" button and no way back to the catalogue. Both are removed
+          deliberately: the customer is one decision from buying, and offering
+          a return to the catalogue at that moment is an invitation to leave.
+          Adding a second piece is offered AFTER the cart instead. */}
+      <div className="mt-10 border-t border-border pt-8">
+          <h2 className="text-lg text-text">Your size</h2>
 
           <SizePicker
             sizeMode={spec.sizeMode}
@@ -341,6 +300,12 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
             onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
             onMeasurementsValidChange={setMeasurementsValid}
+          />
+
+          <DetailField
+            spec={spec}
+            category={item.category}
+            onSpecChange={setSpec}
           />
 
           <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
@@ -364,14 +329,13 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             </button>
           </div>
 
-          <button
-            onClick={() => setStep(2)}
-            className="mt-4 text-xs text-text-3 hover:text-text-2"
-          >
-            ← Back to make it yours
-          </button>
-        </div>
-      )}
+      {/* Shaklek+ sits AFTER the decision. It advertises features nobody can
+          buy yet, so it must never stand between the customer and the cart --
+          it used to render between the sliders and the fit. */}
+      <div className="mt-10 border-t border-border pt-8">
+        <ShaklekPlusSignup source="customizer" />
+      </div>
+      </div>
     </div>
   );
 }

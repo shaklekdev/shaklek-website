@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Header from "@/components/Header";
 import DesignCustomizer from "@/components/DesignCustomizer";
 import { catalog } from "@/data/catalog";
@@ -58,11 +57,10 @@ export default async function DesignPage({
           screen, leaving ~60% of the viewport empty. Widened from lg up so the
           two-column customizer has room; the narrower cap still applies on
           phones and tablets. */}
-      <div className="mx-auto w-full max-w-xl px-6 pt-4 lg:max-w-5xl">
-        <Link href="/" className="inline-flex min-h-6 items-center text-xs text-text-3 hover:text-text-2">
-          ← Back to catalog
-        </Link>
-      </div>
+      {/* No "back to catalog" link. Founder's brief: this is the page where
+          someone is about to buy, and offering them the way back to browsing
+          at that moment is an invitation to leave. The header still carries
+          Catalog for anyone who genuinely wants it. */}
       <DesignCustomizer item={item} />
     </div>
   );

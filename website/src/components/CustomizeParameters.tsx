@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
 import { renderParamsForCategory, premiumParamsForCategory } from "@/data/parameterSliders";
@@ -31,6 +30,11 @@ export default function CustomizeParameters({
   previewGradient,
   preloadImages = [],
   deferredPreloads = [],
+  // The "any detail" field used to live here. It now renders on the page
+  // AFTER the size step, because the founder's order is options, then size,
+  // then the optional detail, then add to cart -- the optional thing should
+  // not sit between a customer and the decision they came to make.
+  detailField,
   primaryAction,
 }: {
   spec: DesignSpec;
@@ -45,6 +49,7 @@ export default function CustomizeParameters({
   // Other colourways. Warmed AFTER the visible preview rather than in front of
   // it -- see the tiering note in DesignCustomizer.
   deferredPreloads?: string[];
+  detailField?: React.ReactNode;
   // Rendered directly beneath the choices, above the Shaklek+ note. The CTA
   // used to sit after everything, so getting to checkout meant scrolling past
   // an upsell for features that are not purchasable yet.
@@ -309,45 +314,14 @@ export default function CustomizeParameters({
         </div>
       )}
 
-      {/* Free-text requests. The sliders only cover what we can pre-render;
-          this is the escape hatch for everything else, and unlike the
-          measurement notes in SizePicker it is available in both size modes.
-          Carried through to the tailor's spec sheet via spec.freeformNotes. */}
-      <div className="mt-5">
-        <label
-          htmlFor="customization-notes"
-          className="mb-1 block text-[11px] tracking-wide text-text-3 uppercase"
-        >
-          Any detail to focus on? (optional)
-        </label>
-        <textarea
-          id="customization-notes"
-          value={spec.freeformNotes}
-          onChange={(e) => onSpecChange({ ...spec, freeformNotes: e.target.value })}
-          rows={2}
-          maxLength={500}
-          placeholder={NOTE_EXAMPLES[category] ?? ""}
-          className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
-        />
-        <p className="mt-1.5 text-[11px] text-text-3">
-          A stylist confirms what&apos;s possible before anything is cut.
-        </p>
-      </div>
+      {detailField}
 
       {primaryAction}
 
-      {/* Shaklek+ is a list, not a demo. It previously rendered every locked
-          slider plus a dead subscribe button -- a wall of controls nobody can
-          use, sitting between the customer and checkout. */}
-      {/* Was a dashed box listing locked sliders -- an advert for something
-          the customer cannot have, with nothing to do about it. Now it takes
-          an email for early access, which is the only useful thing it can do
-          before the features exist. */}
-      {premiumParams.length > 0 && (
-        <div className="mt-5">
-          <ShaklekPlusSignup source="customizer" />
-        </div>
-      )}
+      {detailField}
+
+      {primaryAction}
+
 
       </div>
     </div>

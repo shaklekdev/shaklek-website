@@ -23,11 +23,9 @@ export default function ShippingPage() {
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
-        About <strong>ten days</strong>, counted from the moment a stylist
-        confirms your details rather than from checkout. Confirmation usually
-        happens within a day of ordering. Nothing is cut before that
-        conversation, which is the point of made-to-order and also the reason it
-        is not next-day.
+        Approximately <strong>ten working days</strong> from your order.
+        Nothing is cut before your piece is confirmed, which is the point of
+        made-to-order.
       </p>
       <p>
         Ten days is an estimate, not a guarantee. If anything moves, whether fabric

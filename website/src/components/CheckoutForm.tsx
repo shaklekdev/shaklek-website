@@ -24,6 +24,15 @@ export default function CheckoutForm({ total }: { total: number }) {
 
   // One delivery estimate for the ORDER, not one per garment.
   //
+  // "Working days", and no explanation of when the clock starts. The old
+  // wording -- "from stylist confirmation rather than from checkout" -- was
+  // accurate and read like a get-out: it told the customer our internal
+  // process and then used it to qualify the promise. They do not need to know
+  // how the studio works, only when the piece arrives. Founder's call, and
+  // her adviser's point that a delivery time is not a selling point for a
+  // made-to-order garment is why it appears here and in the FAQ and nowhere
+  // in the marketing copy.
+  //
   // The checkout used to print "10 days delivery" under every line, so a
   // three-piece order showed "10 days" three times and read as a month. That
   // is the opposite of what happens and it is the kind of arithmetic a
@@ -36,8 +45,8 @@ export default function CheckoutForm({ total }: { total: number }) {
   const units = items.reduce((n, i) => n + (i.quantity ?? 1), 0);
   const deliveryEstimate =
     units > 2
-      ? "About 10 days from stylist confirmation. An order this size can take a few days longer, and a stylist confirms the date with you before anything is cut."
-      : "About 10 days from stylist confirmation, delivery included.";
+      ? "Approximately 10 working days. An order this size can take a little longer, and we confirm the date with you before anything is cut."
+      : "Approximately 10 working days, delivery included.";
   const { isSignedIn, user } = useUser();
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
   const [email, setEmail] = useState("");
