@@ -144,13 +144,16 @@ export default function PrivacyPage() {
       {adsEnabled ? (
         <>
           <p>
-            <strong>Meta Pixel.</strong> When we advertise on Instagram or
-            Facebook we use Meta&apos;s pixel to see which ads lead to an order,
-            so we are not paying to show ads that do not work. It records that a
-            browser viewed a piece, added one to the cart, started checkout or
-            completed an order, together with the item and the amount. Meta is a
-            joint controller for this data and may use it to measure and target
-            advertising. See{" "}
+            <strong>Meta Pixel, and only if you agree to it.</strong> Nothing is
+            set and nothing is sent to Meta until you choose. When you first
+            visit we ask, with Accept and Decline given equal weight, and if you
+            do not answer the answer is no. When we advertise on Instagram or
+            Facebook and you have accepted, Meta&apos;s pixel lets us see which
+            ads lead to an order, so we are not paying to show ads that do not
+            work. It records that a browser viewed a piece, added one to the
+            cart, started checkout or completed an order, together with the item
+            and the amount. Meta is a joint controller for this data and may use
+            it to measure and target advertising. See{" "}
             <a
               href="https://www.facebook.com/privacy/policy"
               target="_blank"
@@ -168,10 +171,18 @@ export default function PrivacyPage() {
             is switched off.
           </p>
           <p>
+            <strong>You can change your mind at any time.</strong> Use{" "}
+            <strong>Cookie choices</strong> at the bottom of any page. Declining
+            does more than stop future tracking: it deletes the cookies Meta has
+            already set on this browser. The pixel script itself stays in memory
+            until your next page load, but no further events are sent from the
+            moment you decline.
+          </p>
+          <p>
             There are no other advertising, behavioural or affiliate cookies. You
-            can block cookies in your browser, or use its Do Not Track or
-            tracking-prevention setting; sign-in will stop working, but browsing
-            and ordering as a guest will not.
+            can also block cookies in your browser, or use its tracking-prevention
+            setting; sign-in will stop working, but browsing and ordering as a
+            guest will not.
           </p>
         </>
       ) : (

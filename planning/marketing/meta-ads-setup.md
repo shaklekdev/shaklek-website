@@ -90,15 +90,21 @@ NEXT_PUBLIC_LAUNCH_CODE            = WELCOME20
 NEXT_PUBLIC_LAUNCH_PERCENT         = 20
 ```
 
-The last two turn on the launch-offer popup. They ship inert for the same
-reason the pixel does: until the code existed, a popup promising a discount
-would have sent people to "That code isn't valid".
+The last two turn on the launch-offer popup, and it renders only when **both**
+are set. It waits 18 seconds, never appears on cart, checkout, order-confirmed
+or the dashboard, and never shows twice to the same person. They ship inert for
+the same reason the pixel does: until the code existed, a popup promising a
+discount would have sent people to "That code isn't valid".
 
 **The pixel now also requires the visitor's consent.** Setting the id is
-necessary but not sufficient — a marketing cookie is only set after someone
-accepts on the cookie bar, and Decline is a real answer. Expect measured
-conversions to be lower than raw traffic; that gap is consent rate, not a
-broken pixel.
+necessary but not sufficient — nothing is set and nothing reaches Meta until
+someone accepts, Decline carries equal weight, and no answer means no. Declining
+also deletes Meta's `_fbp` and `_fbc`, and "Cookie choices" in the footer lets
+anyone change their mind later.
+
+**Expect measured conversions to be lower than raw traffic. That gap is your
+consent rate, not a broken pixel** — check it before concluding the pixel is
+misconfigured, because the instinct will be to blame the setup.
 
 ### 4. Upload the catalog
 Commerce Manager → Catalogue → Add products → **Scheduled feed** →
