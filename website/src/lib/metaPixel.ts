@@ -17,6 +17,8 @@
  *    decision for the founder and a privacy-policy change, not a default.
  */
 
+import { marketingAllowed } from "@/lib/consent";
+
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 export const pixelEnabled = Boolean(PIXEL_ID);
@@ -33,6 +35,13 @@ function fbq(): Fbq | null {
 /** Standard Meta event. Silently does nothing when the pixel is not configured. */
 export function track(event: string, params?: Record<string, unknown>) {
   try {
+    // Defence in depth. Gating the script already means fbq never exists
+    // without consent, but a visitor who accepts and then declines within the
+    // same page view leaves fbq loaded. Checking here too means the answer is
+    // honoured immediately rather than until the next navigation.
+    // marketingAllowed() reads guarded storage and cannot throw, so rule 1
+    // still holds.
+    if (!marketingAllowed()) return;
     const f = fbq();
     if (!f) return;
     f("track", event, params ?? {});

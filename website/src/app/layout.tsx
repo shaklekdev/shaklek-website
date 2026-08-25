@@ -10,6 +10,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import MetaPixel from "@/components/MetaPixel";
+import CookieConsent from "@/components/CookieConsent";
+import LaunchOffer from "@/components/LaunchOffer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -100,6 +102,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               ships inert and is switched on with an environment variable
               rather than a code change on a live storefront. */}
           <MetaPixel />
+          {/* The consent bar must mount wherever the pixel does: without a way
+              to answer, the gate would simply mean the pixel never fires.
+              LaunchOffer is separate on purpose and grants nothing about
+              cookies. Consent bundled into an unrelated offer is not freely
+              given, and it would only ever cover the few who take it. */}
+          <CookieConsent />
+          <LaunchOffer />
         </body>
       </html>
     </ClerkProvider>

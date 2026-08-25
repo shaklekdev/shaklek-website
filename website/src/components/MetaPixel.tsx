@@ -2,8 +2,9 @@
 
 import Script from "next/script";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PIXEL, pixelEnabled } from "@/lib/metaPixel";
+import { CONSENT_EVENT, marketingAllowed } from "@/lib/consent";
 
 /**
  * Loads the Meta Pixel and fires PageView on client-side navigations.
@@ -18,13 +19,35 @@ import { PIXEL, pixelEnabled } from "@/lib/metaPixel";
  * image. A performance review today found six speculative catalog images
  * already loading ahead of the visible one; adding a tracker in front of it
  * would repeat that mistake for a script no customer benefits from.
+ *
+ * SECOND GATE: consent. A configured pixel id is now necessary but not
+ * sufficient. Disclosing a tracker in the privacy policy is not the same as
+ * being allowed to run it, and EU visitors are not hypothetical here: the
+ * Adaptive Pricing incident this month came from a French billing address.
+ *
+ * `consented` starts FALSE on the server and on the first client render, and
+ * is only raised in an effect. Reading storage during render would both cause
+ * a hydration mismatch and, worse, fire the pixel for one frame before the
+ * answer is known, which is the exact thing this gate exists to prevent.
  */
 export default function MetaPixel() {
   const pathname = usePathname();
   const first = useRef(true);
+  const [consented, setConsented] = useState(false);
+
+  // Read after mount, then follow the visitor's choice live, so accepting the
+  // bar starts the pixel without a reload and declining is honoured at once.
+  useEffect(() => {
+    const sync = () => setConsented(marketingAllowed());
+    sync();
+    window.addEventListener(CONSENT_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_EVENT, sync);
+  }, []);
+
+  const active = pixelEnabled && consented;
 
   useEffect(() => {
-    if (!pixelEnabled) return;
+    if (!active) return;
     // The snippet below fires the initial PageView itself. Skipping the first
     // effect run stops it being counted twice, which would inflate every
     // downstream rate Meta optimises against.
@@ -38,9 +61,12 @@ export default function MetaPixel() {
     } catch {
       /* never break navigation for a tracker */
     }
-  }, [pathname]);
+  }, [pathname, active]);
 
-  if (!pixelEnabled) return null;
+  // Gates the script AND the <noscript> image below it. The no-JS fallback
+  // fires a PageView with no JavaScript at all, so leaving it outside the gate
+  // would track a no-JS visitor regardless of their answer.
+  if (!active) return null;
 
   return (
     <>
