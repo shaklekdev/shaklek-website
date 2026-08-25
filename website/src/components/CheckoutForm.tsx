@@ -176,7 +176,13 @@ export default function CheckoutForm({ total }: { total: number }) {
           <Link href="/sign-in?redirect_url=/checkout" className="font-medium text-text underline">
             Sign in
           </Link>{" "}
-          to save your measurements and track this order — or continue as a guest below.
+          {/* This used to read "to save your measurements and track this
+              order". It did not save them: measurements reached order_items so
+              the tailor always had them, but nothing was written to
+              customers.measurements, and the only real save path was retyping
+              them on /account. Saving is now an explicit opt-in on the design
+              page, so this states what signing in actually does. */}
+          to keep track of this order, or continue as a guest below.
         </div>
       )}
 

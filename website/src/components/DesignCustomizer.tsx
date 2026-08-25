@@ -16,6 +16,7 @@ import { money, track } from "@/lib/metaPixel";
 import CustomizeParameters from "@/components/CustomizeParameters";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
+import SaveMeasurements from "@/components/SaveMeasurements";
 import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
@@ -301,6 +302,17 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
             onMeasurementsValidChange={setMeasurementsValid}
           />
+
+          {/* The highest-intent moment there is: they have just typed their
+              numbers and are about to buy. Renders only when the measurements
+              are valid, and cannot block anything below it. */}
+          {spec.sizeMode === "tailored" && (
+            <SaveMeasurements
+              measurements={spec.measurements}
+              valid={measurementsValid}
+              className="mt-4"
+            />
+          )}
 
           <DetailField
             spec={spec}
