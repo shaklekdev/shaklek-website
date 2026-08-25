@@ -173,6 +173,15 @@ export default function PrivacyPage() {
             is switched off.
           </p>
           <p>
+            To be exact about what that promise covers: it is about what{" "}
+            <em>we</em> send. If you are signed in to Instagram or Facebook,
+            Meta may still recognise you on this site, as it does on any site
+            carrying its pixel. That recognition comes from your relationship
+            with Meta, not from anything Shaklek passes on, and we cannot
+            switch it off on your behalf. Declining above stops our side of it
+            and removes the cookies.
+          </p>
+          <p>
             <strong>You can change your mind at any time.</strong> Use{" "}
             <strong>Cookie choices</strong> at the bottom of any page. Declining
             does more than switch it off from here on: it deletes the cookies
