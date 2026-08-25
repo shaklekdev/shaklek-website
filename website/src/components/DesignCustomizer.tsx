@@ -282,63 +282,66 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             previewGradient={item.gradient}
             preloadImages={eagerPreloads}
             deferredPreloads={deferredPreloads}
-          />
-      </div>
+            primaryAction={
+              <>
+        {/* No "Next" button and no way back to the catalogue. Both are removed
+            deliberately: the customer is one decision from buying, and offering
+            a return to the catalogue at that moment is an invitation to leave.
+            Adding a second piece is offered AFTER the cart instead. */}
+        <div className="mt-8">
 
-      {/* No "Next" button and no way back to the catalogue. Both are removed
-          deliberately: the customer is one decision from buying, and offering
-          a return to the catalogue at that moment is an invitation to leave.
-          Adding a second piece is offered AFTER the cart instead. */}
-      <div className="mt-8">
-
-          <SizePicker
-            sizeMode={spec.sizeMode}
-            size={spec.size}
-            measurements={spec.measurements}
-            initialMeasurements={measurementSeed}
-            onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
-            onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
-            onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
-            onMeasurementsValidChange={setMeasurementsValid}
-          />
-
-          {/* The highest-intent moment there is: they have just typed their
-              numbers and are about to buy. Renders only when the measurements
-              are valid, and cannot block anything below it. */}
-          {spec.sizeMode === "tailored" && (
-            <SaveMeasurements
+            <SizePicker
+              sizeMode={spec.sizeMode}
+              size={spec.size}
               measurements={spec.measurements}
-              valid={measurementsValid}
-              className="mt-4"
+              initialMeasurements={measurementSeed}
+              onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}
+              onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
+              onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
+              onMeasurementsValidChange={setMeasurementsValid}
             />
-          )}
 
-          <DetailField
-            spec={spec}
-            category={item.category}
-            onSpecChange={setSpec}
-          />
+            {/* The highest-intent moment there is: they have just typed their
+                numbers and are about to buy. Renders only when the measurements
+                are valid, and cannot block anything below it. */}
+            {spec.sizeMode === "tailored" && (
+              <SaveMeasurements
+                measurements={spec.measurements}
+                valid={measurementsValid}
+                className="mt-4"
+              />
+            )}
 
-          <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs text-text-3">Total</p>
-              <p className="font-display text-2xl text-text">AED {price}</p>
+            <DetailField
+              spec={spec}
+              category={item.category}
+              onSpecChange={setSpec}
+            />
+
+            <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs text-text-3">Total</p>
+                <p className="font-display text-2xl text-text">AED {price}</p>
+              </div>
+              <button
+                onClick={handleSave}
+                disabled={!spec.constraints.passed || !measurementsValid}
+                className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
+                title={
+                  !spec.constraints.passed
+                    ? "Resolve the flagged request above before continuing"
+                    : !measurementsValid
+                      ? "Add your measurements above before continuing"
+                      : undefined
+                }
+              >
+                {editingId ? "Save changes" : "Add to cart"}
+              </button>
             </div>
-            <button
-              onClick={handleSave}
-              disabled={!spec.constraints.passed || !measurementsValid}
-              className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
-              title={
-                !spec.constraints.passed
-                  ? "Resolve the flagged request above before continuing"
-                  : !measurementsValid
-                    ? "Add your measurements above before continuing"
-                    : undefined
-              }
-            >
-              {editingId ? "Save changes" : "Add to cart"}
-            </button>
-          </div>
+                </div>
+              </>
+            }
+          />
 
       {/* The illustrative-images note, moved down here from directly under the
           preview. It was pushing the parameters further from the photo on a

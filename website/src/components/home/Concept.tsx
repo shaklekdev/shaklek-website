@@ -21,13 +21,37 @@ import { STEPS, OUTCOME } from "@/data/homeContent";
 
 export default function Concept() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 pt-12">
+    <section className="relative w-full overflow-hidden">
+      {/* The tailor's hands as a BACKGROUND rather than a block beside the
+          text. As an inline image it was 428px of a phone screen ahead of the
+          words; shrunk to 190px it read as a stray thumbnail. Behind the
+          section it does the job it was always meant to do -- show the person
+          who makes the garment while the steps explain what they do -- and
+          costs no vertical space at all.
+
+          Washed at 88% because the type sits on top. Legibility over
+          atmosphere: this is the block that explains the business, and the
+          same mistake was already made once with the hero, where 14px of grey
+          over a photograph was unreadable on a phone in daylight. */}
+      <div className="absolute inset-0">
+        <Image
+          src="/marketing/story-tailoring.png"
+          alt=""
+          fill
+          sizes="100vw"
+          quality={55}
+          className="object-cover"
+        />
+      </div>
+      <div className="absolute inset-0 bg-bg/[0.88]" />
+
+      <div className="relative mx-auto w-full max-w-6xl px-6 py-14">
       {/* The block had no heading, so on a phone a visitor met a large
           photograph and three numbered paragraphs with nothing saying what
           they were. Founder: "we don't understand where how it works is
           coming." */}
       <h2 className="mb-6 text-lg text-text">How it works</h2>
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:items-start lg:gap-14">
+      <div className="max-w-2xl">
         <ol className="space-y-7">
           {STEPS.map((s) => (
             <li key={s.n} className="flex gap-4">
@@ -70,25 +94,8 @@ export default function Concept() {
             </div>
           </li>
         </ol>
-
-        {/* The tailor's hands: the only image on the site showing the person
-            who makes the garment, which is the argument these steps are
-            making.
-            On a phone it was `order-first` and 428px tall -- half the screen,
-            ahead of the words, so step one did not appear until y=854. It now
-            follows the steps and is a short landscape crop. Full height only
-            from lg up, where it has its own column and costs nothing. */}
-        <div className="relative aspect-[16/10] max-h-[190px] w-full overflow-hidden bg-card sm:max-h-[240px] lg:sticky lg:top-[110px] lg:aspect-[4/5] lg:max-h-none">
-          <Image
-            src="/marketing/story-tailoring.png"
-            alt="A tailor working on a single piece"
-            fill
-            sizes="(min-width: 1024px) 352px, 100vw"
-            className="object-cover"
-          />
         </div>
       </div>
-
     </section>
   );
 }

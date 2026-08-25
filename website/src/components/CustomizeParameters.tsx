@@ -30,11 +30,6 @@ export default function CustomizeParameters({
   previewGradient,
   preloadImages = [],
   deferredPreloads = [],
-  // The "any detail" field used to live here. It now renders on the page
-  // AFTER the size step, because the founder's order is options, then size,
-  // then the optional detail, then add to cart -- the optional thing should
-  // not sit between a customer and the decision they came to make.
-  detailField,
   primaryAction,
 }: {
   spec: DesignSpec;
@@ -49,7 +44,6 @@ export default function CustomizeParameters({
   // Other colourways. Warmed AFTER the visible preview rather than in front of
   // it -- see the tiering note in DesignCustomizer.
   deferredPreloads?: string[];
-  detailField?: React.ReactNode;
   // Rendered directly beneath the choices, above the Shaklek+ note. The CTA
   // used to sit after everything, so getting to checkout meant scrolling past
   // an upsell for features that are not purchasable yet.
@@ -71,6 +65,27 @@ export default function CustomizeParameters({
   const activeImage = view === "back" && previewBackImage ? previewBackImage : previewImage;
   const canSlide = Boolean(previewBackImage);
   const touchStartX = useRef(0);
+
+  // Other colourways wait until the VISIBLE photo has finished loading.
+  //
+  // Marking them fetchPriority="low" stopped them jumping the queue but did
+  // not stop them competing: on a throttled phone the four slowest requests on
+  // this page were burgundy and navy, none of which the customer had asked
+  // for, at 1.2-1.3s each while the ivory they were looking at waited behind
+  // them. Founder: "it's lagging a lot, it takes a lot of time for the image
+  // to load."
+  //
+  // Now nothing speculative is fetched until the preview is on screen, and
+  // then only when the browser is idle. Switching colour stays instant for
+  // anyone who waited a second before touching a swatch, which is everyone.
+  const [warm, setWarm] = useState(false);
+  function warmOnIdle() {
+    const w = window as typeof window & {
+      requestIdleCallback?: (cb: () => void) => number;
+    };
+    if (w.requestIdleCallback) w.requestIdleCallback(() => setWarm(true));
+    else setTimeout(() => setWarm(true), 400);
+  }
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
@@ -136,6 +151,7 @@ export default function CustomizeParameters({
             className="object-contain"
             priority
             draggable={false}
+            onLoad={warmOnIdle}
           />
         )}
         {canSlide && (
@@ -224,7 +240,7 @@ export default function CustomizeParameters({
             ahead of it. They still arrive well before anyone taps a swatch.
             `loading="eager"` is kept because next/image's lazy path uses an
             IntersectionObserver that never fires for a 0x0 element. */}
-        {deferredPreloads
+        {(warm ? deferredPreloads : [])
           .filter((src) => src !== activeImage && !preloadImages.includes(src))
           .map((src) => (
             <div key={src} className="relative h-1 w-1">
@@ -310,12 +326,11 @@ export default function CustomizeParameters({
         </div>
       )}
 
-      {detailField}
-
-      {primaryAction}
-
-      {detailField}
-
+      {/* Everything below the sliders renders HERE, inside the controls
+          column. The fit, the detail and the cart used to sit outside this
+          grid, so on a desktop they fell underneath the PHOTOGRAPH while the
+          sliders stayed in the right-hand column -- two halves of one decision
+          in two different places. */}
       {primaryAction}
 
 

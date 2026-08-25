@@ -23,6 +23,19 @@ export default function SizeGuidePage() {
       title="Size Guide"
       intro="Body measurements, in centimetres, not the finished garment."
     >
+      {/* The customer's own numbers come first. Founder: the size guide should
+          open with "your measurements", and the regional chart is the
+          reference underneath it, not the other way round. Someone who knows
+          their numbers should never scroll past a table of averages to enter
+          them. */}
+      <SizeGuideMeasurements />
+
+      <h2 className="pt-2 text-base font-medium text-text">Standard sizes</h2>
+      <p>
+        Consolidated from published UAE-market charts, as a reference if you
+        would rather pick a size than measure.
+      </p>
+
       <div className="overflow-x-auto">
         <table className="w-full min-w-[460px] text-left text-sm">
           <caption className="sr-only">
@@ -54,11 +67,6 @@ export default function SizeGuidePage() {
           </tbody>
         </table>
       </div>
-
-      {/* Capture sits ABOVE "how to measure": someone who already knows their
-          numbers should not have to scroll past instructions to enter them,
-          and someone who does not will read on and come back up. */}
-      <SizeGuideMeasurements />
 
       <h2 className="pt-2 text-base font-medium text-text">How to measure</h2>
       <p>

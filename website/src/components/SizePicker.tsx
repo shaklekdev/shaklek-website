@@ -100,12 +100,18 @@ export default function SizePicker({
           first made the whole proposition opt-in. Standard stays one tap away
           for anyone who would rather not measure. Corners squared to match the
           rest of the customizer and the catalog. */}
+      {/* Labelled like every other control on the page. Without it the fit
+          buttons appeared straight after "Length" with nothing between them,
+          so a customer read Cropped / Full / Tailored / Standard as one run of
+          options and did not see that a new section had started. */}
+      <p className="text-[11px] tracking-wide text-text-3 uppercase">Size</p>
+
       {/* Identical to the sliders above -- same grid, same widths, same
           selected colours. They were a different shape and colour, so the fit
           read as a separate kind of control when it is just another choice on
           the same page. The descriptions moved to one line underneath rather
           than being lost. */}
-      <div className="grid grid-cols-2 gap-1.5 lg:max-w-xs">
+      <div className="mt-1.5 grid grid-cols-2 gap-1.5 lg:max-w-xs">
         {(["tailored", "standard"] as const).map((mode) => (
           <button
             key={mode}

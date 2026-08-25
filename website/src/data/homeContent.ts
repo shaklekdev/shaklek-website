@@ -51,12 +51,12 @@ export const STEPS = [
   {
     n: "01",
     title: "Pick your piece",
-    body: "Eight essentials in linen or organic cotton. Shirts and trousers, cut to last past a season. Customise it to your taste: sleeve or leg, short or long, cropped or full, wide or straight. Every combination has its own image, so you can see what you are choosing instead of imagining it.",
+    body: "Eight essentials in linen or organic cotton. Change the sleeve, leg or length and watch the piece change with it.",
   },
   {
     n: "02",
     title: "Your size, or your measurements",
-    body: "Pick XS to XXL, or give us your own numbers and it is cut to those. Same price either way. Tailoring is never an upgrade here.",
+    body: "Send your measurements and it is cut to them, or pick XS to XXL. Same price either way.",
     // The one the whole proposition rests on, so it is allowed to look
     // different from its neighbours rather than being one of three equals.
     emphasis: true,
@@ -64,13 +64,13 @@ export const STEPS = [
   {
     n: "03",
     title: "Add a detail",
-    body: "Anything you would like us to focus on while your piece is made: a wider collar, a shorter sleeve. Tell us in your own words and a stylist confirms what is possible before anything is cut.",
+    body: "A wider collar, a shorter sleeve. Tell us and a stylist confirms it before anything is cut.",
   },
 ];
 
 export const OUTCOME = {
   title: "We take care of the rest",
-  body: "A tailor makes it. One person, one piece, nothing made before you order it.",
+  body: "One tailor, one piece, nothing made before you order it.",
 };
 
 // The three reasons to buy here rather than anywhere else, as tiles under the
