@@ -1,4 +1,5 @@
 import CatalogCard from "@/components/CatalogCard";
+import ProductRailScroller from "./ProductRailScroller";
 import { catalog } from "@/data/catalog";
 
 /** The catalog carousel, extracted so the home-page variants can order the
@@ -17,13 +18,25 @@ export default function ProductRail({
   return (
     <>
       <section className="mx-auto w-full max-w-6xl px-6 pt-12 pb-5">
-        <h2 className="text-lg text-text">{title}</h2>
-        <p className="mt-1 text-[13px] text-text-3">{subtitle}</p>
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="text-lg text-text">{title}</h2>
+            <p className="mt-1 text-[13px] text-text-3">{subtitle}</p>
+          </div>
+          {/* The count, stated. A phone shows one card and a sliver of the
+              next, so eight pieces read as two -- which is what the founder
+              was told by real visitors. The arrows fix the mechanism; this
+              fixes the impression, before anyone has scrolled at all. */}
+          <p className="shrink-0 text-[13px] text-text-3">
+            {catalog.length} pieces
+          </p>
+        </div>
       </section>
 
-      {/* Carousel. The edge fade hints there is more to scroll. */}
+      {/* Carousel. The edge fade alone was not enough of a hint -- see
+          ProductRailScroller. */}
       <section className="relative w-full pb-16">
-        <div className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-3 sm:px-[max(1.5rem,calc((100vw-72rem)/2))]">
+        <ProductRailScroller label="Catalogue">
           {catalog.map((item, i) => (
             <div
               key={item.slug}
@@ -36,9 +49,7 @@ export default function ProductRail({
               <CatalogCard item={item} eager={i < 2} />
             </div>
           ))}
-        </div>
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-bg to-transparent sm:hidden" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-bg to-transparent sm:hidden" />
+        </ProductRailScroller>
       </section>
     </>
   );
