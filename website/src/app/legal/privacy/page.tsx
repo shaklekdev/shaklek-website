@@ -52,7 +52,7 @@ export default function PrivacyPage() {
             under Cookies below. There is no other analytics on this site.
           </>
         ) : (
-          <>We run no advertising trackers, and there is no analytics on this site.</>
+          <>We run no advertising cookies, and there is no analytics on this site.</>
         )}
       </p>
 
@@ -175,16 +175,16 @@ export default function PrivacyPage() {
           <p>
             <strong>You can change your mind at any time.</strong> Use{" "}
             <strong>Cookie choices</strong> at the bottom of any page. Declining
-            does more than stop future tracking: it deletes the cookies Meta has
-            already set on this browser. The pixel script itself stays in memory
+            does more than switch it off from here on: it deletes the cookies
+            Meta has already set on this browser. The pixel script itself stays in memory
             until your next page load, but no further events are sent from the
             moment you decline.
           </p>
           <p>
             There are no other advertising, behavioural or affiliate cookies. You
-            can also block cookies in your browser, or use its tracking-prevention
-            setting; sign-in will stop working, but browsing and ordering as a
-            guest will not.
+            can also block cookies in your browser, or use its privacy settings;
+            sign-in will stop working, but browsing and ordering as a guest will
+            not.
           </p>
         </>
       ) : (
