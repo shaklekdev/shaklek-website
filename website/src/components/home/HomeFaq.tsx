@@ -94,14 +94,10 @@ export default function HomeFaq() {
             </details>
           ))}
         </div>
-        <p className="mt-6 text-[13px]">
-          <Link
-            href="/faq"
-            className="text-text-2 underline underline-offset-4 hover:text-text"
-          >
-            More questions
-          </Link>
-        </p>
+        {/* No "More questions" link. The point of answering here is that the
+            customer never leaves -- sending them to /faq and expecting them to
+            find their way back to the catalogue is the behaviour this section
+            exists to remove. Founder's call. */}
       </div>
     </section>
   );

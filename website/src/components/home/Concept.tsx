@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { STEPS, OUTCOME, BENEFITS } from "@/data/homeContent";
+import { STEPS, OUTCOME } from "@/data/homeContent";
 
 /**
  * The concept, immediately after the banner: steps on the left, the tailor's
@@ -19,44 +19,14 @@ import { STEPS, OUTCOME, BENEFITS } from "@/data/homeContent";
  * read as work.
  */
 
-function BenefitIcon({ name }: { name: string }) {
-  const common = {
-    width: 22,
-    height: 22,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.5,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-  };
-  if (name === "tag")
-    return (
-      <svg {...common}>
-        <path d="M3 12.5V4a1 1 0 0 1 1-1h8.5L21 11.5 12.5 20 3 12.5Z" />
-        <circle cx="7.5" cy="7.5" r="1.3" />
-      </svg>
-    );
-  if (name === "leaf")
-    return (
-      <svg {...common}>
-        <path d="M4 20c0-8 5-14 16-15 0 11-5.5 16-13 16H4Z" />
-        <path d="M9 20c1.5-4.5 4-7.5 7-9.5" />
-      </svg>
-    );
-  return (
-    <svg {...common}>
-      <path d="M6 3v7a6 6 0 0 0 12 0V3" />
-      <path d="M12 16v5" />
-      <circle cx="12" cy="21" r="1.2" />
-    </svg>
-  );
-}
-
 export default function Concept() {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 pt-12">
+      {/* The block had no heading, so on a phone a visitor met a large
+          photograph and three numbered paragraphs with nothing saying what
+          they were. Founder: "we don't understand where how it works is
+          coming." */}
+      <h2 className="mb-6 text-lg text-text">How it works</h2>
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:items-start lg:gap-14">
         <ol className="space-y-7">
           {STEPS.map((s) => (
@@ -101,12 +71,14 @@ export default function Concept() {
           </li>
         </ol>
 
-        {/* The tailor's hands. Already earning its place on /our-story, and it
-            is the only image on the site showing the person who makes the
-            garment -- which is the whole argument these three steps are
-            making. Ordered second in the DOM so a phone reads the steps
-            first and does not push them below an image. */}
-        <div className="relative order-first aspect-[4/5] w-full overflow-hidden bg-card lg:order-none lg:sticky lg:top-[110px]">
+        {/* The tailor's hands: the only image on the site showing the person
+            who makes the garment, which is the argument these steps are
+            making.
+            On a phone it was `order-first` and 428px tall -- half the screen,
+            ahead of the words, so step one did not appear until y=854. It now
+            follows the steps and is a short landscape crop. Full height only
+            from lg up, where it has its own column and costs nothing. */}
+        <div className="relative aspect-[16/10] max-h-[190px] w-full overflow-hidden bg-card sm:max-h-[240px] lg:sticky lg:top-[110px] lg:aspect-[4/5] lg:max-h-none">
           <Image
             src="/marketing/story-tailoring.png"
             alt="A tailor working on a single piece"
@@ -117,21 +89,6 @@ export default function Concept() {
         </div>
       </div>
 
-      <ul className="mt-12 grid gap-6 border-t border-border pt-10 sm:grid-cols-3 sm:gap-8">
-        {BENEFITS.map((b) => (
-          <li key={b.k} className="flex gap-3">
-            <span className="mt-0.5 shrink-0 text-gold">
-              <BenefitIcon name={b.icon} />
-            </span>
-            <div>
-              <p className="font-display text-[15px] text-text">{b.k}</p>
-              <p className="mt-1 text-[13px] leading-relaxed text-text-2">
-                {b.v}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }
