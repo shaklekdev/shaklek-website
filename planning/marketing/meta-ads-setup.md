@@ -52,6 +52,20 @@ email, which is your decision and a privacy-policy change, not a default.
 
 ---
 
+## Promotion codes, as they stand (2026-08-25)
+
+| code | state | terms |
+|---|---|---|
+| `WELCOME20` | **live** | 20% off, first order only, 500 redemptions, expires 2026-11-23 |
+| `TEST99` | **deactivated** | was 99% off, uncapped, no expiry, repeat use allowed |
+
+TEST99 sold a 429 AED garment for 4.29 AED to anyone who typed it, unlimited
+times, forever, on live cards. It was deactivated once the real payment test
+had been run against it. **Do not reactivate it to test with** — create a
+capped, expiring code instead, or use the sandbox account.
+
+---
+
 ## Your part, in order
 
 ### 1. Create the Pixel (Events Manager)
@@ -63,13 +77,28 @@ Add `shaklek.com`, choose the **meta-tag** method, copy the token.
 Note: use `www.shaklek.com` in the ad links — the apex does not serve deep
 links.
 
-### 3. Set two variables in Amplify, then redeploy
+### 3. Set the variables in Amplify, then redeploy
+
+Every switch on the site, in one place. All are read in the browser, so all
+must start with `NEXT_PUBLIC_`, and **all require a redeploy** — they are baked
+in at build time.
+
 ```
-NEXT_PUBLIC_META_PIXEL_ID        = <the 15-digit id>
+NEXT_PUBLIC_META_PIXEL_ID          = <the 15-digit id>
 NEXT_PUBLIC_FB_DOMAIN_VERIFICATION = <the meta-tag token>
+NEXT_PUBLIC_LAUNCH_CODE            = WELCOME20
+NEXT_PUBLIC_LAUNCH_PERCENT         = 20
 ```
-Both must start with `NEXT_PUBLIC_` — they are read in the browser.
-**A redeploy is required**; these are baked in at build time.
+
+The last two turn on the launch-offer popup. They ship inert for the same
+reason the pixel does: until the code existed, a popup promising a discount
+would have sent people to "That code isn't valid".
+
+**The pixel now also requires the visitor's consent.** Setting the id is
+necessary but not sufficient — a marketing cookie is only set after someone
+accepts on the cookie bar, and Decline is a real answer. Expect measured
+conversions to be lower than raw traffic; that gap is consent rate, not a
+broken pixel.
 
 ### 4. Upload the catalog
 Commerce Manager → Catalogue → Add products → **Scheduled feed** →
