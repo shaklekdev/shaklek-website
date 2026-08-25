@@ -54,15 +54,13 @@ export default function Hero({ compact = false }: { compact?: boolean }) {
             : "min-h-[240px] py-8 sm:min-h-[40vh] sm:py-10"
         }`}
       >
-        <h1 className="text-[28px] leading-tight text-text">
-          {HERO.headline[0]}
-          <br />
-          {HERO.headline[1]}
+        {/* One line. The founder replaced "Your look, your way." plus a
+            four-clause subtitle here on 2026-08-25: too many words separated
+            by commas to read on a phone. Do not restore the old pair without
+            her -- removing it was a decision, not a regression. */}
+        <h1 className="font-display mx-auto max-w-xl text-[22px] leading-snug text-text sm:text-[26px]">
+          {HERO.line}
         </h1>
-        <p className="font-display mx-auto mt-3 max-w-md text-[16px] leading-relaxed font-normal text-text-2">
-          {HERO.subtitle}
-        </p>
-
       </div>
     </section>
   );

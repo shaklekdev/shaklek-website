@@ -1,5 +1,4 @@
 import CatalogCard from "@/components/CatalogCard";
-import ProductRailScroller from "./ProductRailScroller";
 import { catalog } from "@/data/catalog";
 
 /** The catalog carousel, extracted so the home-page variants can order the
@@ -17,39 +16,30 @@ export default function ProductRail({
 }) {
   return (
     <>
-      <section className="mx-auto w-full max-w-6xl px-6 pt-12 pb-5">
+      <section className="mx-auto w-full max-w-6xl px-6 pt-14 pb-5">
         <div className="flex items-end justify-between gap-4">
           <div>
             <h2 className="text-lg text-text">{title}</h2>
             <p className="mt-1 text-[13px] text-text-3">{subtitle}</p>
           </div>
-          {/* The count, stated. A phone shows one card and a sliver of the
-              next, so eight pieces read as two -- which is what the founder
-              was told by real visitors. The arrows fix the mechanism; this
-              fixes the impression, before anyone has scrolled at all. */}
           <p className="shrink-0 text-[13px] text-text-3">
             {catalog.length} pieces
           </p>
         </div>
       </section>
 
-      {/* Carousel. The edge fade alone was not enough of a hint -- see
-          ProductRailScroller. */}
-      <section className="relative w-full pb-16">
-        <ProductRailScroller label="Catalogue">
+      {/* A GRID, not a carousel. Arrows were added on 2026-08-25 and the
+          founder's follow-up was that a carousel is not obvious to everyone --
+          which matches what her own visitors told her, that eight pieces read
+          as two. A grid has no hidden state: everything is on the page, and
+          two columns on a phone means a customer sees four garments without
+          touching anything. Nothing to discover, nothing to swipe. */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-16">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
           {catalog.map((item, i) => (
-            <div
-              key={item.slug}
-              className="w-[220px] shrink-0 snap-start sm:w-[248px]"
-            >
-              {/* The first two cards are above the fold at every width, so they
-                  should not wait for the lazy-load intersection check. `eager`,
-                  not `priority` -- priority would inject a preload competing
-                  with the hero, which is the LCP element. */}
-              <CatalogCard item={item} eager={i < 2} />
-            </div>
+            <CatalogCard key={item.slug} item={item} eager={i < 4} />
           ))}
-        </ProductRailScroller>
+        </div>
       </section>
     </>
   );

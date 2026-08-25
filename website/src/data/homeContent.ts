@@ -1,3 +1,5 @@
+import { catalog } from "@/data/catalog";
+
 // All home-page copy in one place.
 //
 // Written 2026-08-25 after the founder corrected a first attempt that had
@@ -18,59 +20,78 @@
 // again, that is her call and not a copy improvement.
 
 export const HERO = {
-  headline: ["Your look,", "your way."],
-  // The founder's line. "Elegant" became "timeless" at her direction, because
-  // timelessness is the positioning: essentials that outlast a season, as
-  // opposed to fast fashion.
-  subtitle:
-    "Timeless essentials, customizable to your taste, friendly to your skin, shaped to your body.",
+  // One line, at the founder's direction on 2026-08-25. It replaced the
+  // headline "Your look, your way." plus a four-clause subtitle, which she
+  // judged too many words separated by commas to read on a phone.
+  //
+  // NOTE FOR WHOEVER TOUCHES THIS NEXT: "Your look, your way" was her own
+  // line and had been restored twice. Removing it was her explicit decision,
+  // not an edit to undo. /our-story still explains that Shaklek MEANS "your
+  // way" in Arabic, which now reads as a fact about the name rather than an
+  // echo of the hero.
+  line: "Customisable pieces for you, by you, at the same price either way.",
 };
 
-// The funnel.
+// The concept, on the page the visitor lands on.
 //
-// THREE numbered steps, not four, and the count is not a style choice: the
-// design page's own stepper prints "Step N of 3" (TOTAL_STEPS in
-// DesignCustomizer.tsx), where step 1 is choosing the piece on the catalog. A
-// home page promising four steps and a customizer counting three is the site
-// contradicting itself about the one thing the visitor is trying to learn.
+// Moved here from /how-it-works on 2026-08-25, and the tab removed. The
+// founder's reasoning, which is better than the layout argument: an explainer
+// tab is a click that leads somewhere a customer cannot order from, so it
+// costs a visitor and returns nothing.
 //
-// What the tailor does afterwards is real and belongs on the page -- it is
-// most of why this brand exists -- but it is not a step the customer takes, so
-// it is rendered as an outcome rather than given a number.
+// THREE steps, not five, and the order is deliberate:
+//   1. basic, and the same as any shop -- nothing to learn
+//   2. the measurements, which are both the business model and the thing that
+//      makes this different from a rack
+//   3. optional, and the competitive edge
+// What the tailor does afterwards is real but is NOT a step, because the
+// customer has nothing left to do by then. Three reads as quick and
+// deliberate; five reads as work.
 export const STEPS = [
   {
     n: "01",
-    title: "Choose your piece",
-    body: "Timeless essentials in organic cotton or linen.",
+    title: "Pick your piece",
+    body: "Eight essentials in linen or organic cotton. Shirts and trousers, cut to last past a season. Customise it to your taste: sleeve or leg, short or long, cropped or full, wide or straight. Every combination has its own image, so you can see what you are choosing instead of imagining it.",
   },
   {
     n: "02",
-    title: "Make it yours",
-    // NOT "a real photograph". The catalog images are generated, not
-    // photographed, so claiming photography is a false statement about the
-    // product to someone deciding whether to spend AED 389 -- and it is the
-    // exact claim that makes a customer feel cheated if the garment differs.
-    // Founder's call, 2026-08-25. Describe what the customer DOES instead.
-    body: "Sleeve, length, leg, width, colour, and more to come. Customize your piece and watch it change.",
+    title: "Your size, or your measurements",
+    body: "Pick XS to XXL, or give us your own numbers and it is cut to those. Same price either way. Tailoring is never an upgrade here.",
+    // The one the whole proposition rests on, so it is allowed to look
+    // different from its neighbours rather than being one of three equals.
+    emphasis: true,
   },
   {
     n: "03",
-    title: "Give your measurements",
-    // Measurements first, standard size second -- the founder's instruction,
-    // and it is not a wording preference. Cutting to a real body is the whole
-    // reason this brand charges what it does; leading with "pick XS to XXL"
-    // described Shaklek as a shop that also does alterations. Tailored is
-    // already the DEFAULT in the size picker, so listing it second also
-    // disagreed with what the product actually does.
-    body: "Send your own measurements, or pick a standard size. Same price either way.",
+    title: "Add a detail",
+    body: "Anything you would like us to focus on while your piece is made: a wider collar, a shorter sleeve. Tell us in your own words and a stylist confirms what is possible before anything is cut.",
   },
 ];
 
 export const OUTCOME = {
-  n: "Then",
-  title: "A tailor makes it",
-  body: "Every piece you pick is tailored only for you. 10 days to your door.",
+  title: "We take care of the rest",
+  body: "A tailor makes it. One person, one piece, nothing made before you order it.",
 };
+
+// The three reasons to buy here rather than anywhere else, as tiles under the
+// steps. Kept to three for the same reason the steps are three.
+export const BENEFITS = [
+  {
+    k: `From AED ${Math.min(...catalog.map((i) => i.price))}`,
+    v: "One price per piece type. Fabric and every option included.",
+    icon: "tag",
+  },
+  {
+    k: "Nothing on a shelf",
+    v: "Your piece does not exist until you ask for it. No overproduction, no waste.",
+    icon: "leaf",
+  },
+  {
+    k: "Cotton and linen only",
+    v: "Breathable natural fabric against your skin. Never synthetic.",
+    icon: "thread",
+  },
+];
 
 // Why this deserves to exist next to everything else in the market. Each one
 // is a thing a customer gets that a rack of ready-to-wear cannot give them.

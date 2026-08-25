@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Hero from "@/components/home/Hero";
-import FunnelSteps from "@/components/home/FunnelSteps";
+import Concept from "@/components/home/Concept";
 import ProductRail from "@/components/home/ProductRail";
+import HomeFaq from "@/components/home/HomeFaq";
 import {
   pageMetadata,
   SITE_DESCRIPTION,
@@ -16,37 +17,34 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     path: "/",
   }),
-  // Absolute so the root layout's "%s — Shaklek" template doesn't append a
-  // second "Shaklek" to a title that already carries the brand.
   title: { absolute: `${SITE_NAME} — ${SITE_TAGLINE}` },
 };
 
 /**
- * The home page: say what this is, show the three steps, show the clothes.
+ * The home page, restructured 2026-08-25 to the founder's brief.
  *
- * Two things were built here on 2026-08-25 and then removed by the founder,
- * both deliberately, and neither should be reinstated without her:
+ * Banner, then the concept in three steps beside the tailor's hands, then the
+ * three reasons to buy here, then the clothes in a grid, then five questions
+ * answered in place.
  *
- * 1. A live customizer (sleeve toggle + colour dots on a real shirt). Her
- *    call: "I don't like the make it yours on the first one, it shows too
- *    messy. Customization on second page." Customizing belongs on /design,
- *    where there is room to do it properly and where the customer has already
- *    chosen a garment to customize.
+ * The through-line is that a visitor should never have to leave this page to
+ * understand the offer or to have a question answered. /how-it-works is gone
+ * from the menu because it was a click that led somewhere nobody can order
+ * from; the FAQ is inline for the same reason.
  *
- * 2. A value band repeating the brand tenets under the catalog. Her call: it
- *    duplicates what the top of the page and /our-story already say. The
- *    components still exist (TryItDemo, ValueBand) but nothing imports them.
- *
- * What is left is the shortest path that still answers the feedback: a visitor
- * learns what Shaklek is, what the three steps are, and sees the clothes.
+ * Delivery time is deliberately absent from everything above the FAQ. Speed is
+ * the wrong headline for a made-to-order garment -- it reads as carelessly
+ * made -- so it appears once in the FAQ and again at checkout, where it is a
+ * fact someone needs before paying rather than a selling point.
  */
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <Hero />
-      <FunnelSteps dense />
+      <Concept />
       <ProductRail />
+      <HomeFaq />
     </div>
   );
 }

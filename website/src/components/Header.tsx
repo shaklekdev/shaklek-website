@@ -6,9 +6,17 @@ import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
 
+// "How it works" was removed from the menu on 2026-08-25 and its content moved
+// onto the home page. Two reasons, both the founder's: it was a click that led
+// somewhere a customer cannot order from, and the concept needs to land on the
+// page they arrive on rather than behind a tab most people never open.
+//
+// "Size custom" replaces it. That page is where a customer can save their
+// measurements, which is the thing this business actually runs on -- so it
+// earns a menu slot in a way an explainer never did.
 const NAV_LINKS = [
   { href: "/", label: "Catalog" },
-  { href: "/how-it-works", label: "How it works" },
+  { href: "/size-guide", label: "Size custom" },
   { href: "/our-story", label: "Our story" },
 ];
 
@@ -54,7 +62,7 @@ export default function Header() {
   // background is #ffffff, so at rest the two render the same pixels.
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 sm:py-6">
         <Link href="/" className="flex flex-col items-center leading-none">
           <span className="font-display text-2xl font-light tracking-[3px] text-text">
             Shaklek
@@ -99,8 +107,31 @@ export default function Header() {
               </UserButton.MenuItems>
             </UserButton>
           ) : (
-            <Link href="/sign-in" className="hidden hover:text-text transition-colors sm:inline">
-              Sign in
+            /* An icon, not the words "Sign in". The header carried three text
+               links plus "Sign in" plus a cart, and the founder's note was that
+               it is too much text competing for attention on a phone. A person
+               glyph reads instantly and matches the cart beside it. */
+            <Link
+              href="/sign-in"
+              aria-label="Sign in"
+              title="Sign in"
+              className="flex h-6 w-6 items-center justify-center text-text transition-colors hover:text-text-2"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle
+                  cx="12"
+                  cy="8"
+                  r="3.5"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                />
+                <path
+                  d="M5 20c0-4 3.2-6.5 7-6.5s7 2.5 7 6.5"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+              </svg>
             </Link>
           )}
           <Link
