@@ -290,6 +290,39 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     bytes.
   </div>
 
+  <h2>Order data — audited 2026-08-26</h2>
+  <p class="section-note">
+    The founder's line: <em>"customer details for a specific order — we cannot
+    lose this."</em> So this was audited against the live production database
+    rather than reasoned about. Presence was checked, never values: no email,
+    name, address or measurement was printed.
+  </p>
+  <table>
+    <tr><th>Check</th><th>Result</th></tr>
+    <tr><td>Orders / line items</td><td>11 orders, 13 line items, <strong>zero orders with no line items</strong></td></tr>
+    <tr><td><strong>Every garment makeable</strong></td><td><strong>0 unmakeable.</strong> Every line carries a size or the customer's own measurements — the invariant that decides whether a tailor can cut it</td></tr>
+    <tr><td>Colour / fabric / options</td><td>Present on <strong>all 13</strong> lines, with 4–5 recorded customisation changes each</td></tr>
+    <tr><td>Paid orders</td><td>Both carry <strong>full shipping details</strong> — address, city, country, phone, name — plus email</td></tr>
+    <tr><td>Email</td><td>Present on <strong>every</strong> order</td></tr>
+    <tr><td>⚠️ One paid order has no address</td><td><code>bc7bbb09</code>, from 2026-08-22. It <strong>predates</strong> address capture, which shipped that same day. It was refunded, so nobody is waiting on it</td></tr>
+    <tr><td>⚠️ Reference images</td><td><strong>Never stored.</strong> No order carries one yet, so it has not bitten — but a paid upload order would reach the tailor as a boolean</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>The failure mode nothing was watching for.</strong> An order is only
+    marked paid, and only gets its shipping address, when Stripe's webhook
+    reaches us. Stripe retries a failing webhook for about three days and then
+    stops. If it never lands, <strong>the customer has been charged and our
+    database still says <code>pending_payment</code> with nowhere to ship
+    to</strong> — money taken, order invisible. CloudWatch cannot see this: the
+    site is perfectly healthy, it is the data that is wrong.
+    <br><br>
+    <code>scripts/reconcile-orders.mjs</code> now checks every order against
+    Stripe and reports any payment without a complete, shippable order. It is
+    read-only and prints ids only. <strong>Run it after any incident touching
+    the webhook, and periodically regardless.</strong>
+  </div>
+
   <h2>How a purchase actually flows</h2>
   <ol class="flow">
     <li><span class="flow-status built">live</span> Browser loads <code>www.shaklek.com</code> → Amplify serves the pre-rendered home page and catalogue from its CDN edge.</li>
