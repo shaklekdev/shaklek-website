@@ -30,6 +30,17 @@ drawing **Gemini in the live request path** when Gemini has never been called
 at runtime. Every component still read "not deployed" while the site was taking
 real cards. A map that lies is worse than no map, because people act on it.
 
+> ⚠️ **A NEW ENVIRONMENT VARIABLE TAKES TWO STEPS, AND THE CONSOLE IS ONLY
+> ONE OF THEM.** Amplify's build spec carries an explicit allowlist:
+> `env | grep -e DATABASE_URL -e STRIPE_SECRET_KEY … >> .env.production`.
+> A variable set in the console but missing from that grep **never reaches the
+> running app** — `process.env.YOURS` is simply undefined in production while
+> the console shows it set. Cost an hour on 2026-08-26 with `RECONCILE_TOKEN`:
+> the route 404'd against a correct token and every other explanation was
+> checked first. Read the spec with
+> `aws amplify get-app --app-id dqcptedylrif0 --query 'app.buildSpec'`, add
+> `-e YOUR_VAR`, and **redeploy** — the spec is read at build time.
+
 **Verify, do not inherit.** Infrastructure state lives outside git — the
 Amplify console, the Stripe dashboard, the AWS account — so a sentence about it
 goes stale with no diff to notice. The same file also claimed for days that the
