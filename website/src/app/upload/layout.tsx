@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Upload your own design",
   description:
-    "Send us a sketch, a screenshot or a photo of something you love, and we will cut it to your measurements in cotton or linen.",
+    "Send us a sketch, a screenshot or a photo of something you love, and we will cut it to your measurements in 100% linen.",
   path: "/upload",
 });
 

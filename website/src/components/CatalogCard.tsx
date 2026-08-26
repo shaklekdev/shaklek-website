@@ -76,12 +76,18 @@ export default function CatalogCard({
           the founder's point is that visitors assume the same here. The whole
           proposition is that the piece changes, and nothing on the card said
           so. It goes to the same place tapping the photo does; it exists to
-          make the offer legible, not to add a route. */}
+          make the offer legible, not to add a route.
+
+          IT HAS TO CONTAIN THE WORD "CUSTOMISE". This read "Make it yours",
+          which is the better line but does not say what the button does --
+          the founder's report was that visitors still assumed we sell the one
+          garment in the photograph. The plain verb is worth more here than the
+          nicer phrase, because the whole problem is comprehension. */}
       <Link
         href={href}
         className="mt-3 block border border-border-strong px-3 py-2 text-center text-[12px] text-text transition-colors hover:border-text hover:bg-text hover:text-white"
       >
-        Make it yours
+        Customise this piece
       </Link>
     </div>
   );

@@ -148,8 +148,8 @@ export default function TermsPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Care</h2>
       <p>
-        Cotton and linen behave like natural fibres: linen creases, and both
-        soften with washing. Follow the care label. Damage from washing against
+        Linen behaves like the natural fibre it is: it creases, and it softens
+        with washing. Follow the care label. Damage from washing against
         the label, alteration by another tailor, or ordinary wear is not covered
         by the fit guarantee.
       </p>

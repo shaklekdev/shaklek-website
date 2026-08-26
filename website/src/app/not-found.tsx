@@ -13,7 +13,7 @@ export default function NotFound() {
           may have moved.
         </p>
         <Link
-          href="/"
+          href="/#catalog"
           className="mt-8 rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
         >
           Back to catalog

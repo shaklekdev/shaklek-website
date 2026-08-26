@@ -9,7 +9,7 @@ import { colors, sizes } from "@/data/colors";
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
   description:
-    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in sustainable cotton and linen, made in the UAE.",
+    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in 100% linen, made in the UAE.",
   path: "/our-story",
   images: [
     {
@@ -67,7 +67,7 @@ const tenetGroups = [
     items: [
       {
         title: "Materials that respect your skin",
-        body: "Cotton or linen, always, nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
+        body: "Natural fibre, always, nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
       },
       {
         // "Timeless" folded in here at the founder's direction rather than

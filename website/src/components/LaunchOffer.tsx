@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // The launch offer popup: give an email, get the welcome code.
@@ -109,13 +110,17 @@ export default function LaunchOffer() {
             <p className="mt-4 border border-border-strong bg-surface-2 px-4 py-3 text-center text-xl tracking-widest text-text">
               {CODE}
             </p>
-            <button
-              type="button"
+            {/* Goes to the catalogue, not just away. Every other "Start
+                designing" on the site points at /#catalog; this one only
+                closed the dialog, so on /faq or /shipping it handed back the
+                page the visitor was already stuck on. */}
+            <Link
+              href="/#catalog"
               onClick={close}
-              className="mt-4 w-full bg-accent px-4 py-3 text-sm text-white hover:bg-accent-light"
+              className="mt-4 block w-full bg-accent px-4 py-3 text-center text-sm text-white hover:bg-accent-light"
             >
               Start designing
-            </button>
+            </Link>
           </>
         ) : (
           <>

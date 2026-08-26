@@ -80,9 +80,10 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What fabrics do you use?",
     a: (
       <>
-        Organic cotton and linen, and nothing else. Both are natural fibres that
-        breathe in Gulf heat. Linen creases. That is the fibre behaving
-        normally, not a fault. Both soften with washing.
+        100% linen today, and nothing else. It is a natural fibre that breathes
+        in Gulf heat and softens with every wash. Linen creases. That is the
+        fibre behaving normally, not a fault. Organic cotton is coming; we
+        would rather not list it until we can cut it.
       </>
     ),
   },

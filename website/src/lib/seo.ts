@@ -10,7 +10,7 @@ export const SITE_NAME = "Shaklek";
 export const SITE_TAGLINE = "Your look, your way";
 
 export const SITE_DESCRIPTION =
-  "Design your own unique piece with Shaklek, cut by a real tailor in sustainable cotton and linen.";
+  "Design your own unique piece with Shaklek, cut by a real tailor in 100% linen.";
 
 /** Absolute URL on the canonical host, for anywhere Next won't resolve a relative one. */
 export function absoluteUrl(path: string): string {
@@ -30,7 +30,7 @@ export const DEFAULT_OG_IMAGE: OgImage = {
   url: "/marketing/hero-banner.png",
   width: 1584,
   height: 672,
-  alt: "Shaklek made-to-order clothing, cut by a tailor in cotton and linen.",
+  alt: "Shaklek made-to-order clothing, cut by a tailor in 100% linen.",
 };
 
 /**

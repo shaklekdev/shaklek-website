@@ -46,7 +46,7 @@ export async function GET() {
       const back = item.colorImages?.[c.name]?.back;
 
       const description =
-        `${item.descriptor}. Made to order in organic cotton or linen, cut to your ` +
+        `${item.descriptor}. Made to order in 100% linen, cut to your ` +
         `measurements or a standard size for the same price. Choose the cut, the ` +
         `length and the colour, and a tailor makes it for you in about 10 days. ` +
         `Delivered across the UAE.`;
@@ -69,7 +69,7 @@ export async function GET() {
           `      <g:availability>in stock</g:availability>`,
           `      <g:price>${item.price}.00 AED</g:price>`,
           `      <g:color>${esc(c.name)}</g:color>`,
-          `      <g:material>Organic cotton or linen</g:material>`,
+          `      <g:material>100% linen</g:material>`,
           `      <g:product_type>${esc(`Womenswear &gt; ${item.category}`)}</g:product_type>`,
           `      <g:google_product_category>Apparel &amp; Accessories &gt; Clothing</g:google_product_category>`,
           "    </item>",
