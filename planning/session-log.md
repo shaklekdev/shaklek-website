@@ -18,6 +18,78 @@ Rules that make this work:
 
 ## Active claims
 
+### Session G — sizing, fit questions, and a two-commit production outage (2026-08-26)
+
+**Status: DONE, deployed, verified on production (job 193, `9f8d143`).**
+
+⚠️ **I BROKE PRODUCTION FOR TWO COMMITS AND EVERY LOCAL CHECK SAID GREEN.**
+Read this part before anything else in this entry.
+
+`website/src/data/fabrics.ts` was Session F's, on disk and never committed. I
+staged `designSpec.ts` and `api/orders/route.ts` for my own changes **without
+running `git diff` on them first** — the rule at the top of this file — so
+their imports of `@/data/fabrics` went to main while the file did not. Amplify
+builds a git CHECKOUT; `npm run build` reads the WORKING TREE, where the file
+exists. Jobs 191 and 192 failed, the site kept serving the old version, and I
+only looked because I happened to check job 192.
+
+Two guards now run before `next build`, so this class cannot recur silently:
+
+- **`scripts/verify-imports.mjs`** — every `@/` import in every TRACKED file
+  must resolve to a TRACKED file. Replayed against the broken commit it names
+  exactly the two errors Amplify reported. **In a shared working tree, "on disk
+  but not in git" is a normal state, so a green local build was never evidence.**
+- **`scripts/test-techpack-origins.mjs`** — see below.
+
+**Lesson, for whoever is next: `npm run build` passing does not mean the deploy
+will pass, and a failed deploy is silent.** Check the job.
+
+#### Shipped
+
+- **Standard sizing is the default** (`designSpec.ts`). It was `tailored`, and
+  Add to cart is disabled until four body measurements validate — so every
+  visitor was asked for a tape measure before the site would sell anything.
+  Tailored is now the opt-in and its button reads **"Tailored (free)"**.
+- **Trousers and skirts are sold as EU numbers** — 34 to 44 — tops stay XS–XXL.
+  A LABELLING RULE, NOT A SECOND SIZE SYSTEM: one chart, one set of body
+  measurements, and `sizeChart.ts` grew `sizeLabel`/`sizesForCategory`/
+  `rowForSize`. The stored value is the label the customer saw, and `rowForSize`
+  resolves a letter OR a number so pre-2026-08-26 orders still find their row.
+  ⚠️ **EU 32 was NOT added** — it is below the current smallest size and needs a
+  body-measurement row the published charts do not cover. Founder's call, open.
+- **"Anything usually wrong with this size?"** (`src/data/fitNotes.ts`, new) —
+  optional taps under the size, standard mode only, printed on the tech pack.
+  **Ids travel, never text**, re-resolved server-side against the category the
+  SERVER priced. Needed `drizzle/0005` — `order_items.fit_notes`, applied to
+  live Neon by the founder; 13 existing rows untouched.
+- **Measurement ranges moved into the input placeholder.** The same four boxes
+  existed in THREE places with three behaviours; they share `FIELD_LABELS` now.
+- **Catalog menu → `/#catalog`**, and the mobile menu now closes on a hash link
+  (it closed on pathname changes, and a hash is not one).
+- **"Timeless essentials in 100% linen"** — "Eight" dropped, founder's wording.
+
+#### The tech pack was clipping its own sentences, and had been for a while
+
+The founder spotted the new fit-note caveat ending at "Adjust from the standard
+block by". pdfkit keeps `doc.x` where the last positioned draw left it, and this
+document writes values at `left + 118`, so any later `doc.text(str, { width })`
+opens its column at x=190 and loses ~118pt off the right of every line.
+
+**`techPack.ts` already carried a comment explaining this exact trap.** It
+happened anyway. The static check found **two more live instances nobody had
+reported** — the tailored-order size cross-check, and **"Customer's fit note:",
+the customer's own words to the tailor, truncated on every tailored order that
+had one.** The text is CORRECT inside the PDF and only its origin is wrong, so
+no string search, byte diff or content assertion can see it. Only eyes, or
+`test-techpack-origins.mjs`.
+
+#### Known, not chased
+
+`scripts/test-techpack.mjs` cannot run on this Node — it fails to resolve the
+`@/` alias on main as well, so it is pre-existing. The size and fit-note logic
+was unit-tested directly with `tsx` instead.
+
+
 ### Session E — pricing model rebuilt on real fabric costs (2026-08-26)
 
 **Status: DONE, committed. No code touched — `planning/pricing-todo.md` only.**
@@ -83,9 +155,33 @@ now refuses to restate the numbers at all. `planning/marketing/meta-ads-setup.md
 listed WELCOME20 as live; corrected.
 
 
-### Session E — save-measurements popup, catalogue CTA, linen-only MVP (2026-08-26)
+### Session F — save-measurements popup, catalogue CTA, linen-only MVP (2026-08-26)
 
 **Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**
+
+⚠️ **Renamed from "Session E" — the pricing session above claimed the same
+letter on the same day.** Two blocks called Session E is exactly the collision
+this file exists to prevent. Pick the next free letter, not the one you saw
+last.
+
+⚠️ **This session's additions to `planning/pricing-todo.md` were overwritten**
+by that session's commits (`52ad109`, `5eab4ce`) — shared working tree, both
+sessions editing the same file within the hour. **No loss worth recovering:**
+their rebuild is on the same real quotes, corrects three things mine did not
+(the ladder in that file never shipped, pants were 21 AED off, and the "fabric
+is not the lever" line), and reaches the same conclusion about cotton landing
+below linen rather than above it. They also deactivated WELCOME20 in live
+Stripe, which is the action this session was blocked from taking. **The lesson
+is the mechanical one: claim the file before editing, not after.**
+
+**FABRIC WORK IS ON HOLD UNTIL FRIDAY 2026-08-28** (founder, 2026-08-26). She
+has the real in-store quotes and the per-design metre counts arriving that day.
+Her plan if both fabrics can be bought: **cotton keeps today's displayed prices,
+linen goes to +49 AED per piece.** That is a price rise in `catalog.ts`, not a
+`surchargeAed`, because linen is the only sellable fabric today and every live
+price is already a linen price. The cotton entry in `src/data/fabrics.ts` is
+kept and switched off rather than deleted, so Friday's restore is one flag.
+**No price moved in this session and none should before Friday.**
 
 - `website/src/components/SaveMeasurements.tsx`
 - `website/src/components/CatalogCard.tsx`
@@ -103,6 +199,13 @@ listed WELCOME20 as live; corrected.
 - `website/src/app/how-it-works/page.tsx`, `website/src/app/not-found.tsx`,
   `website/src/app/checkout/page.tsx`, `website/src/app/account/page.tsx`,
   `website/src/app/order-confirmed/page.tsx`
+- `planning/aws-architecture-diagram.html`, `CLAUDE.md`, `.gitignore`
+- **Clerk scoping — DONE, verified:** `website/src/app/layout.tsx`,
+  `website/src/components/Header.tsx`, `website/src/components/AuthProvider.tsx`
+  (new), `website/src/app/account/page.tsx`, and `layout.tsx` under
+  `app/account`, `app/design/[slug]`, `app/size-guide`, `app/sign-in`,
+  `app/sign-up`, `app/checkout`, `app/order-confirmed`, `app/dashboard`.
+- `website/src/db/client.ts`
 - `planning/pricing-todo.md`
 
 #### The save button's popup was never missing. The save was.
@@ -150,6 +253,226 @@ sit under the button as standing text. It is now an absolutely positioned
 that cannot proceed, disappears on leave and the moment the numbers are valid,
 and **layout shift is 0px** (measured against a following element and the
 panel's own height).
+
+#### Cleanup and documentation pass (same session)
+
+**Duplicates removed.** Three macOS sync-conflict copies, each verified
+byte-identical (or, for `fabrics 2.ts`, a stale copy of a file whose current
+version is a strict superset) **before** deleting, and the original kept in
+every case: `shaklek-spec-bc7bbb09 2.pdf`, `website/src/data/fabrics 2.ts`,
+`website/scripts/social/encode 2`. Also 5 `.DS_Store` files, and
+`website/.next/` which had accumulated six duplicated build directories and
+**803MB** — wiped and rebuilt clean at 111MB.
+
+**Two new gitignore rules**, both for things that were one `git add .` away
+from being committed:
+
+- `/shaklek-spec-*.pdf` — a downloaded tech pack. The filename carries an order
+  id and the document carries **that customer's measurements**. ⚠️ One is
+  sitting in the repo root right now. It is ignored, not deleted, because it is
+  the founder's file.
+- `website/scripts/social/encode` — an 88KB Mach-O binary compiled from
+  `encode.swift`. Rebuild it, don't commit it.
+
+**`planning/aws-architecture-diagram.html` rewritten.** It described a plan
+from before launch and had been wrong for months. It named **Amazon RDS** (the
+database is Neon), showed an **S3 bucket** (none exists), and drew **Gemini in
+the live request path** called during a customer session (it is a build-time
+tool on a laptop, and CLAUDE.md says plainly that zero AI runs in the product).
+Every status was still "not deployed". The new version is checked against the
+running system, marks the three errors as corrections rather than silently
+fixing them, and adds the deploy traps, the security posture and a
+"deliberately not built" section. **Rendered and read in a browser in both
+light and dark before being called done** — the first two passes had colliding
+connector labels that only showed up in the render.
+
+**`src/db/client.ts` carried a comment saying "No RDS instance exists yet —
+DATABASE_URL isn't set anywhere".** False since 2026-08-22 and actively
+misleading about which database this is. Corrected.
+
+`planning/aws-infrastructure-todo.md` was checked and is accurate — it already
+says Neon-not-RDS and correctly marks S3 as not done. No change.
+
+#### The reported lag is Clerk, not the images. Measured, not guessed.
+
+The founder reported the site "lagging a lot" and proposed moving catalog
+images to S3 + CloudFront to fix it. **It would have fixed nothing.**
+`scripts/perf-check.mjs` against production, 390px, 4x CPU throttle:
+
+    home page   705 KB across 43 requests, DOMContentLoaded 2373 ms
+    design page 836 KB across 52 requests
+
+**The six heaviest files on both pages are Clerk, totalling 356 KB** -- half
+the home page. Catalog images are already WebP at 23-35 KB, already CloudFront
+cache HITs (verified with `x-cache: Hit from cloudfront`), heaviest single
+image 36 KB. HTML TTFB is 75-330 ms. **Images are not the problem and an S3
+migration would have been a week spent on the wrong number.**
+
+Cause: `src/components/Header.tsx` statically imports Clerk's `UserButton` -- a
+UI component -- and the header renders on every route, so `@clerk/ui` (277 KB
+across four files) ships to signed-out visitors who will never open it. Only
+`clerk.browser.js` (79 KB) is needed to know whether someone is signed in.
+**Not fixed yet**, and the lazy-load hypothesis is written up as a hypothesis:
+the provider may pull that bundle regardless, so it must be tested before it is
+believed.
+
+This is the section-7 "pick the right instrument" rule paying for itself. The
+script even exists because of a previous round of this -- its own header says
+*"the site feels laggy is not actionable and guessing at causes has already
+cost time here."*
+
+**The obvious fix was tried, measured, and DID NOT WORK. Do not retry it.**
+`Header.tsx` statically imports `UserButton` while only rendering it when
+signed in, so splitting it behind `next/dynamic` looked like a 277KB win. Built
+it, measured it: **740KB vs 738KB baseline. No change.** Reverted.
+
+The reason, and this is the bit worth keeping: those files are **not in our
+bundle at all.** `find .next -name "*clerk*ui*"` returns nothing. They are
+fetched at runtime by Clerk's own `clerk.browser.js` from
+`clerk.shaklek.com`, so nothing in our import graph can defer them, and
+`@clerk/nextjs` v7 exposes no `clerkJSVariant` knob (only
+`__internal_clerkJSUrl` / `__internal_clerkJSVersion`).
+
+**The only real lever left:** `ClerkProvider` wraps the ROOT layout, so every
+marketing page mounts Clerk. Scoping it to the routes that actually need auth
+(`/account`, `/dashboard`, `/checkout`, `/cart`, `/design`, sign-in/up) would
+take Clerk off the home page entirely. The cost is that `Header` calls
+`useUser()` to show the signed-in avatar, so marketing pages would show a plain
+sign-in link instead. **That is a product trade-off and the founder's call, so
+it is not built.**
+
+⚠️ **A measurement of mine was also wrong and is corrected here.** I counted
+"137 images totalling 2,454 KB" on the home page and briefly treated it as a
+scroll-weight problem. That was **every rung of Next's srcset ladder** (32w,
+48w ... 3840w) summed together; a browser downloads exactly one rung per image.
+The real figure is ~10 images, 4 eager and 5 lazy, and
+`CatalogCardPhoto.tsx` already declares a tight
+`sizes="(min-width: 640px) 248px, 220px"` so the browser picks w=256/384, not
+w=3840. **Images are genuinely fine. Do not "optimise" them.**
+
+#### Clerk scoped off the marketing pages — 738 KB to 310 KB
+
+Founder approved the trade-off. `ClerkProvider` is out of the root layout and
+mounted per-route by `src/components/AuthProvider.tsx`.
+
+    home page    738 KB / 45 req  ->  310 KB / 30 req    (-58%)
+    /our-story                        346 KB / 28 req
+    /faq                              316 KB / 31 req
+    /how-it-works                     226 KB / 24 req
+
+Verified in a real browser, not inferred: on `/` **`window.Clerk` is undefined
+and there are ZERO network requests matching /clerk/i**. Every Clerk file is
+gone from the heaviest-resources list; the top item is now our own 65 KB chunk.
+
+**The unlock was `Header.tsx`, which no longer touches Clerk at all.** It
+called `useUser()` to choose between `<UserButton>` and a sign-in link, and
+Header renders on all ten pages — so one hook put 356 KB everywhere. It now
+renders a single unconditional person icon linking to `/account`, which is
+correct for both states because `clerkMiddleware` bounces a signed-out visitor
+to sign-in and lands a signed-in one on their orders.
+
+⚠️ **Sign-out moved to `/account`.** It only ever existed inside the
+`<UserButton>` menu, so removing that would have left customers with no way to
+sign out at all — staff had their own button in the dashboard layout, customers
+had nothing else. Easy to miss; check it survives any future header rework.
+
+⚠️ **The dashboard layout needed the provider on BOTH branches.** Its
+"you aren't on the staff list" refusal screen renders `<SignOutButton>`, a
+Clerk component, so wrapping only the allowed path would have thrown for
+exactly the person being refused.
+
+**Routes that still mount Clerk**, and why: `/account`, `/checkout`,
+`/dashboard`, `/order-confirmed`, `/sign-in`, `/sign-up`, `/design/[slug]` and
+**`/size-guide`** — the last two both carry `SaveMeasurements`. The size guide
+is easy to mistake for a marketing page; it is not.
+
+Functionally verified in-browser after the change: size guide and design page
+both load Clerk, fill measurements, open the sign-up modal, stash the numbers
+and stay on the page. All 16 routes smoke-tested (`/account` and `/dashboard`
+correctly 307 to sign-in while signed out). Full test suite green.
+
+Note `SaveMeasurements` no longer renders by default on the design page — the
+other session made **Standard** the default size mode in `351502e`, and it only
+appears under Tailored. That is their change, not a regression; verified the
+whole flow still works after switching to Tailored.
+
+#### Monitoring is genuinely at zero
+
+Verified against the account: **zero CloudWatch alarms, zero SNS topics.**
+Cheapest path, in order: Amplify's built-in per-branch build notification
+(`update-branch --enable-notification`, free) covers the silent-failed-build
+case alone; CloudWatch alarms are $0.10/alarm/month with SNS email free for the
+first 1,000/month; Sentry's free tier for application errors, because an alarm
+says the 5xx rate moved and not which line threw. Roughly $0.50/month total.
+
+#### Founder's re-ranking (2026-08-26)
+
+Upload demoted from P0 -- **`/upload` is linked from nowhere**, so it is not a
+funnel she is running. It does still return 200 and sits in `sitemap.ts` at
+priority 0.8, so the cheap fix is removing it from the sitemap rather than
+building object storage for a page nobody is sent to. Order-status emails and
+Tabby/Tamara moved to P3 at her call (large brands go quiet between purchase
+and shipping too). Conversions API approved. Rate limiting approved if cheap --
+Upstash free tier, not AWS WAF at ~$8/month. S3 for catalog images kept, but
+**re-argued on the 230MB build cap and cache-busting, not on latency.**
+
+#### Two things the architecture pass turned up
+
+**1. The customer's uploaded reference photo is lost on every paid order.**
+`/upload` invites a sketch or a screenshot. `order_items` stores only
+`hasReferenceImage: boolean`; the image is never persisted. The stylist email
+is built FROM THE DB ROWS in the Stripe webhook, and the attachment code in
+`orderEmail.ts` only runs on the fallback branch that fires when Stripe is NOT
+configured -- which in production is never. **A customer can pay for a design
+based on their own picture and the tailor receives a checkbox.** Not fixed
+here: it needs object storage and it touches the payments webhook. Written up
+as P0 in the architecture doc.
+
+**2. "The apex domain 404s" is false and had been copied forward for days.**
+`curl` says `shaklek.com` returns **301 → https://www.shaklek.com/**. It was in
+CLAUDE.md, and I repeated it into the new architecture doc without testing it
+before catching it on a later pass. Both corrected. ⚠️ It is the same failure
+mode as the credential warning at the top of CLAUDE.md: infrastructure state
+lives outside git, so a sentence about it goes stale silently. **Test the claim,
+do not inherit it.**
+
+The architecture doc now carries a ranked **"What to build next"** section --
+P0 the lost reference photo, P1 no error monitoring / the 230MB build cap
+(463 files, 38MB today) / per-container rate limiting, P2 Conversions API and
+customer status emails, P3 unverified Neon backups and Resend domain auth.
+
+#### The security agent found one thing, and it was real
+
+`shaklek-security` reviewed the diff. One Low, no Critical/High/Medium, and the
+Low was worth fixing before it shipped:
+
+**The pending stash had no expiry and was only cleared after a successful
+save.** Abandon the sign-up modal and one person's measurements sat in
+sessionStorage for the life of the tab. On a shared browser -- a family iPad, a
+shop display -- the next person to sign in had those measurements silently
+POSTed onto THEIR account, over their own, with no UI beyond the word "Saved".
+Both directions bad: A's PII to B, B's tailoring data clobbered.
+
+Fixed: the stash now carries a timestamp, expires after 15 minutes, refuses a
+clock that has moved backwards, deletes anything unparseable, and is cleared
+whenever a page carrying the save button loads while signed out with no sign-up
+in flight. Key bumped v1 -> v2 so an old bare-string entry cannot be adopted.
+`scripts/test-measurements.mjs` asserts all of it -- **if those go red the hole
+is back.** Verified in a real browser too: a planted stash is gone after
+landing signed-out on any page with the button.
+
+What the agent cleared, so it does not need redoing: the flattened body cannot
+bypass the `boundedText` caps (30,000-char value still sliced to 20),
+`parseMeasurements` is linear on hostile input (31KB of commas in 4ms, no
+ReDoS), `customers.measurement*` has no reader outside its own route,
+`resolveFabric` can only return a member of the closed union and actually
+*removes* a free-text path into the order email, and `forceRedirectUrl:
+window.location.href` is same-origin by construction so it is not an open
+redirect.
+
+One pre-existing note it raised, NOT introduced here: `rejectOversizedBody`
+trusts `Content-Length` only, so a chunked body with no declared length passes
+that gate. Its own comment already admits this. Unchanged by this work.
 
 #### Every "go to the catalogue" button now goes to the catalogue
 
