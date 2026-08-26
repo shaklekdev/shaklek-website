@@ -18,6 +18,13 @@ Rules that make this work:
 
 ## Active claims
 
+### Security agent — RCA for the five 2026-08-26/27 bugs (2026-08-27)
+
+**HOLDING, uncommitted, awaiting founder review — do not edit or commit:**
+
+- `planning/security/rca-2026-08-27.md` (new; RCA for `426484b`, `3908db2`
+  and the RECONCILE_TOKEN build-spec fix, written at the founder's request)
+
 ### Session G — TikTok + Instagram launch content (2026-08-27, overnight)
 
 **HOLDING these files. Please do not edit them tonight:**
