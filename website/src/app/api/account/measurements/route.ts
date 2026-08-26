@@ -3,6 +3,7 @@ import { getVerifiedEmail } from "@/lib/authEmail";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
+import { parseMeasurements } from "@/lib/measurements";
 
 // Verified primary address only -- see src/lib/authEmail.ts. These rows are
 // matched to a customer by email, so an unverified address must never
@@ -50,14 +51,35 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Malformed request" }, { status: 400 });
   }
 
+  // TWO CALLERS, TWO SHAPES, AND ONLY ONE OF THEM USED TO WORK.
+  //
+  // /account's MeasurementsForm posts the fields individually
+  // ({bust, waist, hip, height, notes}). SaveMeasurements -- the button on
+  // the customizer and the size guide -- posts the FLATTENED string that a
+  // cart line carries ({measurements: "Bust / chest: 90cm, Waist: 74cm, ..."}),
+  // because that is the value it has in hand.
+  //
+  // This handler only ever read the field shape. A flattened post therefore
+  // matched nothing, wrote five empty columns, and returned {ok: true} -- so
+  // the button said "Saved. Next time these are filled in for you." and
+  // nothing had been saved. Silent, and indistinguishable from success from
+  // the customer's side.
+  //
+  // parseMeasurements is the inverse of the composeMeasurements that built
+  // the string, and it is the same parser the tailor's tech pack uses, so
+  // there is no second format to keep in step.
+  const flattened =
+    typeof body.measurements === "string" ? parseMeasurements(body.measurements) : undefined;
+  const source: Record<string, unknown> = flattened ?? body;
+
   // These were stored with no length cap at all -- `notes` in particular is a
   // free-text field on an authenticated-but-public-signup endpoint.
   const values = {
-    measurementBust: boundedText(body.bust, 20),
-    measurementWaist: boundedText(body.waist, 20),
-    measurementHip: boundedText(body.hip, 20),
-    measurementHeight: boundedText(body.height, 20),
-    measurementNotes: boundedText(body.notes, 1000),
+    measurementBust: boundedText(source.bust, 20),
+    measurementWaist: boundedText(source.waist, 20),
+    measurementHip: boundedText(source.hip, 20),
+    measurementHeight: boundedText(source.height, 20),
+    measurementNotes: boundedText(source.notes, 1000),
   };
 
   // Signing up doesn't create a customers row -- only checkout does (see
