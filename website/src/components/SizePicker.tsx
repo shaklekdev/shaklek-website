@@ -249,12 +249,17 @@ export default function SizePicker({
               do not. */}
           {options.length > 0 && (
             <div className="mt-4">
-              <p className="text-sm text-text">
-                Anything usually wrong with this size?{" "}
-                <span className="text-text-3">(optional)</span>
+              {/* Same label treatment as SLEEVES, LENGTH and SIZE. This was
+                  a 14px sentence in full-strength text, so one control on the
+                  page shouted while its neighbours whispered -- which is what
+                  made the column read as unfinished rather than considered.
+                  The question moved down into the helper line, where the other
+                  controls put their explanations. */}
+              <p className="text-[11px] tracking-wide text-text-3 uppercase">
+                Usual fit <span className="normal-case">(optional)</span>
               </p>
-              <p className="mt-0.5 text-[11px] text-text-3">
-                Tap what you normally have to put up with and we cut around it.
+              <p className="mt-1.5 text-[11px] text-text-3">
+                Anything usually wrong with this size? Tap it and we cut around it.
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {options.map((n) => {

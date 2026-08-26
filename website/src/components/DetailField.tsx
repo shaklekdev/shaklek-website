@@ -32,11 +32,14 @@ export default function DetailField({
 }) {
   return (
     <div className="mt-8">
+      {/* 11px uppercase, like every other control label on this page. It was
+          text-lg -- a heading among labels -- so the free-text box read as a
+          different section rather than the last parameter in the same column. */}
       <label
         htmlFor="customization-notes"
-        className="mb-1 block text-lg text-text"
+        className="mb-2 block text-[11px] tracking-wide text-text-3 uppercase"
       >
-        Add a detail <span className="text-text-3">(optional)</span>
+        Add a detail <span className="normal-case">(optional)</span>
       </label>
       <textarea
         id="customization-notes"

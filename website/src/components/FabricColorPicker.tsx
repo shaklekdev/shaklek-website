@@ -23,8 +23,14 @@ export default function FabricColorPicker({
   const single = SELLABLE_FABRICS.length === 1 ? SELLABLE_FABRICS[0] : null;
   const upcoming = FABRIC_OPTIONS.filter((f) => !f.available);
 
+  // TWO ROWS, not one. "Organic cotton coming soon" made the right-hand block
+  // two lines tall, and `items-center` then centred that whole block against a
+  // single row of colour dots -- so the 100% linen box floated above the dots
+  // instead of sitting level with them. The box now shares a row with the dots
+  // and the note drops underneath the pair.
   return (
-    <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+    <div className="mt-5">
+      <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="flex flex-wrap items-center gap-3">
         {colors.map((c) => (
           <button
@@ -41,16 +47,9 @@ export default function FabricColorPicker({
       </div>
 
       {single ? (
-        <div className="shrink-0 text-right">
-          <p className="border border-border-strong px-3 py-1.5 text-xs text-text">
-            {single.label}
-          </p>
-          {upcoming.length > 0 && (
-            <p className="mt-1 text-[10px] text-text-3">
-              {upcoming.map((f) => f.label).join(", ")} coming soon
-            </p>
-          )}
-        </div>
+        <p className="shrink-0 border border-border-strong px-3 py-1.5 text-xs text-text">
+          {single.label}
+        </p>
       ) : (
         <div className="flex shrink-0 gap-1.5 border border-border-strong p-1">
           {SELLABLE_FABRICS.map((f) => (
@@ -66,6 +65,12 @@ export default function FabricColorPicker({
             </button>
           ))}
         </div>
+      )}
+      </div>
+      {single && upcoming.length > 0 && (
+        <p className="mt-1.5 text-right text-[10px] text-text-3">
+          {upcoming.map((f) => f.label).join(", ")} coming soon
+        </p>
       )}
     </div>
   );

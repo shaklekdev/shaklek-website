@@ -48,7 +48,12 @@ export default function Header() {
           what the founder was seeing. A header is chrome, not content: it hugs
           the page. */}
       <div className="flex items-center justify-between px-6 py-4 sm:px-10 sm:py-5">
-        <Link href="/" className="flex flex-col items-start leading-none">
+        {/* items-CENTER, not items-start. The lockup is three stacked pieces --
+            wordmark, gold rule, Arabic -- and they centre on each other. Only
+            the lockup as a whole sits left on the page. Left-aligning the
+            pieces individually hung the rule and the Arabic off the "S" and
+            left the mark looking unfinished under its own right half. */}
+        <Link href="/" className="flex flex-col items-center leading-none">
           {/* Italiana, founder's pick 2026-08-26. Single weight and hairline
               thins, so it goes UP a step in size -- at 24px its strokes start
               to disappear on a phone -- and gains letter-spacing, which is
