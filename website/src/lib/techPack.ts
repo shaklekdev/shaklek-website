@@ -14,7 +14,7 @@ import {
 } from "@/data/parameterSliders";
 import { catalog } from "@/data/catalog";
 import { colors } from "@/data/colors";
-import { SIZE_CHART, nearestSize } from "@/data/sizeChart";
+import { nearestSize, rowForSize, sizeLabel } from "@/data/sizeChart";
 import { constructionFor, noteForOption } from "@/data/construction";
 import { flatPath } from "@/data/flats";
 import { parseMeasurements, FIELD_LABELS } from "@/lib/measurements";
@@ -416,7 +416,11 @@ export function buildPdf(
       // -- measurements --------------------------------------------------
       section("Measurements");
       const fields = item.measurements ? parseMeasurements(item.measurements) : undefined;
-      const chartRow = item.size ? SIZE_CHART.find((r) => r.size === item.size) : undefined;
+      // rowForSize, not a direct match on the letter: trousers are ordered as
+      // "38" and tops as "M", and orders placed before trousers were numbered
+      // still carry letters. All three have to resolve to the same row, or the
+      // tailor gets a size with no body measurements under it.
+      const chartRow = rowForSize(item.size);
 
       if (fields) {
         doc.font("Helvetica-Bold").fontSize(11).fillColor(INK).text("TAILORED TO MEASURE");
@@ -438,14 +442,25 @@ export function buildPdf(
             .font("Helvetica")
             .fontSize(9)
             .fillColor(MUTED)
-            .text(`Closest standard size, for cross-check only: ${near.size} (bust ${near.bust}cm). Cut to the numbers above, not to this size.`, { width });
+            .text(`Closest standard size, for cross-check only: ${sizeLabel(category, near)} (bust ${near.bust}cm). Cut to the numbers above, not to this size.`, { width });
         }
         if (fields.notes) {
           doc.moveDown(0.35);
           doc.font("Helvetica").fontSize(10.5).fillColor(INK).text(`Customer's fit note: ${fields.notes}`, { width });
         }
       } else if (chartRow) {
-        doc.font("Helvetica-Bold").fontSize(11).fillColor(INK).text(`STANDARD SIZE ${chartRow.size}`);
+        // The label the customer actually chose -- "38" on a trouser, "M" on a
+        // shirt. The letter is kept alongside for a numbered size so the
+        // workshop can tie it back to the alpha ladder it may already work in;
+        // the EU/UK/US row below carries the rest.
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(11)
+          .fillColor(INK)
+          .text(
+            `STANDARD SIZE ${sizeLabel(category, chartRow)}` +
+              (sizeLabel(category, chartRow) !== chartRow.size ? ` (${chartRow.size})` : ""),
+          );
         doc.moveDown(0.3);
         // Printing the letter alone was the weakest line on the old spec sheet:
         // it assumed the tailor already knows what Shaklek's M is. The numbers

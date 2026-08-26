@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sizes } from "@/data/colors";
-import { SIZE_CHART } from "@/data/sizeChart";
+import { SIZE_CHART, sizeLabel, sizesForCategory, usesNumericSizes } from "@/data/sizeChart";
 import type { SizeMode } from "@/data/designSpec";
 // Shared with the tailor's tech pack, which parses these on the server --
 // see src/lib/measurements.ts for why there is only one copy.
@@ -41,6 +40,7 @@ export function measurementErrors(fields: MeasurementFields): Partial<Record<str
 export default function SizePicker({
   sizeMode,
   size,
+  category,
   initialMeasurements,
   onSizeModeChange,
   onSizeChange,
@@ -49,6 +49,9 @@ export default function SizePicker({
 }: {
   sizeMode: SizeMode;
   size: string;
+  // Which ladder to show. Trousers and skirts are bought as EU numbers, tops
+  // as letters -- one chart, two labellings (sizeChart.ts).
+  category: string;
   measurements: string;
   initialMeasurements?: Partial<MeasurementFields>;
   onSizeModeChange: (mode: SizeMode) => void;
@@ -146,13 +149,13 @@ export default function SizePicker({
       <p className="mt-1.5 text-[11px] text-text-3">
         {sizeMode === "tailored"
           ? "Cut to your measurements, at no extra cost."
-          : "Pick XS to XXL, or switch to Tailored and we cut to your own measurements for free."}{" "}
+          : `Pick ${usesNumericSizes(category) ? "your usual number" : "XS to XXL"}, or switch to Tailored and we cut to your own measurements for free.`}{" "}
       </p>
 
       {sizeMode === "standard" ? (
         <>
           <div className="mt-3 grid grid-cols-6 gap-2">
-            {sizes.map((s) => (
+            {sizesForCategory(category).map((s) => (
               <button
                 key={s}
                 onClick={() => onSizeChange(s)}
@@ -195,11 +198,11 @@ export default function SizePicker({
                     <tr
                       key={row.size}
                       className={`border-t border-border ${
-                        row.size === size ? "bg-surface-2 text-text" : "text-text-2"
+                        sizeLabel(category, row) === size ? "bg-surface-2 text-text" : "text-text-2"
                       }`}
                     >
                       <th scope="row" className="py-2 pr-3 font-medium text-text">
-                        {row.size}
+                        {sizeLabel(category, row)}
                       </th>
                       <td className="py-2 pr-3">{row.uk}</td>
                       <td className="py-2 pr-3">{row.eu}</td>

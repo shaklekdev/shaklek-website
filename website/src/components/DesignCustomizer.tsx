@@ -293,6 +293,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             <SizePicker
               sizeMode={spec.sizeMode}
               size={spec.size}
+              category={spec.garmentType}
               measurements={spec.measurements}
               initialMeasurements={measurementSeed}
               onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}

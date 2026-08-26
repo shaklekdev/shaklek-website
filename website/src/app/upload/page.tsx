@@ -96,6 +96,7 @@ export default function UploadPage() {
             <SizePicker
               sizeMode={spec.sizeMode}
               size={spec.size}
+              category={spec.garmentType}
               measurements={spec.measurements}
               onSizeModeChange={(sizeMode) => setSpec((s) => (s ? { ...s, sizeMode } : s))}
               onSizeChange={(size) => setSpec((s) => (s ? { ...s, size } : s))}
@@ -139,7 +140,7 @@ export default function UploadPage() {
         <p className="subtitle max-w-sm">
           Bring a photo, screenshot, or sketch — even something you saw on
           another brand. We&apos;ll adapt it into something that&apos;s
-          clearly yours, made in cotton or linen, at the same fixed prices as
+          clearly yours, made in 100% linen, at the same fixed prices as
           the catalog.
         </p>
 

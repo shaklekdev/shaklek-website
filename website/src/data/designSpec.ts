@@ -1,5 +1,6 @@
 import type { CatalogItem } from "@/data/catalog";
 import { defaultChangesForCategory } from "@/data/parameterSliders";
+import { defaultSizeFor } from "@/data/sizeChart";
 import { DEFAULT_FABRIC, type Fabric } from "@/data/fabrics";
 
 // The shared format the customize chat, preview, and (eventually) tailor spec
@@ -77,7 +78,10 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     garmentType: item.category,
     fabric: DEFAULT_FABRIC,
     color: "Ivory",
-    size: "M",
+    // Trousers and skirts are sized 34-44, tops XS-XXL -- one chart, two
+    // labellings, see sizeChart.ts. The stored value is the label the customer
+    // saw, so everything downstream reads back what she picked.
+    size: defaultSizeFor(item.category),
     // STANDARD by default, changed 2026-08-26 (founder). This reverses an
     // earlier decision and the reason is worth keeping, because the earlier
     // reasoning was not wrong so much as incomplete: made-to-order only
@@ -105,7 +109,9 @@ export function createSpecFromUpload(fileName: string, imageDataUrl: string): De
     garmentType: "Unspecified",
     fabric: DEFAULT_FABRIC,
     color: "Ivory",
-    size: "M",
+    // An upload has no category until a stylist reads it, so it falls back to
+    // the letter ladder.
+    size: defaultSizeFor("Unspecified"),
     // STANDARD by default, changed 2026-08-26 (founder). This reverses an
     // earlier decision and the reason is worth keeping, because the earlier
     // reasoning was not wrong so much as incomplete: made-to-order only

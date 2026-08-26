@@ -68,6 +68,15 @@ export default function SizeGuidePage() {
         </table>
       </div>
 
+      {/* Added when trousers moved to the EU ladder (sizeChart.ts). This one
+          table covers both, so without a line saying so a customer who has
+          just picked a 38 on a trouser page cannot find her row here. */}
+      <p className="text-sm text-text-2">
+        Tops are sold as XS to XXL. Trousers and skirts are sold by the EU
+        number in the third column, so a top in M and trousers in 38 are cut to
+        the same body.
+      </p>
+
       <h2 className="pt-2 text-base font-medium text-text">How to measure</h2>
       <p>
         Measure your body, not a garment you already own, and keep the tape

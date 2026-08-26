@@ -50,3 +50,56 @@ export function nearestSize(bustCm: number): SizeChartRow {
     Math.abs(row.bust - bustCm) < Math.abs(best.bust - bustCm) ? row : best,
   );
 }
+
+// ---------------------------------------------------------------------------
+// How a size is SHOWN depends on the garment, 2026-08-26 (founder).
+//
+// Women's trousers are not bought in letters. Zara, Mango and the rest sell
+// them as EU numbers -- 34, 36, 38 -- and a customer who knows she is a 38 in
+// trousers does not know, and should not have to work out, that this shop
+// calls it M. Tops stay XS-XXL, which is how tops are bought.
+//
+// THIS IS A LABELLING RULE, NOT A SECOND SIZE SYSTEM. Every size below is one
+// row of one chart with one set of body measurements; trousers simply show the
+// `eu` column that has been sitting here since the chart was written. Nothing
+// is invented and the tailor's numbers do not change.
+//
+// The stored value on an order is whatever the customer actually saw, so the
+// cart, the account page and the tech pack all read back the same word without
+// needing to know this rule. `rowForSize` is what makes that safe: it resolves
+// a letter OR an EU number, so orders placed before today still find their row.
+const NUMERIC_SIZE_CATEGORIES = new Set(["Pants", "Skirt"]);
+
+export function usesNumericSizes(category: string): boolean {
+  return NUMERIC_SIZE_CATEGORIES.has(category);
+}
+
+/** The label a customer sees and the value stored on the order. */
+export function sizeLabel(category: string, row: SizeChartRow): string {
+  return usesNumericSizes(category) ? String(row.eu) : row.size;
+}
+
+/** Every size for a category, in order, as the customer sees them. */
+export function sizesForCategory(category: string): string[] {
+  return SIZE_CHART.map((row) => sizeLabel(category, row));
+}
+
+/**
+ * Resolve a stored size back to its chart row. Accepts both spellings on
+ * purpose: "M" for a top or an order placed before trousers were numbered,
+ * and "38" for a trouser ordered after. Returns undefined for anything else
+ * rather than guessing -- a wrong row here would print wrong body
+ * measurements on a tech pack, which is worse than printing none.
+ */
+export function rowForSize(size: string | null | undefined): SizeChartRow | undefined {
+  if (!size) return undefined;
+  const trimmed = size.trim();
+  const upper = trimmed.toUpperCase();
+  return SIZE_CHART.find((r) => r.size === upper || String(r.eu) === trimmed);
+}
+
+/** The default size for a new design, per category. */
+export function defaultSizeFor(category: string): string {
+  const row = SIZE_CHART.find((r) => r.size === "M") ?? SIZE_CHART[0];
+  return sizeLabel(category, row);
+}
