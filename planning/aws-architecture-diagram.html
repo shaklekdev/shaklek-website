@@ -337,6 +337,70 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <li><span class="flow-status built">live</span> The customer lands on <code>/order-confirmed</code>. Staff open <code>/dashboard/orders</code> and download a tech pack PDF for the tailor, built by <code>src/lib/techPack.ts</code> from the order row plus the technical flat for that exact combination.</li>
   </ol>
 
+  <h2>Where the images live, and how they reach a customer</h2>
+  <p class="section-note">
+    The founder's question, answered by measuring production rather than
+    reading the code. Short version: <strong>there is no image host.</strong>
+    Every photograph is a file in the git repository.
+  </p>
+  <ol class="flow">
+    <li><span class="flow-status built">live</span>
+      <strong>Stored in the repo</strong> at <code>website/public/catalog/</code>
+      — <strong>463 files, 38 MB</strong> across nine garment folders plus
+      <code>flats/</code>, and <code>public/marketing/</code> (4 files, 3.1 MB).
+      No S3 bucket, no CDN origin, no database. They are committed, so they
+      travel with the deploy and are versioned like code.
+    </li>
+    <li><span class="flow-status built">live</span>
+      <strong>Referenced by <code>src/data/catalog.ts</code></strong>, the single
+      source of truth. <code>npm run build</code> runs
+      <code>verify-catalog.mjs</code> first and exits non-zero if any referenced
+      file is missing — a broken path used to build green and deploy broken
+      images.
+    </li>
+    <li><span class="flow-status built">live</span>
+      <strong>Served through Next's image optimizer</strong>
+      (<code>/_next/image?url=…&amp;w=…&amp;q=…</code>) running on Amplify. It
+      resizes to the width the layout asks for and converts to <strong>WebP</strong>
+      for clients that accept it.
+    </li>
+    <li><span class="flow-status built">live</span>
+      <strong>Cached by CloudFront</strong> for four hours, keyed by the full
+      URL. Measured on production: catalog images are 23–35 KB WebP and return
+      <code>x-cache: Hit from cloudfront</code>.
+    </li>
+  </ol>
+
+  <div class="callout">
+    ⚠️ <strong>350 of the 463 catalog files are named <code>.png</code> and are
+    actually JPEG data.</strong> The optimizer picks its output format from the
+    <em>extension</em>, not the file's magic bytes, so those files are re-encoded
+    as PNG for any client that does not accept WebP. Measured on production,
+    same garment, same width:
+    <br><br>
+    <code>…-front.png</code> → WebP client <strong>18,844 B</strong> · no-WebP
+    client <strong>167,304 B</strong> (<code>image/png</code>)<br>
+    <code>…-back-v2.jpg</code> → WebP client <strong>10,890 B</strong> ·
+    no-WebP client <strong>27,147 B</strong> (<code>image/jpeg</code>)
+    <br><br>
+    <strong>6.2× heavier</strong> for that audience. 113 files were renamed to a
+    true <code>.jpg</code> in August and measured 9.4× smaller; the remaining
+    350 never were. The fix is a rename plus the matching
+    <code>catalog.ts</code> update — and since a changed filename is also how
+    cache-busting works here, it carries no stale-cache risk.
+    <strong>Any future rename uses <code>.jpg</code>.</strong>
+  </div>
+
+  <p class="section-note">
+    <strong>Why the repo and not S3.</strong> It costs nothing, versions with
+    the code, and cannot drift from <code>catalog.ts</code>. The limit is
+    Amplify's <strong>230 MB build-output cap</strong>: at 38 MB of catalog
+    inside an 89 MB output there is real headroom, but it grows with every item
+    × colour × combination. Moving to S3 + CloudFront is on the list for that
+    reason and for retiring the filename cache-busting rule — <em>not</em> for
+    speed. Images are not the slow part; that was measured.
+  </p>
+
   <h2>Deploying, and the two traps that have bitten</h2>
   <p class="section-note">
     Both cost a day each in August 2026. Neither is obvious from a green build.

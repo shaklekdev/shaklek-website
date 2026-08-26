@@ -30,6 +30,41 @@ live card → webhook fired → order marked `paid` in Neon → visible on
 
 ---
 
+## Founder's list for 2026-08-27
+
+Given verbatim, in her order. Item 7 is explicitly sequenced last.
+
+1. [ ] **Architecture and end-to-end flow very clear** — `planning/aws-architecture-diagram.html`
+       already carries the deployed state and the purchase flow; the gap is a
+       single readable end-to-end walk from landing to tailor.
+2. [ ] **Latest brand assets with a clear path** — where the current logo,
+       wordmark, colours and imagery actually live, and which copies are stale.
+       ⚠️ `brand-assets/` is **gitignored** and exists on disk only.
+3. [ ] **Clean the Shaklek folder** — unused and outdated files.
+4. [ ] **Where are images stored and how are they served?** — answered
+       2026-08-27, see the architecture doc's image-pipeline section.
+5. [ ] **An RCA per bug fixed, run by the security agent and documented** — so
+       each one is learned from rather than just closed. Backlog of today's
+       fixes listed in `planning/security/`.
+6. [ ] **New TikTok content** — check trends first.
+7. [ ] **A marketing agent built on Fable**, plus a new marketing folder.
+
+### Carried over, still the founder's
+
+- [ ] **Sentry** — free tier, create the account, send the DSN. One package and
+      one env var after that. ⚠️ Remember the Amplify build-spec allowlist: a
+      new variable needs adding to the `env | grep` line too, or it never
+      reaches the running app.
+- [ ] **Meta** — create the Pixel, verify the domain, set
+      `NEXT_PUBLIC_META_PIXEL_ID` and `NEXT_PUBLIC_FB_DOMAIN_VERIFICATION`
+      (both in the build spec allowlist as well), upload the feed URL.
+      Everything on our side is built and inert. **Do not set
+      `NEXT_PUBLIC_LAUNCH_CODE` — no active promotion code exists.**
+- [ ] **Two AED 3.89 TEST99 charges still unrefunded** on the founder's card:
+      `ch_3U7iQkFG6ccJjMKM1ARqYmrs`, `ch_3U8GfHFG6ccJjMKM0fbRXZnf`.
+
+---
+
 ## Do these first — founder's, not Claude's
 
 - [x] ~~**Refund the AED 390 test order.**~~ **DONE.** Verified against the
