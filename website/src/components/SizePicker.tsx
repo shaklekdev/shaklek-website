@@ -111,25 +111,42 @@ export default function SizePicker({
           read as a separate kind of control when it is just another choice on
           the same page. The descriptions moved to one line underneath rather
           than being lost. */}
+      {/* STANDARD IS LISTED FIRST because it is now the default (see
+          designSpec.ts). A row whose first button is the unselected one reads
+          as though something has already been chosen for you.
+
+          "(free)" is on the button itself rather than only in the line
+          underneath. Tailoring is the thing that justifies this brand's price,
+          and moving the default away from it costs a nudge -- this is the nudge
+          bought back. It also answers, at the moment of choosing, the question
+          every customer actually has about made-to-measure, which is what it
+          costs extra. Nothing, and the button now says so. */}
       <div className="mt-1.5 grid grid-cols-2 gap-1.5 lg:max-w-xs">
-        {(["tailored", "standard"] as const).map((mode) => (
+        {([
+          ["standard", "Standard"],
+          ["tailored", "Tailored (free)"],
+        ] as const).map(([mode, label]) => (
           <button
             key={mode}
             onClick={() => onSizeModeChange(mode)}
             aria-pressed={sizeMode === mode}
-            className={`flex min-h-11 cursor-pointer items-center justify-center border px-2 py-2 text-center text-xs capitalize transition-colors lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
+            className={`flex min-h-11 cursor-pointer items-center justify-center border px-2 py-2 text-center text-xs transition-colors lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
               sizeMode === mode
                 ? "border-text bg-text text-white"
                 : "border-border bg-white text-text-2 hover:border-border-strong hover:text-text"
             }`}
           >
-            {mode}
+            {label}
           </button>
         ))}
       </div>
+      {/* "Same price either way" is gone: with "(free)" on the button it said
+          the same thing twice. The standard line now points at tailoring
+          instead, which is the only place left that still has to sell it. */}
       <p className="mt-1.5 text-[11px] text-text-3">
-        {sizeMode === "tailored" ? "Cut to your measurements." : "Pick XS to XXL."}{" "}
-        Same price either way.
+        {sizeMode === "tailored"
+          ? "Cut to your measurements, at no extra cost."
+          : "Pick XS to XXL, or switch to Tailored and we cut to your own measurements for free."}{" "}
       </p>
 
       {sizeMode === "standard" ? (

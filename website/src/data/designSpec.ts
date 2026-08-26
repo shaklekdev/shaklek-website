@@ -1,5 +1,6 @@
 import type { CatalogItem } from "@/data/catalog";
 import { defaultChangesForCategory } from "@/data/parameterSliders";
+import { DEFAULT_FABRIC, type Fabric } from "@/data/fabrics";
 
 // The shared format the customize chat, preview, and (eventually) tailor spec
 // sheet all read from — same object whether the customer started from a
@@ -11,7 +12,10 @@ export type BaseSource =
   | { kind: "catalog"; slug: string }
   | { kind: "upload"; fileName: string; imageDataUrl: string };
 
-export type Fabric = "cotton" | "linen";
+// Defined in @/data/fabrics alongside which of them can actually be made
+// today; re-exported here because most callers already import it from this
+// module.
+export type { Fabric };
 
 export type GarmentType = "Shirt" | "Skirt" | "Pants" | "Dress" | "Unspecified";
 
@@ -71,14 +75,23 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
   return {
     base: { kind: "catalog", slug: item.slug },
     garmentType: item.category,
-    fabric: "linen",
+    fabric: DEFAULT_FABRIC,
     color: "Ivory",
     size: "M",
-    // Tailored by default. Made-to-order only justifies its price if the
-    // garment is cut to the customer, and defaulting to a standard size makes
-    // the whole proposition opt-in. Standard is still one tap away for anyone
-    // who would rather not measure.
-    sizeMode: "tailored",
+    // STANDARD by default, changed 2026-08-26 (founder). This reverses an
+    // earlier decision and the reason is worth keeping, because the earlier
+    // reasoning was not wrong so much as incomplete: made-to-order only
+    // justifies its price if the garment is cut to the customer, so tailored
+    // was the default.
+    //
+    // What that missed is that `Add to cart` is DISABLED until four body
+    // measurements validate (see measurementsValid in DesignCustomizer). So
+    // the default asked every visitor for a tape measure before it would let
+    // them buy anything at all -- on a phone, away from home, that is not a
+    // higher-intent path, it is a closed door. Standard sizing already worked
+    // and was one tap away; now it is zero taps away and tailored is the
+    // upgrade, labelled free so it still sells itself.
+    sizeMode: "standard",
     measurements: "",
     changes: defaultChangesForCategory(item.category, item.defaultChanges),
     freeformNotes: "",
@@ -90,14 +103,23 @@ export function createSpecFromUpload(fileName: string, imageDataUrl: string): De
   return {
     base: { kind: "upload", fileName, imageDataUrl },
     garmentType: "Unspecified",
-    fabric: "cotton",
+    fabric: DEFAULT_FABRIC,
     color: "Ivory",
     size: "M",
-    // Tailored by default. Made-to-order only justifies its price if the
-    // garment is cut to the customer, and defaulting to a standard size makes
-    // the whole proposition opt-in. Standard is still one tap away for anyone
-    // who would rather not measure.
-    sizeMode: "tailored",
+    // STANDARD by default, changed 2026-08-26 (founder). This reverses an
+    // earlier decision and the reason is worth keeping, because the earlier
+    // reasoning was not wrong so much as incomplete: made-to-order only
+    // justifies its price if the garment is cut to the customer, so tailored
+    // was the default.
+    //
+    // What that missed is that `Add to cart` is DISABLED until four body
+    // measurements validate (see measurementsValid in DesignCustomizer). So
+    // the default asked every visitor for a tape measure before it would let
+    // them buy anything at all -- on a phone, away from home, that is not a
+    // higher-intent path, it is a closed door. Standard sizing already worked
+    // and was one tap away; now it is zero taps away and tailored is the
+    // upgrade, labelled free so it still sells itself.
+    sizeMode: "standard",
     measurements: "",
     changes: [],
     freeformNotes: "",
