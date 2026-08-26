@@ -59,6 +59,10 @@ export type DesignSpec = {
   size: string;
   sizeMode: SizeMode;
   measurements: string; // used when sizeMode is "tailored" — no AI needed, just carried to the tailor
+  // "Anything usually wrong with this size?" — stable ids from fitNotes.ts,
+  // never free text, and only meaningful in "standard" mode. See that file for
+  // why the ids are what travels and the labels are only ever displayed.
+  fitNotes: string[];
   changes: SilhouetteChange[];
   freeformNotes: string; // raw customer text — always kept alongside the structured parse
   constraints: ConstraintCheck;
@@ -97,6 +101,7 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     // upgrade, labelled free so it still sells itself.
     sizeMode: "standard",
     measurements: "",
+    fitNotes: [],
     changes: defaultChangesForCategory(item.category, item.defaultChanges),
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },
@@ -127,6 +132,7 @@ export function createSpecFromUpload(fileName: string, imageDataUrl: string): De
     // upgrade, labelled free so it still sells itself.
     sizeMode: "standard",
     measurements: "",
+    fitNotes: [],
     changes: [],
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },

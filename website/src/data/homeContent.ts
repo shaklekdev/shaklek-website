@@ -58,7 +58,7 @@ export const STEPS = [
   {
     n: "01",
     title: "Pick your piece",
-    body: "Eight timeless essentials in 100% linen. Change the sleeve, leg or length and watch the piece change with it.",
+    body: "Timeless essentials in 100% linen. Change the sleeve, leg or length and watch the piece change with it.",
   },
   {
     n: "02",

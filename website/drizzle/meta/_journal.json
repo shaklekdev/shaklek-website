@@ -36,6 +36,13 @@
       "when": 1787412412368,
       "tag": "0004_tranquil_meltdown",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1787766876109,
+      "tag": "0005_naive_rockslide",
+      "breakpoints": true
     }
   ]
 }

@@ -18,6 +18,7 @@ import { nearestSize, rowForSize, sizeLabel } from "@/data/sizeChart";
 import { constructionFor, noteForOption } from "@/data/construction";
 import { flatPath } from "@/data/flats";
 import { parseMeasurements, FIELD_LABELS } from "@/lib/measurements";
+import { fitNoteLabel } from "@/data/fitNotes";
 
 export type SpecItem = {
   name: string;
@@ -26,6 +27,7 @@ export type SpecItem = {
   color: string | null;
   size: string | null;
   measurements: string | null;
+  fitNotes: string[] | null;
   changes: string[] | null;
   freeformNotes: string | null;
 };
@@ -480,6 +482,33 @@ export function buildPdf(
       } else {
         doc.font("Helvetica").fontSize(10.5).fillColor("#a33").text("No size or measurements recorded on this order — do not cut until this has been confirmed with whoever sent it.");
         doc.fillColor(INK);
+      }
+
+      // The customer's own answer to "anything usually wrong with this size?".
+      //
+      // PRINTED AS A REPORT, NOT AN INSTRUCTION, and the wording of the
+      // heading is the load-bearing part. She is describing a habit across
+      // clothes she already owns; she has not measured anything. Turning that
+      // into "+2cm on the sleeve" here would invent a tolerance Shaklek has no
+      // house standard for -- the same thing this document already refuses to
+      // do for seam allowance and stitch density. The workshop decides the
+      // amount; we only say what she told us.
+      const fitLabels = (item.fitNotes ?? [])
+        .map((id) => fitNoteLabel(category, id))
+        .filter((label): label is string => Boolean(label));
+      if (fitLabels.length > 0) {
+        doc.moveDown(0.45);
+        doc.font("Helvetica-Bold").fontSize(10).fillColor(INK).text("WHAT USUALLY GOES WRONG IN THIS SIZE");
+        doc.moveDown(0.15);
+        doc
+          .font("Helvetica")
+          .fontSize(9)
+          .fillColor(MUTED)
+          .text("Reported by the customer about clothes she already owns, not measured. Adjust from the standard block by your own judgement.", { width });
+        doc.moveDown(0.25);
+        for (const label of fitLabels) {
+          doc.font("Helvetica-Bold").fontSize(11).fillColor(INK).text(`•  ${label}`, { width });
+        }
       }
 
       doc.moveDown(0.3);

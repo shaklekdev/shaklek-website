@@ -15,6 +15,10 @@ export type CartItem = {
   color: string;
   size: string;
   measurements: string;
+  // Ids only, from src/data/fitNotes.ts. Re-resolved server-side against the
+  // category before anything is stored or shown to a tailor -- localStorage is
+  // editable, so this is a suggestion like every other field here.
+  fitNotes: string[];
   changes: string[];
   freeformNotes: string;
   // How many of this exact garment to make. Display and cart maths only --

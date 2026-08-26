@@ -14,6 +14,7 @@ import {
 import { useCart } from "@/lib/CartContext";
 import { money, track } from "@/lib/metaPixel";
 import CustomizeParameters from "@/components/CustomizeParameters";
+import { resolveFitNotes } from "@/data/fitNotes";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
 import SaveMeasurements from "@/components/SaveMeasurements";
@@ -102,6 +103,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         sizeMode: line.size === "Tailored" ? "tailored" : "standard",
         size: line.size === "Tailored" ? prev.size : line.size,
         measurements: line.measurements,
+        fitNotes: resolveFitNotes(item.category, line.fitNotes),
         changes: changesFromLabels(item.category, line.changes, item.defaultChanges),
         freeformNotes: line.freeformNotes,
       }));
@@ -230,6 +232,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       color: spec.color,
       size: spec.sizeMode === "tailored" ? "Tailored" : spec.size,
       measurements: spec.sizeMode === "tailored" ? spec.measurements : "",
+      // Standard only. On a tailored order the garment is cut to the
+      // customer's own numbers, so "my usual M is tight" describes a garment
+      // nobody is making -- carrying it would just be noise on the tech pack.
+      fitNotes: spec.sizeMode === "tailored" ? [] : spec.fitNotes,
       changes: spec.changes.map((c) => c.label),
       freeformNotes: spec.freeformNotes,
     };
@@ -294,6 +300,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               sizeMode={spec.sizeMode}
               size={spec.size}
               category={spec.garmentType}
+              fitNotes={spec.fitNotes}
+              onFitNotesChange={(fitNotes) => setSpec((s) => ({ ...s, fitNotes }))}
               measurements={spec.measurements}
               initialMeasurements={measurementSeed}
               onSizeModeChange={(sizeMode) => setSpec((s) => ({ ...s, sizeMode }))}

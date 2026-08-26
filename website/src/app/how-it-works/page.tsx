@@ -17,7 +17,7 @@ const steps = [
   {
     n: "01",
     title: "Pick a piece",
-    body: "Eight timeless essentials in 100% linen. Shirts and trousers, cut to last past a season.",
+    body: "Timeless essentials in 100% linen. Shirts and trousers, cut to last past a season.",
   },
   {
     n: "02",

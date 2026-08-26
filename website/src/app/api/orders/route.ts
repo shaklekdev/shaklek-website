@@ -3,6 +3,8 @@ import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
 import { resolveOrderPricing, type PricedItem } from "@/lib/pricing";
+import { resolveFabric } from "@/data/fabrics";
+import { resolveFitNotes } from "@/data/fitNotes";
 import { issueOrderAccessToken } from "@/lib/orderAccess";
 import { rateLimit } from "@/lib/rateLimit";
 import { canonicalOrigin, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
@@ -12,7 +14,10 @@ import {
   type NotifyOrderItem,
 } from "@/lib/orderEmail";
 
-type OrderItem = NotifyOrderItem & { category?: string; slug?: string };
+// fitNotes is `unknown` deliberately: resolveFitNotes() takes anything and
+// returns only ids that exist for the category, so typing it as string[] here
+// would be a claim about the request body that nothing has checked.
+type OrderItem = NotifyOrderItem & { category?: string; slug?: string; fitNotes?: unknown };
 
 // Free-text fields go into the DB, the stylist's email and the spec sheet.
 // Cap them so a scripted POST can't push megabytes through any of those.
@@ -79,10 +84,17 @@ async function persistOrder(
         orderId: orderRow.id,
         name: priced[index].name,
         category: priced[index].category,
-        fabric: text(item.fabric, 40),
+        // Resolved against what we can actually make, never taken from the
+        // request -- see resolveFabric in src/data/fabrics.ts.
+        fabric: resolveFabric(item.fabric),
         color: text(item.color, 40),
         size: text(item.size, 40),
         measurements: text(item.measurements),
+        // Re-resolved against the category the SERVER priced, not the one the
+        // request claimed, and reduced to ids that genuinely exist for it.
+        // This reaches a tailor's document, so nothing a client can type may
+        // survive -- same rule as price, quantity and fabric.
+        fitNotes: resolveFitNotes(priced[index].category, item.fitNotes),
         changes: Array.isArray(item.changes)
           ? item.changes.slice(0, MAX_CHANGES).map((change) => text(change, 200))
           : [],

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { customerChosenLabels } from "@/data/parameterSliders";
+import { fitNoteLabel, resolveFitNotes } from "@/data/fitNotes";
 import Header from "@/components/Header";
 import { useCart } from "@/lib/CartContext";
 import { cartThumbnail } from "@/lib/cartThumbnail";
@@ -88,6 +89,20 @@ export default function CartPage() {
                 {customerChosenLabels(item.category, item.changes).length > 0 && (
                   <p className="mt-1 text-xs text-text-2">
                     {customerChosenLabels(item.category, item.changes).join(", ")}
+                  </p>
+                )}
+                {/* Read back what she told us about her usual size. Without
+                    this the answers vanish between the design page and the
+                    till, which reads as "it did not save" -- and this is the
+                    one part of the order the customer cannot see on the
+                    garment before it is made. */}
+                {resolveFitNotes(item.category, item.fitNotes).length > 0 && (
+                  <p className="mt-1 text-xs text-text-3">
+                    Usually:{" "}
+                    {resolveFitNotes(item.category, item.fitNotes)
+                      .map((id) => fitNoteLabel(item.category, id)?.toLowerCase())
+                      .filter(Boolean)
+                      .join(", ")}
                   </p>
                 )}
                 {/* Adding to the cart used to be a one-way door -- changing a

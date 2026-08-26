@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SIZE_CHART, sizeLabel, sizesForCategory, usesNumericSizes } from "@/data/sizeChart";
+import { fitNotesForCategory } from "@/data/fitNotes";
 import type { SizeMode } from "@/data/designSpec";
 // Shared with the tailor's tech pack, which parses these on the server --
 // see src/lib/measurements.ts for why there is only one copy.
@@ -41,6 +42,8 @@ export default function SizePicker({
   sizeMode,
   size,
   category,
+  fitNotes,
+  onFitNotesChange,
   initialMeasurements,
   onSizeModeChange,
   onSizeChange,
@@ -52,6 +55,8 @@ export default function SizePicker({
   // Which ladder to show. Trousers and skirts are bought as EU numbers, tops
   // as letters -- one chart, two labellings (sizeChart.ts).
   category: string;
+  fitNotes: string[];
+  onFitNotesChange: (ids: string[]) => void;
   measurements: string;
   initialMeasurements?: Partial<MeasurementFields>;
   onSizeModeChange: (mode: SizeMode) => void;
@@ -74,6 +79,9 @@ export default function SizePicker({
   // Standard sizing needs no measurements, so validity only depends on the
   // fields while Tailored is selected.
   const measurementsValid = sizeMode !== "tailored" || Object.keys(errors).length === 0;
+  // Empty for an uploaded design, whose garment type nobody has read yet --
+  // the question then renders not at all rather than guessing a vocabulary.
+  const options = fitNotesForCategory(category);
   useEffect(() => {
     onMeasurementsValidChange?.(measurementsValid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -226,7 +234,58 @@ export default function SizePicker({
             </div>
           </details>
 
-          <p className="mt-2 text-xs text-text-3">
+          {/* "Anything usually wrong with this size?"
+              Standard sizing used to be a letter and nothing else, while
+              Tailored demanded four body measurements and blocked the purchase
+              until it got them. Almost everyone lives in between: they know
+              exactly what is wrong with their usual size and own no tape
+              measure. This is that middle, and it is the brand's own sentence
+              -- "those lovely shirts you wished had longer sleeves" is on
+              /our-story -- turned into a control.
+
+              Optional by construction. It sits below the size, it gates
+              nothing, and an untouched question costs the customer one line of
+              reading. See src/data/fitNotes.ts for why ids travel and labels
+              do not. */}
+          {options.length > 0 && (
+            <div className="mt-4">
+              <p className="text-sm text-text">
+                Anything usually wrong with this size?{" "}
+                <span className="text-text-3">(optional)</span>
+              </p>
+              <p className="mt-0.5 text-[11px] text-text-3">
+                Tap what you normally have to put up with and we cut around it.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {options.map((n) => {
+                  const on = fitNotes.includes(n.id);
+                  return (
+                    <button
+                      key={n.id}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() =>
+                        onFitNotesChange(
+                          on
+                            ? fitNotes.filter((id) => id !== n.id)
+                            : [...fitNotes, n.id],
+                        )
+                      }
+                      className={`min-h-9 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                        on
+                          ? "border-text bg-text text-white"
+                          : "border-border-strong bg-white text-text-2 hover:border-text hover:text-text"
+                      }`}
+                    >
+                      {n.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          <p className="mt-3 text-xs text-text-3">
             No measurement needed. Want a more precise fit? Switch to Tailored above.
           </p>
         </>

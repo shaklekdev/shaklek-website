@@ -58,6 +58,10 @@ export default function UploadPage() {
       color: spec.color,
       size: spec.sizeMode === "tailored" ? "Tailored" : spec.size,
       measurements: spec.sizeMode === "tailored" ? spec.measurements : "",
+      // An upload has no category until a stylist reads it, so fitNotesForCategory
+      // offers nothing and this is always empty. Passed explicitly rather than
+      // omitted so the cart line shape stays one thing.
+      fitNotes: spec.sizeMode === "tailored" ? [] : spec.fitNotes,
       changes: spec.changes.map((c) => c.label),
       freeformNotes: spec.freeformNotes,
     });
@@ -97,6 +101,8 @@ export default function UploadPage() {
               sizeMode={spec.sizeMode}
               size={spec.size}
               category={spec.garmentType}
+              fitNotes={spec.fitNotes}
+              onFitNotesChange={(fitNotes) => setSpec((s) => (s ? { ...s, fitNotes } : s))}
               measurements={spec.measurements}
               onSizeModeChange={(sizeMode) => setSpec((s) => (s ? { ...s, sizeMode } : s))}
               onSizeChange={(size) => setSpec((s) => (s ? { ...s, size } : s))}
