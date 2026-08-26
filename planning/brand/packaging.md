@@ -121,6 +121,16 @@ Agreed, with one exception that matters.
 
 Five things, in the order they will bite.
 
+**DECIDED 2026-08-26 (founder: "add the care label a small one"): a small satin
+care label, sewn to the SIDE SEAM, separate from the brand label.** Two labels,
+not one, and that is the point — the brand label stays a clean wordmark with no
+size and no laundry symbols on it, which was the founder's instruction, while
+the legally required text lives on a small label nobody looks at. Cost ~AED
+0.4–1.0. It carries fibre content, wash symbols and country of origin.
+
+Do NOT put care information only on the site or only on a card: a card is thrown
+away with the wrapping, and the disclosure has to survive on the garment.
+
 1. **A care label or card.** Linen shrinks, creases and softens. Without written
    care instructions the first wash is the customer's fault and the remake is
    Shaklek's cost — and the returns policy already promises a free alteration or
@@ -141,6 +151,13 @@ Five things, in the order they will bite.
 5. **Something that brings her back.** The single highest-return item in this
    whole list. A card with a code, or an invitation to send her measurements for
    next time. Cost: nothing, it is already being printed.
+
+## The visual sheet
+
+A coloured drawing of all nine elements at real proportions, with the material
+palette and the per-order cost, is published as an artifact (2026-08-26). The
+wordmark trials for the header are a separate one. Both are private to the
+founder's Claude account; ask her for the links rather than rebuilding them.
 
 ## Before ordering anything
 
