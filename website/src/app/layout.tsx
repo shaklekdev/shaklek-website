@@ -72,8 +72,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        {/* One request for all three faces. Italiana is the WORDMARK ONLY --
+            it has a single weight and hairline strokes, so it is a signature,
+            not a typeface a page can be set in. Cormorant Garamond replaces
+            Georgia as the display face everywhere else (founder 2026-08-26:
+            she disliked how the hero line was set, and Georgia was why). */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
           rel="stylesheet"
         />
       </head>

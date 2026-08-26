@@ -38,13 +38,17 @@ export default function Header() {
   // background is #ffffff, so at rest the two render the same pixels.
   return (
     <header className="sticky top-0 z-50 bg-white">
-      {/* The wordmark sits CENTRED on its own white row and the menu is a black
-          bar underneath it (Youssef's layout, founder 2026-08-26). The mark is
-          the thing being introduced, so it gets the row; navigation is a
-          different job and now reads as a different band. */}
-      <div className="relative mx-auto flex max-w-6xl items-center justify-center px-6 py-4 sm:py-5">
-        <Link href="/" className="flex flex-col items-center leading-none">
-          <span className="font-display text-2xl font-light tracking-[3px] text-text">
+      {/* Wordmark LEFT, icons right, menu in a black band underneath. The bar
+          is Youssef's layout; the left-aligned mark is the founder's amendment
+          to it (2026-08-26) -- a centred wordmark reads as a fashion editorial,
+          and this is a shop where people have to find the cart. */}
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:py-5">
+        <Link href="/" className="flex flex-col items-start leading-none">
+          {/* Italiana, founder's pick 2026-08-26. Single weight and hairline
+              thins, so it goes UP a step in size -- at 24px its strokes start
+              to disappear on a phone -- and gains letter-spacing, which is
+              what a display face this fine is drawn to be given. */}
+          <span className="font-wordmark text-[27px] tracking-[4px] text-text sm:text-[29px]">
             Shaklek
           </span>
           <span className="my-1.5 h-px w-9 bg-gold" aria-hidden="true" />
@@ -56,9 +60,7 @@ export default function Header() {
             شكلك
           </span>
         </Link>
-        {/* Absolute, so the wordmark is centred on the PAGE and not on whatever
-            space these icons leave over. */}
-        <div className="absolute right-6 flex items-center gap-5">
+        <div className="flex items-center gap-5">
           {/* ONE LINK FOR BOTH STATES, and no Clerk in this component.
 
               This was `isSignedIn ? <UserButton/> : <Link href="/sign-in"/>`, which

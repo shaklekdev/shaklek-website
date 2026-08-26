@@ -19,7 +19,17 @@
   --radius: 20px;
   --radius-sm: 12px;
   --radius-xs: 8px;
-  --font-display: "Georgia", "Times New Roman", serif;
+  /* Cormorant Garamond replaces Georgia, 2026-08-26. Georgia is a screen face
+     drawn for long paragraphs -- thick stems, big x-height -- and it made
+     every heading on this site read heavier than the clothes do. Cormorant is
+     a light, high-contrast garalde with real weights, and it sits properly
+     beside Reem Kufi, which Georgia crowded.
+     ⚠️ IT RUNS SMALL for its point size. Anything set below ~15px in it needs
+     a size bump or it disappears; that is why the wordmark went UP a step. */
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  /* THE WORDMARK ONLY. Single weight, hairline thins -- a signature, not a
+     typeface anything can be set in. Founder's choice, 2026-08-26. */
+  --font-wordmark: "Italiana", "Cormorant Garamond", Georgia, serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
   --font-arabic: "Reem Kufi", sans-serif;
@@ -43,6 +53,7 @@
   --radius-shaklek-sm: var(--radius-sm);
   --radius-shaklek-xs: var(--radius-xs);
   --font-display: var(--font-display);
+  --font-wordmark: var(--font-wordmark);
   --font-body: var(--font-body);
   --font-arabic: var(--font-arabic);
 }
