@@ -253,6 +253,43 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <tr><td>Lambda + EventBridge</td><td>The planned weekly trend-intake job. Never built. <code>/dashboard/trends</code> exists and calls Google Trends on demand from a staff request instead</td><td><span class="status tbd">Not built</span></td></tr>
   </table>
 
+  <h2>Deployed state, verified 2026-08-26</h2>
+  <p class="section-note">
+    Every row below was checked against the live system on this date — the AWS
+    API, the Stripe API, and HTTP requests to production. Nothing here is
+    recalled from a planning document. Re-run the checks rather than trusting
+    the table; the commands are in the footer.
+  </p>
+  <table>
+    <tr><th>Thing</th><th>State</th></tr>
+    <tr><td>Amplify app</td><td><code>shaklek-website</code> · <code>dqcptedylrif0</code> · eu-west-1 · <code>WEB_COMPUTE</code> · deploys from <code>github.com/shaklekdev/shaklek-website</code></td></tr>
+    <tr><td>Custom domain</td><td><code>shaklek.com</code> — <strong>AVAILABLE</strong>. The apex <strong>301-redirects to www</strong> (this doc previously said it 404s; that was stale)</td></tr>
+    <tr><td>Routes</td><td>21 checked. All 200 except <code>/account</code> and <code>/dashboard/orders</code> (307 to sign-in, correct) and <code>/legal/returns</code> (308 redirect)</td></tr>
+    <tr><td>Security headers</td><td>HSTS <code>max-age=63072000; includeSubDomains; preload</code> · CSP present · <code>X-Frame-Options: DENY</code> · <code>nosniff</code> · <code>strict-origin-when-cross-origin</code></td></tr>
+    <tr><td>Environment</td><td>13 variables set. Clerk <strong>live</strong>, Stripe <strong>live</strong>, Resend set, DB set. <strong>No <code>NEXT_PUBLIC_META_PIXEL_ID</code></strong> — the pixel is inert</td></tr>
+    <tr><td>Stripe webhook</td><td><strong>Enabled</strong> at <code>https://www.shaklek.com/api/webhooks/stripe</code>, listening to <code>checkout.session.completed</code> and <code>checkout.session.expired</code></td></tr>
+    <tr><td>Promotion codes</td><td><strong>Zero active.</strong> <code>GET /v1/promotion_codes?active=true</code> returns an empty list. WELCOME20 and TEST99 both deactivated</td></tr>
+    <tr><td>Test charges</td><td>AED 390 order <strong>refunded in full</strong>. ⚠️ Two AED 3.89 TEST99 charges remain <strong>unrefunded</strong> on the founder's own card</td></tr>
+    <tr><td>Apple Pay</td><td><strong>Working.</strong> All three live charges carry <code>wallet.apple_pay</code> in the payment record</td></tr>
+    <tr><td>Monitoring</td><td>3 CloudWatch alarms, all <strong>OK</strong>. EventBridge build-failure rule <strong>ENABLED</strong>. SNS subscription to <strong>hello@shaklek.com</strong> confirmed. Delivery tested</td></tr>
+    <tr><td>Meta feed</td><td><code>/feed/meta.xml</code> live, 200, <strong>32 items</strong>, material reads <code>100% linen</code></td></tr>
+    <tr><td>Fonts</td><td><strong>Self-hosted</strong> via <code>next/font</code> since 2026-08-26. No requests to <code>fonts.googleapis.com</code> or <code>fonts.gstatic.com</code></td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Home-page weight, measured three times today as things changed.</strong>
+    705 KB with Clerk in the root layout → <strong>377 KB</strong> once Clerk
+    was scoped per-route → 420 KB after another session added three Google font
+    families → <strong>465 KB with DOMContentLoaded down from 1595 ms to
+    542 ms</strong> once those fonts were self-hosted.
+    <br><br>
+    ⚠️ <strong>Note that the last step made the byte count go UP while the page
+    got much faster.</strong> Total transferred is the wrong instrument: the
+    win was removing a render-blocking third-party round trip from the critical
+    path, not shrinking the payload. Do not "optimise" this back by chasing
+    bytes.
+  </div>
+
   <h2>How a purchase actually flows</h2>
   <ol class="flow">
     <li><span class="flow-status built">live</span> Browser loads <code>www.shaklek.com</code> → Amplify serves the pre-rendered home page and catalogue from its CDN edge.</li>
