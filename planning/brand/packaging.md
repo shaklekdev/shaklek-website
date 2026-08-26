@@ -99,6 +99,33 @@ quantity.
 
 ---
 
+## The wordmark is Italiana, and that decides which processes it can use
+
+Set 2026-08-26. Italiana is a very high-contrast face: its thick strokes are
+normal and its thin strokes are close to hairlines. **That is what makes it look
+like a fashion label, and it is also a manufacturing constraint.**
+
+| Process | Italiana | Why |
+|---|---|---|
+| **Woven label** | ✅ fine | Weaving resolves detail far finer than stitching — down to a fraction of a millimetre |
+| **Screen print** (linen bag) | ✅ fine | Holds thin strokes comfortably at bag scale |
+| **Letterpress / foil** (cards) | ✅ fine | Fine lines are what these processes are for |
+| **Hot stamp** (kraft) | ⚠️ check | Kraft is rough; ask for a proof on the actual stock |
+| **EMBROIDERY** | ❌ **no** | Satin stitch needs roughly **1–1.5 mm** of stroke. On a 35 mm wordmark Italiana's thins land near **0.2 mm**, so they would either not stitch at all or have to be thickened — and thickening them removes the contrast that makes it Italiana |
+
+**Founder's question, 2026-08-26: does the thin wordmark rule out embroidery?**
+For the Latin wordmark, yes. But nothing in this plan needs it embroidered —
+the label is woven and the bag is screen-printed, and both handle it.
+
+**If something is to be stitched, stitch the Arabic.** `شكلك` in Reem Kufi has
+even, substantial strokes with no hairlines anywhere; it is the half of the mark
+that embroiders beautifully, at any size, on any cloth. The gold rule stitches
+well too. That gives a stitched mark that is unmistakably Shaklek without asking
+a hairline serif to do something it cannot.
+
+Going back to Georgia would solve embroidery and reintroduce the problem that
+started this — and a system font is weak ground for a brand mark regardless.
+
 ## Print rules — "print logo everywhere"
 
 Agreed, with one exception that matters.

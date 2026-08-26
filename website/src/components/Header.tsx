@@ -135,14 +135,22 @@ export default function Header() {
           centred below that -- three short labels fit a phone comfortably,
           which is the whole reason the hamburger could go. */}
       <nav aria-label="Main" className="bg-text">
-        <div className="flex items-center justify-center gap-7 px-6 py-2.5 sm:justify-end sm:gap-10 sm:px-10">
+        {/* CENTRED AT EVERY WIDTH (founder, 2026-08-26). It was right-aligned
+            from 640px to match the mockup; she wants the three links centred on
+            a phone and on a desktop alike, so the bar reads the same way
+            everywhere. */}
+        <div className="flex items-center justify-center gap-7 px-6 py-2.5 sm:gap-12">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              /* white/75 rather than a grey: on black, a mid-grey reads as
-                 disabled. It lifts to full white on hover. */
-              className="font-display text-[13px] tracking-[0.5px] text-white/75 transition-colors hover:text-white"
+              /* NOT the display serif. Cormorant is a light, high-contrast
+                 face -- at 13px reversed out of black its thin strokes broke up
+                 and the founder could not read them. Small reversed type wants
+                 an even-weight sans, full white, and a little letter-spacing to
+                 stop it closing up. The serif belongs in the wordmark and the
+                 headings, not in 13px navigation. */
+              className="font-body text-[13.5px] tracking-[0.06em] text-white transition-colors hover:text-white/70"
             >
               {link.label}
             </Link>
