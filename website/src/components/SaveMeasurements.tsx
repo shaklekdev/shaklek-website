@@ -34,6 +34,7 @@ export default function SaveMeasurements({
   const { isSignedIn } = useUser();
   const clerk = useClerk();
   const [state, setState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [hint, setHint] = useState(false);
 
   // Held across the sign-up round trip. The customer typed these BEFORE an
   // account existed, and losing them to the redirect would make the feature
@@ -85,37 +86,65 @@ export default function SaveMeasurements({
 
   return (
     <div className={className}>
+      {/* A REAL BUTTON. This was an underlined sentence, and the founder's
+          note was that nobody knows a sentence is clickable -- which is why
+          she reported the sign-up popup as missing. It was not missing: Clerk's
+          modal opens correctly on click. Nobody had ever clicked it.
+
+          It stays enabled even when the measurements are incomplete. A
+          disabled button on a phone does nothing when tapped and explains
+          nothing, so instead the click tells the customer what is needed and
+          takes them to the fields. */}
       <button
         type="button"
-        disabled={state === "saving" || !ready}
-        title={ready ? undefined : "Fill in your measurements first"}
+        disabled={state === "saving"}
+        title={
+          ready
+            ? undefined
+            : "Add your measurements above to be able to save"
+        }
         onClick={() => {
+          if (!ready) {
+            setHint(true);
+            document
+              .querySelector("input[type=number]")
+              ?.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+          setHint(false);
           if (isSignedIn) {
             void save(measurements);
             return;
           }
           pending.current = measurements;
           // Clerk's modal, not a redirect: leaving the page mid-design would
-          // lose everything they have configured.
+          // lose everything already configured.
           clerk.openSignUp({});
         }}
-        className="text-[13px] text-text underline underline-offset-4 hover:text-text-2 disabled:cursor-not-allowed disabled:no-underline disabled:opacity-40"
+        className={`w-full border px-5 py-3 text-sm transition-colors sm:w-auto ${
+          ready
+            ? "border-text bg-text text-white hover:opacity-90"
+            : "border-border-strong bg-white text-text-2 hover:border-text hover:text-text"
+        } disabled:opacity-60`}
       >
-        {state === "saving"
-          ? "Saving…"
-          : isSignedIn
-            ? "Save these measurements to my account"
-            : "Save my measurements for next time"}
+        {state === "saving" ? "Saving…" : "Save my measurements"}
       </button>
-      <p className="mt-1 text-[11px] text-text-3">
-        {!ready
-          ? "Add your four measurements above to save them."
-          : isSignedIn
-            ? "Kept on your account for next time."
-            : "Creates an account with your email. Your piece is cut to these numbers either way."}
-      </p>
+
+      {/* Shown only after a click that could not proceed, never as standing
+          text under the button. */}
+      {hint && !ready && (
+        <p role="status" className="mt-2 text-[12px] text-text-2">
+          Add your measurements above to be able to save.
+        </p>
+      )}
+      {ready && !isSignedIn && (
+        <p className="mt-2 text-[11px] text-text-3">
+          Takes an email and a password. Your piece is cut to these numbers
+          either way.
+        </p>
+      )}
       {state === "error" && (
-        <p role="alert" className="mt-1 text-[11px] text-red-700">
+        <p role="alert" className="mt-2 text-[11px] text-red-700">
           Could not save just now. Your order is unaffected.
         </p>
       )}

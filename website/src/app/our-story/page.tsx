@@ -274,8 +274,11 @@ export default function OurStoryPage() {
 
       {/* Closing */}
       <div className="mx-auto w-full max-w-2xl px-6 pb-20">
+        {/* /#catalog, not "/". A Start designing button that drops someone at
+            the top of the home page makes them scroll past the whole explainer
+            they have just read. */}
         <Link
-          href="/"
+          href="/#catalog"
           className="inline-block bg-accent px-6 py-3 text-sm text-white transition-opacity hover:opacity-90"
         >
           Start designing

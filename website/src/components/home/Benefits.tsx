@@ -47,6 +47,10 @@ function BenefitIcon({ name }: { name: string }) {
 export default function Benefits() {
   return (
     <section className="mx-auto w-full max-w-6xl px-6 pb-16">
+      {/* Named, because an unlabelled row of three claims under the catalogue
+          reads as decoration. As a section with a question for a title it is
+          answering something the customer is actually asking by that point. */}
+      <h2 className="mb-6 text-lg text-text">Why choose us</h2>
       <ul className="grid gap-6 sm:grid-cols-3 sm:gap-8">
         {BENEFITS.map((b) => (
           <li key={b.k} className="flex gap-3">

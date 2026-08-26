@@ -25,6 +25,14 @@ import SaveMeasurements from "@/components/SaveMeasurements";
  * Pre-fills from the account for anyone signed in, so this doubles as "check
  * and update what we have" rather than only a first-time form.
  */
+function inRange(
+  f: (typeof FIELD_LABELS)[number],
+  raw: string,
+): boolean {
+  const v = Number(raw);
+  return raw.trim() !== "" && Number.isFinite(v) && v >= f.min && v <= f.max;
+}
+
 export default function SizeGuideMeasurements() {
   const [fields, setFields] = useState<MeasurementFields>(EMPTY_FIELDS);
 
@@ -44,10 +52,7 @@ export default function SizeGuideMeasurements() {
       .catch(() => {});
   }, []);
 
-  const complete = FIELD_LABELS.every((f) => {
-    const v = Number(fields[f.key]);
-    return fields[f.key].trim() !== "" && v >= f.min && v <= f.max;
-  });
+  const complete = FIELD_LABELS.every((f) => inRange(f, fields[f.key]));
 
   return (
     <div className="not-prose mt-8 border border-border-strong bg-surface p-5">
@@ -63,6 +68,10 @@ export default function SizeGuideMeasurements() {
             <span className="mb-1 block text-[11px] tracking-wide text-text-3 uppercase">
               {f.label} <span className="normal-case">cm</span>
             </span>
+            {/* The field tells you where it stands. Customers reported not
+                knowing what to type or whether a number was acceptable, so the
+                expected range is printed under every box and the border turns
+                green once the value is inside it. Silence is not feedback. */}
             <input
               type="number"
               inputMode="numeric"
@@ -70,11 +79,29 @@ export default function SizeGuideMeasurements() {
               max={f.max}
               value={fields[f.key]}
               placeholder={f.placeholder}
+              aria-invalid={
+                fields[f.key].trim() !== "" && !inRange(f, fields[f.key])
+              }
               onChange={(e) =>
                 setFields((p) => ({ ...p, [f.key]: e.target.value }))
               }
-              className="w-full border border-border-strong bg-white px-3 py-2 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+              className={`w-full border bg-white px-3 py-2 text-sm text-text placeholder:text-text-3 focus:outline-none ${
+                fields[f.key].trim() === ""
+                  ? "border-border-strong focus:border-accent"
+                  : inRange(f, fields[f.key])
+                    ? "border-green-600"
+                    : "border-red-500"
+              }`}
             />
+            <span
+              className={`mt-1 block text-[10px] ${
+                fields[f.key].trim() !== "" && !inRange(f, fields[f.key])
+                  ? "text-red-700"
+                  : "text-text-3"
+              }`}
+            >
+              {f.min}–{f.max}
+            </span>
           </label>
         ))}
       </div>

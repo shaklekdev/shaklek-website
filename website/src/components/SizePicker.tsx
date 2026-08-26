@@ -218,9 +218,19 @@ export default function SizePicker({
                 <label htmlFor={`measurement-${f.key}`} className="mb-1 block text-xs text-text-2">
                   {f.label}
                 </label>
+                {/* Green once the value is inside the accepted range. Users
+                    reported not knowing what to type or whether a number was
+                    acceptable: the field only ever spoke when it was unhappy,
+                    so a correct entry got silence. */}
                 <div
                   className={`flex items-center rounded-shaklek-xs border bg-white focus-within:border-accent ${
-                    shownErrors[f.key] ? "border-red-400" : "border-border-strong"
+                    shownErrors[f.key]
+                      ? "border-red-400"
+                      : fields[f.key].trim() !== "" &&
+                          Number(fields[f.key]) >= f.min &&
+                          Number(fields[f.key]) <= f.max
+                        ? "border-green-600"
+                        : "border-border-strong"
                   }`}
                 >
                   <input
@@ -240,6 +250,11 @@ export default function SizePicker({
                   />
                   <span className="pr-3 text-xs text-text-3">cm</span>
                 </div>
+                {/* The expected range, always visible, so nobody has to guess
+                    and then be told they were wrong. */}
+                <span className="mt-1 block text-[10px] text-text-3">
+                  {f.min}&ndash;{f.max} cm
+                </span>
                 {shownErrors[f.key] && (
                   <p id={`measurement-${f.key}-error`} className="mt-1 text-xs text-red-700">
                     {shownErrors[f.key]}

@@ -69,6 +69,20 @@ export default function CatalogCard({
         </p>
         <p className="mt-1.5 text-xs text-text-2">AED {item.price}</p>
       </Link>
+
+      {/* Says the piece is not fixed.
+          A photograph of a garment with a price under it reads as "this exact
+          item, take it or leave it" -- which is what a normal shop sells, and
+          the founder's point is that visitors assume the same here. The whole
+          proposition is that the piece changes, and nothing on the card said
+          so. It goes to the same place tapping the photo does; it exists to
+          make the offer legible, not to add a route. */}
+      <Link
+        href={href}
+        className="mt-3 block border border-border-strong px-3 py-2 text-center text-[12px] text-text transition-colors hover:border-text hover:bg-text hover:text-white"
+      >
+        Make it yours
+      </Link>
     </div>
   );
 }
