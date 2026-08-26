@@ -10,6 +10,31 @@ on push to `main`. Planning docs in `planning/`.
 on this repo at once. Read it before you start so you do not edit a file another
 session is holding uncommitted, and update it before you finish.
 
+## The architecture file is the map. Keep it true.
+
+**`planning/aws-architecture-diagram.html`** — open it in a browser. It is the
+single answer to *what is deployed, how it fits together, and what is still
+pending*. It carries the live component table, the request flow, the deploy
+traps, the security posture, the verified deployed state, and the ranked
+"what to build next".
+
+> ⚠️ **EVERY CHANGE TO THE ENVIRONMENT MUST BE MAPPED THERE, IN THE SAME
+> SESSION THAT MAKES IT.** A new service, a new alarm, a new scheduled job, a
+> new environment variable, a component removed, a status that moved from
+> planned to live — if it changes what is deployed or how, it goes in that file
+> before the session ends. Founder's instruction, 2026-08-26.
+
+This is not bookkeeping. That file spent months naming **Amazon RDS** as the
+database (it is Neon), showing an **S3 bucket** that has never existed, and
+drawing **Gemini in the live request path** when Gemini has never been called
+at runtime. Every component still read "not deployed" while the site was taking
+real cards. A map that lies is worse than no map, because people act on it.
+
+**Verify, do not inherit.** Infrastructure state lives outside git — the
+Amplify console, the Stripe dashboard, the AWS account — so a sentence about it
+goes stale with no diff to notice. The same file also claimed for days that the
+apex domain 404s; it 301-redirects. Check the live system, then write it down.
+
 **§7 matters more than the technical sections.** Nearly everything that has gone
 wrong on this project was scope creep or claiming success without checking —
 not missing knowledge. Read it before doing anything that costs money.
