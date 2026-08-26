@@ -17,7 +17,7 @@ import path from "node:path";
 
 const ROOT = path.resolve(process.cwd(), "..");
 const OUT = path.join(ROOT, "branding");
-const FONTS = path.join(OUT, "logo", "fonts");
+const FONTS = path.join(OUT, "source", "fonts");
 mkdirSync(OUT, { recursive: true });
 
 const INK = "#1A1A1A", GOLD = "#9C8445", MUTED = "#6d6659", HAIR = "#d8d2c6", CREAM = "#F5F0E8";
@@ -38,7 +38,7 @@ function shape(file, text, size, tracking = 0) {
 }
 
 const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: "Shaklek artwork for suppliers", Author: "Shaklek" } });
-doc.pipe(createWriteStream(path.join(OUT, "Shaklek-artwork-for-suppliers.pdf")));
+doc.pipe(createWriteStream(path.join(OUT, "send-to-supplier", "READ-ME-FIRST-Shaklek-artwork.pdf")));
 
 const W = doc.page.width, H = doc.page.height, M = 52, CW = W - M * 2;
 let y = 0;
@@ -105,17 +105,17 @@ rule(y); y += 22;
 label("Which mark goes on which item", y); y += 20;
 
 const rows = [
-  ["Linen drawstring bag", "Wordmark, one colour", "shaklek-lockup-black", "Screen print. Ink to match the gold, or black."],
-  ["Woven brand label", "Wordmark, colour", "shaklek-lockup-colour", "Weaving holds fine detail. No size, no care text on this one."],
-  ["Care label", "Monogram", "shaklek-monogram-black", "Small. Fibre, care symbols and origin sit beside it."],
-  ["Hang tag", "Wordmark, colour", "shaklek-lockup-colour", "Order reference printed below the mark."],
-  ["Thank-you card", "Wordmark, colour", "shaklek-lockup-colour", "Letterpress or foil. Fine lines are what these are for."],
-  ["Envelope", "Monogram", "shaklek-monogram-black", "Back flap, small."],
-  ["Tissue seal sticker", "Seal", "shaklek-seal-gold", "Gold circle, cream mark. 30–40 mm."],
-  ["Tissue wrap", "Wordmark, one colour", "shaklek-lockup-black", "Light repeat. Keep it faint."],
-  ["Mailer", "Monogram, small", "shaklek-monogram-black", "Deliberately understated. A heavily branded parcel advertises what is worth stealing."],
-  ["Paper bag", "Wordmark, one colour", "shaklek-lockup-black", "Hand-over only. Not used for courier orders."],
-  ["Embroidery, anywhere", "Monogram ONLY", "shaklek-monogram-black.pdf", "See the note overleaf. The Latin cannot be stitched."],
+  ["Linen drawstring bag", "Wordmark, one colour", "shaklek-logo-one-colour", "Screen print. Ink to match the gold, or black."],
+  ["Woven brand label", "Wordmark, colour", "shaklek-logo", "Weaving holds fine detail. No size, no care text on this one."],
+  ["Care label", "Monogram", "shaklek-monogram", "Small. Fibre, care symbols and origin sit beside it."],
+  ["Hang tag", "Wordmark, colour", "shaklek-logo", "Order reference printed below the mark."],
+  ["Thank-you card", "Wordmark, colour", "shaklek-logo", "Letterpress or foil. Fine lines are what these are for."],
+  ["Envelope", "Monogram", "shaklek-monogram", "Back flap, small."],
+  ["Tissue seal sticker", "Seal", "shaklek-gold-seal", "Gold circle, cream mark. 30–40 mm."],
+  ["Tissue wrap", "Wordmark, one colour", "shaklek-logo-one-colour", "Light repeat. Keep it faint."],
+  ["Mailer", "Monogram, small", "shaklek-monogram", "Deliberately understated. A heavily branded parcel advertises what is worth stealing."],
+  ["Paper bag", "Wordmark, one colour", "shaklek-logo-one-colour", "Hand-over only. Not used for courier orders."],
+  ["Embroidery, anywhere", "Monogram ONLY", "shaklek-monogram.pdf", "See the note overleaf. The Latin cannot be stitched."],
 ];
 
 doc.font("Helvetica-Bold").fontSize(7.5).fillColor(MUTED);
@@ -193,7 +193,7 @@ const proc = [
   ["Letterpress / foil", "Yes", "Fine lines are what these processes are for."],
   ["Hot stamp on kraft", "Proof first", "Kraft is rough. Ask for a proof on the real stock."],
   ["EMBROIDERY of the wordmark", "No", "Satin stitch needs about 1–1.5 mm of stroke. On a 35 mm wordmark the thin strokes are near 0.2 mm, so they will not stitch, and thickening them changes the mark."],
-  ["EMBROIDERY of the monogram", "Yes", "Even strokes, no hairlines. Stitches cleanly at any size on any cloth. Use shaklek-monogram-black.pdf."],
+  ["EMBROIDERY of the monogram", "Yes", "Even strokes, no hairlines. Stitches cleanly at any size on any cloth. Use shaklek-monogram.pdf."],
 ];
 for (const [name, verdict, note] of proc) {
   const nh = doc.font("Helvetica").fontSize(8).heightOfString(note, { width: CW - 200, lineGap: 1.4 });
@@ -227,4 +227,4 @@ draw(sheenSmall.segs, W - M - 22, FOOTER_Y + 12, INK);
 console.log(`page 2 content ends at ${y.toFixed(0)}pt, footer at ${FOOTER_Y}pt, clearance ${(FOOTER_Y - y).toFixed(0)}pt`);
 
 doc.end();
-console.log("wrote branding/Shaklek-artwork-for-suppliers.pdf");
+console.log("wrote branding/send-to-supplier/READ-ME-FIRST-Shaklek-artwork.pdf");

@@ -30,9 +30,22 @@ import { readFileSync, writeFileSync, mkdirSync, createWriteStream } from "node:
 import path from "node:path";
 
 const ROOT = path.resolve(process.cwd(), "..");
-const OUT = path.join(ROOT, "branding", "logo");
-const FONTS = path.join(OUT, "fonts");
-mkdirSync(OUT, { recursive: true });
+const BRAND = path.join(ROOT, "branding");
+
+// THREE FOLDERS, ORDERED BY WHO NEEDS THEM. A flat directory of 44 files told
+// the founder nothing about which two to attach to an email, which was the only
+// question she actually had.
+//
+//   send-to-supplier/  the six marks a supplier needs, PNG + vector PDF,
+//                      named in plain words rather than studio jargon
+//   other-formats/     the remaining variants, and a JPG of everything, for
+//                      when a supplier specifically asks
+//   source/            the SVG masters and the two fonts they were built from
+const SEND = path.join(BRAND, "send-to-supplier");
+const OTHER = path.join(BRAND, "other-formats");
+const SOURCE = path.join(BRAND, "source");
+const FONTS = path.join(SOURCE, "fonts");
+for (const d of [SEND, OTHER, SOURCE, FONTS]) mkdirSync(d, { recursive: true });
 
 const INK = "#1A1A1A";
 const GOLD = "#9C8445";
@@ -128,20 +141,41 @@ const files = [
   ["shaklek-seal-gold", doc(MBOX, MBOX, monoBody(CREAM, `  <circle cx="${(MBOX / 2).toFixed(2)}" cy="${(MBOX / 2).toFixed(2)}" r="${(MBOX / 2).toFixed(2)}" fill="${GOLD}"/>\n`), "Shaklek seal"), "square", false],
 ];
 
+// name in the pack        -> [source key, folder, plain filename]
+// Plain names, because "lockup-colour" means nothing to anyone outside a
+// design studio and this folder is read by suppliers.
+const PLACEMENT = {
+  "shaklek-lockup-colour": [SEND, "shaklek-logo"],
+  "shaklek-lockup-black": [SEND, "shaklek-logo-one-colour"],
+  "shaklek-lockup-white": [SEND, "shaklek-logo-white-on-dark"],
+  "shaklek-monogram-black": [SEND, "shaklek-monogram"],
+  "shaklek-monogram-white": [SEND, "shaklek-monogram-white-on-dark"],
+  "shaklek-seal-gold": [SEND, "shaklek-gold-seal"],
+  "shaklek-wordmark-black": [OTHER, "shaklek-name-only"],
+  "shaklek-wordmark-white": [OTHER, "shaklek-name-only-white-on-dark"],
+  "shaklek-arabic-black": [OTHER, "shaklek-arabic-only"],
+  "shaklek-arabic-white": [OTHER, "shaklek-arabic-only-white-on-dark"],
+  "shaklek-monogram-gold": [OTHER, "shaklek-monogram-gold"],
+};
+
 const made = [];
 for (const [name, svg, kind, reversed] of files) {
-  writeFileSync(`${OUT}/${name}.svg`, svg);
+  const [dir, plain] = PLACEMENT[name];
+  // The SVG master always goes to source/, whatever else happens to it.
+  writeFileSync(`${SOURCE}/${plain}.svg`, svg);
   const px = kind === "wide" ? 3000 : 1600;
   const buf = Buffer.from(svg);
-  await sharp(buf, { density: 300 }).resize({ width: px }).png({ compressionLevel: 9 }).toFile(`${OUT}/${name}@${px}.png`);
+  await sharp(buf, { density: 300 }).resize({ width: px }).png({ compressionLevel: 9 }).toFile(`${dir}/${plain}.png`);
   // JPG has no transparency, so a reversed mark is flattened onto black and
   // everything else onto white -- a supplier who cannot take PNG gets something
-  // that is still legible rather than a black square on black.
+  // legible rather than a black square on black. Always a fallback, so it lives
+  // in other-formats even for the marks that ship in send-to-supplier.
   await sharp(buf, { density: 300 }).resize({ width: px })
     .flatten({ background: reversed ? INK : "#ffffff" })
-    .jpeg({ quality: 95, mozjpeg: true }).toFile(`${OUT}/${name}@${px}.jpg`);
-  made.push(name);
+    .jpeg({ quality: 95, mozjpeg: true }).toFile(`${OTHER}/${plain}.jpg`);
+  made.push([name, dir === SEND ? "send" : "other", plain]);
 }
+const plainOf = Object.fromEntries(Object.entries(PLACEMENT).map(([k, v]) => [k, v]));
 
 // ------------------------------------------------------- vector PDF per mark
 function pdfPaths(stream, segs, dx, dy, fill) {
@@ -206,14 +240,17 @@ const pdfJobs = [
   }],
 ];
 for (const [name, w, h, drawFn] of pdfJobs) {
-  await writeVectorPdf(`${OUT}/${name}.pdf`, w, h, drawFn);
+  const [dir, plain] = plainOf[name];
+  await writeVectorPdf(`${dir}/${plain}.pdf`, w, h, drawFn);
 }
 
 // verify the monogram really is centred, and say so out loud
-const after = await inkBounds(readFileSync(`${OUT}/shaklek-monogram-black.svg`, "utf8"));
+const after = await inkBounds(readFileSync(`${SOURCE}/shaklek-monogram.svg`, "utf8"));
 const vErr = (after.box - (after.y + after.h)) - after.y;
 const hErr = (after.box - (after.x + after.w)) - after.x;
 
 console.log(`latin ${latin.glyphs} glyphs, arabic ${arabic.glyphs} glyphs, monogram ${sheen.glyphs} glyphs (shaped)`);
-console.log(`${made.length} marks x svg + png + jpg + pdf = ${made.length * 4} files`);
+console.log(`send-to-supplier: ${made.filter((m) => m[1] === "send").length} marks (png + pdf)`);
+console.log(`other-formats:    ${made.filter((m) => m[1] === "other").length} marks, plus a jpg of all ${made.length}`);
+console.log(`source:           ${made.length} svg masters + 2 fonts`);
 console.log(`monogram centring: vertical error ${vErr.toFixed(1)}, horizontal ${hErr.toFixed(1)} of ${after.box.toFixed(0)}`);
