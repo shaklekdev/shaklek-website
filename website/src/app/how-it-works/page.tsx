@@ -17,7 +17,7 @@ const steps = [
   {
     n: "01",
     title: "Pick a piece",
-    body: "Eight essentials in linen or organic cotton. Shirts and trousers, cut to last past a season.",
+    body: "Eight timeless essentials in 100% linen. Shirts and trousers, cut to last past a season.",
   },
   {
     n: "02",
@@ -56,7 +56,7 @@ const steps = [
 const promises = [
   { k: "From AED 389", v: "One price per piece type. Fabric and every option included." },
   { k: "Nothing on a shelf", v: "Your piece does not exist until you ask for it. No overproduction, no waste." },
-  { k: "Cotton and linen only", v: "Breathable natural fabric against your skin. Never synthetic." },
+  { k: "Natural fibre only", v: "100% linen against your skin. Breathable, never synthetic." },
 ];
 
 export default function HowItWorksPage() {
@@ -94,7 +94,7 @@ export default function HowItWorksPage() {
         </div>
 
         <Link
-          href="/"
+          href="/#catalog"
           className="mt-10 inline-block rounded-full bg-accent px-6 py-3 text-sm text-white"
         >
           Start with a piece

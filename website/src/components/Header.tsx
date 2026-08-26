@@ -15,7 +15,10 @@ import { useCart } from "@/lib/CartContext";
 // measurements, which is the thing this business actually runs on -- so it
 // earns a menu slot in a way an explainer never did.
 const NAV_LINKS = [
-  { href: "/", label: "Catalog" },
+  // /#catalog, not "/" -- same fix as the Start designing buttons. A menu item
+  // called Catalog that lands someone at the top of the home page makes them
+  // scroll past the whole page to reach the clothes they asked for.
+  { href: "/#catalog", label: "Catalog" },
   { href: "/size-guide", label: "Size custom" },
   { href: "/our-story", label: "Our story" },
 ];
@@ -204,6 +207,12 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
+              /* The menu closes on a PATHNAME change, and "/#catalog" tapped
+                 from the home page does not change the pathname -- it only
+                 scrolls. Without this, tapping Catalog on a phone scrolled the
+                 page to the clothes and then left the open menu sitting on top
+                 of them. */
+              onClick={() => setMenuOpen(false)}
               className="block border-b border-border py-3.5 text-sm text-text-2 transition-colors hover:text-text"
             >
               {link.label}

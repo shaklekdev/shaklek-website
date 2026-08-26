@@ -265,16 +265,19 @@ export default function SizePicker({
                     value={fields[f.key]}
                     onChange={(e) => updateField(f.key, e.target.value)}
                     onBlur={() => setTouched((t) => ({ ...t, [f.key]: true }))}
-                    placeholder={f.placeholder}
+                    /* The range IS the placeholder now (founder, 2026-08-26).
+                       It used to be a specimen value -- "90" in the bust box --
+                       with the range on a separate line underneath, so the box
+                       showed a number that was not the customer's and the page
+                       carried two hints per field. One hint, in the one place
+                       the eye is already looking. "cm" is not repeated here
+                       because the field already prints it against the right
+                       edge. */
+                    placeholder={`${f.min}\u2013${f.max}`}
                     className="w-full bg-transparent p-3 text-sm text-text placeholder:text-text-3 focus:outline-none"
                   />
                   <span className="pr-3 text-xs text-text-3">cm</span>
                 </div>
-                {/* The expected range, always visible, so nobody has to guess
-                    and then be told they were wrong. */}
-                <span className="mt-1 block text-[10px] text-text-3">
-                  {f.min}&ndash;{f.max} cm
-                </span>
                 {shownErrors[f.key] && (
                   <p id={`measurement-${f.key}-error`} className="mt-1 text-xs text-red-700">
                     {shownErrors[f.key]}

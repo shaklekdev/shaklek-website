@@ -78,7 +78,9 @@ export default function SizeGuideMeasurements() {
               min={f.min}
               max={f.max}
               value={fields[f.key]}
-              placeholder={f.placeholder}
+              /* The range, in the box -- not a specimen value with the range
+                 printed underneath. Same rule as the other two forms. */
+              placeholder={`${f.min}\u2013${f.max}`}
               aria-invalid={
                 fields[f.key].trim() !== "" && !inRange(f, fields[f.key])
               }
@@ -93,15 +95,15 @@ export default function SizeGuideMeasurements() {
                     : "border-red-500"
               }`}
             />
-            <span
-              className={`mt-1 block text-[10px] ${
-                fields[f.key].trim() !== "" && !inRange(f, fields[f.key])
-                  ? "text-red-700"
-                  : "text-text-3"
-              }`}
-            >
-              {f.min}–{f.max}
-            </span>
+            {/* Only when the number is actually wrong. The range lives in the
+                placeholder now, so printing it again under an empty box said
+                the same thing twice; printing it under a BAD number is the
+                only moment it is news. */}
+            {fields[f.key].trim() !== "" && !inRange(f, fields[f.key]) && (
+              <span className="mt-1 block text-[10px] text-red-700">
+                Needs to be between {f.min} and {f.max}
+              </span>
+            )}
           </label>
         ))}
       </div>

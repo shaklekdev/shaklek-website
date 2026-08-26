@@ -1,17 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  clearPendingMeasurements,
+  FIELD_LABELS,
+  parseMeasurements,
+  readPendingMeasurements,
+} from "@/lib/measurements";
 
 type Measurements = { bust: string; waist: string; hip: string; height: string; notes: string };
 
 const EMPTY: Measurements = { bust: "", waist: "", hip: "", height: "", notes: "" };
 
-const FIELDS: { key: keyof Omit<Measurements, "notes">; label: string; placeholder: string }[] = [
-  { key: "bust", label: "Bust / chest", placeholder: "90" },
-  { key: "waist", label: "Waist", placeholder: "74" },
-  { key: "hip", label: "Hip", placeholder: "98" },
-  { key: "height", label: "Height", placeholder: "165" },
-];
+// These four were declared a second time here, with their own labels and
+// their own specimen placeholders and no ranges at all -- so the same four
+// boxes behaved differently depending on which page you met them on. One
+// source, shared with SizePicker's Tailored mode.
+const FIELDS = FIELD_LABELS;
 
 export default function MeasurementsForm() {
   const [fields, setFields] = useState<Measurements>(EMPTY);
@@ -19,14 +24,50 @@ export default function MeasurementsForm() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // Drains anything the "Save my measurements" button parked before sending
+  // the customer through sign-up.
+  //
+  // The button opens Clerk's modal in place and overrides the redirect so it
+  // stays put, but a sign-up completed from an email link in another tab --
+  // or any future change to that redirect -- lands here instead, with the
+  // numbers only in sessionStorage. Without this, that customer typed their
+  // measurements, created an account because we asked them to, and arrived on
+  // a page showing four empty boxes. Draining it here means the save lands
+  // wherever the flow ends up.
   useEffect(() => {
+    // Expires after fifteen minutes -- see lib/measurements.ts. On a shared
+    // browser an abandoned sign-up must not hand its measurements to whoever
+    // signs in next.
+    const pending = readPendingMeasurements(Date.now());
+    const parsed = pending ? parseMeasurements(pending) : undefined;
+
     fetch("/api/account/measurements")
       .then((res) => res.json())
       .then((data) => {
-        if (data.ok && data.measurements) setFields(data.measurements);
+        // The pending numbers are the ones just typed, so they win over
+        // whatever was stored before.
+        if (parsed) setFields(parsed);
+        else if (data.ok && data.measurements) setFields(data.measurements);
         setLoaded(true);
       })
-      .catch(() => setLoaded(true));
+      .catch(() => {
+        if (parsed) setFields(parsed);
+        setLoaded(true);
+      })
+      .then(async () => {
+        if (!pending || !parsed) return;
+        try {
+          const res = await fetch("/api/account/measurements", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(parsed),
+          });
+          if (res.ok) setSaved(true);
+        } catch {
+          // Left in the form for them to save by hand rather than lost.
+        }
+        clearPendingMeasurements();
+      });
   }, []);
 
   function updateField(key: keyof Measurements, value: string) {
@@ -68,10 +109,12 @@ export default function MeasurementsForm() {
                 id={`saved-${f.key}`}
                 type="number"
                 inputMode="decimal"
-                min="0"
+                min={f.min}
+                max={f.max}
                 value={fields[f.key]}
                 onChange={(e) => updateField(f.key, e.target.value)}
-                placeholder={f.placeholder}
+                /* The accepted range, in the box, same as the design page. */
+                placeholder={`${f.min}\u2013${f.max}`}
                 className="w-full rounded-shaklek-xs bg-transparent p-2.5 text-sm text-text placeholder:text-text-3 focus:outline-none"
               />
               <span className="pr-2.5 text-xs text-text-3">cm</span>

@@ -14,6 +14,13 @@ import { catalog } from "@/data/catalog";
 // fashion essentials: timeless, elegant, customizable, very skin-friendly,
 // organic cotton or linen."
 //
+// ⚠️ THE FABRIC HALF OF THAT LINE IS AHEAD OF THE SUPPLY. On 2026-08-26 the
+// founder confirmed there is no organic cotton supplier -- it is an online
+// order with a two-week ETA -- and that the MVP ships LINEN ONLY, because all
+// catalog photography was generated in linen. Every "organic cotton and linen"
+// on the site has been narrowed to linen for that reason, not as a copy edit.
+// Put cotton back the day fabrics.ts marks it available, and not before.
+//
 // So: "essentials" and "timeless" are load-bearing and should not be edited
 // out for something punchier. The subtitle below is the founder's own line,
 // which has now been restored twice after rewrites; if it needs to change
@@ -51,7 +58,7 @@ export const STEPS = [
   {
     n: "01",
     title: "Pick your piece",
-    body: "Eight essentials in linen or organic cotton. Change the sleeve, leg or length and watch the piece change with it.",
+    body: "Eight timeless essentials in 100% linen. Change the sleeve, leg or length and watch the piece change with it.",
   },
   {
     n: "02",
@@ -87,8 +94,8 @@ export const BENEFITS = [
     icon: "leaf",
   },
   {
-    k: "Cotton and linen only",
-    v: "Breathable natural fabric against your skin. Never synthetic.",
+    k: "Natural fibre only",
+    v: "100% linen against your skin. Breathable, never synthetic.",
     icon: "thread",
   },
 ];
@@ -102,7 +109,7 @@ export const VALUES = [
   },
   {
     k: "Kind to your skin",
-    v: "Organic cotton and linen, and nothing else. Breathable natural fibre against your skin all day, never synthetic.",
+    v: "100% linen, and nothing else. Breathable natural fibre against your skin all day, never synthetic. Organic cotton follows once we can cut it.",
   },
   {
     k: "Tailoring is never an upgrade",
