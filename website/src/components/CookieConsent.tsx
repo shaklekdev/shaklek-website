@@ -45,12 +45,17 @@ export default function CookieConsent() {
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-surface px-4 py-4 sm:px-6"
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* "cookies from Meta", not a count. Meta sets TWO: _fbp always, and
-            _fbc when a visitor arrives from an ad click carrying fbclid. The
-            earlier "one cookie" understated what this bar asks permission for,
-            and _fbc is precisely the one an ad campaign sets, so it was the
-            worst one to omit. lib/consent.ts deletes both, so the banner was
-            also contradicting the code behind it.
+        {/* Never a COUNT. Two cookies are set, _fbp always and _fbc on an ad
+            click, and lib/consent.ts deletes both; an earlier "one cookie"
+            understated the ask and contradicted the code behind it.
+
+            The processor is deliberately NOT named here. Founder, 2026-08-26:
+            naming Meta on the banner is not what anyone else does, and she is
+            right. Layered notice is the accepted approach: the bar carries the
+            plain statement, and legal/privacy names Meta, links to their policy
+            and states the joint-controller position, one tap away. GDPR
+            requires the information be accessible, not that all of it sit on
+            the banner. Nothing is hidden by dropping two words.
 
             Wording matches legal/privacy deliberately. A consent bar and the
             policy it links to describing the same thing differently is how a
@@ -70,9 +75,9 @@ export default function CookieConsent() {
             was rejected as false: the pixel does collect behaviour, and Meta is
             a joint controller for it. */}
         <p className="text-sm text-text-2">
-          With your permission, we use cookies from Meta to see how our
-          advertising performs. They tell us nothing about who you are, and we
-          run no other analytics.{" "}
+          With your permission, we use cookies to see how our advertising
+          performs. They tell us nothing about who you are, and we run no other
+          analytics.{" "}
           <Link href="/legal/privacy" className="underline">
             How we handle data
           </Link>
