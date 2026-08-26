@@ -41,8 +41,6 @@ photos/
 !/branding/pages/
 !/branding/*.md
 /insparation/
-/top/
-/shaklek_logo_*.html
 
 # legal/incorporation documents — reference copies only, not for version control
 /DCCI-*.pdf
@@ -52,8 +50,15 @@ photos/
 # filename carries an order id, and the document carries that customer's
 # MEASUREMENTS -- these must never reach git. Kept on disk, ignored by version
 # control, same reasoning as the PII rule in CLAUDE.md section 0.
-/shaklek-spec-*.pdf
 
 # Compiled output of website/scripts/social/encode.swift. A build artifact and
 # a Mach-O binary; rebuild it from the .swift source rather than committing it.
 website/scripts/social/encode
+
+# _archive/ is committed on purpose -- it is where superseded work goes so it
+# is never lost. Two things inside it must still stay out of git:
+#   - screenshots: 31MB of local screenshots, no value in history
+#   - downloaded tech packs: the filename carries an order id and the document
+#     carries that CUSTOMER'S MEASUREMENTS. Same PII rule as CLAUDE.md §0.
+/_archive/screenshots-2026-08-15/
+/_archive/downloaded-tech-packs/
