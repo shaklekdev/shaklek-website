@@ -155,6 +155,33 @@ now refuses to restate the numbers at all. `planning/marketing/meta-ads-setup.md
 listed WELCOME20 as live; corrected.
 
 
+### Session H — self-hosting the fonts (2026-08-26) — DONE, no files held
+
+Session G owns the typography *choices*; this changed only how those exact
+fonts are DELIVERED. **Verified no visual change:** pixel diff of the phone
+viewport before and after — 0.10% of pixels differ by more than 8, and **zero**
+differ by more than 60. That is antialiasing on glyph edges, nothing else.
+
+Founder reported latency again after the Clerk fix. Measured: the Google Fonts
+stylesheet is **render-blocking, on a third origin, 357 ms TTFB**, and the
+request asks for **15 font files / 245 KB**, including a Cormorant italic with
+**zero uses anywhere in the codebase**.
+
+`next/font/google` now downloads them at build time and serves them from our
+own origin: no third-party DNS/TLS, no render-blocking external stylesheet.
+**DOMContentLoaded 1595 ms -> 542 ms** on the same page.
+
+Two things dropped because nothing used them: the Cormorant **italic** (grep: 0
+italic classes) and Reem Kufi's **latin subset** — that face sets exactly one
+thing, the four-glyph Arabic wordmark in the header, so its latin glyphs could
+never render. It stays preloaded: the wordmark is above the fold on every page
+and a swap flash on the brand name is not acceptable.
+
+⚠️ **Bytes went UP slightly (420 KB -> 465 KB) while the page got much
+faster.** Total transferred is the wrong instrument here — the win is removing
+a blocking third-party round trip from the critical path, not shrinking the
+payload. Do not "optimise" this back by chasing the byte count.
+
 ### Session F — save-measurements popup, catalogue CTA, linen-only MVP, Clerk perf (2026-08-26)
 
 **Status: DONE, COMMITTED, DEPLOYED AND VERIFIED ON PRODUCTION.

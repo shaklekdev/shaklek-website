@@ -26,13 +26,13 @@
      beside Reem Kufi, which Georgia crowded.
      ⚠️ IT RUNS SMALL for its point size. Anything set below ~15px in it needs
      a size bump or it disappears; that is why the wordmark went UP a step. */
-  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
   /* THE WORDMARK ONLY. Single weight, hairline thins -- a signature, not a
      typeface anything can be set in. Founder's choice, 2026-08-26. */
-  --font-wordmark: "Italiana", "Cormorant Garamond", Georgia, serif;
+  --font-wordmark: var(--font-italiana), var(--font-cormorant), Georgia, serif;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     sans-serif;
-  --font-arabic: "Reem Kufi", sans-serif;
+  --font-arabic: var(--font-reem), sans-serif;
 }
 
 @theme inline {

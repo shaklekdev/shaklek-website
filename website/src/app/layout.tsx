@@ -12,6 +12,48 @@ import MetaPixel from "@/components/MetaPixel";
 import CookieConsent from "@/components/CookieConsent";
 import LaunchOffer from "@/components/LaunchOffer";
 import "./globals.css";
+import { Cormorant_Garamond, Italiana, Reem_Kufi } from "next/font/google";
+
+// SELF-HOSTED, not fetched from Google at runtime.
+//
+// These were three <link> tags to fonts.googleapis.com. Measured on production
+// 2026-08-26, after the Clerk fix, because the founder still reported lag:
+// that stylesheet is RENDER-BLOCKING, sits on a third origin needing its own
+// DNS and TLS, answered in 357ms, and pulled 15 font files totalling 245KB --
+// including a Cormorant italic used NOWHERE in the codebase (grep: 0 hits).
+//
+// next/font/google downloads these at BUILD time and serves them from our own
+// origin, so there is no third-party round trip, no render-blocking external
+// stylesheet, and the files are subset automatically. Same typefaces, same
+// weights, same look -- only the delivery changes. Session G owns the
+// typography choices; this does not touch them.
+//
+// Weights kept are the ones actually used: 300 and 400 appear in globals.css,
+// 500 and 600 come from font-medium (74 uses) and font-semibold (3). Italic is
+// dropped because nothing is italic.
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  display: "swap",
+  variable: "--font-cormorant",
+});
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-italiana",
+});
+// Arabic subset only. This face sets exactly one thing -- the Arabic wordmark
+// in the header (four glyphs, "شكلك") -- so its latin subset was never going
+// to render a character. It stays preloaded because the wordmark is above the
+// fold on every page and a swap flash on the brand name is not acceptable.
+const reemKufi = Reem_Kufi({
+  subsets: ["arabic"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-reem",
+});
+
 
 export const metadata: Metadata = {
   // Pins every relative URL below -- and every per-page canonical, OG and
@@ -64,24 +106,10 @@ export const metadata: Metadata = {
 // by src/components/AuthProvider.tsx -- read that file before moving it back.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        {/* One request for all three faces. Italiana is the WORDMARK ONLY --
-            it has a single weight and hairline strokes, so it is a signature,
-            not a typeface a page can be set in. Cormorant Garamond replaces
-            Georgia as the display face everywhere else (founder 2026-08-26:
-            she disliked how the hero line was set, and Georgia was why). */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html
+      lang="en"
+      className={`h-full antialiased ${cormorant.variable} ${italiana.variable} ${reemKufi.variable}`}
+    >
       <body className="min-h-full flex flex-col bg-bg text-text">
         <CartProvider>
           {children}
