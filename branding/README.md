@@ -4,12 +4,34 @@ Everything visual, in one place. Settled 2026-08-26 with the founder.
 
 ```
 branding/
-  README.md      you are here — the decisions
-  logo/          the artwork, outlined. START WITH logo/README.md
-  packaging.md   every element, costed against the margin
-  voice.md       tone, the "shhhhh" idea, and the two standing corrections
-  pages/         the three visual sheets the decisions came out of
+  README.md                            you are here, the decisions
+  Shaklek-artwork-for-suppliers.pdf    ⭐ SEND THIS ONE. Two pages: which
+                                       mark on which item, CMYK, sizes,
+                                       clear space, and what cannot be done
+  logo/                                44 files. 11 marks x svg/pdf/png/jpg
+  packaging.md                         every element, costed against margin
+  voice.md                             tone, "shhhhh", standing corrections
+  pages/                               the sheets the decisions came out of
 ```
+
+## Sending this to a supplier
+
+Send **`Shaklek-artwork-for-suppliers.pdf`** and the `logo/` folder. That is the
+whole handover; the PDF answers the questions they would otherwise ask.
+
+Regenerate both with:
+
+```bash
+cd website
+node scripts/brand/generate-logo.mjs
+node scripts/brand/generate-supplier-pdf.mjs
+```
+
+The fonts sit in `logo/fonts/`, so this runs offline and is byte-identical every
+time. The website favicon is built from `logo/shaklek-monogram-black.svg`, so
+if the mark is ever regenerated, `website/src/app/icon.tsx` and `apple-icon.tsx`
+must be rebuilt from the same bytes or the screen mark and the printed mark
+drift apart.
 
 ---
 
