@@ -157,7 +157,23 @@ listed WELCOME20 as live; corrected.
 
 ### Session F — save-measurements popup, catalogue CTA, linen-only MVP, Clerk perf (2026-08-26)
 
-**Status: DONE, COMMITTED. No files held.**
+**Status: DONE, COMMITTED, DEPLOYED AND VERIFIED ON PRODUCTION.
+No files held.**
+
+Four commits: `426484b` measurements saving, `5efe983` linen-only + catalogue
+CTA, `609bd1c` Clerk scoping, `5e973f8` architecture doc + monitoring.
+Deployed in Amplify job **197** (which carried Session G's `fc8f6a6` on top).
+
+⚠️ **I never actually ran `git push` — Session G pushed main and carried my
+four commits with it.** `git push` answered "Everything up-to-date". Worth
+knowing in a shared tree: your commits can ship on someone else's push, so
+"committed but not pushed" is not a state you can rely on holding.
+
+**Measured on production after the deploy: 705 KB -> 377 KB** on the home
+page, DOMContentLoaded 2373 ms -> 1734 ms, and zero occurrences of "clerk" in
+the served HTML. Clerk is still present on `/size-guide`, `/design/[slug]` and
+`/checkout`, which is exactly the intended split. All 13 public routes 200,
+`/account` correctly 307.
 
 Committed at the founder's instruction while Session G was still writing, so
 the Clerk-performance commit also carries **Session G's black-nav-bar rewrite
