@@ -18,6 +18,148 @@ Rules that make this work:
 
 ## Active claims
 
+### Session E — pricing model rebuilt on real fabric costs (2026-08-26)
+
+**Status: DONE, committed. No code touched — `planning/pricing-todo.md` only.**
+
+The founder gave the first real fabric quotes: cotton 10, organic cotton 20,
+linen 30 AED/m **online**, and **linen cannot be had below 40 in store**. The
+launch runs on store prices. In-store prices for the other fabrics, and metres
+consumed per design, arrive **Friday 2026-08-28** and are marked as placeholders
+in the file.
+
+**Three things in that file were wrong and are corrected, not patched over:**
+
+1. **It listed a ladder that never shipped** — 390/420/450/620. Live is
+   **389 / 419 / 429 / 619**, read out of `BASE_PRICE_BY_CATEGORY`. Pants were
+   21 AED below the number the whole margin case was built on.
+2. **It computed margins on a blended 15 AED/m** that corresponds to nothing the
+   founder can buy. At real in-store linen the live prices earn **57–61%**, not
+   the 69–72% claimed — about **11 points thinner**.
+3. **It said "fabric is not the lever."** At 40 AED/m and 2 metres, fabric is
+   80 AED — the largest single line on a shirt, more than cut-and-sew.
+
+**Only ONE fabric is sellable today: linen** (`src/data/fabrics.ts`, set this
+morning — organic cotton has no supplier and all catalog photography is linen).
+So every live price is already a linen price, and the founder's "+49 for linen"
+is a **price rise, not a surcharge**. Recorded as such.
+
+⚠️ **Do not build a fabric surcharge for a single-fabric catalogue.** The right
+change is moving base prices in `catalog.ts` with `surchargeAed` left at 0.
+`surchargeAed` earns its keep when organic cotton becomes sellable — and at
+20 AED/m it arrives *cheaper* than linen, so it is a discount below linen, not a
+supplement on top of it.
+
+**The metre count matters more than the fabric price.** At 2.0m a 65% shirt is
+471; at 2.5m it is 536. That is why Friday's per-design metre counts are the
+most valuable number outstanding, and why the ladder is not being re-set today.
+
+**Nobody is buying and nothing is promoted** (founder, 2026-08-26), so prices
+can move freely right now. That stops being true the day the first campaign
+runs.
+
+⚠️ **The 20% welcome code is where this bites.** A discounted linen shirt at
++49 comes to **−11 against a pessimistic 200 AED CAC** (it was +4 under the old
+wrong fabric number). The lever is measuring real CAC with 2–3k of spend, not
+shrinking the offer.
+
+
+### Session E — save-measurements popup, catalogue CTA, linen-only MVP (2026-08-26)
+
+**Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**
+
+- `website/src/components/SaveMeasurements.tsx`
+- `website/src/components/CatalogCard.tsx`
+- `website/src/components/LaunchOffer.tsx`
+- `website/src/components/FabricColorPicker.tsx`
+- `website/src/data/designSpec.ts`, `website/src/data/homeContent.ts`
+- `website/src/app/faq/page.tsx`, `website/src/components/home/HomeFaq.tsx`
+- `website/src/app/how-it-works/page.tsx`, `website/src/app/our-story/page.tsx`
+- `website/src/lib/seo.ts`, `website/src/app/feed/meta.xml/route.ts`
+- `website/src/lib/measurements.ts`, `website/src/components/MeasurementsForm.tsx`
+- `website/src/app/api/account/measurements/route.ts`, `website/src/app/api/orders/route.ts`
+- `website/src/data/fabrics.ts` (new), `website/scripts/test-measurements.mjs`
+- `website/src/app/legal/terms/page.tsx`, `website/src/app/upload/page.tsx`,
+  `website/src/app/upload/layout.tsx`
+- `planning/pricing-todo.md`
+
+#### The save button's popup was never missing. The save was.
+
+The founder's report was "there is no pop-up". Clerk's modal opens correctly
+and always did. **Two things behind it were broken, and both were silent:**
+
+1. **`/api/account/measurements` never stored what the button sent.** The
+   handler only ever read the field shape `{bust, waist, hip, height, notes}`.
+   `SaveMeasurements` posts the FLATTENED string a cart line carries,
+   `{measurements: "Bust / chest: 90cm, ..."}` -- so the body matched nothing,
+   five empty columns were written, and it answered `{ok: true}`. The button
+   then said "Saved. Next time these are filled in for you." Indistinguishable
+   from success from the customer's side, and the reason nothing was ever
+   pre-filled. The route now parses the flattened shape with the same
+   `parseMeasurements` the tech pack uses. `scripts/test-measurements.mjs`
+   asserts both body shapes reach the columns.
+
+2. **Amplify sets `NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/account`**, so
+   completing the sign-up threw the customer off the design page to /account
+   and the measurements held in a React ref died with the navigation. Verified
+   in a real browser: `Clerk.buildAfterSignUpUrl()` returned
+   `http://localhost:3311/account` while standing on /size-guide. `openSignUp`
+   now passes `forceRedirectUrl: window.location.href`, which Clerk's own types
+   say takes precedence over the environment variable. Belt to that braces: the
+   numbers are parked in sessionStorage (`shaklek.pendingMeasurements.v1`,
+   exported from `lib/measurements.ts`) and `/account`'s MeasurementsForm
+   drains the same key, so the save lands wherever the flow ends up.
+
+⚠️ **Do not read credential/config state out of a doc for this** -- the
+redirect variable lives in the Amplify console and leaves no git trace. Same
+trap as the Stripe key mode. Check it with `aws amplify get-app`.
+
+**Could not complete a real sign-up end to end:** Clerk's modal carries a
+Cloudflare Turnstile bot check, and completing one is off limits. Everything up
+to that point is verified in a browser; the post-sign-up POST is verified by
+unit test and by the redirect override being what Clerk's types document.
+
+#### The tooltip
+
+Founder's note: the sentence must appear on hover and on click, but must not
+sit under the button as standing text. It is now an absolutely positioned
+`role="tooltip"` above the button. Verified in a browser at both call sites
+(design page and size guide): appears on `mouseover`, on `focusin` and on a tap
+that cannot proceed, disappears on leave and the moment the numbers are valid,
+and **layout shift is 0px** (measured against a following element and the
+panel's own height).
+
+#### Linen-only MVP
+
+`src/data/fabrics.ts` is new and is the single place that says which fabrics
+can be made. `FabricColorPicker` renders a two-button toggle only when more
+than one is `available` -- today it prints "100% linen" plus "Organic cotton
+coming soon", and flipping one flag in fabrics.ts turns the toggle back on.
+`resolveFabric()` pins the stored value server-side in `/api/orders`, the same
+rule as price: a request body cannot name a fabric we cannot cut.
+
+**Eleven files of copy were narrowed from "organic cotton and linen" to
+linen.** This includes the VALUES entry on the home page and the Meta product
+feed's `<g:material>`. It was going to be false the moment the first order was
+placed. ⚠️ The founder's own brand definition line quoted in `homeContent.ts`
+says "organic cotton or linen"; the comment there now carries the reason the
+fabric half is ahead of the supply, and says to put cotton back the day
+fabrics.ts marks it available.
+
+#### Pricing
+
+`planning/pricing-todo.md` has a new 2026-08-26 section. Headline: **the MVP
+does not need a linen surcharge -- the discount was the problem, not the
+fabric.** At her real quotes with the offer off, the shirt clears 58-64% GM and
++93 to +227 against estimated CAC. The stale "fabric is not the lever"
+conclusion at the top of that file is struck through: at 30-40 AED/metre fabric
+now costs more than the tailor.
+
+⚠️ **WELCOME20 is still live in Stripe** (0 redemptions, expires 2026-11-23).
+Nothing on the site advertises it, but the checkout has a promo box. Awaiting
+the founder's yes before deactivating it -- that is a live payment-system
+change.
+
 ### Session C — overnight social content (2026-08-25 night)
 
 **Status: DONE. No files held. Nothing posted, nothing scheduled, nothing
