@@ -1,0 +1,242 @@
+<title>The Shaklek Monogram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&family=Reem+Kufi:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper: #f8f5f0;
+    --card: #ffffff;
+    --ink: #191713;
+    --ink-2: #6d6659;
+    --ink-3: #a39a89;
+    --gold: #9c8445;
+    --rule: rgba(25,23,19,.11);
+    --rule-soft: rgba(25,23,19,.06);
+    --dark: #1a1a1a;
+    --shadow: 0 1px 2px rgba(25,23,19,.05), 0 14px 44px rgba(25,23,19,.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #131110; --card: #1c1a17; --ink: #f3ede2; --ink-2: #a39a89;
+      --ink-3: #6d6659; --gold: #c4a964; --rule: rgba(243,237,226,.14);
+      --rule-soft: rgba(243,237,226,.07); --dark: #000000;
+      --shadow: 0 1px 2px rgba(0,0,0,.55), 0 14px 44px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #131110; --card: #1c1a17; --ink: #f3ede2; --ink-2: #a39a89;
+    --ink-3: #6d6659; --gold: #c4a964; --rule: rgba(243,237,226,.14);
+    --rule-soft: rgba(243,237,226,.07); --dark: #000000;
+    --shadow: 0 1px 2px rgba(0,0,0,.55), 0 14px 44px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Jost", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 300; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 68px 26px 120px; }
+
+  .eyebrow { font-size: 11px; letter-spacing: .19em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 16px; }
+  h1 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 300;
+       font-size: clamp(34px,6vw,54px); line-height: 1.06; margin: 0 0 18px; text-wrap: balance; }
+  h2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400;
+       font-size: 28px; margin: 0 0 10px; }
+  .lede { max-width: 62ch; font-size: 16px; line-height: 1.72; color: var(--ink-2); margin: 0 0 14px; }
+  .sec-note { max-width: 62ch; font-size: 14.5px; line-height: 1.7; color: var(--ink-2); margin: 0 0 26px; }
+  .hr { height: 1px; background: var(--rule); border: 0; margin: 58px 0 40px; }
+
+  .marks { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 20px; }
+  .mark {
+    background: var(--card); border: 1px solid var(--rule-soft); box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+  }
+  .face {
+    height: 180px; display: flex; align-items: center; justify-content: center;
+    color: var(--ink); line-height: 1;
+  }
+  .face.rev { background: var(--dark); color: #fff; }
+  .cap { padding: 15px 18px 18px; border-top: 1px solid var(--rule-soft); }
+  .cap b { display: block; font-size: 14px; font-weight: 400; margin-bottom: 5px; }
+  .cap span { font-size: 12.5px; line-height: 1.6; color: var(--ink-2); }
+  .verdict-tag {
+    display: inline-block; font-size: 9.5px; letter-spacing: .13em; text-transform: uppercase;
+    border: 1px solid var(--gold); color: var(--gold); padding: 3px 7px; margin-bottom: 8px;
+  }
+  .verdict-tag.no { border-color: var(--ink-3); color: var(--ink-3); }
+
+  .it { font-family: "Italiana", Georgia, serif; }
+  .rk { font-family: "Reem Kufi", sans-serif; }
+
+  .s-single { font-size: 96px; letter-spacing: 0; }
+  .s-pair { font-size: 84px; letter-spacing: 8px; }
+  .s-ar { font-size: 92px; }
+  .stack { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .stack .top { font-size: 62px; letter-spacing: 6px; }
+  .stack .rule { width: 40px; height: 1.5px; background: var(--gold); }
+  .stack .bot { font-size: 34px; }
+  .rev .stack .rule { background: #c4a964; }
+
+  /* in-use strip */
+  .uses { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 20px; }
+  .use { background: var(--card); border: 1px solid var(--rule-soft); box-shadow: var(--shadow); }
+  .use .stage { height: 168px; display: flex; align-items: center; justify-content: center; background: #f1ece1; }
+  .use .lab { padding: 13px 16px 16px; font-size: 12.5px; color: var(--ink-2); }
+  .use .lab b { display: block; color: var(--ink); font-weight: 400; font-size: 13.5px; margin-bottom: 3px; }
+
+  .callout { border-left: 2px solid var(--gold); padding: 2px 0 2px 22px; margin: 0 0 18px;
+             font-size: 15.5px; line-height: 1.78; max-width: 62ch; }
+  .callout strong { font-weight: 500; }
+
+  .shh { font-family: "Italiana", serif; font-size: clamp(40px,9vw,86px); letter-spacing: 6px;
+         color: var(--ink); margin: 26px 0 8px; line-height: 1; }
+  .shh em { font-style: normal; color: var(--gold); }
+
+  ul.plain { margin: 0; padding: 0; list-style: none; max-width: 64ch; }
+  ul.plain li { padding: 0 0 14px 20px; position: relative; font-size: 14.5px; line-height: 1.7; color: var(--ink-2); }
+  ul.plain li::before { content: ""; position: absolute; left: 0; top: 11px; width: 8px; height: 1px; background: var(--gold); }
+  ul.plain li b { color: var(--ink); font-weight: 400; }
+
+  @media (max-width: 560px) { .wrap { padding: 48px 18px 90px; } }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Shaklek · monogram study</p>
+  <h1>The letter you already own</h1>
+  <p class="lede">A short mark for the places the full lockup cannot go — a woven tab, a button, a browser tab, a sticker, a stitched cuff. It does not replace the wordmark. Nobody knows this brand yet, so the wordmark still has to do the naming; the monogram is what people recognise afterwards.</p>
+  <p class="callout"><strong>The connection worth noticing:</strong> the Arabic letter <span class="rk">ش</span> <em>is</em> "sh". It is the first letter of شكلك and the sound your campaign is built on. One mark, doing three jobs at once — Arabic initial, Latin initials, and the gesture.</p>
+
+  <hr class="hr">
+
+  <h2>Five candidates</h2>
+  <p class="sec-note">Each set in the faces you already use: Italiana for Latin, Reem Kufi for Arabic. Nothing new has been introduced.</p>
+
+  <div class="marks">
+
+    <div class="mark">
+      <div class="face"><span class="it s-single">S</span></div>
+      <div class="cap">
+        <span class="verdict-tag no">too anonymous</span>
+        <b>S alone</b>
+        <span>Elegant, and it belongs to everyone. A single Italiana S is a hundred other labels. It also throws away the "sh".</span>
+      </div>
+    </div>
+
+    <div class="mark">
+      <div class="face"><span class="it s-pair">SH</span></div>
+      <div class="cap">
+        <span class="verdict-tag">works</span>
+        <b>SH</b>
+        <span>Reads as initials and carries the sound. Italiana's thin strokes still rule out stitching it.</span>
+      </div>
+    </div>
+
+    <div class="mark">
+      <div class="face"><span class="rk s-ar">ش</span></div>
+      <div class="cap">
+        <span class="verdict-tag">my pick</span>
+        <b>ش, the Arabic sheen</b>
+        <span>Distinctive, unmistakably yours, even-stroked — the only one of the five that can be embroidered. And it <em>is</em> "sh".</span>
+      </div>
+    </div>
+
+    <div class="mark">
+      <div class="face">
+        <div class="stack">
+          <span class="it top">SH</span>
+          <span class="rule"></span>
+          <span class="rk bot">ش</span>
+        </div>
+      </div>
+      <div class="cap">
+        <span class="verdict-tag">for print</span>
+        <b>SH over ش</b>
+        <span>The full lockup's logic, compressed. Beautiful on a tag or a card; too busy at button size.</span>
+      </div>
+    </div>
+
+    <div class="mark">
+      <div class="face rev"><span class="rk s-ar">ش</span></div>
+      <div class="cap">
+        <span class="verdict-tag">reversed</span>
+        <b>ش on black</b>
+        <span>How it looks on the mailer seal, a dark woven tab, or the site favicon. It holds at any size, which the Latin does not.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="hr">
+
+  <h2>Where a short mark actually earns its place</h2>
+  <p class="sec-note">These are the applications where the full lockup is either illegible or absurd. Every one of them is small, and small is exactly where an even-stroked Arabic letter beats a hairline serif.</p>
+
+  <div class="uses">
+    <div class="use">
+      <div class="stage">
+        <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Round seal">
+          <circle cx="60" cy="60" r="34" fill="#9c8445"/>
+          <text x="60" y="76" text-anchor="middle" font-size="38" fill="#f5f0e8" font-family="Reem Kufi, sans-serif" direction="rtl">ش</text>
+        </svg>
+      </div>
+      <div class="lab"><b>Tissue seal</b>The sticker that closes the wrap.</div>
+    </div>
+
+    <div class="use">
+      <div class="stage">
+        <svg width="150" height="120" viewBox="0 0 150 120" role="img" aria-label="Woven tab on a seam">
+          <rect x="20" y="34" width="42" height="52" fill="#ded3c0"/>
+          <rect x="62" y="34" width="66" height="52" rx="2" fill="#f3efe6" stroke="#ddd4c2"/>
+          <text x="95" y="70" text-anchor="middle" font-size="26" fill="#2c2620" font-family="Reem Kufi, sans-serif" direction="rtl">ش</text>
+        </svg>
+      </div>
+      <div class="lab"><b>Woven side tab</b>The small mark on a seam.</div>
+    </div>
+
+    <div class="use">
+      <div class="stage">
+        <svg width="150" height="120" viewBox="0 0 150 120" role="img" aria-label="Embroidered cuff">
+          <path d="M28 40 h94 v46 h-94 z" fill="#0a2d4a"/>
+          <path d="M28 40 h94" stroke="#123c60" stroke-width="3"/>
+          <text x="75" y="74" text-anchor="middle" font-size="24" fill="#e6dcc6" font-family="Reem Kufi, sans-serif" direction="rtl">ش</text>
+        </svg>
+      </div>
+      <div class="lab"><b>Stitched cuff</b>The one that can be embroidered.</div>
+    </div>
+
+    <div class="use">
+      <div class="stage">
+        <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Browser favicon">
+          <rect x="30" y="30" width="60" height="60" rx="12" fill="#1a1a1a"/>
+          <text x="60" y="74" text-anchor="middle" font-size="34" fill="#ffffff" font-family="Reem Kufi, sans-serif" direction="rtl">ش</text>
+        </svg>
+      </div>
+      <div class="lab"><b>Favicon &amp; app icon</b>16px. Nothing else survives it.</div>
+    </div>
+  </div>
+
+  <hr class="hr">
+
+  <h2>The "shhhhh" idea</h2>
+  <p class="lede">It is a good hook, and it is better than a pun. Say it out loud and it is already the brand's tone of voice: quiet, unhurried, the opposite of a sale.</p>
+
+  <p class="shh">Shhh<em>hhh</em></p>
+  <p class="sec-note" style="margin-top:4px">The gesture works because it is a <em>secret</em>, not a joke — the piece nobody else has, the one that was cut for you. That is a truthful thing for a made-to-order label to say, which is what stops it being a gag that wears out in a month.</p>
+
+  <ul class="plain">
+    <li><b>What it can carry:</b> "Shhh. It's made for you." · "Nobody else has this one." · A finger to the lips, and the ش appearing.</li>
+    <li><b>What it should not become:</b> a discount voice. "Shhh, secret sale" burns the idea on the cheapest possible use and cannot be taken back.</li>
+    <li><b>Where it belongs:</b> Reels and stories, where sound is the point. It is a <em>spoken</em> idea — it does almost nothing on a still image or a static ad.</li>
+    <li><b>The reason it fits Shaklek specifically:</b> ش is the sound and the letter. The mark on the garment and the noise in the video are the same thing. Most brands have to invent that link; you already have it.</li>
+  </ul>
+
+  <hr class="hr">
+
+  <h2>What I would do</h2>
+  <p class="callout"><strong>Adopt ش as the short mark. Keep the full lockup as the logo.</strong> The wordmark names the brand while nobody knows it; the ش is what goes on the seal, the tab, the cuff and the favicon — and it is the only candidate here that can actually be stitched.</p>
+  <p class="sec-note"><strong>Do not build the campaign yet.</strong> It needs a real reel, a real voice and a real garment reveal, and it is worth more once there is a customer to film it for. Write it down, keep the mark, come back to it when there is something to be quiet about.</p>
+
+</div>
