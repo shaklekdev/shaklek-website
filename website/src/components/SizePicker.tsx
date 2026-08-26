@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SIZE_CHART, sizeLabel, sizesForCategory, usesNumericSizes } from "@/data/sizeChart";
+import { SIZE_CHART, sizeLabel, sizesForCategory } from "@/data/sizeChart";
 import { fitNotesForCategory } from "@/data/fitNotes";
 import type { SizeMode } from "@/data/designSpec";
 // Shared with the tailor's tech pack, which parses these on the server --
@@ -151,18 +151,18 @@ export default function SizePicker({
           </button>
         ))}
       </div>
-      {/* "Same price either way" is gone: with "(free)" on the button it said
-          the same thing twice. The standard line now points at tailoring
-          instead, which is the only place left that still has to sell it. */}
-      <p className="mt-1.5 text-[11px] text-text-3">
-        {sizeMode === "tailored"
-          ? "Cut to your measurements, at no extra cost."
-          : `Pick ${usesNumericSizes(category) ? "your usual number" : "XS to XXL"}, or switch to Tailored and we cut to your own measurements for free.`}{" "}
-      </p>
+      {/* No helper line under this toggle. It said "Cut to your measurements,
+          at no extra cost" and "Pick XS to XXL, or switch to Tailored..." --
+          both of which the two buttons already say, one of them with the word
+          "(free)" printed on it. Founder, 2026-08-26: too much. The size
+          section is now the two buttons and the sizes. */}
 
       {sizeMode === "standard" ? (
         <>
-          <div className="mt-3 grid grid-cols-6 gap-2">
+          {/* 4-then-3 on a phone, one row from 640px. Trousers gained a 32,
+              so seven buttons across a 342px screen would be ~42px each --
+              under the 44px touch target, and "XXL" would be tight in it. */}
+          <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-7">
             {sizesForCategory(category).map((s) => (
               <button
                 key={s}
@@ -285,9 +285,6 @@ export default function SizePicker({
             </div>
           )}
 
-          <p className="mt-3 text-xs text-text-3">
-            No measurement needed. Want a more precise fit? Switch to Tailored above.
-          </p>
         </>
       ) : (
         <div className="mt-3">

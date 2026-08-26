@@ -1,9 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
@@ -28,35 +25,11 @@ export default function Header() {
   // Garments, not cart lines -- the cart page counts the same way, and a
   // badge reading "2" over a cart saying "4 pieces" reads as a bug.
   const units = items.reduce((sum, item) => sum + item.quantity, 0);
-  const { isSignedIn } = useUser();
-  const pathname = usePathname();
-
-  // Every nav link used to be `hidden sm:inline` with no hamburger anywhere in
-  // the markup, so below 640px the header was a logo and a cart icon: Catalog,
-  // How it works, Our story and Sign in were all unreachable. Signed-in users
-  // were unaffected because Clerk's <UserButton> carries no `hidden` class --
-  // so the breakage hit exactly the mobile visitors who had not converted yet,
-  // which is why it survived to production.
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  // Navigating with the panel open would otherwise leave it covering the new
-  // page. Adjusted during render rather than in an effect -- React's own
-  // recommended pattern for "reset state when a prop changes", and it avoids
-  // the extra commit an effect would cause.
-  const [menuPathname, setMenuPathname] = useState(pathname);
-  if (pathname !== menuPathname) {
-    setMenuPathname(pathname);
-    setMenuOpen(false);
-  }
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [menuOpen]);
+  // NO HAMBURGER. The three links live in the black bar below the wordmark at
+  // every width, so there is nothing left for a menu to hide. That removes the
+  // panel, its Escape handler, its close-on-navigation state, and the bug where
+  // "/#catalog" tapped from the home page changed only the hash -- which the
+  // panel did not treat as navigation, so it stayed open over the clothes.
 
   // Opaque rather than bg-white/90 + backdrop-blur-xl. A full-width sticky
   // element with a 24px backdrop blur is re-sampled and re-blurred on every
@@ -64,8 +37,12 @@ export default function Header() {
   // hero-ken-burns loop, meant every frame even when idle. The page
   // background is #ffffff, so at rest the two render the same pixels.
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 sm:py-6">
+    <header className="sticky top-0 z-50 bg-white">
+      {/* The wordmark sits CENTRED on its own white row and the menu is a black
+          bar underneath it (Youssef's layout, founder 2026-08-26). The mark is
+          the thing being introduced, so it gets the row; navigation is a
+          different job and now reads as a different band. */}
+      <div className="relative mx-auto flex max-w-6xl items-center justify-center px-6 py-4 sm:py-5">
         <Link href="/" className="flex flex-col items-center leading-none">
           <span className="font-display text-2xl font-light tracking-[3px] text-text">
             Shaklek
@@ -79,64 +56,38 @@ export default function Header() {
             شكلك
           </span>
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-text-2 sm:gap-8">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="hidden hover:text-text transition-colors sm:inline"
-            >
-              {link.label}
-            </Link>
-          ))}
-          {isSignedIn ? (
-            <UserButton userProfileMode="navigation" userProfileUrl="/account">
-              <UserButton.MenuItems>
-                <UserButton.Link
-                  label="My orders"
-                  href="/account"
-                  labelIcon={
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path
-                        d="M3 3h2l.4 2M7 13h10l3-8H5.4M7 13L5.4 5M7 13l-2.3 4.6A1 1 0 0 0 5.6 19H17M17 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM9 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"
-                        stroke="currentColor"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  }
-                />
-              </UserButton.MenuItems>
-            </UserButton>
-          ) : (
-            /* An icon, not the words "Sign in". The header carried three text
-               links plus "Sign in" plus a cart, and the founder's note was that
-               it is too much text competing for attention on a phone. A person
-               glyph reads instantly and matches the cart beside it. */
-            <Link
-              href="/sign-in"
-              aria-label="Sign in"
-              title="Sign in"
-              className="flex h-6 w-6 items-center justify-center text-text transition-colors hover:text-text-2"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <circle
-                  cx="12"
-                  cy="8"
-                  r="3.5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <path
-                  d="M5 20c0-4 3.2-6.5 7-6.5s7 2.5 7 6.5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </Link>
-          )}
+        {/* Absolute, so the wordmark is centred on the PAGE and not on whatever
+            space these icons leave over. */}
+        <div className="absolute right-6 flex items-center gap-5">
+          {/* ONE LINK FOR BOTH STATES, and no Clerk in this component.
+
+              This was `isSignedIn ? <UserButton/> : <Link href="/sign-in"/>`, which
+              meant Header called useUser() -- and Header renders on every page, so
+              Clerk's 356KB loaded on the home page, /our-story, /faq and every
+              other page with no sign-in on it. See AuthProvider.tsx for the
+              measurements.
+
+              /account is protected by clerkMiddleware, so this one link is correct
+              for both states: a signed-out visitor is bounced to sign-in, a
+              signed-in one lands on their orders. The avatar menu it replaces
+              offered exactly two things -- "My orders", which is this link, and
+              sign out, which now lives on /account itself. */}
+          <Link
+            href="/account"
+            aria-label="Your account"
+            title="Your account"
+            className="flex h-6 w-6 items-center justify-center text-text transition-colors hover:text-text-2"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.6" />
+              <path
+                d="M5 20c0-4 3.2-6.5 7-6.5s7 2.5 7 6.5"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          </Link>
           <Link
             href="/cart"
             aria-label={`Cart, ${units} ${units === 1 ? "item" : "items"}`}
@@ -166,71 +117,31 @@ export default function Header() {
             )}
           </Link>
 
-          {/* Below sm this is the only way to reach the rest of the site.
-              44x44 tap target per WCAG 2.5.8. */}
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            className="-mr-2 flex h-11 w-11 items-center justify-center text-text transition-colors hover:text-text-2 sm:hidden"
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              {menuOpen ? (
-                <path
-                  d="M6 6l12 12M18 6L6 18"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              ) : (
-                <path
-                  d="M4 7h16M4 12h16M4 17h16"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              )}
-            </svg>
-          </button>
-        </nav>
+        </div>
       </div>
 
-      {menuOpen && (
-        <nav
-          id="mobile-nav"
-          aria-label="Main"
-          className="border-t border-border bg-white px-6 py-2 sm:hidden"
-        >
+      {/* THE BLACK BAR. Full-bleed, so it reads as a band across the page
+          rather than a boxed strip; the links themselves stay inside the same
+          max-w-6xl column as everything else.
+
+          Right-aligned from 640px, matching the layout Youssef drew, and
+          centred below that -- three short labels fit a phone comfortably,
+          which is the whole reason the hamburger could go. */}
+      <nav aria-label="Main" className="bg-text">
+        <div className="mx-auto flex max-w-6xl items-center justify-center gap-7 px-6 py-2.5 sm:justify-end sm:gap-10">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              /* The menu closes on a PATHNAME change, and "/#catalog" tapped
-                 from the home page does not change the pathname -- it only
-                 scrolls. Without this, tapping Catalog on a phone scrolled the
-                 page to the clothes and then left the open menu sitting on top
-                 of them. */
-              onClick={() => setMenuOpen(false)}
-              className="block border-b border-border py-3.5 text-sm text-text-2 transition-colors hover:text-text"
+              /* white/75 rather than a grey: on black, a mid-grey reads as
+                 disabled. It lifts to full white on hover. */
+              className="font-display text-[13px] tracking-[0.5px] text-white/75 transition-colors hover:text-white"
             >
               {link.label}
             </Link>
           ))}
-          {/* Signed-in users get /account through Clerk's <UserButton>, which
-              renders on mobile already -- so only the signed-out entry point
-              was missing. */}
-          {!isSignedIn && (
-            <Link
-              href="/sign-in"
-              className="block py-3.5 text-sm text-text-2 transition-colors hover:text-text"
-            >
-              Sign in
-            </Link>
-          )}
-        </nav>
-      )}
+        </div>
+      </nav>
     </header>
   );
 }

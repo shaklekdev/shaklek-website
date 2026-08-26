@@ -36,11 +36,8 @@ export default function DetailField({
         htmlFor="customization-notes"
         className="mb-1 block text-lg text-text"
       >
-        Add a detail
+        Add a detail <span className="text-text-3">(optional)</span>
       </label>
-      <p className="mb-3 text-[13px] text-text-2">
-        Optional. A stylist confirms it before anything is cut.
-      </p>
       <textarea
         id="customization-notes"
         value={spec.freeformNotes}

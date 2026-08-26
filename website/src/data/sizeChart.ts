@@ -26,6 +26,12 @@
 
 export type SizeChartRow = {
   size: string;
+  // Offered on the NUMERIC ladder only (trousers, skirts). The founder asked
+  // for a 32 because Zara and Mango sell trousers in one; she did not ask for
+  // an XXS shirt, and every size offered is a garment the tailor has to be
+  // able to cut. The row exists in the chart either way, so flipping this on
+  // is one word if tops should have it too.
+  numericOnly?: boolean;
   eu: number;
   uk: number;
   us: number;
@@ -35,6 +41,21 @@ export type SizeChartRow = {
 };
 
 export const SIZE_CHART: SizeChartRow[] = [
+  // XXS / EU 32 added 2026-08-26 on the founder's instruction, because Zara and
+  // Mango both sell women's trousers in a 32 and stopping at 34 turns those
+  // customers away.
+  //
+  // ⚠️ ITS NUMBERS ARE EXTRAPOLATED, NOT SOURCED. Every other row here comes
+  // from a published UAE-market chart (see the provenance note above). None of
+  // those three publishes a 32, so this row continues the ladder's own 4cm
+  // grading downward from XS: bust 80-4, waist 64-4, hip 88-4. That is
+  // internally consistent and it is not evidence.
+  //
+  // CONFIRM WITH THE TAILOR BEFORE TREATING IT AS A PROMISE -- both that the
+  // measurements are right and that it is a size he will cut. It is the
+  // smallest size on the ladder, so it is the one where a wrong number costs a
+  // full remake against a fixed price.
+  { size: "XXS", eu: 32, uk: 4, us: 0, bust: 76, waist: 60, hip: 84, numericOnly: true },
   { size: "XS", eu: 34, uk: 6, us: 2, bust: 80, waist: 64, hip: 88 },
   { size: "S", eu: 36, uk: 8, us: 4, bust: 84, waist: 68, hip: 92 },
   { size: "M", eu: 38, uk: 10, us: 6, bust: 88, waist: 72, hip: 96 },
@@ -81,7 +102,10 @@ export function sizeLabel(category: string, row: SizeChartRow): string {
 
 /** Every size for a category, in order, as the customer sees them. */
 export function sizesForCategory(category: string): string[] {
-  return SIZE_CHART.map((row) => sizeLabel(category, row));
+  const numeric = usesNumericSizes(category);
+  return SIZE_CHART.filter((row) => numeric || !row.numericOnly).map((row) =>
+    sizeLabel(category, row),
+  );
 }
 
 /**
