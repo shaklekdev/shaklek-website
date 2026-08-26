@@ -179,3 +179,33 @@ build({
     { end: true },
   ],
 });
+
+build({
+  name: "05-how-it-actually-works",
+  caption:
+    "How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to that exact cut, then either choose a size or send four measurements. One tailor in Dubai makes it. About ten days, because nothing is made before you order it.",
+  hashtags: HASH,
+  slides: [
+    { k: "how it actually works", s: "Four steps. Swipe.", src: shot("oversized-shirt", "Ivory", "base"), focus: "full" },
+    { k: "1. pick a piece", s: "Eight timeless essentials. 100% linen.", src: shot("utility-shirt", "Navy", "long:longer"), focus: "full" },
+    { k: "2. change it", s: "Sleeve, leg, length, colour. The picture changes to that exact cut.", src: shot("wide-leg-trousers", "Ivory", "wide:cropped"), focus: "legs", tag: "Wide, cropped" },
+    { k: "3. your size", s: "XS to XXL, trousers 32 to 44, or send four measurements. Same price.", src: shot("structured-blouse", "Ivory", "long:longer"), focus: "full" },
+    { k: "4. one tailor makes it", s: "About ten days. Nothing is made before you order it.", src: shot("banded-trousers", "Burgundy", "wide:full"), focus: "full", tag: "From AED 389" },
+    { end: true },
+  ],
+});
+
+build({
+  name: "06-why-ten-days",
+  caption:
+    "Ten days is not slow. It is how long it takes when the piece does not exist until you order it. No warehouse, no leftover stock, no size run guessed months ago. One tailor, one piece, cut to the numbers you sent.",
+  hashtags: HASH,
+  slides: [
+    { k: "ten days.", s: "Here is what that buys.", src: shot("pleated-trousers", "Ivory", "wide:full"), focus: "full" },
+    { k: "no warehouse.", s: "Nothing is sitting in a box waiting for someone your size.", src: shot("cargo-trousers", "Navy", "wide:full"), focus: "full" },
+    { k: "no leftover stock.", s: "Nothing is made that nobody ordered.", src: shot("wrap-top", "Burgundy", "long:longer"), focus: "full" },
+    { k: "one tailor. one piece.", s: "Cut to the numbers you sent, or to the size you picked.", src: shot("utility-shirt", "White", "long:longer"), focus: "full" },
+    { k: "that is the ten days.", s: "It is the reason, not the cost.", src: shot("wide-leg-trousers", "Ivory", "wide:full"), focus: "full", tag: "AED 429" },
+    { end: true },
+  ],
+});

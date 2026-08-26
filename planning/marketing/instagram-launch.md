@@ -1,5 +1,25 @@
 # Instagram launch kit
 
+> ⚠️ **CORRECTED 2026-08-27. This file was quoting prices that never shipped**
+> (Shirt 390 / Skirt 420 / Pants 450 / Dress 620) **and a fabric the brand
+> cannot buy** ("cotton and linen"). It had been sitting here since 2026-08-23
+> ready to be posted, and posting it would have advertised wrong prices to
+> customers, which in the UAE is a consumer-protection exposure and not just an
+> embarrassment.
+>
+> Live now: **Shirt 389 · Trousers 429**, **100% linen only**, tops **XS to
+> XXL**, trousers **32 to 44**. Skirts and dresses are NOT on sale; those
+> prices only apply to the upload-your-own path. **There is no active discount
+> code.** Verify before posting:
+>
+> ```bash
+> grep -A 6 "BASE_PRICE_BY_CATEGORY" website/src/data/catalog.ts
+> grep -n "available" website/src/data/fabrics.ts
+> ```
+>
+> **The 2026 platform strategy lives in `tiktok-launch.md`** and most of it
+> applies to Reels too. This file is the grid, the captions and the bio.
+
 Ready to post. Every price and promise below traces to the source files — see
 the claim audit at the bottom.
 
@@ -52,7 +72,7 @@ Palette: Ivory `#f5f0e8` · Navy `#0a2d4a` · Burgundy `#4a1a2d` · gold `#9c844
 ### Post 8 — TEXT tile: "A SIZE CHART" (ivory ground, navy type)
 > A size chart is an average of everyone, which makes it exact for no one.
 >
-> We offer standard sizes, XS to XXL, if that's what you want. But you can also send us your own measurements, and we'll cut for those instead. Same price either way.
+> We offer standard sizes, XS to XXL for tops and 32 to 44 for trousers, if that is what you want. But you can also send us your own measurements, and we'll cut for those instead. Same price either way.
 >
 > A person — not software — reads every order before a single thread is cut.
 
@@ -65,7 +85,7 @@ Carousel slides:
 - *Navy tile:* **WHY LINEN?** Linen is spun from flax. The fibre carries moisture away from the skin and the open weave lets air through — which is why it stays wearable in Gulf heat when heavier fabrics give up.
 - *Burgundy tile:* **IT GETS BETTER, NOT WORSE.** Every wash softens the fibre. The creases aren't damage — they're what linen looks like when it's lived in.
 - *Ivory tile:* **AND COTTON?** Cotton does the quiet work. Soft against the skin, absorbs sweat and releases it, washes without complaint, holds a pressed line.
-- *Navy tile:* **COTTON AND LINEN. NOTHING ELSE.** Every Shaklek piece is cut in one or the other. From AED 390, made to your measurements.
+- *Navy tile:* **100% LINEN. NOTHING ELSE.** Every Shaklek piece is cut in it. From AED 389, made to your measurements.
 
 > We only cut in two fabrics, and this is why.
 >
@@ -92,19 +112,22 @@ Carousel slides:
 > This is where every order starts. Paper, chalk, your numbers.
 >
 > One price per category, whatever your measurements:
-> Shirt AED 390
-> Skirt AED 420
-> Pants AED 450
-> Dress AED 620
+> Shirt AED 389
+> Trousers AED 429
 >
 > About ten days from confirmation to your door. And if the fit isn't right, one alteration or remake is free within 14 days.
 
 `#MadeToOrder #MadeToMeasure #PatternMaking #DubaiFashion #UAEFashion #Tailoring #خياطة #تفصيل`
 
+⚠️ **Skirts and dresses are not on sale.** The catalogue is four shirts/tops and
+four trousers. `BASE_PRICE_BY_CATEGORY` carries a skirt and a dress price, but
+those are only reachable through the upload-your-own path, so listing them in a
+caption advertises something a customer cannot buy from the grid.
+
 ### Post 4 — TEXT tile: "FOR YOUR BODY" (navy ground, ivory type)
 > Shoulders, waist, hip, length. Your numbers, not the industry's.
 >
-> Send your measurements when you order, or choose a standard size from XS to XXL — both are cut fresh, both cost the same.
+> Send your measurements when you order, or choose a standard size, XS to XXL for tops and 32 to 44 for trousers. Both are cut fresh and both cost the same.
 >
 > شكلك، على مقاسك.
 
@@ -133,9 +156,9 @@ space in ivory; `شكلك` smaller beneath; gold hairline below that.
 
 > Shaklek. شكلك. It means your shape — and that's the entire brief.
 >
-> Made-to-order womenswear, cut in cotton and linen, in the UAE. You choose the design and the colour, send your measurements or pick a size, and a stylist confirms every detail before we cut. About ten days later, it's at your door. If the fit isn't perfect, one alteration or remake is on us within 14 days.
+> Made-to-order womenswear, cut in 100% linen, in the UAE. You choose the design and the colour, send your measurements or pick a size, and a stylist confirms every detail before we cut. About ten days later, it's at your door. If the fit isn't perfect, one alteration or remake is on us within 14 days.
 >
-> Fixed prices, no surprises: shirts AED 390, skirts 420, pants 450, dresses 620.
+> Fixed prices, no surprises: shirts AED 389, trousers AED 429.
 >
 > The link in our bio is open.
 
@@ -146,9 +169,9 @@ space in ivory; `شكلك` smaller beneath; gold hairline below that.
 ## Bio
 
 > شكلك · your shape
-> Made-to-order cotton & linen womenswear, UAE
+> Made-to-order linen womenswear, UAE
 > Your measurements or XS–XXL · ~10 days
-> From AED 390
+> From AED 389
 
 *(127 characters, under the 150 limit.)*
 
@@ -181,9 +204,9 @@ Hook: fingers flip out a care label reading **100% POLYESTER**.
 1. The label flip
 2. Navy card — *"Polyester is a plastic fibre. In Gulf heat it holds warmth and odour against the skin."*
 3. Linen held to window light, hand moving behind it — *"Linen breathes. The weave lets heat out."*
-4. Water droplet absorbing into cotton — *"Cotton absorbs sweat and lets it go."*
-5. Pan across the four fabric stacks — *"We cut in cotton and linen. Nothing else."*
-6. End card — *"Shaklek · made to your measure · from AED 390"*
+4. Water droplet absorbing into linen — *"Linen breathes, and it keeps breathing in August."*
+5. Pan across the linen — *"We cut in linen. Nothing else, for now."*
+6. End card — *"Shaklek · made to your measure · from AED 389"*
 
 ### Reel 3 — "Nothing here exists yet" (~25s)
 Hook: shears making the first cut into linen.
@@ -295,10 +318,13 @@ When a competitor uses it, that is a reason to trust them less, not a gap in
 our content.
 
 The honest case is strong enough: linen's open weave and moisture-wicking flax
-fibre keep it wearable in Gulf heat; it softens with every wash; cotton is soft,
-absorbent, easy-care and holds a tailored line; polyester genuinely is a
+fibre keep it wearable in Gulf heat; it softens with every wash; polyester
+genuinely is a
 plastic-derived fibre that holds warmth and odour against the skin. All
-physically defensible comfort claims — no biology, no healing, no frequencies.
+physically defensible comfort claims: no biology, no healing, no frequencies.
+
+⚠️ The cotton half of this argument is written for the day cotton is sellable.
+It is not, so do not post it yet.
 
 ---
 
