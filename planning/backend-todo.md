@@ -29,7 +29,15 @@ From dossier §5 — the mechanism that builds the catalog and validates produci
 - [ ] Real automated WhatsApp send (no human click) stays possible later, once WhatsApp Business Platform access exists — the PDF-generation half already built here is the same building block that would need.
 
 ### 4. File storage
-- [ ] Uploaded reference images are currently base64-encoded and emailed directly — fine at near-zero volume, won't scale. Needs an S3 bucket (see AWS doc) once volume picks up.
+- [ ] ⚠️ **Uploaded reference images are LOST on every paid order, not emailed.**
+      This item used to say they are "base64-encoded and emailed directly",
+      which was true only of the fallback branch that fires when Stripe is NOT
+      configured — in production that branch never runs. On the real path the
+      stylist email is built from DB rows in the Stripe webhook, and
+      `order_items` stores only `hasReferenceImage: boolean`. **A customer can
+      pay for a design based on their own picture and the tailor receives a
+      checkbox.** Corrected 2026-08-26 after tracing the code rather than
+      trusting this line. Needs object storage; see the architecture doc.
 
 ### 5. Payment webhooks
 - [x] Handler for `checkout.session.completed` — `website/src/app/api/webhooks/stripe/route.ts`, done 2026-08-14 (see `payment-auth-todo.md`)
