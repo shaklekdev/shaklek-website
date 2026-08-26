@@ -1,6 +1,7 @@
 import { getVerifiedEmail } from "@/lib/authEmail";
 import { desc, eq } from "drizzle-orm";
 import Header from "@/components/Header";
+import { SignOutButton } from "@clerk/nextjs";
 import AccountNameForm from "@/components/AccountNameForm";
 import MeasurementsForm from "@/components/MeasurementsForm";
 import { getDb, schema } from "@/db/client";
@@ -56,7 +57,20 @@ export default async function AccountPage() {
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
-        <p className="text-xs tracking-wide text-text-3 uppercase">My account</p>
+        {/* Sign out lives here now.
+            It used to be inside Clerk's <UserButton> in the header, which was
+            removed because Header renders on every page and pulling Clerk into
+            it cost 356KB sitewide (see components/AuthProvider.tsx). /account
+            is the only page a signed-in customer has, so it is the right home
+            for the one action that only a signed-in customer can take. */}
+        <div className="flex items-baseline justify-between gap-4">
+          <p className="text-xs tracking-wide text-text-3 uppercase">My account</p>
+          <SignOutButton redirectUrl="/">
+            <button className="text-xs text-text-3 underline underline-offset-4 transition-colors hover:text-text">
+              Sign out
+            </button>
+          </SignOutButton>
+        </div>
         <h1 className="mt-1 text-[26px] text-text">{name || "Your account"}</h1>
 
         <div className="mt-4 rounded-shaklek-sm border border-border bg-surface p-5">
@@ -85,7 +99,7 @@ export default async function AccountPage() {
           <div className="mt-10 text-center">
             <p className="subtitle">No orders yet under {email}.</p>
             <a
-              href="/"
+              href="/#catalog"
               className="mt-6 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
             >
               Browse the catalog

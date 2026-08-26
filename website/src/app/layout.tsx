@@ -6,7 +6,6 @@ import {
   SITE_TAGLINE,
   SITE_URL,
 } from "@/lib/seo";
-import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/CartContext";
 import MetaPixel from "@/components/MetaPixel";
@@ -60,57 +59,41 @@ export const metadata: Metadata = {
     : {}),
 };
 
+// NOTE: no ClerkProvider here, deliberately. It used to wrap this whole tree
+// and put 356KB of Clerk on every marketing page. It is now mounted per-route
+// by src/components/AuthProvider.tsx -- read that file before moving it back.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <ClerkProvider
-      appearance={{
-        variables: {
-          colorPrimary: "#1a1a1a",
-          fontFamily: "-apple-system, 'Segoe UI', Roboto, sans-serif",
-        },
-        elements: {
-          avatarBox: {
-            backgroundColor: "#1a1a1a",
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='3.5'/%3E%3Cpath d='M5 20c0-4.5 3.5-7 7-7s7 2.5 7 7'/%3E%3C/svg%3E\")",
-            backgroundSize: "58%",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          },
-        },
-      }}
-    >
-      <html lang="en" className="h-full antialiased">
-        <head>
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossOrigin="anonymous"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&display=swap"
-            rel="stylesheet"
-          />
-        </head>
-        <body className="min-h-full flex flex-col bg-bg text-text">
-          <CartProvider>
-            {children}
-            <Footer />
-          </CartProvider>
-          {/* Renders nothing at all without NEXT_PUBLIC_META_PIXEL_ID, so this
-              ships inert and is switched on with an environment variable
-              rather than a code change on a live storefront. */}
-          <MetaPixel />
-          {/* The consent bar must mount wherever the pixel does: without a way
-              to answer, the gate would simply mean the pixel never fires.
-              LaunchOffer is separate on purpose and grants nothing about
-              cookies. Consent bundled into an unrelated offer is not freely
-              given, and it would only ever cover the few who take it. */}
-          <CookieConsent />
-          <LaunchOffer />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="h-full antialiased">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-bg text-text">
+        <CartProvider>
+          {children}
+          <Footer />
+        </CartProvider>
+        {/* Renders nothing at all without NEXT_PUBLIC_META_PIXEL_ID, so this
+            ships inert and is switched on with an environment variable
+            rather than a code change on a live storefront. */}
+        <MetaPixel />
+        {/* The consent bar must mount wherever the pixel does: without a way
+            to answer, the gate would simply mean the pixel never fires.
+            LaunchOffer is separate on purpose and grants nothing about
+            cookies. Consent bundled into an unrelated offer is not freely
+            given, and it would only ever cover the few who take it. */}
+        <CookieConsent />
+        <LaunchOffer />
+      </body>
+    </html>
   );
 }

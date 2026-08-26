@@ -1,6 +1,7 @@
 import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { SignOutButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import AuthProvider from "@/components/AuthProvider";
 import { NOINDEX } from "@/lib/seo";
 
 export const metadata: Metadata = NOINDEX;
@@ -20,6 +21,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   if (!allowed) {
     return (
+      // AuthProvider wraps this branch too: <SignOutButton> below is a Clerk
+      // component, so the refusal screen needs the provider just as much as
+      // the allowed one does.
+      <AuthProvider>
       <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-slate-50 px-6 py-20 text-center font-sans">
         <p className="text-sm text-slate-500">
           {email
@@ -32,8 +37,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </button>
         </SignOutButton>
       </div>
+      </AuthProvider>
     );
   }
 
-  return <>{children}</>;
+  return <AuthProvider>{children}</AuthProvider>;
 }
