@@ -102,12 +102,24 @@ in at build time.
 ```
 NEXT_PUBLIC_META_PIXEL_ID          = <the 15-digit id>
 NEXT_PUBLIC_FB_DOMAIN_VERIFICATION = <the meta-tag token>
-NEXT_PUBLIC_LAUNCH_CODE            = WELCOME20
-NEXT_PUBLIC_LAUNCH_PERCENT         = 20
 ```
 
-The last two turn on the launch-offer popup, and it renders only when **both**
-are set. It waits 18 seconds, never appears on cart, checkout, order-confirmed
+⚠️ **Do NOT set `NEXT_PUBLIC_LAUNCH_CODE = WELCOME20`.** This block used to say
+exactly that, and it contradicted the section above it: WELCOME20 was
+**deactivated on 2026-08-26** and no active promotion code exists. Setting it
+would put a dead code in the popup and send every signup to "That code isn't
+valid" — the precise failure the inert-by-default design exists to prevent.
+
+The launch popup stays off until a real code exists. When one does — founder's
+decision is **10% or nothing**, never 20% — create it in Stripe first, capped
+and expiring, then set both of:
+
+```
+NEXT_PUBLIC_LAUNCH_CODE            = <the new code>
+NEXT_PUBLIC_LAUNCH_PERCENT         = <its percentage>
+```
+
+The popup renders only when **both** are set. It waits 18 seconds, never appears on cart, checkout, order-confirmed
 or the dashboard, and never shows twice to the same person. They ship inert for
 the same reason the pixel does: until the code existed, a popup promising a
 discount would have sent people to "That code isn't valid".
