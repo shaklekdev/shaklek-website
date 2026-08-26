@@ -32,11 +32,20 @@ live card → webhook fired → order marked `paid` in Neon → visible on
 
 ## Do these first — founder's, not Claude's
 
-- [ ] **Refund the AED 390 test order.** Real charge on a real card.
-- [ ] **Confirm Apple Pay on a phone.** Start a checkout on iPhone/Safari and
-      stop at the payment step: Apple Pay should be the top button with no Link
-      screen. Apple Pay never renders in desktop Chrome — testing there proves
-      nothing.
+- [x] ~~**Refund the AED 390 test order.**~~ **DONE.** Verified against the
+      Stripe API on 2026-08-26, not recalled: charge
+      `ch_3U7GbOFG6ccJjMKM0i0cgAZD`, AED 390.00, `refunded: true`,
+      `amount_refunded` equals the full amount.
+- [x] ~~**Confirm Apple Pay on a phone.**~~ **DONE — confirmed by the founder,
+      and the charges prove it.** All three live charges carry
+      `payment_method_details.card.wallet.apple_pay`. It is not a claim any
+      more, it is in the payment records.
+
+- [ ] ⚠️ **Two live charges of AED 3.89 are still unrefunded** —
+      `ch_3U7iQkFG6ccJjMKM1ARqYmrs` and `ch_3U8GfHFG6ccJjMKM0fbRXZnf`, both on
+      the founder's own card, both `refunded: false`. These are the TEST99
+      runs: 99% off a 389 shirt. Small money, but they are real charges on a
+      live account and they sit in the books until refunded.
 - [ ] **Download the new spec sheet and say what the tailor still needs.** The
       structure is rebuilt; only the tailor knows what is missing from it.
 
