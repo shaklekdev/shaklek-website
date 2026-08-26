@@ -248,6 +248,7 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <tr><td>Resend</td><td>Emails the stylist when an order is confirmed. Sent from the Stripe webhook, so an email means a payment actually settled</td><td><span class="status built">Live</span></td></tr>
     <tr><td>Google Gemini</td><td>Catalog photography and technical flats, generated on a developer's laptop by <code>scripts/catalog/</code> and committed as files. <strong>Not a runtime dependency.</strong> A Gemini outage cannot affect a customer</td><td><span class="status built">Build-time tool</span></td></tr>
     <tr><td>Meta Pixel</td><td>Ships <strong>inert</strong>: without <code>NEXT_PUBLIC_META_PIXEL_ID</code> no script loads, no cookie is set, nothing reaches Meta. Turning ads on is an environment variable and a redeploy, not a code change. Product feed at <code>/feed/meta.xml</code></td><td><span class="status built">Built, switched off</span></td></tr>
+    <tr><td>Nightly reconciliation</td><td>EventBridge rule <code>shaklek-reconcile-daily</code> (<code>cron(0 6 * * ? *)</code>) → API destination → <code>GET /api/admin/reconcile</code>, authorised by a bearer token stored in an EventBridge <strong>Connection</strong> (Secrets Manager), never in a rule or in git. Emails staff only when Stripe and the order table disagree. Alarm <code>shaklek-reconcile-not-running</code> watches its FailedInvocations</td><td><span class="status built">Live</span></td></tr>
     <tr><td>Amazon RDS</td><td>Named in the previous version of this document. Never existed — Neon does this job</td><td><span class="status tbd">Not used</span></td></tr>
     <tr><td>Amazon S3</td><td>Named in the previous version. No bucket exists; images are repository files served by Amplify. Worth revisiting only when customer uploads need to persist beyond a session</td><td><span class="status tbd">Not used</span></td></tr>
     <tr><td>Lambda + EventBridge</td><td>The planned weekly trend-intake job. Never built. <code>/dashboard/trends</code> exists and calls Google Trends on demand from a staff request instead</td><td><span class="status tbd">Not built</span></td></tr>
@@ -267,6 +268,7 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <tr><td>Routes</td><td>21 checked. All 200 except <code>/account</code> and <code>/dashboard/orders</code> (307 to sign-in, correct) and <code>/legal/returns</code> (308 redirect)</td></tr>
     <tr><td>Security headers</td><td>HSTS <code>max-age=63072000; includeSubDomains; preload</code> · CSP present · <code>X-Frame-Options: DENY</code> · <code>nosniff</code> · <code>strict-origin-when-cross-origin</code></td></tr>
     <tr><td>Environment</td><td>13 variables set. Clerk <strong>live</strong>, Stripe <strong>live</strong>, Resend set, DB set. <strong>No <code>NEXT_PUBLIC_META_PIXEL_ID</code></strong> — the pixel is inert</td></tr>
+    <tr><td>⚠️ Env vars need TWO steps</td><td>The Amplify <strong>build spec</strong> carries an allowlist — <code>env | grep -e DATABASE_URL … &gt;&gt; .env.production</code>. A variable set in the console but missing from that grep <strong>never reaches the running app</strong>: <code>process.env</code> is undefined in production while the console shows it set. 12 variables allowlisted today. Read it with <code>aws amplify get-app --app-id dqcptedylrif0 --query 'app.buildSpec'</code></td></tr>
     <tr><td>Stripe webhook</td><td><strong>Enabled</strong> at <code>https://www.shaklek.com/api/webhooks/stripe</code>, listening to <code>checkout.session.completed</code> and <code>checkout.session.expired</code></td></tr>
     <tr><td>Promotion codes</td><td><strong>Zero active.</strong> <code>GET /v1/promotion_codes?active=true</code> returns an empty list. WELCOME20 and TEST99 both deactivated</td></tr>
     <tr><td>Test charges</td><td>AED 390 order <strong>refunded in full</strong>. ⚠️ Two AED 3.89 TEST99 charges remain <strong>unrefunded</strong> on the founder's own card</td></tr>
@@ -423,15 +425,17 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
   <ol class="flow">
     <li><span class="flow-status built">fixed</span>
       <strong>The site is now watched.</strong> Before this there were zero
-      CloudWatch alarms and zero SNS topics on the account. Four things now
+      CloudWatch alarms and zero SNS topics on the account. Five things now
       email <strong>hello@shaklek.com</strong> through
       <code>sns:eu-west-1:…:shaklek-alerts</code>: any <strong>5xx</strong>
       within five minutes; <strong>zero requests for an hour</strong>, which
       catches a total outage that an error alarm cannot because a dead site
       emits nothing rather than errors; <strong>p90 latency over 3s</strong>
-      sustained for fifteen minutes; and an <strong>Amplify build failing or
+      sustained for fifteen minutes; an <strong>Amplify build failing or
       being cancelled</strong>, which was previously silent while the site kept
-      serving the old version.
+      serving the old version; and the <strong>nightly order reconciliation
+      failing to run</strong> — because every failure mode of that check ends in
+      "nobody was told", so the check itself needs watching.
       <br><br>
       Verified rather than assumed: a test message was published and delivered,
       and the build-failure event pattern was checked <em>both ways</em> — it

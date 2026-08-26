@@ -142,6 +142,25 @@ charges nothing for AWS service events.
 A test message was published to the topic and delivered — this is not a
 config-only claim.
 
+### The nightly order reconciliation — added 2026-08-27
+
+`shaklek-reconcile-daily`, `cron(0 6 * * ? *)` → EventBridge **API
+destination** → `GET /api/admin/reconcile`. Bearer token lives in an
+EventBridge **Connection**, which stores it in Secrets Manager — never in a
+rule definition and never in git. Two retries, one hour max age.
+
+**Proved end to end before being left alone**, not just configured: a
+temporary `rate(1 minute)` rule fired the same target twice — **2 invocations,
+0 failures** — then was deleted. That is the only way to test that the
+Connection's stored `Authorization` header actually works.
+
+`shaklek-reconcile-not-running` alarms on the rule's `FailedInvocations`.
+Every failure mode of this check ends in "nobody was told", so the check needs
+watching too.
+
+⚠️ **SNS cannot be an EventBridge dead-letter target** — it must be SQS. The
+FailedInvocations alarm does the same job here without another queue.
+
 ### Still open
 
 - [ ] **Sentry (free tier) for application errors.** CloudWatch tells you the
