@@ -95,3 +95,59 @@ Rollback: switch the nameservers back at GoDaddy. Allow for propagation delay, s
 
 ## Sequencing note
 Originally: don't build the database until `backend-todo.md`'s schema work is actually ready to use it. **Fully done as of 2026-08-14** — Neon is provisioned, migrated, and confirmed persisting real orders in production (see Database section above).
+
+---
+
+## Monitoring and alerting — BUILT 2026-08-26
+
+Before this, **nothing watched the site.** Zero CloudWatch alarms, zero SNS
+topics, verified against the account. A failed Amplify build is silent — the
+site just keeps serving the previous version — and a 500 went to CloudWatch,
+which nobody reads. The detection mechanism was the founder noticing.
+
+Everything below is in **eu-west-1**, account `793168138974`, tagged
+`project=shaklek`.
+
+### The topic
+
+`arn:aws:sns:eu-west-1:793168138974:shaklek-alerts` → email
+**hello@shaklek.com** (subscription confirmed 2026-08-26).
+
+Its access policy allows publish from `events.amazonaws.com` and
+`cloudwatch.amazonaws.com`. ⚠️ **Without those two statements the alarms and
+the rule fire into nothing and the whole setup looks configured while
+notifying no one.** If alerts ever go quiet, check the topic policy first.
+
+### What fires
+
+| Alarm | Condition | Why this shape |
+|---|---|---|
+| `shaklek-5xx-errors` | any 5xx in 5 min | A *rate* threshold hides a handful of failed checkouts at low traffic. At this size, one server error is worth an email. |
+| `shaklek-site-silent` | 0 requests in 1 hour | Catches a **total outage**, which the 5xx alarm cannot: a dead site emits no errors, it emits nothing. `--treat-missing-data breaching` is the whole trick. |
+| `shaklek-slow-responses` | p90 latency > 3s for 15 min | Three consecutive periods, so one slow spike does not page anyone. |
+| `shaklek-build-failed` (EventBridge) | Amplify job `FAILED` or `CANCELLED` on any branch | The silent-failed-build case. Message includes the `get-job` command to read the log. |
+
+The event pattern was checked **both ways** with `aws events test-event-pattern`:
+it matches a `FAILED` deployment event and does **not** match a `SUCCEED` one.
+A rule that quietly matches everything is worse than no rule.
+
+### Cost
+
+Roughly **$0.30/month**: three standard-resolution alarms at $0.10 each. SNS
+email is free for the first 1,000 notifications a month, and EventBridge
+charges nothing for AWS service events.
+
+### Verified end to end
+
+A test message was published to the topic and delivered — this is not a
+config-only claim.
+
+### Still open
+
+- [ ] **Sentry (free tier) for application errors.** CloudWatch tells you the
+      5xx rate moved; it cannot tell you which line threw. Requires creating an
+      account, which is the founder's to do. Once the DSN exists it is
+      `@sentry/nextjs` plus one environment variable.
+- [ ] Consider a second subscription to a phone-reachable address if
+      hello@shaklek.com is not checked daily. An alert nobody reads is the same
+      as no alert.

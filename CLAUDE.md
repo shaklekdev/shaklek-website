@@ -14,10 +14,11 @@ session is holding uncommitted, and update it before you finish.
 wrong on this project was scope creep or claiming success without checking —
 not missing knowledge. Read it before doing anything that costs money.
 
-## Where the project stands (2026-08-22)
+## Where the project stands (2026-08-26)
 
-Live at `www.shaklek.com` on AWS Amplify (the apex `shaklek.com` 404s — use
-www). Commerce works end to end: Stripe Checkout → webhook → order persisted in
+Live at `www.shaklek.com` on AWS Amplify. (The apex `shaklek.com` **301-redirects
+to www** — re-verified 2026-08-26. This file previously said it 404s; that was
+true once and was copied forward for days without anyone re-testing it.) Commerce works end to end: Stripe Checkout → webhook → order persisted in
 Neon Postgres → notification email via Resend. Auth is Clerk (staff
 `/dashboard`, customers `/account`).
 
@@ -55,6 +56,53 @@ project is judged against that.
 Zero real AI exists in the product itself; that is deliberate (Phase 1 is a
 human-run concierge model). The image generation described here is a build-time
 tool for producing catalog photos, not a product feature.
+
+**The architecture, as it actually runs, is drawn in
+`planning/aws-architecture-diagram.html`** (rewritten 2026-08-26). Open it in a
+browser before designing anything that adds a service. The short version:
+**Amplify is the only AWS service in the system.** The database is **Neon
+Postgres, not RDS**; there is **no S3 bucket** (catalog photography is committed
+to the repo); and **no Lambda or EventBridge exists** — the trend job was never
+built. That file previously claimed all three and was wrong for months.
+
+### Changed since 2026-08-22, in the order it will bite you
+
+- **Every catalog image is 2:3**, and **113 files carry a true `.jpg`
+  extension**. The deployed optimizer picks its output format from the
+  extension, not the magic bytes, so a `.png` name served 248KB of PNG where a
+  `.jpg` served 18KB. **Any future rename uses `.jpg`, not the old
+  JPEG-under-`.png` convention.**
+- **`npm run build` runs `scripts/verify-catalog.mjs` first** and exits 1 on a
+  `catalog.ts` entry pointing at a missing file. A broken image path used to
+  build green and deploy broken.
+- **Linen is the only sellable fabric.** `src/data/fabrics.ts` is the single
+  source of truth for what can be made; `resolveFabric()` pins it server-side in
+  `/api/orders`. The organic-cotton entry is **switched off, not deleted**.
+  ⚠️ **On hold until Friday 2026-08-28** pending real in-store quotes — do not
+  change a fabric or a price before then. The founder's plan if both fabrics
+  can be bought: cotton keeps today's prices, linen +49. That is a price rise in
+  `catalog.ts`, **not a `surchargeAed`** — linen is the only fabric today, so
+  every live price is already a linen price.
+- **There is no active promotion code.** WELCOME20 was deactivated in live
+  Stripe on 2026-08-26 with 0 redemptions ever. A code is enterable on our own
+  checkout page and validated against the API, so an active code is reachable by
+  anyone who guesses the word, advertised or not. **Do not leave one active
+  "for later".**
+- **The pricing model was rebuilt on real fabric quotes** — see
+  `planning/pricing-todo.md`. The old "fabric is not the lever" conclusion is
+  struck through: at 30–40 AED/metre, fabric costs more than the tailor.
+- **Saving measurements works.** `/api/account/measurements` accepts both the
+  field shape and the flattened string the Save button sends; it previously
+  matched neither and wrote five empty columns while answering `ok: true`. The
+  sign-up modal passes `forceRedirectUrl` because Amplify sets
+  `NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/account`, which used to throw
+  the customer off the page mid-design. The pending stash in sessionStorage
+  **expires after 15 minutes** — that is a security property, asserted in
+  `scripts/test-measurements.mjs`, not a nicety.
+- **The Meta pixel is built and switched off.** Without
+  `NEXT_PUBLIC_META_PIXEL_ID` no script loads and nothing reaches Meta. Turning
+  ads on is an environment variable and a redeploy. Product feed at
+  `/feed/meta.xml`.
 
 ---
 

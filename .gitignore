@@ -31,3 +31,13 @@ photos/
 # legal/incorporation documents — reference copies only, not for version control
 /DCCI-*.pdf
 /LicenseCertificateReport_*.pdf
+
+# Generated tech packs / spec sheets downloaded from the dashboard. The
+# filename carries an order id, and the document carries that customer's
+# MEASUREMENTS -- these must never reach git. Kept on disk, ignored by version
+# control, same reasoning as the PII rule in CLAUDE.md section 0.
+/shaklek-spec-*.pdf
+
+# Compiled output of website/scripts/social/encode.swift. A build artifact and
+# a Mach-O binary; rebuild it from the .swift source rather than committing it.
+website/scripts/social/encode

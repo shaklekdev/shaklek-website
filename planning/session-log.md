@@ -155,9 +155,17 @@ now refuses to restate the numbers at all. `planning/marketing/meta-ads-setup.md
 listed WELCOME20 as live; corrected.
 
 
-### Session F — save-measurements popup, catalogue CTA, linen-only MVP (2026-08-26)
+### Session F — save-measurements popup, catalogue CTA, linen-only MVP, Clerk perf (2026-08-26)
 
-**Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**
+**Status: DONE, COMMITTED. No files held.**
+
+Committed at the founder's instruction while Session G was still writing, so
+the Clerk-performance commit also carries **Session G's black-nav-bar rewrite
+of `Header.tsx`** — the two edits landed in the same file and could not be
+separated. Their sizing work (`SizePicker`, `DetailField`, `sizeChart`) went in
+as its own commit, attributed to them.
+
+Files that were held:
 
 ⚠️ **Renamed from "Session E" — the pricing session above claimed the same
 letter on the same day.** Two blocks called Session E is exactly the collision
@@ -396,7 +404,31 @@ other session made **Standard** the default size mode in `351502e`, and it only
 appears under Tailored. That is their change, not a regression; verified the
 whole flow still works after switching to Tailored.
 
-#### Monitoring is genuinely at zero
+#### Monitoring — BUILT, verified end to end (was genuinely at zero)
+
+Founder chose **hello@shaklek.com** as the alert address; subscription
+confirmed. Full runbook in `planning/aws-infrastructure-todo.md`. Four alerts:
+any 5xx, zero requests for an hour, p90 latency over 3s, and a failed Amplify
+deploy. **~$0.30/month.**
+
+Three things worth keeping from building it:
+
+- **The zero-requests alarm needs `--treat-missing-data breaching`.** A totally
+  dead site emits no metrics at all, so an error-rate alarm cannot see it. That
+  flag is the difference between catching an outage and catching nothing.
+- **The SNS topic policy is load-bearing and easy to forget.** Without explicit
+  publish statements for `events.amazonaws.com` and `cloudwatch.amazonaws.com`,
+  every alarm and rule fires into a void while the console shows everything
+  configured. Check it first if alerts go quiet.
+- **The event pattern was tested BOTH ways** with `aws events
+  test-event-pattern` — matches FAILED, does not match SUCCEED. A rule that
+  silently matches everything is worse than no rule, and a rule that matches
+  nothing looks identical to a healthy site.
+
+Sentry is deliberately not done: it needs an account, which is the founder's to
+create. Everything else is wired.
+
+#### (superseded) Monitoring was genuinely at zero
 
 Verified against the account: **zero CloudWatch alarms, zero SNS topics.**
 Cheapest path, in order: Amplify's built-in per-branch build notification
