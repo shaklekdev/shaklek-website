@@ -96,15 +96,28 @@ check; `eager` loading for above-the-fold cards; WCAG tap-target fixes.
       deliver real key events failed (zero keydown events captured). Needs the
       other session's CDP harness. Not a blocker — tap, click, Tab and Space all
       work.
-- [ ] **Clerk loads on every route** — 188.7kb raw / 54.7kb gzipped, 24% of
-      homepage JS, all from `ClerkProvider` in the root layout. Plan in
-      `clerk-migration-plan.md`. **Do not start it** until production sign-in has
-      been exercised for a while; never change the auth layer in the same window
-      as auth credentials.
+- [x] ~~**Clerk loads on every route**~~ — **DONE 2026-08-26, deployed.**
+      `ClerkProvider` moved out of the root layout into per-route
+      `AuthProvider` (`609bd1c`). Measured on production: home page **705 KB →
+      377 KB**, DOMContentLoaded 2373 ms → 1734 ms, and zero occurrences of
+      "clerk" in the served HTML. Clerk still mounts on `/account`,
+      `/checkout`, `/dashboard`, `/order-confirmed`, `/design/[slug]`,
+      `/size-guide` and sign-in/up. ⚠️ **The obvious fix does not work** —
+      `next/dynamic` on Header's `UserButton` changed nothing, because Clerk's
+      UI bundle is fetched at runtime from `clerk.shaklek.com` and is not in
+      our bundle at all. Sign-out moved to `/account`; it only existed inside
+      the removed avatar menu.
 - [ ] **Founder's note claims 288 shirt / 576 trouser combinations.** What ships
       is 32 per garment (192 with sizes); the rest count locked Shaklek+
       sliders. Founder's copy, founder's call — but it is checkable.
 - [ ] **`/upload` is built but unlinked** from the nav. Link it or leave it.
+      ⚠️ Two things found 2026-08-26: it is **in `sitemap.ts` at priority 0.8**,
+      so search engines can send people to a page nothing links to; and the
+      reference photo it collects is **never persisted** — `order_items` stores
+      only `hasReferenceImage: boolean`, and the stylist email is built from DB
+      rows in the Stripe webhook, so on a paid order the tailor receives a
+      checkbox instead of the customer's picture. Cheapest resolution while it
+      is not a funnel being run: remove it from the sitemap.
 - [ ] **Welcome-offer capture flow not built** — `subscribers` table, unique
       promotion codes, Resend email, `allow_promotion_codes` on the session.
       This is what makes ads work: at Shaklek's order volume a purchase-optimised
