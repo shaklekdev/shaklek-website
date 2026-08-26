@@ -444,11 +444,20 @@ export function buildPdf(
             .font("Helvetica")
             .fontSize(9)
             .fillColor(MUTED)
-            .text(`Closest standard size, for cross-check only: ${sizeLabel(category, near)} (bust ${near.bust}cm). Cut to the numbers above, not to this size.`, { width });
+            .text(
+              `Closest standard size, for cross-check only: ${sizeLabel(category, near)} (bust ${near.bust}cm). Cut to the numbers above, not to this size.`,
+              left,
+              doc.y,
+              { width },
+            );
         }
         if (fields.notes) {
           doc.moveDown(0.35);
-          doc.font("Helvetica").fontSize(10.5).fillColor(INK).text(`Customer's fit note: ${fields.notes}`, { width });
+          doc
+            .font("Helvetica")
+            .fontSize(10.5)
+            .fillColor(INK)
+            .text(`Customer's fit note: ${fields.notes}`, left, doc.y, { width });
         }
       } else if (chartRow) {
         // The label the customer actually chose -- "38" on a trouser, "M" on a
@@ -497,17 +506,32 @@ export function buildPdf(
         .map((id) => fitNoteLabel(category, id))
         .filter((label): label is string => Boolean(label));
       if (fitLabels.length > 0) {
+        // EVERY draw here passes `left` explicitly. The block above this one
+        // writes its values at left + 118, and pdfkit keeps doc.x there -- so
+        // `{ width }` alone would set a 515pt column starting at x=158 on a
+        // 595pt page and clip ~78pt off the right of every line. That is the
+        // exact bug documented on `para` below, and it caught this block too:
+        // the caveat rendered as "Adjust from the standard block by" with the
+        // rest of the sentence off the page. Use para(), or pass left.
         doc.moveDown(0.45);
-        doc.font("Helvetica-Bold").fontSize(10).fillColor(INK).text("WHAT USUALLY GOES WRONG IN THIS SIZE");
-        doc.moveDown(0.15);
         doc
-          .font("Helvetica")
-          .fontSize(9)
-          .fillColor(MUTED)
-          .text("Reported by the customer about clothes she already owns, not measured. Adjust from the standard block by your own judgement.", { width });
+          .font("Helvetica-Bold")
+          .fontSize(10)
+          .fillColor(INK)
+          .text("WHAT USUALLY GOES WRONG IN THIS SIZE", left, doc.y, { width });
+        doc.moveDown(0.15);
+        para(
+          "Reported by the customer about clothes she already owns, not measured. Adjust from the standard block by your own judgement.",
+          MUTED,
+          9,
+        );
         doc.moveDown(0.25);
         for (const label of fitLabels) {
-          doc.font("Helvetica-Bold").fontSize(11).fillColor(INK).text(`•  ${label}`, { width });
+          doc
+            .font("Helvetica-Bold")
+            .fontSize(11)
+            .fillColor(INK)
+            .text(`•  ${label}`, left, doc.y, { width });
         }
       }
 
@@ -545,7 +569,11 @@ export function buildPdf(
       if (construction || premiumNotes.length) {
         section("Construction");
         if (construction) {
-          doc.font("Helvetica-Bold").fontSize(10.5).fillColor(INK).text(construction.silhouette, { width });
+          doc
+            .font("Helvetica-Bold")
+            .fontSize(10.5)
+            .fillColor(INK)
+            .text(construction.silhouette, left, doc.y, { width });
           doc.moveDown(0.35);
           bullets(construction.details.map((d) => (d.view ? `${d.text} (${d.view})` : d.text)));
         }
