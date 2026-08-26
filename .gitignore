@@ -29,8 +29,15 @@ photos/
 # that must not live on one laptop. brand-assets/ stays out: it is 252MB of
 # working material. Anything else dropped into branding/ stays ignored, so the
 # folder can still be used as scratch.
+# ⚠️ THESE EXCEPTIONS ARE NAMED FOLDERS, SO RENAMING ONE SILENTLY UNTRACKS IT.
+# That already happened once: logo/ was split into the three folders below and
+# 47 artwork files went back to being ignored, on disk only, while a commit
+# that looked successful removed the old ones. If a folder here is ever
+# renamed, change it here in the same commit and check `git ls-files branding/`.
 /branding/*
-!/branding/logo/
+!/branding/send-to-supplier/
+!/branding/other-formats/
+!/branding/source/
 !/branding/pages/
 !/branding/*.md
 /insparation/

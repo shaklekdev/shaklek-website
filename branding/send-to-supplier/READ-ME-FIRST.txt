@@ -1,0 +1,30 @@
+SHAKLEK — ARTWORK
+=================
+
+Everything you need is in this folder. Nothing here needs a font installed.
+
+START WITH:  READ-ME-FIRST-Shaklek-artwork.pdf
+             Two pages. It says which mark goes on which item, the colours,
+             the minimum sizes, and which process will not work.
+
+THE FILES
+
+  shaklek-logo                    The logo. Use this one unless told otherwise.
+  shaklek-logo-one-colour         Same, for single-colour printing.
+  shaklek-logo-white-on-dark      For printing onto anything dark.
+  shaklek-monogram                The short mark. Small items and embroidery.
+  shaklek-monogram-white-on-dark  The same, for dark surfaces.
+  shaklek-gold-seal               The round sticker.
+
+  .pdf  Vector. Please use this.
+  .png  Transparent, high resolution, if you cannot take vector.
+
+TWO THINGS
+
+  1. Please do not retype the name in a font. These files are the artwork.
+  2. The logo cannot be embroidered. Its thin strokes are far below the
+     minimum for satin stitch. Use shaklek-monogram.pdf for anything
+     stitched. The PDF explains why.
+
+Other formats (JPG, the name on its own, the Arabic on its own) are in
+../other-formats/. Ask if you need one.
