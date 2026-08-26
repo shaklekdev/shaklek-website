@@ -172,26 +172,62 @@ tailoring cost before the real 40 existed. The claim was wrong. The reprice
 rests on positioning and capacity, not on rescuing a broken margin — and that
 is still true at the new fabric prices.
 
-## The welcome offer at 20%, and where it now gets thin
+## The welcome offer — withdrawn, 2026-08-26
 
-Applied as a Stripe promotion code at checkout, **never** by discounting the
-list price. No struck-through price nobody ever paid — that is fake reference
-pricing, and Dubai separately requires a DET permit to advertise a discount
-campaign (**verify before running one**).
+**Founder decision: the 20% welcome offer is gone. It will be 10% or nothing.**
 
-At +49 and in-store linen, with the 20% code applied:
+`WELCOME20` was **deactivated in live Stripe on 2026-08-26 with 0 redemptions,
+ever** — it cost nothing to withdraw. Verified independently afterwards:
+`GET /v1/promotion_codes?active=true` returns an empty list. **There is no
+active promotion code.**
 
-| Item | Customer pays | Gross | vs CAC 134 | vs CAC 200 |
-|---|---|---|---|---|
-| Shirt | 350 | 189 | +55 | **−11** |
-| Pants | 382 | 199 | +65 | **−1** |
+The numbers behind the decision, at real in-store linen (40 AED/m):
 
-⚠️ **This is the case to watch.** A discounted linen shirt no longer clears a
-pessimistic 200 AED acquisition cost. It was +4 under the old (wrong) fabric
-assumption and it is −11 under the real one. The lever is **not** shrinking the
-welcome offer to 15% — it is that 134 is an assumption and 200 is a guess.
-**Spend 2–3k AED and measure the real CAC before treating either as a
-constraint.** If the real number lands near 134, all of this is comfortable.
+| | Pays | Gross | GM | vs CAC 134 | vs CAC 200 |
+|---|---|---|---|---|---|
+| Shirt 389, **20% off** | 311 | 151 | 49% | +17 | **−49** |
+| Shirt 389, **10% off** | 350 | 189 | 54% | +55 | **−11** |
+| Shirt 389, **no offer** | 389 | 227 | 58% | +93 | +27 |
+| Pants 429, **20% off** | 343 | 161 | 47% | +27 | **−39** |
+| Pants 429, **10% off** | 386 | 203 | 53% | +69 | +3 |
+| Pants 429, **no offer** | 429 | 244 | 57% | +110 | +44 |
+
+**20% was indefensible on the real fabric cost** — it took a shirt to a 49%
+margin and 49 AED underwater against a pessimistic acquisition cost. The old
+version of this file blessed it at 65% GM, computed on a fabric price that does
+not exist.
+
+### The 10%-or-nothing decision is coupled to the +49
+
+They are not independent choices, and this is the one thing to carry into
+Friday:
+
+| | 10% off | No offer |
+|---|---|---|
+| **At live prices** | Shirt **−11** vs CAC 200 — still thin | Shirt +27 · Pants +44 |
+| **At +49** | Shirt **+32** · Pants **+46** | Shirt **+74** · Pants **+92** |
+
+**10% only works if the +49 goes with it.** At today's prices a 10% shirt is
+still slightly underwater against a 200 AED CAC; at 438 it clears comfortably.
+Taking the price rise and keeping a 10% offer earns more per order than leaving
+the price alone and offering nothing.
+
+### Rules that outlive this decision
+
+- **Any offer is a Stripe promotion code at checkout, never a discounted list
+  price.** No struck-through price nobody ever paid — that is fake reference
+  pricing, and Dubai separately requires a DET permit to advertise a discount
+  campaign (**verify before running one**).
+- ⚠️ **A code is enterable on Shaklek's own checkout page**, which validates it
+  against the Stripe API (`api/orders/route.ts`). An active code is reachable by
+  anyone who guesses the word, advertised or not. **Do not leave one active
+  "for later"** — that is why WELCOME20 was withdrawn rather than left to expire
+  in November.
+- The launch popup (`LaunchOffer.tsx`) reads its percentage from
+  `NEXT_PUBLIC_LAUNCH_PERCENT` and renders nothing unless both it and
+  `NEXT_PUBLIC_LAUNCH_CODE` are set. **Neither is set in Amplify**, so the popup
+  is inert and no percentage is hardcoded anywhere in the UI. Creating the code
+  comes first, setting the variables second — never the reverse.
 
 ## CAC, and why it sets the price more than cost does
 

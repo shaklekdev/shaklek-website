@@ -30,11 +30,19 @@ export type CatalogItem = {
   defaultChanges?: Partial<Record<string, string>>;
 };
 
-// Pricing set 2026-08-22 from real unit costs -- see planning/pricing-todo.md
+// Pricing set 2026-08-22, revised 2026-08-26 -- see planning/pricing-todo.md
 // for the model, the CAC assumptions and the capacity constraint behind it.
-// Shirt 390 · Skirt 420 · Pants 450 · Dress 620 AED.
-// These are LIST prices. The welcome offer (20% off a first order) is applied
-// as a Stripe promotion code at checkout, never by discounting these.
+//
+// DO NOT restate the ladder in this comment. It said "Shirt 390 · Skirt 420 ·
+// Pants 450 · Dress 620" for four days while the object below said 389/419/
+// 429/619, and the margin case was argued from the comment. The numbers are
+// three lines down; read them there.
+//
+// These are LIST prices, and they are LINEN prices -- linen is the only
+// sellable fabric (src/data/fabrics.ts). Any discount is applied as a Stripe
+// promotion code at checkout, never by discounting these. As of 2026-08-26
+// there is NO active promotion code: the founder withdrew the 20% welcome
+// offer, and WELCOME20 is deactivated in live Stripe with 0 redemptions.
 // Supersedes the dossier's Section 9 ladder (290/320/350/490 + elaborate 670);
 // the elaborate dress tier is dropped -- simple designs only.
 // Same fixed tiers apply to uploaded designs, by category — no separate

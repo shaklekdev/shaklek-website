@@ -58,10 +58,29 @@ most valuable number outstanding, and why the ladder is not being re-set today.
 can move freely right now. That stops being true the day the first campaign
 runs.
 
-⚠️ **The 20% welcome code is where this bites.** A discounted linen shirt at
-+49 comes to **−11 against a pessimistic 200 AED CAC** (it was +4 under the old
-wrong fabric number). The lever is measuring real CAC with 2–3k of spend, not
-shrinking the offer.
+**The 20% welcome offer was withdrawn the same day (founder, 2026-08-26).** It
+will be **10% or nothing**. On real linen a 20%-off shirt earned 151 gross — 49
+AED *underwater* against a pessimistic 200 CAC — so the old file's blessing of
+it was computed on a fabric price that does not exist.
+
+⚠️ **`WELCOME20` is DEACTIVATED in live Stripe, 0 redemptions ever.** Done via
+the API with the live key read from Amplify and never printed; verified
+independently afterwards with the read-only Stripe tool —
+`GET /v1/promotion_codes?active=true` returns an empty list. **No active
+promotion code exists.** A code is enterable on Shaklek's OWN checkout page,
+which validates it against the API, so an active code is reachable by anyone
+who guesses the word whether it is advertised or not. Do not leave one active
+"for later".
+
+**10% and the +49 are one decision, not two.** At today's prices a 10%-off
+shirt is still −11 against CAC 200; at 438 it is +32. Taking the price rise and
+keeping 10% beats leaving the price alone and offering nothing.
+
+**Also corrected: `catalog.ts` restated the ladder in a comment** — "Shirt 390 ·
+Skirt 420 · Pants 450 · Dress 620" — while the object three lines below it said
+389/419/429/619, and the margin case was argued from the comment. The comment
+now refuses to restate the numbers at all. `planning/marketing/meta-ads-setup.md`
+listed WELCOME20 as live; corrected.
 
 
 ### Session E — save-measurements popup, catalogue CTA, linen-only MVP (2026-08-26)
@@ -81,6 +100,9 @@ shrinking the offer.
 - `website/src/data/fabrics.ts` (new), `website/scripts/test-measurements.mjs`
 - `website/src/app/legal/terms/page.tsx`, `website/src/app/upload/page.tsx`,
   `website/src/app/upload/layout.tsx`
+- `website/src/app/how-it-works/page.tsx`, `website/src/app/not-found.tsx`,
+  `website/src/app/checkout/page.tsx`, `website/src/app/account/page.tsx`,
+  `website/src/app/order-confirmed/page.tsx`
 - `planning/pricing-todo.md`
 
 #### The save button's popup was never missing. The save was.
@@ -128,6 +150,15 @@ sit under the button as standing text. It is now an absolutely positioned
 that cannot proceed, disappears on leave and the moment the numbers are valid,
 and **layout shift is 0px** (measured against a following element and the
 panel's own height).
+
+#### Every "go to the catalogue" button now goes to the catalogue
+
+`/our-story` and `/size-guide` already pointed at `/#catalog`. Six more did
+not, and three of them were labelled "Back to catalog" while landing on the top
+of the home page: `/how-it-works` ("Start with a piece"), `/checkout` empty
+state, `/account` empty state, `/not-found`, and both on `/order-confirmed`.
+Also the launch-offer dialog's "Start designing", which only closed itself.
+The Header logo and the dashboard's "Back to site" deliberately still go to "/".
 
 #### Linen-only MVP
 

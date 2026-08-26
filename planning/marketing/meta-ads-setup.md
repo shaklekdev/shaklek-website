@@ -52,12 +52,28 @@ email, which is your decision and a privacy-policy change, not a default.
 
 ---
 
-## Promotion codes, as they stand (2026-08-25)
+## Promotion codes, as they stand (2026-08-26)
+
+**There is no active promotion code in live mode.** Verified against the Stripe
+API, not the Dashboard: `GET /v1/promotion_codes?active=true` returns an empty
+list.
 
 | code | state | terms |
 |---|---|---|
-| `WELCOME20` | **live** | 20% off, first order only, 500 redemptions, expires 2026-11-23 |
+| `WELCOME20` | **deactivated 2026-08-26** | was 20% off, first order only, 500 redemptions. **0 redemptions, ever.** |
 | `TEST99` | **deactivated** | was 99% off, uncapped, no expiry, repeat use allowed |
+
+**Why WELCOME20 went.** Founder decision, 2026-08-26: the welcome offer will be
+**10% or nothing**, never 20%. On the real linen cost a 20%-off shirt earned
+151 AED gross — **49 short** of a pessimistic 200 AED acquisition cost. It was
+also a guessable code with 500 redemptions sitting active on a live account
+that takes real cards, so it was withdrawn rather than left to expire in
+November. See `planning/pricing-todo.md` for the numbers.
+
+⚠️ **A code is enterable on Shaklek's own checkout page, not Stripe's** — the
+site validates it against the API (`api/orders/route.ts`). An active code is
+therefore reachable by anyone who guesses the word, whether or not it is
+advertised anywhere.
 
 TEST99 sold a 429 AED garment for 4.29 AED to anyone who typed it, unlimited
 times, forever, on live cards. It was deactivated once the real payment test
