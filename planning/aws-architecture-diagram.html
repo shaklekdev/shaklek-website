@@ -372,22 +372,27 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
   </ol>
 
   <div class="callout">
-    ⚠️ <strong>350 of the 463 catalog files are named <code>.png</code> and are
-    actually JPEG data.</strong> The optimizer picks its output format from the
-    <em>extension</em>, not the file's magic bytes, so those files are re-encoded
-    as PNG for any client that does not accept WebP. Measured on production,
-    same garment, same width:
+    <strong>Fixed 2026-08-27: 290 files were named <code>.png</code> and
+    contained JPEG data.</strong> The optimizer picks its output format from the
+    <em>extension</em>, not the file's magic bytes, so every one of them was
+    re-encoded as PNG for any client that does not accept WebP. Measured on the
+    same garment at the same width, before and after the rename:
     <br><br>
-    <code>…-front.png</code> → WebP client <strong>18,844 B</strong> · no-WebP
-    client <strong>167,304 B</strong> (<code>image/png</code>)<br>
-    <code>…-back-v2.jpg</code> → WebP client <strong>10,890 B</strong> ·
-    no-WebP client <strong>27,147 B</strong> (<code>image/jpeg</code>)
+    no-WebP client: <strong>167,304 B → 29,822 B</strong> (<code>image/png</code>
+    → <code>image/jpeg</code>). WebP clients were already fine and are
+    unchanged at ~18 KB.
     <br><br>
-    <strong>6.2× heavier</strong> for that audience. 113 files were renamed to a
-    true <code>.jpg</code> in August and measured 9.4× smaller; the remaining
-    350 never were. The fix is a rename plus the matching
-    <code>catalog.ts</code> update — and since a changed filename is also how
-    cache-busting works here, it carries no stale-cache risk.
+    286 garment photos plus 4 marketing images renamed with <code>git mv</code>;
+    145 references updated across <code>catalog.ts</code>, <code>seo.ts</code>,
+    <code>Hero</code>, <code>Concept</code> and <code>/our-story</code>.
+    <strong>The 64 files in <code>flats/</code> were left alone — they are
+    genuinely PNG</strong>, which is the right format for line art, and
+    <code>flats.ts</code> constructs their names with a <code>.png</code>
+    suffix.
+    <br><br>
+    ⚠️ <strong>This was never the cause of the perceived lag</strong>, and was
+    not done to fix it — modern browsers accept WebP and always got the small
+    file. It matters for older iOS and in-app webviews.
     <strong>Any future rename uses <code>.jpg</code>.</strong>
   </div>
 

@@ -60,7 +60,7 @@ export default function Concept() {
             sm up, where it has its own half and costs no vertical space. */}
         <div className="relative order-first h-[170px] w-full sm:order-none sm:h-auto sm:min-h-[220px]">
           <Image
-            src="/marketing/story-tailoring.png"
+            src="/marketing/story-tailoring.jpg"
             alt="A tailor working on a single piece"
             fill
             sizes="(min-width: 640px) 50vw, 100vw"

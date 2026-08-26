@@ -35,7 +35,7 @@ export default function Hero({ compact = false }: { compact?: boolean }) {
     <section className="relative w-full overflow-hidden">
       <div className="hero-ken-burns absolute inset-0">
         <Image
-          src="/marketing/hero-banner.png"
+          src="/marketing/hero-banner.jpg"
           alt=""
           fill
           priority

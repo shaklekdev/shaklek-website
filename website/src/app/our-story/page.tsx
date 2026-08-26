@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/our-story",
   images: [
     {
-      url: "/marketing/story-hero.png",
+      url: "/marketing/story-hero.jpg",
       width: 1584,
       height: 672,
       alt: "Shaklek tailoring studio.",
@@ -63,7 +63,7 @@ function ImagePlaceholder({
 const tenetGroups = [
   {
     caption: "A finished piece: natural fabric texture, a personal detail visible",
-    image: "/marketing/story-materials-v2.png",
+    image: "/marketing/story-materials-v2.jpg",
     items: [
       {
         title: "Materials that respect your skin",
@@ -82,7 +82,7 @@ const tenetGroups = [
   },
   {
     caption: "A tailor at work on a single piece, price tag visible",
-    image: "/marketing/story-tailoring.png",
+    image: "/marketing/story-tailoring.jpg",
     items: [
       {
         title: "Tailoring for your shape",
@@ -116,7 +116,7 @@ export default function OurStoryPage() {
       {/* Hero */}
       <div className="relative h-[52vh] max-h-[440px] min-h-[320px] w-full overflow-hidden">
         <Image
-          src="/marketing/story-hero.png"
+          src="/marketing/story-hero.jpg"
           alt="A Shaklek piece worn outdoors, natural light"
           fill
           priority

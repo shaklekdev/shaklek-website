@@ -27,7 +27,7 @@ export type OgImage = {
 // Site-wide social card. 1584x672 -- the real dimensions of the file, which
 // scrapers use to lay the card out before they have downloaded the image.
 export const DEFAULT_OG_IMAGE: OgImage = {
-  url: "/marketing/hero-banner.png",
+  url: "/marketing/hero-banner.jpg",
   width: 1584,
   height: 672,
   alt: "Shaklek made-to-order clothing, cut by a tailor in 100% linen.",
