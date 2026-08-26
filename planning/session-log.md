@@ -18,6 +18,52 @@ Rules that make this work:
 
 ## Active claims
 
+### Session G — TikTok + Instagram launch content (2026-08-27, overnight)
+
+**HOLDING these files. Please do not edit them tonight:**
+
+- `website/scripts/social/tiktok-launch.mjs` (new, the frame/video engine)
+- `website/scripts/social/tiktok-videos.mjs` (new, the video set)
+- `website/scripts/social/carousel.mjs` (new)
+- `planning/marketing/tiktok-launch.md` (new)
+- `planning/marketing/instagram-launch-2026.md` (new)
+- `brand-assets/TIKTOK/`, `brand-assets/INSTA/` (output only, gitignored)
+- `branding/` (finished earlier tonight, committed, not held any more)
+- `.claude/agents/shaklek-marketing.md` (done, committed)
+
+**Not touching** `website/src/`, the catalogue, pricing, or anything under
+`planning/` other than `marketing/`. Earlier tonight I did touch
+`src/app/icon.tsx`, `apple-icon.tsx`, `globals.css`, `layout.tsx`,
+`Header.tsx`, `SizePicker.tsx`, `DetailField.tsx`, `FabricColorPicker.tsx`,
+`sizeChart.ts`, `designSpec.ts` and `homeContent.ts` — all committed and pushed,
+so pull before you edit those.
+
+⚠️ **TWO WHITELIST-BY-NAME FAILURES TONIGHT, SAME ROOT CAUSE. Read this.**
+
+1. `fabrics.ts` was on disk and never committed while two committed files
+   imported it. **Production failed to build for two commits** and the site
+   quietly served the old version. `npm run build` reads the WORKING TREE;
+   Amplify builds a git CHECKOUT. A green local build is not evidence.
+2. `.gitignore` whitelists `branding/` **by named folder**. Renaming `logo/`
+   into three folders silently un-tracked **47 artwork files** while the commit
+   that removed the old ones looked perfectly successful.
+
+`website/scripts/verify-imports.mjs` now fails the build on (1). For (2), run
+`git ls-files <dir>` after any rename inside an ignored tree. **In a shared
+working tree, "on disk" and "in git" are different things, and only one of them
+deploys.**
+
+
+### Session I — repo tidy (2026-08-27, IN PROGRESS)
+
+⚠️ **Holding the repo ROOT only.** Creating `_archive/` and a root `README.md`,
+and moving stale root files into it. **Touching none of:** `website/`,
+`branding/`, `planning/`, `catalog-archive/`, and — deliberately —
+**`brand-assets/` and `insparation/`**, because the other session is producing
+TikTok and Instagram content out of the first and `insparation/` was modified
+2026-08-26, so both are live inputs to work in flight.
+
+
 ### Session G — sizing, fit questions, and a two-commit production outage (2026-08-26)
 
 **Status: DONE, deployed, verified on production (job 193, `9f8d143`).**
