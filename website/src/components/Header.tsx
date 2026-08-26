@@ -42,7 +42,12 @@ export default function Header() {
           is Youssef's layout; the left-aligned mark is the founder's amendment
           to it (2026-08-26) -- a centred wordmark reads as a fashion editorial,
           and this is a shop where people have to find the cart. */}
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:py-5">
+      {/* FULL WIDTH, not the max-w-6xl content column. Inside that column the
+          mark was left-aligned but the column is centred, so on a wide screen
+          it sat ~700px in from the edge and still read as "middle" -- which is
+          what the founder was seeing. A header is chrome, not content: it hugs
+          the page. */}
+      <div className="flex items-center justify-between px-6 py-4 sm:px-10 sm:py-5">
         <Link href="/" className="flex flex-col items-start leading-none">
           {/* Italiana, founder's pick 2026-08-26. Single weight and hairline
               thins, so it goes UP a step in size -- at 24px its strokes start
@@ -130,7 +135,7 @@ export default function Header() {
           centred below that -- three short labels fit a phone comfortably,
           which is the whole reason the hamburger could go. */}
       <nav aria-label="Main" className="bg-text">
-        <div className="mx-auto flex max-w-6xl items-center justify-center gap-7 px-6 py-2.5 sm:justify-end sm:gap-10">
+        <div className="flex items-center justify-center gap-7 px-6 py-2.5 sm:justify-end sm:gap-10 sm:px-10">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}

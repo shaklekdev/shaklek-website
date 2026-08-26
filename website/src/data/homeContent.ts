@@ -36,7 +36,7 @@ export const HERO = {
   // not an edit to undo. /our-story still explains that Shaklek MEANS "your
   // way" in Arabic, which now reads as a fact about the name rather than an
   // echo of the hero.
-  line: "Customisable pieces for you, by you, at the same price either way.",
+  line: "Customisable pieces for you, by you, always at the same price.",
 };
 
 // The concept, on the page the visitor lands on.
