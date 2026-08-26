@@ -57,10 +57,23 @@ function buildPrompt({ item, comboKey, view }) {
     .map((d) => `- ${d.text}`)
     .join("\n");
 
+  // Whether this garment has ANY pocket on its back, read from the construction
+  // data rather than assumed. Trousers do (welt back pockets); the shirts do
+  // not. Saying "no front pockets" was not enough: the model put a patch pocket
+  // on two Utility Shirt backs and a second one on another, none of which exist
+  // in the source image or in the spec. A tailor reading that flat would make
+  // it, so the prohibition has to be explicit and it has to be derived.
+  const hasBackPocket = c.details.some(
+    (d) => /pocket/i.test(d.text) && d.view !== "front" && !/no pockets/i.test(d.text),
+  );
+  const backPocketLine = hasBackPocket
+    ? ""
+    : " This garment has NO pockets on the back. Do not draw a pocket, a pocket outline, a flap or a welt anywhere on the back panel.";
+
   const viewLine =
     view === "front"
       ? "Front view of the garment."
-      : "Back view of the garment. Draw the back panel as photographed — no front placket, no front opening and no front pockets on this drawing.";
+      : `Back view of the garment. Draw the back panel as photographed — no front placket, no front opening and no front pockets on this drawing.${backPocketLine}`;
 
   const symmetryLine =
     view === "front" && ASYMMETRIC_FRONT.has(item.slug)
