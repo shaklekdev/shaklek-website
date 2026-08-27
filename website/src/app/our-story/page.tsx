@@ -216,8 +216,8 @@ export default function OurStoryPage() {
               This sentence is the thesis of the whole page, so it is the one
               thing that should never be collapsed. */}
           <p className="font-display mt-5 text-[21px] leading-snug text-text sm:text-[23px]">
-            So I started wondering: what if clothes adapted to women instead of
-            women adapting to clothes?
+            So I started wondering: what if clothes adapted to us instead of us
+            adapting to clothes?
           </p>
 
           <details className="group mt-6 border border-border-strong">
