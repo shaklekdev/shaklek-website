@@ -161,6 +161,14 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#F2EDE4}
 .top .s{margin-top:14px;font-family:'Cormorant Garamond',serif;font-weight:300;
   font-size:36px;color:#4A443B;letter-spacing:.4px}
 
+/* ---- an opening title laid over the garment, which then fades away ----
+   The founder: start with "you customise, we tailor" and behind it we see the
+   design changing. So it is an overlay on top of live frames rather than a card
+   before them, and the dissolve machinery fades it out. */
+.title{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center}
+.title .box{background:rgba(242,237,228,.95);padding:64px 78px;text-align:center}
+.title .l{font-family:Italiana,serif;font-size:98px;letter-spacing:8px;color:#171512;line-height:1.16}
+
 /* ---- the four-colour split: horizontal bands that slide in from the sides ----
    The founder's shot: the same shirt in four colours, as four horizontal bands
    arriving from alternating sides and meeting in the centre, with the line laid
@@ -210,6 +218,11 @@ const FOCUS = {
   // The whole garment, hem included. No zoom at all: on a full-length shot any
   // scale above 1 eats the hem, which is the thing being compared.
   whole: "object-position:50% 50%;transform:none",
+  // TROUSERS. The founder: the caption strip was covering the hem, and the hem
+  // is how you tell cropped from full length. No zoom, whole figure, so the
+  // strip has nothing to hide. A tighter crop on the legs looked better and
+  // made the one comparison the shot exists for impossible to see.
+  trouser: "object-position:50% 50%;transform:none",
 };
 
 const page = (inner) =>
@@ -227,7 +240,7 @@ const sayFrame = ({ big, under }) =>
  * a gold hairline, which is how a lookbook captions a plate. It is deliberately
  * NOT a pill, a badge or a button: those belong to interfaces.
  */
-const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, top, topSub }) => {
+const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, top, topSub, title }) => {
   const band = hook
     ? `<div class="band"><div class="k${hook.replace(/<br>/g, " ").length > 26 ? " sm" : ""}">${hook}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>`
     : "";
@@ -245,6 +258,7 @@ const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, top, top
     ${overlay}
     <div class="stage">
       <img class="photo" src="${src}" style="${FOCUS[focus]}">
+      ${title ? `<div class="title"><div class="box"><div class="l">${title}</div></div></div>` : ""}
     </div>
     ${ann}
   `);

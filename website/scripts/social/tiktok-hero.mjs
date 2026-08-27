@@ -57,28 +57,60 @@ async function change({ src, focus = "full", label, top, price, dissolveSecs, ho
 }
 
 // ---------------------------------------------------------------- the mix
-// Fourteen changes across five garments. Each one names what moved, so the
-// viewer is told they can change that thing rather than left to infer it.
+//
+// Founder's notes on the last cut, all three addressed here:
+//   "the text background at the bottom is hiding the pants"  -> trousers use a
+//      no-zoom crop, so the hem sits well clear of the caption strip. The hem
+//      is how you tell cropped from full length; hiding it removes the only
+//      reason the shot exists.
+//   "use pants that actually show the difference"            -> PLEATED
+//      trousers. Compared side by side against the other three, its wide cut is
+//      dramatically fuller than its straight one; on the others the two read as
+//      almost the same trouser.
+//   "you only change the colour on the others"               -> every garment
+//      here changes its SHAPE. Colour is a change among many, not the only one.
+//   "start with you customise, we tailor, and behind it the design changing"
+//      -> the line opens the video as an overlay on top of live frames, with
+//      the garment already dissolving underneath it, and then fades away.
+
+const OPEN_A = shot("pleated-trousers", "Ivory", "base");
+const OPEN_B = shot("pleated-trousers", "Ivory", "wide:full");
+const TITLE = "You customise.<br>We tailor.";
+
+// title held over the first garment
+const t0 = render(photoFrame({ src: OPEN_A, focus: "trouser", title: TITLE }), "op0");
+// title still up, garment already changed underneath it
+const t1 = render(photoFrame({ src: OPEN_B, focus: "trouser", title: TITLE }), "op1");
+// same garment, title gone: dissolving t1 -> t2 is the title opening away
+const t2 = render(photoFrame({ src: OPEN_B, focus: "trouser",
+  note: ["Pleated trousers", "Wide, full length"], price: "AED 429" }), "op2");
+
+f.push(...hold(t0, 1.1));
+for (const fr of await dissolve(t0, t1, 12, "opx")) f.push(fr);
+f.push(...hold(t1, 0.9));
+for (const fr of await dissolve(t1, t2, 10, "opy")) f.push(fr);
+f.push(...hold(t2, 0.5));
+prevPng = t2;
+
+// Fourteen changes. Every garment changes SHAPE, not just colour.
 const SEQ = [
-  // the shirt: sleeve, then body length
-  { src: shot("utility-shirt", "Ivory", "base"),          label: ["Utility shirt", "Short sleeve"],  top: "You are<br>the designer", d: 0.30, h: 1.10 },
-  { src: shot("utility-shirt", "Ivory", "long:normal"),   label: ["Change", "the sleeve"],           top: "You are<br>the designer", d: 0.30, h: 0.75 },
-  { src: shot("utility-shirt", "Ivory", "long:longer"),   label: ["Change", "the length"],           d: 0.26, h: 0.70 },
-  { src: shot("utility-shirt", "Navy", "long:longer"),    label: ["Change", "the colour"],           d: 0.26, h: 0.70 },
-  // the trousers: leg width, then hem
-  { src: shot("wide-leg-trousers", "Ivory", "base"),      label: ["Wide-leg trousers", "Straight"],  focus: "legs", d: 0.24, h: 0.62 },
-  { src: shot("wide-leg-trousers", "Ivory", "wide:full"), label: ["Change", "the leg"],              focus: "legs", d: 0.22, h: 0.58 },
-  { src: shot("wide-leg-trousers", "Ivory", "wide:cropped"), label: ["Change", "the hem"],           focus: "legs", d: 0.22, h: 0.58 },
-  { src: shot("wide-leg-trousers", "Burgundy", "wide:cropped"), label: ["Change", "the colour"],     focus: "legs", d: 0.20, h: 0.54 },
-  // the blouse
-  { src: shot("structured-blouse", "Ivory", "long:normal"), label: ["Structured blouse", "Long sleeve"], d: 0.20, h: 0.52 },
-  { src: shot("structured-blouse", "Ivory", "short:longer"), label: ["Change", "both"],              d: 0.18, h: 0.48 },
-  // the wrap top
-  { src: shot("wrap-top", "Ivory", "long:normal"),        label: ["Wrap top", "Long sleeve"],        d: 0.18, h: 0.46 },
-  { src: shot("wrap-top", "Burgundy", "long:longer"),     label: ["Change", "everything"],           d: 0.16, h: 0.46 },
-  // the cargo trousers, the fastest pair
-  { src: shot("cargo-trousers", "Navy", "wide:full"),     label: ["Cargo trousers", "Wide"],         focus: "legs", d: 0.16, h: 0.44 },
-  { src: shot("cargo-trousers", "White", "straight:cropped"), label: ["Change", "the cut"],          focus: "legs", d: 0.14, h: 0.80 },
+  // trousers: width, then length, then colour
+  { src: shot("pleated-trousers", "Ivory", "wide:cropped"),      label: ["Change", "the length"], focus: "trouser", d: 0.26, h: 0.72 },
+  { src: shot("pleated-trousers", "Ivory", "base"),              label: ["Change", "the leg"],    focus: "trouser", d: 0.24, h: 0.68 },
+  { src: shot("pleated-trousers", "Navy", "wide:full"),          label: ["Change", "the colour"], focus: "trouser", d: 0.24, h: 0.66 },
+  // the shirt: sleeve, then body length, on a crop that keeps the hem in frame
+  { src: shot("utility-shirt", "Ivory", "base"),                 label: ["Utility shirt", "Short sleeve"], focus: "whole", d: 0.24, h: 0.66 },
+  { src: shot("utility-shirt", "Ivory", "long:normal"),          label: ["Change", "the sleeve"], focus: "whole", d: 0.22, h: 0.62 },
+  { src: shot("utility-shirt", "Ivory", "long:longer"),          label: ["Change", "the length"], focus: "whole", d: 0.22, h: 0.62 },
+  // cargo: width and length again, on a different silhouette
+  { src: shot("cargo-trousers", "Ivory", "base"),                label: ["Cargo trousers", "Straight, full"], focus: "trouser", d: 0.20, h: 0.58 },
+  { src: shot("cargo-trousers", "Ivory", "wide:full"),           label: ["Change", "the leg"],    focus: "trouser", d: 0.20, h: 0.56 },
+  { src: shot("cargo-trousers", "Ivory", "straight:cropped"),    label: ["Change", "the hem"],    focus: "trouser", d: 0.18, h: 0.54 },
+  // blouse and wrap: shape again, then colour
+  { src: shot("structured-blouse", "Ivory", "long:normal"),      label: ["Structured blouse", "Long sleeve"], focus: "whole", d: 0.18, h: 0.52 },
+  { src: shot("structured-blouse", "Ivory", "short:longer"),     label: ["Change", "both"],       focus: "whole", d: 0.16, h: 0.50 },
+  { src: shot("wrap-top", "Ivory", "long:normal"),               label: ["Wrap top", "Long sleeve"], focus: "whole", d: 0.16, h: 0.48 },
+  { src: shot("wrap-top", "Burgundy", "long:longer"),            label: ["Change", "everything"], focus: "whole", d: 0.16, h: 0.90 },
 ];
 for (const s of SEQ) {
   await change({ src: s.src, focus: s.focus, label: s.label, top: s.top,
@@ -94,8 +126,8 @@ const rows = [
 ];
 const TRAVEL = 20;
 for (let i = 0; i <= TRAVEL; i++)
-  f.push(render(splitFrame({ rows, p: i / TRAVEL, line: "You customise.<br>We tailor." }), `x${String(i).padStart(2, "0")}`));
-at(render(splitFrame({ rows, p: 1, line: "You customise.<br>We tailor." }), "x99"), 2.3);
+  f.push(render(splitFrame({ rows, p: i / TRAVEL, line: "And four colours." }), `x${String(i).padStart(2, "0")}`));
+at(render(splitFrame({ rows, p: 1, line: "And four colours." }), "x99"), 2.3);
 
 // --------------------------------------------------------------- the tenets
 at(render(tenetsFrame([
