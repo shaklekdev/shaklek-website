@@ -28,7 +28,7 @@ that cannot link out is not a sales channel.
 Around 25 July 2025 TikTok tightened enforcement so commercially-cleared music
 is required for **any account operating with a commercial purpose**, including
 a personal account the moment a video promotes a business. So the choice is not
-"business loses sounds" — it is "business is licensed, personal is exposed".
+"business loses sounds", it is "business is licensed, personal is exposed".
 
 **What that means for the content, and it is not a small thing:** the videos
 cannot lean on whatever song is trending this week. They have to work on
@@ -39,7 +39,7 @@ already rendered works with the sound off, which is deliberate.
 
 Under Federal Media Law 55/2023 and Cabinet Resolution 42/2025, the **UAE Media
 Council requires an Advertiser Permit for promotional content published from
-inside the UAE, effective 1 February 2026** — paid or unpaid, any follower
+inside the UAE, effective 1 February 2026**, paid or unpaid, any follower
 count. It is **free for residents for the first three years (2026-2028)**.
 Penalties elsewhere in the regime run from AED 5,000 into six figures.
 
@@ -67,11 +67,11 @@ included: ask for the permit number and put permit maintenance in writing.
 
 Two things, and everything below is built on them.
 
-**1. The garment redraws itself.** Tap "wide" and the photograph changes to a
-real photograph of that trouser, wide. 128 combinations, every one shot. Almost
+**1. The garment redraws itself.** Tap "wide" and the image changes to that
+trouser, wide. 128 combinations, every one with its own image. Almost
 no competitor's site does this, and nobody scrolling has seen a trouser change
 its own leg width. The research could not find a named viral trend for
-"screen-record the configurator" — which is the point. It is not a trend to
+"screen-record the configurator", which is the point. It is not a trend to
 join, it is a format nobody else can run.
 
 **2. "Packing your order" becomes "MAKING your order."** Filming an order being
@@ -95,11 +95,11 @@ categorisation. So: five pillars, nothing else.
 
 | | Pillar | Why | Effort |
 |---|---|---|---|
-| **1** | **The change** — the configurator redrawing | The defensible format. Rewatch-friendly, works silent | ✅ rendered |
-| **2** | **The making** — one order, ten days, the tailor's hands | Trust, and it makes the wait the product | 📱 your phone |
-| **3** | **The argument** — size charts, sleeves, one price | The ideas the brand owns. Earns saves and comments | ✅ rendered |
-| **4** | **The founder** — why you started this | Fastest trust a brand with no history can buy. Lo-fi outperforms produced | 📱 your phone |
-| **5** | **The audience decides** — comments pick the combination | Interactive formats get algorithmic preference in 2026 | 📱 needs comments first |
+| **1** | **The change**, the configurator redrawing | The defensible format. Rewatch-friendly, works silent | ✅ rendered |
+| **2** | **The making**, one order, ten days, the tailor's hands | Trust, and it makes the wait the product | 📱 your phone |
+| **3** | **The argument**, size charts, sleeves, one price | The ideas the brand owns. Earns saves and comments | ✅ rendered |
+| **4** | **The founder**, why you started this | Fastest trust a brand with no history can buy. Lo-fi outperforms produced | 📱 your phone |
+| **5** | **The audience decides**, comments pick the combination | Interactive formats get algorithmic preference in 2026 | 📱 needs comments first |
 
 **Dance trends, lip-syncs, hauls and generic day-in-the-life are out.** Dance
 participation is reportedly down 64% year on year, hauls make no sense for a
@@ -111,7 +111,7 @@ source found.
 ## The first 30 days
 
 **Judge nothing before 30 videos.** The consistent finding across sources: a new
-account is not penalised — every video goes to a test audience of a few hundred
+account is not penalised, every video goes to a test audience of a few hundred
 non-followers matched by interest, and follower count does not affect
 distribution. But the account needs volume before its analytics mean anything.
 Do not delete flops; they do not poison the account.
@@ -121,7 +121,7 @@ quality-led accounts, 2-3/day early to feed the algorithm. One genuinely good
 video a day beats three padded ones, because weak completion rates drag the
 account's own signals down.
 
-### Week 1 — the change (all five are rendered and ready)
+### Week 1, the change (all five are rendered and ready)
 
 | Day | Post | Sound |
 |---|---|---|
@@ -140,7 +140,7 @@ the known trigger. If it is ever boosted, swap to the third-person rewrite
 Meta's, but the same creative gets reused across both and that is how the wrong
 version ends up in an ad account.
 
-### Weeks 2-4 — the making
+### Weeks 2-4, the making
 
 This is where the account either becomes a brand or stays a catalogue. **It
 needs your phone and the tailor's hands, and I cannot render it.** Shot lists
@@ -159,7 +159,7 @@ say they prefer raw behind-the-scenes to polished commercials.
 
 1. **Shears through linen.** 10 seconds, close, sound on. This is the single
    highest-value clip you can capture, and it is also the one thing catalogue
-   photography can never give you: motion and texture.
+   catalogue imagery can never give you: motion and texture.
 2. **Chalk on fabric.** The marking out. Hands only.
 3. **The machine.** 15 seconds of a seam being sewn, close enough to see the
    needle.
@@ -201,7 +201,7 @@ the second distribution pool at no cost:
 #دبي #تفصيل #خياطة
 ```
 
-**Posting time.** Sources genuinely contradict each other — one says Tue-Thu
+**Posting time.** Sources genuinely contradict each other, one says Tue-Thu
 2-6pm and avoid weekends, another says Sunday 9am, UAE agencies say evenings
 7-10pm. Treat timing as a secondary lever: test **7-10pm** and **12-1pm** for
 two weeks, then follow your own analytics rather than anyone's blog.
@@ -212,14 +212,14 @@ two weeks, then follow your own analytics rather than anyone's blog.
 
 Consistent across every source, in rough order of weight:
 
-1. **Completion rate and watch time** — the reason every video here is under 11
+1. **Completion rate and watch time**, the reason every video here is under 11
    seconds. A 9-second video watched twice beats a 40-second video abandoned.
 2. **Rewatches**
-3. **Shares — and a share by DM reportedly counts about double a feed share.**
+3. **Shares, and a share by DM reportedly counts about double a feed share.**
    Content worth sending to one specific friend beats content worth
    broadcasting. "Which of these four would you wear" is a DM.
 4. **Saves**, which rank above likes. Educational content reportedly gets ~3.2×
-   the saves — this is the argument for the size-chart and fit explainers.
+   the saves, this is the argument for the size-chart and fit explainers.
 5. **Comment depth.** A thread beats a single comment.
 6. **Likes, last.** Ignore them as a measure.
 
@@ -233,7 +233,7 @@ are not verifiable. Do not build a plan that depends on any single figure.
 
 - TikTok Ads minimums: **$50/day campaign, $20/day ad group.**
 - The learning phase needs roughly **50 conversions per ad group per week** to
-  exit — the same wall the Meta plan hit. Purchases will not reach it.
+  exit, the same wall the Meta plan hit. Purchases will not reach it.
   **Optimise for email signups**, exactly as `pricing-todo.md` already argues.
 - **Spark Ads boost a post that already worked organically**, keeping its
   comments and native look. That is the right first spend: put money behind
@@ -246,7 +246,7 @@ budget behind the two posts that already earned their views.**
 
 ## Cross-posting to Instagram
 
-The watermark penalty is real and confirmed at the top of Meta — Reels carrying
+The watermark penalty is real and confirmed at the top of Meta, Reels carrying
 another app's watermark are downranked, and 2026 enforcement flags them within
 seconds. Estimates of the reach hit range 30-70% (third-party, direction
 certain, magnitude not).
@@ -267,7 +267,7 @@ Virality solved their demand problem. It did not solve their unit economics.
 
 Shaklek has **one tailor**, and `planning/tailor-capacity.md` puts that at
 roughly **11-22 garments a month**. The site promises ten days and nothing in
-the code caps orders, which is correct — a made-to-order brand that turns away
+the code caps orders, which is correct, a made-to-order brand that turns away
 demand has given up its one structural advantage.
 
 **But a video that works is a capacity event, not just a good day.** Before
@@ -304,7 +304,7 @@ Recorded so nobody later treats it as fact:
   self-promotion rests on five consistent secondary sources, not the law.
 - **Every algorithm multiplier** quoted anywhere above.
 - **Whether TikTok Shop is coming to the UAE.** No official signal exists.
-- **Per-hashtag volumes for UAE tags** — needs TikTok Creative Center in-app
+- **Per-hashtag volumes for UAE tags**, needs TikTok Creative Center in-app
   with the region filter.
 - **Which trending sounds are live.** Sounds churn in days, and a Business
   account cannot use them anyway. Re-check at posting time if it ever matters.

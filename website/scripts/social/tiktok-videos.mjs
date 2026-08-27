@@ -13,6 +13,7 @@
 import {
   render, encode, hold, photoFrame, gridFrame, endFrame, shot, OUTDIR,
 } from "./tiktok-launch.mjs";
+import { lint } from "./copy-rules.mjs";
 import fs from "node:fs";
 
 const only = process.argv.slice(2);
@@ -28,7 +29,7 @@ videos.push({
   id: "01",
   name: "01-same-trouser-four-ways",
   caption:
-    "Same trouser. Four ways to cut it. You pick the one you want and a tailor makes that one. No stock, nothing sitting in a warehouse. Dubai.",
+    "Same trouser, four ways to cut it. You pick one and a tailor makes that one. No stock, nothing sitting in a warehouse. Dubai.",
   build() {
     const S = (combo) => shot("wide-leg-trousers", "Ivory", combo);
     const state = (combo, label, hook) =>
@@ -106,7 +107,7 @@ videos.push({
   id: "03",
   name: "03-pick-a-colour",
   caption:
-    "Four colours, one piece. Every one of these is the actual piece in that colour, not a swatch on a screen.",
+    "Four colours, one piece. Each image shows the combination you chose, so you can see the cut and the colour before anyone cuts the linen.",
   build() {
     const S = (colour) => shot("wide-leg-trousers", colour, "wide:full");
     const state = (colour, hook) =>
@@ -135,7 +136,7 @@ videos.push({
   id: "04",
   name: "04-nothing-here-exists-yet",
   caption:
-    "Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor in Dubai makes that piece, and it takes about ten days because it has to.",
+    "Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor makes that piece, and it takes about ten days because it has to.",
   build() {
     const f = [];
     f.push(...hold(render(photoFrame({
@@ -201,6 +202,11 @@ videos.push({
 let built = 0;
 for (const v of videos) {
   if (!want(v.id)) continue;
+  // Every caption goes through the founder's standing corrections before a
+  // single frame is encoded. This exists because the first version of these
+  // captions called the imagery "the actual piece", which is the exact phrasing
+  // scripts/social/README.md forbids.
+  lint(v.caption, `${v.name} caption`);
   const frames = v.build();
   const out = `${OUTDIR}/${v.name}.mp4`;
   encode(frames, out);

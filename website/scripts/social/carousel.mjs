@@ -6,7 +6,7 @@
  * WHY CAROUSELS GET THEIR OWN BUILDER: multiple 2026 sources put photo mode
  * among the fastest-growing content types on TikTok, saved at higher rates than
  * video, and saves rank above likes as a ranking signal. Shaklek has 128
- * combination images already shot, which is a carousel library nobody else has.
+ * combination images already rendered, which is a carousel library nobody else has.
  *
  * Two sizes out of one definition:
  *   TikTok photo mode  1080x1920
@@ -18,6 +18,7 @@
  * declares its own focus.
  */
 import fs from "node:fs";
+import { lint } from "./copy-rules.mjs";
 import { execFileSync } from "node:child_process";
 
 const ROOT = "/Users/nadatlohi/Desktop/Shaklek";
@@ -89,6 +90,10 @@ function render(html, file, W, H) {
 }
 
 function build(set) {
+  lint(set.caption, `${set.name} caption`);
+  for (const sl of set.slides) {
+    for (const key of ["k", "s", "tag"]) if (sl[key]) lint(sl[key], `${set.name} slide.${key}`);
+  }
   let made = 0;
   for (const [key, S] of Object.entries(SIZES)) {
     const dir = `${S.dir}/${set.name}`;
@@ -117,7 +122,7 @@ const HASH = "#dubaifashion #madetomeasure #madetoorder #linen #shaklek\n#دبي
 build({
   name: "01-four-ways-to-cut-it",
   caption:
-    "Same trouser. Four ways to cut it. Straight or wide, cropped or full length, and every one of these is the actual piece in that cut. You pick one and a tailor in Dubai makes that one. AED 429.",
+    "Same trouser, four ways to cut it. Straight or wide, cropped or full length. You pick one and a tailor makes that one. AED 429.",
   hashtags: HASH,
   slides: [
     { k: "same trouser.", s: "Four ways to cut it. Swipe.", src: shot("wide-leg-trousers", "Ivory", "base"), focus: "legs", tag: "Straight, full length" },
@@ -153,14 +158,14 @@ build({
 build({
   name: "03-the-trousers-four-colours",
   caption:
-    "The same trousers, four colours. Each of these is that trouser in that colour rather than a swatch on a screen. 100% linen, AED 429, made after you order it and not before. The top is styling and sold separately.",
+    "The same trousers, four colours. You see the cut and the colour together rather than a swatch on a screen. 100% linen, AED 429, made after you order it and not before. The top is styling and not included.",
   hashtags: HASH,
   slides: [
     { k: "same trousers.", s: "Four colours. Swipe.", src: shot("banded-trousers", "Ivory", "wide:full"), focus: "full", tag: "Ivory" },
     { k: "white", src: shot("banded-trousers", "White", "wide:full"), focus: "full", tag: "White" },
     { k: "navy", src: shot("banded-trousers", "Navy", "wide:full"), focus: "full", tag: "Navy" },
     { k: "burgundy", src: shot("banded-trousers", "Burgundy", "wide:full"), focus: "full", tag: "Burgundy" },
-    { k: "the trousers, AED 429.", s: "The top is styling, sold separately.", src: shot("banded-trousers", "Navy", "wide:cropped"), focus: "legs", tag: "Banded Trousers" },
+    { k: "the trousers, AED 429.", s: "The top is styling, not included.", src: shot("banded-trousers", "Navy", "wide:cropped"), focus: "legs", tag: "Banded Trousers" },
     { end: true },
   ],
 });
@@ -183,12 +188,12 @@ build({
 build({
   name: "05-how-it-actually-works",
   caption:
-    "How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to that exact cut, then either choose a size or send four measurements. One tailor in Dubai makes it. About ten days, because nothing is made before you order it.",
+    "How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to the cut you chose, then either choose a size or send four measurements. One tailor makes it. About ten days, because nothing is made before you order it.",
   hashtags: HASH,
   slides: [
     { k: "how it actually works", s: "Four steps. Swipe.", src: shot("oversized-shirt", "Ivory", "base"), focus: "full" },
     { k: "1. pick a piece", s: "Eight timeless essentials. 100% linen.", src: shot("utility-shirt", "Navy", "long:longer"), focus: "full" },
-    { k: "2. change it", s: "Sleeve, leg, length, colour. The picture changes to that exact cut.", src: shot("wide-leg-trousers", "Ivory", "wide:cropped"), focus: "legs", tag: "Wide, cropped" },
+    { k: "2. change it", s: "Sleeve, leg, length, colour. The picture changes to the cut you chose.", src: shot("wide-leg-trousers", "Ivory", "wide:cropped"), focus: "legs", tag: "Wide, cropped" },
     { k: "3. your size", s: "XS to XXL, trousers 32 to 44, or send four measurements. Same price.", src: shot("structured-blouse", "Ivory", "long:longer"), focus: "full" },
     { k: "4. one tailor makes it", s: "About ten days. Nothing is made before you order it.", src: shot("banded-trousers", "Burgundy", "wide:full"), focus: "full", tag: "From AED 389" },
     { end: true },

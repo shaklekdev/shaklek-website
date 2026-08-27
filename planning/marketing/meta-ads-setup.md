@@ -1,4 +1,4 @@
-# Enabling Meta ads — what is built, and what only you can do
+# Enabling Meta ads, what is built, and what only you can do
 
 Written overnight 2026-08-25 by Session D. Everything in "Built and deployed"
 is live and verified against production. Everything in "Your part" needs a
@@ -25,7 +25,7 @@ storefront. Nothing about the site changes until you set it.
 
 The site sends a strict Content-Security-Policy. Without the two hosts added,
 the pixel would have loaded, fired nothing, and reported **zero conversions
-with no visible error** — the most expensive kind of bug to find mid-campaign.
+with no visible error**, the most expensive kind of bug to find mid-campaign.
 Verified in a real browser: pixel loads, `fbq` defined, **0 CSP violations**.
 
 ### Events wired, and what each carries
@@ -34,7 +34,7 @@ Verified end to end in a headless browser against a production build:
 
 | Event | Fires when | Payload |
 |---|---|---|
-| `PageView` | every page, incl. client-side navigation | — |
+| `PageView` | every page, incl. client-side navigation |, |
 | `ViewContent` | design page opens | item, category, value, AED |
 | `AddToCart` | Add to cart succeeds (**not** on edit) | item, quantity, value |
 | `InitiateCheckout` | Pay pressed, before the network call | items, num_items, value |
@@ -47,7 +47,7 @@ optimises against and the ROAS you read.
 
 **No personal data is sent.** No email, name, address, phone or measurements.
 Verified: an email typed into checkout appears nowhere in any event payload.
-Advanced Matching is deliberately OFF — it would hash and send the customer's
+Advanced Matching is deliberately OFF, it would hash and send the customer's
 email, which is your decision and a privacy-policy change, not a default.
 
 ---
@@ -65,19 +65,19 @@ list.
 
 **Why WELCOME20 went.** Founder decision, 2026-08-26: the welcome offer will be
 **10% or nothing**, never 20%. On the real linen cost a 20%-off shirt earned
-151 AED gross — **49 short** of a pessimistic 200 AED acquisition cost. It was
+151 AED gross, **49 short** of a pessimistic 200 AED acquisition cost. It was
 also a guessable code with 500 redemptions sitting active on a live account
 that takes real cards, so it was withdrawn rather than left to expire in
 November. See `planning/pricing-todo.md` for the numbers.
 
-⚠️ **A code is enterable on Shaklek's own checkout page, not Stripe's** — the
+⚠️ **A code is enterable on Shaklek's own checkout page, not Stripe's**, the
 site validates it against the API (`api/orders/route.ts`). An active code is
 therefore reachable by anyone who guesses the word, whether or not it is
 advertised anywhere.
 
 TEST99 sold a 429 AED garment for 4.29 AED to anyone who typed it, unlimited
 times, forever, on live cards. It was deactivated once the real payment test
-had been run against it. **Do not reactivate it to test with** — create a
+had been run against it. **Do not reactivate it to test with**, create a
 capped, expiring code instead, or use the sandbox account.
 
 ---
@@ -90,13 +90,13 @@ Business Manager → Events Manager → Connect data source → Web → name it
 
 ### 2. Verify the domain (Business Settings → Brand Safety → Domains)
 Add `shaklek.com`, choose the **meta-tag** method, copy the token.
-Note: use `www.shaklek.com` in the ad links — the apex does not serve deep
+Note: use `www.shaklek.com` in the ad links, the apex does not serve deep
 links.
 
 ### 3. Set the variables in Amplify, then redeploy
 
 Every switch on the site, in one place. All are read in the browser, so all
-must start with `NEXT_PUBLIC_`, and **all require a redeploy** — they are baked
+must start with `NEXT_PUBLIC_`, and **all require a redeploy**, they are baked
 in at build time.
 
 ```
@@ -108,10 +108,10 @@ NEXT_PUBLIC_FB_DOMAIN_VERIFICATION = <the meta-tag token>
 exactly that, and it contradicted the section above it: WELCOME20 was
 **deactivated on 2026-08-26** and no active promotion code exists. Setting it
 would put a dead code in the popup and send every signup to "That code isn't
-valid" — the precise failure the inert-by-default design exists to prevent.
+valid", the precise failure the inert-by-default design exists to prevent.
 
-The launch popup stays off until a real code exists. When one does — founder's
-decision is **10% or nothing**, never 20% — create it in Stripe first, capped
+The launch popup stays off until a real code exists. When one does, founder's
+decision is **10% or nothing**, never 20%, create it in Stripe first, capped
 and expiring, then set both of:
 
 ```
@@ -125,13 +125,13 @@ the same reason the pixel does: until the code existed, a popup promising a
 discount would have sent people to "That code isn't valid".
 
 **The pixel now also requires the visitor's consent.** Setting the id is
-necessary but not sufficient — nothing is set and nothing reaches Meta until
+necessary but not sufficient, nothing is set and nothing reaches Meta until
 someone accepts, Decline carries equal weight, and no answer means no. Declining
 also deletes Meta's `_fbp` and `_fbc`, and "Cookie choices" in the footer lets
 anyone change their mind later.
 
 **Expect measured conversions to be lower than raw traffic. That gap is your
-consent rate, not a broken pixel** — check it before concluding the pixel is
+consent rate, not a broken pixel**, check it before concluding the pixel is
 misconfigured, because the instinct will be to blame the setup.
 
 ### 4. Upload the catalog
@@ -147,7 +147,7 @@ navy browser is retargeted with navy rather than the ivory hero shot.
 
 ---
 
-## Ad policy — read before writing creative
+## Ad policy, read before writing creative
 
 Flagged by Session C, and it will cost you a rejection if ignored.
 
@@ -155,8 +155,8 @@ Flagged by Session C, and it will cost you a rejection if ignored.
 attributes**, including body. Two of the strongest organic lines cannot run
 as ads:
 
-- `h01` "YOU'VE NEVER BEEN A MEDIUM" — organic only
-- `h03` "WE DON'T CHARGE FOR YOUR BODY" — organic only
+- `h01` "YOU'VE NEVER BEEN A MEDIUM", organic only
+- `h03` "WE DON'T CHARGE FOR YOUR BODY", organic only
 
 `social-playbook.md` holds ad-safe third-person rewrites as `h01ad` / `h03ad`.
 The same rule applies to any "kinda chic" line addressed at the viewer's body.
@@ -175,18 +175,18 @@ Two more, from today's corrections:
 
 ## Deliberately NOT done
 
-**Conversions API (server-side events).** Browser pixels lose 20–40% of events
+**Conversions API (server-side events).** Browser pixels lose 20 to 40% of events
 to ad blockers and iOS. CAPI recovers them by sending `Purchase` from the
 Stripe webhook, which is the only source that knows for certain that money
 moved. It is the single biggest accuracy win available.
 
-It was not done tonight because it means editing the payments webhook — the
-same blast radius as the AED 5 bug — while you are asleep and cannot review
+It was not done tonight because it means editing the payments webhook, the
+same blast radius as the AED 5 bug, while you are asleep and cannot review
 it. It needs an access token from Events Manager and a deduplication
 `event_id` shared with the browser event. **Worth doing before you scale
 spend, not before you start.**
 
-**`deviceSizes` trimming** — reverted deliberately; it turns working image URLs
+**`deviceSizes` trimming**, reverted deliberately; it turns working image URLs
 into 400s for no customer-visible gain.
 
 ---
@@ -196,7 +196,7 @@ into 400s for no customer-visible gain.
 **No one has bought anything through the current version of the site.** Nine
 deploys went out on 2026-08-25 touching the design page, cart, checkout and
 every catalog image. A ~AED 4 order with `TEST99` on a real phone is the only
-thing that proves the money path — and it also produces the first real
+thing that proves the money path, and it also produces the first real
 `Purchase` event, which is how you confirm the pixel end to end.
 
 **Do that before spending on traffic.**

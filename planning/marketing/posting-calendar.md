@@ -68,7 +68,7 @@ TikTok search, so the target phrase leads.
 
 ### Day 1 · `01-same-trouser-four-ways.mp4`
 
-> Same trouser. Four ways to cut it. You pick the one you want and a tailor makes that one. No stock, nothing sitting in a warehouse. Dubai.
+> Same trouser, four ways to cut it. You pick one and a tailor makes that one. No stock, nothing sitting in a warehouse. Dubai.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -77,7 +77,7 @@ TikTok search, so the target phrase leads.
 
 ### Day 2 · `01-four-ways-to-cut-it` (6 slides)
 
-> Same trouser. Four ways to cut it. Straight or wide, cropped or full length, and every one of these is the actual piece in that cut. You pick one and a tailor in Dubai makes that one. AED 429.
+> Same trouser, four ways to cut it. Straight or wide, cropped or full length. You pick one and a tailor makes that one. AED 429.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -104,7 +104,7 @@ TikTok search, so the target phrase leads.
 
 ### Day 5 · `03-pick-a-colour.mp4`
 
-> Four colours, one piece. Every one of these is the actual piece in that colour, not a swatch on a screen.
+> Four colours, one piece. Each image shows the combination you chose, so you can see the cut and the colour before anyone cuts the linen.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -113,7 +113,7 @@ TikTok search, so the target phrase leads.
 
 ### Day 6 · `03-the-trousers-four-colours` (6 slides)
 
-> The same trousers, four colours. Each of these is that trouser in that colour rather than a swatch on a screen. 100% linen, AED 429, made after you order it and not before. The top is styling and sold separately.
+> The same trousers, four colours. You see the cut and the colour together rather than a swatch on a screen. 100% linen, AED 429, made after you order it and not before. The top is styling and not included.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -135,7 +135,7 @@ Why you started a made-to-order label in the UAE. Do not rehearse it and do not 
 
 ### Day 9 · `04-nothing-here-exists-yet.mp4`
 
-> Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor in Dubai makes that piece, and it takes about ten days because it has to.
+> Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor makes that piece, and it takes about ten days because it has to.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -144,7 +144,7 @@ Why you started a made-to-order label in the UAE. Do not rehearse it and do not 
 
 ### Day 10 · `05-how-it-actually-works` (6 slides)
 
-> How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to that exact cut, then either choose a size or send four measurements. One tailor in Dubai makes it. About ten days, because nothing is made before you order it.
+> How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to the cut you chose, then either choose a size or send four measurements. One tailor makes it. About ten days, because nothing is made before you order it.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -171,7 +171,7 @@ Why you started a made-to-order label in the UAE. Do not rehearse it and do not 
 
 ### Day 14 · 📱 Shears through linen, 10 seconds, sound on
 
-The single highest-value clip you can capture. Close. This is the one thing catalogue photography can never give you.
+The single highest-value clip you can capture. Close. This is the one thing the catalogue imagery can never give you.
 
 ### Day 15 · 📱 Chalk marking on fabric
 

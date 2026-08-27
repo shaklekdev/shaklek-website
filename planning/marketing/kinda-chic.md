@@ -1,4 +1,4 @@
-# Kinda chic — the campaign, and the trap in it
+# Kinda chic, the campaign, and the trap in it
 
 Written overnight 2026-08-25 on the founder's brief. Read the first section
 before using any line below. The brief as given would have produced a post that
@@ -48,7 +48,7 @@ That is a body-positivity statement that happens to be true of the product. It
 needs no hijack. Every line in section 3 is written from there.
 
 **"Kinda chic to not have to go to the tailor yourself" is the one brief line
-that survives** — it is about the person's time and effort, not the feature
+that survives**, it is about the person's time and effort, not the feature
 list. It is kept, reworded, in the B set.
 
 ---
@@ -104,7 +104,7 @@ Ranked within each set. `ORGANIC` means do not put it in a paid ad, per rule 6.
 
 | Line | | Why |
 |---|---|---|
-| Kinda chic to dress for August in Dubai | SAFE | A Zara ad cannot say this. Cotton and linen make it true. |
+| Kinda chic to dress for August in Dubai | SAFE | A Zara ad cannot say this. Linen makes it true. |
 | Kinda chic to choose fabric you can breathe in | SAFE | True: cotton or linen only. Avoids the word "breathable" as a spec claim and makes it a choice the customer makes. |
 | Kinda chic to wear linen in a lift | SAFE | Funny, local, specific. Strong TikTok opener. |
 | Kinda chic to own four things and love them | SAFE | Carries "essentials" without saying it. |

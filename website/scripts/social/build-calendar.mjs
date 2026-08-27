@@ -46,7 +46,7 @@ const plan = [];
 let vi = 0, ci = 0;
 const FILM = [
   ["Founder to camera, 30 seconds, no script", "Why you started a made-to-order label in the UAE. Do not rehearse it and do not reshoot it five times. Lo-fi outperforms produced here."],
-  ["Shears through linen, 10 seconds, sound on", "The single highest-value clip you can capture. Close. This is the one thing catalogue photography can never give you."],
+  ["Shears through linen, 10 seconds, sound on", "The single highest-value clip you can capture. Close. This is the one thing the catalogue imagery can never give you."],
   ["Chalk marking on fabric", "Hands only. No face needed."],
   ["The machine, 15 seconds", "Close enough to see the needle."],
   ["The hem being turned", "Slow. This is ASMR territory and it earns rewatches."],

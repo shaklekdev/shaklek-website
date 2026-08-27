@@ -1,11 +1,11 @@
 /**
- * TikTok launch videos, rendered from the catalogue photography.
+ * TikTok launch videos, rendered from the catalogue imagery.
  *
  *   npx tsx scripts/social/tiktok-launch.mjs [name ...]
  *
  * WHY THIS EXISTS: Shaklek owns one visual that almost no other clothing brand
  * has, which is a garment that REDRAWS ITSELF when an option changes, with a
- * real photograph behind every combination rather than a mockup. 128 of them.
+ * its own image behind every combination rather than a mockup. 128 of them.
  * Nobody scrolling has seen a trouser change its own leg width. That is the
  * asset; tiles restating the website are not.
  *
@@ -57,7 +57,7 @@ const shot = (slug, colour, combo) => {
 //
 // ON-SCREEN TEXT IS SET IN A SANS, NOT THE BRAND SERIF, AND THAT IS DELIBERATE.
 // Italiana and Cormorant are hairline faces; at thumb distance on a phone, over
-// photography, moving, they break up. The brand mark still closes every video,
+// imagery, moving, they break up. The brand mark still closes every video,
 // so the identity lands where it can be read. Legibility wins over consistency
 // in the only two seconds that decide whether the video is watched at all.
 //
@@ -69,10 +69,10 @@ const CSS = `
 html,body{width:${W}px;height:${H}px;overflow:hidden;background:#EFEBE3}
 /* A SOLID BAND, NOT A GRADIENT OVER THE PHOTOGRAPH.
    The first cut faded a white veil down over the top of the frame. On a
-   full-length shot the model's head sits exactly there, so every hook frame
+   full-length image the model's head sits exactly there, so every hook frame
    bleached her face into a ghost and printed the words across it. It looked
    like a mistake because it was one.
-   The band is its own row now: type on clean ground, photograph untouched
+   The band is its own row now: type on clean ground, image untouched
    underneath, and the garment starts where the words end. */
 .f{position:relative;width:${W}px;height:${H}px;background:#EFEBE3;overflow:hidden;
   display:flex;flex-direction:column}
@@ -106,7 +106,7 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#EFEBE3}
 `;
 
 /**
- * `focus` positions the photograph inside the frame. It is not decoration:
+ * `focus` positions the image inside the frame. It is not decoration:
  * see the crop rule at the top of this file.
  *   arms  -> upper body, both sleeves and the hem in frame
  *   legs  -> lower body, the hem inside the frame or cropped and full read alike
