@@ -43,6 +43,14 @@ const b64 = (rel) => {
   return `data:image/${ext};base64,${fs.readFileSync(p).toString("base64")}`;
 };
 
+/** back image for a slug + colour + combo */
+const shotBack = (slug, colour, combo) => {
+  const item = bySlug[slug];
+  const rel = combo === "base" ? item.colorImages[colour].back : item.comboImages?.[colour]?.[combo]?.back;
+  if (!rel) throw new Error(`no back image for ${slug}/${colour}/${combo}`);
+  return b64(rel);
+};
+
 /** front image for a slug + colour + combo ("base" for the default combo) */
 const shot = (slug, colour, combo) => {
   const item = bySlug[slug];
@@ -105,7 +113,12 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#F2EDE4}
    pale ground: the first version set these words directly on the image and they
    were close to unreadable over the light shirts. A local strip fixes that
    without the earlier mistake of fading a veil across the model's face. */
-.note{position:absolute;left:0;right:0;bottom:0;background:#F2EDE4;
+/* A ROW IN THE COLUMN, not a layer over the photograph. As an absolute overlay
+   it covered the bottom ~150px of the image, and on a full-length shot that is
+   exactly where the hem is: a "normal length" and a "longer length" back view
+   came out looking identical because the only difference between them was
+   hidden behind this strip. */
+.note{flex:0 0 auto;position:relative;background:#F2EDE4;
   padding:34px 84px 40px;display:flex;align-items:flex-end;justify-content:space-between}
 .note .hr{position:absolute;left:84px;top:0;width:64px;height:1px;background:#9C8445}
 .note .lines{display:flex;flex-direction:column}
@@ -122,6 +135,31 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#F2EDE4}
 .gl{position:absolute;left:20px;bottom:20px;font-family:'Cormorant Garamond',serif;
   font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#171512;
   background:rgba(242,237,228,.86);padding:8px 14px}
+
+
+/* ---- the four-colour split: horizontal bands that slide in from the sides ----
+   The founder's shot: the same shirt in four colours, as four horizontal bands
+   arriving from alternating sides and meeting in the centre, with the line laid
+   over them. Bands start fully off-frame and ease in. */
+.split{position:absolute;inset:0;display:flex;flex-direction:column;z-index:2;background:#F2EDE4}
+.split .row{position:relative;flex:1;overflow:hidden}
+.split .row img{position:absolute;width:100%;height:100%;object-fit:cover}
+.split .cap{position:absolute;right:34px;bottom:22px;font-family:'Cormorant Garamond',serif;
+  font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#F6F2EA;
+  text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.split .cap.dark{color:#171512;text-shadow:none}
+.overlay{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center}
+.overlay .box{background:rgba(242,237,228,.93);padding:52px 72px;text-align:center}
+.overlay .l1{font-family:Italiana,serif;font-size:92px;letter-spacing:7px;color:#171512;line-height:1.16}
+
+/* ---- the tenets, set as the site sets them ---- */
+.tenets{position:absolute;inset:0;z-index:2;background:#F2EDE4;padding:150px 96px;
+  display:flex;flex-direction:column;justify-content:center;gap:56px}
+.tenets .t{display:flex;flex-direction:column;gap:14px}
+.tenets .k{font-family:Italiana,serif;font-size:64px;letter-spacing:4px;color:#171512}
+.tenets .v{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:40px;
+  line-height:1.34;color:#4A443B}
+.tenets .hr{width:56px;height:1px;background:#9C8445}
 
 /* ---- the sign-off ---- */
 .end{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;
@@ -145,6 +183,9 @@ const FOCUS = {
   arms: "object-position:50% 22%;transform:scale(1.28)",
   legs: "object-position:50% 78%;transform:scale(1.18)",
   full: "object-position:50% 45%;transform:scale(1.02)",
+  // The whole garment, hem included. No zoom at all: on a full-length shot any
+  // scale above 1 eats the hem, which is the thing being compared.
+  whole: "object-position:50% 50%;transform:none",
 };
 
 const page = (inner) =>
@@ -176,8 +217,8 @@ const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, onDark =
     ${band}
     <div class="stage">
       <img class="photo" src="${src}" style="${FOCUS[focus]}">
-      ${ann}
     </div>
+    ${ann}
   `);
 };
 
@@ -185,6 +226,26 @@ const gridFrame = ({ cells, cols = 2 }) =>
   page(`<div class="grid" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${Math.ceil(cells.length / cols)},1fr)">
     ${cells.map((c) => `<div><img src="${c.src}" style="${FOCUS[c.focus ?? "legs"]}"><div class="gl">${c.label}</div></div>`).join("")}
   </div>`);
+
+
+/** Four horizontal colour bands sliding in from alternating sides. p: 0 to 1. */
+const splitFrame = ({ rows, p, line }) => {
+  const ease = 1 - Math.pow(1 - Math.min(1, Math.max(0, p)), 3);
+  const body = rows.map((r, i) => {
+    const from = i % 2 === 0 ? -100 : 100;
+    const x = from * (1 - ease);
+    return `<div class="row"><img src="${r.src}" style="${FOCUS[r.focus ?? "full"]};transform:translateX(${x}%) ${FOCUS[r.focus ?? "full"].includes("scale") ? "" : ""}">
+      <div class="cap${r.dark ? " dark" : ""}" style="opacity:${ease.toFixed(2)}">${r.label}</div></div>`;
+  }).join("");
+  const over = line && ease > 0.72
+    ? `<div class="overlay" style="opacity:${(((ease - 0.72) / 0.28)).toFixed(2)}"><div class="box"><div class="l1">${line}</div></div></div>`
+    : "";
+  return page(`<div class="split">${body}</div>${over}`);
+};
+
+/** The three reasons from the website, set the way the website sets them. */
+const tenetsFrame = (items) =>
+  page(`<div class="tenets">${items.map((t) => `<div class="t"><div class="k">${t.k}</div><div class="hr"></div><div class="v">${t.v}</div></div>`).join("")}</div>`);
 
 const endFrame = () =>
   page(`<div class="end"><div class="mark">Shaklek</div><div class="rule"></div>
@@ -214,7 +275,7 @@ function encode(frames, outFile) {
 /** hold(frame, seconds) -> repeated frame paths */
 const hold = (f, secs) => Array(Math.round(secs * FPS)).fill(f);
 
-export { render, encode, hold, photoFrame, sayFrame, gridFrame, endFrame, shot, page, W, H, FPS, OUTDIR, TMP };
+export { render, encode, hold, photoFrame, sayFrame, gridFrame, splitFrame, tenetsFrame, endFrame, shot, shotBack, page, W, H, FPS, OUTDIR, TMP };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log("This module is the engine. Run scripts/social/tiktok-videos.mjs to build the set.");

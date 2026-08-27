@@ -1,105 +1,91 @@
 /**
- * "You are the designer" — the founder's own brief, 2026-08-27.
+ * "You are the designer" — the founder's own shot list, 2026-08-27.
  *
  *   npx tsx scripts/social/tiktok-hero.mjs
  *
- * Her note on the first attempt: it did not say what the added value is, or why
- * this brand and not another. It showed four trousers and left the viewer to
- * work out why that mattered. It also looked, in her words, like a kid made it.
+ * Her brief, in her order:
+ *   1. the SLEEVE change, from the FRONT, close enough to actually see it
+ *   2. turn the model to the BACK and pull out, so the LENGTH is visible
+ *   3. the colours, as four horizontal bands arriving from alternating sides
+ *      and meeting in the centre, with YOU CUSTOMISE, WE TAILOR over them
+ *   4. the three tenets from the website
  *
- * So this one states the claim in words, proves it with the four cuts, and
- * names the trade at the end: YOU CUSTOMISE, WE TAILOR IT FOR YOU. The
- * typography is Italiana and Cormorant, the brand's own faces, set large. There
- * are no pills, no badges and no icons anywhere in it.
- *
- * The four states are the founder's shot list exactly: short sleeve at normal
- * length, long sleeve at normal length, short sleeve at longer length, long
- * sleeve at longer length. One garment, one colour, one crop, so the ONLY thing
- * that moves between frames is the thing being sold.
+ * ⚠️ THE SHIRT IS THE UTILITY SHIRT AND I ONCE TALKED MYSELF OUT OF IT.
+ * catalog.ts records defaultChanges as { sleeve_length: "short",
+ * garment_length: "longer" }, so I read the base photo as the short-sleeve
+ * LONGER cut, decided short-sleeve NORMAL had never been generated, moved the
+ * video to another shirt, and then told the founder her live site was serving
+ * customers the wrong garment. She checked and it was not. The metadata is
+ * mislabelled; the photograph shows SHORT SLEEVE, NORMAL LENGTH. All four cuts
+ * exist. Metadata lies, pixels do not.
  */
-import { render, encode, hold, photoFrame, sayFrame, gridFrame, endFrame, shot, OUTDIR } from "./tiktok-launch.mjs";
+import {
+  render, encode, hold, photoFrame, sayFrame, splitFrame, tenetsFrame,
+  endFrame, shot, shotBack, OUTDIR, FPS,
+} from "./tiktok-launch.mjs";
 import { lint } from "./copy-rules.mjs";
 import fs from "node:fs";
 
-// UTILITY SHIRT, the founder's own choice.
-//
-// ⚠️ I TALKED MYSELF OUT OF THIS ONCE AND I WAS WRONG. catalog.ts says this
-// item's defaultChanges are { sleeve_length: "short", garment_length: "longer" },
-// so I read the base photo as the short-sleeve LONGER cut, concluded the
-// short-sleeve NORMAL cut did not exist, and moved the video to a different
-// shirt. Then I told the founder her live site was showing customers the wrong
-// garment.
-//
-// She checked her own site and said no. She was right. Looking at the actual
-// pixels: the base photo shows SHORT SLEEVE, NORMAL LENGTH. The metadata is
-// mislabelled, the photograph is not, and the site is correct because the
-// fallback lands on an image that genuinely depicts what was chosen.
-//
-// The lesson is the one this repo keeps writing down and I keep having to
-// relearn: METADATA LIES, LOOK AT THE PIXELS. I checked font metrics instead of
-// ink twice last night, and here I checked a JSON field instead of a garment.
-//
-// All four cuts exist for this shirt. One of them simply lives in the base
-// photo rather than in comboImages.
 const ITEM = "utility-shirt", COLOUR = "Ivory";
-const S = (combo) => shot(ITEM, COLOUR, combo);
-
-// The founder's order: sleeve changes first, then the hem.
-const FOUR = [
-  ["base",         ["Short sleeve", "Normal length"]],
-  ["long:normal",  ["Long sleeve", "Normal length"]],
-  ["short:longer", ["Short sleeve", "Longer length"]],
-  ["long:longer",  ["Long sleeve", "Longer length"]],
-];
-{
-  const seen = new Map();
-  for (const [combo] of FOUR) {
-    const src = S(combo).slice(-60);
-    if (seen.has(src)) throw new Error(`"${combo}" and "${seen.get(src)}" are the same image: the four cuts are not four cuts`);
-    seen.set(src, combo);
-  }
-}
+const F = (combo) => shot(ITEM, COLOUR, combo);
+const B = (combo) => shotBack(ITEM, COLOUR, combo);
 
 const caption =
-  "You are the designer. Same shirt, four different cuts: pick the sleeve, pick the length, pick the colour. You customise it, we tailor it to you, and one tailor makes that piece after you order it. AED 389.";
+  "You are the designer. Change the sleeve, change the length, change the colour, and the picture changes to the cut you chose. You customise it, we tailor it to you. 100% linen, AED 389, made after you order it.";
 lint(caption, "hero caption");
 
 const f = [];
+const at = (fr, secs) => f.push(...hold(fr, secs));
 
-// 1. The claim, in words, before anything else. Three seconds decides the view.
-f.push(...hold(render(sayFrame({ big: "You are<br>the designer" }), "h1"), 2.0));
+// 1. the claim
+at(render(sayFrame({ big: "You are<br>the designer" }), "h01"), 1.9);
 
-// 2-5. The proof. One crop, one colour, only the cut changing.
-const state = (combo, lines, id) =>
-  render(photoFrame({
-    src: S(combo), focus: "full",
-    note: lines, price: "AED 389",
-  }), id);
-// The founder's order: short sleeve normal, long sleeve normal, then the same
-// two again at the longer length, so the sleeve changes first and the hem
-// changes second. One variable moves at a time and the eye can follow it.
-FOUR.forEach(([combo, lines], i) => {
-  f.push(...hold(state(combo, lines, `h${i + 2}`), 1.45));
-});
+// 2. THE SLEEVE, FROM THE FRONT, cropped to the arms so the change is the
+//    subject. Length is deliberately not mentioned here: one idea at a time.
+const sleeve = (combo, label, id) =>
+  render(photoFrame({ src: F(combo), focus: "arms", note: ["Sleeve", label] }), id);
+at(render(sayFrame({ big: "Change<br>the sleeve." }), "h02"), 1.4);
+at(sleeve("base", "Short", "h03"), 1.3);
+at(sleeve("long:normal", "Long", "h04"), 1.3);
+at(sleeve("base", "Short", "h05"), 0.9);
+at(sleeve("long:normal", "Long", "h06"), 0.9);
 
-// 6. All four at once, so the choice is legible as a choice.
-f.push(...hold(render(gridFrame({
-  cells: FOUR.map(([combo, lines]) => ({
-    src: S(combo),
-    label: `${lines[0].split(" ")[0]}, ${lines[1].split(" ")[0].toLowerCase()}`,
-    focus: "full",
-  })),
-}), "h6"), 2.4));
+// 3. TURN AROUND AND PULL OUT. The back view at full length, because the hem is
+//    the subject now and a cropped frame would show two identical pictures.
+at(render(sayFrame({ big: "Now the length." }), "h07"), 1.4);
+const back = (combo, label, id) =>
+  render(photoFrame({ src: B(combo), focus: "whole", note: ["Length", label] }), id);
+at(back("long:normal", "Normal", "h08"), 1.5);
+at(back("long:longer", "Longer", "h09"), 1.5);
+at(back("long:normal", "Normal", "h10"), 1.0);
+at(back("long:longer", "Longer", "h11"), 1.2);
 
-// 7. The trade, named.
-f.push(...hold(render(sayFrame({
-  big: "You customise.<br>We tailor.",
-  under: "Pick your size, or send four measurements and it is cut to those. The same price either way.",
-}), "h7"), 2.6));
+// 4. THE COLOURS, sliding in from alternating sides to meet in the centre, then
+//    the line laid over them. Animated, so it needs real intermediate frames
+//    rather than a hold: 22 frames of travel is about three quarters of a
+//    second, which reads as a move and not as a cut.
+const rows = [
+  { src: F("long:longer"), label: "Ivory", dark: true },
+  { src: shot(ITEM, "White", "long:longer"), label: "White", dark: true },
+  { src: shot(ITEM, "Navy", "long:longer"), label: "Navy" },
+  { src: shot(ITEM, "Burgundy", "long:longer"), label: "Burgundy" },
+];
+const TRAVEL = 22;
+for (let i = 0; i <= TRAVEL; i++) {
+  f.push(render(splitFrame({ rows, p: i / TRAVEL, line: "You customise.<br>We tailor." }), `hs${String(i).padStart(2, "0")}`));
+}
+at(render(splitFrame({ rows, p: 1, line: "You customise.<br>We tailor." }), "hs99"), 2.4);
 
-f.push(...hold(render(endFrame(), "h8"), 1.5));
+// 5. the three reasons, straight from the website
+at(render(tenetsFrame([
+  { k: "From AED 389", v: "One price per piece type. Fabric and every option included." },
+  { k: "Nothing on a shelf", v: "Your piece does not exist until you ask for it. No overproduction, no waste." },
+  { k: "Natural fibre only", v: "100% linen against your skin. Breathable, never synthetic." },
+]), "h12"), 3.4);
+
+at(render(endFrame(), "h13"), 1.5);
 
 const out = `${OUTDIR}/00-you-are-the-designer.mp4`;
 encode(f, out);
 fs.writeFileSync(`${OUTDIR}/00-you-are-the-designer.caption.txt`, caption + "\n");
-console.log(`00-you-are-the-designer  ${(f.length / 30).toFixed(1)}s  ${(fs.statSync(out).size / 1024).toFixed(0)}KB`);
+console.log(`00-you-are-the-designer  ${(f.length / FPS).toFixed(1)}s  ${(fs.statSync(out).size / 1024).toFixed(0)}KB  ${f.length} frames`);
