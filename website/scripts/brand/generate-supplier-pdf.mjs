@@ -34,7 +34,29 @@ function shape(file, text, size, tracking = 0) {
     x += p.xAdvance * scale + tracking;
   });
   if (layout.glyphs.length) x -= tracking;
-  return { segs, width: x };
+  // Ink extents relative to the baseline, from the glyph boxes and their own
+  // offsets. Needed because A BASELINE IS NOT AN EDGE: the Latin sits on its
+  // baseline with nothing below it, the Arabic's ink starts almost at its own,
+  // so equal baseline gaps render as wildly unequal visual gaps. That shipped
+  // once in the supplier artwork (39% above the rule against 3% below) and the
+  // founder caught it.
+  let above = 0, below = 0;
+  layout.glyphs.forEach((g, i) => {
+    const p = layout.positions[i], bb = g.bbox;
+    if (!bb) return;
+    above = Math.max(above, (bb.maxY + (p.yOffset || 0)) * scale);
+    below = Math.max(below, -(bb.minY + (p.yOffset || 0)) * scale);
+  });
+  return { segs, width: x, above, below: Math.max(0, below) };
+}
+
+/** Stack a lockup so the visible gap above and below the rule is the same. */
+function stack(latin, arabic, ruleH, gapRatio = 0.26) {
+  const gap = latin.above * gapRatio;
+  const latBase = latin.above;
+  const ruleY = latBase + latin.below + gap;
+  const arBase = ruleY + ruleH + gap + arabic.above;
+  return { latBase, ruleY, arBase, height: arBase + arabic.below };
 }
 
 const doc = new PDFDocument({ size: "A4", margin: 0, info: { Title: "Shaklek artwork for suppliers", Author: "Shaklek" } });
@@ -63,9 +85,10 @@ const sheenBig = shape("ReemKufi-Regular.ttf", "ش", 60);
 const sheenSmall = shape("ReemKufi-Regular.ttf", "ش", 34);
 
 y = 64;
-draw(lockLatin.segs, M, y + 34, INK);
-doc.rect(M, y + 48, lockLatin.width * 0.32, 1.1).fill(GOLD);
-draw(lockAr.segs, M, y + 70, INK);
+const L1 = stack(lockLatin, lockAr, 1.1);
+draw(lockLatin.segs, M, y + L1.latBase, INK);
+doc.rect(M, y + L1.ruleY, lockLatin.width * 0.32, 1.1).fill(GOLD);
+draw(lockAr.segs, M, y + L1.arBase, INK);
 
 doc.font("Helvetica").fontSize(8).fillColor(MUTED)
   .text("ARTWORK FOR SUPPLIERS", W - M - 200, y + 6, { width: 200, align: "right", characterSpacing: 1.4 });
@@ -82,9 +105,11 @@ const tileH = 118, tileW = (CW - 16) / 2;
 doc.rect(M, y, tileW, tileH).fillAndStroke("#faf8f4", HAIR);
 const l2 = shape("Italiana-Regular.ttf", "Shaklek", 30, (30 * 4) / 29);
 const a2 = shape("ReemKufi-Regular.ttf", "شكلك", 12.5);
-draw(l2.segs, M + (tileW - l2.width) / 2, y + 52, INK);
-doc.rect(M + (tileW - l2.width * 0.32) / 2, y + 62, l2.width * 0.32, 0.9).fill(GOLD);
-draw(a2.segs, M + (tileW - a2.width) / 2, y + 84, INK);
+const L2 = stack(l2, a2, 0.9);
+const tileTop = y + (tileH - L2.height) / 2;
+draw(l2.segs, M + (tileW - l2.width) / 2, tileTop + L2.latBase, INK);
+doc.rect(M + (tileW - l2.width * 0.32) / 2, tileTop + L2.ruleY, l2.width * 0.32, 0.9).fill(GOLD);
+draw(a2.segs, M + (tileW - a2.width) / 2, tileTop + L2.arBase, INK);
 
 doc.rect(M + tileW + 16, y, tileW, tileH).fillAndStroke("#faf8f4", HAIR);
 draw(sheenBig.segs, M + tileW + 16 + tileW / 2 - 17, y + 88, INK);
@@ -170,9 +195,10 @@ const am = shape("ReemKufi-Regular.ttf", "شكلك", 11);
 const capH = 19;
 const bx = dx + capH, by = dy + capH;
 doc.rect(dx, dy, lm.width + capH * 2, capH * 2 + 56).dash(2, { space: 2 }).strokeColor(GOLD).lineWidth(0.7).stroke().undash();
-draw(lm.segs, bx, by + 20, INK);
-doc.rect(bx + (lm.width - lm.width * 0.32) / 2, by + 28, lm.width * 0.32, 0.9).fill(GOLD);
-draw(am.segs, bx + (lm.width - am.width) / 2, by + 48, INK);
+const L3 = stack(lm, am, 0.9);
+draw(lm.segs, bx, by + L3.latBase, INK);
+doc.rect(bx + (lm.width - lm.width * 0.32) / 2, by + L3.ruleY, lm.width * 0.32, 0.9).fill(GOLD);
+draw(am.segs, bx + (lm.width - am.width) / 2, by + L3.arBase, INK);
 
 doc.font("Helvetica").fontSize(8).fillColor(MUTED)
   .text("Clear space on every side is the cap height of the wordmark: the height of the S. Nothing else prints inside the dashed line.", M + lm.width + capH * 2 + 22, dy + 4, { width: CW - lm.width - capH * 2 - 22, lineGap: 2 });

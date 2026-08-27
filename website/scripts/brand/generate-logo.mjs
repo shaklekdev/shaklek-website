@@ -98,11 +98,68 @@ ${body}</svg>
 `;
 
 // ---------------------------------------------------------------- lockup
+//
+// ⚠️ POSITIONED BY MEASURED INK, IN TWO PASSES. The first version set the two
+// gaps as constants against the BASELINES and produced 39% of the wordmark
+// height above the gold rule and 3% below it, thirteen times more space on one
+// side than the other, with the lockup sitting high in its box. The founder
+// spotted it in the supplier files in seconds.
+//
+// A baseline is not an edge. The Latin sits on its baseline with empty space
+// below it; the Arabic's ink begins almost at its own baseline. So equal
+// baseline gaps are wildly unequal visual gaps, and no constant can fix that
+// because it depends on the two fonts. The only reliable reading is where the
+// ink actually lands, so this renders once, measures the three ink bands, and
+// then solves for the offsets that make the gaps and the padding equal.
 const RULE_W = latin.width * 0.32, RULE_H = Math.max(1.6, SIZE * 0.009);
-const PAD = SIZE * 0.18, CAP = SIZE * 0.74, GAP1 = SIZE * 0.30, GAP2 = SIZE * 0.36;
+const PAD = SIZE * 0.18;
+const CAP = SIZE * 0.74;
 const LW = Math.max(latin.width, arabic.width, RULE_W);
-const latBase = PAD + CAP, ruleY = latBase + GAP1, arBase = ruleY + RULE_H + GAP2;
-const lockW = LW + PAD * 2, lockH = arBase + SIZE * 0.42 * 0.30 + PAD;
+
+/** ink bands (top,bottom) of a rendered lockup, in viewBox units */
+async function bands(svg) {
+  const m = svg.match(/viewBox="0 0 ([0-9.]+) ([0-9.]+)"/);
+  const vw = parseFloat(m[1]), vh = parseFloat(m[2]);
+  const Hpx = 1200, Wpx = Math.round(Hpx * (vw / vh));
+  const buf = await sharp(Buffer.from(svg), { density: 200 })
+    .resize(Wpx, Hpx, { fit: "fill" }).ensureAlpha().raw().toBuffer();
+  const out = []; let st = null;
+  for (let y = 0; y < Hpx; y++) {
+    let ink = false;
+    for (let x = 0; x < Wpx && !ink; x++) if (buf[(y * Wpx + x) * 4 + 3] > 25) ink = true;
+    if (ink && st === null) st = y;
+    if (!ink && st !== null) { out.push([st * vh / Hpx, (y - 1) * vh / Hpx]); st = null; }
+  }
+  if (st !== null) out.push([st * vh / Hpx, (Hpx - 1) * vh / Hpx]);
+  return out;
+}
+
+const draft = (latBase, ruleY, arBase, height) =>
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${(LW + PAD * 2).toFixed(2)} ${height.toFixed(2)}">
+  <g fill="#111" transform="translate(${(PAD + (LW - latin.width) / 2).toFixed(2)} ${latBase.toFixed(2)})">${svgOf(latin.segs)}</g>
+  <rect x="${(PAD + (LW - RULE_W) / 2).toFixed(2)}" y="${ruleY.toFixed(2)}" width="${RULE_W.toFixed(2)}" height="${RULE_H.toFixed(2)}" fill="#111"/>
+  <g fill="#111" transform="translate(${(PAD + (LW - arabic.width) / 2).toFixed(2)} ${arBase.toFixed(2)})">${svgOf(arabic.segs)}</g>
+</svg>`;
+
+// Pass 1: draw with rough positions purely to find where each run's ink sits
+// relative to the baseline we gave it.
+const P1_LAT = 400, P1_RULE = 600, P1_AR = 800, P1_H = 1200;
+const b1 = await bands(draft(P1_LAT, P1_RULE, P1_AR, P1_H));
+if (b1.length !== 3) throw new Error(`expected 3 ink bands, got ${b1.length}`);
+const latAboveBase = P1_LAT - b1[0][0];        // ink height above the Latin baseline
+const latBelowBase = b1[0][1] - P1_LAT;        // ink below it (0 for "Shaklek")
+const arAboveBase = P1_AR - b1[2][0];
+const arBelowBase = b1[2][1] - P1_AR;
+
+// Pass 2: solve. VGAP is the visible space above AND below the rule.
+const VGAP = CAP * 0.26;
+const top = PAD;
+const latBase2 = top + latAboveBase;
+const ruleY2 = latBase2 + latBelowBase + VGAP;
+const arBase2 = ruleY2 + RULE_H + VGAP + arAboveBase;
+const lockW = LW + PAD * 2;
+const lockH = arBase2 + arBelowBase + PAD;
+const latBase = latBase2, ruleY = ruleY2, arBase = arBase2;
 
 const lockupBody = (ink, gold) =>
 `  <g fill="${ink}" transform="translate(${(PAD + (LW - latin.width) / 2).toFixed(2)} ${latBase.toFixed(2)})">${svgOf(latin.segs)}</g>
