@@ -55,54 +55,83 @@ const shot = (slug, colour, combo) => {
 
 // ------------------------------------------------------------------- style
 //
-// ON-SCREEN TEXT IS SET IN A SANS, NOT THE BRAND SERIF, AND THAT IS DELIBERATE.
-// Italiana and Cormorant are hairline faces; at thumb distance on a phone, over
-// imagery, moving, they break up. The brand mark still closes every video,
-// so the identity lands where it can be read. Legibility wins over consistency
-// in the only two seconds that decide whether the video is watched at all.
+// ⚠️ REBUILT 2026-08-27 AFTER THE FOUNDER SAW THE FIRST CUT. Her words: it looks
+// like a kid did it, and she wanted luxurious, subtle, high value.
 //
-// SAFE AREA: TikTok's caption, username and button rail cover roughly the
-// bottom 500px and the right 180px. Nothing that must be read goes there.
+// She was right and the diagnosis is precise. The first cut set every hook in
+// INTER SEMIBOLD, a user-interface sans, and hung black pill-shaped chips with
+// little gold dots over the photograph. That is app design. It is the visual
+// language of a settings screen, and no fashion house on earth uses it.
+//
+// I chose it deliberately, reasoning that Italiana's hairlines break up at thumb
+// distance. That reasoning was wrong in the way that matters: the answer to a
+// hairline face being fragile at 13px is to set it at 110px, where it is
+// magnificent, not to replace it with a UI font. The brand already owns the
+// right typeface and the first cut refused to use it.
+//
+// So: ITALIANA carries every statement, huge and letterspaced. Cormorant sets
+// the second voice. Nothing is bold. Nothing is a pill. Labels are small caps
+// over a gold hairline, which is how a fashion label annotates a garment, and
+// the type sits on cream rather than on top of the model.
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Italiana&family=Reem+Kufi:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Reem+Kufi:wght@400&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:${W}px;height:${H}px;overflow:hidden;background:#EFEBE3}
-/* A SOLID BAND, NOT A GRADIENT OVER THE PHOTOGRAPH.
-   The first cut faded a white veil down over the top of the frame. On a
-   full-length image the model's head sits exactly there, so every hook frame
-   bleached her face into a ghost and printed the words across it. It looked
-   like a mistake because it was one.
-   The band is its own row now: type on clean ground, image untouched
-   underneath, and the garment starts where the words end. */
-.f{position:relative;width:${W}px;height:${H}px;background:#EFEBE3;overflow:hidden;
+html,body{width:${W}px;height:${H}px;overflow:hidden;background:#F2EDE4}
+.f{position:relative;width:${W}px;height:${H}px;background:#F2EDE4;overflow:hidden;
   display:flex;flex-direction:column}
-.band{flex:0 0 auto;background:#F4F1EA;padding:96px 72px 44px;min-height:300px}
+
+/* ---- the statement frame: type alone on cream, nothing else ---- */
+.say{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0 90px;text-align:center;gap:38px}
+.say .big{font-family:Italiana,serif;font-size:118px;line-height:1.1;letter-spacing:9px;
+  color:#171512;text-transform:none}
+.say .big.two{font-size:96px;letter-spacing:7px}
+.say .rule{width:120px;height:1px;background:#9C8445}
+.say .under{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:46px;
+  line-height:1.35;letter-spacing:.5px;color:#4A443B;max-width:820px}
+
+/* ---- the product frame: photograph, annotated the way a garment is ---- */
+.band{flex:0 0 auto;background:#F2EDE4;padding:86px 84px 40px}
+.band .k{font-family:Italiana,serif;font-size:82px;line-height:1.12;letter-spacing:6px;color:#171512}
+.band .k.sm{font-size:62px;letter-spacing:4px}
+.band .s{margin-top:20px;font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:40px;line-height:1.35;color:#4A443B;letter-spacing:.4px}
 .stage{position:relative;flex:1 1 auto;overflow:hidden}
 .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.hook{font-family:Inter,sans-serif;font-weight:600;font-size:82px;line-height:1.05;
-  letter-spacing:-.022em;color:#171512}
-.hook.sm{font-size:62px}
-.sub{margin-top:22px;font-family:Inter,sans-serif;font-weight:400;font-size:36px;
-  line-height:1.32;color:#4a453c;max-width:860px}
-.chip{position:absolute;left:56px;bottom:340px;display:inline-flex;align-items:center;gap:18px;
-  background:rgba(23,21,18,.92);color:#fff;padding:20px 32px;border-radius:999px;
-  font-family:Inter,sans-serif;font-weight:500;font-size:40px;letter-spacing:.01em}
-.chip .dot{width:16px;height:16px;border-radius:50%;background:#c4a964}
-.chip.off{background:rgba(255,255,255,.94);color:#171512}
-.chip.off .dot{background:#cfc7b6}
-.price{position:absolute;left:58px;bottom:150px;font-family:Inter,sans-serif;
-  font-weight:400;font-size:34px;color:#4a453c;letter-spacing:.02em}
-.grid{position:absolute;inset:0;display:grid;z-index:2}
+
+/* Annotation, not a chip. A caption strip along the foot of the image, the way
+   a lookbook captions a plate.
+   IT IS A STRIP AND NOT FLOATING TEXT because the garments are ivory linen on a
+   pale ground: the first version set these words directly on the image and they
+   were close to unreadable over the light shirts. A local strip fixes that
+   without the earlier mistake of fading a veil across the model's face. */
+.note{position:absolute;left:0;right:0;bottom:0;background:#F2EDE4;
+  padding:34px 84px 40px;display:flex;align-items:flex-end;justify-content:space-between}
+.note .hr{position:absolute;left:84px;top:0;width:64px;height:1px;background:#9C8445}
+.note .lines{display:flex;flex-direction:column}
+.note .l{font-family:'Cormorant Garamond',serif;font-weight:400;
+  font-size:38px;letter-spacing:4.5px;text-transform:uppercase;color:#171512;line-height:1.45}
+.note .l + .l{color:#5A5349}
+.price{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:38px;
+  letter-spacing:4px;color:#171512;padding-bottom:4px}
+
+/* ---- the four-up ---- */
+.grid{position:absolute;inset:0;display:grid;z-index:2;background:#F2EDE4;gap:3px}
 .grid>div{position:relative;overflow:hidden}
 .grid img{position:absolute;width:100%;height:100%;object-fit:cover}
-.gl{position:absolute;left:22px;bottom:22px;font-family:Inter,sans-serif;font-weight:500;
-  font-size:32px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.gl{position:absolute;left:20px;bottom:20px;font-family:'Cormorant Garamond',serif;
+  font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#171512;
+  background:rgba(242,237,228,.86);padding:8px 14px}
+
+/* ---- the sign-off ---- */
 .end{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;background:#171512;gap:26px}
-.end .mark{font-family:Italiana,serif;font-size:120px;letter-spacing:16px;color:#fff}
-.end .rule{width:150px;height:2px;background:#c4a964}
-.end .ar{font-family:'Reem Kufi',sans-serif;font-size:46px;color:#fff;direction:rtl}
-.end .u{margin-top:34px;font-family:Inter,sans-serif;font-weight:400;font-size:40px;color:#c8c1b5;letter-spacing:.04em}
+  justify-content:center;background:#171512;gap:30px}
+.end .mark{font-family:Italiana,serif;font-size:136px;letter-spacing:20px;color:#F6F2EA;
+  padding-left:20px}
+.end .rule{width:150px;height:1px;background:#9C8445}
+.end .ar{font-family:'Reem Kufi',sans-serif;font-size:48px;color:#F6F2EA;direction:rtl}
+.end .u{margin-top:40px;font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:38px;color:#B8B0A2;letter-spacing:5px}
 `;
 
 /**
@@ -121,19 +150,33 @@ const FOCUS = {
 const page = (inner) =>
   `<!doctype html><meta charset="utf-8"><style>${CSS}</style><div class="f">${inner}</div>`;
 
-const photoFrame = ({ src, focus = "full", hook, sub, chips = [], price }) => {
-  const chipHtml = chips
-    .map((c, i) => `<div class="chip ${c.on ? "" : "off"}" style="bottom:${340 - i * 112}px"><span class="dot"></span>${c.label}</div>`)
-    .join("");
+/** Type alone on cream. Used for the claim, never over a model's face. */
+const sayFrame = ({ big, under }) =>
+  page(`<div class="say">
+    <div class="big${big.replace(/<br>/g, " ").length > 22 ? " two" : ""}">${big}</div>
+    ${under ? `<div class="rule"></div><div class="under">${under}</div>` : ""}
+  </div>`);
+
+/**
+ * A photograph, annotated. `note` is an array of lines set in small caps under
+ * a gold hairline, which is how a lookbook captions a plate. It is deliberately
+ * NOT a pill, a badge or a button: those belong to interfaces.
+ */
+const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, onDark = false }) => {
   const band = hook
-    ? `<div class="band"><div class="hook${hook.replace(/<br>/g, " ").length > 34 ? " sm" : ""}">${hook}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>`
+    ? `<div class="band"><div class="k${hook.replace(/<br>/g, " ").length > 26 ? " sm" : ""}">${hook}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>`
+    : "";
+  const ann = note.length
+    ? `<div class="note"><div class="hr"></div>
+         <div class="lines">${note.map((l) => `<span class="l">${l}</span>`).join("")}</div>
+         ${price ? `<div class="price">${price}</div>` : ""}
+       </div>`
     : "";
   return page(`
     ${band}
     <div class="stage">
       <img class="photo" src="${src}" style="${FOCUS[focus]}">
-      ${chipHtml}
-      ${price ? `<div class="price">${price}</div>` : ""}
+      ${ann}
     </div>
   `);
 };
@@ -171,7 +214,7 @@ function encode(frames, outFile) {
 /** hold(frame, seconds) -> repeated frame paths */
 const hold = (f, secs) => Array(Math.round(secs * FPS)).fill(f);
 
-export { render, encode, hold, photoFrame, gridFrame, endFrame, shot, page, W, H, FPS, OUTDIR, TMP };
+export { render, encode, hold, photoFrame, sayFrame, gridFrame, endFrame, shot, page, W, H, FPS, OUTDIR, TMP };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log("This module is the engine. Run scripts/social/tiktok-videos.mjs to build the set.");

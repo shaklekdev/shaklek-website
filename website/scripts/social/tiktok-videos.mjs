@@ -11,7 +11,7 @@
  * the rest is watched at all.
  */
 import {
-  render, encode, hold, photoFrame, gridFrame, endFrame, shot, OUTDIR,
+  render, encode, hold, photoFrame, sayFrame, gridFrame, endFrame, shot, OUTDIR,
 } from "./tiktok-launch.mjs";
 import { lint } from "./copy-rules.mjs";
 import fs from "node:fs";
@@ -37,23 +37,19 @@ videos.push({
         src: S(combo),
         focus: "legs",
         hook,
-        chips: [
-          { label: label[0], on: true },
-          { label: label[1], on: true },
-        ],
+        note: [label[0], label[1]],
         price: "AED 429",
       });
     const f = [];
+    f.push(...hold(render(sayFrame({ big: "One trouser.<br>Four ways." }), "v01hook"), 1.9));
     f.push(...hold(render(photoFrame({
       src: S("base"), focus: "legs",
-      hook: "same trouser.",
-      sub: "Wait for the last one.",
-      chips: [{ label: "Straight", on: true }, { label: "Full length", on: true }],
+      note: ["Straight", "Full length"],
       price: "AED 429",
-    }), "v01a"), 1.9));
-    f.push(...hold(render(state("straight:cropped", ["Straight", "Cropped"], "four ways to cut it"), "v01b"), 1.3));
-    f.push(...hold(render(state("wide:full", ["Wide", "Full length"], "four ways to cut it"), "v01c"), 1.3));
-    f.push(...hold(render(state("wide:cropped", ["Wide", "Cropped"], "four ways to cut it"), "v01d"), 1.3));
+    }), "v01a"), 1.4));
+    f.push(...hold(render(state("straight:cropped", ["Straight", "Cropped"], "Four ways to cut it"), "v01b"), 1.3));
+    f.push(...hold(render(state("wide:full", ["Wide", "Full length"], "Four ways to cut it"), "v01c"), 1.3));
+    f.push(...hold(render(state("wide:cropped", ["Wide", "Cropped"], "Four ways to cut it"), "v01d"), 1.3));
     f.push(...hold(render(gridFrame({
       cells: [
         { src: S("base"), label: "Straight, full" },
@@ -78,21 +74,20 @@ videos.push({
     const S = (combo) => shot("oversized-shirt", "Ivory", combo);
     // focus:"full", not "arms". Both the sleeve AND the hem have to be inside
     // the frame or two of the four states are the same picture.
-    const state = (combo, chips, hook, sub) =>
+    const state = (combo, note, hook, sub) =>
       photoFrame({ src: S(combo), focus: "full", hook, sub,
-        chips: chips.map((c) => ({ label: c, on: true })), price: "AED 389" });
+        note, price: "AED 389" });
     const f = [];
-    f.push(...hold(render(photoFrame({
-      src: S("base"), focus: "full",
-      hook: "the shirt fits.<br>the sleeves never do.",
-    }), "v02a"), 2.1));
-    f.push(...hold(render(state("short:normal", ["Short sleeve", "Normal length"], "so you set the sleeve"), "v02b"), 1.3));
-    f.push(...hold(render(state("base", ["Long sleeve", "Normal length"], "so you set the sleeve"), "v02c"), 1.3));
-    f.push(...hold(render(state("long:longer", ["Long sleeve", "Longer"], "so you set the sleeve"), "v02d"), 1.3));
-    f.push(...hold(render(state("short:longer", ["Short sleeve", "Longer"], "so you set the sleeve"), "v02e"), 1.3));
+    f.push(...hold(render(sayFrame({
+      big: "The shirt fits.<br>The sleeves<br>never do.",
+    }), "v02a"), 2.4));
+    f.push(...hold(render(state("short:normal", ["Short sleeve", "Normal length"], "So you set the sleeve"), "v02b"), 1.3));
+    f.push(...hold(render(state("base", ["Long sleeve", "Normal length"], "So you set the sleeve"), "v02c"), 1.3));
+    f.push(...hold(render(state("long:longer", ["Long sleeve", "Longer"], "So you set the sleeve"), "v02d"), 1.3));
+    f.push(...hold(render(state("short:longer", ["Short sleeve", "Longer"], "So you set the sleeve"), "v02e"), 1.3));
     f.push(...hold(render(photoFrame({
       src: S("long:longer"), focus: "full",
-      hook: "then it is cut<br>to your measurements",
+      hook: "Then it is cut<br>to your measurements",
       sub: "Or pick XS to XXL. Same price.", subTop: 430,
     }), "v02f"), 2.0));
     f.push(...hold(render(endFrame(), "v02g"), 1.4));
@@ -111,12 +106,13 @@ videos.push({
   build() {
     const S = (colour) => shot("wide-leg-trousers", colour, "wide:full");
     const state = (colour, hook) =>
-      photoFrame({ src: S(colour), focus: "full", hook, chips: [{ label: colour, on: true }], price: "AED 429" });
+      photoFrame({ src: S(colour), focus: "full", hook: hook || undefined, note: [colour], price: "AED 429" });
     const f = [];
-    f.push(...hold(render(state("Ivory", "pick a colour"), "v03a"), 1.7));
-    f.push(...hold(render(state("White", "pick a colour"), "v03b"), 1.2));
-    f.push(...hold(render(state("Navy", "pick a colour"), "v03c"), 1.2));
-    f.push(...hold(render(state("Burgundy", "pick a colour"), "v03d"), 1.2));
+    f.push(...hold(render(sayFrame({ big: "Pick a colour." }), "v03hook"), 1.7));
+    f.push(...hold(render(state("Ivory", ""), "v03a"), 1.2));
+    f.push(...hold(render(state("White", "Pick a colour"), "v03b"), 1.2));
+    f.push(...hold(render(state("Navy", "Pick a colour"), "v03c"), 1.2));
+    f.push(...hold(render(state("Burgundy", "Pick a colour"), "v03d"), 1.2));
     f.push(...hold(render(gridFrame({
       cols: 2,
       cells: ["Ivory", "White", "Navy", "Burgundy"].map((c) => ({ src: S(c), label: c, focus: "full" })),
@@ -139,22 +135,22 @@ videos.push({
     "Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor makes that piece, and it takes about ten days because it has to.",
   build() {
     const f = [];
-    f.push(...hold(render(photoFrame({
-      src: shot("wide-leg-trousers", "Navy", "wide:full"), focus: "full",
-      hook: "nothing here<br>exists yet",
-    }), "v04a"), 2.2));
+    f.push(...hold(render(sayFrame({
+      big: "Nothing here<br>exists yet.",
+      under: "Not one of these is in a warehouse.",
+    }), "v04a"), 2.5));
     f.push(...hold(render(photoFrame({
       src: shot("oversized-shirt", "Burgundy", "long:longer"), focus: "full",
-      hook: "not one of these<br>is in a warehouse",
+      hook: "Not one of these<br>is in a warehouse",
     }), "v04b"), 1.7));
     f.push(...hold(render(photoFrame({
       src: shot("banded-trousers", "Ivory", "wide:cropped"), focus: "legs",
-      hook: "you choose the cut",
+      hook: "You choose the cut",
       sub: "Sleeve. Leg. Length. Colour.", subTop: 400,
     }), "v04c"), 1.7));
     f.push(...hold(render(photoFrame({
       src: shot("structured-blouse", "White", "long:longer"), focus: "arms",
-      hook: "then one tailor<br>makes that one",
+      hook: "Then one tailor<br>makes that one",
       sub: "About ten days. Because it has to be.", subTop: 430,
     }), "v04d"), 2.2));
     f.push(...hold(render(endFrame(), "v04e"), 1.4));
@@ -174,23 +170,22 @@ videos.push({
     "A size chart is an average of everyone. You are not an average of everyone. Pick a size, or send four measurements and we cut to those instead. Same price.",
   build() {
     const f = [];
-    f.push(...hold(render(photoFrame({
-      src: shot("utility-shirt", "Ivory", "long:longer"), focus: "full",
-      hook: "a size chart is<br>an average of<br>everyone",
-    }), "v05a"), 2.4));
+    f.push(...hold(render(sayFrame({
+      big: "A size chart is<br>an average<br>of everyone.",
+    }), "v05a"), 2.6));
     f.push(...hold(render(photoFrame({
       src: shot("structured-blouse", "Ivory", "long:longer"), focus: "full",
-      hook: "so pick a size",
+      hook: "So pick a size",
       sub: "XS to XXL. Trousers 32 to 44.",
     }), "v05b"), 1.8));
     f.push(...hold(render(photoFrame({
       src: shot("pleated-trousers", "Ivory", "wide:full"), focus: "full",
-      hook: "or send four numbers",
+      hook: "Or send four numbers",
       sub: "Bust. Waist. Hip. Height. We cut to those instead.",
     }), "v05c"), 2.2));
     f.push(...hold(render(photoFrame({
       src: shot("wrap-top", "Ivory", "long:longer"), focus: "full",
-      hook: "same price either way",
+      hook: "Same price either way",
       sub: "Tailoring costs nothing extra here.",
     }), "v05d"), 2.0));
     f.push(...hold(render(endFrame(), "v05e"), 1.4));

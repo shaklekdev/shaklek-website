@@ -28,19 +28,19 @@ Grid, bio and Instagram captions: `instagram-launch.md`.
 
 | Day | What | Asset |
 |---|---|---|
-| 1 | 🎬 Video | `TIKTOK/01-same-trouser-four-ways.mp4` |
+| 1 | 🎬 Video | `TIKTOK/00-you-are-the-designer.mp4` |
 | 2 | 🖼 Carousel, 6 slides | `carousels/01-four-ways-to-cut-it/` |
-| 3 | 🎬 Video | `TIKTOK/02-the-sleeves-never-fit.mp4` |
+| 3 | 🎬 Video | `TIKTOK/01-same-trouser-four-ways.mp4` |
 | 4 | 🖼 Carousel, 7 slides | `carousels/02-the-sleeves-never-fit/` |
-| 5 | 🎬 Video | `TIKTOK/03-pick-a-colour.mp4` |
+| 5 | 🎬 Video | `TIKTOK/02-the-sleeves-never-fit.mp4` |
 | 6 | 🖼 Carousel, 6 slides | `carousels/03-the-trousers-four-colours/` |
 | 7 | 📱 **FILM** | Founder to camera, 30 seconds, no script |
 | 8 | 🖼 Carousel, 6 slides | `carousels/04-a-size-chart-is-an-average/` |
-| 9 | 🎬 Video | `TIKTOK/04-nothing-here-exists-yet.mp4` |
+| 9 | 🎬 Video | `TIKTOK/03-pick-a-colour.mp4` |
 | 10 | 🖼 Carousel, 6 slides | `carousels/05-how-it-actually-works/` |
-| 11 | 🎬 Video | `TIKTOK/05-nobody-is-a-medium-ORGANIC-ONLY.mp4` |
+| 11 | 🎬 Video | `TIKTOK/04-nothing-here-exists-yet.mp4` |
 | 12 | 🖼 Carousel, 6 slides | `carousels/06-why-ten-days/` |
-| 13 | ♻️ Repost | Best performer so far, recut or reframed |
+| 13 | 🎬 Video | `TIKTOK/05-nobody-is-a-medium-ORGANIC-ONLY.mp4` |
 | 14 | 📱 **FILM** | Shears through linen, 10 seconds, sound on |
 | 15 | 📱 **FILM** | Chalk marking on fabric |
 | 16 | ♻️ Repost | Best performer so far, recut or reframed |
@@ -66,9 +66,9 @@ Grid, bio and Instagram captions: `instagram-launch.md`.
 Copy these as they are. The first characters of a caption are weighted most in
 TikTok search, so the target phrase leads.
 
-### Day 1 · `01-same-trouser-four-ways.mp4`
+### Day 1 · `00-you-are-the-designer.mp4`
 
-> Same trouser, four ways to cut it. You pick one and a tailor makes that one. No stock, nothing sitting in a warehouse. Dubai.
+> You are the designer. Same shirt, four different cuts: pick the sleeve, pick the length, pick the colour. You customise it, we tailor it to you, and one tailor makes that piece after you order it. AED 389.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -84,9 +84,9 @@ TikTok search, so the target phrase leads.
 #دبي #تفصيل #خياطة
 ```
 
-### Day 3 · `02-the-sleeves-never-fit.mp4`
+### Day 3 · `01-same-trouser-four-ways.mp4`
 
-> The shirt fits. The sleeves never do. So we let you set the sleeve, then cut the shirt to your measurements. Same price either way.
+> Same trouser, four ways to cut it. You pick one and a tailor makes that one. No stock, nothing sitting in a warehouse. Dubai.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -102,9 +102,9 @@ TikTok search, so the target phrase leads.
 #دبي #تفصيل #خياطة
 ```
 
-### Day 5 · `03-pick-a-colour.mp4`
+### Day 5 · `02-the-sleeves-never-fit.mp4`
 
-> Four colours, one piece. Each image shows the combination you chose, so you can see the cut and the colour before anyone cuts the linen.
+> The shirt fits. The sleeves never do. So we let you set the sleeve, then cut the shirt to your measurements. Same price either way.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -133,9 +133,9 @@ Why you started a made-to-order label in the UAE. Do not rehearse it and do not 
 #دبي #تفصيل #خياطة
 ```
 
-### Day 9 · `04-nothing-here-exists-yet.mp4`
+### Day 9 · `03-pick-a-colour.mp4`
 
-> Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor makes that piece, and it takes about ten days because it has to.
+> Four colours, one piece. Each image shows the combination you chose, so you can see the cut and the colour before anyone cuts the linen.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -151,9 +151,9 @@ Why you started a made-to-order label in the UAE. Do not rehearse it and do not 
 #دبي #تفصيل #خياطة
 ```
 
-### Day 11 · `05-nobody-is-a-medium-ORGANIC-ONLY.mp4`
+### Day 11 · `04-nothing-here-exists-yet.mp4`
 
-> A size chart is an average of everyone. You are not an average of everyone. Pick a size, or send four measurements and we cut to those instead. Same price.
+> Nothing in these pictures exists yet. Not one of them is sitting in a warehouse. You choose the cut, then one tailor makes that piece, and it takes about ten days because it has to.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
@@ -163,6 +163,15 @@ Why you started a made-to-order label in the UAE. Do not rehearse it and do not 
 ### Day 12 · `06-why-ten-days` (6 slides)
 
 > Ten days is not slow. It is how long it takes when the piece does not exist until you order it. No warehouse, no leftover stock, no size run guessed months ago. One tailor, one piece, cut to the numbers you sent.
+
+```
+#dubaifashion #madetomeasure #madetoorder #linen #shaklek
+#دبي #تفصيل #خياطة
+```
+
+### Day 13 · `05-nobody-is-a-medium-ORGANIC-ONLY.mp4`
+
+> A size chart is an average of everyone. You are not an average of everyone. Pick a size, or send four measurements and we cut to those instead. Same price.
 
 ```
 #dubaifashion #madetomeasure #madetoorder #linen #shaklek
