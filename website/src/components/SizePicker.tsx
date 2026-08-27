@@ -115,7 +115,7 @@ export default function SizePicker({
           buttons appeared straight after "Length" with nothing between them,
           so a customer read Cropped / Full / Tailored / Standard as one run of
           options and did not see that a new section had started. */}
-      <p className="text-[11px] tracking-wide text-text-3 uppercase">Size</p>
+      <p className="font-display text-[15px] text-text">Size</p>
 
       {/* Identical to the sliders above -- same grid, same widths, same
           selected colours. They were a different shape and colour, so the fit
@@ -255,11 +255,20 @@ export default function SizePicker({
                   made the column read as unfinished rather than considered.
                   The question moved down into the helper line, where the other
                   controls put their explanations. */}
-              <p className="text-[11px] tracking-wide text-text-3 uppercase">
-                Usual fit <span className="normal-case">(optional)</span>
+              {/* "Make it your way", not "Anything usually wrong with this
+                  size?". The reviewer's note on 2026-08-27: negative words on a
+                  made-to-order page invite doubt about quality at the moment
+                  the customer is deciding to trust you -- "it gives the
+                  impression there are often manufacturing defects". Nothing is
+                  wrong with the garment; the customer has a preference. The
+                  labels in fitNotes.ts were rewritten the same way, ids
+                  untouched. */}
+              <p className="font-display text-[15px] text-text">
+                Make it your way
               </p>
               <p className="mt-1.5 text-[11px] text-text-3">
-                Anything usually wrong with this size? Tap it and we cut around it.
+                Tell us how you usually like your fit, and we&apos;ll adjust
+                accordingly. Optional.
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {options.map((n) => {

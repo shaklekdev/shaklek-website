@@ -1,5 +1,21 @@
 /**
- * "Anything usually wrong with this size?"
+ * "Make it your way" — how the customer would like this cut.
+ *
+ * ⚠️ THE LABELS WERE REWRITTEN ON 2026-08-27 AND THE IDS WERE NOT. That is
+ * rule 1 below, and it is why the rewrite was safe: every order already placed
+ * still resolves. Do not "tidy" an id to match its new label.
+ *
+ * The labels used to name defects -- "Sleeves too short", "Too loose overall",
+ * "Waist too tight". An outside reviewer's note, and it is right: on a
+ * made-to-order page, negative words invite doubt about quality at the exact
+ * moment the customer is deciding to trust you. "It gives the impression there
+ * are often manufacturing defects." The garment is not wrong; the customer has
+ * a preference. So every label is now the ADJUSTMENT the customer wants rather
+ * than the fault they are reporting: "Sleeves a little longer", not "Sleeves
+ * too short".
+ *
+ * The tailor reads the same thing either way -- and arguably reads an
+ * instruction more usefully than a complaint.
  *
  * WHY THIS EXISTS: standard sizing asked the customer to pick a letter and
  * said nothing else. Tailored asked for four body measurements and blocked the
@@ -38,36 +54,36 @@
 export type FitNote = { id: string; label: string };
 
 const SHIRT_NOTES: FitNote[] = [
-  { id: "sleeves-short", label: "Sleeves too short" },
-  { id: "sleeves-long", label: "Sleeves too long" },
-  { id: "tight-chest", label: "Tight across the chest" },
-  { id: "too-loose", label: "Too loose overall" },
-  { id: "body-long", label: "Too long in the body" },
-  { id: "body-short", label: "Too short in the body" },
+  { id: "sleeves-short", label: "Sleeves a little longer" },
+  { id: "sleeves-long", label: "Sleeves a little shorter" },
+  { id: "tight-chest", label: "More room in the chest" },
+  { id: "too-loose", label: "A closer fit overall" },
+  { id: "body-long", label: "Shorter in the body" },
+  { id: "body-short", label: "Longer in the body" },
 ];
 
 const PANTS_NOTES: FitNote[] = [
-  { id: "legs-long", label: "Too long in the leg" },
-  { id: "legs-short", label: "Too short in the leg" },
-  { id: "waist-loose", label: "Waist too loose" },
-  { id: "waist-tight", label: "Waist too tight" },
-  { id: "tight-hip", label: "Tight at the hip" },
+  { id: "legs-long", label: "Shorter in the leg" },
+  { id: "legs-short", label: "Longer in the leg" },
+  { id: "waist-loose", label: "A closer waist" },
+  { id: "waist-tight", label: "More room at the waist" },
+  { id: "tight-hip", label: "More room at the hip" },
 ];
 
 const SKIRT_NOTES: FitNote[] = [
-  { id: "skirt-long", label: "Too long" },
-  { id: "skirt-short", label: "Too short" },
-  { id: "waist-loose", label: "Waist too loose" },
-  { id: "waist-tight", label: "Waist too tight" },
-  { id: "tight-hip", label: "Tight at the hip" },
+  { id: "skirt-long", label: "A shorter length" },
+  { id: "skirt-short", label: "A longer length" },
+  { id: "waist-loose", label: "A closer waist" },
+  { id: "waist-tight", label: "More room at the waist" },
+  { id: "tight-hip", label: "More room at the hip" },
 ];
 
 const DRESS_NOTES: FitNote[] = [
-  { id: "dress-long", label: "Too long" },
-  { id: "dress-short", label: "Too short" },
-  { id: "tight-chest", label: "Tight across the chest" },
-  { id: "waist-tight", label: "Tight at the waist" },
-  { id: "too-loose", label: "Too loose overall" },
+  { id: "dress-long", label: "A shorter length" },
+  { id: "dress-short", label: "A longer length" },
+  { id: "tight-chest", label: "More room in the chest" },
+  { id: "waist-tight", label: "More room at the waist" },
+  { id: "too-loose", label: "A closer fit overall" },
 ];
 
 const BY_CATEGORY: Record<string, FitNote[]> = {

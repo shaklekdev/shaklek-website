@@ -54,6 +54,29 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   // constraints gate only covered the fabric/layer/logo rules and never looked
   // at the numbers. Each unmakeable order costs a manual stylist round-trip.
   const [measurementsValid, setMeasurementsValid] = useState(true);
+
+  // STICKY BUY BAR. The reviewer's requirement was that the customer can reach
+  // Add to cart "sans avoir besoin de défiler et peu importe les dimensions de
+  // son écran" -- without scrolling, whatever their screen size. Reordering
+  // could not deliver that: colour, two sliders, size, the size chart and Make
+  // it your way are all decisions that belong ABOVE the button, and on a laptop
+  // that puts it past 1200px however it is arranged.
+  //
+  // So the real button keeps its place at the end of the column, and a bar
+  // appears only while it is off screen. An IntersectionObserver, not a scroll
+  // listener: no work on the main thread between intersections, and it is
+  // correct at any viewport without hardcoding a breakpoint.
+  const buyRef = useRef<HTMLDivElement | null>(null);
+  const [buyVisible, setBuyVisible] = useState(true);
+  useEffect(() => {
+    const el = buyRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setBuyVisible(e.isIntersecting), {
+      rootMargin: "0px 0px -80px 0px",
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const { items, addItem, updateItem } = useCart();
   const { isSignedIn } = useUser();
   const router = useRouter();
@@ -327,7 +350,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               onSpecChange={setSpec}
             />
 
-            <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div
+              ref={buyRef}
+              className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between"
+            >
               <div>
                 <p className="text-xs text-text-3">Total</p>
                 <p className="font-display text-2xl text-text">AED {price}</p>
@@ -351,6 +377,34 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               </>
             }
           />
+
+      {/* Only while the real button is off screen, so it never doubles up. */}
+      {!buyVisible && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white/95 backdrop-blur-sm">
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-3">
+            <div className="min-w-0">
+              <p className="truncate text-[13px] text-text">{item.name}</p>
+              <p className="font-display text-lg leading-tight text-text">
+                AED {price}
+              </p>
+            </div>
+            <button
+              onClick={handleSave}
+              disabled={!spec.constraints.passed || !measurementsValid}
+              className="shrink-0 rounded-full bg-accent px-7 py-3 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+              title={
+                !spec.constraints.passed
+                  ? "Resolve the flagged request above before continuing"
+                  : !measurementsValid
+                    ? "Add your measurements above before continuing"
+                    : undefined
+              }
+            >
+              {editingId ? "Save changes" : "Add to cart"}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* The illustrative-images note, moved down here from directly under the
           preview. It was pushing the parameters further from the photo on a

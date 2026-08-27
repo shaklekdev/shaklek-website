@@ -31,15 +31,23 @@ export default function DetailField({
   onSpecChange: (spec: DesignSpec) => void;
 }) {
   return (
-    <div className="mt-8">
-      {/* 11px uppercase, like every other control label on this page. It was
-          text-lg -- a heading among labels -- so the free-text box read as a
-          different section rather than the last parameter in the same column. */}
+    /* PART OF "Make it your way", not a section of its own.
+       The reviewer's idea, and the reasoning is hers: the chips let someone
+       personalise without having to think, and this box is there for the
+       person who knows exactly what they want and would rather write it.
+       "Le fait de trop réfléchir peut freiner l'achat" -- making a customer
+       think too hard is what stops the purchase. Two separate blocks asking
+       for the same thing made it a second decision; one block with an easy
+       path and an optional harder one makes it a single glance.
+
+       So: no top margin creating a gap, and a quiet label rather than another
+       uppercase section heading. */
+    <div className="mt-3">
       <label
         htmlFor="customization-notes"
-        className="mb-2 block text-[11px] tracking-wide text-text-3 uppercase"
+        className="mb-2 block text-[12px] text-text-3"
       >
-        Add a detail <span className="normal-case">(optional)</span>
+        Something else? Tell us here (optional)
       </label>
       <textarea
         id="customization-notes"

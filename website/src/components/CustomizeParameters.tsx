@@ -6,8 +6,14 @@ import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
 import { renderParamsForCategory, premiumParamsForCategory } from "@/data/parameterSliders";
 import FabricColorPicker from "@/components/FabricColorPicker";
+import { SELLABLE_FABRICS } from "@/data/fabrics";
 
 const PREVIEW_SIZES = "(min-width: 640px) 576px, 100vw";
+
+// Sits on the photograph. One fabric today, so this is a statement rather than
+// a choice; if a second becomes sellable the picker below carries the choice
+// and this stays the label of whatever is selected.
+const FABRIC_BADGE = SELLABLE_FABRICS.map((f) => f.label).join(" / ");
 
 // Examples have to match the garment in front of you -- "no chest pocket" on a
 // pair of trousers reads as a page that isn't paying attention. Anything not
@@ -142,6 +148,15 @@ export default function CustomizeParameters({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* ON THE PHOTOGRAPH, not in the column beside it.
+            "100% linen is a big asset but it gets lost in the information,
+            up in the top right" -- reviewer, 2026-08-27. It was a bordered box
+            competing with the colour dots for the same corner, which is where
+            information goes to be ignored. On the image it is the first thing
+            read, and it is the single strongest claim on the page. */}
+        <span className="pointer-events-none absolute top-3 right-3 z-10 border border-border-strong bg-white/90 px-2.5 py-1 text-[11px] tracking-wide text-text backdrop-blur-sm">
+          {FABRIC_BADGE}
+        </span>
         {activeImage && (
           <Image
             src={activeImage}
@@ -273,7 +288,13 @@ export default function CustomizeParameters({
               param.options.findIndex((o) => o.value === current?.value),
             );
             return (
-              <div key={param.type}>
+              <div
+                key={param.type}
+                /* A rule between each step. The options ran together as one
+                   long column, so Leg width, Length and Size read as a single
+                   list of choices rather than three separate decisions. */
+                className="border-t border-border pt-4 first:border-t-0 first:pt-0"
+              >
                 {/* Native radios behind styled labels, not buttons with
                     role="radio". ARIA radiogroup semantics tell a screen
                     reader to press arrow keys; buttons do not implement them,
@@ -282,9 +303,12 @@ export default function CustomizeParameters({
                     the accessibility tree here for free, and none of it can
                     drift. Each label is a 44px-tall full-width target. */}
                 <fieldset>
-                  <legend className="text-[11px] tracking-wide text-text-3 uppercase">
-                    {param.name}
-                  </legend>
+                  {/* Display face at full strength, matching Size and Make
+                      it your way. These were text-text-3 uppercase 11px --
+                      identical to the helper lines beneath them -- so a title
+                      and its own explanation carried the same visual weight
+                      and nothing announced a new step. */}
+                  <legend className="font-display text-[15px] text-text">{param.name}</legend>
                   {/* max-w stops a two-option row stretching across the whole
                       control column on desktop. Full-width slabs read as
                       utilitarian; the brand wants restraint, and a option that
