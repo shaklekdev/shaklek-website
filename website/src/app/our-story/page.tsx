@@ -227,7 +227,7 @@ export default function OurStoryPage() {
                 own body, and a long stretch of it changing everything that
                 touched my skin, day and night. The clothes I wore all day,
                 full of polyester and chemical finishes, couldn&apos;t possibly
-                be neutral.
+                have no effect on me.
               </p>
               <p>
                 I wanted something timelessly elegant, comfortable, and kind to

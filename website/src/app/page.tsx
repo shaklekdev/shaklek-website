@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/home/Hero";
 import Concept from "@/components/home/Concept";
 import ProductRail from "@/components/home/ProductRail";
+import BackToTop from "@/components/BackToTop";
 import Benefits from "@/components/home/Benefits";
 import HomeFaq from "@/components/home/HomeFaq";
 import {
@@ -47,6 +48,7 @@ export default function Home() {
       <ProductRail />
       <Benefits />
       <HomeFaq />
+      <BackToTop />
     </div>
   );
 }

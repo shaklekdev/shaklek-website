@@ -21,7 +21,7 @@ export default function SizeGuidePage() {
   return (
     <LegalPage
       title="Size Guide"
-      intro="Body measurements, in centimetres, not the finished garment."
+      intro="Measure your body, not a garment you already own. All numbers in centimetres."
     >
       {/* The customer's own numbers come first. Founder: the size guide should
           open with "your measurements", and the regional chart is the
