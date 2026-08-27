@@ -21,21 +21,33 @@ import { render, encode, hold, photoFrame, sayFrame, gridFrame, endFrame, shot, 
 import { lint } from "./copy-rules.mjs";
 import fs from "node:fs";
 
-// oversized-shirt, NOT utility-shirt. Utility's base photo IS its short-sleeve
-// longer-length cut (see defaultChanges in catalog.ts), so two of the four
-// states were the same combination shown twice, with different captions. The
-// first render of this video shipped that: frames 4 and 5 were the same shirt
-// under two different labels. Oversized is the only shirt whose base photo is
-// the category default, which means base + its three combos are the complete
-// 2x2 and every frame is a genuinely different garment.
-const ITEM = "oversized-shirt", COLOUR = "Ivory";
+// UTILITY SHIRT, the founder's own choice.
+//
+// ⚠️ I TALKED MYSELF OUT OF THIS ONCE AND I WAS WRONG. catalog.ts says this
+// item's defaultChanges are { sleeve_length: "short", garment_length: "longer" },
+// so I read the base photo as the short-sleeve LONGER cut, concluded the
+// short-sleeve NORMAL cut did not exist, and moved the video to a different
+// shirt. Then I told the founder her live site was showing customers the wrong
+// garment.
+//
+// She checked her own site and said no. She was right. Looking at the actual
+// pixels: the base photo shows SHORT SLEEVE, NORMAL LENGTH. The metadata is
+// mislabelled, the photograph is not, and the site is correct because the
+// fallback lands on an image that genuinely depicts what was chosen.
+//
+// The lesson is the one this repo keeps writing down and I keep having to
+// relearn: METADATA LIES, LOOK AT THE PIXELS. I checked font metrics instead of
+// ink twice last night, and here I checked a JSON field instead of a garment.
+//
+// All four cuts exist for this shirt. One of them simply lives in the base
+// photo rather than in comboImages.
+const ITEM = "utility-shirt", COLOUR = "Ivory";
 const S = (combo) => shot(ITEM, COLOUR, combo);
 
-// The whole video is the claim that these four are different. If two of them
-// resolve to the same file, the video disproves itself, so it refuses to build.
+// The founder's order: sleeve changes first, then the hem.
 const FOUR = [
-  ["short:normal", ["Short sleeve", "Normal length"]],
-  ["base",         ["Long sleeve", "Normal length"]],
+  ["base",         ["Short sleeve", "Normal length"]],
+  ["long:normal",  ["Long sleeve", "Normal length"]],
   ["short:longer", ["Short sleeve", "Longer length"]],
   ["long:longer",  ["Long sleeve", "Longer length"]],
 ];
