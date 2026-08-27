@@ -278,9 +278,19 @@ export default function CustomizeParameters({
         onColorChange={handleColorChange}
       />
 
-      {/* Sliders */}
+      {/* THE PRODUCT CHARACTERISTICS ARE ONE STEP, so they sit SIDE BY SIDE.
+          Founder, 2026-08-27: "aligner les caractéristiques du produit car
+          c'est la même étape" -- align them, because it is the same step.
+          Sleeve and Length (or Leg width and Length) are two facets of one
+          decision about the garment's shape; stacking them with a rule between
+          each made two halves of one choice look like two separate steps.
+
+          The separation she asked for goes AFTER this group, before Size,
+          which is where the customer really does move on to something else.
+          An earlier pass put a rule between every slider, which is the thing
+          she was correcting. */}
       {params.length > 0 && (
-        <div className="mt-5 flex flex-col gap-4">
+        <div className="mt-5 grid gap-x-5 gap-y-4 sm:grid-cols-2">
           {params.map((param) => {
             const current = spec.changes.find((c) => c.type === param.type);
             const activeIndex = Math.max(
@@ -288,13 +298,7 @@ export default function CustomizeParameters({
               param.options.findIndex((o) => o.value === current?.value),
             );
             return (
-              <div
-                key={param.type}
-                /* A rule between each step. The options ran together as one
-                   long column, so Leg width, Length and Size read as a single
-                   list of choices rather than three separate decisions. */
-                className="border-t border-border pt-4 first:border-t-0 first:pt-0"
-              >
+              <div key={param.type}>
                 {/* Native radios behind styled labels, not buttons with
                     role="radio". ARIA radiogroup semantics tell a screen
                     reader to press arrow keys; buttons do not implement them,
@@ -316,7 +320,7 @@ export default function CustomizeParameters({
                       full width, where it is the only way to hold a 44px
                       target. */}
                   <div
-                    className="mt-1.5 grid gap-1.5 lg:max-w-xs"
+                    className="mt-1.5 grid gap-1.5"
                     style={{ gridTemplateColumns: `repeat(${param.options.length}, minmax(0, 1fr))` }}
                   >
                     {param.options.map((option, i) => {

@@ -49,6 +49,7 @@ export default function SizePicker({
   onSizeChange,
   onMeasurementsChange,
   onMeasurementsValidChange,
+  detailSlot,
 }: {
   sizeMode: SizeMode;
   size: string;
@@ -65,6 +66,10 @@ export default function SizePicker({
   // Lets the parent gate Add to cart on complete, plausible measurements.
   // Optional so callers that don't gate don't have to care.
   onMeasurementsValidChange?: (valid: boolean) => void;
+  // Rendered inside "Make it your way", after the chips. It is a slot rather
+  // than an import so the free-text box and the chips can share one <details>
+  // without this component knowing what a DetailField is.
+  detailSlot?: React.ReactNode;
 }) {
   const [fields, setFields] = useState<MeasurementFields>(EMPTY_FIELDS);
   // Errors only surface once a field has been visited, so the form doesn't
@@ -105,7 +110,11 @@ export default function SizePicker({
   }
 
   return (
-    <div className="mt-5">
+    /* The separation the founder asked for, in the place she asked for it:
+       between the product characteristics above and Size, because THIS is
+       where the customer moves to a new kind of decision. Leg width and Length
+       describe the garment; Size describes the body. */
+    <div className="mt-6 border-t border-border pt-6">
       {/* Tailored first and selected by default. Made-to-order only justifies
           its price if the garment is cut to the customer -- putting Standard
           first made the whole proposition opt-in. Standard stays one tap away
@@ -248,28 +257,48 @@ export default function SizePicker({
               reading. See src/data/fitNotes.ts for why ids travel and labels
               do not. */}
           {options.length > 0 && (
-            <div className="mt-4">
+            /* COLLAPSED BY DEFAULT, like the size chart above it.
+               Founder, 2026-08-27: "make it your way, peut être retractable".
+               Her reasoning is the good part -- a customer who does not want to
+               think should be able to skip the whole thing with their eyes,
+               and one who knows exactly what they want opens it. Making people
+               think too hard is what stops the purchase.
+
+               It also buys back most of the vertical space that was pushing
+               Add to cart down the page, which was the other complaint. */
+            <details className="group mt-4 border border-border-strong">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
+                <span>
+                  <span className="font-display block text-[15px] text-text">
+                    Make it your way
+                  </span>
+                  <span className="mt-0.5 block text-[11px] text-text-3">
+                    Tell us how you usually like your fit. Optional.
+                  </span>
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 text-lg leading-none text-text-3 group-open:hidden"
+                >
+                  +
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="hidden shrink-0 text-lg leading-none text-text-3 group-open:block"
+                >
+                  &minus;
+                </span>
+              </summary>
+              <div className="border-t border-border px-4 py-4">
               {/* Same label treatment as SLEEVES, LENGTH and SIZE. This was
                   a 14px sentence in full-strength text, so one control on the
                   page shouted while its neighbours whispered -- which is what
                   made the column read as unfinished rather than considered.
                   The question moved down into the helper line, where the other
                   controls put their explanations. */}
-              {/* "Make it your way", not "Anything usually wrong with this
-                  size?". The reviewer's note on 2026-08-27: negative words on a
-                  made-to-order page invite doubt about quality at the moment
-                  the customer is deciding to trust you -- "it gives the
-                  impression there are often manufacturing defects". Nothing is
-                  wrong with the garment; the customer has a preference. The
-                  labels in fitNotes.ts were rewritten the same way, ids
-                  untouched. */}
-              <p className="font-display text-[15px] text-text">
-                Make it your way
-              </p>
-              <p className="mt-1.5 text-[11px] text-text-3">
-                Tell us how you usually like your fit, and we&apos;ll adjust
-                accordingly. Optional.
-              </p>
+                {/* The labels are the ADJUSTMENT wanted, never the fault
+                    reported -- see fitNotes.ts. Ids are untouched, so orders
+                    already placed still resolve. */}
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {options.map((n) => {
                   const on = fitNotes.includes(n.id);
@@ -296,7 +325,9 @@ export default function SizePicker({
                   );
                 })}
               </div>
-            </div>
+                {detailSlot}
+              </div>
+            </details>
           )}
 
         </>

@@ -331,6 +331,17 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               onSizeChange={(size) => setSpec((s) => ({ ...s, size }))}
               onMeasurementsChange={(measurements) => setSpec((s) => ({ ...s, measurements }))}
               onMeasurementsValidChange={setMeasurementsValid}
+              /* Inside "Make it your way" rather than after it: the chips are
+                 the easy path and this is the same question for someone who
+                 knows exactly what they want. Two separate blocks asking the
+                 same thing made it a second decision. */
+              detailSlot={
+                <DetailField
+                  spec={spec}
+                  category={item.category}
+                  onSpecChange={setSpec}
+                />
+              }
             />
 
             {/* The highest-intent moment there is: they have just typed their
@@ -344,15 +355,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               />
             )}
 
-            <DetailField
-              spec={spec}
-              category={item.category}
-              onSpecChange={setSpec}
-            />
-
             <div
               ref={buyRef}
-              className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between"
+              className="mt-5 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
                 <p className="text-xs text-text-3">Total</p>
