@@ -137,6 +137,30 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#F2EDE4}
   background:rgba(242,237,228,.86);padding:8px 14px}
 
 
+
+/* ---- crossfade: two images stacked, the top one fading in ----
+   Hard cuts between four near-identical garments read as a stutter. A short
+   dissolve reads as the garment CHANGING, which is the entire proposition, and
+   it is also what makes the sequence feel smooth rather than clicked through. */
+.x{position:absolute;inset:0}
+.x img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Text over the garment rather than on its own card. The founder's note: too
+   many white pages. A line at the top of the frame, on a soft wash that only
+   covers the backdrop above the model's head, keeps the product on screen for
+   the whole video. */
+/* A SOLID STRIP THAT PUSHES THE IMAGE DOWN, not a wash laid over it. The first
+   version faded cream down the top of the frame and, on these shots, the
+   model's head is 8% from the top: it bleached her face into a white blob. That
+   is the same defect the founder rejected in the very first cut, reintroduced
+   by a different route. A strip cannot cover a face, because the face is not
+   underneath it. */
+.top{flex:0 0 auto;position:relative;z-index:3;padding:64px 76px 34px;background:#F2EDE4}
+.top .l{font-family:Italiana,serif;font-size:78px;line-height:1.1;letter-spacing:6px;color:#171512}
+.top .l.sm{font-size:58px;letter-spacing:4px}
+.top .s{margin-top:14px;font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:36px;color:#4A443B;letter-spacing:.4px}
+
 /* ---- the four-colour split: horizontal bands that slide in from the sides ----
    The founder's shot: the same shirt in four colours, as four horizontal bands
    arriving from alternating sides and meeting in the centre, with the line laid
@@ -203,7 +227,7 @@ const sayFrame = ({ big, under }) =>
  * a gold hairline, which is how a lookbook captions a plate. It is deliberately
  * NOT a pill, a badge or a button: those belong to interfaces.
  */
-const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, onDark = false }) => {
+const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, top, topSub }) => {
   const band = hook
     ? `<div class="band"><div class="k${hook.replace(/<br>/g, " ").length > 26 ? " sm" : ""}">${hook}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>`
     : "";
@@ -213,8 +237,12 @@ const photoFrame = ({ src, focus = "full", hook, sub, note = [], price, onDark =
          ${price ? `<div class="price">${price}</div>` : ""}
        </div>`
     : "";
+  const overlay = top
+    ? `<div class="top"><div class="l${top.replace(/<br>/g, " ").length > 24 ? " sm" : ""}">${top}</div>${topSub ? `<div class="s">${topSub}</div>` : ""}</div>`
+    : "";
   return page(`
     ${band}
+    ${overlay}
     <div class="stage">
       <img class="photo" src="${src}" style="${FOCUS[focus]}">
     </div>
@@ -227,6 +255,33 @@ const gridFrame = ({ cells, cols = 2 }) =>
     ${cells.map((c) => `<div><img src="${c.src}" style="${FOCUS[c.focus ?? "legs"]}"><div class="gl">${c.label}</div></div>`).join("")}
   </div>`);
 
+
+
+/**
+ * Two images stacked with the top one at opacity p, so a sequence of these is a
+ * dissolve. `note` and `top` ride above both.
+ */
+const crossFrame = ({ from, to, p, focus = "full", note = [], top, topSub, price }) => {
+  const ann = note.length
+    ? `<div class="note"><div class="hr"></div>
+         <div class="lines">${note.map((l) => `<span class="l">${l}</span>`).join("")}</div>
+         ${price ? `<div class="price">${price}</div>` : ""}
+       </div>`
+    : "";
+  const overlay = top
+    ? `<div class="top"><div class="l${top.replace(/<br>/g, " ").length > 24 ? " sm" : ""}">${top}</div>${topSub ? `<div class="s">${topSub}</div>` : ""}</div>`
+    : "";
+  return page(`
+    <div class="stage">
+      <div class="x">
+        <img src="${from}" style="${FOCUS[focus]}">
+        <img src="${to}" style="${FOCUS[focus]};opacity:${p.toFixed(3)}">
+      </div>
+      ${overlay}
+    </div>
+    ${ann}
+  `);
+};
 
 /** Four horizontal colour bands sliding in from alternating sides. p: 0 to 1. */
 const splitFrame = ({ rows, p, line }) => {
@@ -275,7 +330,40 @@ function encode(frames, outFile) {
 /** hold(frame, seconds) -> repeated frame paths */
 const hold = (f, secs) => Array(Math.round(secs * FPS)).fill(f);
 
-export { render, encode, hold, photoFrame, sayFrame, gridFrame, splitFrame, tenetsFrame, endFrame, shot, shotBack, page, W, H, FPS, OUTDIR, TMP };
+
+/**
+ * Blend two already-rendered PNGs into `steps` intermediate frames.
+ *
+ * WHY NOT RENDER THE DISSOLVE IN THE BROWSER: the first attempt did, and every
+ * intermediate frame was its own headless Chrome launch. Fourteen changes at
+ * seven frames each is a hundred browser starts, and the build ran past ten
+ * minutes without finishing. Blending pixels here is roughly a thousand times
+ * faster and produces the same frames.
+ *
+ * Blending the RENDERED frames rather than the photographs also crossfades the
+ * captions along with the garment, which is what makes the label change read as
+ * part of the same movement.
+ */
+async function dissolve(fromPng, toPng, steps, outPrefix) {
+  const sharp = (await import("sharp")).default;
+  const [a, b] = await Promise.all([
+    sharp(fromPng).ensureAlpha().raw().toBuffer({ resolveWithObject: true }),
+    sharp(toPng).ensureAlpha().raw().toBuffer({ resolveWithObject: true }),
+  ]);
+  const { width, height, channels } = a.info;
+  const out = [];
+  for (let s = 1; s <= steps; s++) {
+    const p = s / (steps + 1);
+    const buf = Buffer.allocUnsafe(a.data.length);
+    for (let i = 0; i < a.data.length; i++) buf[i] = a.data[i] + (b.data[i] - a.data[i]) * p;
+    const file = `${TMP}/${outPrefix}-${String(s).padStart(2, "0")}.png`;
+    await sharp(buf, { raw: { width, height, channels } }).png({ compressionLevel: 1 }).toFile(file);
+    out.push(file);
+  }
+  return out;
+}
+
+export { render, encode, hold, dissolve, photoFrame, crossFrame, sayFrame, gridFrame, splitFrame, tenetsFrame, endFrame, shot, shotBack, page, W, H, FPS, OUTDIR, TMP };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log("This module is the engine. Run scripts/social/tiktok-videos.mjs to build the set.");
