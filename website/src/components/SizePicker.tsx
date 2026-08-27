@@ -256,79 +256,7 @@ export default function SizePicker({
               nothing, and an untouched question costs the customer one line of
               reading. See src/data/fitNotes.ts for why ids travel and labels
               do not. */}
-          {options.length > 0 && (
-            /* COLLAPSED BY DEFAULT, like the size chart above it.
-               Founder, 2026-08-27: "make it your way, peut être retractable".
-               Her reasoning is the good part -- a customer who does not want to
-               think should be able to skip the whole thing with their eyes,
-               and one who knows exactly what they want opens it. Making people
-               think too hard is what stops the purchase.
 
-               It also buys back most of the vertical space that was pushing
-               Add to cart down the page, which was the other complaint. */
-            <details className="group mt-4 border border-border-strong">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
-                <span>
-                  <span className="font-display block text-[15px] text-text">
-                    Make it your way
-                  </span>
-                  <span className="mt-0.5 block text-[11px] text-text-3">
-                    Tell us how you usually like your fit. Optional.
-                  </span>
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="shrink-0 text-lg leading-none text-text-3 group-open:hidden"
-                >
-                  +
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="hidden shrink-0 text-lg leading-none text-text-3 group-open:block"
-                >
-                  &minus;
-                </span>
-              </summary>
-              <div className="border-t border-border px-4 py-4">
-              {/* Same label treatment as SLEEVES, LENGTH and SIZE. This was
-                  a 14px sentence in full-strength text, so one control on the
-                  page shouted while its neighbours whispered -- which is what
-                  made the column read as unfinished rather than considered.
-                  The question moved down into the helper line, where the other
-                  controls put their explanations. */}
-                {/* The labels are the ADJUSTMENT wanted, never the fault
-                    reported -- see fitNotes.ts. Ids are untouched, so orders
-                    already placed still resolve. */}
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {options.map((n) => {
-                  const on = fitNotes.includes(n.id);
-                  return (
-                    <button
-                      key={n.id}
-                      type="button"
-                      aria-pressed={on}
-                      onClick={() =>
-                        onFitNotesChange(
-                          on
-                            ? fitNotes.filter((id) => id !== n.id)
-                            : [...fitNotes, n.id],
-                        )
-                      }
-                      className={`min-h-9 rounded-full border px-3 py-1.5 text-xs transition-colors ${
-                        on
-                          ? "border-text bg-text text-white"
-                          : "border-border-strong bg-white text-text-2 hover:border-text hover:text-text"
-                      }`}
-                    >
-                      {n.label}
-                    </button>
-                  );
-                })}
-              </div>
-                {detailSlot}
-              </div>
-            </details>
-          )}
 
         </>
       ) : (
@@ -401,6 +329,80 @@ export default function SizePicker({
                 numbers. Saying it three times did not make it truer. */}
         </div>
       )}
+
+        {options.length > 0 && (
+          /* COLLAPSED BY DEFAULT, like the size chart above it.
+             Founder, 2026-08-27: "make it your way, peut être retractable".
+             Her reasoning is the good part -- a customer who does not want to
+             think should be able to skip the whole thing with their eyes,
+             and one who knows exactly what they want opens it. Making people
+             think too hard is what stops the purchase.
+
+             It also buys back most of the vertical space that was pushing
+             Add to cart down the page, which was the other complaint. */
+          <details className="group mt-4 border border-border-strong">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
+              <span>
+                <span className="font-display block text-[15px] text-text">
+                  Make it your way
+                </span>
+                <span className="mt-0.5 block text-[11px] text-text-3">
+                  Tell us how you usually like your fit. Optional.
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="shrink-0 text-lg leading-none text-text-3 group-open:hidden"
+              >
+                +
+              </span>
+              <span
+                aria-hidden="true"
+                className="hidden shrink-0 text-lg leading-none text-text-3 group-open:block"
+              >
+                &minus;
+              </span>
+            </summary>
+            <div className="border-t border-border px-4 py-4">
+            {/* Same label treatment as SLEEVES, LENGTH and SIZE. This was
+                a 14px sentence in full-strength text, so one control on the
+                page shouted while its neighbours whispered -- which is what
+                made the column read as unfinished rather than considered.
+                The question moved down into the helper line, where the other
+                controls put their explanations. */}
+              {/* The labels are the ADJUSTMENT wanted, never the fault
+                  reported -- see fitNotes.ts. Ids are untouched, so orders
+                  already placed still resolve. */}
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {options.map((n) => {
+                const on = fitNotes.includes(n.id);
+                return (
+                  <button
+                    key={n.id}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() =>
+                      onFitNotesChange(
+                        on
+                          ? fitNotes.filter((id) => id !== n.id)
+                          : [...fitNotes, n.id],
+                      )
+                    }
+                    className={`min-h-9 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                      on
+                        ? "border-text bg-text text-white"
+                        : "border-border-strong bg-white text-text-2 hover:border-text hover:text-text"
+                    }`}
+                  >
+                    {n.label}
+                  </button>
+                );
+              })}
+            </div>
+              {detailSlot}
+            </div>
+          </details>
+        )}
     </div>
   );
 }

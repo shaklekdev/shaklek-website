@@ -33,6 +33,12 @@
  *    reworded; ids reach the database and a tailor's document and must not
  *    move. Renaming an id orphans every order that already carries it.
  *
+ * 1b. SHOWN FOR BOTH SIZE MODES since 2026-08-27. These were standard-only,
+ *    on the reasoning that a garment cut to the customer's own numbers cannot
+ *    be wrong in its size. That stopped being true when the labels were
+ *    rewritten from faults into preferences: measurements say what the body
+ *    is, not how she likes the garment to sit on it. Founder's call.
+ *
  * 2. NOTHING HERE IS AN INSTRUCTION IN CENTIMETRES. The customer is reporting
  *    a habit, not measuring. `sizeChart.ts` already warns that its numbers are
  *    published market charts rather than Shaklek's patterns, and techPack.ts

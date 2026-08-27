@@ -518,10 +518,10 @@ export function buildPdf(
           .font("Helvetica-Bold")
           .fontSize(10)
           .fillColor(INK)
-          .text("WHAT USUALLY GOES WRONG IN THIS SIZE", left, doc.y, { width });
+          .text("HOW SHE LIKES IT TO FIT", left, doc.y, { width });
         doc.moveDown(0.15);
         para(
-          "Reported by the customer about clothes she already owns, not measured. Adjust from the standard block by your own judgement.",
+          "The customer's own preference, not a measurement. Adjust by your own judgement -- no amount is specified because Shaklek has no house tolerance for these.",
           MUTED,
           9,
         );

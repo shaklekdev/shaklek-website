@@ -258,7 +258,15 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       // Standard only. On a tailored order the garment is cut to the
       // customer's own numbers, so "my usual M is tight" describes a garment
       // nobody is making -- carrying it would just be noise on the tech pack.
-      fitNotes: spec.sizeMode === "tailored" ? [] : spec.fitNotes,
+      // Kept for BOTH size modes. They used to be dropped on a tailored
+      // order, on the reasoning that a garment cut to the customer's own
+      // numbers cannot be "wrong in this size". Founder, 2026-08-27: they
+      // belong on both -- and she is right, because these stopped being
+      // complaints about a size chart when the labels were rewritten. "A
+      // closer fit overall" is a preference about how the garment should hang,
+      // which measurements do not express: they say what the body is, not how
+      // she likes it to sit on her.
+      fitNotes: spec.fitNotes,
       changes: spec.changes.map((c) => c.label),
       freeformNotes: spec.freeformNotes,
     };

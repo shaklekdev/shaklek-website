@@ -75,11 +75,13 @@ export const orderItems = pgTable("order_items", {
   color: text("color"),
   size: text("size"),
   measurements: text("measurements"),
-  // "Anything usually wrong with this size?" -- stable ids from
-  // src/data/fitNotes.ts, never customer free text. Only ever set on a
-  // STANDARD-size order: a tailored garment is already cut to the customer's
-  // own numbers, so a complaint about a shop size describes nothing anyone is
-  // making. Nullable, because every order placed before 2026-08-26 has none.
+  // "Make it your way" -- stable ids from src/data/fitNotes.ts, never customer
+  // free text. Set on BOTH size modes since 2026-08-27. They were standard-only
+  // when the labels named faults ("Sleeves too short"), on the reasoning that a
+  // garment cut to the customer's own numbers cannot be wrong in its size. The
+  // labels are now preferences ("Sleeves a little longer"), and a preference
+  // about how a garment should hang is something measurements do not express.
+  // Nullable, because every order placed before 2026-08-26 has none.
   fitNotes: text("fit_notes").array(),
   changes: text("changes").array(),
   freeformNotes: text("freeform_notes"),
