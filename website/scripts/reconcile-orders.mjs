@@ -32,11 +32,21 @@ async function stripe(path) {
   return res.json();
 }
 
+// SAME WINDOW AND SAME RULES AS THE DEPLOYED ROUTE
+// (src/app/api/admin/reconcile/route.ts). They disagreed at first -- this
+// script flagged the 2026-08-22 order that predates shipping_address_collection
+// while the nightly job correctly aged it out -- which meant running this by
+// hand contradicted the thing that emails you. A checker that cries wolf gets
+// ignored, and this one exists to be believed.
+const WINDOW_DAYS = 35;
 const sql = postgres(PROD_DB, { max: 1 });
 const rows = await sql`
   SELECT id, status, stripe_session_id, total_aed,
          shipping_line1 IS NOT NULL AS has_addr
-  FROM orders WHERE stripe_session_id IS NOT NULL`;
+  FROM orders
+  WHERE stripe_session_id IS NOT NULL
+    AND created_at >= now() - (${WINDOW_DAYS} || ' days')::interval
+    AND status <> 'canceled'`;
 
 const problems = [];
 for (const o of rows) {
@@ -47,7 +57,11 @@ for (const o of rows) {
     problems.push([o.id, "session not found in Stripe", o.status]);
     continue;
   }
-  const reallyPaid = session.payment_status === "paid";
+  // no_payment_required is what a 100%-off code produces, and the webhook
+  // already treats a completed session as paid regardless.
+  const reallyPaid =
+    session.payment_status === "paid" ||
+    session.payment_status === "no_payment_required";
   const weSayPaid = o.status !== "pending_payment" && o.status !== "payment_failed";
 
   // The dangerous one: Stripe took money, our records do not show it.
@@ -57,7 +71,9 @@ for (const o of rows) {
   if (!reallyPaid && weSayPaid)
     problems.push([o.id, `our status is "${o.status}" but Stripe says "${session.payment_status}"`, ""]);
   // Paid with no address is unshippable, whatever the cause.
-  if (reallyPaid && !o.has_addr)
+  // Only for orders nobody has picked up yet -- once staff move one to
+  // in_progress or shipped they have the address by other means.
+  if (reallyPaid && o.status === "paid" && !o.has_addr)
     problems.push([o.id, "paid but NO SHIPPING ADDRESS stored", "cannot be shipped"]);
 }
 
