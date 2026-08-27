@@ -25,8 +25,8 @@
  * and I sent the founder a false bug report about her live site before checking.
  */
 import {
-  render, encode, hold, dissolve, photoFrame, splitFrame, tenetsFrame,
-  endFrame, shot, OUTDIR, FPS,
+  render, encode, hold, dissolve, photoFrame, duoFrame, mosaicFrame, splitFrame,
+  tenetsFrame, endFrame, shot, OUTDIR, FPS,
 } from "./tiktok-launch.mjs";
 import { lint } from "./copy-rules.mjs";
 import fs from "node:fs";
@@ -77,47 +77,55 @@ const OPEN_A = shot("pleated-trousers", "Ivory", "base");
 const OPEN_B = shot("pleated-trousers", "Ivory", "wide:full");
 const TITLE = "You customise.<br>We tailor.";
 
-// title held over the first garment
+// THE TITLE LEAVES FAST. Founder: it stays too long and it is not beautiful. It
+// held nearly three seconds and faded over a third of one, which is a long time
+// to look at a box. It holds under a second now, carries one change underneath
+// it, and leaves in six frames, so it reads as a card lifted away.
 const t0 = render(photoFrame({ src: OPEN_A, focus: "trouser", title: TITLE }), "op0");
-// title still up, garment already changed underneath it
 const t1 = render(photoFrame({ src: OPEN_B, focus: "trouser", title: TITLE }), "op1");
-// same garment, title gone: dissolving t1 -> t2 is the title opening away
-const t2 = render(photoFrame({ src: OPEN_B, focus: "trouser",
-  note: ["Pleated trousers", "Wide, full length"], price: "AED 429" }), "op2");
+const t2 = render(duoFrame({
+  left:  { src: OPEN_A, a: "Straight", b: "Full length" },
+  right: { src: OPEN_B, a: "Wide", b: "Full length" },
+  top: "Change the leg.",
+}), "op2");
 
-// The line holds while the garment changes TWICE underneath it, so the idea
-// the video is selling starts in the first second rather than after the title.
-const t1b = render(photoFrame({ src: shot("pleated-trousers", "Navy", "wide:cropped"), focus: "trouser", title: TITLE }), "op1b");
-f.push(...hold(t0, 0.9));
-for (const fr of await dissolve(t0, t1, 10, "opx")) f.push(fr);
-f.push(...hold(t1, 0.5));
-for (const fr of await dissolve(t1, t1b, 9, "opxb")) f.push(fr);
-f.push(...hold(t1b, 0.5));
-const t2b = render(photoFrame({ src: shot("pleated-trousers", "Navy", "wide:cropped"), focus: "trouser",
-  note: ["Pleated trousers", "Wide, cropped"], price: "AED 429" }), "op2b");
-for (const fr of await dissolve(t1b, t2b, 9, "opy")) f.push(fr);
-f.push(...hold(t2b, 0.5));
-prevPng = t2b;
+f.push(...hold(t0, 0.6));
+for (const fr of await dissolve(t0, t1, 8, "opx")) f.push(fr);
+f.push(...hold(t1, 0.45));
+for (const fr of await dissolve(t1, t2, 6, "opy")) f.push(fr);
+f.push(...hold(t2, 1.6));
+prevPng = t2;
 
-// Fourteen changes. Every garment changes SHAPE, not just colour.
+// TROUSERS ARE SHOWN SIDE BY SIDE, NOT IN SEQUENCE. Founder: on the pleated
+// trousers "we don't notice the difference, it feels like it's repeating
+// itself". Right, and the reason is that a leg width is not a change the eye
+// catches between two frames a second apart. A bare forearm is; two inches of
+// hem is not. Both cuts are on screen at once now, labelled, one glance.
+for (const [left, right, top, id, secs] of [
+  [{ src: shot("pleated-trousers", "Ivory", "wide:full"), a: "Wide", b: "Full length" },
+   { src: shot("pleated-trousers", "Ivory", "wide:cropped"), a: "Wide", b: "Cropped" },
+   "Change the hem.", "d1", 1.5],
+  [{ src: shot("cargo-trousers", "Ivory", "base"), a: "Straight", b: "Full length" },
+   { src: shot("cargo-trousers", "Ivory", "wide:full"), a: "Wide", b: "Full length" },
+   "Cargo trousers.", "d2", 1.4],
+]) {
+  const png = render(duoFrame({ left, right, top }), id);
+  for (const fr of await dissolve(prevPng, png, 7, `${id}x`)) f.push(fr);
+  f.push(...hold(png, secs));
+  prevPng = png;
+}
+
+// THE SHIRTS STAY A SEQUENCE, because a sleeve appearing and a hem dropping are
+// changes the eye does catch between frames. That is the same reason the
+// trousers had to leave the sequence.
 const SEQ = [
-  // trousers: width, then length, then colour
-  { src: shot("pleated-trousers", "Ivory", "wide:cropped"),      label: ["Change", "the length"], focus: "trouser", d: 0.26, h: 0.72 },
-  { src: shot("pleated-trousers", "Ivory", "base"),              label: ["Change", "the leg"],    focus: "trouser", d: 0.24, h: 0.68 },
-  { src: shot("pleated-trousers", "Navy", "wide:full"),          label: ["Change", "the colour"], focus: "trouser", d: 0.24, h: 0.66 },
-  // the shirt: sleeve, then body length, on a crop that keeps the hem in frame
-  { src: shot("utility-shirt", "Ivory", "base"),                 label: ["Utility shirt", "Short sleeve"], focus: "whole", d: 0.24, h: 0.66 },
-  { src: shot("utility-shirt", "Ivory", "long:normal"),          label: ["Change", "the sleeve"], focus: "whole", d: 0.22, h: 0.62 },
-  { src: shot("utility-shirt", "Ivory", "long:longer"),          label: ["Change", "the length"], focus: "whole", d: 0.22, h: 0.62 },
-  // cargo: width and length again, on a different silhouette
-  { src: shot("cargo-trousers", "Ivory", "base"),                label: ["Cargo trousers", "Straight, full"], focus: "trouser", d: 0.20, h: 0.58 },
-  { src: shot("cargo-trousers", "Ivory", "wide:full"),           label: ["Change", "the leg"],    focus: "trouser", d: 0.20, h: 0.56 },
-  { src: shot("cargo-trousers", "Ivory", "straight:cropped"),    label: ["Change", "the hem"],    focus: "trouser", d: 0.18, h: 0.54 },
-  // blouse and wrap: shape again, then colour
-  { src: shot("structured-blouse", "Ivory", "long:normal"),      label: ["Structured blouse", "Long sleeve"], focus: "whole", d: 0.18, h: 0.52 },
-  { src: shot("structured-blouse", "Ivory", "short:longer"),     label: ["Change", "both"],       focus: "whole", d: 0.16, h: 0.50 },
-  { src: shot("wrap-top", "Ivory", "long:normal"),               label: ["Wrap top", "Long sleeve"], focus: "whole", d: 0.16, h: 0.48 },
-  { src: shot("wrap-top", "Burgundy", "long:longer"),            label: ["Change", "everything"], focus: "whole", d: 0.16, h: 0.90 },
+  { src: shot("utility-shirt", "Ivory", "base"),             label: ["Utility shirt", "Short sleeve"], focus: "whole", d: 0.22, h: 0.62 },
+  { src: shot("utility-shirt", "Ivory", "long:normal"),      label: ["Change", "the sleeve"],          focus: "whole", d: 0.20, h: 0.58 },
+  { src: shot("utility-shirt", "Ivory", "long:longer"),      label: ["Change", "the length"],          focus: "whole", d: 0.20, h: 0.58 },
+  { src: shot("structured-blouse", "Ivory", "long:normal"),  label: ["Structured blouse", "Long sleeve"], focus: "whole", d: 0.18, h: 0.54 },
+  { src: shot("structured-blouse", "Ivory", "short:longer"), label: ["Change", "both"],                focus: "whole", d: 0.16, h: 0.52 },
+  { src: shot("wrap-top", "Ivory", "long:normal"),           label: ["Wrap top", "Long sleeve"],       focus: "whole", d: 0.16, h: 0.50 },
+  { src: shot("wrap-top", "Ivory", "long:longer"),           label: ["Change", "the length"],          focus: "whole", d: 0.16, h: 0.70 },
 ];
 for (const s of SEQ) {
   await change({ src: s.src, focus: s.focus, label: s.label, top: s.top,
@@ -131,10 +139,28 @@ for (const s of SEQ) {
 // its own image, which is why the video could be made at all. Verified against
 // catalog.ts rather than typed: the count is the number of combination images
 // that exist.
-at(render(photoFrame({
-  src: shot("pleated-trousers", "Burgundy", "wide:full"), focus: "trouser",
-  top: "128 ways<br>to cut them.", topSub: "Eight pieces. Every one of them, drawn.",
-}), "num"), 2.4);
+// Founder: "you randomly added pleated trousers in burgundy, it doesn't make
+// any sense." It did not. One garment cannot illustrate a count. Twenty of the
+// hundred and twenty-eight, on screen at once, is the only picture that means
+// "128".
+const MOSAIC = [];
+for (const [slug, combos] of [
+  ["utility-shirt", ["base", "long:normal", "long:longer", "short:longer"]],
+  ["pleated-trousers", ["base", "wide:full", "wide:cropped", "straight:cropped"]],
+  ["structured-blouse", ["long:normal", "long:longer", "short:longer"]],
+  ["cargo-trousers", ["base", "wide:full", "wide:cropped"]],
+  ["wrap-top", ["long:normal", "long:longer"]],
+  ["oversized-shirt", ["base", "short:normal"]],
+  ["wide-leg-trousers", ["base", "wide:full"]],
+  ["banded-trousers", ["wide:full", "straight:cropped"]],
+]) {
+  const cs = ["Ivory", "Navy", "Burgundy", "White"];
+  combos.forEach((c, i) => MOSAIC.push(shot(slug, cs[i % cs.length], c)));
+}
+at(render(mosaicFrame({
+  srcs: MOSAIC.slice(0, 20), cols: 4,
+  top: "128 ways<br>to cut them.", topSub: "Eight pieces. Every one of them drawn.",
+}), "num"), 2.6);
 
 // ------------------------------------------------- the colours, then the line
 const rows = [

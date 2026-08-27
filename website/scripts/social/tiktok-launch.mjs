@@ -161,6 +161,27 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#F2EDE4}
 .top .s{margin-top:14px;font-family:'Cormorant Garamond',serif;font-weight:300;
   font-size:36px;color:#4A443B;letter-spacing:.4px}
 
+
+/* ---- two garments side by side, so the difference is SIMULTANEOUS ----
+   The founder: on the trousers "we don't notice the difference, it feels like
+   it's repeating itself". Sequentially, a leg that gets wider is a small change
+   between two frames a second apart; side by side it is one picture and the eye
+   gets it instantly. Sleeves survive a sequence because a bare forearm is
+   obvious; a leg width does not. */
+.duo{position:absolute;inset:0;display:flex;z-index:2;background:#F2EDE4;gap:3px}
+.duo .half{position:relative;flex:1;overflow:hidden}
+.duo .half img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.duo .tag{position:absolute;left:0;right:0;bottom:0;background:#F2EDE4;padding:22px 26px 26px}
+.duo .tag b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;
+  letter-spacing:3.5px;text-transform:uppercase;color:#171512}
+.duo .tag span{display:block;margin-top:4px;font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:27px;letter-spacing:3px;text-transform:uppercase;color:#5A5349}
+
+/* ---- a mosaic, for the moment the video says how many there are ---- */
+.mosaic{position:absolute;inset:0;display:grid;z-index:2;background:#F2EDE4;gap:2px}
+.mosaic div{position:relative;overflow:hidden}
+.mosaic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
 /* ---- an opening title laid over the garment, which then fades away ----
    The founder: start with "you customise, we tailor" and behind it we see the
    design changing. So it is an overlay on top of live frames rather than a card
@@ -297,6 +318,27 @@ const crossFrame = ({ from, to, p, focus = "full", note = [], top, topSub, price
   `);
 };
 
+
+/** Two garments side by side, each labelled. The difference is one glance. */
+const duoFrame = ({ left, right, focus = "trouser", top, topSub }) => {
+  const half = (h) => `<div class="half"><img src="${h.src}" style="${FOCUS[h.focus ?? focus]}">
+      <div class="tag"><b>${h.a}</b><span>${h.b}</span></div></div>`;
+  const overlay = top
+    ? `<div class="top"><div class="l${top.replace(/<br>/g, " ").length > 24 ? " sm" : ""}">${top}</div>${topSub ? `<div class="s">${topSub}</div>` : ""}</div>`
+    : "";
+  return page(`${overlay}<div class="duo">${half(left)}${half(right)}</div>`);
+};
+
+/** Many combinations at once. The point of the frame is the COUNT. */
+const mosaicFrame = ({ srcs, cols = 4, top, topSub }) => {
+  const overlay = top
+    ? `<div class="top"><div class="l${top.replace(/<br>/g, " ").length > 24 ? " sm" : ""}">${top}</div>${topSub ? `<div class="s">${topSub}</div>` : ""}</div>`
+    : "";
+  return page(`${overlay}<div class="mosaic" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${Math.ceil(srcs.length / cols)},1fr)">
+    ${srcs.map((s) => `<div><img src="${s}" style="object-position:50% 42%"></div>`).join("")}
+  </div>`);
+};
+
 /** Four horizontal colour bands sliding in from alternating sides. p: 0 to 1. */
 const splitFrame = ({ rows, p, line }) => {
   const ease = 1 - Math.pow(1 - Math.min(1, Math.max(0, p)), 3);
@@ -377,7 +419,7 @@ async function dissolve(fromPng, toPng, steps, outPrefix) {
   return out;
 }
 
-export { render, encode, hold, dissolve, photoFrame, crossFrame, sayFrame, gridFrame, splitFrame, tenetsFrame, endFrame, shot, shotBack, page, W, H, FPS, OUTDIR, TMP };
+export { render, encode, hold, dissolve, photoFrame, crossFrame, duoFrame, mosaicFrame, sayFrame, gridFrame, splitFrame, tenetsFrame, endFrame, shot, shotBack, page, W, H, FPS, OUTDIR, TMP };
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   console.log("This module is the engine. Run scripts/social/tiktok-videos.mjs to build the set.");
