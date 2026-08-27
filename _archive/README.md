@@ -24,3 +24,20 @@ the README at the repo root.
 - **`brand-assets/`** stays at the root. It is the working folder for Instagram
   and TikTok production. ⚠️ It is gitignored and exists **on disk only** — it
   cannot be recovered from git if it is lost.
+
+## `duplicate-png-names/` — added 2026-08-27
+
+100 files that reappeared in `website/public/catalog/` after the 2026-08-27
+rename of JPEG-data files from `.png` to `.jpg`. Every one was verified
+**byte-identical** to its surviving `.jpg` twin, so no image content is lost by
+moving them here — git holds all of it under the `.jpg` names.
+
+⚠️ **They did not come back from git.** Their mtimes are the original
+2026-08-21, which a `git checkout` would have reset to the restore time. Taken
+with the `fabrics 2.ts` / `encode 2` / `shaklek-spec 2.pdf` conflict copies
+found the same day, **the repository appears to sit under a file-sync tool
+(iCloud/Dropbox) that can resurrect deleted files.** If deletions keep undoing
+themselves, that is where to look first — not at git.
+
+Gitignored, because tracking a second copy of every catalog image would double
+the repository for nothing.

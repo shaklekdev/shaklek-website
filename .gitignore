@@ -62,3 +62,7 @@ website/scripts/social/encode
 #     carries that CUSTOMER'S MEASUREMENTS. Same PII rule as CLAUDE.md §0.
 /_archive/screenshots-2026-08-15/
 /_archive/downloaded-tech-packs/
+# 100 byte-identical duplicates of catalog .jpg files, moved out of
+# website/public/ on 2026-08-27. Kept rather than deleted per CLAUDE.md, but
+# ignored: git already holds every one of them under its .jpg name.
+/_archive/duplicate-png-names/
