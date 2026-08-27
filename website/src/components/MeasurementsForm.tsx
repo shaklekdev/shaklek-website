@@ -23,6 +23,7 @@ export default function MeasurementsForm() {
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Drains anything the "Save my measurements" button parked before sending
   // the customer through sign-up.
@@ -73,17 +74,49 @@ export default function MeasurementsForm() {
   function updateField(key: keyof Measurements, value: string) {
     setFields((f) => ({ ...f, [key]: value }));
     setSaved(false);
+    setError(null);
   }
 
+  // ⚠️ THIS SAID "Saved" FOR AN EMPTY FORM, AND FOR A FAILED REQUEST.
+  //
+  // It had no validation at all and called setSaved(true) unconditionally --
+  // so pressing Save with every box empty wrote five empty columns and showed
+  // the customer a confirmation, and a 401 or a 500 did exactly the same. That
+  // is the failure shape planning/security/rca-2026-08-27.md names as the
+  // common cause of all five bugs written up the same night: a success signal
+  // derived from a proxy ("the request returned") instead of from the effect.
+  //
+  // Reported by a reviewer who was signed in: "clicking on Save measurements
+  // marks save even if I put nothing."
+  //
+  // Same ranges as the other two forms, from lib/measurements, so a number
+  // accepted here cannot be rejected at checkout.
+  const filled = FIELD_LABELS.filter((f) => fields[f.key].trim() !== "");
+  const outOfRange = filled.filter((f) => {
+    const v = Number(fields[f.key]);
+    return !Number.isFinite(v) || v < f.min || v > f.max;
+  });
+  const hasSomething = filled.length > 0 || fields.notes.trim() !== "";
+  const canSave = hasSomething && outOfRange.length === 0;
+
   async function handleSave() {
+    if (!canSave) return;
     setSaving(true);
+    setError(null);
     try {
-      await fetch("/api/account/measurements", {
+      const res = await fetch("/api/account/measurements", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(fields),
       });
+      // fetch resolves on 401 and 500 -- only res.ok means it was written.
+      if (!res.ok) {
+        setError("Could not save just now. Please try again.");
+        return;
+      }
       setSaved(true);
+    } catch {
+      setError("Could not save just now. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -140,12 +173,24 @@ export default function MeasurementsForm() {
       <div className="mt-3 flex items-center gap-3">
         <button
           onClick={handleSave}
-          disabled={saving}
+          disabled={saving || !canSave}
+          title={
+            canSave
+              ? undefined
+              : outOfRange.length > 0
+                ? "Check the highlighted measurement"
+                : "Add a measurement first"
+          }
           className="rounded-full bg-accent px-5 py-2 text-xs text-white transition-opacity hover:opacity-90 disabled:opacity-40"
         >
           {saving ? "Saving…" : "Save"}
         </button>
         {saved && <span className="text-xs text-gold">Saved</span>}
+        {error && (
+          <span role="alert" className="text-xs text-red-700">
+            {error}
+          </span>
+        )}
       </div>
     </div>
   );
