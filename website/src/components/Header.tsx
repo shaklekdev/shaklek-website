@@ -47,13 +47,57 @@ export default function Header() {
           it sat ~700px in from the edge and still read as "middle" -- which is
           what the founder was seeing. A header is chrome, not content: it hugs
           the page. */}
-      <div className="flex items-center justify-between px-6 py-4 sm:px-10 sm:py-5">
+      {/* THREE COLUMNS, so the wordmark is centred on the PAGE rather than on
+          whatever is left over beside the icons. A flex row with two children
+          centres the mark between them and it drifts as either side changes
+          width; equal-basis outer columns pin it.
+
+          ⚠️ THE CENTRED MARK REVERSES THE FOUNDER'S OWN 2026-08-26 AMENDMENT.
+          Her reasoning then, kept because it may still be right: "a centred
+          wordmark reads as a fashion editorial, and this is a shop where people
+          have to find the cart." An outside reviewer asked for centred on
+          2026-08-27 and she passed it on with a mockup. To go back, swap the
+          justify classes below -- it is one line, not a rebuild. */}
+      {/* Constrained to the same max-w-6xl column as every page, so the icons
+          line up with the content instead of hugging the screen edge -- the
+          reviewer's point that an eye should not have to hunt the corners for
+          them. The previous full-bleed row existed only to stop a LEFT-aligned
+          wordmark reading as "middle" on a wide screen; with the mark centred
+          on purpose that reason is gone. */}
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-4 sm:py-5">
+        {/* A REAL PHONE NUMBER, on purpose, and the reviewer's argument for it
+            is a conversion one rather than a design one: the product imagery is
+            generated, and a site with AI pictures and an AI chatbot reads as a
+            scam. A human number visible without scrolling is what separates
+            "shop" from "drop-shipper" in UAE e-commerce, and it reassures the
+            larger, quieter group of visitors who never ask anything.
+
+            Same number as the footer. wa.me opens WhatsApp on a phone and
+            web.whatsapp.com on a desktop, so one link covers both. */}
+        <a
+          href="https://wa.me/971504766769"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Message us on WhatsApp"
+          className="flex items-center gap-2.5 justify-self-start text-text transition-colors hover:text-text-2"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M10.5 18.5h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <span className="hidden leading-tight sm:block">
+            <span className="block text-[10px] tracking-wide text-text-3 uppercase">
+              Need help? Message us
+            </span>
+            <span className="block text-[13px] font-medium">+971 50 476 6769</span>
+          </span>
+        </a>
         {/* items-CENTER, not items-start. The lockup is three stacked pieces --
             wordmark, gold rule, Arabic -- and they centre on each other. Only
             the lockup as a whole sits left on the page. Left-aligning the
             pieces individually hung the rule and the Arabic off the "S" and
             left the mark looking unfinished under its own right half. */}
-        <Link href="/" className="flex flex-col items-center leading-none">
+        <Link href="/" className="col-start-2 flex flex-col items-center leading-none">
           {/* Italiana, founder's pick 2026-08-26. Single weight and hairline
               thins, so it goes UP a step in size -- at 24px its strokes start
               to disappear on a phone -- and gains letter-spacing, which is
@@ -70,7 +114,7 @@ export default function Header() {
             شكلك
           </span>
         </Link>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 justify-self-end">
           {/* ONE LINK FOR BOTH STATES, and no Clerk in this component.
 
               This was `isSignedIn ? <UserButton/> : <Link href="/sign-in"/>`, which

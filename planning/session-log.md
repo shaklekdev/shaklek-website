@@ -61,7 +61,22 @@ working tree, "on disk" and "in git" are different things, and only one of them
 deploys.**
 
 
-### Session I — repo tidy (2026-08-27, IN PROGRESS)
+### Session I — reviewer UI feedback (2026-08-27, IN PROGRESS)
+
+⚠️ **Holding `website/src/components/Header.tsx`,
+`website/src/components/CustomizeParameters.tsx`,
+`website/src/components/SizePicker.tsx`, `website/src/components/DetailField.tsx`
+and `website/src/components/DesignCustomizer.tsx`.** Session G committed its
+sizing work and its social run does not touch these, but check before editing.
+
+Working an outside reviewer's list, relayed with two annotated mockups: centre
+the logo and bring the header icons off the corners, surface the WhatsApp
+number, put "100% linen" on the photo, give the customizer's section titles
+real weight and separators, raise Add to cart above the fold, and rework
+"Anything usually wrong with this size?" into a retractable positive
+"Make it your way".
+
+### Session I — repo tidy (2026-08-27, DONE)
 
 ⚠️ **Holding the repo ROOT only.** Creating `_archive/` and a root `README.md`,
 and moving stale root files into it. **Touching none of:** `website/`,
