@@ -85,12 +85,19 @@ const t1 = render(photoFrame({ src: OPEN_B, focus: "trouser", title: TITLE }), "
 const t2 = render(photoFrame({ src: OPEN_B, focus: "trouser",
   note: ["Pleated trousers", "Wide, full length"], price: "AED 429" }), "op2");
 
-f.push(...hold(t0, 1.1));
-for (const fr of await dissolve(t0, t1, 12, "opx")) f.push(fr);
-f.push(...hold(t1, 0.9));
-for (const fr of await dissolve(t1, t2, 10, "opy")) f.push(fr);
-f.push(...hold(t2, 0.5));
-prevPng = t2;
+// The line holds while the garment changes TWICE underneath it, so the idea
+// the video is selling starts in the first second rather than after the title.
+const t1b = render(photoFrame({ src: shot("pleated-trousers", "Navy", "wide:cropped"), focus: "trouser", title: TITLE }), "op1b");
+f.push(...hold(t0, 0.9));
+for (const fr of await dissolve(t0, t1, 10, "opx")) f.push(fr);
+f.push(...hold(t1, 0.5));
+for (const fr of await dissolve(t1, t1b, 9, "opxb")) f.push(fr);
+f.push(...hold(t1b, 0.5));
+const t2b = render(photoFrame({ src: shot("pleated-trousers", "Navy", "wide:cropped"), focus: "trouser",
+  note: ["Pleated trousers", "Wide, cropped"], price: "AED 429" }), "op2b");
+for (const fr of await dissolve(t1b, t2b, 9, "opy")) f.push(fr);
+f.push(...hold(t2b, 0.5));
+prevPng = t2b;
 
 // Fourteen changes. Every garment changes SHAPE, not just colour.
 const SEQ = [
@@ -117,6 +124,18 @@ for (const s of SEQ) {
                  dissolveSecs: s.d, holdFor: s.h, price: "From AED 389" });
 }
 
+// ------------------------------------------- the number, then the colours
+//
+// The strongest thing this brand can say, and it was missing entirely: how many
+// there are. 8 pieces x 4 cuts x 4 colours = 128, and every one of those has
+// its own image, which is why the video could be made at all. Verified against
+// catalog.ts rather than typed: the count is the number of combination images
+// that exist.
+at(render(photoFrame({
+  src: shot("pleated-trousers", "Burgundy", "wide:full"), focus: "trouser",
+  top: "128 ways<br>to cut them.", topSub: "Eight pieces. Every one of them, drawn.",
+}), "num"), 2.4);
+
 // ------------------------------------------------- the colours, then the line
 const rows = [
   { src: shot("utility-shirt", "Ivory", "long:longer"), label: "Ivory", dark: true },
@@ -130,11 +149,13 @@ for (let i = 0; i <= TRAVEL; i++)
 at(render(splitFrame({ rows, p: 1, line: "And four colours." }), "x99"), 2.3);
 
 // --------------------------------------------------------------- the tenets
+// Two lines, not three, and 2.2s rather than 3.2. The founder's note about
+// white pages applies here too: a static card is a page, and the third tenet
+// was the weakest of them.
 at(render(tenetsFrame([
-  { k: "From AED 389", v: "One price per piece type. Fabric and every option included." },
-  { k: "Nothing on a shelf", v: "Your piece does not exist until you ask for it. No overproduction, no waste." },
-  { k: "Natural fibre only", v: "100% linen against your skin. Breathable, never synthetic." },
-]), "t1"), 3.2);
+  { k: "Nothing on a shelf", v: "Your piece does not exist until you ask for it." },
+  { k: "From AED 389", v: "One price. Every option and the tailoring included." },
+]), "t1"), 2.2);
 at(render(endFrame(), "t2"), 1.4);
 
 const out = `${OUTDIR}/00-you-are-the-designer.mp4`;

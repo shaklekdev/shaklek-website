@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { renderParamsForCategory } from "@/data/parameterSliders";
 import { colors, sizes } from "@/data/colors";
+import { SELLABLE_FABRICS } from "@/data/fabrics";
 
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
@@ -102,10 +103,16 @@ const tenetGroups = [
 // = 192. The higher figures appear to have counted the Shaklek+ sliders, which
 // are locked and cannot be chosen. Computed here rather than typed, so it
 // follows parameterSliders.ts and colors.ts instead of drifting away from them.
+// ⚠️ THE FABRIC COUNT WAS HARDCODED TO 2 AND IS NOW WRONG. This computed 192 by
+// multiplying in two fabrics, but cotton has no supplier and is
+// `available: false` in fabrics.ts, so 96 of those 192 ways cannot be bought.
+// A number that counts an unbuyable option is a false claim to a customer, and
+// it was live. It reads from SELLABLE_FABRICS now, so it follows the code the
+// way the rest of this figure already did instead of drifting on one constant.
 const SHIRT_WAYS =
   renderParamsForCategory("Shirt").reduce((n, p) => n * p.options.length, 1) *
   colors.length *
-  2 *
+  SELLABLE_FABRICS.length *
   sizes.length;
 
 export default function OurStoryPage() {
