@@ -83,20 +83,22 @@ export const OUTCOME = {
 // The three reasons to buy here rather than anywhere else, as tiles under the
 // steps. Kept to three for the same reason the steps are three.
 export const BENEFITS = [
+  // Order and titles from the founder's mockup, 2026-08-27. Custom-made leads,
+  // because it is the only one of the three a normal shop cannot claim.
   {
-    k: `From AED ${Math.min(...catalog.map((i) => i.price))}`,
+    k: "100% custom-made",
+    v: "Nothing on a shelf. Your piece does not exist until you ask for it. No overproduction, no waste.",
+    icon: "sewing-machine",
+  },
+  {
+    k: `One price, from AED ${Math.min(...catalog.map((i) => i.price))}`,
     v: "One price per piece type. Fabric and every option included.",
     icon: "tag",
   },
   {
-    k: "Nothing on a shelf",
-    v: "Your piece does not exist until you ask for it. No overproduction, no waste.",
-    icon: "leaf",
-  },
-  {
-    k: "Natural fibre only",
-    v: "100% linen against your skin. Breathable, never synthetic.",
-    icon: "thread",
+    k: "100% natural",
+    v: "Linen only. Breathable natural fabric against your skin, never synthetic.",
+    icon: "flax",
   },
 ];
 
