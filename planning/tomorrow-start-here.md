@@ -49,6 +49,63 @@ Given verbatim, in her order. Item 7 is explicitly sequenced last.
 6. [ ] **New TikTok content** — check trends first.
 7. [ ] **A marketing agent built on Fable**, plus a new marketing folder.
 
+### The founder's own list — verified 2026-08-27, nothing here is assumed
+
+Checked against Stripe, AWS and production, not read out of this file. If you
+are about to report one of these as open, re-check it first: two items on this
+list were already done when they were last read aloud.
+
+**Legal / compliance**
+
+- [ ] ⚠️ **DET advertising permit — before any discount campaign, not after.**
+      Dubai's Department of Economy and Tourism requires a permit to *advertise*
+      a discount. Creating a code in Stripe is not the gate; advertising it is.
+      This bites the day the welcome offer goes live, and it is the kind of
+      thing that stops a campaign after the creative is paid for. Flagged in
+      `planning/pricing-todo.md` since 2026-08-22 and still unverified.
+      **Founder's decision on the offer itself: 10% or nothing, never 20%.**
+
+**Accounts only she can create**
+
+- [ ] **Sentry** (free tier) — send the DSN and it is a package plus one
+      variable. ⚠️ New variables need adding to the Amplify **build spec's**
+      `env | grep` allowlist as well as the console, or they never reach the
+      running app.
+- [ ] **Meta** — create the Pixel, verify the domain, set
+      `NEXT_PUBLIC_META_PIXEL_ID` and `NEXT_PUBLIC_FB_DOMAIN_VERIFICATION`
+      (allowlist too), upload the feed URL. Everything on our side is built and
+      **inert**. ⚠️ **Do not set `NEXT_PUBLIC_LAUNCH_CODE`** — no active
+      promotion code exists.
+
+**Money**
+
+- [ ] **Two AED 3.89 TEST99 charges unrefunded** on her own card:
+      `ch_3U7iQkFG6ccJjMKM1ARqYmrs`, `ch_3U8GfHFG6ccJjMKM0fbRXZnf`.
+      Verified outstanding 2026-08-26.
+- [ ] **Fabric prices — Friday 2026-08-28.** Cotton's entry in
+      `src/data/fabrics.ts` is switched off, one flag to restore. Her plan:
+      cotton keeps today's prices, linen +49. That is a price rise in
+      `catalog.ts`, not a `surchargeAed`.
+
+**Decisions waiting on her**
+
+- [ ] **Six proposed `CLAUDE.md` §0 rules** at the foot of
+      `planning/security/rca-2026-08-27.md`. Not applied — they change how every
+      future session works, so they are hers to approve.
+- [ ] **The centred wordmark reverses her own 2026-08-26 decision.** Her
+      reasoning is preserved in `Header.tsx`. Look at it live and keep or flip.
+- [ ] **What "architecture and end-to-end flow very clear" should contain.**
+      Ambiguous, and guessing wastes a session.
+
+**Still with Claude**
+
+- [ ] **The repeated / AI-sounding copy pass.** Deliberately not started: it
+      needs the customer-facing pages read end to end and the actual
+      repetitions listed *before* anything is rewritten. Rewriting on instinct
+      would undo copy she has already approved.
+
+---
+
 ### Carried over, still the founder's
 
 - [ ] **Sentry** — free tier, create the account, send the DSN. One package and
