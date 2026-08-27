@@ -208,8 +208,38 @@ export default function OurStoryPage() {
           <p className="text-xs tracking-wide text-text-3 uppercase">
             From our founder
           </p>
-          <div className="mt-6">
-            <div className="space-y-4 text-justify text-[15px] leading-relaxed text-text-2 hyphens-auto">
+
+          {/* THE QUESTION IS OUT LOUD; THE LETTER IS BEHIND A CLICK.
+              Founder's own proposal, 2026-08-27, and it is the same reasoning
+              that fixed the product page: a wall of text before anything else
+              loses the reader, and someone who wants the story will open it.
+              This sentence is the thesis of the whole page, so it is the one
+              thing that should never be collapsed. */}
+          <p className="font-display mt-5 text-[21px] leading-snug text-text sm:text-[23px]">
+            So I started wondering: what if clothes adapted to women instead of
+            women adapting to clothes?
+          </p>
+
+          <details className="group mt-6 border border-border-strong">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 marker:hidden">
+              <span className="text-[14px] text-text">
+                Read how Shaklek started
+              </span>
+              <span
+                aria-hidden="true"
+                className="shrink-0 text-lg leading-none text-text-3 group-open:hidden"
+              >
+                +
+              </span>
+              <span
+                aria-hidden="true"
+                className="hidden shrink-0 text-lg leading-none text-text-3 group-open:block"
+              >
+                &minus;
+              </span>
+            </summary>
+            <div className="border-t border-border px-5 py-5">
+              <div className="space-y-4 text-justify text-[15px] leading-relaxed text-text-2 hyphens-auto">
               {/* The founder's note, rewritten by her on 2026-08-25 and used
                   verbatim. Two changes worth not "improving" back:
 
@@ -271,11 +301,12 @@ export default function OurStoryPage() {
                 If you have an idea or feedback to make Shaklek better, please
                 reach out. This isn&apos;t just a brand. It&apos;s yours.
               </p>
-              <p className="pt-1 text-sm font-medium text-text">
-                Nada, founder of Shaklek
-              </p>
+                <p className="pt-1 text-sm font-medium text-text">
+                  Nada, founder of Shaklek
+                </p>
+              </div>
             </div>
-          </div>
+          </details>
         </div>
       </div>
 
