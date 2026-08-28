@@ -595,26 +595,34 @@ That is not a broken feature, it is an outage, because Drizzle's bare
 so the failure is "nobody can buy" and "cards are charged and the order is
 never marked paid", not "the new page 500s".
 
-**⚠️ AND `drizzle-kit migrate` DOES NOT WORK ON THIS DATABASE. It exits 0 and
-does nothing.** Two reasons, found 2026-08-28 after it "succeeded" twice while
-creating no table:
+**⚠️ THERE ARE TWO DATABASES AND `.env.local` POINTS AT THE WRONG ONE.**
 
-1. `drizzle.config.ts` reads `process.env.DATABASE_URL`, and **drizzle-kit does
-   not load `.env.local`**. Without the variable it fails loudly, which is fine.
-2. Worse, with the variable set it fails **silently**. This schema was created
-   with `drizzle-kit push`, so `drizzle.__drizzle_migrations` is **empty** —
-   the tool believes 0000 onwards are all unapplied, tries to create tables
-   that already exist, and no-ops out with exit 0.
+```
+dev   ep-jolly-cloud-b1e2dn40-pooler…   ← what website/.env.local uses
+prod  ep-blue-cell-b1krtp0o-pooler…     ← what Amplify actually serves with
+```
 
-So apply the generated SQL yourself, in a transaction, after reading it:
+They differ only after `ep-`. On 2026-08-28 the `fit_feedback` table was
+created, verified against `information_schema`, and reported done — **on dev**,
+while the code was already pushed. Production served for a while querying a
+table that did not exist there and `/account` broke for every signed-in
+customer. Every check run was a real check; not one asked *which database*.
+
+**⚠️ AND `drizzle-kit migrate` DOES NOTHING HERE.** The schema was created with
+`drizzle-kit push`, so `drizzle.__drizzle_migrations` is empty; the tool thinks
+every migration since 0000 is unapplied, tries to create tables that exist, and
+**exits 0 having done nothing**. It did that twice before anyone checked.
+
+**So use the script, which names the database out loud:**
 
 ```bash
 cd website
-U="$(grep -m1 '^DATABASE_URL=' .env.local | cut -d= -f2-)"
-cat drizzle/00NN_*.sql        # READ IT FIRST. Additive only, or stop.
-DATABASE_URL="$U" node --input-type=module -e "…begin/unsafe/commit…"
-git push origin main          # only then
+node scripts/db-migrate.mjs --target=prod   # or --target=dev. No default.
 ```
+
+It prints the host, refuses if the host does not match the target, applies each
+file in its own transaction, records it in `shaklek_migrations` (our ledger,
+not drizzle's), and prints the tables afterwards.
 
 Then **verify against `information_schema`**, never against the exit code —
 that is what the exit code got wrong. Additive changes are safe in this order;
