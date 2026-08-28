@@ -66,7 +66,7 @@ const QUESTIONS = [
     a: (
       <>
         100% linen today, and nothing else. It is a natural fibre that breathes
-        in Gulf heat and softens with every wash. Linen creases. That is the
+        in Gulf heat and softens with wear. Linen creases. That is the
         fibre behaving normally, not a fault. Organic cotton is coming; we
         would rather not list it until we can cut it.
       </>

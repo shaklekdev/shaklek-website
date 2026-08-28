@@ -17,6 +17,7 @@ import CustomizeParameters from "@/components/CustomizeParameters";
 import { resolveFitNotes } from "@/data/fitNotes";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
+import ProductDisclosure from "@/components/ProductDisclosure";
 import SaveMeasurements from "@/components/SaveMeasurements";
 import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 
@@ -386,6 +387,15 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 {editingId ? "Save changes" : "Add to cart"}
               </button>
             </div>
+
+            {/* The consumer information UAE law requires with a product:
+                fibre composition, origin, care and return terms, in Arabic
+                alongside English. Placed AFTER Add to cart on purpose -- it is
+                reference the customer must be able to find, not another
+                decision in front of the button. See
+                data/productDisclosure.ts for the law and for why Care is
+                still missing. */}
+            <ProductDisclosure garmentName={item.name} />
                 </div>
               </>
             }
