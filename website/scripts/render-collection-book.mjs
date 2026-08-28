@@ -21,6 +21,7 @@ import PDFDocument from "pdfkit";
 import { catalog } from "../src/data/catalog.ts";
 import { renderParamsForCategory } from "../src/data/parameterSliders.ts";
 import { colors } from "../src/data/colors.ts";
+import { versionsForItem } from "../src/data/versionIds.ts";
 
 // Inspection flags. `sips` and qlmanage can only rasterise page one, so
 // checking an item page meant either shipping a layout nobody had looked at or
@@ -115,6 +116,12 @@ for (const item of catalog) {
       label: opts.map((o) => o.text.toLowerCase()).join(", "),
     }));
 
+  // The stable code for each cut. See src/data/versionIds.ts: it exists so a
+  // number written in the margin at the tailor's table can be typed back in
+  // against something unambiguous.
+  const versions = versionsForItem(item.slug);
+  const codeFor = (key) => versions.find((v) => v.comboKey === key)?.id ?? "";
+
   if (!(NO_COVER && first)) doc.addPage();
   first = false;
   doc.fontSize(8).fillColor(MUTED).font("Helvetica-Bold").text(item.category.toUpperCase(), { characterSpacing: 1.4 });
@@ -134,13 +141,19 @@ for (const item of catalog) {
   // column for one cut and across a row for the thing being changed.
   const labelTop = doc.y;
   combos.forEach((c, i) => {
+    const x = left + i * (cw + gap);
     doc
-      .fontSize(8)
+      .fontSize(9)
       .fillColor(INK)
       .font("Helvetica-Bold")
-      .text(c.label, left + i * (cw + gap), labelTop, { width: cw, align: "center" });
+      .text(codeFor(c.key), x, labelTop, { width: cw, align: "center" });
+    doc
+      .fontSize(8)
+      .fillColor(MUTED)
+      .font("Helvetica")
+      .text(c.label, x, labelTop + 12, { width: cw, align: "center" });
   });
-  doc.y = labelTop + 22;
+  doc.y = labelTop + 34;
 
   for (const view of ["front", "back"]) {
     const top = doc.y;
@@ -169,6 +182,20 @@ for (const item of catalog) {
   doc.fontSize(8).fillColor(MUTED).font("Helvetica-Bold").text("AVAILABLE IN", left, doc.y, { characterSpacing: 1.2 });
   doc.moveDown(0.3);
   const sy = doc.y;
+  // SOMEWHERE TO WRITE THE NUMBER. The whole point of the codes above: the
+  // tailor says how many metres a cut takes, it gets written here against a
+  // code, and it is typed back in without anyone guessing which cut was meant.
+  doc.moveDown(0.5);
+  const mTop = doc.y;
+  combos.forEach((c, i) => {
+    const x = left + i * (cw + gap);
+    doc.fontSize(7).fillColor(MUTED).font("Helvetica")
+      .text(`${codeFor(c.key)}  metres`, x, mTop, { width: cw, align: "center" });
+    doc.moveTo(x + 8, mTop + 22).lineTo(x + cw - 8, mTop + 22)
+      .strokeColor(RULE).lineWidth(0.5).stroke();
+  });
+  doc.y = mTop + 32;
+
   colors.forEach((c, i) => {
     const x = left + i * 120;
     doc.rect(x, sy, 22, 14).fillColor(c.hex).fill();

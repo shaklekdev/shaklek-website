@@ -118,22 +118,22 @@ export const catalog: CatalogItem[] = [
     comboImages: {
       Ivory: {
         "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-straight-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-straight-cropped-back-v2.jpg" },
-        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-full-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-full-back-v2.jpg" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-full-front-v3.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-full-back-v3.jpg" },
         "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-back-v2.jpg" },
       },
       Burgundy: {
         "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-straight-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-straight-cropped-back-v2.jpg" },
-        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-full-front.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-full-back.jpg" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-full-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-full-back-v2.jpg" },
         "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-combo-wide-cropped-back-v2.jpg" },
       },
       White: {
         "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-straight-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-straight-cropped-back-v2.jpg" },
-        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-full-front.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-full-back-v2.jpg" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-full-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-full-back-v2.jpg" },
         "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-combo-wide-cropped-back-v2.jpg" },
       },
       Navy: {
         "straight:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-straight-cropped-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-straight-cropped-back-v2.jpg" },
-        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-full-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-full-back-v2.jpg" },
+        "wide:full": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-full-front-v3.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-full-back-v3.jpg" },
         "wide:cropped": { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-front-v3.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-combo-wide-cropped-back-v3.jpg" },
       },
     },
