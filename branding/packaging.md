@@ -126,6 +126,44 @@ a hairline serif to do something it cannot.
 Going back to Georgia would solve embroidery and reintroduce the problem that
 started this — and a system font is weak ground for a brand mark regardless.
 
+
+## Care and compliance, settled 2026-08-28
+
+**DRY CLEAN ONLY.** Founder's decision, and it is a fit decision rather than a
+laundry one. Unwashed linen shrinks roughly 4 to 10% on its first wash, and
+these garments are cut to a customer's own measurements: a "wash at 30" label on
+fabric that was never pre-shrunk gives her a piece that fits perfectly once and
+then does not, with the remake free under Shaklek's own returns policy.
+
+**If home washing is ever wanted back, the route is to pre-wash the fabric
+before cutting.** Then wash-at-30 becomes true. Worth revisiting, because dry
+cleaning is a real running cost to the customer and some will wash it anyway.
+
+**Arabic is mandatory on the label.** Federal Law 15/2020 Art. 26: consumer data
+"shall be made in Arabic, and other languages may be used in addition to
+Arabic". Breach carries AED 3,000 to 200,000. Also applies to the WEBSITE:
+Cabinet Resolution 66/2023 Art. 40 requires fibre composition, origin, care and
+return terms on the product page in Arabic. **The site is English only and that
+is an open compliance gap**, separate from packaging.
+
+**ECAS registration: the founder's position is that it does not apply.** Cabinet
+Resolution 54/2019 Art. 2(2)(b) excludes "textile products crafted by
+self-employed tailors", and she is sending orders to a tailor who is not her
+employee rather than manufacturing. Recorded as her decision, made with the
+knowledge that the legal brief recommended a lawyer's read of that exclusion.
+If it is ever found to apply, the label needs the ECAS conformity mark and a
+production batch code added, both required by Art. 5.
+
+⚠️ **The Arabic on the care label has not been read by an Arabic speaker.** It
+is a legal disclosure. Three separate rendering faults were found and fixed by
+eye before it looked right, and each of the broken versions rendered cleanly and
+looked deliberate:
+
+- ٪ (U+066A) is absent from Reem Kufi and printed as an empty box
+- the shaper does not apply the bidirectional algorithm, so "كتان 100%" as one
+  string printed "%001", the digits backwards
+- once split into two runs, an unmeasured text box wrapped "100%" onto two lines
+
 ## Print rules — "print logo everywhere"
 
 Agreed, with one exception that matters.

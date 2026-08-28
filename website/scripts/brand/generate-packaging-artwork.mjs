@@ -109,52 +109,56 @@ function plain(doc, cx, baseY, text, sizePt, fill = INK, tracking = 0) {
 // Drawn as vector, at a size in mm. The standard five for linen. Each is a
 // simple geometric figure; getting one wrong is a consumer-protection issue,
 // so they are drawn precisely and listed on the proof sheet for confirmation.
+/**
+ * DRY CLEAN ONLY. Founder's decision, 2026-08-28.
+ *
+ * The reasoning is worth keeping, because it is a fit decision and not a
+ * laundry one. Unwashed linen shrinks roughly 4 to 10% on its first wash. These
+ * garments are cut to a customer's own measurements, so a "wash at 30" label on
+ * fabric that was never pre-shrunk produces a piece that fits perfectly once and
+ * then does not, and the remake is free under Shaklek's own returns policy.
+ * Dry cleaning removes that failure entirely.
+ *
+ * The alternative, if she ever wants home washing back: pre-wash the fabric
+ * before cutting. Then wash-at-30 becomes true and the customer keeps a garment
+ * she can look after herself.
+ *
+ * The set: do not wash, do not bleach, do not tumble dry, iron medium,
+ * professional dry clean (P).
+ */
 function careSymbols(doc, x, y, h, gap, fill = INK) {
   const lw = h * 0.09;
   doc.lineWidth(lw).strokeColor(fill);
   const at = (i) => x + (h + gap) * i;
-  // 1. wash tub, 30
+  // 1. wash tub, crossed: DO NOT WASH
   let cx = at(0);
   doc.moveTo(cx, y + h * 0.30).lineTo(cx + h * 0.06, y + h * 0.30)
      .lineTo(cx + h * 0.12, y + h * 0.22).lineTo(cx + h * 0.88, y + h * 0.22)
      .lineTo(cx + h * 0.94, y + h * 0.30).lineTo(cx + h, y + h * 0.30).stroke();
   doc.moveTo(cx + h * 0.05, y + h * 0.30).lineTo(cx + h * 0.16, y + h * 0.88)
      .lineTo(cx + h * 0.84, y + h * 0.88).lineTo(cx + h * 0.95, y + h * 0.30).stroke();
-  doc.font("Helvetica").fontSize(h * 0.40).fillColor(fill)
-     .text("30", cx, y + h * 0.42, { width: h, align: "center" });
-  // 2. triangle crossed: do not bleach
+  doc.moveTo(cx + h * 0.02, y + h * 0.16).lineTo(cx + h * 0.98, y + h * 0.94).stroke();
+  // 2. triangle, crossed: do not bleach
   cx = at(1);
   doc.moveTo(cx + h / 2, y + h * 0.16).lineTo(cx + h * 0.92, y + h * 0.88)
      .lineTo(cx + h * 0.08, y + h * 0.88).closePath().stroke();
   doc.moveTo(cx + h * 0.16, y + h * 0.24).lineTo(cx + h * 0.84, y + h * 0.84).stroke();
-  // 3. square with a circle, crossed: DO NOT TUMBLE DRY
-  //    Added on the legal brief's advice. Tumble drying is the single biggest
-  //    shrink risk for linen, and leaving the symbol off implies it is allowed.
+  // 3. square with circle, crossed: do not tumble dry
   cx = at(2);
   doc.rect(cx + h * 0.08, y + h * 0.16, h * 0.84, h * 0.72).stroke();
   doc.circle(cx + h * 0.50, y + h * 0.52, h * 0.24).stroke();
   doc.moveTo(cx + h * 0.14, y + h * 0.22).lineTo(cx + h * 0.86, y + h * 0.82).stroke();
-  return { rowWidth: at(2) + h - x };
 }
-/** second row: line dry, iron, dry clean */
+/** second row: iron medium, professional dry clean */
 function careSymbols2(doc, x, y, h, gap, fill = INK) {
-  const lw = h * 0.09;
-  doc.lineWidth(lw).strokeColor(fill);
+  doc.lineWidth(h * 0.09).strokeColor(fill);
   const at = (i) => x + (h + gap) * i;
-  // 4. square with a vertical bar: LINE DRY
-  //    Line dry, not dry flat. Dry flat is a knitwear instruction; hanging woven
-  //    linen while damp is what keeps its drape and reduces creasing.
   let cx = at(0);
-  doc.rect(cx + h * 0.08, y + h * 0.16, h * 0.84, h * 0.72).stroke();
-  doc.moveTo(cx + h * 0.50, y + h * 0.24).lineTo(cx + h * 0.50, y + h * 0.80).stroke();
-  // 5. iron, two dots: medium
-  cx = at(1);
   doc.moveTo(cx + h * 0.10, y + h * 0.74).lineTo(cx + h * 0.90, y + h * 0.74)
      .lineTo(cx + h * 0.74, y + h * 0.36).lineTo(cx + h * 0.28, y + h * 0.36).closePath().stroke();
   doc.circle(cx + h * 0.42, y + h * 0.56, h * 0.055).fill(fill);
   doc.circle(cx + h * 0.58, y + h * 0.56, h * 0.055).fill(fill);
-  // 6. circle with P: professional dry clean
-  cx = at(2);
+  cx = at(1);
   doc.circle(cx + h / 2, y + h * 0.52, h * 0.38).stroke();
   doc.font("Helvetica").fontSize(h * 0.40).fillColor(fill)
      .text("P", cx, y + h * 0.36, { width: h, align: "center" });
@@ -191,28 +195,46 @@ makePdf("02-care-label", 25, 45, (doc, w, h) => {
   // be used in addition to Arabic". Penalty for breach runs AED 3,000 to
   // 200,000. The first version of this label was English only.
   monogram(doc, w / 2, 6.5 * MM, 3.6 * MM);
-  // Latin digits in the Arabic line, deliberately. Reem Kufi has no ARABIC
-  // PERCENT SIGN (U+066A) and rendered it as an empty box on the first proof;
-  // Arabic-Indic digits then raised a bidirectional ordering question I cannot
-  // settle by eye. Latin digits inside Arabic text are normal on Gulf labels and
-  // have one unambiguous reading.
+  // ⚠️ MIXED ARABIC AND DIGITS ARE DRAWN AS TWO SEPARATE RUNS, POSITIONED BY
+  // HAND. Passing "كتان 100%" through the shaper as one string printed "%001":
+  // fontkit shapes glyphs but does not apply the bidirectional algorithm, so
+  // the digits came out in logical order inside a right-to-left line, which is
+  // backwards. Three attempts got this wrong in three different ways, and each
+  // one rendered cleanly and looked deliberate.
   //
-  // ⚠️ THE ARABIC ON THIS LABEL MUST BE READ BY AN ARABIC SPEAKER BEFORE IT IS
-  // PRINTED. It is a legal disclosure under Federal Law 15/2020 Art. 26 and I
-  // cannot verify Arabic typesetting the way I can verify a measurement.
-  arabic(doc, w / 2, 11 * MM, "كتان 100%", 3.0 * MM);
+  // In correct bidi the number sits to the LEFT of the Arabic word and reads
+  // left to right, which is what these two calls produce.
+  //
+  // ⚠️ AN ARABIC SPEAKER MUST STILL READ THIS BEFORE IT IS PRINTED. It is a
+  // legal disclosure under Federal Law 15/2020 Art. 26, and Arabic typesetting
+  // is not something I can verify the way I can verify a measurement.
+  {
+    const word = shape("ReemKufi-Regular.ttf", "كتان", 3.0 * MM);
+    // MEASURE the number, do not guess its box. A 4.6mm box was too narrow for
+    // "100%" at 8pt, so it wrapped to two lines and printed "10" above "0%"
+    // across the line beneath. widthOfString is exact.
+    doc.font("Helvetica").fontSize(8);
+    const numW = doc.widthOfString("100%");
+    const total = numW + 1.4 * MM + word.width;
+    const left = (w - total) / 2;
+    doc.fillColor(INK).text("100%", left, 11 * MM - 8, { width: numW + 2, lineBreak: false });
+    draw(doc, word.segs, left + numW + 1.4 * MM, 11 * MM, INK);
+  }
   plain(doc, w / 2, 15 * MM, "100% LINEN", 7, INK, 1.2);
   doc.moveTo(4 * MM, 17.5 * MM).lineTo(w - 4 * MM, 17.5 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
 
-  const sh = 4.0 * MM, gap = 1.0 * MM, rowW = sh * 3 + gap * 2;
-  careSymbols(doc, (w - rowW) / 2, 20 * MM, sh, gap);
-  careSymbols2(doc, (w - rowW) / 2, 25.5 * MM, sh, gap);
+  const sh = 3.8 * MM, gap = 1.0 * MM;
+  careSymbols(doc, (w - (sh * 3 + gap * 2)) / 2, 19.5 * MM, sh, gap);
+  careSymbols2(doc, (w - (sh * 2 + gap)) / 2, 24.5 * MM, sh, gap);
+  // The symbols are the legal form, but almost nobody reads them. The words say
+  // the same thing so the customer actually knows.
+  arabic(doc, w / 2, 32 * MM, "تنظيف جاف فقط", 2.5 * MM);
+  plain(doc, w / 2, 35.5 * MM, "DRY CLEAN ONLY", 5.6, INK, 0.9);
 
-  doc.moveTo(4 * MM, 32 * MM).lineTo(w - 4 * MM, 32 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
-  arabic(doc, w / 2, 36 * MM, "صنع في الإمارات", 2.6 * MM);
-  plain(doc, w / 2, 40 * MM, "MADE IN UAE", 6, INK, 1.0);
-  plain(doc, w / 2, 43.5 * MM, "SHAKLEK.COM", 4.8, MUTED, 0.9);
-}, "⚠️ Arabic added (legally required). Needs the ECAS mark and batch code before production");
+  doc.moveTo(4 * MM, 37.5 * MM).lineTo(w - 4 * MM, 37.5 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
+  arabic(doc, w / 2, 41 * MM, "صنع في الإمارات", 2.4 * MM);
+  plain(doc, w / 2, 44 * MM, "MADE IN UAE", 5.4, INK, 1.0);
+}, "dry clean only. ⚠️ the Arabic needs a native reader before printing");
 
 // 3. HANG TAG 50 x 90 mm ----------------------------------------------------
 makePdf("03-hang-tag", 50, 90, (doc, w, h) => {
