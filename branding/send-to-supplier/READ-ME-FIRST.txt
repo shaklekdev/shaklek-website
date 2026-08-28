@@ -8,7 +8,7 @@ START HERE:  artwork/
 
   artwork/01-woven-brand-label.pdf        45 x 18 mm   wordmark only
   artwork/02-care-label.pdf               25 x 45 mm   fibre, care, origin
-  artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark + order number
+  artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark
   artwork/04-thank-you-card-front.pdf    105 x 148 mm  A6
   artwork/05-thank-you-card-back.pdf     105 x 148 mm  A6
   artwork/06-tissue-seal-40mm.pdf         40 mm dia    gold, mark in cream
@@ -16,11 +16,7 @@ START HERE:  artwork/
   artwork/08-linen-bag-print.pdf         400 x 500 mm  print area guide
   artwork/09-mailer-placement.pdf        250 x 350 mm  placement guide
 
-TWO NOTES ON THOSE FILES
-
-  03-hang-tag: "A7F3C210" is a SPECIMEN, not a fixed value. The order number
-  is different on every garment. It shows you where the field sits and how big
-  it is. Please quote for variable data on this item.
+ONE NOTE ON THOSE FILES
 
   07-tissue-wrap: this is one tile. Step and repeat it across the 50 x 70 cm
   sheet. Keep it faint: it should read as texture, not as print.

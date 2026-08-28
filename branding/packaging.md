@@ -210,8 +210,16 @@ away with the wrapping, and the disclosure has to survive on the garment.
 4. **A size record.** The founder is right that the brand label carries **no
    size** — that is a considered, garment-first decision and it should hold. But
    made-to-measure customers reorder, and the tailor needs to know what was cut.
-   Put it where it does not touch the garment's look: **the hang tag** (which is
-   removed and thrown away) or **the care slip**, printed as the order reference
+   ⚠️ **The hang-tag idea below was wrong and is withdrawn (2026-08-28).** You
+   cannot print a per-order number on a tag you buy five hundred of before those
+   orders exist. The tag is bulk stock, the number is per garment, and I had
+   them on the same object. The customer already has her order number in the
+   confirmation email and her account, and the tailor has it on the tech pack.
+   There is nothing left for the tag to solve.
+
+   Original note, kept so the reasoning is visible: put it where it does not
+   touch the garment's look, the hang tag (which is removed and thrown away) or
+   the care slip, printed as the order reference
    rather than a size. Then the order in the database is the record.
 5. **Something that brings her back.** The single highest-return item in this
    whole list. A card with a code, or an invitation to send her measurements for

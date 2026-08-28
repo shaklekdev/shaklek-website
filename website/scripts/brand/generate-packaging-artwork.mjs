@@ -248,17 +248,24 @@ makePdf("02-care-label", 25, 45, (doc, w, h) => {
 }, "dry clean only. ⚠️ the Arabic needs a native reader before printing");
 
 // 3. HANG TAG 50 x 90 mm ----------------------------------------------------
+//
+// ⚠️ NO ORDER NUMBER. It used to carry one and the founder killed it with the
+// obvious question: how do you print an order number on a tag you are ordering
+// five hundred of, months before those orders exist? You cannot. The tag is
+// bulk stock; the number is per garment. I had the two on the same object.
+//
+// My reasoning was that she wants no size on the brand label, so a reference
+// had to live somewhere. It did not: the customer already has the number in her
+// confirmation email and her account, and the tailor has it printed on the tech
+// pack he works from. It solved a problem that was already solved, and it did it
+// by turning a cheap bulk print into variable data, which costs more per tag and
+// needs a different quote.
 makePdf("03-hang-tag", 50, 90, (doc, w, h) => {
-  // string hole
   doc.circle(w / 2, 7 * MM, 2.1 * MM).lineWidth(0.4).strokeColor("#B9B1A2").stroke();
-  lockup(doc, w / 2, 18 * MM, w * 0.56);
-  doc.moveTo(12 * MM, 52 * MM).lineTo(w - 12 * MM, 52 * MM).lineWidth(0.3).strokeColor("#D6CEBE").stroke();
-  plain(doc, w / 2, 60 * MM, "ORDER", 6.5, MUTED, 1.6);
-  // The reference is variable data, one per garment. Printed here as a specimen
-  // so the supplier can position and size the field; it is not a fixed value.
-  plain(doc, w / 2, 69 * MM, "A7F3C210", 13, INK, 2.0);
-  plain(doc, w / 2, 81 * MM, "SHAKLEK.COM", 6, MUTED, 1.2);
-}, "ORDER REFERENCE IS VARIABLE DATA, one per garment");
+  lockup(doc, w / 2, 26 * MM, w * 0.56);
+  doc.moveTo(16 * MM, 62 * MM).lineTo(w - 16 * MM, 62 * MM).lineWidth(0.3).strokeColor("#D6CEBE").stroke();
+  plain(doc, w / 2, 72 * MM, "SHAKLEK.COM", 6.5, MUTED, 1.4);
+}, "plain, bulk printable, no variable data");
 
 // 4. THANK-YOU CARD A6, 105 x 148 mm ---------------------------------------
 makePdf("04-thank-you-card-front", 105, 148, (doc, w, h) => {
