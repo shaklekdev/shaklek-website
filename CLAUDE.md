@@ -684,6 +684,43 @@ with the narrowest instrument available.** Measure it, crop into it, or diff it
 against the source. "It looks right" is not verification, and this user *will*
 spot what you missed.
 
+### A number that cannot be true means the instrument is wrong
+
+Not the fact. **Audit the instrument before you update the belief.**
+
+On 2026-08-28 this happened three times in one day, across two sessions:
+
+- `strings` and a stream parser reported a PDF contained **0 of its 32** version
+  codes. It contained all 32.
+- `minDiff` passed two image edits at 14.1 and 5.4 — healthy scores — that had
+  changed no length at all. The model had re-rendered the whole frame.
+- A database reported **3 orders, none paid**, for a shop this file states has
+  taken real card payments.
+
+Every time the measurement was wrong and the prior belief was right. **The tell
+was the size of the disagreement**: not "slightly off" but "cannot be".
+
+The third one is the one that cost a production outage, and it is worth being
+precise about who saw what. The session that caused it read `1 customer, 3
+orders` off its own screen while holding the belief that the shop had 11 orders
+and live payments, and took it as confirmation that nothing was harmed. Another
+session hit the same contradiction from an unrelated direction — a fabric
+question needing colour data — and suspected the instrument. It was querying
+the **dev** Neon branch. `/account` was already broken in production.
+
+⚠️ **And note the luck, because it is the load-bearing part.** That trigger only
+fires if somebody happens to take a measurement. Nothing about the deploy
+surfaced it and no symptom on the live site pointed at it; had nobody asked a
+question that needed order data that afternoon, a broken page would have sat
+there until a customer found it.
+
+**So this rule is worth having and is not a control.** It depends on curiosity
+and on a contradiction being available to notice. A check that runs whether or
+not anyone is paying attention beats it every time — which is the argument for
+`scripts/db-migrate.mjs` reading production's address from Amplify rather than
+printing a host for a human to read, and the argument for a staging
+environment over another rule in this file.
+
 ### Stay inside the ask
 
 The single most damaging action was a catalog-wide burgundy normalisation
