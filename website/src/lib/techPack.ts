@@ -515,6 +515,16 @@ export function buildPdf(
       // Same restraint as the block below -- a report, never a tolerance. She
       // wore a garment and it felt close at the waist; she did not measure the
       // difference, and neither did we.
+      //
+      // ⚠️ THE WORDING OF THE CAPTION IS A SECURITY CONTROL, not house style.
+      // It first read "the strongest signal on this page ... carry it into the
+      // pattern", and a review pointed out what that does: /fit takes an email
+      // nobody has proved they own, so this text is not fully trusted input,
+      // and a document telling the workshop to trust it above the measurements
+      // turns "someone overwrote her notes" into "we cut and shipped a garment
+      // to a stranger's instructions". It now says plainly that nobody has
+      // checked it and that it does not replace the numbers. Keep it that way
+      // unless /fit gains a signed per-order link.
       const pastLines = order.pastFit ? fitFeedbackLines(order.pastFit.answers) : [];
       const pastNote = order.pastFit?.note?.trim();
       if (pastLines.length > 0 || pastNote) {
@@ -526,7 +536,7 @@ export function buildPdf(
           .text("HOW HER LAST PIECE FITTED", left, doc.y, { width });
         doc.moveDown(0.15);
         para(
-          `Reported by the customer after wearing it, ${order.pastFit!.at.toISOString().slice(0, 10)}. This is the strongest signal on this page: it is the only line here that describes a real garment on this real body rather than a chart. Carry it into the pattern.`,
+          `Reported by the customer after wearing an earlier piece, ${order.pastFit!.at.toISOString().slice(0, 10)}. Her own impression of a real garment, so it is worth more than a chart -- but it is not a measurement and nobody here has checked it. Weigh it against the numbers above; it does not replace them.`,
           MUTED,
           9,
         );

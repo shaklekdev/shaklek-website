@@ -62,8 +62,19 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const fbAt = row.customers.fitFeedbackAt;
   if (fb && fbAt && fbAt < row.orders.createdAt) {
     try {
+      const parsed: unknown = JSON.parse(fb);
+      // SHAPE, not just syntax. JSON.parse("null") succeeds and returns null,
+      // sails through this catch, and then throws inside buildPdf when the
+      // print block reads a property off it -- so the guard added to keep a
+      // bad column from taking down a tech pack did not actually stop the one
+      // value that takes down a tech pack. Found by a security review.
+      // Nothing the feature itself writes can be null, but a hand-edited row
+      // or a second writer could be, and that is exactly what this is for.
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw new Error("unexpected shape");
+      }
       pastFit = {
-        answers: JSON.parse(fb) as Record<string, string>,
+        answers: parsed as Record<string, string>,
         note: row.customers.fitFeedbackNote,
         at: fbAt,
       };

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, exists, sql } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
@@ -43,6 +43,29 @@ const MAX_PER_WINDOW = 6;
 // Deliberately identical for every outcome. See defence 1 above.
 const SAME_ANSWER_FOR_EVERYONE = { ok: true } as const;
 
+/**
+ * Strip control and bidirectional-override characters from the free-text note.
+ *
+ * NOT an injection defence -- pdfkit renders this as literal text and a review
+ * confirmed nothing here can break the document's structure. It is a SPOOFING
+ * defence. U+202E reverses everything after it, so "cut 5cm \u202Eshorter\u202C
+ * please" can be made to read as its own opposite on the tailor's document,
+ * which is a made-to-order instruction that says one thing and prints another.
+ *
+ * Newlines go too: the note is set as a single quoted sentence in a fixed
+ * block, and a note of forty blank lines pushes the rest of the page around.
+ *
+ * Kept here rather than in boundedText() on purpose -- boundedText guards every
+ * write route on the site, and widening it is a change to checkout.
+ */
+function sanitise(value: string | null): string | null {
+  if (!value) return null;
+  return value
+    .replace(/[\u0000-\u001F\u007F-\u009F\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export async function POST(req: NextRequest) {
   const cross = rejectCrossOrigin(req);
   if (cross) return cross;
@@ -73,7 +96,7 @@ export async function POST(req: NextRequest) {
   }
 
   const answers = resolveFitFeedback(payload.answers);
-  const note = boundedText(payload.note, FIT_NOTE_MAX)?.trim() || null;
+  const note = sanitise(boundedText(payload.note, FIT_NOTE_MAX)) || null;
   // Nothing to record. Still answered identically.
   if (Object.keys(answers).length === 0 && !note) {
     return NextResponse.json(SAME_ANSWER_FOR_EVERYONE);
@@ -83,21 +106,18 @@ export async function POST(req: NextRequest) {
   if (!db) return NextResponse.json(SAME_ANSWER_FOR_EVERYONE);
 
   try {
-    const [customer] = await db
-      .select({ id: schema.customers.id })
-      .from(schema.customers)
-      .where(eq(schema.customers.email, email));
-    if (!customer) return NextResponse.json(SAME_ANSWER_FOR_EVERYONE);
-
-    // Defence 2: a paid order, not merely a row in customers. A customers row
-    // exists the moment someone starts a checkout that never completes.
-    const [paid] = await db
-      .select({ id: schema.orders.id })
-      .from(schema.orders)
-      .where(and(eq(schema.orders.customerId, customer.id), eq(schema.orders.status, "paid")))
-      .limit(1);
-    if (!paid) return NextResponse.json(SAME_ANSWER_FOR_EVERYONE);
-
+    // ⚠️ ONE STATEMENT, ALWAYS, WHATEVER THE OUTCOME. This was a SELECT for the
+    // customer, then a SELECT for a paid order, then an UPDATE -- and a
+    // security review found the oracle that defence 1 above says cannot exist,
+    // rebuilt out of LATENCY. An unknown email did one round trip to Neon, a
+    // customer without a paid order did two, a real customer did three. The
+    // bodies were byte-identical and the response time was not, so timing the
+    // route still answered "does this woman shop here".
+    //
+    // Now every well-formed request executes exactly this one UPDATE. It
+    // matches nothing for a stranger and nothing for someone who never paid,
+    // and the work done is the same either way. Do not "optimise" this back
+    // into a lookup followed by a conditional write.
     await db
       .update(schema.customers)
       .set({
@@ -105,7 +125,24 @@ export async function POST(req: NextRequest) {
         fitFeedbackNote: note,
         fitFeedbackAt: new Date(),
       })
-      .where(eq(schema.customers.id, customer.id));
+      .where(
+        and(
+          eq(schema.customers.email, email),
+          // A paid order, not merely a customers row: a row exists the moment
+          // someone opens a checkout they never complete.
+          exists(
+            db
+              .select({ one: sql`1` })
+              .from(schema.orders)
+              .where(
+                and(
+                  eq(schema.orders.customerId, schema.customers.id),
+                  eq(schema.orders.status, "paid"),
+                ),
+              ),
+          ),
+        ),
+      );
   } catch (err) {
     // ⚠️ NO REQUEST BODY IN THIS LOG. It carries an email address and a
     // sentence about someone's body, and CloudWatch outlives the order.
