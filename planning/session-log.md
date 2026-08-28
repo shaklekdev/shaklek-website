@@ -1974,3 +1974,34 @@ refunds (`ch_3U7iQk…`, `ch_3U8GfH…`, verified still unrefunded in live Strip
 Sentry account; Meta pixel ID and domain verification; DET advertising permit;
 ECAS lawyer. Everything else on her list is checkable — run the
 `shaklek-assistant` agent rather than trusting this paragraph tomorrow.
+
+### 2026-08-28, end of session — TOP PRIORITY FOR TOMORROW
+
+**Build a staging environment. Founder's call, and it outranks everything else
+on the list.**
+
+Why, in one line: a migration went to the dev Neon branch while the code was
+already on production, `/account` broke for signed-in customers, and the thing
+that caught it was the other session rather than any control in this repo.
+
+The shape, half of which already exists:
+
+| | staging | production |
+|---|---|---|
+| git branch | `staging` (new) | `main` |
+| Amplify | second branch, basic auth on | `main`, public |
+| database | the **dev** Neon branch, already there | `ep-blue-cell…` |
+| Stripe | **test** keys | live |
+| Clerk | development instance | production |
+
+**Blocked on the founder for:** Stripe test keys, a Clerk dev instance.
+
+**Do it before any paid advertising.** Paid traffic landing on a broken
+checkout costs the ad spend as well as the orders.
+
+Also still open and not blocked by the above:
+- Guest emails are stored unnormalised at checkout, so a customer who typed a
+  capital has orders invisible in her own account. Touches the payment path,
+  wants its own careful job.
+- The remake request flow: designed, not built. The order reference is now
+  visible to the customer, which was its prerequisite.

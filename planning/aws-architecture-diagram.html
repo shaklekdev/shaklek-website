@@ -479,6 +479,41 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     page weight is an auth SDK, on a page where nobody signs in.</strong>
   </div>
 
+  <div class="callout" style="border-color:var(--c-security)">
+    <strong>P0, FOUNDER'S CALL 2026-08-28 — THERE IS NO TEST ENVIRONMENT, AND
+    THAT IS NOW THE TOP PRIORITY.</strong>
+    <p>
+      One branch, <code>main</code>, deploys straight to a site taking live
+      cards. There is no staging anything. Verification today means building a
+      throwaway copy of the repo locally, which proves the code compiles and
+      proves nothing about production.
+    </p>
+    <p>
+      On 2026-08-28 a migration was applied to the <strong>dev</strong> Neon
+      branch, verified against <code>information_schema</code>, and reported
+      done, while the code was already pushed. Production served a query
+      against a table that did not exist there and <code>/account</code> broke
+      for every signed-in customer. The other Claude session found it. Not the
+      migration guard, not the security reviews, not the build check. The
+      guard added afterwards prevents that exact mistake and no other; a
+      staging environment is the first control here that is structural rather
+      than a matter of someone being careful.
+    </p>
+    <p>
+      <strong>Half of it already exists.</strong> The dev Neon branch is sitting
+      unused. Amplify hosts a second git branch natively with its own
+      environment variables, so staging runs on the dev database with
+      <strong>Stripe TEST keys</strong> and a Clerk dev instance, behind Amplify
+      basic auth so it is off Google and away from customers.
+    </p>
+    <p>
+      <strong>Blocking on the founder:</strong> Stripe test keys and a Clerk
+      development instance. <strong>Do before paid ads:</strong> traffic that
+      was paid for, landing on a broken checkout, costs the ad spend and the
+      orders.
+    </p>
+  </div>
+
   <h3 class="flow-h3">P0 — DONE 2026-08-26 <span class="flow-tag">738 KB to 310 KB</span></h3>
   <ol class="flow">
     <li><span class="flow-status built">fixed</span>
