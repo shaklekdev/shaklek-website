@@ -354,8 +354,15 @@ upload-your-own path.
 
 **There is no active discount code.** WELCOME20 was deactivated on 2026-08-26.
 
-Nothing above claims sustainability, provenance, "made in UAE" manufacture,
-customer counts, press, or free delivery. No copy implies a team or automation.
+⚠️ **"Made in the UAE" IS now a live claim**, confirmed by the founder on
+2026-08-28 and shipped to the home page and Our Story. This line previously said
+the copy claims no UAE manufacture; that stopped being true the moment it went
+live, and a stale audit line is how a real claim gets pulled back out by whoever
+reads it next. Say **the UAE**, not Dubai: the company is licensed in Dubai, but
+where the tailor works is recorded nowhere.
+
+Nothing above claims sustainability, customer counts, press, or free delivery.
+No copy implies a team or automation.
 
 ⚠️ **"One tailor in Dubai" is not supported anywhere in the repo.** The company
 is licensed in Dubai; where the tailor works is not recorded. Say "one tailor"
