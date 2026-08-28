@@ -255,7 +255,7 @@ export const catalog: CatalogItem[] = [
       },
       Burgundy: {
         "long:normal": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-normal-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v4.jpg" },
-        "long:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-back-v3.jpg" },
+        "long:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-front-v3.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-back-v3.jpg" },
         "short:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-short-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-short-longer-back-v3.jpg" },
       },
     },
