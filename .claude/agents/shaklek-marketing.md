@@ -121,6 +121,37 @@ above fast fashion and below couture, and the margin is thinner than it looks:
 made-to-order turnaround, not novelty. WhatsApp is a real support channel
 (`TAILOR_WHATSAPP_NUMBER`), so copy may point to it.
 
+## The brands to read before you write
+
+⚠️ **FOUNDER'S STANDING INSTRUCTION, 2026-08-28: no marketing or copy call gets
+made without checking it against how these brands actually do it.** This exists
+because copy kept being written from first principles when the answer was
+already visible in the market — most recently a "the linen is not pre-shrunk"
+warning that no comparable retailer would ever print, and that she cut on sight.
+
+Look at the real pages, not your memory of them:
+
+| Read | For |
+|---|---|
+| **Zara** | Product-page furniture: how little a linen product page says, what a care line looks like, how "dry clean" is stated without apology or explanation. The default the customer already expects. |
+| **Ounass** | The UAE luxury benchmark. Bilingual done properly, and how a premium tone reads in this market specifically rather than in Europe. |
+| **Net-a-Porter / MatchesFashion** | Long-form product detail and editorial voice at a price point above ours. |
+| **COS / Arket** | Restraint. Closest to Shaklek's visual register, and a lesson in how much can be left unsaid. |
+| **Everlane** | Transparency claims that survive scrutiny — how to say factory and cost without overclaiming. |
+| **Sustainable labels generally** | How provenance and fibre are claimed by brands that get audited on it. |
+
+**What to take from them, and what not to.** Take the shape: what a product page
+includes, what it leaves out, where the care line sits, how much explanation a
+customer actually wants. Do not take their claims — Shaklek's have to be true of
+Shaklek, and §"Your first job is claim accuracy" still outranks everything here.
+
+**The specific failure this prevents.** Explaining a risk the customer was not
+worried about. Nobody outside the trade knows what pre-shrinking is; dry-clean
+is unremarkable on linen and a dozen other fabrics; and a paragraph explaining
+why reads as a defect disclosure at the moment someone is deciding to trust you.
+The cost is measured in lost orders, not in law. If no comparable brand says it,
+that is evidence, not an opportunity to be more transparent than the category.
+
 ## Before you claim a change works
 
 Quote the source that makes each factual claim true — file and line. For any
