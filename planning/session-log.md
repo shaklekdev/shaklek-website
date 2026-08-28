@@ -1860,3 +1860,29 @@ which does not change that. A UAE lawyer should read them against Federal Law
 ⚠️ **Verify on a phone, not a laptop.** Both of the day's real bugs — the sliced
 button and the cropped hem — were invisible at 1440px and obvious at 390px. Most
 of this brand's traffic is mobile. Check there first.
+
+## 2026-08-28 — session a5450c67 (packaging + /fit)
+
+**Committed, NOT PUSHED. Do not push until the migration is run** (see below).
+
+- `/fit` — post-delivery fit feedback, reached by a QR on the thank-you card.
+  New: `src/app/fit/`, `src/app/api/fit-feedback/`, `src/components/FitFeedbackForm.tsx`,
+  `src/data/fitFeedback.ts`. Modified: `src/db/schema.ts` (3 new `customers`
+  columns), `src/lib/techPack.ts`, the spec-sheet route, `legal/privacy`.
+- Business card + rewritten thank-you card in `branding/send-to-supplier/artwork/`
+  (10, 10b, 04, 05). Both carry QR codes drawn as vector.
+- `CLAUDE.md` gained deploy Trap 3.
+
+⚠️ **`npx drizzle-kit migrate` MUST run before this is pushed.** Amplify has no
+migrate step, and seven files do a bare `db.select()` on `customers` — including
+`/api/orders` and the Stripe webhook. Deploying the code first breaks checkout
+and stops paid orders being marked paid.
+
+Security review done (`shaklek-security`), four findings fixed in `38d699a`'s
+follow-up. Two accepted and reported to the founder: `rejectOversizedBody`
+trusts `Content-Length` site-wide, and there is no staff path to delete stored
+fit feedback (nor saved measurements — pre-existing, and `legal/privacy`
+already promises one).
+
+Not held by me: `src/data/versionIds.ts` and `scripts/render-collection-book.mjs`
+are the other session's.
