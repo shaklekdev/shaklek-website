@@ -21,6 +21,7 @@
  */
 import { openSync } from "fontkit";
 import PDFDocument from "pdfkit";
+import QRCode from "qrcode";
 import { createWriteStream, mkdirSync } from "node:fs";
 import path from "node:path";
 
@@ -74,6 +75,21 @@ function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD) {
   doc.rect(cx - (la.width * 0.32) / 2, topY + st.ruleY, la.width * 0.32, rh).fill(gold);
   draw(doc, ar.segs, cx - ar.width / 2, topY + st.arBase, ink);
   return st.height;
+}
+/**
+ * The height lockup() will occupy at a given width, WITHOUT drawing it.
+ *
+ * Needed to centre the mark vertically: the lockup is a wordmark, a rule and an
+ * Arabic line of three different heights, so its box centre is not where the
+ * eye puts its centre, and "just use h/2" hangs it high. Same probe maths as
+ * lockup() -- change one and change both.
+ */
+function lockupHeight(targetW) {
+  const probe = shape("Italiana-Regular.ttf", "Shaklek", 46, (46 * 4) / 29);
+  const size = (targetW / probe.width) * 46;
+  const la = shape("Italiana-Regular.ttf", "Shaklek", size, (size * 4) / 29);
+  const ar = shape("ReemKufi-Regular.ttf", "\u0634\u0643\u0644\u0643", size * 0.42);
+  return stack(la, ar, Math.max(0.35, size * 0.022)).height;
 }
 function monogram(doc, cx, baseY, inkHeight, fill = INK) {
   const sh = shape("ReemKufi-Regular.ttf", "ش", inkHeight / 0.72);
@@ -301,19 +317,61 @@ makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
 }, "the values, no price. Print on the reverse of 03-hang-tag");
 
 // 4. THANK-YOU CARD A6, 105 x 148 mm ---------------------------------------
+// Copy approved by the founder, 2026-08-28. Two lines she cut are worth
+// recording so they do not come back: "feedback is a gift" and "your
+// satisfaction is our key". Both are things every company says, and the
+// sentence about the tailor already proves what they only assert.
+//
+// The front stays mostly empty ON PURPOSE. She writes the customer's name and
+// a line by hand under the printed paragraph, and handwriting is the whole
+// value of this card -- a full printed message leaves nowhere to put it.
+const FIT_URL = "https://www.shaklek.com/fit";
+
 makePdf("04-thank-you-card-front", 105, 148, (doc, w, h) => {
-  lockup(doc, w / 2, 34 * MM, w * 0.42);
-}, "front. Message handwritten below the mark");
+  lockup(doc, w / 2, 24 * MM, w * 0.40);
+  line(doc, w / 2, 56 * MM, "Thank you", 6.4 * MM, INK, 1.2);
+  doc.font("Helvetica").fontSize(8.6).fillColor(MUTED)
+    .text("This piece did not exist until you asked for it. It was cut to your measurements and sewn here in the UAE, to be worn for years rather than a season.",
+      18 * MM, 64 * MM, { width: w - 36 * MM, align: "center", lineGap: 3.4 });
+  // Ruled guides for the handwritten line, in the palest cream on the sheet.
+  // They print, faintly, and they are the difference between a straight line
+  // and a note that slopes down the card.
+  doc.lineWidth(0.25).strokeColor("#EDE7DA");
+  for (let i = 0; i < 3; i++) {
+    const y = (98 + i * 11) * MM;
+    doc.moveTo(20 * MM, y).lineTo(w - 20 * MM, y).stroke();
+  }
+}, "front. Founder handwrites the name and a line on the ruled guides");
 
 makePdf("05-thank-you-card-back", 105, 148, (doc, w, h) => {
-  line(doc, w / 2, 30 * MM, "If it is not right", 5 * MM, INK, 0.8);
+  line(doc, w / 2, 26 * MM, "Now tell us how it fits", 5.2 * MM, INK, 0.9);
+  doc.font("Helvetica").fontSize(8.4).fillColor(MUTED)
+    .text("Scan below. It goes to your tailor, and your next piece starts from it.",
+      18 * MM, 33 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
+
+  // 30 mm block. Bigger than the business card's because this one is scanned
+  // one-handed by someone holding a garment, often at arm's length in bad
+  // bedroom light -- the margin is worth the space on a card this size.
+  const qrSize = 30;
+  qr(doc, FIT_URL, w / 2 - (qrSize * MM) / 2, 44 * MM, qrSize);
+
+  // The URL under the code, for the same reason as on the business card: a QR
+  // is the one thing here that can fail silently, and short enough to type.
+  plain(doc, w / 2, 82 * MM, "SHAKLEK.COM/FIT", 7.6, INK, 1.5);
+
+  doc.rect(w / 2 - 6 * MM, 90 * MM, 12 * MM, 0.3).fill(GOLD);
+
+  // ⚠️ THIS SENTENCE IS THE FAQ'S, WORD FOR WORD. /faq says "one free
+  // alteration or remake within 14 days of delivery". Dropping the "one" --
+  // which an earlier draft of this card did -- promises unlimited alterations
+  // in print, on a card that cannot be recalled, against a policy that says
+  // otherwise. Change the FAQ and this together or not at all.
   doc.font("Helvetica").fontSize(8).fillColor(MUTED)
-    .text("One free alteration or remake within 14 days.\nWrite to us and we will collect the piece.",
-      14 * MM, 36 * MM, { width: w - 28 * MM, align: "center", lineGap: 3 });
-  doc.moveTo(30 * MM, 58 * MM).lineTo(w - 30 * MM, 58 * MM).lineWidth(0.3).strokeColor("#D6CEBE").stroke();
-  plain(doc, w / 2, 70 * MM, "SHAKLEK.COM", 8, INK, 1.6);
-  monogram(doc, w / 2, 92 * MM, 7 * MM, "#C9C0AE");
-}, "back. ⚠️ returns wording to confirm against the legal page");
+    .text("If something is not right, you get one free alteration or remake within 14 days. Message us and we will collect the piece.",
+      18 * MM, 98 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
+
+  monogram(doc, w / 2, 130 * MM, 7 * MM, "#C9C0AE");
+}, "back. QR to the fit form, wording matches /faq");
 
 // 6. TISSUE SEAL STICKER 40 mm circle ---------------------------------------
 makePdf("06-tissue-seal-40mm", 40, 40, (doc, w, h) => {
@@ -364,8 +422,95 @@ makePdf("09-mailer-placement", 250, 350, (doc, w, h) => {
       18 * MM, 18 * MM, { width: w - 36 * MM });
 }, "small monogram only, deliberately plain");
 
-console.log("\n⚠️ TWO THINGS THE FOUNDER MUST CONFIRM BEFORE ANY OF THIS IS MADE:");
-console.log("   1. the care instructions on 02-care-label (drawn: wash 30, do not bleach,");
-console.log("      dry flat, iron medium, professional dry clean P)");
-console.log("   2. the country of origin, currently MADE IN UAE");
-console.log("Both are legal disclosures on a garment sold in the UAE and neither is mine to decide.");
+// 10. BUSINESS CARD 90 x 50 mm ---------------------------------------------
+// Trim is 90 x 50, the standard UAE/European size. The PDFs are 96 x 56
+// because 3 mm of BLEED is included on every edge: the front prints edge to
+// edge in ink, and without bleed a 0.3 mm drift on the guillotine leaves a
+// white sliver down one side of a black card. Tell the printer: trim 90 x 50,
+// bleed 3 mm, no crop marks needed.
+//
+// NO INSTAGRAM OR TIKTOK HANDLE. Neither account exists yet, and a dead handle
+// on a printed card is worse than no handle -- these are printed in hundreds
+// and cannot be corrected. The QR carries the site, and the site will carry the
+// socials the day they open.
+const CARD_W = 90, CARD_H = 50, BLEED = 3;
+
+// The link on the card. It must OUTLIVE THE PRINT RUN, so it is the bare home
+// page and nothing deeper: a campaign page or a collection slug can be renamed
+// or retired, and every card already handed out then points at a 404.
+// ?c=card is a marker, not a redirect -- it changes nothing about where the
+// link goes, it only lets the analytics separate a scan from a search.
+const CARD_URL = "https://www.shaklek.com/?c=card";
+
+/**
+ * QR, drawn as VECTOR RECTANGLES rather than placed as a raster image, so it is
+ * resolution-independent: at any print size every module lands on an exact
+ * edge instead of being resampled into grey fringes that a scanner reads as
+ * noise. Horizontal runs are merged into single rects, which cuts the drawing
+ * operations by more than half.
+ *
+ * Two things below are what actually make a printed QR scan, and both are
+ * routinely dropped:
+ *
+ *  - THE QUIET ZONE. Four blank modules on every side are part of the symbol,
+ *    not a margin around it. Crowd the code with type and many scanners simply
+ *    never lock on. sizeMm is the whole block INCLUDING it.
+ *  - DARK ON LIGHT. A QR inverted -- light code on a dark ground -- is legal in
+ *    the spec and fails on a lot of phone cameras. So on the ink-ground front
+ *    the code would have to sit in a light panel; here it sits on the cream
+ *    back instead, which is cleaner.
+ */
+function qr(doc, text, x, y, sizeMm, dark = INK) {
+  const q = QRCode.create(text, { errorCorrectionLevel: "Q" });
+  const n = q.modules.size, data = q.modules.data, QUIET = 4;
+  const total = n + QUIET * 2;
+  const m = (sizeMm * MM) / total;
+  // A module below ~0.4 mm is past what a phone camera resolves on paper. This
+  // is printed rather than assumed, because the symbol grows with the URL: a
+  // longer link silently shrinks every module at a fixed block size.
+  const mm = m / MM;
+  console.log(`      qr ${n}x${n} modules, ${mm.toFixed(2)} mm each` +
+    (mm < 0.4 ? "  ⚠️ TOO SMALL TO SCAN RELIABLY" : "  ok"));
+  doc.fillColor(dark);
+  for (let r = 0; r < n; r++) {
+    let c = 0;
+    while (c < n) {
+      if (!data[r * n + c]) { c++; continue; }
+      let run = 1;
+      while (c + run < n && data[r * n + c + run]) run++;
+      doc.rect(x + (c + QUIET) * m, y + (r + QUIET) * m, run * m, m).fill();
+      c += run;
+    }
+  }
+}
+
+makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
+  doc.rect(0, 0, w, h).fill(INK);
+  // Centred on MEASURED ink, not on a guessed y. The lockup is three stacked
+  // pieces of different heights and its optical centre is not its box centre.
+  const markW = CARD_W * 0.40 * MM;
+  doc.save();
+  lockup(doc, w / 2, (h - lockupHeight(markW)) / 2, markW, CREAM, GOLD);
+  doc.restore();
+}, "trim 90x50, 3mm bleed. Ink ground, mark reversed");
+
+makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
+  doc.rect(0, 0, w, h).fill(CREAM);
+  const B = BLEED * MM;
+  const qrSize = 21;
+  qr(doc, CARD_URL, w / 2 - (qrSize * MM) / 2, B + 4.5 * MM, qrSize);
+  doc.rect(w / 2 - 5 * MM, B + 28.5 * MM, 10 * MM, 0.3).fill(GOLD);
+  // The URL is printed UNDER the code on purpose. A QR is the only thing on a
+  // card that can fail silently -- a scuff, a bad light, an old camera -- and
+  // when it does the person is left holding a card with no way to reach us.
+  plain(doc, w / 2, B + 34 * MM, "SHAKLEK.COM", 7.4, INK, 1.5);
+  plain(doc, w / 2, B + 39.5 * MM, "+971 50 476 6769", 7.4, MUTED, 0.9);
+  plain(doc, w / 2, B + 44.5 * MM, "HELLO@SHAKLEK.COM", 6.6, MUTED, 0.9);
+}, "trim 90x50, 3mm bleed. QR to the home page");
+
+console.log("\nConfirmed by the founder on 2026-08-28, no longer open questions:");
+console.log("   care  = DRY CLEAN ONLY (see the note on careSymbols above -- it is a fit");
+console.log("           decision, not a laundry one: unwashed linen shrinks 4-10%)");
+console.log("   origin = MADE IN UAE");
+console.log("Both are legal disclosures on a garment sold in the UAE. Do not change either");
+console.log("without her, and re-read that note before proposing wash-at-30.");

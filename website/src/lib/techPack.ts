@@ -19,6 +19,7 @@ import { constructionFor, noteForOption } from "@/data/construction";
 import { flatPath } from "@/data/flats";
 import { parseMeasurements, FIELD_LABELS } from "@/lib/measurements";
 import { fitNoteLabel } from "@/data/fitNotes";
+import { fitFeedbackLines } from "@/data/fitFeedback";
 
 export type SpecItem = {
   name: string;
@@ -118,6 +119,17 @@ export function buildPdf(
     id: string;
     createdAt: Date;
     items: SpecItem[];
+    // How the LAST piece this customer received actually fitted, from /fit.
+    //
+    // This is what makes the promise on the thank-you card true. That card
+    // tells her the feedback goes to her tailor and her next piece starts from
+    // it -- so if this never reached this document, we would be printing a
+    // claim about a feature that does not exist, in ink, on a card we cannot
+    // recall. It is per-CUSTOMER, not per-item, which is why it arrives here
+    // rather than on SpecItem.
+    //
+    // Still no identity: lines and a sentence, never a name or an address.
+    pastFit?: { answers: Record<string, string>; note: string | null; at: Date } | null;
   },
   // Uncompressed output exists so scripts/test-techpack.mjs can read the text
   // back and assert on it. A tech pack that renders without error but prints
@@ -491,6 +503,47 @@ export function buildPdf(
       } else {
         doc.font("Helvetica").fontSize(10.5).fillColor("#a33").text("No size or measurements recorded on this order — do not cut until this has been confirmed with whoever sent it.");
         doc.fillColor(INK);
+      }
+
+      // -- how her LAST piece actually fitted -------------------------------
+      //
+      // Printed directly under the measurements and above her stated
+      // preference, because those three things are one thought: this is the
+      // body, this is how she likes it, and this is what happened last time we
+      // tried. A tailor reading them apart is reading them wrongly.
+      //
+      // Same restraint as the block below -- a report, never a tolerance. She
+      // wore a garment and it felt close at the waist; she did not measure the
+      // difference, and neither did we.
+      const pastLines = order.pastFit ? fitFeedbackLines(order.pastFit.answers) : [];
+      const pastNote = order.pastFit?.note?.trim();
+      if (pastLines.length > 0 || pastNote) {
+        doc.moveDown(0.45);
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(10)
+          .fillColor(INK)
+          .text("HOW HER LAST PIECE FITTED", left, doc.y, { width });
+        doc.moveDown(0.15);
+        para(
+          `Reported by the customer after wearing it, ${order.pastFit!.at.toISOString().slice(0, 10)}. This is the strongest signal on this page: it is the only line here that describes a real garment on this real body rather than a chart. Carry it into the pattern.`,
+          MUTED,
+          9,
+        );
+        doc.moveDown(0.25);
+        for (const line of pastLines) {
+          doc
+            .font("Helvetica-Bold")
+            .fontSize(11)
+            .fillColor(INK)
+            .text(`\u2022  ${line}`, left, doc.y, { width });
+        }
+        if (pastNote) {
+          doc.moveDown(0.2);
+          // Her own words, set apart from the resolved options so the tailor
+          // can tell what she chose from what she wrote.
+          para(`In her words: \u201c${pastNote}\u201d`, INK, 10.5);
+        }
       }
 
       // The customer's own answer to "anything usually wrong with this size?".

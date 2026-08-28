@@ -9,18 +9,33 @@ START HERE:  artwork/
   artwork/01-woven-brand-label.pdf        45 x 18 mm   wordmark only
   artwork/02-care-label.pdf               25 x 45 mm   fibre, care, origin
   artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark  (FRONT)
-  artwork/03b-hang-tag-back.pdf           50 x 90 mm   the four values (BACK)
+  artwork/03b-hang-tag-back.pdf           50 x 90 mm   the three values (BACK)
   artwork/04-thank-you-card-front.pdf    105 x 148 mm  A6
-  artwork/05-thank-you-card-back.pdf     105 x 148 mm  A6
+  artwork/05-thank-you-card-back.pdf     105 x 148 mm  A6, carries a QR code
   artwork/06-tissue-seal-40mm.pdf         40 mm dia    gold, mark in cream
   artwork/07-tissue-wrap-repeat-tile.pdf 250 x 250 mm  step and repeat
   artwork/08-linen-bag-print.pdf         400 x 500 mm  print area guide
   artwork/09-mailer-placement.pdf        250 x 350 mm  placement guide
+  artwork/10-business-card-front.pdf      90 x 50 mm   trim size (FRONT)
+  artwork/10b-business-card-back.pdf      90 x 50 mm   trim size, QR code (BACK)
 
-TWO NOTES ON THOSE FILES
+FOUR NOTES ON THOSE FILES
 
   The hang tag is DOUBLE SIDED. 03 is the front, 03b is the back. Same card,
   same size, printed both sides.
+
+  The business card is DOUBLE SIDED and is the only item here supplied WITH
+  BLEED. The two PDFs measure 96 x 56 mm because 3 mm of bleed is included on
+  every edge. Trim to 90 x 50 mm. The front prints edge to edge in near-black,
+  and without that bleed a small drift on the guillotine leaves a white line
+  down one side.
+
+  TWO ITEMS CARRY A QR CODE: 05-thank-you-card-back and 10b-business-card-back.
+  Please print them exactly as supplied. Do not redraw, re-generate, re-colour,
+  scale one axis, or place anything over them, and do not reduce them below the
+  size in the file. The blank margin around each code is part of the code, not
+  a margin we left for tidiness -- crop into it and phones stop reading it. If
+  a code has to move or change size, please ask us for a new file.
 
   07-tissue-wrap: this is one tile. Step and repeat it across the 50 x 70 cm
   sheet. Keep it faint: it should read as texture, not as print.

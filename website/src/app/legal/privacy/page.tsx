@@ -97,6 +97,14 @@ export default function PrivacyPage() {
         needs none. They go to the tailor making your piece and nowhere else,
         and you can delete saved measurements from your account at any time.
       </p>
+      <p>
+        If you scan the card in your parcel and tell us how a piece fitted, we
+        keep that answer with your measurements and show it to the tailor making
+        your next piece. It is why we ask for your email on that page: only to
+        put your answer with your order. That page sends you nothing, and we
+        keep only your most recent answer, not a history. Ask us and we will
+        delete it.
+      </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Why we hold it</h2>
       <p>

@@ -43,10 +43,43 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     .from(schema.orderItems)
     .where(eq(schema.orderItems.orderId, id));
 
+  // Fit feedback from /fit, carried onto the tailor's document -- this is the
+  // half that makes the thank-you card's promise true.
+  //
+  // ⚠️ ONLY IF IT PREDATES THIS ORDER. The feedback is a single overwritten
+  // row on the customer, so the newest answer may well be ABOUT THIS ORDER --
+  // she opens the parcel and scans the card. Printing that on this order's own
+  // tech pack heads it "how her last piece fitted" over a description of the
+  // piece on the table, which is worse than printing nothing: a tailor who
+  // believes it will alter a garment to correct a fault it does not have yet.
+  //
+  // The comparison is against createdAt rather than a delivery date because no
+  // fulfilment timestamp exists yet (see the status comment in schema.ts). It
+  // errs conservative: feedback about an older piece that happens to arrive
+  // after this order was placed is dropped rather than risked.
+  let pastFit = null;
+  const fb = row.customers.fitFeedback;
+  const fbAt = row.customers.fitFeedbackAt;
+  if (fb && fbAt && fbAt < row.orders.createdAt) {
+    try {
+      pastFit = {
+        answers: JSON.parse(fb) as Record<string, string>,
+        note: row.customers.fitFeedbackNote,
+        at: fbAt,
+      };
+    } catch {
+      // Unparseable JSON must not take down a tech pack. The tailor losing one
+      // advisory block is recoverable; a 500 on the document he needs to cut
+      // from is not.
+      pastFit = null;
+    }
+  }
+
   const pdf = await buildPdf({
     id: row.orders.id,
     createdAt: row.orders.createdAt,
     items,
+    pastFit,
   });
 
   return new NextResponse(new Uint8Array(pdf), {

@@ -31,6 +31,20 @@ export const customers = pgTable("customers", {
   measurementHip: text("measurement_hip"),
   measurementHeight: text("measurement_height"),
   measurementNotes: text("measurement_notes"),
+  // How the last piece ACTUALLY fitted, sent from /fit after delivery -- the
+  // return leg of order_items.fit_notes, which records what she expected to be
+  // wrong before it was made. See src/data/fitFeedback.ts.
+  //
+  // ONE ROW PER CUSTOMER, DELIBERATELY OVERWRITTEN, not a history table. The
+  // tailor needs the latest read on this body, and a second answer supersedes
+  // the first rather than adding to it. If a fit history is ever wanted, it
+  // wants its own table with an order_id -- do not turn this into an array.
+  //
+  // JSON of {questionId: optionId}. Ids only, never labels: labels are copy
+  // and get reworded, ids reach a tailor's document and must not move.
+  fitFeedback: text("fit_feedback"),
+  fitFeedbackNote: text("fit_feedback_note"),
+  fitFeedbackAt: timestamp("fit_feedback_at", { withTimezone: true }),
 });
 
 export const orders = pgTable("orders", {
