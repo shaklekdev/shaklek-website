@@ -92,3 +92,44 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true });
 }
+
+/**
+ * Clear the saved measurements.
+ *
+ * ⚠️ THIS EXISTS BECAUSE legal/privacy ALREADY PROMISED IT. That page has told
+ * customers they "can delete saved measurements from your account at any time"
+ * for as long as it has existed, and until now there was no control anywhere
+ * that did it -- the promise was simply untrue. A security review of the fit
+ * feedback surfaced it, on the way to the same gap for the new column.
+ *
+ * Blanked, not deleted as a row: the customer row also carries her name, her
+ * orders and her email, and dropping it would take her order history with it.
+ * Nulls, not empty strings, so "she cleared this" and "she never entered it"
+ * are the same state to every reader -- MeasurementsForm, the tech pack, and
+ * /api/orders all already treat null as absent.
+ */
+export async function DELETE(req: NextRequest) {
+  const crossOrigin = rejectCrossOrigin(req);
+  if (crossOrigin) return crossOrigin;
+
+  const email = await getEmail();
+  if (!email) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
+
+  const db = getDb();
+  if (!db) return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 500 });
+
+  // Scoped to her own verified address. There is no id in this request at all,
+  // so there is nothing for a customer to tamper with to reach another row.
+  await db
+    .update(schema.customers)
+    .set({
+      measurementBust: null,
+      measurementWaist: null,
+      measurementHip: null,
+      measurementHeight: null,
+      measurementNotes: null,
+    })
+    .where(eq(schema.customers.email, email));
+
+  return NextResponse.json({ ok: true });
+}

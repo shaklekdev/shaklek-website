@@ -4,6 +4,8 @@ import Header from "@/components/Header";
 import { SignOutButton } from "@clerk/nextjs";
 import AccountNameForm from "@/components/AccountNameForm";
 import MeasurementsForm from "@/components/MeasurementsForm";
+import AccountFitFeedback from "@/components/AccountFitFeedback";
+import { fitFeedbackLines } from "@/data/fitFeedback";
 import { getDb, schema } from "@/db/client";
 import type { Metadata } from "next";
 import { NOINDEX } from "@/lib/seo";
@@ -24,6 +26,31 @@ async function getNameForEmail(email: string) {
   if (!db) return null;
   const [customer] = await db.select().from(schema.customers).where(eq(schema.customers.email, email));
   return customer?.name ?? null;
+}
+
+/** What she sent from /fit, if anything. Read here rather than through an API
+ *  route because this page is already a server component holding her verified
+ *  email -- a fetch would only add a round trip and a second place to get the
+ *  authorization wrong. */
+async function getFitFeedbackForEmail(email: string) {
+  const db = getDb();
+  if (!db) return null;
+  const [customer] = await db
+    .select()
+    .from(schema.customers)
+    .where(eq(schema.customers.email, email));
+  if (!customer?.fitFeedback || !customer.fitFeedbackAt) return null;
+  try {
+    const parsed: unknown = JSON.parse(customer.fitFeedback);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return null;
+    return {
+      lines: fitFeedbackLines(parsed as Record<string, string>),
+      note: customer.fitFeedbackNote,
+      at: customer.fitFeedbackAt.toISOString().slice(0, 10),
+    };
+  } catch {
+    return null;
+  }
 }
 
 async function getOrdersForEmail(email: string) {
@@ -52,6 +79,7 @@ export default async function AccountPage() {
   const email = await getVerifiedEmail();
   const name = email ? await getNameForEmail(email) : null;
   const orders = email ? await getOrdersForEmail(email) : null;
+  const fitFeedback = email ? await getFitFeedbackForEmail(email) : null;
 
   return (
     <div className="flex flex-1 flex-col bg-bg">
@@ -90,6 +118,14 @@ export default async function AccountPage() {
         <div className="mt-4">
           <MeasurementsForm />
         </div>
+
+        {fitFeedback && (
+          <AccountFitFeedback
+            lines={fitFeedback.lines}
+            note={fitFeedback.note}
+            at={fitFeedback.at}
+          />
+        )}
 
         <h2 className="mt-8 text-lg text-text">Your orders</h2>
 

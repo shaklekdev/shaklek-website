@@ -24,6 +24,12 @@ export default function MeasurementsForm() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Two-step, no browser confirm(). A native confirm() blocks the page and
+  // reads as a system error; this is the customer's own data and she is
+  // allowed to remove it without being interrogated -- but not with one
+  // mis-tap next to Save.
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // Drains anything the "Save my measurements" button parked before sending
   // the customer through sign-up.
@@ -124,6 +130,26 @@ export default function MeasurementsForm() {
 
   if (!loaded) return null;
 
+  const hasAnySaved = Object.values(fields).some((v) => String(v ?? "").trim() !== "");
+
+  async function handleDelete() {
+    setDeleting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/account/measurements", { method: "DELETE" });
+      if (!res.ok) throw new Error("failed");
+      // Clear what is on screen too. Leaving the numbers in the inputs after a
+      // successful delete makes it look as though nothing happened, and the
+      // next Save would silently write them all back.
+      setFields(EMPTY);
+      setConfirmingDelete(false);
+    } catch {
+      setError("Could not delete. Try again.");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   return (
     <div className="rounded-shaklek-sm border border-border bg-surface p-5">
       <p className="text-sm text-text">Saved measurements</p>
@@ -186,6 +212,34 @@ export default function MeasurementsForm() {
           {saving ? "Saving…" : "Save"}
         </button>
         {saved && <span className="text-xs text-gold">Saved</span>}
+
+        {/* legal/privacy promises this: "you can delete saved measurements
+            from your account at any time". Until 2026-08-28 nothing on the
+            site actually did it. */}
+        {!confirmingDelete ? (
+          hasAnySaved && (
+            <button
+              onClick={() => { setConfirmingDelete(true); setSaved(false); }}
+              className="ml-auto text-xs text-text-3 underline transition-colors hover:text-text"
+            >
+              Delete these
+            </button>
+          )
+        ) : (
+          <span className="ml-auto flex items-center gap-3 text-xs">
+            <span className="text-text-2">Delete your saved measurements?</span>
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="text-red-700 underline disabled:opacity-40"
+            >
+              {deleting ? "Deleting…" : "Yes, delete"}
+            </button>
+            <button onClick={() => setConfirmingDelete(false)} className="text-text-3 underline">
+              Keep
+            </button>
+          </span>
+        )}
         {error && (
           <span role="alert" className="text-xs text-red-700">
             {error}
