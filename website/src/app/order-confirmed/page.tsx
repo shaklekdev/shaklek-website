@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
+import { orderRef } from "@/lib/orderRef";
 import { money, track } from "@/lib/metaPixel";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -141,7 +142,18 @@ function OrderConfirmedContent() {
       </div>
 
       <h1 className="text-[26px] text-text">Order confirmed</h1>
-      <p className="subtitle mx-auto max-w-sm">
+      {/* Her reference, on the first screen she sees after paying, because this
+          page and the confirmation email are the only record a GUEST has --
+          she has no account to look it up in. The staff dashboard and the
+          tailor's document have always quoted this string; she never had it. */}
+      {/* orderId comes from Stripe's success_url, so it is present for every
+          real order and absent only on the sessionStorage demo path. */}
+      {orderId && (
+        <p className="mt-1 text-[13px] tracking-[0.06em] text-text">
+          Order reference {orderRef(orderId)}
+        </p>
+      )}
+      <p className="subtitle mx-auto mt-2 max-w-sm">
         Thank you — your {order.items.length === 1 ? "piece is" : "pieces are"} on{" "}
         {order.items.length === 1 ? "its" : "their"} way to being made, just for you.
       </p>

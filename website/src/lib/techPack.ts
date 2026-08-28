@@ -20,6 +20,7 @@ import { flatPath } from "@/data/flats";
 import { parseMeasurements, FIELD_LABELS } from "@/lib/measurements";
 import { fitNoteLabel } from "@/data/fitNotes";
 import { fitFeedbackLines } from "@/data/fitFeedback";
+import { orderRef } from "@/lib/orderRef";
 
 export type SpecItem = {
   name: string;
@@ -168,7 +169,10 @@ export function buildPdf(
     // The reference stays, because the tailor still has to be able to say
     // which order they mean. It is the order id's first 8 characters and
     // identifies the order to us without naming us.
-    const ref = order.id.slice(0, 8).toUpperCase();
+    // orderRef(), so the tailor quotes the same string the customer and the
+    // dashboard see. This printed a bare "A7F3C210" while the dashboard showed
+    // "SHK-A7F3C210" -- one reference wearing two costumes.
+    const ref = orderRef(order.id);
     const groups = groupIdentical(order.items);
     const totalGarments = order.items.length;
 

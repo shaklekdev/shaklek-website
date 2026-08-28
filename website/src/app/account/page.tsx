@@ -6,6 +6,7 @@ import AccountNameForm from "@/components/AccountNameForm";
 import MeasurementsForm from "@/components/MeasurementsForm";
 import AccountFitFeedback from "@/components/AccountFitFeedback";
 import { fitFeedbackLines } from "@/data/fitFeedback";
+import { orderRef } from "@/lib/orderRef";
 import { getDb, schema } from "@/db/client";
 import type { Metadata } from "next";
 import { NOINDEX } from "@/lib/seo";
@@ -67,7 +68,7 @@ async function getFitFeedbackForEmail(email: string) {
         at: r.createdAt.toISOString().slice(0, 10),
         // Same short reference the tech pack and the confirmation email use, so
         // she and the workshop are naming the same order.
-        orderRef: r.orderId ? r.orderId.slice(0, 8).toUpperCase() : null,
+        orderRef: r.orderId ? orderRef(r.orderId) : null,
       }];
     } catch {
       // One unreadable row must not blank the whole section.
@@ -167,7 +168,14 @@ export default async function AccountPage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs text-text-3">
+                    {/* The reference the staff dashboard and the tailor's
+                        document both quote. She had no copy of it anywhere
+                        until 2026-08-28, so quoting it back at her was asking
+                        for something she had never been given. */}
+                    <p className="text-xs tracking-[0.06em] text-text">
+                      {orderRef(order.id)}
+                    </p>
+                    <p className="mt-0.5 text-xs text-text-3">
                       {new Date(order.createdAt).toLocaleDateString("en-AE", {
                         dateStyle: "medium",
                       })}

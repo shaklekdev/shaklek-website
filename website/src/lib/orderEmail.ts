@@ -10,6 +10,8 @@
 // AED 390 and then a total of AED 3.90 -- which reads as a broken email to
 // the customer and as a pricing error to the stylist. Derived, not stored:
 // nothing new has to be persisted to say it truthfully.
+import { orderRef } from "@/lib/orderRef";
+
 export function discountLine(items: { price: number; quantity?: number }[], total: number): number {
   const subtotal = items.reduce((sum, i) => sum + i.price * (i.quantity ?? 1), 0);
   const discount = subtotal - total;
@@ -134,7 +136,17 @@ export async function sendCustomerConfirmationEmail(
   items: NotifyOrderItem[],
   total: number,
   email: string,
+  // ⚠️ THE CUSTOMER'S ONLY DURABLE COPY OF HER ORDER REFERENCE. Until
+  // 2026-08-28 this email carried none, and neither did /order-confirmed or
+  // /account -- so the staff dashboard and the tailor's document both quoted a
+  // reference the customer had never been given, and any conversation about a
+  // specific piece began by describing the garment.
+  //
+  // Optional so a caller without an id still SENDS the email rather than
+  // throwing at the end of a paid checkout. Both real callers pass it.
+  orderId?: string,
 ): Promise<{ emailed: boolean }> {
+  const ref = orderId ? orderRef(orderId) : null;
   const apiKey = process.env.RESEND_API_KEY;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.shaklek.com";
 
@@ -162,7 +174,11 @@ export async function sendCustomerConfirmationEmail(
 
   const html = `
     <div style="font-family:-apple-system,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;color:#1a1a1a;">
-      <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:300;font-size:24px;margin-bottom:4px;">Order confirmed</h1>
+      <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:300;font-size:24px;margin-bottom:4px;">Order confirmed</h1>${
+        ref
+          ? `<p style="font-size:13px;color:#1a1a1a;margin:0 0 12px;letter-spacing:0.06em;">Order reference ${esc(ref)}</p>`
+          : ""
+      }
       <p style="font-size:14px;color:#6b6b6b;margin-top:0;">
         Thank you — your ${items.length === 1 ? "piece is" : "pieces are"} on ${items.length === 1 ? "its" : "their"} way to being made.
       </p>
@@ -192,7 +208,7 @@ export async function sendCustomerConfirmationEmail(
       </div>
     </div>`;
 
-  const text = `Order confirmed — thank you!${
+  const text = `Order confirmed — thank you!${ref ? ` Order reference ${ref}.` : ""}${
     discount > 0 ? ` Discount -AED ${discount.toFixed(2)}.` : ""
   } Total AED ${total}. A stylist will reach out within 24 hours. Track this and future orders by creating a free account with this same email at ${appUrl}/sign-up`;
 

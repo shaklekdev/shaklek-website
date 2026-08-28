@@ -183,6 +183,7 @@ export async function POST(req: NextRequest) {
       emailItems,
       Number(order.orders.totalAed),
       order.customers.email,
+      order.orders.id,
     );
   }
 

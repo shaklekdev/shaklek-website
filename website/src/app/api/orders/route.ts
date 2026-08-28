@@ -337,6 +337,6 @@ export async function POST(req: NextRequest) {
     serverTotal,
     email,
   );
-  await sendCustomerConfirmationEmail(emailItems, serverTotal, email);
+  await sendCustomerConfirmationEmail(emailItems, serverTotal, email, orderId ?? undefined);
   return NextResponse.json({ ok: true, emailed });
 }

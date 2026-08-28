@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { orderRef } from "@/lib/orderRef";
 import { desc, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import OrderStatusButtons from "@/components/OrderStatusButtons";
@@ -26,7 +27,7 @@ function tailorMessage(order: { id: string; items: { name: string; fabric: strin
   const itemsLine = order.items
     .map((i) => `${i.name} (${i.fabric ?? "?"}, ${i.color ?? "?"}, ${i.size ?? "made to measure"})`)
     .join("; ");
-  return `Shaklek order SHK-${order.id.slice(0, 8).toUpperCase()}: ${itemsLine}. Tech pack attached.`;
+  return `Shaklek order ${orderRef(order.id)}: ${itemsLine}. Tech pack attached.`;
 }
 
 async function getOrders() {
@@ -125,7 +126,7 @@ export default async function OrdersDashboardPage() {
                         tailor's spec sheet -- so a WhatsApp message about
                         SHK-BC7BBB09 matches a row here without pasting a UUID. */}
                     <td className="px-4 py-3 font-mono text-xs whitespace-nowrap text-slate-900">
-                      SHK-{order.id.slice(0, 8).toUpperCase()}
+                      {orderRef(order.id)}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-slate-500">
                       {new Date(order.createdAt).toLocaleString("en-AE", {
