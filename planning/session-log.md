@@ -1975,7 +1975,94 @@ Sentry account; Meta pixel ID and domain verification; DET advertising permit;
 ECAS lawyer. Everything else on her list is checkable — run the
 `shaklek-assistant` agent rather than trusting this paragraph tomorrow.
 
-### 2026-08-28, end of session — TOP PRIORITY FOR TOMORROW
+### 2026-08-28, end of session — THE LIST FOR TOMORROW
+
+**Ordered. Everything above the line is mine, everything below needs her.**
+
+#### P0 — Staging environment. Blocked on her for keys.
+
+A migration went to the dev Neon branch while the code was already on
+production; `/account` broke for signed-in customers; what caught it was
+another session asking an unrelated fabric question, not any control in this
+repo. See the P0 callout in `aws-architecture-diagram.html`.
+
+| | staging | production |
+|---|---|---|
+| git branch | `staging` (new) | `main` |
+| Amplify | second branch, basic auth on | `main`, public |
+| database | the **dev** Neon branch, already there | `ep-blue-cell…` |
+| Stripe | **test** keys | live |
+| Clerk | development instance | production |
+
+**She must supply: Stripe test keys, a Clerk development instance.**
+**Do it before any paid advertising.**
+
+#### P1 — `/upload` is live, indexed, and loses the photo. Decide, then act.
+
+The founder believes this feature was removed. **It is not.** It returns 200,
+it is in the live sitemap at priority 0.8 so Google indexes it, and it calls
+`addItem()` then pushes to `/cart` — so a visitor arriving from search can
+configure an upload, pay for it, and the reference photo is never stored.
+`order_items.has_reference_image` records only a boolean; the image itself
+exists solely in the request body of the non-Stripe fallback path and is
+attached to the stylist email there. On the live Stripe path it is simply lost.
+
+**Zero orders have hit this**, so it has never bitten. Two honest options:
+either take it off the sitemap and off the router properly, or build image
+storage. There is no S3 bucket, so storage is real work.
+
+#### P2 — The remake request flow. Designed, not built. Not blocked.
+
+One form, not two: `/fit` gains a final question, "would you like us to alter
+or remake it?", so the reason is captured by the survey she has just filled in.
+Her order reference is now visible to her (shipped today), which was the
+prerequisite for asking an unsigned-in customer to identify her order.
+
+Two things must exist first or "one free remake within 14 days" is
+unenforceable: **there is no delivery date anywhere in the system**, so the 14
+days counts from nothing, and **nothing records that the free remake was
+used**, so "one" cannot be enforced. Both are small.
+
+The photo stays on WhatsApp regardless, because the site cannot store images
+(see P1) and a photo is the best abuse filter she has.
+
+#### P3 — Normalise emails at checkout. Touches the payment path.
+
+`/api/orders` stores a guest address exactly as typed, so a customer who typed
+a capital has orders invisible in her own `/account`. **Zero customers are
+currently affected** — checked against production — so this is not urgent, but
+it wants its own careful job with a one-off cleanup of existing rows.
+
+---
+
+#### Hers, and nothing of mine is waiting on most of it
+
+- **Stripe test keys + a Clerk dev instance** → unblocks P0.
+- **Send Ada the folder** on the Desktop. Complete, 12 files, nothing pending.
+- **Verdict on `00-you-are-the-designer.mp4`** → unblocks rebuilding 5 videos.
+- **Friday's fabric numbers** (in-store prices, metres per design) — overdue,
+  blocking the price ladder.
+- **Decide on `/upload`** (P1 above): remove it properly, or pay for storage.
+- One lawyer hour: the tailor/ECAS exemption, privacy, terms/returns.
+- TikTok Business account and the free UAE advertiser permit.
+- Film the three phone clips.
+
+---
+
+#### Verified today, so nobody re-checks it tomorrow
+
+Production audited directly: **no schema drift**, 11 orders (2 paid, 1 in
+progress, 8 abandoned checkouts), 13 line items with **0 unmakeable**, colour
+and fabric on every line, **0 orders with no line items**, 3 customers, and
+**0 emails stored with a capital**.
+
+⚠️ **Both paid orders DO carry the emirate.** It is in `shipping_state` as
+`"إمارة دبيّ"`, which is what Stripe returns for a UAE address, and the
+dashboard already renders it. An earlier note in this session claimed the city
+was missing; that was an audit script that printed every shipping field except
+`state`. Nothing is lost.
+
+
 
 **Build a staging environment. Founder's call, and it outranks everything else
 on the list.**
