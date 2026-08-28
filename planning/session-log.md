@@ -1873,10 +1873,16 @@ of this brand's traffic is mobile. Check there first.
   (10, 10b, 04, 05). Both carry QR codes drawn as vector.
 - `CLAUDE.md` gained deploy Trap 3.
 
-⚠️ **`npx drizzle-kit migrate` MUST run before this is pushed.** Amplify has no
-migrate step, and seven files do a bare `db.select()` on `customers` — including
-`/api/orders` and the Stripe webhook. Deploying the code first breaks checkout
-and stops paid orders being marked paid.
+⚠️ **`npx drizzle-kit migrate` must run before this is pushed** — Amplify has no
+migrate step (CLAUDE.md deploy Trap 3).
+
+The blast radius shrank on the founder's instruction to stop overwriting. This
+started as three columns on `customers`, which put the migration in the path of
+`/api/orders` and the Stripe webhook — seven files do a bare `db.select()` on
+that table, so deploying first would have broken checkout and stopped paid
+orders being marked paid. It is now a **new `fit_feedback` table** and
+`customers` is untouched, so a premature deploy would only affect `/fit`
+itself. Migrate first anyway.
 
 Security review done (`shaklek-security`), four findings fixed in `38d699a`'s
 follow-up. Two accepted and reported to the founder: `rejectOversizedBody`
