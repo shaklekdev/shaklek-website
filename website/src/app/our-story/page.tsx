@@ -60,6 +60,39 @@ function ImagePlaceholder({
   );
 }
 
+// THE FOUR VIGNETTES, from the founder's mockup 2026-08-27.
+//
+// WHY THEY EXIST: measured on a real 390px phone, /our-story ran 3,423px --
+// 4.1 screens -- and the four tenets alone spanned 1,659px of it, almost two
+// full screens, with 1,290px of that being three full-bleed photographs. Half
+// the page was one section, and most of that section was decoration. "People
+// get annoyed and leave."
+//
+// These carry the same four ideas in four to six words each. The long-form
+// versions still follow underneath, where they do their real job, which is
+// SEO and the reader who has decided to care.
+// ⚠️ NO "YOUR" IN THESE TITLES, ON PURPOSE. They read Your body / Your style
+// before, four lines above a line that already says "your shape, your skin,
+// your style". The founder's note: too many yours, repeated again after the
+// cards. The one list on this page is hers, in the intro; these carry the same
+// four ideas without competing with it.
+const VIGNETTES = [
+  {
+    // ⚠️ THIS USED TO SAY "not a size chart", WHICH CONTRADICTS THE PRODUCT.
+    // Standard sizing is a real, equally-priced option -- SizePicker offers XS
+    // to XXL and the chart sits right beside it. Dismissing it here sold
+    // against something we actually offer. Founder caught it.
+    k: "Cut to fit",
+    v: "Send your measurements, or pick a standard size. Same price either way.",
+  },
+  { k: "Details you choose", v: "Change the sleeve, the length, the leg, the fit. More coming." },
+  {
+    k: "100% natural fabrics",
+    v: "Plant-based only. Breathable against the skin, never synthetic.",
+  },
+  { k: "Made to order", v: "Nothing is cut until you order, so nothing is wasted." },
+];
+
 const tenetGroups = [
   {
     caption: "A finished piece: natural fabric texture, a personal detail visible",
@@ -67,7 +100,7 @@ const tenetGroups = [
     items: [
       {
         title: "Materials that respect your skin",
-        body: "Natural fibre, always, nothing synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
+        body: "Plant-based fibre only, never synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
       },
       {
         // "Timeless" folded in here at the founder's direction rather than
@@ -86,7 +119,11 @@ const tenetGroups = [
     items: [
       {
         title: "Tailoring for your shape",
-        body: "Standard sizing or your exact measurements, cut for your body, not a size chart. Nothing is made until you order it, so there is no stock sitting on a shelf and no waste. The most sustainable thing a clothing brand can do is not make what nobody asked for.",
+        // ⚠️ THIS REPEATED TWO VIGNETTES ALMOST WORD FOR WORD -- "cut for
+        // your body, not a size chart" and "nothing is made until you order
+        // it" are both card copy now. Founder: "cut for you and made to order
+        // are repeated a lot". The long version says what a card cannot.
+        body: "A solo tailor cuts one piece at a time, so there is no minimum run and no stock waiting for a body that happens to fit it. That is the part most labels cannot copy: the most sustainable thing a clothing brand can do is not make what nobody asked for, and that only works if nothing is made in advance.",
       },
       {
         title: "Fixed prices",
@@ -125,7 +162,7 @@ export default function OurStoryPage() {
       <Header />
 
       {/* Hero */}
-      <div className="relative h-[52vh] max-h-[440px] min-h-[320px] w-full overflow-hidden">
+      <div className="relative h-[34vh] max-h-[300px] min-h-[240px] w-full overflow-hidden sm:h-[52vh] sm:max-h-[440px] sm:min-h-[320px]">
         <Image
           src="/marketing/story-hero.jpg"
           alt="A Shaklek piece worn outdoors, natural light"
@@ -134,20 +171,31 @@ export default function OurStoryPage() {
           sizes="100vw"
           className="object-cover object-top"
         />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/45 to-black/25"
+        />
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 pb-10 text-center">
           {/* The hero carries the slogan only. The page title moved below it:
               a floating "Our story" chip over the photograph read as a stray
               button rather than a heading. */}
-          <p className="max-w-lg font-display text-[30px] leading-tight text-text drop-shadow-[0_1px_12px_rgba(255,255,255,0.8)]">
-            Your look,
-            <br />
-            your way.
+          {/* ⚠️ WHITE TYPE ON A SCRIM, NOT DARK TYPE ON A DROP SHADOW.
+              This was text-text with a white drop-shadow, which only works
+              while the photograph stays pale exactly where the words fall --
+              founder: "it's not visible with the colors behind it". A scrim
+              guarantees contrast whatever the image does, same as the band
+              lower down. */}
+          <p className="text-[12px] tracking-[0.16em] text-white/85 uppercase">
+            Shaklek means &ldquo;your way&rdquo; in Arabic
           </p>
+          <h1 className="font-display mt-3 max-w-xl text-[26px] leading-tight text-white sm:text-[34px]">
+            your shape, your skin, your style, your Shaklek.
+          </h1>
           {/* The founder's note is the most personal thing on the site and it
               sits at the very bottom. This is the shortcut to it. */}
           <a
             href="#from-our-founder"
-            className="mt-5 inline-block border-b border-text/30 pb-0.5 text-[13px] text-text transition-colors hover:border-text"
+            className="mt-6 inline-block border-b border-white/40 pb-0.5 text-[13px] text-white transition-colors hover:border-white"
           >
             From our founder ↓
           </a>
@@ -155,15 +203,10 @@ export default function OurStoryPage() {
       </div>
 
       <div className="mx-auto w-full max-w-2xl px-6 py-14">
-        <h1 className="mb-5 text-[26px] text-text">Our story</h1>
-        <p className="text-xs text-text-3">
-          Shaklek means your way in Arabic: your vision, your style, your
-          shape, your skin.
-        </p>
         <p className="subtitle mt-3 max-w-md text-justify hyphens-auto">
-          We make elegant fashion essentials, not fast trends. Pieces
-          customizable to your taste, friendly to your skin, and shaped to
-          your body, not the other way around.
+          We make elegant fashion essentials, not fast trends. Pieces you can
+          change to your taste, kind to the skin, and shaped to fit you, not
+          the other way around.
         </p>
         <p className="subtitle mt-4 max-w-md text-justify hyphens-auto">
           Every piece here starts as an idea, not a rack of stock waiting for
@@ -173,7 +216,89 @@ export default function OurStoryPage() {
         </p>
       </div>
 
-      {/* Tenets — grouped by theme, one image per pair, alternating sides */}
+      {/* WHY SHAKLEK? — the four ideas in four words each, before the long
+          versions. On a phone this section is the whole answer; the prose
+          below is for search engines and for the reader who wants more. */}
+      <div className="mx-auto w-full max-w-5xl px-6 pb-14">
+        <p className="text-xs tracking-[0.14em] text-text-3 uppercase">
+          Why Shaklek?
+        </p>
+        <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-5">
+          {VIGNETTES.map((v) => (
+            <li
+              key={v.k}
+              className="border border-border-strong p-4 sm:p-6"
+            >
+              <p className="font-display text-[15px] text-text sm:text-[18px]">
+                {v.k}
+              </p>
+              <p className="mt-2 text-[13px] leading-relaxed text-text-2 sm:text-[14px]">
+                {v.v}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+
+      {/* A FULL-BLEED HORIZONTAL BAND, text over the image.
+          The portraits were hidden on phones to save 1,290px, which fixed the
+          scroll and stripped the page of any visual. Founder: "we need
+          pictures and visuals". A band is the cheap way back in -- 21:9 at
+          390px wide is 186px tall against 487px for the 4:5 portrait, so it
+          buys the imagery back for roughly a third of the height.
+
+          The scrim is not decoration. White type over a photograph is only
+          legible if something guarantees the contrast, and these are pale
+          studio shots; without it the line disappears into the linen. */}
+      <section className="relative mb-14 w-full overflow-hidden">
+        <Image
+          src="/marketing/story-tailoring.jpg"
+          alt="A tailor at work on a single piece"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/25"
+        />
+        <div className="relative mx-auto flex min-h-[280px] max-w-6xl items-center px-6 py-12 sm:min-h-[340px]">
+          <div className="max-w-md">
+            {/* Founder's line, 2026-08-28. She first proposed "your tailor,
+                your piece, made for you", which is warmer but puts three
+                "your" back on a screen we had just cleared them from, and
+                trades a checkable fact for a sentiment any label could print.
+                This keeps the one claim most brands cannot make -- a single
+                tailor, cutting after the order -- and one "your". */}
+            <p className="font-display text-[22px] leading-snug text-white sm:text-[30px]">
+              Your piece, cut by one tailor, after you order it.
+            </p>
+            {/* THE CTA GOES HERE, NOT IN THE HERO.
+                A call to action converts where intent peaks, and on a story
+                page that is AFTER the argument: by this point the reader has
+                the four cards and the tailor behind them. In the hero they
+                have had one line, and it would fork against
+                "From our founder", which is a scroll action pointing the other
+                way. The nav bar already offers Catalog to anyone who wants to
+                skip the page entirely. */}
+            <p className="mt-6">
+              <Link
+                href="/#catalog"
+                className="inline-block bg-white px-6 py-3 text-sm text-text transition-opacity hover:opacity-90"
+              >
+                Create your piece
+              </Link>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Tenets — the long-form versions. One image per pair on desktop,
+          alternating sides. ⚠️ IMAGES ARE HIDDEN ON PHONES: they were 1,290px
+          of a 3,423px page, pushing the words that actually persuade a screen
+          and a half further down. The vignettes above carry this section on a
+          phone. */}
       <div className="mx-auto w-full max-w-5xl px-6 pb-16">
         <div className="flex flex-col gap-14 sm:gap-16">
           {tenetGroups.map((group, i) => (
@@ -183,7 +308,7 @@ export default function OurStoryPage() {
                 i % 2 === 1 ? "sm:flex-row-reverse" : "sm:flex-row"
               }`}
             >
-              <div className="w-full sm:w-1/2">
+              <div className="hidden w-full sm:block sm:w-1/2">
                 <ImagePlaceholder aspect="aspect-[4/5]" caption={group.caption} src={group.image} />
               </div>
               <div className="w-full space-y-8 sm:w-1/2">
@@ -314,18 +439,47 @@ export default function OurStoryPage() {
         </div>
       </div>
 
-      {/* Closing */}
-      <div className="mx-auto w-full max-w-2xl px-6 pb-20">
-        {/* /#catalog, not "/". A Start designing button that drops someone at
-            the top of the home page makes them scroll past the whole explainer
-            they have just read. */}
-        <Link
-          href="/#catalog"
-          className="inline-block bg-accent px-6 py-3 text-sm text-white transition-opacity hover:opacity-90"
-        >
-          Start designing
-        </Link>
-      </div>
+      {/* THE CLOSER, ON THE MATERIALS PHOTOGRAPH.
+          The founder asked for the shirt-and-cotton shot to sit behind text
+          somewhere it makes sense. This is the place: it is the last thing
+          read, the line is short enough to hold its own over an image, and it
+          puts the fabric in front of someone at the moment they decide to
+          click. A band in the middle of the prose would have been decoration;
+          here it is the ending.
+
+          Taller than the other band because it carries two lines and a button,
+          and centred type needs the room on a phone. */}
+      <section className="relative w-full overflow-hidden">
+        <Image
+          src="/marketing/story-materials-v2.jpg"
+          alt="A finished linen piece with raw cotton beside it"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-black/55"
+        />
+        <div className="relative mx-auto flex min-h-[340px] w-full max-w-2xl flex-col items-center justify-center px-6 py-16 text-center sm:min-h-[380px]">
+          <p className="font-display text-[24px] leading-snug text-white sm:text-[32px]">
+            Your body isn&apos;t standard.
+            <br />
+            Why should your clothes be?
+          </p>
+          <p className="mt-8">
+            {/* /#catalog, not "/". A button that drops someone at the top of
+                the home page makes them scroll past the whole page they have
+                just read. */}
+            <Link
+              href="/#catalog"
+              className="inline-block bg-white px-7 py-3.5 text-sm text-text transition-opacity hover:opacity-90"
+            >
+              Create your piece
+            </Link>
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

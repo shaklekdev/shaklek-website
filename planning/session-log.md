@@ -18,6 +18,30 @@ Rules that make this work:
 
 ## Active claims
 
+### Session J — /our-story + a live nav bug (2026-08-28) — DONE, no files held
+
+**The Catalog menu link was broken on every page** and is the more urgent half
+of this. A hash link to the URL you are already on is a no-op in the App
+Router, so on the home page Catalog worked exactly once: 976, then 0, then 0.
+Fixed in `Header.tsx` and measured 976/976/976.
+
+**/our-story** rebuilt to the founder's mockup over several rounds of her
+feedback, shown on localhost before anything shipped. A first attempt at her
+written proposal was previewed and rejected ("not sure this is what was
+meant") and deleted; what shipped is the parts she confirmed, one at a time.
+
+⚠️ **Two standing rules I broke and had to be told about.** I put em dashes
+back into customer copy -- a documented founder correction with a linter for it
+in the social builder. And a vignette read "not a size chart", which sells
+against standard sizing, a real equally-priced option the page links to. Both
+caught by her, not by me.
+
+⚠️ **143 more resurrected .png duplicates** appeared in public/catalog and
+public/marketing, all byte-identical to their .jpg twins, all with original
+mtimes. Moved to `_archive/duplicate-png-names/`. That is the third occurrence;
+see `_archive/README.md` for the sync-tool explanation.
+
+
 ### Security agent — RCA for the five 2026-08-26/27 bugs (2026-08-27)
 
 **HOLDING, uncommitted, awaiting founder review — do not edit or commit:**
