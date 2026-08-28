@@ -56,10 +56,9 @@ export default function FitFeedbackForm() {
   if (state === "done") {
     return (
       <div className="py-10 text-center">
-        <p className="text-[22px] text-text">Thank you.</p>
+        <p className="text-[22px] text-text">Noted, and kept.</p>
         <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-text-2">
-          This goes to your tailor and sits with your measurements. Your next
-          piece starts from it.
+          Your tailor has this now. Your next piece starts here.
         </p>
         <Link
           href="/catalog"
