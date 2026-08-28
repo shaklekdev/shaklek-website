@@ -77,20 +77,30 @@ function ImagePlaceholder({
 // cards. The one list on this page is hers, in the intro; these carry the same
 // four ideas without competing with it.
 const VIGNETTES = [
+  // ⚠️ "Cut to fit" and "Made to order" USED TO BE TWO CARDS. Founder,
+  // 2026-08-28: they are the same idea. She is right -- cutting to your
+  // measurements and cutting only after you order are two halves of one
+  // proposition, and splitting them spent a card saying the same thing twice
+  // on a page already criticised for repeating itself. Combined, that freed
+  // the fourth slot for something genuinely different.
   {
-    // ⚠️ THIS USED TO SAY "not a size chart", WHICH CONTRADICTS THE PRODUCT.
-    // Standard sizing is a real, equally-priced option -- SizePicker offers XS
-    // to XXL and the chart sits right beside it. Dismissing it here sold
-    // against something we actually offer. Founder caught it.
-    k: "Cut to fit",
-    v: "Send your measurements, or pick a standard size. Same price either way.",
+    k: "Made to order, cut to fit",
+    v: "Your measurements or a standard size, same price. Nothing is cut until you order it.",
   },
   { k: "Details you choose", v: "Change the sleeve, the length, the leg, the fit. More coming." },
   {
     k: "100% natural fabrics",
     v: "Plant-based only. Breathable against the skin, never synthetic.",
   },
-  { k: "Made to order", v: "Nothing is cut until you order, so nothing is wasted." },
+  // ⚠️ "THE UAE", NOT "DUBAI". Confirmed by the founder 2026-08-28. The
+  // company is licensed in Dubai, but where the tailor actually works is
+  // recorded nowhere, so the narrower claim is not supported. "Local tailors"
+  // plural is supported: planning/pricing-todo.md records that the bench is
+  // more than one person.
+  {
+    k: "Made in the UAE",
+    v: "Sewn here by local tailors, never shipped in from a factory abroad.",
+  },
 ];
 
 const tenetGroups = [

@@ -65,6 +65,18 @@ function BenefitIcon({ name }: { name: string }) {
       </svg>
     );
 
+  if (name === "pin")
+    return (
+      <svg {...common}>
+        {/* A place marker. Generic, and deliberately so -- provenance is a
+            place, and the same argument that makes a price tag right for price
+            makes a pin right for here. A flag would be worse: it claims a
+            nationality rather than where the garment was made. */}
+        <path d="M12 21.5s7-6.1 7-11.1a7 7 0 1 0-14 0c0 5 7 11.1 7 11.1Z" />
+        <circle cx="12" cy="10.2" r="2.6" />
+      </svg>
+    );
+
   // tag
   return (
     <svg {...common}>
@@ -86,7 +98,7 @@ export default function Benefits() {
           body copy; boxed, they read as three things rather than a paragraph,
           and each icon gets room to be seen at a size where it is legible.
           Stacks on a phone, where three columns would be unreadable. */}
-      <ul className="grid gap-4 sm:grid-cols-3 sm:gap-5">
+      <ul className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
         {BENEFITS.map((b) => (
           <li
             key={b.k}

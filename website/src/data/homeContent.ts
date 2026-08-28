@@ -100,6 +100,19 @@ export const BENEFITS = [
     v: "Linen only. Breathable natural fabric against your skin, never synthetic.",
     icon: "flax",
   },
+  // ⚠️ "MADE IN THE UAE", NOT "MADE IN DUBAI". Confirmed by the founder
+  // 2026-08-28. The company is licensed in Dubai, but where the tailor
+  // actually works is recorded nowhere in this repo, so the narrower claim is
+  // not supported. Do not tighten it without her saying so.
+  //
+  // It earns a place because almost no fast-fashion competitor in this market
+  // can say it, and it is one of the few brand claims that is both
+  // differentiating and verifiable.
+  {
+    k: "Made in the UAE",
+    v: "Sewn here by local tailors, never shipped in from a factory abroad.",
+    icon: "pin",
+  },
 ];
 
 // Why this deserves to exist next to everything else in the market. Each one
