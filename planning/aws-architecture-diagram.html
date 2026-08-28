@@ -167,7 +167,7 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       <rect class="bx" x="336" y="370" width="256" height="72" style="stroke:var(--c-db)"/>
       <text class="lbl" x="464" y="394" text-anchor="middle">Neon Postgres</text>
       <text class="sub" x="464" y="412" text-anchor="middle">NOT Amazon RDS · eu-central-1</text>
-      <text class="tiny" x="464" y="429" text-anchor="middle">customers · orders · order_items</text>
+      <text class="tiny" x="464" y="429" text-anchor="middle">customers · orders · order_items · fit_feedback</text>
 
       <rect class="bx" x="52" y="466" width="256" height="72" style="stroke:var(--c-integration)"/>
       <text class="lbl" x="180" y="490" text-anchor="middle">Stripe Checkout</text>
@@ -335,7 +335,25 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <li><span class="flow-status built">live</span> The customer pays on <strong>Stripe's hosted page</strong>. Shaklek's code never sees a card number.</li>
     <li><span class="flow-status built">live</span> <strong>Stripe's webhook</strong> calls <code>/api/webhooks/stripe</code>. Signature verified, state transition gated (Stripe delivers at-least-once), the true paid total written back over the pre-discount figure, and Resend emails the stylist. <strong>This, not the browser redirect, is what makes an order real.</strong></li>
     <li><span class="flow-status built">live</span> The customer lands on <code>/order-confirmed</code>. Staff open <code>/dashboard/orders</code> and download a tech pack PDF for the tailor, built by <code>src/lib/techPack.ts</code> from the order row plus the technical flat for that exact combination.</li>
+    <li><span class="flow-status built">live</span> <strong>The loop closes after delivery.</strong> A QR on the thank-you card in the parcel opens <code>/fit</code>. She answers five questions about how the piece actually sat and <code>POST /api/fit-feedback</code> appends a row to <code>fit_feedback</code>, attached to her most recent paid order. On her <strong>next</strong> order that row prints on the tailor's tech pack. She can see every entry, and delete them, from <code>/account</code>.</li>
   </ol>
+
+  <h2>The one unauthenticated write, and why it is shaped the way it is</h2>
+  <p class="section-note">
+    <code>/api/fit-feedback</code> is the only route on the site that writes to a
+    customer record without a login. That is deliberate — it is reached by a QR
+    on a printed card, by a woman holding a garment, and a password wall there
+    collects nothing. Two security reviews shaped what follows; the second was
+    run because the first had reviewed code that a redesign had already replaced.
+  </p>
+  <ul class="flow">
+    <li><span class="flow-status built">rule</span> <strong>It answers every request identically</strong> — same body, same status, same headers, whether the email is a paying customer, a stranger or nonsense. A route that 404s on an unknown address is a customer-list oracle: feed it emails and it tells you who shops here.</li>
+    <li><span class="flow-status built">rule</span> <strong>It is one SQL statement, always.</strong> Not for elegance: branching on whether the customer exists rebuilt that same oracle out of <strong>latency</strong> — one database round trip for a stranger, three for a real customer, with byte-identical responses. Found by review. Do not turn this back into a lookup plus a conditional write.</li>
+    <li><span class="flow-status built">rule</span> <strong>Nothing is ever overwritten.</strong> Founder's instruction. A row per submission, each naming the order it was about, because a body changes and three entries a year apart mean something one cannot.</li>
+    <li><span class="flow-status built">rule</span> <strong>It matches on <code>lower(email)</code>.</strong> Guest checkout stores an address exactly as typed, so a case-sensitive match silently saved nothing for anyone who typed a capital — invisible, because the response is identical either way.</li>
+    <li><span class="flow-status built">rule</span> <strong>Capped at 100 rows per customer</strong>, inside that same statement. Append-only plus an unauthenticated writer plus an unbounded account-page read is a way to make a customer's own account fail to load.</li>
+    <li><span class="flow-status tbd">accepted</span> Someone who knows a customer's email can <strong>add</strong> a false entry. They cannot read anything back and cannot destroy a real one. The tech pack caption says explicitly that the note is unverified and does not replace the measurements. The real fix, if it is ever needed, is a signed per-order link printed as variable data.</li>
+  </ul>
 
   <h2>Where the images live, and how they reach a customer</h2>
   <p class="section-note">
@@ -406,13 +424,14 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     speed. Images are not the slow part; that was measured.
   </p>
 
-  <h2>Deploying, and the two traps that have bitten</h2>
+  <h2>Deploying, and the three traps that have bitten</h2>
   <p class="section-note">
     Both cost a day each in August 2026. Neither is obvious from a green build.
   </p>
   <ol class="flow">
     <li><span class="flow-status tbd">trap</span> <strong>Amplify rejects a build output over 230MB.</strong> The catalogue is the bulk of it, so catalog images are stored as <strong>JPEG q92</strong>. Shipping them as PNG once produced a 291MB output and a failed deploy.</li>
     <li><span class="flow-status tbd">trap</span> <strong>Replacing an image in place changes nothing for visitors.</strong> Photos are served through Next's optimizer and CloudFront caches that response for four hours, keyed by URL — and Amplify owns the distribution, so there is no invalidation available. <strong>Changed content means a changed filename.</strong> That is what the <code>-v2</code>/<code>-v3</code> suffixes are for.</li>
+    <li><span class="flow-status tbd">trap</span> <strong>Amplify never runs a database migration, and <code>drizzle-kit migrate</code> does not work here either.</strong> The build spec is <code>npm ci</code> then <code>npm run build</code>; there is no migrate step and never has been. Worse, the documented fallback lies: this schema was created with <code>drizzle-kit push</code>, so <code>drizzle.__drizzle_migrations</code> is <strong>empty</strong> — the tool believes every migration since 0000 is unapplied, tries to create tables that already exist, and <strong>exits 0 having done nothing</strong>. It did exactly that twice on 2026-08-28. Apply the generated SQL yourself in a transaction, then <strong>verify against <code>information_schema</code>, never against the exit code</strong>. Migrate first, push second.</li>
     <li><span class="flow-status built">note</span> <strong>A failed build is silent</strong> — the site keeps serving the previous version. When a change is not live, check the job status before blaming caching.</li>
   </ol>
 
