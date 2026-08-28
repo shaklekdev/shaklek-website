@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { getVerifiedEmail } from "@/lib/authEmail";
 import { getDb, schema } from "@/db/client";
 import { rejectCrossOrigin } from "@/lib/requestGuards";
@@ -41,7 +41,12 @@ export async function DELETE(req: NextRequest) {
   const [customer] = await db
     .select({ id: schema.customers.id })
     .from(schema.customers)
-    .where(eq(schema.customers.email, email));
+    // lower(), matching the write and the account page. Without it this
+    // deletes nothing for a customer whose row was stored mixed-case at guest
+    // checkout, while still answering ok -- so the UI says "Deleted" and the
+    // data is still there. A privacy promise that reports success and does
+    // nothing is worse than not offering the control.
+    .where(sql`lower(${schema.customers.email}) = ${email.toLowerCase()}`);
   if (customer) {
     await db.delete(schema.fitFeedback).where(eq(schema.fitFeedback.customerId, customer.id));
   }

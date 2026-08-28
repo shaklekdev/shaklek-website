@@ -1,5 +1,5 @@
 {
-  "id": "90467cc8-4acc-4cc1-b81f-ef9b157278c3",
+  "id": "87ca50d0-b7c8-4e78-b492-8b19938eb4ee",
   "prevId": "c015911a-faef-4b03-8938-7ba3ce8ac0ab",
   "version": "7",
   "dialect": "postgresql",
@@ -124,7 +124,29 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "fit_feedback_customer_created_idx": {
+          "name": "fit_feedback_customer_created_idx",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "fit_feedback_customer_id_customers_id_fk": {
           "name": "fit_feedback_customer_id_customers_id_fk",

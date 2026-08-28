@@ -38,6 +38,21 @@ import { FIT_NOTE_MAX, resolveFitFeedback } from "@/data/fitFeedback";
  *
  * Rate limited hard, because unlike the waitlist there is no reason on earth
  * for one person to send this more than a few times.
+ *
+ * ⚠️ CASE-INSENSITIVE ON THE EMAIL, and it has to be. /api/orders stores a
+ * guest's address EXACTLY AS TYPED -- nothing on that path lowercases it -- so
+ * a customer who typed "Nada@Gmail.com" at checkout has a mixed-case row. This
+ * route lowercases what she types here, and a case-sensitive match would then
+ * find nothing, insert nothing, and answer ok. Her feedback would vanish with
+ * no signal to her, to staff, or to any log, precisely because the response is
+ * identical for every outcome. Found by a security review.
+ *
+ * ⚠️ ACCEPTED RESIDUAL, stated rather than implied: one statement is constant
+ * in SHAPE but not in TIME -- a matching customer causes a row insert, a
+ * stranger does not, and a patient attacker averaging many samples could still
+ * distinguish the two. That is far weaker than the 1-vs-3 round-trip oracle
+ * this replaced, and every probe costs rate-limit budget. Closing it properly
+ * means signed per-order links, which is the fix defence 3 already names.
  */
 
 const WINDOW_MS = 10 * 60 * 1000;
@@ -133,7 +148,17 @@ export async function POST(req: NextRequest) {
       select o.customer_id, o.id, ${JSON.stringify(answers)}, ${note}
       from orders o
       join customers c on c.id = o.customer_id
-      where c.email = ${email} and o.status = 'paid'
+      where lower(c.email) = ${email}
+        and o.status = 'paid'
+        -- ⚠️ A CEILING ON AN APPEND-ONLY TABLE WITH AN UNAUTHENTICATED WRITE.
+        -- Nothing here overwrites, by the founder's instruction, so without a
+        -- cap someone who knows a paying customer's address can add rows until
+        -- her account page is too large to render -- and her orders and
+        -- measurements live on that same page. The limiter alone does not stop
+        -- it: it is per-IP and per-container in memory (see rateLimit.ts), so
+        -- rotating addresses raises the ceiling. This keeps the statement
+        -- single and constant-shaped.
+        and (select count(*) from fit_feedback f where f.customer_id = o.customer_id) < 100
       order by o.created_at desc
       limit 1
     `);

@@ -8,4 +8,5 @@ CREATE TABLE "fit_feedback" (
 );
 --> statement-breakpoint
 ALTER TABLE "fit_feedback" ADD CONSTRAINT "fit_feedback_customer_id_customers_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."customers"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "fit_feedback" ADD CONSTRAINT "fit_feedback_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "fit_feedback" ADD CONSTRAINT "fit_feedback_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "fit_feedback_customer_created_idx" ON "fit_feedback" USING btree ("customer_id","created_at");

@@ -1,11 +1,4 @@
-import {
-  pgTable,
-  uuid,
-  text,
-  numeric,
-  timestamp,
-  boolean,
-} from "drizzle-orm/pg-core";
+import { boolean, index, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 // Tailor and catalog tables aren't defined yet — nothing writes to them
 // until the tailor swipe tool and catalog admin tool exist (backend-todo.md).
@@ -132,4 +125,10 @@ export const fitFeedback = pgTable("fit_feedback", {
   answers: text("answers").notNull(),
   note: text("note"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (t) => [
+  // All three readers -- the account page, the spec sheet and the delete --
+  // filter on customer_id and order by created_at. A foreign key does NOT
+  // create an index in Postgres, so without this every read is a sequential
+  // scan of the whole table, and the table only grows.
+  index("fit_feedback_customer_created_idx").on(t.customerId, t.createdAt),
+]);

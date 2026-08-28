@@ -1,5 +1,5 @@
 import { getVerifiedEmail } from "@/lib/authEmail";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import Header from "@/components/Header";
 import { SignOutButton } from "@clerk/nextjs";
 import AccountNameForm from "@/components/AccountNameForm";
@@ -45,8 +45,16 @@ async function getFitFeedbackForEmail(email: string) {
     })
     .from(schema.fitFeedback)
     .innerJoin(schema.customers, eq(schema.fitFeedback.customerId, schema.customers.id))
-    .where(eq(schema.customers.email, email))
-    .orderBy(desc(schema.fitFeedback.createdAt));
+    // lower(), matching the write. A guest checkout stores the address exactly
+    // as typed while Clerk hands us a normalised one, so a case-sensitive
+    // match here would hide a customer's own notes from her -- and the delete
+    // below would then report success while removing nothing.
+    .where(sql`lower(${schema.customers.email}) = ${email.toLowerCase()}`)
+    .orderBy(desc(schema.fitFeedback.createdAt))
+    // Bounded. This renders every row it fetches, on the same page as her
+    // orders and measurements, and the table it reads is append-only with an
+    // unauthenticated writer. Newest first, so the cap drops the oldest.
+    .limit(50);
 
   return rows.flatMap((r) => {
     try {

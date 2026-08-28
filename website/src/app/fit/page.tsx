@@ -26,7 +26,15 @@ export default function FitPage() {
           size chart.
         </p>
         <p className="mt-2 text-[13px] text-text-3">
-          Two minutes. Answer only what you noticed.
+          Two minutes. Answer only what you noticed.{" "}
+          {/* Notice AT THE POINT OF COLLECTION. This page takes an email and a
+              sentence about someone's body from a visitor who is not signed in,
+              and UAE PDPL expects the notice where the data is given, not only
+              on a page in the footer. */}
+          <a href="/legal/privacy" className="underline">
+            How we handle this
+          </a>
+          .
         </p>
         <FitFeedbackForm />
         <p className="mt-10 border-t border-[#E7E0D2] pt-5 text-[12.5px] leading-relaxed text-text-3">
