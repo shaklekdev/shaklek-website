@@ -37,6 +37,19 @@
  * CARE IS DRY CLEAN ONLY: founder's decision, taken twice and held. The
  * residual risk is accepted, not solved -- unwashed linen shrinks 4-10%, and we
  * promise a free remake if the fit is wrong. Recorded, closed, do not reopen.
+ *
+ * ⚠️ NO PRE-SHRINK WARNING ON THIS PAGE, AND DO NOT ADD ONE BACK. A row saying
+ * "the linen is not pre-shrunk, washing will change the fit" shipped briefly
+ * and the founder cut it: nobody outside the trade knows what pre-shrinking is,
+ * dry-clean is unremarkable on linen and a dozen other fabrics, and explaining
+ * a risk nobody was worried about reads as a defect disclosure at the moment
+ * someone is deciding to trust you. She is right, and the cost of the sentence
+ * is measured in lost orders, not in law -- Art. 40 asks for warnings where
+ * there are warnings to give, and "dry clean only" is the instruction.
+ *
+ * The consequence is still WRITTEN DOWN, in src/app/legal/terms/page.tsx,
+ * which is where the returns position belongs and where it protects us if
+ * someone washes a garment and asks for a remake.
  */
 export type Disclosure = {
   label: string;
@@ -86,17 +99,6 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       // Arabic inside an approved row.
       value: "Dry clean only",
       valueAr: "تنظيف جاف فقط",
-    },
-    {
-      // ⚠️ ARABIC NOT YET READ BY THE FOUNDER. Her approval covers the
-      // composition, care and origin strings only. Do not treat this as
-      // verified until she has read it.
-      label: "Warning",
-      labelAr: "تحذير",
-      value:
-        "The linen is not pre-shrunk. Washing will change the fit of a garment cut to your measurements.",
-      valueAr:
-        "الكتان غير مسبق الانكماش. الغسل سيغير مقاس الملابس المفصلة على قياساتك.",
     },
     {
       // ⚠️ ARABIC NOT YET READ BY THE FOUNDER. Her approval covers the
