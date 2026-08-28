@@ -113,7 +113,7 @@ export default function SizeGuidePage() {
           the clothes. */}
       <p className="not-prose pt-2">
         <Link
-          href="/#catalog"
+          href="/catalog"
           className="inline-block bg-accent px-6 py-3 text-sm text-white transition-opacity hover:opacity-90"
         >
           Start designing

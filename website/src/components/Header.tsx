@@ -13,10 +13,12 @@ import { useCart } from "@/lib/CartContext";
 // measurements, which is the thing this business actually runs on -- so it
 // earns a menu slot in a way an explainer never did.
 const NAV_LINKS = [
-  // /#catalog, not "/" -- same fix as the Start designing buttons. A menu item
-  // called Catalog that lands someone at the top of the home page makes them
-  // scroll past the whole page to reach the clothes they asked for.
-  { href: "/#catalog", label: "Catalog" },
+  // A REAL PAGE, not "/#catalog". The anchor worked for a visitor but was
+  // never a URL: everything after "#" is not sent to a server, so Google only
+  // ever saw the home page and an ad click could not be told from a story
+  // click. It also left /catalog orphaned, which is what makes a route rank
+  // badly. The home page keeps its products either way.
+  { href: "/catalog", label: "Catalog" },
   { href: "/size-guide", label: "Size custom" },
   { href: "/our-story", label: "Our story" },
 ];
@@ -60,7 +62,7 @@ export default function Header() {
   // NO HAMBURGER. The three links live in the black bar below the wordmark at
   // every width, so there is nothing left for a menu to hide. That removes the
   // panel, its Escape handler, its close-on-navigation state, and the bug where
-  // "/#catalog" tapped from the home page changed only the hash -- which the
+  // "/catalog" tapped from the home page changed only the hash -- which the
   // panel did not treat as navigation, so it stayed open over the clothes.
 
   // Opaque rather than bg-white/90 + backdrop-blur-xl. A full-width sticky

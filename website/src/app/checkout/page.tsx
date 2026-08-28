@@ -17,7 +17,7 @@ export default function CheckoutPage() {
           <h1 className="text-[26px] text-text">Nothing to check out</h1>
           <p className="subtitle mt-2">Your cart is empty.</p>
           <Link
-            href="/#catalog"
+            href="/catalog"
             className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
           >
             Browse catalog

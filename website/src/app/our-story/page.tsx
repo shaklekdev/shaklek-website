@@ -306,7 +306,7 @@ export default function OurStoryPage() {
                 skip the page entirely. */}
             <p className="mt-6">
               <Link
-                href="/#catalog"
+                href="/catalog"
                 className="inline-block bg-white px-6 py-3 text-sm text-text transition-opacity hover:opacity-90"
               >
                 Create your piece
@@ -494,7 +494,7 @@ export default function OurStoryPage() {
                 the home page makes them scroll past the whole page they have
                 just read. */}
             <Link
-              href="/#catalog"
+              href="/catalog"
               className="inline-block bg-white px-7 py-3.5 text-sm text-text transition-opacity hover:opacity-90"
             >
               Create your piece

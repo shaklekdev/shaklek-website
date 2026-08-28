@@ -117,7 +117,7 @@ function OrderConfirmedContent() {
           If you just placed an order, check your email — otherwise head back to the catalog.
         </p>
         <Link
-          href="/#catalog"
+          href="/catalog"
           className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
         >
           Back to catalog
@@ -212,7 +212,7 @@ function OrderConfirmedContent() {
         </div>
       )}
 
-      <Link href="/#catalog" className="mt-8 inline-block text-sm text-text-2 underline">
+      <Link href="/catalog" className="mt-8 inline-block text-sm text-text-2 underline">
         Back to catalog
       </Link>
     </div>

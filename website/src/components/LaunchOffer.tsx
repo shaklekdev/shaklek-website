@@ -115,7 +115,7 @@ export default function LaunchOffer() {
                 closed the dialog, so on /faq or /shipping it handed back the
                 page the visitor was already stuck on. */}
             <Link
-              href="/#catalog"
+              href="/catalog"
               onClick={close}
               className="mt-4 block w-full bg-accent px-4 py-3 text-center text-sm text-white hover:bg-accent-light"
             >

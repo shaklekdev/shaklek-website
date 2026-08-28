@@ -94,7 +94,7 @@ export default function HowItWorksPage() {
         </div>
 
         <Link
-          href="/#catalog"
+          href="/catalog"
           className="mt-10 inline-block rounded-full bg-accent px-6 py-3 text-sm text-white"
         >
           Start with a piece

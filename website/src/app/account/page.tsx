@@ -99,7 +99,7 @@ export default async function AccountPage() {
           <div className="mt-10 text-center">
             <p className="subtitle">No orders yet under {email}.</p>
             <a
-              href="/#catalog"
+              href="/catalog"
               className="mt-6 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
             >
               Browse the catalog

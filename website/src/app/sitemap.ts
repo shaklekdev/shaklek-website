@@ -11,6 +11,9 @@ const STATIC_ROUTES: {
   priority: number;
 }[] = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
+  // Second only to the home page: it is the page ads point at and the one
+  // that can rank for product intent, which "/catalog" never could.
+  { path: "/catalog", changeFrequency: "weekly", priority: 0.9 },
   { path: "/how-it-works", changeFrequency: "monthly", priority: 0.8 },
   { path: "/our-story", changeFrequency: "monthly", priority: 0.7 },
   { path: "/upload", changeFrequency: "monthly", priority: 0.8 },
