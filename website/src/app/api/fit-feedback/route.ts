@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq, exists, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
@@ -22,14 +22,17 @@ import { FIT_NOTE_MAX, resolveFitFeedback } from "@/data/fitFeedback";
  *    here. That matters more than usual for a small brand in a small city.
  *    ⚠️ Do not add a helpful "we could not find your order" message here.
  *
- * 2. IT WRITES ONLY TO A CUSTOMER WHO HAS ACTUALLY PAID FOR SOMETHING. No row
- *    is created and nothing is stored for an address with no paid order, so
- *    the endpoint cannot be used to seed the customers table with junk.
+ * 2. IT WRITES ONLY FOR A CUSTOMER WHO HAS ACTUALLY PAID FOR SOMETHING. The
+ *    insert selects from her own paid orders, so an address with no paid order
+ *    inserts nothing at all -- the endpoint cannot be used to seed the database
+ *    with junk, and it cannot create a customer.
  *
  * 3. THE WORST CASE IS BOUNDED AND VISIBLE. Someone who knows a customer's
- *    email can overwrite her fit notes. They cannot read them back -- the
- *    response says nothing -- and the damage surfaces on a tech pack a human
- *    reads before cutting cloth. Weighed against a login wall that collects
+ *    email can ADD a false entry. They cannot read anything back -- the
+ *    response says nothing -- and since 2026-08-28 they cannot destroy a real
+ *    one either, because nothing here overwrites. The damage surfaces on a
+ *    tech pack a human reads before cutting cloth, and on her own account page
+ *    where she can see and delete it. Weighed against a login wall that collects
  *    nothing, that is the right trade. If it is ever abused, the fix is a
  *    signed per-order link printed as variable data on the tag, not a password.
  *
@@ -106,43 +109,34 @@ export async function POST(req: NextRequest) {
   if (!db) return NextResponse.json(SAME_ANSWER_FOR_EVERYONE);
 
   try {
-    // ⚠️ ONE STATEMENT, ALWAYS, WHATEVER THE OUTCOME. This was a SELECT for the
-    // customer, then a SELECT for a paid order, then an UPDATE -- and a
-    // security review found the oracle that defence 1 above says cannot exist,
-    // rebuilt out of LATENCY. An unknown email did one round trip to Neon, a
-    // customer without a paid order did two, a real customer did three. The
-    // bodies were byte-identical and the response time was not, so timing the
-    // route still answered "does this woman shop here".
+    // ⚠️ ONE STATEMENT, ALWAYS, WHATEVER THE OUTCOME -- and an INSERT, never an
+    // UPDATE. Two separate rules meet in this query, both learned the hard way.
     //
-    // Now every well-formed request executes exactly this one UPDATE. It
-    // matches nothing for a stranger and nothing for someone who never paid,
-    // and the work done is the same either way. Do not "optimise" this back
-    // into a lookup followed by a conditional write.
-    await db
-      .update(schema.customers)
-      .set({
-        fitFeedback: JSON.stringify(answers),
-        fitFeedbackNote: note,
-        fitFeedbackAt: new Date(),
-      })
-      .where(
-        and(
-          eq(schema.customers.email, email),
-          // A paid order, not merely a customers row: a row exists the moment
-          // someone opens a checkout they never complete.
-          exists(
-            db
-              .select({ one: sql`1` })
-              .from(schema.orders)
-              .where(
-                and(
-                  eq(schema.orders.customerId, schema.customers.id),
-                  eq(schema.orders.status, "paid"),
-                ),
-              ),
-          ),
-        ),
-      );
+    // APPEND ONLY. This was an UPDATE of three columns on `customers`, which
+    // meant a second submission destroyed the first. Founder: "i don't want
+    // anything to be overwritten, i don't want to lose any data." A row per
+    // submission, forever.
+    //
+    // CONSTANT WORK. A security review found a customer-list oracle rebuilt out
+    // of LATENCY: the old code did one round trip for an unknown email, two for
+    // a customer with no paid order, three for a real customer. The bodies were
+    // byte-identical and the timings were not, so the route still answered
+    // "does this woman shop here". This is one statement that inserts either
+    // one row or none, doing the same work either way.
+    //
+    // The join picks the order for us -- the founder's own rule, and the only
+    // safe one: /fit has no sign-in, so it must never show a visitor a list of
+    // orders for a typed email. Her most recent PAID order is the parcel she is
+    // holding while she scans the card.
+    await db.execute(sql`
+      insert into fit_feedback (customer_id, order_id, answers, note)
+      select o.customer_id, o.id, ${JSON.stringify(answers)}, ${note}
+      from orders o
+      join customers c on c.id = o.customer_id
+      where c.email = ${email} and o.status = 'paid'
+      order by o.created_at desc
+      limit 1
+    `);
   } catch (err) {
     // ⚠️ NO REQUEST BODY IN THIS LOG. It carries an email address and a
     // sentence about someone's body, and CloudWatch outlives the order.

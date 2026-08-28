@@ -102,8 +102,9 @@ export default function PrivacyPage() {
         keep that answer with your measurements and show it to the tailor making
         your next piece. It is why we ask for your email on that page: only to
         put your answer with your order. That page sends you nothing, and we
-        keep only your most recent answer, not a history. It is shown to you in
-        your account, and you can delete it there whenever you like.
+        keep each answer with the order it was about, so nothing you have told us
+        is ever replaced by something newer. All of it is shown to you in your
+        account, and you can delete it there whenever you like.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Why we hold it</h2>

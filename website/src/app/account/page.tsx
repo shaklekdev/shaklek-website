@@ -28,29 +28,44 @@ async function getNameForEmail(email: string) {
   return customer?.name ?? null;
 }
 
-/** What she sent from /fit, if anything. Read here rather than through an API
- *  route because this page is already a server component holding her verified
- *  email -- a fetch would only add a round trip and a second place to get the
- *  authorization wrong. */
+/** Every entry she has sent from /fit, newest first, each with the order it
+ *  was about. Read here rather than through an API route because this page is
+ *  already a server component holding her verified email -- a fetch would only
+ *  add a round trip and a second place to get the authorization wrong. */
 async function getFitFeedbackForEmail(email: string) {
   const db = getDb();
-  if (!db) return null;
-  const [customer] = await db
-    .select()
-    .from(schema.customers)
-    .where(eq(schema.customers.email, email));
-  if (!customer?.fitFeedback || !customer.fitFeedbackAt) return null;
-  try {
-    const parsed: unknown = JSON.parse(customer.fitFeedback);
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return null;
-    return {
-      lines: fitFeedbackLines(parsed as Record<string, string>),
-      note: customer.fitFeedbackNote,
-      at: customer.fitFeedbackAt.toISOString().slice(0, 10),
-    };
-  } catch {
-    return null;
-  }
+  if (!db) return [];
+  const rows = await db
+    .select({
+      id: schema.fitFeedback.id,
+      answers: schema.fitFeedback.answers,
+      note: schema.fitFeedback.note,
+      createdAt: schema.fitFeedback.createdAt,
+      orderId: schema.fitFeedback.orderId,
+    })
+    .from(schema.fitFeedback)
+    .innerJoin(schema.customers, eq(schema.fitFeedback.customerId, schema.customers.id))
+    .where(eq(schema.customers.email, email))
+    .orderBy(desc(schema.fitFeedback.createdAt));
+
+  return rows.flatMap((r) => {
+    try {
+      const parsed: unknown = JSON.parse(r.answers);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return [];
+      return [{
+        id: r.id,
+        lines: fitFeedbackLines(parsed as Record<string, string>),
+        note: r.note,
+        at: r.createdAt.toISOString().slice(0, 10),
+        // Same short reference the tech pack and the confirmation email use, so
+        // she and the workshop are naming the same order.
+        orderRef: r.orderId ? r.orderId.slice(0, 8).toUpperCase() : null,
+      }];
+    } catch {
+      // One unreadable row must not blank the whole section.
+      return [];
+    }
+  });
 }
 
 async function getOrdersForEmail(email: string) {
@@ -79,7 +94,7 @@ export default async function AccountPage() {
   const email = await getVerifiedEmail();
   const name = email ? await getNameForEmail(email) : null;
   const orders = email ? await getOrdersForEmail(email) : null;
-  const fitFeedback = email ? await getFitFeedbackForEmail(email) : null;
+  const fitFeedback = email ? await getFitFeedbackForEmail(email) : [];
 
   return (
     <div className="flex flex-1 flex-col bg-bg">
@@ -119,13 +134,7 @@ export default async function AccountPage() {
           <MeasurementsForm />
         </div>
 
-        {fitFeedback && (
-          <AccountFitFeedback
-            lines={fitFeedback.lines}
-            note={fitFeedback.note}
-            at={fitFeedback.at}
-          />
-        )}
+        {fitFeedback.length > 0 && <AccountFitFeedback entries={fitFeedback} />}
 
         <h2 className="mt-8 text-lg text-text">Your orders</h2>
 

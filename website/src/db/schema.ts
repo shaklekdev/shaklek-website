@@ -31,20 +31,6 @@ export const customers = pgTable("customers", {
   measurementHip: text("measurement_hip"),
   measurementHeight: text("measurement_height"),
   measurementNotes: text("measurement_notes"),
-  // How the last piece ACTUALLY fitted, sent from /fit after delivery -- the
-  // return leg of order_items.fit_notes, which records what she expected to be
-  // wrong before it was made. See src/data/fitFeedback.ts.
-  //
-  // ONE ROW PER CUSTOMER, DELIBERATELY OVERWRITTEN, not a history table. The
-  // tailor needs the latest read on this body, and a second answer supersedes
-  // the first rather than adding to it. If a fit history is ever wanted, it
-  // wants its own table with an order_id -- do not turn this into an array.
-  //
-  // JSON of {questionId: optionId}. Ids only, never labels: labels are copy
-  // and get reworded, ids reach a tailor's document and must not move.
-  fitFeedback: text("fit_feedback"),
-  fitFeedbackNote: text("fit_feedback_note"),
-  fitFeedbackAt: timestamp("fit_feedback_at", { withTimezone: true }),
 });
 
 export const orders = pgTable("orders", {
@@ -101,4 +87,49 @@ export const orderItems = pgTable("order_items", {
   freeformNotes: text("freeform_notes"),
   priceAed: numeric("price_aed", { precision: 10, scale: 2 }).notNull(),
   hasReferenceImage: boolean("has_reference_image").notNull().default(false),
+});
+
+/**
+ * Every piece of fit feedback a customer has ever sent from /fit.
+ *
+ * ⚠️ APPEND ONLY. THIS WAS THREE COLUMNS ON `customers` AND IT WAS WRONG.
+ * That version kept one answer per customer and overwrote it on the next
+ * submission, on the reasoning that the tailor only needs the latest read.
+ * The founder's instruction, 2026-08-28: "i don't want anything to be
+ * overwritten, i don't want to lose any data."
+ *
+ * She is right, and the reason is not sentiment about records. A body changes,
+ * and so does what she wants from a garment. Three entries saying "a little
+ * tight at the waist" across a year is a different instruction from one, and
+ * an overwrite destroys the only evidence that would tell them apart. It also
+ * destroyed the customer's own history silently, with nothing to restore from.
+ *
+ * So: one row per submission, nothing ever updated. The tech pack reads the
+ * most recent row that predates the order it is printing; the account shows
+ * her the whole list. The only DELETE is the customer's own, from her account,
+ * and it clears every row because that is what "delete my data" has to mean.
+ */
+export const fitFeedback = pgTable("fit_feedback", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  customerId: uuid("customer_id")
+    .notNull()
+    .references(() => customers.id),
+  // WHICH PIECE THIS IS ABOUT. Founder, 2026-08-28: "one customer can have
+  // different feedbacks on multiple orders."
+  //
+  // ⚠️ RESOLVED ON THE SERVER, NOT ASKED FOR. The QR is printed in bulk on a
+  // card that cannot know which parcel it was packed into, and /fit has no
+  // sign-in -- so it must never offer a visitor a list of orders for a typed
+  // email. That would answer "what has this woman bought" to anyone who knows
+  // her address. Instead the insert attaches the feedback to her most recent
+  // PAID order at the moment she submits, which is the parcel she is holding.
+  //
+  // Nullable because the reference must survive an order being removed for any
+  // reason; the feedback itself is still true about her body.
+  orderId: uuid("order_id").references(() => orders.id),
+  // JSON of {questionId: optionId}. Ids only, never labels: labels are copy
+  // and get reworded, ids reach a tailor's document and must not move.
+  answers: text("answers").notNull(),
+  note: text("note"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });

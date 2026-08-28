@@ -32,10 +32,19 @@ export async function DELETE(req: NextRequest) {
   const db = getDb();
   if (!db) return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 500 });
 
-  await db
-    .update(schema.customers)
-    .set({ fitFeedback: null, fitFeedbackNote: null, fitFeedbackAt: null })
+  // Every entry she has ever sent, not just the latest. "Delete my fit notes"
+  // cannot leave four of the five behind.
+  //
+  // This is the ONLY delete in the system. The write path never overwrites, so
+  // a customer's history can be destroyed by exactly one action: her own,
+  // taken while signed in, from her own account.
+  const [customer] = await db
+    .select({ id: schema.customers.id })
+    .from(schema.customers)
     .where(eq(schema.customers.email, email));
+  if (customer) {
+    await db.delete(schema.fitFeedback).where(eq(schema.fitFeedback.customerId, customer.id));
+  }
 
   return NextResponse.json({ ok: true });
 }

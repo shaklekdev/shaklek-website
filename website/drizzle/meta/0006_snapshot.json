@@ -1,5 +1,5 @@
 {
-  "id": "06b5383d-af69-4cb0-b2e4-2a5c5380bc5b",
+  "id": "90467cc8-4acc-4cc1-b81f-ef9b157278c3",
   "prevId": "c015911a-faef-4b03-8938-7ba3ce8ac0ab",
   "version": "7",
   "dialect": "postgresql",
@@ -63,24 +63,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "fit_feedback": {
-          "name": "fit_feedback",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "fit_feedback_note": {
-          "name": "fit_feedback_note",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "fit_feedback_at": {
-          "name": "fit_feedback_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -95,6 +77,84 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.fit_feedback": {
+      "name": "fit_feedback",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "answers": {
+          "name": "answers",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "fit_feedback_customer_id_customers_id_fk": {
+          "name": "fit_feedback_customer_id_customers_id_fk",
+          "tableFrom": "fit_feedback",
+          "tableTo": "customers",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fit_feedback_order_id_orders_id_fk": {
+          "name": "fit_feedback_order_id_orders_id_fk",
+          "tableFrom": "fit_feedback",
+          "tableTo": "orders",
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
