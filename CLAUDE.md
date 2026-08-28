@@ -582,6 +582,30 @@ what the `-v2` / `-v3` suffixes throughout `public/catalog/` are for. Bump the
 suffix and update the reference in `catalog.ts`. New files need no bump — their
 URLs are already new.
 
+**Trap 3 — Amplify never runs your migration, and a new column breaks
+checkout before it breaks the feature you added it for.**
+
+The build spec is `npm ci` then `npm run build`. There is no migrate step and
+there never has been. So a commit that adds a column to `schema.ts` deploys
+code that believes the column exists against a database where it does not.
+
+That is not a broken feature, it is an outage, because Drizzle's bare
+`db.select()` expands to an explicit column list. Seven files use it on
+`customers`, and two of them are **`/api/orders`** and the **Stripe webhook** —
+so the failure is "nobody can buy" and "cards are charged and the order is
+never marked paid", not "the new page 500s".
+
+**Always expand, then deploy:**
+
+```bash
+cd website && npx drizzle-kit migrate    # additive columns first, against Neon
+git push origin main                     # only then
+```
+
+Additive nullable columns are safe in that order — the running code simply
+ignores them. Reverse the order and there is a window with live cards in it.
+Found on 2026-08-28 while adding `fit_feedback`; caught before the push.
+
 ### Checking a deploy (AWS CLI is available)
 
 ```bash
