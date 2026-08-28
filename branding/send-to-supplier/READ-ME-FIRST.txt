@@ -1,30 +1,48 @@
 SHAKLEK — ARTWORK
 =================
 
-Everything you need is in this folder. Nothing here needs a font installed.
+START HERE:  artwork/
+             One print-ready file per product, at its true finished size, with
+             every mark and every word already placed. Text is converted to
+             outlines, so no font is needed and nothing can be substituted.
 
-START WITH:  READ-ME-FIRST-Shaklek-artwork.pdf
-             Two pages. It says which mark goes on which item, the colours,
-             the minimum sizes, and which process will not work.
+  artwork/01-woven-brand-label.pdf        45 x 18 mm   wordmark only
+  artwork/02-care-label.pdf               25 x 45 mm   fibre, care, origin
+  artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark + order number
+  artwork/04-thank-you-card-front.pdf    105 x 148 mm  A6
+  artwork/05-thank-you-card-back.pdf     105 x 148 mm  A6
+  artwork/06-tissue-seal-40mm.pdf         40 mm dia    gold, mark in cream
+  artwork/07-tissue-wrap-repeat-tile.pdf 250 x 250 mm  step and repeat
+  artwork/08-linen-bag-print.pdf         400 x 500 mm  print area guide
+  artwork/09-mailer-placement.pdf        250 x 350 mm  placement guide
 
-THE FILES
+TWO NOTES ON THOSE FILES
 
-  shaklek-logo                    The logo. Use this one unless told otherwise.
-  shaklek-logo-one-colour         Same, for single-colour printing.
-  shaklek-logo-white-on-dark      For printing onto anything dark.
-  shaklek-monogram                The short mark. Small items and embroidery.
-  shaklek-monogram-white-on-dark  The same, for dark surfaces.
-  shaklek-gold-seal               The round sticker.
+  03-hang-tag: "A7F3C210" is a SPECIMEN, not a fixed value. The order number
+  is different on every garment. It shows you where the field sits and how big
+  it is. Please quote for variable data on this item.
 
-  .pdf  Vector. Please use this.
-  .png  Transparent, high resolution, if you cannot take vector.
+  07-tissue-wrap: this is one tile. Step and repeat it across the 50 x 70 cm
+  sheet. Keep it faint: it should read as texture, not as print.
 
-TWO THINGS
+ALSO IN THIS FOLDER
+
+  READ-ME-FIRST-Shaklek-artwork.pdf
+      Four pages: the two marks, which mark belongs on which item, colours in
+      CMYK, minimum sizes, clear space, and which processes will not work.
+      Pages 3 and 4 draw every item to proportion.
+
+  shaklek-logo / shaklek-monogram / shaklek-gold-seal (.pdf and .png)
+      The marks on their own, for anything not covered above.
+
+THREE THINGS
 
   1. Please do not retype the name in a font. These files are the artwork.
-  2. The logo cannot be embroidered. Its thin strokes are far below the
-     minimum for satin stitch. Use shaklek-monogram.pdf for anything
-     stitched. The PDF explains why.
+  2. The logo CANNOT be embroidered. Its thin strokes are far below the
+     minimum for satin stitch. Use shaklek-monogram.pdf for anything stitched.
+     The PDF explains why.
+  3. Please send a physical proof on the real material before any production
+     run, especially for the gold.
 
 Other formats (JPG, the name on its own, the Arabic on its own) are in
 ../other-formats/. Ask if you need one.
