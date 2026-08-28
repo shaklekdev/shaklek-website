@@ -393,8 +393,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 alongside English. Placed AFTER Add to cart on purpose -- it is
                 reference the customer must be able to find, not another
                 decision in front of the button. See
-                data/productDisclosure.ts for the law and for why Care is
-                still missing. */}
+                data/productDisclosure.ts for the law it satisfies and for
+                which Arabic strings are founder-verified. */}
             <ProductDisclosure garmentName={item.name} />
                 </div>
               </>

@@ -14,8 +14,8 @@ import { disclosuresFor } from "@/data/productDisclosure";
  * Arabic characters in a left-to-right box, which is worse than nothing on a
  * line that exists to be legally sufficient.
  *
- * Rows with no value are omitted rather than shown empty. See
- * data/productDisclosure.ts for why Care has none yet.
+ * Every row has a value; see data/productDisclosure.ts for which
+ * Arabic strings the founder has verified and which are still drafts.
  */
 export default function ProductDisclosure({
   garmentName,

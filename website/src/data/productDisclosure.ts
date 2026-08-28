@@ -71,8 +71,8 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       // verified until she has read it.
       label: "Product",
       labelAr: "المنتج",
-      value: `${garmentName} — made-to-order garment`,
-      valueAr: `${garmentName} — ملابس تُصنع حسب الطلب`,
+      value: `${garmentName}, made to order`,
+      valueAr: `${garmentName}، تُصنع حسب الطلب`,
     },
     {
       // Art. 40 wants components in the original language IN ADDITION to
@@ -117,8 +117,8 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       // verified until she has read it.
       label: "Sold by",
       labelAr: "البائع",
-      value: `${ENTITY}, sole establishment, Dubai, United Arab Emirates. Commercial licence ${LICENCE}. hello@shaklek.com`,
-      valueAr: `${ENTITY_AR}، مؤسسة فردية، دبي، الإمارات العربية المتحدة. رخصة تجارية ${LICENCE}. hello@shaklek.com`,
+      value: `${ENTITY}, Dubai, United Arab Emirates. Licence ${LICENCE}. hello@shaklek.com`,
+      valueAr: `${ENTITY_AR}، دبي، الإمارات العربية المتحدة. رخصة ${LICENCE}. hello@shaklek.com`,
     },
   ];
 }
