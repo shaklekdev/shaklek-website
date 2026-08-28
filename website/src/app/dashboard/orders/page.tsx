@@ -124,7 +124,8 @@ export default async function OrdersDashboardPage() {
                   <tr key={order.id}>
                     {/* Short, quotable, and the same reference printed on the
                         tailor's spec sheet -- so a WhatsApp message about
-                        SHK-BC7BBB09 matches a row here without pasting a UUID. */}
+                        BC7BBB09 matches a row here without pasting a UUID, and it is
+                        now the same string the customer and the tailor see. */}
                     <td className="px-4 py-3 font-mono text-xs whitespace-nowrap text-slate-900">
                       {orderRef(order.id)}
                     </td>
