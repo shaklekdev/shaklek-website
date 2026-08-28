@@ -16,10 +16,12 @@
  *   - warnings
  *   - terms and conditions of return or exchange
  *
- * ⚠️ THE ARABIC HERE IS FOUNDER-VERIFIED. She read the fibre, care and origin
- * strings on the care-label proof on 2026-08-28 and approved them. Do not
- * "improve" them, and do not invent new Arabic without her reading it: nobody
- * on this side can check Arabic typesetting the way a measurement is checked.
+ * ⚠️ EVERY ARABIC STRING HERE IS FOUNDER-READ, 2026-08-28. Fibre, care and
+ * origin were approved on the care-label proof; product, returns and seller
+ * were read on the rendered page. Do not "improve" any of them, and do not add
+ * new Arabic without her reading it -- nobody on this side can check Arabic
+ * grammar or typesetting the way a measurement is checked, which is exactly how
+ * a feminine verb survived review here until she caught it.
  *
  * ⚠️ MIXED ARABIC AND DIGITS NEEDS dir="rtl" ON THE ELEMENT. On the PDF label
  * "كتان 100%" printed as "%001" with the digits reversed, because that shaper
@@ -66,13 +68,16 @@ const LICENCE = "1645657";
 export function disclosuresFor(garmentName: string): Disclosure[] {
   return [
     {
-      // ⚠️ ARABIC NOT YET READ BY THE FOUNDER. Her approval covers the
-      // composition, care and origin strings only. Do not treat this as
-      // verified until she has read it.
+      // ✅ FOUNDER-READ 2026-08-28. She caught a real grammar fault here: the
+      // verb was تُصنع, the feminine form. It was correct in the original
+      // string because it followed ملابس, a non-human plural, which takes
+      // feminine agreement -- but cutting that word to remove an em dash left
+      // the verb agreeing with nothing. The subject is now المنتج, masculine,
+      // so it is يُصنع. Do not "restore" the feminine.
       label: "Product",
       labelAr: "المنتج",
       value: `${garmentName}, made to order`,
-      valueAr: `${garmentName}، تُصنع حسب الطلب`,
+      valueAr: `${garmentName}، يُصنع حسب الطلب`,
     },
     {
       // Art. 40 wants components in the original language IN ADDITION to
@@ -101,9 +106,7 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       valueAr: "تنظيف جاف فقط",
     },
     {
-      // ⚠️ ARABIC NOT YET READ BY THE FOUNDER. Her approval covers the
-      // composition, care and origin strings only. Do not treat this as
-      // verified until she has read it.
+      // ✅ FOUNDER-READ AND APPROVED 2026-08-28.
       label: "Returns and exchange",
       labelAr: "الإرجاع والاستبدال",
       value:
@@ -112,9 +115,7 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
         "تعديل واحد مجاني أو إعادة تصنيع خلال 14 يوماً من التسليم إذا لم يكن المقاس مناسباً.",
     },
     {
-      // ⚠️ ARABIC NOT YET READ BY THE FOUNDER. Her approval covers the
-      // composition, care and origin strings only. Do not treat this as
-      // verified until she has read it.
+      // ✅ FOUNDER-READ AND APPROVED 2026-08-28.
       label: "Sold by",
       labelAr: "البائع",
       value: `${ENTITY}, Dubai, United Arab Emirates. Licence ${LICENCE}. hello@shaklek.com`,
