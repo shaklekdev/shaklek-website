@@ -92,24 +92,26 @@ const VIGNETTES = [
     k: "100% natural fabrics",
     v: "Plant-based only. Breathable against the skin, never synthetic.",
   },
-  // ⚠️ "THE UAE", NOT "DUBAI", AND "A TAILOR", NOT "TAILORS".
+  // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
   //
-  // Dubai: the company is licensed there, but where the tailor actually works
-  // is recorded nowhere, so the narrower claim is not supported.
+  // Founder, 2026-08-28: "the customer doesn't have to know how many tailors
+  // we have." This copy went through "local tailors" (mine, inferred from a
+  // capacity note) and "a local tailor" (a correction to it) before either of
+  // us noticed we were arguing about which NUMBER to imply. The customer needs
+  // none. A count is a claim that has to stay true as the bench changes, and
+  // the bench will change.
   //
-  // Singular: I first wrote "local tailors" on the strength of a
-  // pricing-todo.md line reading "more than one tailor available". That line
-  // is a CAPACITY note about what could be hired, dated 2026-08-22, and the
-  // same file's open list still asks "How many tailors are available?" --
-  // unanswered. Everything else in the repo is singular: tailor-capacity.md is
-  // written around one maker, and the site says "the tailor" 40 times.
+  // What carries the value is the CONTRAST -- made here, not imported -- which
+  // is true at any headcount. "The UAE" and not "Dubai" for the same reason it
+  // always was: the licence is Dubai, where the tailor works is recorded
+  // nowhere.
   //
-  // Plural implies a workshop. A customer who finds one person behind it has
-  // been told something untrue, and singular is safe whichever way the bench
-  // grows.
+  // This also stops the open "how many tailors?" question in
+  // planning/pricing-todo.md gating anything on the site. It still matters for
+  // capacity and lead time; it no longer matters for copy.
   {
     k: "Made in the UAE",
-    v: "Sewn here by a local tailor, never shipped in from a factory abroad.",
+    v: "Cut and sewn here, never shipped in from a factory abroad.",
   },
 ];
 

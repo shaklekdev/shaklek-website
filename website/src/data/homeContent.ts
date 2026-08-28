@@ -100,18 +100,26 @@ export const BENEFITS = [
     v: "Linen only. Breathable natural fabric against your skin, never synthetic.",
     icon: "flax",
   },
-  // ⚠️ "THE UAE" NOT "DUBAI", AND "A TAILOR" NOT "TAILORS". Confirmed by the
-  // founder 2026-08-28. Where the tailor works is recorded nowhere, so Dubai
-  // is not supported; and the only line suggesting more than one tailor is a
-  // capacity note about what could be hired, against an open question that is
-  // still unanswered. Plural implies a workshop nobody has verified exists.
+  // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
   //
-  // It earns a place because almost no fast-fashion competitor in this market
-  // can say it, and it is one of the few brand claims that is both
-  // differentiating and verifiable.
+  // Founder, 2026-08-28: "the customer doesn't have to know how many tailors
+  // we have." This copy went through "local tailors" (mine, inferred from a
+  // capacity note) and "a local tailor" (a correction to it) before either of
+  // us noticed we were arguing about which NUMBER to imply. The customer needs
+  // none. A count is a claim that has to stay true as the bench changes, and
+  // the bench will change.
+  //
+  // What carries the value is the CONTRAST -- made here, not imported -- which
+  // is true at any headcount. "The UAE" and not "Dubai" for the same reason it
+  // always was: the licence is Dubai, where the tailor works is recorded
+  // nowhere.
+  //
+  // This also stops the open "how many tailors?" question in
+  // planning/pricing-todo.md gating anything on the site. It still matters for
+  // capacity and lead time; it no longer matters for copy.
   {
     k: "Made in the UAE",
-    v: "Sewn here by a local tailor, never shipped in from a factory abroad.",
+    v: "Cut and sewn here, never shipped in from a factory abroad.",
     icon: "pin",
   },
 ];
