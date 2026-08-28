@@ -1931,3 +1931,46 @@ Raised with her.
 
 Wrap Top shortening *does* work: navy `long:longer` front came back hip-length
 first try. Waiting on her approval before the remaining seven fronts.
+
+### Same session, later — fabric decision and the burgundy hem
+
+**Everything below is committed and pushed.** Nothing held.
+
+- **The fabric question is closed and prices do NOT move.** Supplier is 100%
+  linen online at **AED 24/metre**, one price per colour. In-store was
+  abandoned: ≥45 AED/m *and not 100% linen*, so it failed the claim printed on
+  every product page before it failed on price. At 24 AED/m the live ladder
+  earns **65–67%**, inside the band it was designed for, so **the +49 rise is
+  off**. Opening order: **110 metres, AED 2,640** — 40 ivory, 30 navy, 25
+  burgundy, 15 white, aimed at ~50 garments. Full working in
+  `planning/pricing-todo.md`.
+  ⚠️ That rests on **2.2m per garment at 140cm width, which is an estimate**.
+  At 110cm width it is ~40 garments, not 50. The supplier has not been asked
+  the width. The collection book has a blank per version code for the tailor's
+  real numbers.
+- **Wrap Top burgundy `long:longer` front** fixed — its *longer* length
+  disagreed with its own short-sleeved version. Founder found it. Committed
+  `1047638`, approved.
+- **The Wrap Top length change was dropped** by the founder after review, and
+  the **Oversized Shirt shorter "normal" is blocked** and needs her decision.
+  Both written up in `planning/catalog-images-todo.md`.
+
+**Two process notes worth carrying.**
+
+- **I queried the wrong database and nearly reported it as fact.** `.env.local`
+  points at `ep-jolly-cloud` (dev); production is `ep-blue-cell`. The dev branch
+  holds three unpaid audit rows from 2026-08-23, so it reads as "almost no
+  orders". **Print the DATABASE_URL host before believing any query about
+  production.** The same gap put the `fit_feedback` table on dev while the code
+  went live — handed to the other session, which owns the fix.
+- **I compared a fabric cost to gross retail revenue** and called AED 1,680
+  of linen "against AED 12,000 of finished stock". There is no finished stock;
+  nothing is made until it is ordered. The founder caught it. The number that
+  means something is **AED 53 of linen per garment, ~14% of a 389 shirt**.
+
+**Still needs the founder** (not checkable from any system, so it lives here):
+supplier's fabric width; the Oversized Shirt length decision; two AED 3.89
+refunds (`ch_3U7iQk…`, `ch_3U8GfH…`, verified still unrefunded in live Stripe);
+Sentry account; Meta pixel ID and domain verification; DET advertising permit;
+ECAS lawyer. Everything else on her list is checkable — run the
+`shaklek-assistant` agent rather than trusting this paragraph tomorrow.

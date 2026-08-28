@@ -17,6 +17,67 @@ the first campaign runs.
 
 ---
 
+## ✅ RESOLVED 2026-08-28 — the fabric question is closed, and prices do not move
+
+**Founder's supplier: 100% linen, online, AED 24/metre, one price for every
+colour.** The in-store route was abandoned: it quoted **at least 45 AED/m and
+was not 100% linen**, so it fails the claim printed on every product page
+before it fails on price.
+
+That single number settles everything this file was waiting on.
+
+| Item | Live price | At 40/m (the old working case) | **At 24/m (what she actually pays)** |
+|---|---|---|---|
+| Shirt | 389 | 227 gross · 58% | **261 · 67%** |
+| Skirt | 419 | 256 · 61% | **280 · 67%** |
+| Pants | 429 | 244 · 57% | **278 · 65%** |
+| Dress | 619 | 361 · 58% | **411 · 66%** |
+
+Computed the same way as the tables below: per unit at 2.0m (shirt/pants),
+1.5m (skirt), 3.0m (dress), COGS including the 5% remake allowance, gross after
+the Stripe fee.
+
+### What this changes
+
+- **THE +49 RISE IS OFF.** It existed to rescue a 57–61% margin caused by a
+  40 AED/m fabric assumption that no longer describes anything. At 24 AED/m the
+  live ladder already earns **65–67%**, inside the 65–72% band it was designed
+  for. Raising prices now would be solving a problem that no longer exists, and
+  it would have to be explained to customers.
+- **Fabric is AED 53 in a garment** (2.2m × 24), about 14% of a 389 shirt. It is
+  no longer the largest line and no longer the lever.
+- The margin holds under pressure: at **2.5m** per shirt instead of 2.0m it is
+  still 64%.
+
+### The opening fabric order
+
+Founder's decision, 2026-08-28: **110 metres, AED 2,640** — 40 ivory, 30 navy,
+25 burgundy, 15 white. Aimed at **~50 garments** at an estimated 2.2m each.
+She rejected a 20m opening order as too small to launch on, and rejected an
+even split in favour of weighting toward ivory.
+
+⚠️ **The estimate that this rests on is 2.2m per garment at 140cm fabric
+width, and it is an estimate, not a measurement.** Two things move it:
+
+- **Fabric width.** At 110cm rather than 140cm, consumption rises about 25% and
+  110 metres yields roughly 40 garments, not 50. **Ask the supplier the width.**
+- **The wide cuts.** A wide-leg full-length trouser is close to 3m, nearly two
+  blouses. A trouser-heavy mix lands nearer 45 than 50.
+
+Per-garment estimates used, at 140cm including ~10% cutting waste — shirts
+1.7–2.0m short-sleeved and 2.0–2.3m long, trousers 1.7–2.1m cropped and
+2.0–2.4m full, wide-leg cuts 2.7–2.9m. **Replace these with the tailor's real
+numbers**: the collection book prints a blank against each of the 32 version
+codes for exactly this.
+
+### Still open after this
+
+The **10%-or-nothing welcome offer** is no longer coupled to the +49, because
+the +49 is gone. Decide it on its own merits against a 65–67% margin, and
+remember the DET advertising permit gates advertising any discount at all.
+
+---
+
 ## What is actually live (verified against the code, 2026-08-26)
 
 `website/src/data/catalog.ts` → `BASE_PRICE_BY_CATEGORY`:

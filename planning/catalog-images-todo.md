@@ -78,6 +78,59 @@ and `PANTS_PARAMS` -- likely `sleeve` x `length`, mirroring the shirts.
 
 ---
 
+## Fixed 2026-08-28
+
+- **Wide-leg `wide:full`, the grey bar across the bottom.** Founder: "we see
+  the picture cropped from the bottom, like a different line with different
+  colour". It was on 7 of the 8 live files, 22-63px tall and 31-37 grey levels
+  off the backdrop -- leftover canvas padding from the extension pass.
+  Deterministic fix, no generation: `scripts/catalog/fix-bottom-band.mjs`
+  copies the real backdrop rows just above the band downward over it and leaves
+  the heels alone. Largest remaining step 1-4 levels. Files bumped to -v2/-v3;
+  originals in `catalog-archive/2026-08-28-wideleg-bottom-band/`. (`b799fcd`)
+- **Wrap Top burgundy `long:longer` front.** Burgundy's *longer* length
+  disagreed with itself: short sleeves had the curved tulip hem the rest of the
+  catalogue has, long sleeves had a straight hem sitting lower. Sleeves do not
+  change the body. Fixed by passing the short-sleeved photograph to `edit2.mjs`
+  as a reference, one attempt. Founder approved. (`1047638`)
+
+## Dropped 2026-08-28
+
+- **The Wrap Top length change.** The plan was a new *longer* sitting just
+  under the hip, fronts only, all four colours. Founder cancelled it after
+  review: the generated front read as the same length as the existing *normal*.
+  The current tunic stays. Two generations spent, both archived in
+  `catalog-archive/2026-08-28-oversized-normal/`.
+
+## Blocked 2026-08-28 -- needs a founder decision
+
+- **Oversized Shirt, a shorter "normal".** The plan was: promote today's
+  *normal* to *longer*, generate a new shorter *normal*, front and back, all
+  colours, both sleeve lengths. **It will not generate.** Three attempts, the
+  hem does not move, and the difference against the source is uniform across
+  the whole frame -- the model re-renders and changes nothing. Both attempts
+  passed `minDiff`. `gemini-3-pro-image`, the tier that reshapes silhouettes,
+  returned 503 six times running and was never actually tried.
+
+  There is a second problem underneath the first: **today's base shirt already
+  ends at the belt**, so promoting it to *longer* would leave the two lengths
+  nearly identical and the length slider would stop doing anything visible.
+  Alternative put to the founder and not yet answered: keep the base as
+  *normal* and shorten only the too-long tunic, which is the edit that already
+  works.
+
+## What today proved about the tooling
+
+- **`minDiff` cannot catch an edit that did not happen.** It passed 14.1 and
+  5.4 on two Oversized Shirt attempts that changed no length at all, because
+  the model re-rendered the whole frame. **For a length or width edit, diff row
+  by row and check the change sits where the edit was asked for.**
+- **References beat descriptions, twice more.** "Just under the hip" as prose
+  produced a top level with the existing *normal*. The burgundy hem, described
+  in prose, would have been the same gamble; passed as a reference image it
+  landed first try. In both cases the correct reference was already sitting in
+  `public/catalog/`.
+
 ## Known open defects
 
 - [ ] **Wide-leg:** see section 1.
