@@ -112,8 +112,9 @@ function plain(doc, cx, baseY, text, sizePt, fill = INK, tracking = 0) {
 function careSymbols(doc, x, y, h, gap, fill = INK) {
   const lw = h * 0.09;
   doc.lineWidth(lw).strokeColor(fill);
-  let cx = x;
+  const at = (i) => x + (h + gap) * i;
   // 1. wash tub, 30
+  let cx = at(0);
   doc.moveTo(cx, y + h * 0.30).lineTo(cx + h * 0.06, y + h * 0.30)
      .lineTo(cx + h * 0.12, y + h * 0.22).lineTo(cx + h * 0.88, y + h * 0.22)
      .lineTo(cx + h * 0.94, y + h * 0.30).lineTo(cx + h, y + h * 0.30).stroke();
@@ -121,27 +122,48 @@ function careSymbols(doc, x, y, h, gap, fill = INK) {
      .lineTo(cx + h * 0.84, y + h * 0.88).lineTo(cx + h * 0.95, y + h * 0.30).stroke();
   doc.font("Helvetica").fontSize(h * 0.40).fillColor(fill)
      .text("30", cx, y + h * 0.42, { width: h, align: "center" });
-  cx += h + gap;
-  // 2. triangle, crossed: do not bleach
+  // 2. triangle crossed: do not bleach
+  cx = at(1);
   doc.moveTo(cx + h / 2, y + h * 0.16).lineTo(cx + h * 0.92, y + h * 0.88)
      .lineTo(cx + h * 0.08, y + h * 0.88).closePath().stroke();
   doc.moveTo(cx + h * 0.16, y + h * 0.24).lineTo(cx + h * 0.84, y + h * 0.84).stroke();
-  cx += h + gap;
-  // 3. square with a horizontal bar: dry flat
+  // 3. square with a circle, crossed: DO NOT TUMBLE DRY
+  //    Added on the legal brief's advice. Tumble drying is the single biggest
+  //    shrink risk for linen, and leaving the symbol off implies it is allowed.
+  cx = at(2);
   doc.rect(cx + h * 0.08, y + h * 0.16, h * 0.84, h * 0.72).stroke();
-  doc.moveTo(cx + h * 0.26, y + h * 0.52).lineTo(cx + h * 0.74, y + h * 0.52).stroke();
-  cx += h + gap;
-  // 4. iron with two dots: medium heat
+  doc.circle(cx + h * 0.50, y + h * 0.52, h * 0.24).stroke();
+  doc.moveTo(cx + h * 0.14, y + h * 0.22).lineTo(cx + h * 0.86, y + h * 0.82).stroke();
+  return { rowWidth: at(2) + h - x };
+}
+/** second row: line dry, iron, dry clean */
+function careSymbols2(doc, x, y, h, gap, fill = INK) {
+  const lw = h * 0.09;
+  doc.lineWidth(lw).strokeColor(fill);
+  const at = (i) => x + (h + gap) * i;
+  // 4. square with a vertical bar: LINE DRY
+  //    Line dry, not dry flat. Dry flat is a knitwear instruction; hanging woven
+  //    linen while damp is what keeps its drape and reduces creasing.
+  let cx = at(0);
+  doc.rect(cx + h * 0.08, y + h * 0.16, h * 0.84, h * 0.72).stroke();
+  doc.moveTo(cx + h * 0.50, y + h * 0.24).lineTo(cx + h * 0.50, y + h * 0.80).stroke();
+  // 5. iron, two dots: medium
+  cx = at(1);
   doc.moveTo(cx + h * 0.10, y + h * 0.74).lineTo(cx + h * 0.90, y + h * 0.74)
      .lineTo(cx + h * 0.74, y + h * 0.36).lineTo(cx + h * 0.28, y + h * 0.36).closePath().stroke();
   doc.circle(cx + h * 0.42, y + h * 0.56, h * 0.055).fill(fill);
   doc.circle(cx + h * 0.58, y + h * 0.56, h * 0.055).fill(fill);
-  cx += h + gap;
-  // 5. circle with P: professional dry clean, any solvent but trichloroethylene
+  // 6. circle with P: professional dry clean
+  cx = at(2);
   doc.circle(cx + h / 2, y + h * 0.52, h * 0.38).stroke();
   doc.font("Helvetica").fontSize(h * 0.40).fillColor(fill)
      .text("P", cx, y + h * 0.36, { width: h, align: "center" });
-  return cx + h - x;
+}
+
+/** Arabic, shaped and outlined. Required: Federal Law 15/2020 Art. 26. */
+function arabic(doc, cx, baseY, text, size, fill = INK) {
+  const a = shape("ReemKufi-Regular.ttf", text, size);
+  draw(doc, a.segs, cx - a.width / 2, baseY, fill);
 }
 
 // ---------------------------------------------------------------- the items
@@ -164,16 +186,33 @@ makePdf("01-woven-brand-label", 45, 18, (doc, w, h) => {
 
 // 2. CARE LABEL 25 x 45 mm --------------------------------------------------
 makePdf("02-care-label", 25, 45, (doc, w, h) => {
-  monogram(doc, w / 2, 8 * MM, 4.2 * MM);
-  plain(doc, w / 2, 14 * MM, "100% LINEN", 7.5, INK, 1.2);
-  doc.moveTo(5 * MM, 16 * MM).lineTo(w - 5 * MM, 16 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
-  const symbolH = 4.4 * MM, gap = 0.9 * MM;
-  const total = symbolH * 5 + gap * 4;
-  careSymbols(doc, (w - total) / 2, 19 * MM, symbolH, gap);
-  doc.moveTo(5 * MM, 28 * MM).lineTo(w - 5 * MM, 28 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
-  plain(doc, w / 2, 32 * MM, "MADE IN UAE", 6.5, INK, 1.1);
-  plain(doc, w / 2, 38 * MM, "SHAKLEK.COM", 5.5, MUTED, 1.0);
-}, "⚠️ care symbols and origin to confirm");
+  // ⚠️ ARABIC IS MANDATORY, not a nicety. Federal Law 15/2020 Art. 26: data
+  // relating to the consumer "shall be made in Arabic, and other languages may
+  // be used in addition to Arabic". Penalty for breach runs AED 3,000 to
+  // 200,000. The first version of this label was English only.
+  monogram(doc, w / 2, 6.5 * MM, 3.6 * MM);
+  // Latin digits in the Arabic line, deliberately. Reem Kufi has no ARABIC
+  // PERCENT SIGN (U+066A) and rendered it as an empty box on the first proof;
+  // Arabic-Indic digits then raised a bidirectional ordering question I cannot
+  // settle by eye. Latin digits inside Arabic text are normal on Gulf labels and
+  // have one unambiguous reading.
+  //
+  // ⚠️ THE ARABIC ON THIS LABEL MUST BE READ BY AN ARABIC SPEAKER BEFORE IT IS
+  // PRINTED. It is a legal disclosure under Federal Law 15/2020 Art. 26 and I
+  // cannot verify Arabic typesetting the way I can verify a measurement.
+  arabic(doc, w / 2, 11 * MM, "كتان 100%", 3.0 * MM);
+  plain(doc, w / 2, 15 * MM, "100% LINEN", 7, INK, 1.2);
+  doc.moveTo(4 * MM, 17.5 * MM).lineTo(w - 4 * MM, 17.5 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
+
+  const sh = 4.0 * MM, gap = 1.0 * MM, rowW = sh * 3 + gap * 2;
+  careSymbols(doc, (w - rowW) / 2, 20 * MM, sh, gap);
+  careSymbols2(doc, (w - rowW) / 2, 25.5 * MM, sh, gap);
+
+  doc.moveTo(4 * MM, 32 * MM).lineTo(w - 4 * MM, 32 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
+  arabic(doc, w / 2, 36 * MM, "صنع في الإمارات", 2.6 * MM);
+  plain(doc, w / 2, 40 * MM, "MADE IN UAE", 6, INK, 1.0);
+  plain(doc, w / 2, 43.5 * MM, "SHAKLEK.COM", 4.8, MUTED, 0.9);
+}, "⚠️ Arabic added (legally required). Needs the ECAS mark and batch code before production");
 
 // 3. HANG TAG 50 x 90 mm ----------------------------------------------------
 makePdf("03-hang-tag", 50, 90, (doc, w, h) => {
