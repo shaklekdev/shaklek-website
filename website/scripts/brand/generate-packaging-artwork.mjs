@@ -267,6 +267,33 @@ makePdf("03-hang-tag", 50, 90, (doc, w, h) => {
   plain(doc, w / 2, 72 * MM, "SHAKLEK.COM", 6.5, MUTED, 1.4);
 }, "plain, bulk printable, no variable data");
 
+// 3b. HANG TAG, BACK 50 x 90 mm --------------------------------------------
+//
+// The four values, on the back of the tag rather than as a fifth printed item.
+// Founder's call, and the cheap side of it: a card printed both sides costs
+// almost nothing more than one side, while a separate insert is another unit to
+// buy, store and stuff into every envelope.
+//
+// The words are taken from BENEFITS in src/data/homeContent.ts so the tag and
+// the website say the same thing. If those change, regenerate this file.
+makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
+  doc.circle(w / 2, 7 * MM, 2.1 * MM).lineWidth(0.4).strokeColor("#B9B1A2").stroke();
+  const items = [
+    "100% custom-made",
+    "One price, from AED 389",
+    "100% natural linen",
+    "Made in the UAE",
+  ];
+  let y = 24 * MM;
+  for (const t of items) {
+    // a gold hairline as the bullet, the same mark the lockup uses
+    doc.rect(w / 2 - 3 * MM, y - 1.6 * MM, 6 * MM, 0.28 * MM).fill(GOLD);
+    plain(doc, w / 2, y + 4.4 * MM, t.toUpperCase(), 6.2, INK, 0.9);
+    y += 13 * MM;
+  }
+  monogram(doc, w / 2, 82 * MM, 5 * MM, "#C9C0AE");
+}, "the four values. Print on the reverse of 03-hang-tag");
+
 // 4. THANK-YOU CARD A6, 105 x 148 mm ---------------------------------------
 makePdf("04-thank-you-card-front", 105, 148, (doc, w, h) => {
   lockup(doc, w / 2, 34 * MM, w * 0.42);

@@ -8,7 +8,8 @@ START HERE:  artwork/
 
   artwork/01-woven-brand-label.pdf        45 x 18 mm   wordmark only
   artwork/02-care-label.pdf               25 x 45 mm   fibre, care, origin
-  artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark
+  artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark  (FRONT)
+  artwork/03b-hang-tag-back.pdf           50 x 90 mm   the four values (BACK)
   artwork/04-thank-you-card-front.pdf    105 x 148 mm  A6
   artwork/05-thank-you-card-back.pdf     105 x 148 mm  A6
   artwork/06-tissue-seal-40mm.pdf         40 mm dia    gold, mark in cream
@@ -16,7 +17,10 @@ START HERE:  artwork/
   artwork/08-linen-bag-print.pdf         400 x 500 mm  print area guide
   artwork/09-mailer-placement.pdf        250 x 350 mm  placement guide
 
-ONE NOTE ON THOSE FILES
+TWO NOTES ON THOSE FILES
+
+  The hang tag is DOUBLE SIDED. 03 is the front, 03b is the back. Same card,
+  same size, printed both sides.
 
   07-tissue-wrap: this is one tile. Step and repeat it across the 50 x 70 cm
   sheet. Keep it faint: it should read as texture, not as print.
