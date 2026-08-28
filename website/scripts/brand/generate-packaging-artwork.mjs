@@ -213,14 +213,25 @@ makePdf("06-tissue-seal-40mm", 40, 40, (doc, w, h) => {
 makePdf("07-tissue-wrap-repeat-tile", 250, 250, (doc, w, h) => {
   // A seamless tile: the supplier steps and repeats this across the 50x70cm
   // sheet. Marks are staggered row to row so the repeat does not read as a grid.
-  const cols = 3, rows = 4;
-  for (let r = 0; r < rows; r++)
+  // Every mark sits WHOLLY INSIDE the tile. The first version staggered odd rows
+  // by half a column, which pushed the last mark of those rows off the right
+  // edge and sliced it in half. A tile with a half mark on one edge does not
+  // step and repeat, it prints a row of damaged logos across the sheet.
+  // Staggering is kept, but by using one fewer mark on the offset rows.
+  const rows = 4;
+  for (let r = 0; r < rows; r++) {
+    const stagger = r % 2 === 1;
+    const cols = stagger ? 2 : 3;
+    // Spaced so the gap ACROSS THE SEAM equals the gap inside the tile: marks
+    // sit at (c + 0.5) / cols, giving half a gap at each edge. Placing them
+    // flush to the edges instead put two marks side by side wherever two tiles
+    // met, which prints as "ShaklekShaklek" down every seam of the sheet.
+    const markW = w * 0.19;
     for (let c = 0; c < cols; c++) {
-      const offset = r % 2 === 0 ? 0 : w / (cols * 2);
-      const cx = (w / cols) * (c + 0.5) + offset;
-      if (cx > w) continue;
-      lockup(doc, cx, (h / rows) * r + 14 * MM, w * 0.19, "#B3A78E", "#B3A78E");
+      const cx = (w * (c + 0.5)) / cols;
+      lockup(doc, cx, (h / rows) * r + 14 * MM, markW, "#B3A78E", "#B3A78E");
     }
+  }
 }, "step and repeat across the 50x70cm sheet, keep it faint");
 
 // 8. LINEN BAG PRINT 400 x 500 mm ------------------------------------------
