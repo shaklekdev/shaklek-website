@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
@@ -20,7 +21,38 @@ const NAV_LINKS = [
   { href: "/our-story", label: "Our story" },
 ];
 
+
+// Clicking a hash link that matches the URL you are already on does nothing in
+// the App Router -- there is no navigation, so nothing scrolls. On the home
+// page that made "Catalog" work exactly once: it moved you down, and every
+// click after that was dead until you navigated away. Reported by the founder
+// as "the Catalog button bugs, it doesn't work always".
+//
+// So when the target is an anchor on the page we are already on, do the scroll
+// ourselves and let the router alone.
+function useHashNav(pathname: string | null) {
+  return (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const [path, hash] = href.split("#");
+    if (!hash) return;
+    const samePage = (path || "/") === (pathname || "/");
+    if (!samePage) return;
+    const el = document.getElementById(hash);
+    if (!el) return;
+    e.preventDefault();
+    el.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "start",
+    });
+    // Keep the URL honest without asking the router to navigate.
+    window.history.replaceState(null, "", href);
+  };
+}
+
 export default function Header() {
+  const pathname = usePathname();
+  const onHashLink = useHashNav(pathname);
   const { items } = useCart();
   // Garments, not cart lines -- the cart page counts the same way, and a
   // badge reading "2" over a cart saying "4 pieces" reads as a bug.
@@ -193,6 +225,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
+              onClick={(e) => onHashLink(e, link.href)}
               /* NOT the display serif. Cormorant is a light, high-contrast
                  face -- at 13px reversed out of black its thin strokes broke up
                  and the founder could not read them. Small reversed type wants
