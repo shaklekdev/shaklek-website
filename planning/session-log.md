@@ -1886,3 +1886,42 @@ already promises one).
 
 Not held by me: `src/data/versionIds.ts` and `scripts/render-collection-book.mjs`
 are the other session's.
+
+## 2026-08-28 — session 2a816505 (version IDs + wide-leg band)
+
+Committed `b799fcd`, **not pushed** (the other session's migration must run
+first — see the entry above).
+
+- `src/data/versionIds.ts` — a short stable code per render-tier combination
+  (32 of them: `OVS-LN`, `WLT-WF`). The collection book prints the code above
+  each column with a ruled blank beside it, so metres per cut can be written on
+  the page at the workshop meeting and matched back afterwards. **The codes are
+  a key, not a label** — changing one orphans whatever was recorded against it.
+  Book re-rendered: `brand-assets/tailor-samples/collection-book.pdf`.
+- Wide-leg trousers: the flat grey bar across the bottom of the `wide:full`
+  photos is gone. Deterministic, no generation —
+  `scripts/catalog/fix-bottom-band.mjs` copies the real backdrop rows just
+  above the band downward over it. 7 of 8 files fixed, filenames bumped to
+  -v2/-v3, originals in `catalog-archive/2026-08-28-wideleg-bottom-band/`.
+
+**Two instruments lied today, both worth knowing about.**
+
+- A *mean* of the outer columns as a row-background estimate is dragged down
+  several levels by the model's floor shadow. Use a median. And a median over
+  both edges is bimodal when the backdrop has a left-to-right gradient, so it
+  returns a cluster edge rather than a middle — do not use it as an anchor.
+- `strings` and an ad-hoc PDF stream parser both reported the collection book
+  had zero version codes in it. It had all 32. Verifying a PDFKit document by
+  scraping bytes does not work; wrap `PDFDocument.prototype.text` and log what
+  is actually drawn.
+
+**Blocked, needs the founder.** The Oversized Shirt's new shorter "normal"
+would not generate: three attempts, the hem does not move, and the diff is
+uniform across the whole frame (the model re-renders and changes nothing).
+Pro — the tier that reshapes silhouettes — returned 503 six times running.
+Separately, the current base's hem already sits at the belt, so promoting it to
+"longer" would leave almost no visible difference between the two lengths.
+Raised with her.
+
+Wrap Top shortening *does* work: navy `long:longer` front came back hip-length
+first try. Waiting on her approval before the remaining seven fronts.
