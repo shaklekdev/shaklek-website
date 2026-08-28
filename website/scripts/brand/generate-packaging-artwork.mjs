@@ -278,21 +278,27 @@ makePdf("03-hang-tag", 50, 90, (doc, w, h) => {
 // the website say the same thing. If those change, regenerate this file.
 makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
   doc.circle(w / 2, 7 * MM, 2.1 * MM).lineWidth(0.4).strokeColor("#B9B1A2").stroke();
+  // ⚠️ NO PRICE. "One price, from AED 389" was here and the founder cut it:
+  // a price on the tag reads as a discount sticker, and the tag is the one
+  // object in the parcel whose only job is to feel like the brand. The claim
+  // itself is good and stays on the website, where a shopper is deciding; it
+  // does not belong on a garment she has already bought.
   const items = [
     "100% custom-made",
-    "One price, from AED 389",
     "100% natural linen",
     "Made in the UAE",
   ];
-  let y = 24 * MM;
+  // Three, not four, so the spacing opens up rather than leaving a gap where
+  // the fourth was.
+  let y = 28 * MM;
   for (const t of items) {
     // a gold hairline as the bullet, the same mark the lockup uses
     doc.rect(w / 2 - 3 * MM, y - 1.6 * MM, 6 * MM, 0.28 * MM).fill(GOLD);
-    plain(doc, w / 2, y + 4.4 * MM, t.toUpperCase(), 6.2, INK, 0.9);
-    y += 13 * MM;
+    plain(doc, w / 2, y + 4.6 * MM, t.toUpperCase(), 6.4, INK, 1.0);
+    y += 15 * MM;
   }
   monogram(doc, w / 2, 82 * MM, 5 * MM, "#C9C0AE");
-}, "the four values. Print on the reverse of 03-hang-tag");
+}, "the values, no price. Print on the reverse of 03-hang-tag");
 
 // 4. THANK-YOU CARD A6, 105 x 148 mm ---------------------------------------
 makePdf("04-thank-you-card-front", 105, 148, (doc, w, h) => {
