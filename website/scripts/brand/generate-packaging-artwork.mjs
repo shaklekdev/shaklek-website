@@ -213,11 +213,22 @@ makePdf("02-care-label", 25, 45, (doc, w, h) => {
     // MEASURE the number, do not guess its box. A 4.6mm box was too narrow for
     // "100%" at 8pt, so it wrapped to two lines and printed "10" above "0%"
     // across the line beneath. widthOfString is exact.
-    doc.font("Helvetica").fontSize(8);
+    // SIZE AND BASELINE, both by the founder's eye on the first proof: the
+    // number sat too high and was too large beside the Arabic.
+    //
+    // Baseline: pdfkit places the TOP of a text box at the y it is given, while
+    // draw() places a glyph run on its BASELINE. Passing the same y to both put
+    // the Latin roughly a full ascender high. Helvetica's ascender is about
+    // 0.718 of its point size, so subtracting that lands the two on one line.
+    //
+    // Size: 8pt against Arabic drawn at 3mm was visibly the bigger of the two.
+    // 6.4pt matches the weight of the Arabic beside it.
+    const NUM_PT = 6.4;
+    doc.font("Helvetica").fontSize(NUM_PT);
     const numW = doc.widthOfString("100%");
     const total = numW + 1.4 * MM + word.width;
     const left = (w - total) / 2;
-    doc.fillColor(INK).text("100%", left, 11 * MM - 8, { width: numW + 2, lineBreak: false });
+    doc.fillColor(INK).text("100%", left, 11 * MM - NUM_PT * 0.718, { width: numW + 2, lineBreak: false });
     draw(doc, word.segs, left + numW + 1.4 * MM, 11 * MM, INK);
   }
   plain(doc, w / 2, 15 * MM, "100% LINEN", 7, INK, 1.2);
