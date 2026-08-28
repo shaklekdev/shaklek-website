@@ -345,8 +345,11 @@ makePdf("04-thank-you-card-front", 105, 148, (doc, w, h) => {
 
 makePdf("05-thank-you-card-back", 105, 148, (doc, w, h) => {
   line(doc, w / 2, 26 * MM, "Now tell us how it fits", 5.2 * MM, INK, 0.9);
+  // "Two minutes" is load bearing. The biggest reason not to scan is not
+  // knowing what it costs, and five tap-questions plus an email honestly is
+  // two minutes. Say it at the moment of decision.
   doc.font("Helvetica").fontSize(8.4).fillColor(MUTED)
-    .text("Scan below. It goes to your tailor, and your next piece starts from it.",
+    .text("Scan below. Two minutes, straight to your tailor, and your next piece starts from it.",
       18 * MM, 33 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
 
   // 30 mm block. Bigger than the business card's because this one is scanned
@@ -361,14 +364,27 @@ makePdf("05-thank-you-card-back", 105, 148, (doc, w, h) => {
 
   doc.rect(w / 2 - 6 * MM, 90 * MM, 12 * MM, 0.3).fill(GOLD);
 
-  // ⚠️ THIS SENTENCE IS THE FAQ'S, WORD FOR WORD. /faq says "one free
-  // alteration or remake within 14 days of delivery". Dropping the "one" --
-  // which an earlier draft of this card did -- promises unlimited alterations
-  // in print, on a card that cannot be recalled, against a policy that says
-  // otherwise. Change the FAQ and this together or not at all.
+  // ⚠️ THIS SENTENCE IS THE FAQ'S, WORD FOR WORD, AND TWICE IT HAS NOT BEEN.
+  //
+  // /faq, /legal/terms, /shipping and /size-guide all say "one free alteration
+  // or remake within 14 days OF DELIVERY", and "Message us with a photo and a
+  // stylist arranges it". Two drifts have been caught here:
+  //
+  //  - an early draft dropped the "one", which promises UNLIMITED alterations
+  //    in print, on a card that cannot be recalled, against a policy that says
+  //    otherwise;
+  //  - this comment then claimed word-for-word accuracy while the card said
+  //    "we will collect the piece" and dropped "of delivery". NOTHING on the
+  //    shipped site promises collection. That was a courier pickup for every
+  //    alteration, promised in ink, forever, by a card rather than by a policy.
+  //
+  // An unanchored "14 days" is also the vaguer promise: 14 days from what?
+  //
+  // The number prints because a card has no links. Verify it against
+  // TAILOR_WHATSAPP_NUMBER before any print run.
   doc.font("Helvetica").fontSize(8).fillColor(MUTED)
-    .text("If something is not right, you get one free alteration or remake within 14 days. Message us and we will collect the piece.",
-      18 * MM, 98 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
+    .text("If something is not right, you get one free alteration or remake within 14 days of delivery. Message us on WhatsApp, +971 50 476 6769, and a stylist arranges it.",
+      18 * MM, 96 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
 
   monogram(doc, w / 2, 130 * MM, 7 * MM, "#C9C0AE");
 }, "back. QR to the fit form, wording matches /faq");

@@ -29,16 +29,32 @@ export default function FitPage() {
             middle one is the whole proposition. Everything the old version
             explained about tailors and size charts is still true and is now
             said once, in the sentence under the promise, instead of three
-            times before the first question. Resist adding it back. */}
+            times before the first question. Resist adding it back.
+
+            ⚠️ "WHAT CAN WE IMPROVE FOR YOU?" WAS CONSIDERED AND REJECTED, and
+            the reason is already recorded in fitNotes.ts: an outside reviewer
+            struck negative framing off the design page because "on a
+            made-to-order page, negative words invite doubt about quality at
+            the exact moment the customer is deciding to trust you." Here she
+            is holding the garment, so it lands harder. It also biases her away
+            from "Just right" -- the most useful answer in the set -- and it
+            selects respondents: only the dissatisfied fill in a complaint
+            form, so the tailor would read a file that over-represents faults
+            and never hear from the happy repeat buyer this loop exists for.
+
+            "Your next piece starts from this one" is the payoff stated as HER
+            possession rather than the brand's project, it is the one thing a
+            stocked brand cannot say, and it chains: the card back says it, the
+            page says it, the done screen says it. */}
         <h1 className="text-[26px] leading-snug text-text">
           Thank you for your order.
         </h1>
         <p className="mt-3 text-[17px] leading-snug text-text">
-          Let’s make the next one even better.
+          Your next piece starts from this one.
         </p>
         <p className="mt-4 text-[14px] leading-relaxed text-text-2">
-          Tell us how this piece sat on you. Your tailor keeps every detail and
-          cuts to it next time.
+          Tell us how it sits, what you love as much as what you would change.
+          Your tailor keeps every detail and cuts to it next time.
         </p>
         <FitFeedbackForm />
         <p className="mt-10 border-t border-[#E7E0D2] pt-5 text-[12.5px] leading-relaxed text-text-3">
