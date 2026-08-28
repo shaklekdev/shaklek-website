@@ -92,14 +92,24 @@ const VIGNETTES = [
     k: "100% natural fabrics",
     v: "Plant-based only. Breathable against the skin, never synthetic.",
   },
-  // ⚠️ "THE UAE", NOT "DUBAI". Confirmed by the founder 2026-08-28. The
-  // company is licensed in Dubai, but where the tailor actually works is
-  // recorded nowhere, so the narrower claim is not supported. "Local tailors"
-  // plural is supported: planning/pricing-todo.md records that the bench is
-  // more than one person.
+  // ⚠️ "THE UAE", NOT "DUBAI", AND "A TAILOR", NOT "TAILORS".
+  //
+  // Dubai: the company is licensed there, but where the tailor actually works
+  // is recorded nowhere, so the narrower claim is not supported.
+  //
+  // Singular: I first wrote "local tailors" on the strength of a
+  // pricing-todo.md line reading "more than one tailor available". That line
+  // is a CAPACITY note about what could be hired, dated 2026-08-22, and the
+  // same file's open list still asks "How many tailors are available?" --
+  // unanswered. Everything else in the repo is singular: tailor-capacity.md is
+  // written around one maker, and the site says "the tailor" 40 times.
+  //
+  // Plural implies a workshop. A customer who finds one person behind it has
+  // been told something untrue, and singular is safe whichever way the bench
+  // grows.
   {
     k: "Made in the UAE",
-    v: "Sewn here by local tailors, never shipped in from a factory abroad.",
+    v: "Sewn here by a local tailor, never shipped in from a factory abroad.",
   },
 ];
 

@@ -100,17 +100,18 @@ export const BENEFITS = [
     v: "Linen only. Breathable natural fabric against your skin, never synthetic.",
     icon: "flax",
   },
-  // ⚠️ "MADE IN THE UAE", NOT "MADE IN DUBAI". Confirmed by the founder
-  // 2026-08-28. The company is licensed in Dubai, but where the tailor
-  // actually works is recorded nowhere in this repo, so the narrower claim is
-  // not supported. Do not tighten it without her saying so.
+  // ⚠️ "THE UAE" NOT "DUBAI", AND "A TAILOR" NOT "TAILORS". Confirmed by the
+  // founder 2026-08-28. Where the tailor works is recorded nowhere, so Dubai
+  // is not supported; and the only line suggesting more than one tailor is a
+  // capacity note about what could be hired, against an open question that is
+  // still unanswered. Plural implies a workshop nobody has verified exists.
   //
   // It earns a place because almost no fast-fashion competitor in this market
   // can say it, and it is one of the few brand claims that is both
   // differentiating and verifiable.
   {
     k: "Made in the UAE",
-    v: "Sewn here by local tailors, never shipped in from a factory abroad.",
+    v: "Sewn here by a local tailor, never shipped in from a factory abroad.",
     icon: "pin",
   },
 ];
