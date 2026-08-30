@@ -98,7 +98,7 @@ const RULES = [
   ["1", "PRINT THE FILES EXACTLY AS WE SEND THEM.",
    "Please do not redraw them, retype them, or set them again in your own fonts — in any language. If anything cannot be printed as it is, tell us and we will send a new file."],
   ["2", "ONE COLOUR APPLIES TO THE TWO BAGS ONLY.",
-   "Items 1 and 2, the cotton bag and the hand bag, print in BLACK ONLY. The logo file has a gold line in it — on those two items please print that line in black. Every other item prints exactly as its file shows, in full colour."],
+   "Items 1 and 2, the cotton bag and the hand bag, print in BLACK ONLY, and their file is already one colour — there is no gold in it. Every other item prints exactly as its file shows, in full colour."],
   ["3", `${QTY} PIECES OF EVERY ITEM.`,
    "If 100 is below your minimum for any item, please tell us your minimum and the price at that quantity — do not leave the item out."],
   ["4", "SEND A PHOTO OR A SAMPLE BEFORE THE FULL RUN.",

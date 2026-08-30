@@ -66,20 +66,20 @@ function raster(stem) {
 
 const SPEC_RAW = [
   { n: "1", item: "Cotton bag", size: "35 x 45 cm", mat: "Natural cotton, ribbon drawstring",
-    qty: "100", file: "shaklek-logo", checkSize: false,
+    qty: "100", file: "shaklek-logo-one-colour", checkSize: false,
     fileNote: "file is the LOGO - print it 110 mm wide",
     texture: "Undyed natural cotton, soft, not stiff. No coating.",
     inks: [["#1A1A1A", "Black - the only colour on this item"]],
     colour: "Black only, ONE colour",
-    plain: "The logo file has a gold line in it — please print that line in BLACK, not gold. Silk-screen the logo on ONE side only. Logo 110 mm wide, centred, in the upper third of the bag. No embroidery.",
+    plain: "Silk-screen the logo on ONE side only. Logo 110 mm wide, centred, in the upper third of the bag. No embroidery.",
     note: "Silkscreen, one colour. Logo 110 mm wide, centred, in the upper third. No embroidery." },
   { n: "2", item: "Hand bag", size: "to fit 35 x 30 x 6 cm", mat: "Kraft card, rope or ribbon handle",
-    qty: "100", file: "shaklek-logo", checkSize: false,
+    qty: "100", file: "shaklek-logo-one-colour", checkSize: false,
     fileNote: "file is the LOGO - print it 110 mm wide",
     texture: "Matt kraft, uncoated. Rope or ribbon handle, not plastic.",
     inks: [["#1A1A1A", "Black - the only colour on this item"]],
     colour: "Black only, ONE colour",
-    plain: "The logo file has a gold line in it — please print that line in BLACK, not gold. The cotton bag goes inside this one. Please use your nearest stock size that fits — do not cut a custom size. Logo on one side, centred.",
+    plain: "The cotton bag goes inside this one. Please use your nearest stock size that fits — do not cut a custom size. Logo on one side, centred.",
     note: "The outer bag — the cotton bag goes inside it. Please use your nearest stock size that fits those contents; do not cut a custom size. Logo centred, one side." },
   { n: "2", item: "Woven brand label", size: "45 x 18 mm", mat: "Woven, single-sided",
     qty: "100", file: "01-woven-brand-label", checkSize: true,
@@ -218,7 +218,7 @@ doc.font("Helvetica-Bold").fontSize(8).fillColor(RED)
   .text("THREE RULES FOR EVERY ITEM", 52, y + 9, { characterSpacing: 0.6 });
 const RULES = [
   ["1.", "Print the file exactly as it is. Please do not redraw, retype or re-set anything, in any language."],
-  ["2.", "ONE COLOUR, BLACK, applies to items 1 and 2 only — the cotton bag and the hand bag. The logo file has a gold line in it; on those two print it black. Every other item prints exactly as its file, in full colour."],
+  ["2.", "ONE COLOUR, BLACK, applies to items 1 and 2 only — the cotton bag and the hand bag, whose file is already one colour. Every other item prints exactly as its file, in full colour."],
   ["3.", "Send a photo or sample for approval before the full run."],
 ];
 let ry = y + 23;
