@@ -18,6 +18,46 @@ Rules that make this work:
 
 ## Active claims
 
+### Session K — the silent-fallback fix, shipped through staging (2026-08-30)
+
+**`a601ded`. Staging job 4, then production job 285. Both green.** The first
+change on this project to be proven on staging before it touched production —
+which is the whole point of building it.
+
+**What was wrong:** `/api/orders` catches a persistence failure, leaves
+`orderId` null, and falls past `if (orderId && stripe)` into the **pre-Stripe
+demo flow** — which emails a confirmation and returns `ok: true` without ever
+creating a Checkout Session. Correct while there was no Stripe account.
+**One has existed since 2026-08-22**, so for eight days any failure that nulled
+`orderId` turned a live checkout into a free confirmed order. No error, no 5xx,
+and a row on the dashboard indistinguishable from an abandoned checkout.
+
+**Now:** `if (stripe && !orderId)` returns **500** with *"You have not been
+charged. Please try again."* Gated on `stripe`, so a local checkout with no
+secrets still gets the demo flow it is meant to get.
+
+**Verified by reproducing the failure, not by reading the diff.** A local
+production build pointed at an unreachable database:
+
+| | before | after |
+|---|---|---|
+| response | `200 ok:true` | **500** |
+| customer sees | "Order confirmed" | "You have not been charged" |
+| confirmation email | sent | not sent |
+| Stripe session | none | none |
+
+Then on **staging**: healthy path still returns a `cs_test_` checkout URL,
+foreign origin still 403, empty body still 400. Then production: home, catalog
+and checkout all 200; `/api/orders` 400 own-origin and 403 foreign; both webhook
+routes still 400; still serving `pk_live_`.
+
+⚠️ **The security agent was NOT run on this, and CLAUDE.md asks for it on
+anything in the payment blast radius.** This session is configured not to spawn
+agents. The change is one early-return that can only turn a 200 into a 500 and
+cannot reach `unit_amount`, pricing, or auth — but that is my assessment, not a
+review. **Worth a pass by `shaklek-security` before the next payment change
+lands on top of it.**
+
 ### Session K — STAGING PROVED A FULL CHECKOUT, AND FOUND THREE BUGS DOING IT (2026-08-30)
 
 **End to end on staging, with a Stripe test card: order created -> Stripe
