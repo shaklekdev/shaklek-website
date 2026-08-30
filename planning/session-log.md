@@ -18,6 +18,67 @@ Rules that make this work:
 
 ## Active claims
 
+### THE LIST FOR 2026-08-31 — written 2026-08-30, checked against live systems
+
+**Production verified tonight, so nobody re-checks it:** 5 customers, 12 orders,
+2 paid, **0 emails stored with a capital**, **0 orders with no line items**, and
+**0 orders that ever took the silent-fallback path**. The free-order bug existed
+for eight days and never actually fired on production. Working tree clean,
+nothing unpushed.
+
+#### Mine, unblocked — start here
+
+1. **Staging still inherits two PRODUCTION secrets.** `CLERK_WEBHOOK_SECRET`
+   and `RECONCILE_TOKEN` were never overridden at branch level, so staging holds
+   production's values. Consequence today is small — no production Clerk webhook
+   points at staging, and reconcile only reaches the dev DB — but it is the same
+   inheritance trap that would have given staging the live Stripe key, and it
+   means staging cannot verify a Clerk **dev-instance** webhook until it is
+   fixed. **Override both.** Small, and it should be done before anything else
+   is built on staging.
+2. **P2 — the remake request flow.** Designed, not built, not blocked. Two
+   things must exist first or "one free remake within 14 days" is
+   unenforceable: **no delivery date is recorded anywhere**, so the 14 days
+   counts from nothing, and **nothing records that the remake was used**, so
+   "one" cannot be enforced. Both small, both additive.
+3. **P3 — email normalisation at checkout.** Re-checked tonight: **0 customers
+   affected.** Genuinely not urgent. Wants its own careful job because it
+   touches the payment path.
+
+#### Blocked on her decision, then mine
+
+4. **`/upload` — still 200 and STILL in the live sitemap.** Verified again
+   tonight. A visitor from search can configure an upload, pay, and the
+   reference photo is never stored; the tailor receives a boolean. **Zero orders
+   have hit it.** Two honest options: take it off the sitemap and the router, or
+   build image storage (there is no S3 bucket, so that is real work).
+
+#### Worth a pass, not urgent
+
+5. **`shaklek-security` on `a601ded`.** A payment-path change shipped tonight
+   without the review CLAUDE.md asks for, because this session cannot spawn
+   agents. Low risk by my reading — one early return that can only turn a 200
+   into a 500 — but unreviewed, and it should not have a second payment change
+   stacked on it first.
+
+#### Hers
+
+- **The pricing reopen is the biggest business item.** Packaging is **36.15 per
+  order**, not the 2 the file assumed, so margins are **56–61%** against a
+  65–72% design band. The "+49 is off" conclusion of 2026-08-28 rested on the
+  wrong number. Other session has it. **Nobody is buying and no campaign is
+  running, so prices can still move freely — that stops the day ads start.**
+- **Clerk DEV-instance webhook** at `…staging…/api/webhooks/clerk`, so staging
+  signups notify. Needs item 1 done first.
+- **Supplier:** fabric width (the 110m / ~50 garments estimate rests on 140cm,
+  unconfirmed), and one line in writing that **W300235 as sold to us is 100%
+  linen** — the thing that actually backs the claim on ~20 pages.
+- **Arimo font swap** in the artwork PDFs — shaklek-83 is holding for her word.
+- Two **AED 3.89** refunds; **Sentry**; **Meta** pixel + domain verification;
+  **DET advertising permit before any discount campaign**; **TikTok** business
+  account + UAE advertiser permit; **one lawyer hour** (tailor/ECAS, privacy,
+  terms).
+
 ### Session K — the silent-fallback fix, shipped through staging (2026-08-30)
 
 **`a601ded`. Staging job 4, then production job 285. Both green.** The first
