@@ -66,3 +66,6 @@ website/scripts/social/encode
 # website/public/ on 2026-08-27. Kept rather than deleted per CLAUDE.md, but
 # ignored: git already holds every one of them under its .jpg name.
 /_archive/duplicate-png-names/
+
+# Generated supplier hand-off folder, rebuilt by build-final-folder.mjs
+/send-to-packagin-supplier-final/
