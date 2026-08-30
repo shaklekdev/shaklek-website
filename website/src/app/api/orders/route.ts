@@ -216,6 +216,41 @@ export async function POST(req: NextRequest) {
 
   const stripe = getStripe();
 
+  // ⚠️ IF STRIPE IS CONFIGURED, A NULL orderId IS A HARD FAILURE. IT MUST NOT
+  // FALL THROUGH.
+  //
+  // Everything below `if (orderId && stripe)` is the PRE-STRIPE demo flow: it
+  // emails a confirmation and returns ok:true without ever creating a Checkout
+  // Session. That was correct while there was no Stripe account (see
+  // src/lib/stripe.ts). There has been one since 2026-08-22.
+  //
+  // So from that date, any failure that nulls `orderId` -- the catch above
+  // swallows it -- silently turned a checkout into a FREE CONFIRMED ORDER. The
+  // customer is told "order confirmed", is never asked for a card, is emailed a
+  // confirmation, and the row sits at `pending_payment` with no line items and
+  // no session. Nothing surfaces it: no error to the customer, no 5xx, and
+  // nothing on the dashboard distinguishing it from an abandoned checkout.
+  //
+  // FOUND ON STAGING, 2026-08-30, on its first real checkout. The trigger was
+  // a missing `order_items.fit_notes` column on the dev database, which made
+  // the line-item insert throw. The missing column was a staging accident; the
+  // fallback is a production defect, and the same code path runs against live
+  // cards. Any transient database error does the same thing.
+  //
+  // Deliberately gated on `stripe` rather than made unconditional: with no
+  // Stripe key -- a local checkout of this repo with no secrets -- the demo
+  // flow is still the intended behaviour and still works.
+  if (stripe && !orderId) {
+    console.error("[orders] order could not be persisted while Stripe is configured — refusing to confirm");
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "We could not start your order. You have not been charged. Please try again.",
+      },
+      { status: 500 },
+    );
+  }
+
   // Resolve the customer's code to a real Stripe promotion code id. A code
   // that has expired or been archived between the cart and here simply drops
   // out: the order is still placed, at full price, which is the honest
