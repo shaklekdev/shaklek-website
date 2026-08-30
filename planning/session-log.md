@@ -18,6 +18,68 @@ Rules that make this work:
 
 ## Active claims
 
+### Session K — Clerk signup notification (2026-08-30) — DONE, deployed, nothing held
+
+**Shipped `e461777`, Amplify job 278 SUCCEED, verified on production.**
+New files only; no existing file was touched.
+
+**The gap:** a customer could create an account and it produced no email, no
+row, no dashboard entry. There was no Clerk webhook of any kind — only
+Stripe's. `customers` rows are written when someone ORDERS, so an account with
+no order lived entirely inside Clerk and was invisible to everyone. The founder
+found it when a friend signed up and nothing happened.
+
+⚠️ **Diagnose before fixing: the mail pipeline was never broken.** The first
+theory was that notifications were going to `orders@`/`hello@` mailboxes she
+could not read, and a "repoint everything at STAFF_EMAILS" change was proposed.
+She then pasted two notification emails she HAD received. Resend, DKIM
+(`resend._domainkey.shaklek.com`), the `send.shaklek.com` SPF subdomain and
+DMARC `p=quarantine` are all correctly configured and delivering. **The
+proposed fix was withdrawn — it would have changed working code and fixed
+nothing.** The only real defect was the missing webhook.
+
+**What was built**
+- `src/lib/svixVerify.ts` — Svix HMAC verification, no new dependency (~40 lines
+  of `node:crypto` beats a package in the tree, where a failed `npm ci` is a
+  silent Amplify failure). Constant-time compare, 5-minute replay window,
+  multi-signature support for key rotation.
+- `src/app/api/webhooks/clerk/route.ts` — `user.created` → one email to
+  `STAFF_EMAILS`. Writes nothing, touches no database, does not import
+  `orderEmail.ts`. A signup notification has no business in the payment blast
+  radius.
+
+**Verification, in the order it was done**
+- 13/13 unit tests, including **Svix's own published test vector** rather than
+  an HMAC computed by the code under test — the standing rule about not
+  verifying with a metric that shares the transform's own thresholds. Negative
+  cases: tampered body, wrong secret, wrong `svix-id`, truncated and empty
+  signatures, both ends of the replay window, malformed headers, `v0` ignored.
+- `tsc --noEmit` clean, `npm run build` exit 0, route registers as
+  `ƒ /api/webhooks/clerk`.
+- On production: unsigned POST → **400**, and a signature forged with the wrong
+  secret → **400**.
+
+⚠️ **The 400 is the load-bearing observation, not the 200.** A missing
+`CLERK_WEBHOOK_SECRET` returns **501**, so 400 is what proves the variable
+actually reached the running app. That is the only cheap external test that
+distinguishes "allowlist correct" from "console set, runtime undefined" — the
+`RECONCILE_TOKEN` failure. **Probe for the 400 after any future env-var
+addition.**
+
+**Two guard rails held, and both were right to.** The permission classifier
+blocked `aws amplify update-app`, so the founder made both console changes
+herself — correct, because `update-app` REPLACES the whole variable map and a
+bad merge silently wipes `DATABASE_URL` and `STRIPE_SECRET_KEY`. Her first
+attempt put `-e CLERK_WEBHOOK_SECRET` *after* the `>>`, which would have
+redirected the build output into a file named `-e` and dropped every variable;
+she asked before saving it. **Both values were read back from Amplify and
+diffed against a 14-variable snapshot before anything was pushed.**
+
+**Still open:** no end-to-end delivery from Clerk itself has run yet — the
+signature path is proven, the Clerk-to-inbox path is not. Create a throwaway
+account, or use the Clerk dashboard's test event.
+
+
 ### Session J — /our-story + a live nav bug (2026-08-28) — DONE, no files held
 
 **The Catalog menu link was broken on every page** and is the more urgent half
