@@ -17,6 +17,83 @@ the first campaign runs.
 
 ---
 
+## ⚠️ REVISED 2026-08-30 — packaging was the lever, not fabric
+
+Two inputs arrived on the same day. Only one of them matters, and it is not the
+one that was being negotiated.
+
+### The packaging line in this file is wrong by a factor of eighteen
+
+`Inputs` below carries **2 AED/package**, from 2026-08-22, when packaging was a
+guess. It is now bought. Local Dubai supplier, 100 pieces, no shipping:
+
+| | AED |
+|---|---|
+| Cotton drawstring bag | 20.00 |
+| Hand bag (outer, replaces the mailer) | 12.00 |
+| Hang tag, thank-you card + envelope, seal, tissue x2 | 4.15 |
+| **Per order** | **36.15** |
+
+Still excluded: the woven brand label, the care label and the business card,
+none of which has been quoted yet. So 36.15 is a floor, not a total.
+
+**That one line costs more margin than the entire fabric question.**
+
+| Case | Shirt | Skirt | Pants | Dress |
+|---|---|---|---|---|
+| As this file was written — fabric 24, packaging 2 | 67% | 67% | 65% | 66% |
+| **Real packaging — fabric 24, packaging 36** | **58%** | **58%** | **56%** | **61%** |
+| Helen Wu's linen — fabric 32, packaging 36 | 53% | 55% | 52% | 56% |
+
+The 65-67% recorded on 2026-08-28 was true of its inputs and is no longer true
+of anything. **The live ladder earns 56-61%.**
+
+### Helen Wu's linen is more expensive than the supplier already chosen
+
+Quote, 2026-08-30: **pure linen 195 gsm, $6.25/m at 100 m, shipping $250 for
+100 m, not included.** Landed that is **$8.75/m = AED 32.13/m**, and duty and
+VAT were not mentioned — at 5% + 5% it is AED 35.35.
+
+Against the **AED 24/m** supplier this file settled on two days earlier, that is
+**34% more expensive, or 47% with duty**. It costs about 4.4 margin points on a
+shirt. It may still be the right cloth — 195 gsm is a stated weight and the
+incumbent's is not recorded anywhere — but on price alone it is a step
+backwards, and the incumbent needs a reason to be dropped.
+
+### What each lever is actually worth, on a 389 shirt
+
+| Lever | Margin |
+|---|---|
+| Drop the hand bag (AED 12) | **+3.2 pts** |
+| Drop the hand bag and halve the cotton bag | +5.4 pts |
+| Raise the shirt to 438 (the old +49) | +4.4 pts |
+| Fabric down to 20/m | +2.2 pts |
+| Switch to Helen's linen | **-4.4 pts** |
+| 2.5m per shirt instead of 2.0m | -3.2 pts |
+
+**The hand bag is worth more than the whole fabric negotiation.** It is AED 12
+for the bag that goes around the bag, and `branding/packaging.md` flagged the
+paper bag as "only if there is a physical handover" long before it was ordered.
+
+### Prices that would restore 65%
+
+| Item | Live | At fabric 24 + packaging 36 | At fabric 32 + packaging 36 |
+|---|---|---|---|
+| Shirt | 389 | 478 (+89) | 531 (+142) |
+| Skirt | 419 | 504 (+85) | 544 (+125) |
+| Pants | 429 | 543 (+114) | 597 (+168) |
+| Dress | 619 | 704 (+85) | 783 (+164) |
+
+Not a recommendation. It is the size of the hole, and it is far larger than the
++49 that was withdrawn on 2026-08-28 — because that decision was taken against
+a 2 AED packaging line.
+
+**Nothing here is loss-making and nothing is urgent**; 56-61% is a healthy
+margin for a made-to-order label. But the 65-72% band this positioning was
+argued from is not being met, and the reason is packaging, not cloth.
+
+---
+
 ## ✅ RESOLVED 2026-08-28 — the fabric question is closed, and prices do not move
 
 **Founder's supplier: 100% linen, online, AED 24/metre, one price for every
@@ -128,7 +205,7 @@ used yet.
 | **In-store prices, all fabrics** | ⏳ **PLACEHOLDER — founder, Friday 2026-08-28** | Launch runs on store prices, not online ones |
 | **Metres per garment, per design** | ⏳ **PLACEHOLDER — founder, Friday 2026-08-28** | Currently assumed Shirt 2.0 · Skirt 1.5 · Pants 2.0 · Dress 3.0 |
 | Shipping | 21 AED/shipment | Founder, 2026-08-22 |
-| Packaging | 2 AED/package (1,000 per 500) | Founder, 2026-08-22 |
+| Packaging | ~~2 AED/package~~ **36.15 AED/order** | **Superseded 2026-08-30 — real local quotes, see the top of this file** |
 | Tailoring | Shirt **40** · Skirt **60** · Pants **60** · Dress **85** | Founder, 2026-08-22 |
 | Make time | 1–2 days per piece, per tailor | Founder, 2026-08-22 |
 | Tailor bench | More than one tailor available | Founder, 2026-08-22 |
