@@ -70,6 +70,37 @@ values.
 Note both are **branch-level** variables. The build-spec allowlist is
 app-level and already carries every name, so no spec change is needed.
 
+**Update, same session — Stripe webhook wired, and basic auth deliberately
+removed.**
+
+⚠️ **Amplify basic auth gates EVERY path on a branch and cannot exclude one.**
+So `/api/webhooks/stripe` and `/api/webhooks/clerk` returned **401** to Stripe
+and Clerk, and staging could not test a checkout — the one thing it exists for.
+Measured, not assumed: staging returned 401 where production returned 400.
+
+**Basic auth is now OFF, with the founder's explicit go-ahead**, and the real
+harm it was covering is closed more precisely: `src/app/robots.ts` returns
+`Disallow: /` whenever `AWS_BRANCH !== "main"`. It reads an **Amplify built-in
+at BUILD time**, so `/robots.txt` being statically generated means no new
+variable and **no build-spec allowlist change** — a `NEXT_PUBLIC_` variable
+would have needed the console *and* the spec, which is the RECONCILE_TOKEN
+two-step. Verified by building both ways before pushing, then on the live sites:
+staging is `Disallow: /`, production's is byte-for-byte unchanged.
+
+What the exposure actually is: a public copy of the storefront on `sk_test_`
+keys, so no real card can be charged, against the dev Neon branch, so no live
+customer row is reachable.
+
+**Stripe test-mode webhook is done** — endpoint `shaklek-staging` registered
+against the staging URL for `checkout.session.completed` and
+`checkout.session.expired` only; `STRIPE_WEBHOOK_SECRET` merged into the
+staging branch's variables (12 → 13, read back and asserted, still `sk_test_`
+and still the dev DB).
+
+**Still outstanding:** the Clerk **dev instance** webhook endpoint, so
+`CLERK_WEBHOOK_SECRET` is unset on staging and staging signups do not notify.
+Production signups are unaffected and working.
+
 **Minor, noticed in passing:** `git branch -a` warns
 `ignoring ref with broken name refs/remotes/origin/main 2` — the macOS/iCloud
 "file 2" duplicate that CLAUDE.md already documents for `.next/types`, this time

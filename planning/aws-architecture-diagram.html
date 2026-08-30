@@ -499,7 +499,7 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       <tr><td>git branch</td><td><code>main</code></td><td><code>staging</code></td></tr>
       <tr><td>Amplify stage</td><td>PRODUCTION</td><td>DEVELOPMENT</td></tr>
       <tr><td>URL</td><td><code>www.shaklek.com</code></td><td><code>staging.dqcptedylrif0.amplifyapp.com</code></td></tr>
-      <tr><td>public?</td><td>yes</td><td><strong>no</strong> — Amplify basic auth, returns 401</td></tr>
+      <tr><td>public?</td><td>yes</td><td>yes, but <code>robots.txt</code> is <code>Disallow: /</code></td></tr>
       <tr><td>database</td><td><code>ep-blue-cell…</code> (prod)</td><td><code>ep-jolly-cloud…</code> (dev)</td></tr>
       <tr><td>Stripe</td><td><code>sk_live_</code></td><td><code>sk_test_</code></td></tr>
       <tr><td>Clerk</td><td><code>pk_live_</code>, <code>clerk.shaklek.com</code></td><td><code>pk_test_</code>, dev instance</td></tr>
@@ -528,12 +528,26 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       (staging job 1).
     </p>
     <p>
-      <strong>Still outstanding:</strong> staging has no
-      <code>STRIPE_WEBHOOK_SECRET</code> or <code>CLERK_WEBHOOK_SECRET</code> —
-      both need endpoints registered against the staging URL in Stripe
-      <em>test</em> mode and the Clerk <em>dev</em> instance. Until then
-      staging checkout will not mark orders paid and staging signups will not
-      notify. Everything else works.
+      <strong>Basic auth was turned off on 2026-08-30, deliberately.</strong>
+      It gates <em>every</em> path on an Amplify branch and cannot exclude one,
+      so Stripe and Clerk received <strong>401</strong> on
+      <code>/api/webhooks/*</code> and staging could never test a checkout &mdash;
+      the single thing it was built for. The exposure that buys is a public copy
+      of the storefront with <code>sk_test_</code> keys (no real card can be
+      charged) on the dev database (no live customer rows). The one real harm,
+      search indexing, is closed instead by <code>src/app/robots.ts</code>,
+      which returns <code>Disallow: /</code> whenever
+      <code>AWS_BRANCH !== "main"</code>. That reads an Amplify built-in at
+      build time, so it needed no new variable and no build-spec change.
+      <strong>Verified:</strong> staging <code>/robots.txt</code> is
+      <code>Disallow: /</code>, production's is unchanged.
+    </p>
+    <p>
+      <strong>Still outstanding:</strong> the Clerk <em>dev instance</em> has no
+      webhook endpoint yet, so <code>CLERK_WEBHOOK_SECRET</code> is unset on
+      staging and staging signups do not notify. Stripe is done &mdash; a
+      test-mode endpoint is registered against the staging URL and its secret is
+      set at branch level.
     </p>
   </div>
 
