@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getDb, schema } from "@/db/client";
 import { rejectOversizedBody } from "@/lib/requestGuards";
 import { verifySvixSignature } from "@/lib/svixVerify";
 
@@ -111,6 +112,49 @@ export async function POST(req: NextRequest) {
   const email = primary?.email_address ?? "(no email on account)";
   const verified = primary?.verification?.status === "verified";
   const name = [data.first_name, data.last_name].filter(Boolean).join(" ").trim();
+
+  // Record the signup, so an account is visible somewhere we can query.
+  //
+  // WHY: `customers` rows were only ever written by three things -- placing an
+  // order, saving a name on /account, saving measurements on /account. A
+  // person who merely signed up existed ONLY inside Clerk. The founder went
+  // looking for a registered account in the database and correctly could not
+  // find one.
+  //
+  // WHY THIS IS SAFE, and why it needs no migration: it adds ROWS, not
+  // columns. Deploy Trap 3 (schema ahead of database) does not apply. Every
+  // read of `customers` is either an innerJoin from `orders`/`fit_feedback` --
+  // so a customer with no orders simply does not appear, and the orders
+  // dashboard is unchanged -- or a lookup by email.
+  //
+  // Lower-cased on the way in. /api/orders stores a guest address exactly as
+  // typed, which is the open email-normalisation defect; writing the canonical
+  // form here means the signup row is the clean one rather than another
+  // variant to reconcile later.
+  //
+  // onConflictDoNothing, matching /api/orders: a signup that later orders must
+  // not double up, and an existing row's name and measurements must not be
+  // clobbered by a webhook retry.
+  const emailKey = email.toLowerCase();
+  if (primary?.email_address) {
+    try {
+      const db = getDb();
+      if (db) {
+        await db
+          .insert(schema.customers)
+          .values({ email: emailKey, ...(name ? { name } : {}) })
+          .onConflictDoNothing({ target: schema.customers.email });
+      }
+    } catch (err) {
+      // Never fail the delivery over this -- the notification email is the
+      // part the founder actually depends on, and Clerk would retry the whole
+      // event and resend it. Log the failure, not the address.
+      console.error(
+        "[webhooks/clerk] customer row not written:",
+        err instanceof Error ? err.message : "unknown error",
+      );
+    }
+  }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
