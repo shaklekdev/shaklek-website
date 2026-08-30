@@ -2268,3 +2268,101 @@ has to be maintained by hand is another thing that goes stale.
 **The general shape of every defect this session:** one artefact regenerated,
 its sibling not. Artwork vs spec sheet, spec sheet vs README, print file vs the
 drawing of it. None of it was missing knowledge.
+
+---
+
+## 2026-08-30 — the linen test report, verified against the lab
+
+**No repo changes. Nothing held.** Everything produced went to
+`~/Desktop/shak-docs/`, outside the repo.
+
+The founder asked whether the fibre-composition certificate her fabric supplier
+sent is enough. Short answer: **the document is genuine, and it still is not
+what backs the claim on the site.** Both halves matter.
+
+### What the document is
+
+`certif_W300235 成分检测报告（全英）.pdf` — report `ZFLJ2761423`, anti-fake code
+`2718292117`, issued by CNTAC Testing Service Co., Ltd. (Foshan). Applicant
+**Guangzhou Xinjishang Textile Co., Ltd.**, brand *Amazhiyu*. One 30x30cm swatch
+of "woven 21S 100% linen", tested 2022-03-30, reported 2022-04-01.
+**Fibre content only** (FZ/T 01057). Result: `Flax 100`. Judgement standard: `/`
+— a raw result, not a pass/fail against any spec.
+
+### Verified, not assumed
+
+The lookup passed and the lab served **its own stored copy** of the report. Its
+text was diffed line by line against the supplier's PDF: **identical, all 55
+lines**, including the fibre result. The supplier's copy is not doctored. Lab
+copy archived as `certif_W300235_LAB-VERIFIED-COPY_ZFLJ2761423.pdf` with a
+plain-text record beside it, `certif_W300235_VERIFICATION-NOTE.txt`, which
+carries the re-verification steps.
+
+⚠️ **The portal actively misleads you, which is why the note exists.**
+`www.fcl-sz.org.cn` lands on a STAFF LOGIN (用户名 / 密码). The report number and
+the code are **not** a username and password and are rejected forever. The real
+form only appears after clicking **质检报告防伪查询** below the box, and it renders
+*underneath* the login panel where it is easy to miss. It wants both fields:
+报告编号 = `ZFLJ2761423`, 防伪码 = `2718292117`.
+
+Also resolved: the report's "United Testing Services" watermark, the CNTAC
+Foshan letterhead and the 中联品检(北京) portal are **one organisation** — the UTS
+logo is on the portal's own login box. Three names, no discrepancy.
+
+### What it does NOT do, and this is the part that matters
+
+- **It does not name the fabric being bought.** `W300235` appears only in the
+  supplier's *filename*. The lab never wrote it. Nothing links the report to the
+  110m order.
+- It is **four years old**, covers **one undyed swatch**, and tests fibre content
+  only — no dye/azo/formaldehyde work, no colourfastness, no shrinkage. The four
+  sellable colours are untested.
+- The lab says so itself: "results refer only to sample(s) tested".
+
+**What actually backs "100% linen" on ~20 pages of the site is the supplier
+confirming in writing that article W300235 as sold to Shaklek is 100% linen —
+ideally on the invoice.** This report is then corroboration, now known to be real
+corroboration. That written line is still outstanding and is hers; it belongs in
+the same message as the unanswered fabric-width question.
+
+### Instrument note, for the running list
+
+**A fifth PDF extractor lied, and for a new reason: the file is encrypted.**
+`strings`, a zlib stream walk, and raw `/DCTDecode` extraction all returned
+nothing usable — 0 text streams, and the embedded JPEGs had no `FFD8` header
+because the stream bytes are encrypted. `sips` renders page 1 only, at 72dpi.
+
+What worked: **PDFKit through JXA** (`osascript -l JavaScript`), which decrypts
+transparently. `PDFDocument.string` gave the complete text of all three pages
+first try.
+
+Two JXA traps, both costly: **`console.log` writes to stderr**, so `> out.txt`
+captures an empty file — redirect `2>`. And **two-argument selectors do not
+bridge** in this build (`writeToFile$atomically`, `insertPage$atIndex` are all
+`undefined`); route binary out via `base64EncodedStringWithOptions(0)` and
+decode in the shell instead.
+
+Consistent with the standing rule — "cannot be true" means audit the instrument,
+not the belief. Four instruments disagreed with a document that was entirely
+intact.
+
+### Told her, not acted on
+
+- The applicant on the report may not be the company invoicing her. If her seller
+  is a reseller, this is someone else's certificate. Worth one glance at the
+  order chat.
+- **Get a swatch card before the 110 metres.** Not compliance — colour. Every
+  catalog photo is rendered at exact values (Ivory `#f5f0e8`, Navy `#0a2d4a`,
+  Burgundy `#4a1a2d`, White `#fafafa`). A navy that arrives visibly different
+  means the photography misrepresents the goods, discovered with all 110m paid
+  for.
+- Whether any of this is *required* is a lawyer question, not mine. It sits with
+  the tailor/ECAS hour already on her list. Nothing here is a legal requirement
+  as far as I could establish; a certificate is not a compliance document, and
+  the real duty is simply not to describe the product inaccurately.
+
+⚠️ **I over-scoped this at the start and she pushed back twice** ("you don't have
+to be this extra"). She was right: I bundled the fabric-width question and a
+swatch-archiving routine into what read as a compliance checklist, when the
+actual ask was "is this document enough". **Answer the question asked, then
+offer the rest separately.**
