@@ -18,6 +18,63 @@ Rules that make this work:
 
 ## Active claims
 
+### Session K, later — P0 STAGING ENVIRONMENT IS BUILT (2026-08-30)
+
+**Founder supplied the two blocking values, so P0 is no longer blocked — it is
+done.** Nothing held.
+
+| | production | staging |
+|---|---|---|
+| git branch | `main` | **`staging`** (new, pushed) |
+| Amplify stage | PRODUCTION | DEVELOPMENT |
+| URL | `www.shaklek.com` | `staging.dqcptedylrif0.amplifyapp.com` |
+| public | yes | **no — basic auth, 401** |
+| database | `ep-blue-cell` | `ep-jolly-cloud` (dev) |
+| Stripe | `sk_live_` | `sk_test_` |
+| Clerk | `pk_live_` | `pk_test_` (dev instance) |
+| auto-deploy | push to `main` | push to `staging` |
+
+Basic auth: user `shaklek`, password in the founder's hands (generated, not
+committed).
+
+⚠️ **THE TRAP THAT WOULD HAVE MADE THIS WORSE THAN USELESS: Amplify branches
+INHERIT app-level environment variables.** A `staging` branch created without an
+explicit override for every sensitive variable runs the **live Stripe key
+against the production database** — a second production wearing a staging name,
+which is strictly more dangerous than having no staging at all. All twelve
+variables are overridden at branch level.
+
+**So the branch was created with `--no-enable-auto-build`**, the overrides were
+**read back from the API and asserted** (`sk_test_`, `pk_test_`, dev DB host)
+*before* the first build was allowed to run, and auto-build was turned on only
+after. Do it in that order for any future branch.
+
+`src/lib/envGuard.ts` is the backstop and it already covered this case: a
+`sk_test_` key against the production DB **throws on startup**. It was written
+for local dev; it turns out to be exactly the staging guard too.
+
+**Verified, not assumed:** staging 401 without credentials, 200 with them,
+`/sign-up` serves `pk_test_`; production still 200 and still `pk_live_`; first
+staging build succeeded. Auto-branch-creation was checked and is **off**, so
+pushing the git branch could not have auto-provisioned anything with production
+values.
+
+**Still outstanding (needs the founder, both are five-minute dashboard jobs):**
+- **Stripe TEST-mode webhook** → `https://staging.…amplifyapp.com/api/webhooks/stripe`,
+  then set `STRIPE_WEBHOOK_SECRET` on the staging branch. Until then a staging
+  checkout will not mark orders paid.
+- **Clerk DEV-instance webhook** → `…/api/webhooks/clerk`, then
+  `CLERK_WEBHOOK_SECRET` on the staging branch. Until then staging signups do
+  not notify.
+
+Note both are **branch-level** variables. The build-spec allowlist is
+app-level and already carries every name, so no spec change is needed.
+
+**Minor, noticed in passing:** `git branch -a` warns
+`ignoring ref with broken name refs/remotes/origin/main 2` — the macOS/iCloud
+"file 2" duplicate that CLAUDE.md already documents for `.next/types`, this time
+inside `.git/refs`. Harmless, but it is the third place that pattern has shown up.
+
 ### Session K — Clerk signup notification (2026-08-30) — DONE, deployed, nothing held
 
 **Shipped `e461777`, Amplify job 278 SUCCEED, verified on production.**

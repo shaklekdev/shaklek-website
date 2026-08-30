@@ -480,37 +480,60 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
   </div>
 
   <div class="callout" style="border-color:var(--c-security)">
-    <strong>P0, FOUNDER'S CALL 2026-08-28 — THERE IS NO TEST ENVIRONMENT, AND
-    THAT IS NOW THE TOP PRIORITY.</strong>
+    <strong>P0 — BUILT AND VERIFIED 2026-08-30. A STAGING ENVIRONMENT NOW
+    EXISTS.</strong>
     <p>
-      One branch, <code>main</code>, deploys straight to a site taking live
-      cards. There is no staging anything. Verification today means building a
-      throwaway copy of the repo locally, which proves the code compiles and
-      proves nothing about production.
-    </p>
-    <p>
-      On 2026-08-28 a migration was applied to the <strong>dev</strong> Neon
-      branch, verified against <code>information_schema</code>, and reported
+      <strong>Why it was P0</strong> (founder's call, 2026-08-28): one branch,
+      <code>main</code>, deployed straight to a site taking live cards. On
+      2026-08-28 a migration was applied to the <strong>dev</strong> Neon
+      branch, verified against <code>information_schema</code> and reported
       done, while the code was already pushed. Production served a query
       against a table that did not exist there and <code>/account</code> broke
-      for every signed-in customer. The other Claude session found it. Not the
-      migration guard, not the security reviews, not the build check. The
-      guard added afterwards prevents that exact mistake and no other; a
-      staging environment is the first control here that is structural rather
-      than a matter of someone being careful.
+      for every signed-in customer. The other Claude session found it — not the
+      migration guard, not the security reviews, not the build check. Staging is
+      the first control here that is structural rather than a matter of someone
+      being careful.
+    </p>
+    <table class="comp">
+      <tr><th></th><th>production</th><th>staging</th></tr>
+      <tr><td>git branch</td><td><code>main</code></td><td><code>staging</code></td></tr>
+      <tr><td>Amplify stage</td><td>PRODUCTION</td><td>DEVELOPMENT</td></tr>
+      <tr><td>URL</td><td><code>www.shaklek.com</code></td><td><code>staging.dqcptedylrif0.amplifyapp.com</code></td></tr>
+      <tr><td>public?</td><td>yes</td><td><strong>no</strong> — Amplify basic auth, returns 401</td></tr>
+      <tr><td>database</td><td><code>ep-blue-cell…</code> (prod)</td><td><code>ep-jolly-cloud…</code> (dev)</td></tr>
+      <tr><td>Stripe</td><td><code>sk_live_</code></td><td><code>sk_test_</code></td></tr>
+      <tr><td>Clerk</td><td><code>pk_live_</code>, <code>clerk.shaklek.com</code></td><td><code>pk_test_</code>, dev instance</td></tr>
+      <tr><td>auto-deploy</td><td>on push to <code>main</code></td><td>on push to <code>staging</code></td></tr>
+    </table>
+    <p>
+      &#9888; <strong>THE TRAP, AND IT IS NOT OBVIOUS: Amplify branches INHERIT
+      app-level environment variables.</strong> A staging branch created without
+      an explicit override for every sensitive variable silently runs the
+      <em>live</em> Stripe key against the <em>production</em> database — a
+      second production, not a staging. All twelve are overridden at branch
+      level, and the override was <strong>read back from the API and asserted</strong>
+      (<code>sk_test_</code>, <code>pk_test_</code>, dev DB host) before the
+      branch was ever built.
     </p>
     <p>
-      <strong>Half of it already exists.</strong> The dev Neon branch is sitting
-      unused. Amplify hosts a second git branch natively with its own
-      environment variables, so staging runs on the dev database with
-      <strong>Stripe TEST keys</strong> and a Clerk dev instance, behind Amplify
-      basic auth so it is off Google and away from customers.
+      <code>src/lib/envGuard.ts</code> is the backstop: a <code>sk_test_</code>
+      key pointed at the production database <strong>throws on startup</strong>.
+      Staging cannot quietly write test rows into live orders.
     </p>
     <p>
-      <strong>Blocking on the founder:</strong> Stripe test keys and a Clerk
-      development instance. <strong>Do before paid ads:</strong> traffic that
-      was paid for, landing on a broken checkout, costs the ad spend and the
-      orders.
+      <strong>Verified on 2026-08-30, not assumed:</strong> staging returns
+      <strong>401</strong> without credentials and 200 with them; its
+      <code>/sign-up</code> serves <code>pk_test_</code>; production still
+      serves <code>pk_live_</code> and returns 200. First build succeeded
+      (staging job 1).
+    </p>
+    <p>
+      <strong>Still outstanding:</strong> staging has no
+      <code>STRIPE_WEBHOOK_SECRET</code> or <code>CLERK_WEBHOOK_SECRET</code> —
+      both need endpoints registered against the staging URL in Stripe
+      <em>test</em> mode and the Clerk <em>dev</em> instance. Until then
+      staging checkout will not mark orders paid and staging signups will not
+      notify. Everything else works.
     </p>
   </div>
 
