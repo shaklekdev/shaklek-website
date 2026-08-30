@@ -17,10 +17,11 @@ the first campaign runs.
 
 ---
 
-## ⚠️ REVISED 2026-08-30 — packaging was the lever, not fabric
+## ⚠️ REVISED 2026-08-30 — two under-counted inputs, and the 28 August conclusion does not hold
 
-Two inputs arrived on the same day. Only one of them matters, and it is not the
-one that was being negotiated.
+Two costs in this file were recorded at less than they are: packaging at 2 AED
+when it is 36, and fabric at 24 AED/m when it is 32 landed. Between them they
+account for the whole gap between what this file claimed and what the shop earns.
 
 ### The packaging line in this file is wrong by a factor of eighteen
 
@@ -48,17 +49,50 @@ none of which has been quoted yet. So 36.15 is a floor, not a total.
 The 65-67% recorded on 2026-08-28 was true of its inputs and is no longer true
 of anything. **The live ladder earns 56-61%.**
 
-### Helen Wu's linen is more expensive than the supplier already chosen
+### There is one fabric supplier, and this file recorded half her price
 
-Quote, 2026-08-30: **pure linen 195 gsm, $6.25/m at 100 m, shipping $250 for
-100 m, not included.** Landed that is **$8.75/m = AED 32.13/m**, and duty and
-VAT were not mentioned — at 5% + 5% it is AED 35.35.
+Corrected 2026-08-30, second pass. The **AED 24/m** that the 28 August section
+calls "the founder's supplier" and Helen Wu's quote are **the same supplier and
+the same cloth**. 24 is her ex-works price — $6.25/m is AED 22.95 — recorded
+without the freight to get it here.
 
-Against the **AED 24/m** supplier this file settled on two days earlier, that is
-**34% more expensive, or 47% with duty**. It costs about 4.4 margin points on a
-shirt. It may still be the right cloth — 195 gsm is a stated weight and the
-incumbent's is not recorded anywhere — but on price alone it is a step
-backwards, and the incumbent needs a reason to be dropped.
+| | |
+|---|---|
+| $6.25/m ex-works | AED 22.95/m ← what this file has been calling 24 |
+| + $250 shipping per 100 m | AED 9.18/m |
+| **Landed** | **AED 32.13/m** |
+
+Duty and VAT were not quoted. At 5% + 5% it is AED 35.35.
+
+**So there was never a cheaper alternative to compare against.** The earlier
+paragraph on this page treating Helen as "34% more expensive than the supplier
+already chosen" was wrong, and is struck. There is one supplier, one cloth, and
+one price, and that price is 32.13 landed.
+
+⚠️ **This is the second under-counted input found on the same day.** Packaging
+was recorded at 2 AED when it is 36, and fabric at 24 when it is 32. The
+2026-08-28 conclusion — *"the fabric question is closed, and prices do not
+move"* — was computed on both. **It does not hold.** The ladder was never
+earning 65-67%.
+
+### What the live prices actually earn, on landed fabric
+
+| Packaging | Shirt | Pants | Dress |
+|---|---|---|---|
+| As ordered now (36) | 53.3% | 52.5% | 56.5% |
+| Cover swap + hand bag 12 (22) | 57.0% | 55.8% | 58.8% |
+| Cover swap + hand bag 9 (19) | 57.8% | 56.5% | 59.3% |
+| *claimed on 2026-08-28* | *67%* | *65%* | *66%* |
+
+**The +49 that was withdrawn on 28 August was withdrawn for a reason that was
+not true.** It was dropped because the ladder appeared to be earning 65-67%
+already. On real numbers it earns 53%, and +49 would take a shirt to 62.2% and
+pants to 60.7% — no longer a rescue of a phantom problem but a reasonable
+answer to a real one. It is worth reopening, and this is still the cheapest
+moment to do it: nothing is promoted and nobody is holding a price.
+
+Prices that would reach 65% on landed fabric with the leanest packaging:
+shirt **477** (+88), pants **542** (+113), dress **729** (+110).
 
 ### What each lever is actually worth, on a 389 shirt
 
