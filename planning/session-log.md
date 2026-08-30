@@ -18,6 +18,77 @@ Rules that make this work:
 
 ## Active claims
 
+### Session K — STAGING PROVED A FULL CHECKOUT, AND FOUND THREE BUGS DOING IT (2026-08-30)
+
+**End to end on staging, with a Stripe test card: order created -> Stripe
+Checkout -> payment -> webhook delivered -> signature verified -> order `paid`.**
+Shipping name, phone, address, emirate and country all persisted; the line item
+carries its colour, size, price and changes. **Zero production risk taken: test
+card, test keys, dev database.** That is the thing the founder asked for on
+2026-08-28.
+
+It took three bugs to get there, and **two of them are latent PRODUCTION
+risks, not staging quirks.**
+
+#### 1. ⚠️ A FAILED LINE-ITEM INSERT CONFIRMS AN ORDER WITHOUT TAKING PAYMENT
+
+The dev database was missing `order_items.fit_notes`, a column production has.
+So: the order row was written, the **items insert failed**, `orderId` came back
+null, and `/api/orders` fell through `if (orderId && stripe)` to the
+**pre-Stripe fallback** — which emails a confirmation and returns `ok: true`.
+The founder saw "order confirmed", was never asked for a card, and the row sat
+at `pending_payment` with **0 items** and no session.
+
+**The missing column was the trigger; the silent fallback is the defect.** That
+branch exists for "no Stripe account wired up yet", a condition that has not
+been true since 2026-08-22. On production it means **any** failure that nulls
+`orderId` turns a checkout into a free confirmed order, with no error shown and
+nothing in the dashboard to distinguish it. **Recommended, not done (payment
+path, founder's call): when Stripe IS configured, a null `orderId` should be a
+5xx, not a fallback.**
+
+Diagnostic that found it, worth reusing: an order row with **0 line items** is
+the signature. Compare `items` count against `stripe_session_id` — a healthy
+order has both, this one had neither.
+
+#### 2. ⚠️ THE MIGRATION LEDGER LIED, AND `db-migrate` WOULD HAVE SKIPPED THE FIX
+
+`shaklek_migrations` on **dev** records `0005_naive_rockslide.sql` — the
+migration whose entire body is `ALTER TABLE order_items ADD COLUMN fit_notes` —
+as applied at 2026-08-28T17:43:45. **The column was not there.** So the ledger
+we built to replace drizzle's broken one has now produced a false "applied" of
+its own, and `node scripts/db-migrate.mjs --target=dev` would have exited 0
+having done nothing.
+
+Applied the column directly against a host-checked connection instead, then
+**diffed every column of both databases**: dev and prod are now identical, no
+drift in either direction.
+
+**This is the third instrument on this project to report success for work that
+did not happen.** The rule holds: verify against `information_schema`, never
+against a ledger or an exit code.
+
+#### 3. The origin allowlist is hardcoded, so no non-production host can check out
+
+`allowedOrigins()` hardcodes the shaklek.com domains, and it does two jobs:
+CSRF admission **and** choosing Stripe's `success_url`. On staging the first
+rejected checkout outright ("Cross-origin request rejected"), and the second
+would have redirected a staging payment to **www.shaklek.com/order-confirmed**.
+
+Fixed with configuration, **not by touching the CSRF guard**:
+`NEXT_PUBLIC_APP_URL` set at branch level. Verified that staging now accepts its
+own origin (400 validation) and still rejects `evil.example.com` (403), and that
+production still rejects staging's origin (403).
+
+#### 4. Amplify basic auth gates EVERY path and cannot exclude one
+
+Stripe and Clerk got **401** on `/api/webhooks/*`, so staging could never test a
+checkout. Basic auth is off with the founder's explicit go-ahead; indexing is
+blocked instead by `robots.ts` returning `Disallow: /` when
+`AWS_BRANCH !== "main"`.
+
+#### Cost of the whole thing to production: nothing. It was never touched.
+
 ### Session K, later — P0 STAGING ENVIRONMENT IS BUILT (2026-08-30)
 
 **Founder supplied the two blocking values, so P0 is no longer blocked — it is
