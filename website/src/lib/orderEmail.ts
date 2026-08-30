@@ -213,7 +213,12 @@ export async function sendCustomerConfirmationEmail(
   } Total AED ${total}. A stylist will reach out within 24 hours. Track this and future orders by creating a free account with this same email at ${appUrl}/sign-up`;
 
   if (!apiKey) {
-    console.log(`[orders] RESEND_API_KEY not set — customer confirmation not emailed to ${email}.`);
+    // The address is deliberately NOT interpolated here. Its sibling
+    // sendOrderNotificationEmail withholds it for exactly this reason: these
+    // lines land in CloudWatch, which outlives the order. Flagged by the
+    // security review 2026-08-30 as the one place the codebase broke its own
+    // no-PII-in-logs rule.
+    console.log("[orders] RESEND_API_KEY not set — customer confirmation not emailed. Address withheld (PII).");
     return { emailed: false };
   }
 

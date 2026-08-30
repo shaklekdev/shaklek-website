@@ -40,7 +40,7 @@ subject is the hem and the width, not the model.
 > Ivory, white, navy, burgundy. The same piece, four ways.
 >
 > We keep the palette small on purpose, every colour is one we'd wear all
-> year in this climate, and every one is cut in cotton or linen. Nothing else.
+> year in this climate, and every one is cut in 100% linen. Nothing else.
 >
 > From AED 389.
 

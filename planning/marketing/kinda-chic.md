@@ -65,7 +65,7 @@ claim discipline:
    receive". The catalog images are generated. Say what the customer *does*, not
    what the medium is.
 4. **"Timeless" and "essentials" are load-bearing.** The niche is timeless
-   fashion essentials: elegant, customizable, skin friendly, cotton or linen.
+   fashion essentials: elegant, customizable, skin friendly, 100% linen.
 5. **Every claim must be true of what ships today.** No unlimited customization
    (pockets and closure are fixed at their defaults until Shaklek+), no camera
    measurement, no promises the tailor cannot keep.
@@ -105,7 +105,7 @@ Ranked within each set. `ORGANIC` means do not put it in a paid ad, per rule 6.
 | Line | | Why |
 |---|---|---|
 | Kinda chic to dress for August in Dubai | SAFE | A Zara ad cannot say this. Linen makes it true. |
-| Kinda chic to choose fabric you can breathe in | SAFE | True: cotton or linen only. Avoids the word "breathable" as a spec claim and makes it a choice the customer makes. |
+| Kinda chic to choose fabric you can breathe in | ⚠️ REWORDED 2026-08-30 | It was marked SAFE on the strength of "cotton or linen only", which stopped being true when cotton went `available: false`. There is no fabric CHOICE to make: linen is the only sellable fabric, so a line about choosing one is false however it is phrased. Use a line about the linen itself, not about choosing. |
 | Kinda chic to wear linen in a lift | SAFE | Funny, local, specific. Strong TikTok opener. |
 | Kinda chic to own four things and love them | SAFE | Carries "essentials" without saying it. |
 

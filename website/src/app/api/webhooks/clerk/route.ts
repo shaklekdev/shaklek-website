@@ -148,10 +148,16 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       // Never fail the delivery over this -- the notification email is the
       // part the founder actually depends on, and Clerk would retry the whole
-      // event and resend it. Log the failure, not the address.
+      // event and resend it.
+      //
+      // Log the error's NAME, not its message. A Postgres message can echo a
+      // column value back -- a unique violation reads `Key (email)=(...)` --
+      // and these lines land in CloudWatch, which outlives the account.
+      // `onConflictDoNothing` makes that specific error unreachable, but the
+      // next constraint added here would not be. Security review, 2026-08-30.
       console.error(
         "[webhooks/clerk] customer row not written:",
-        err instanceof Error ? err.message : "unknown error",
+        err instanceof Error ? err.name : "unknown error",
       );
     }
   }
@@ -173,10 +179,18 @@ export async function POST(req: NextRequest) {
     `order row, so this will not appear on the dashboard.`,
   ];
 
-  // Clerk delivers at-least-once, so a retry after a slow response can produce
-  // a duplicate email. That is the whole consequence here: this route changes
-  // no state, so there is nothing to gate and a repeated note is harmless.
-  // If signup volume ever makes duplicates annoying, dedupe on `svix-id`.
+  // ⚠️ THIS COMMENT USED TO SAY "this route changes no state, so there is
+  // nothing to gate". THAT STOPPED BEING TRUE an hour after it was written,
+  // when the `customers` insert above was added. Corrected 2026-08-30 by the
+  // security review, and left here as the example rather than quietly deleted:
+  // it is the same shape as the RCA's root cause -- a handler was extended and
+  // the assumption written into its own comment was not revisited.
+  //
+  // What is actually true now: Clerk delivers at-least-once. The DB insert is
+  // idempotent (`onConflictDoNothing`), so a retry writes nothing new, but it
+  // DOES re-send this email -- there is no `svix-id` dedupe. The consequence is
+  // a duplicate "new account" note, nothing more. If that ever matters, dedupe
+  // on `svix-id`; do not assume the state question is settled, re-check it.
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
