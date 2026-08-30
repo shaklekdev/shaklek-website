@@ -6,46 +6,107 @@ START HERE:  artwork/
              every mark and every word already placed. Text is converted to
              outlines, so no font is needed and nothing can be substituted.
 
-  artwork/01-woven-brand-label.pdf        45 x 18 mm   wordmark only
-  artwork/02-care-label.pdf               25 x 45 mm   fibre, care, origin
-  artwork/03-hang-tag.pdf                 50 x 90 mm   wordmark  (FRONT)
-  artwork/03b-hang-tag-back.pdf           50 x 90 mm   the three values (BACK)
-  artwork/04-thank-you-card-front.pdf    105 x 148 mm  A6
-  artwork/05-thank-you-card-back.pdf     105 x 148 mm  A6, carries a QR code
-  artwork/06-tissue-seal-40mm.pdf         40 mm dia    gold, mark in cream
-  artwork/07-tissue-wrap-repeat-tile.pdf 250 x 250 mm  step and repeat
-  artwork/08-linen-bag-print.pdf         400 x 500 mm  print area guide
-  artwork/09-mailer-placement.pdf        250 x 350 mm  placement guide
-  artwork/10-business-card-front.pdf      90 x 50 mm   trim size (FRONT)
-  artwork/10b-business-card-back.pdf      90 x 50 mm   trim size, QR code (BACK)
+  artwork/01-woven-brand-label.pdf         45 x 18 mm   wordmark only
+  artwork/02-care-label.pdf                25 x 45 mm   fibre, care, origin
+  artwork/03-hang-tag.pdf                  50 x 90 mm   wordmark  (FRONT)
+  artwork/03b-hang-tag-back.pdf            50 x 90 mm   the three values (BACK)
+  artwork/04-thank-you-card-front.pdf     148 x 105 mm  A6 LANDSCAPE
+  artwork/05-thank-you-card-back.pdf      148 x 105 mm  A6 LANDSCAPE, QR code
+  artwork/05b-thank-you-envelope-back.pdf 162 x 114 mm  C6 LANDSCAPE, wallet
+  artwork/06-tissue-seal-40mm.pdf           40 mm dia   gold, mark in cream
+  artwork/07-tissue-wrap-repeat-tile.pdf  250 x 250 mm  step and repeat
+  artwork/08-linen-bag-print.pdf          500 x 400 mm  LANDSCAPE, print guide
+  artwork/09-mailer-placement.pdf         320 x 400 mm  placement guide, MINIMUM
+  artwork/10-business-card-front.pdf        96 x 56 mm   trim to 90x50 (FRONT)
+  artwork/10b-business-card-back.pdf        96 x 56 mm   trim to 90x50, QR (BACK)
 
-FOUR NOTES ON THOSE FILES
+NOTES ON THOSE FILES
 
-  The hang tag is DOUBLE SIDED. 03 is the front, 03b is the back. Same card,
-  same size, printed both sides.
+  1. THE HANG TAG IS DOUBLE SIDED. 03 is the front, 03b is the back. Same card,
+     same size, printed both sides.
 
-  The business card is DOUBLE SIDED and is the only item here supplied WITH
-  BLEED. The two PDFs measure 96 x 56 mm because 3 mm of bleed is included on
-  every edge. Trim to 90 x 50 mm. The front prints edge to edge in near-black,
-  and without that bleed a small drift on the guillotine leaves a white line
-  down one side.
+  2. THE THANK-YOU CARD IS LANDSCAPE: 148 mm WIDE x 105 mm TALL. It is the same
+     A6 sheet as a portrait card, turned on its side, so the paper and the price
+     do not move. It is landscape to match the envelope: the card slides
+     straight in and comes straight out the right way up, instead of having to
+     be turned ninety degrees each way.
 
-  TWO ITEMS CARRY A QR CODE: 05-thank-you-card-back and 10b-business-card-back.
-  Please print them exactly as supplied. Do not redraw, re-generate, re-colour,
-  scale one axis, or place anything over them, and do not reduce them below the
-  size in the file. The blank margin around each code is part of the code, not
-  a margin we left for tidiness -- crop into it and phones stop reading it. If
-  a code has to move or change size, please ask us for a new file.
+  3. THE ENVELOPE IS C6 LANDSCAPE, 162 mm WIDE x 114 mm TALL, and it must be a
+     WALLET envelope — the flap hinged on the LONG edge, pointed, opening
+     across the top. That is the card and invitation format. A POCKET envelope
+     is the same C6 sheet with the flap on the short edge, used portrait, and
+     it is what invoices and statements come in: same paper, same price, wrong
+     object.
 
-  07-tissue-wrap: this is one tile. Step and repeat it across the 50 x 70 cm
-  sheet. Keep it faint: it should read as texture, not as print.
+     ONLY THE BACK PRINTS. The front carries nothing at all — this envelope
+     never travels on its own, it sits inside the linen bag inside the mailer,
+     so it needs no address panel and no stamp box. The monogram sits on the
+     back, 9 mm, below the point of the flap and NOT on the flap itself: on a
+     gummed flap the ink meets the adhesive, and under a self-seal strip it is
+     covered. IN THE ARTWORK FILE THE TINTED TRIANGLE IS THE FLAP AND DOES NOT
+     PRINT.
+
+     C6 is a shelf size everywhere, so there is no die to pay for. The card at
+     148 x 105 goes in with about 7 mm of clearance along the long edge and
+     4.5 mm along the short one.
+
+  4. THE BUSINESS CARD IS DOUBLE SIDED and is the only item here supplied WITH
+     BLEED. Both PDFs measure 96 x 56 mm because 3 mm of bleed is included on
+     every edge. TRIM TO 90 x 50 mm. The front prints edge to edge in
+     near-black, and without that bleed a small drift on the guillotine leaves
+     a white line down one side. No crop marks needed.
+
+  5. THE COTTON BAG IS LANDSCAPE: 500 mm WIDE x 400 mm TALL, wider than it is
+     tall. 08-linen-bag-print.pdf is the print area at that size. The wordmark
+     is 110 mm WIDE, one colour, centred, at about a third of the bag height.
+
+  6. THE MAILER IS A MINIMUM, NOT A SPECIFICATION: 320 x 400 mm internal, kraft
+     paper at 120 gsm or heavier, with a self-seal strip. Your nearest stock
+     size at or above that is the right answer and the cheapest one — please do
+     not cut a custom size for this. The monogram is fixed in millimetres from
+     the lower-right corner, so the placement stays correct at any bag size.
+
+  7. TWO ITEMS CARRY A QR CODE: 05-thank-you-card-back and
+     10b-business-card-back. Please print them exactly as supplied. Do not
+     redraw, re-generate, re-colour, scale one axis, or place anything over
+     them, and do not reduce them below the size in the file. The blank margin
+     around each code is part of the code, not a margin we left for tidiness —
+     crop into it and phones stop reading it. If a code has to move or change
+     size, please ask us for a new file.
+
+  8. THE TISSUE WRAP FILE IS ONE TILE. Step and repeat it across the
+     50 x 70 cm sheet. Keep it faint: it should read as texture, not as print.
+
+HOW THE PARCEL GOES TOGETHER
+
+  Asked and answered, because a list of parts does not say how the parts nest.
+  Five layers, outside in:
+
+    1. kraft mailer          320 x 400 mm min, 120 gsm+, self-seal
+    2. linen drawstring bag  50 x 40 cm LANDSCAPE <- the box, and she keeps it
+    3. tissue wrap           two sheets, 50 x 70 cm, closed with the gold seal
+    4. the garment           folded, with its labels and hang tag
+    5. thank-you card in its C6 landscape envelope, plus a business card
+
+  THE KRAFT IS THE OUTER MAILER, NOT A WRAPPING PAPER. Nothing is wrapped in
+  kraft. The paper that touches the cloth is unbleached tissue.
+
+  Is kraft sturdy enough? Yes. A folded garment is soft goods — no corners,
+  nothing rigid, nothing to crush — and kraft paper mailers are the normal
+  choice for clothing. The failure is never the panel, it is the seal opening
+  or an edge tearing, so the specification is the weight and the closure:
+  120 gsm or heavier, full-width self-seal strip, no padded lining. Recycled
+  poly is tougher and cheaper and we do not want it; plastic contradicts the
+  whole brand. Please send a sample of your 120 gsm kraft and we will confirm
+  on the real thing.
 
 ALSO IN THIS FOLDER
 
   READ-ME-FIRST-Shaklek-artwork.pdf
-      Four pages: the two marks, which mark belongs on which item, colours in
-      CMYK, minimum sizes, clear space, and which processes will not work.
-      Pages 3 and 4 draw every item to proportion.
+      Seven pages: the two marks, which mark belongs on which item, EVERY ITEM
+      WITH ITS DIMENSIONS IN ONE TABLE, how the parcel goes together, colours
+      in CMYK, minimum sizes, clear space, and which processes will not work.
+      Pages 5 to 7 draw every item to proportion.
 
   shaklek-logo / shaklek-monogram / shaklek-gold-seal (.pdf and .png)
       The marks on their own, for anything not covered above.

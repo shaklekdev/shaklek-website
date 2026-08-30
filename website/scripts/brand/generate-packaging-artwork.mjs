@@ -316,7 +316,7 @@ makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
   monogram(doc, w / 2, 82 * MM, 5 * MM, "#C9C0AE");
 }, "the values, no price. Print on the reverse of 03-hang-tag");
 
-// 4. THANK-YOU CARD A6, 105 x 148 mm ---------------------------------------
+// 4. THANK-YOU CARD A6 LANDSCAPE, 148 x 105 mm -----------------------------
 // Copy approved by the founder, 2026-08-28. Two lines she cut are worth
 // recording so they do not come back: "feedback is a gift" and "your
 // satisfaction is our key". Both are things every company says, and the
@@ -325,44 +325,63 @@ makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
 // The front stays mostly empty ON PURPOSE. She writes the customer's name and
 // a line by hand under the printed paragraph, and handwriting is the whole
 // value of this card -- a full printed message leaves nowhere to put it.
+//
+// ⚠️ TURNED LANDSCAPE 2026-08-29, founder's call: "the thank you card should be
+// same as envelope." SAME A6 SHEET, SAME COST -- 105 x 148 becomes 148 x 105.
+// Nothing about the paper or the price moves.
+//
+// The point of it: a PORTRAIT card in a LANDSCAPE envelope has to be turned
+// ninety degrees to go in and turned back to be read. That is a small, constant
+// awkwardness in the one moment of the unboxing that is supposed to feel
+// considered. Matched, it slides straight in and comes straight out the right
+// way up.
+//
+// The layout is re-proportioned, not rotated. A landscape card is wider, so
+// every line of type fits more words and the paragraphs run to fewer lines --
+// which is what buys back the 43 mm of height that turning it costs.
+const CARD_LONG = 148, CARD_SHORT = 105;
 const FIT_URL = "https://www.shaklek.com/fit";
 
-makePdf("04-thank-you-card-front", 105, 148, (doc, w, h) => {
-  lockup(doc, w / 2, 24 * MM, w * 0.40);
-  line(doc, w / 2, 56 * MM, "Thank you", 6.4 * MM, INK, 1.2);
+makePdf("04-thank-you-card-front", CARD_LONG, CARD_SHORT, (doc, w, h) => {
+  lockup(doc, w / 2, 11 * MM, w * 0.28);
+  line(doc, w / 2, 36 * MM, "Thank you", 6 * MM, INK, 1.2);
   doc.font("Helvetica").fontSize(8.6).fillColor(MUTED)
     .text("This piece did not exist until you asked for it. It was cut to your measurements and sewn here in the UAE, to be worn for years rather than a season.",
-      18 * MM, 64 * MM, { width: w - 36 * MM, align: "center", lineGap: 3.4 });
+      22 * MM, 43 * MM, { width: w - 44 * MM, align: "center", lineGap: 3.4 });
   // Ruled guides for the handwritten line, in the palest cream on the sheet.
   // They print, faintly, and they are the difference between a straight line
-  // and a note that slopes down the card.
+  // and a note that slopes down the card. THREE LINES, kept: the width gained
+  // by turning the card means each one now holds noticeably more handwriting.
   doc.lineWidth(0.25).strokeColor("#EDE7DA");
   for (let i = 0; i < 3; i++) {
-    const y = (98 + i * 11) * MM;
-    doc.moveTo(20 * MM, y).lineTo(w - 20 * MM, y).stroke();
+    const y = (64 + i * 11) * MM;
+    doc.moveTo(24 * MM, y).lineTo(w - 24 * MM, y).stroke();
   }
-}, "front. Founder handwrites the name and a line on the ruled guides");
+}, "LANDSCAPE front. Founder handwrites the name and a line on the ruled guides");
 
-makePdf("05-thank-you-card-back", 105, 148, (doc, w, h) => {
-  line(doc, w / 2, 26 * MM, "Now tell us how it fits", 5.2 * MM, INK, 0.9);
+makePdf("05-thank-you-card-back", CARD_LONG, CARD_SHORT, (doc, w, h) => {
+  line(doc, w / 2, 16 * MM, "Now tell us how it fits", 4.8 * MM, INK, 0.9);
   // "Two minutes" is load bearing. The biggest reason not to scan is not
   // knowing what it costs, and five tap-questions plus an email honestly is
   // two minutes. Say it at the moment of decision.
   doc.font("Helvetica").fontSize(8.4).fillColor(MUTED)
     .text("Scan below. Two minutes, straight to your tailor, and your next piece starts from it.",
-      18 * MM, 33 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
+      24 * MM, 21 * MM, { width: w - 48 * MM, align: "center", lineGap: 3 });
 
-  // 30 mm block. Bigger than the business card's because this one is scanned
+  // 28 mm block, down from 30 on the portrait card. This one is scanned
   // one-handed by someone holding a garment, often at arm's length in bad
-  // bedroom light -- the margin is worth the space on a card this size.
-  const qrSize = 30;
-  qr(doc, FIT_URL, w / 2 - (qrSize * MM) / 2, 44 * MM, qrSize);
+  // bedroom light, so the block is still generous -- and the module size is
+  // printed by qr() on every build, which is the number that actually decides
+  // whether a phone reads it. 28 mm keeps it near 0.75 mm, well clear of the
+  // 0.4 mm floor. Do not shrink it further to win layout space.
+  const qrSize = 28;
+  qr(doc, FIT_URL, w / 2 - (qrSize * MM) / 2, 31 * MM, qrSize);
 
   // The URL under the code, for the same reason as on the business card: a QR
   // is the one thing here that can fail silently, and short enough to type.
-  plain(doc, w / 2, 82 * MM, "SHAKLEK.COM/FIT", 7.6, INK, 1.5);
+  plain(doc, w / 2, 65 * MM, "SHAKLEK.COM/FIT", 7.6, INK, 1.5);
 
-  doc.rect(w / 2 - 6 * MM, 90 * MM, 12 * MM, 0.3).fill(GOLD);
+  doc.rect(w / 2 - 6 * MM, 69 * MM, 12 * MM, 0.3).fill(GOLD);
 
   // ⚠️ THIS SENTENCE IS THE FAQ'S, WORD FOR WORD, AND TWICE IT HAS NOT BEEN.
   //
@@ -384,10 +403,74 @@ makePdf("05-thank-you-card-back", 105, 148, (doc, w, h) => {
   // TAILOR_WHATSAPP_NUMBER before any print run.
   doc.font("Helvetica").fontSize(8).fillColor(MUTED)
     .text("If something is not right, you get one free alteration or remake within 14 days of delivery. Message us on WhatsApp, +971 50 476 6769, and a stylist arranges it.",
-      18 * MM, 96 * MM, { width: w - 36 * MM, align: "center", lineGap: 3 });
+      22 * MM, 74 * MM, { width: w - 44 * MM, align: "center", lineGap: 3 });
 
-  monogram(doc, w / 2, 130 * MM, 7 * MM, "#C9C0AE");
-}, "back. QR to the fit form, wording matches /faq");
+  monogram(doc, w / 2, 99 * MM, 6 * MM, "#C9C0AE");
+}, "LANDSCAPE back. QR to the fit form, wording matches /faq");
+
+// 5b. THANK-YOU ENVELOPE C6, LANDSCAPE 162 x 114 mm -------------------------
+//
+// The supplier asked, on 2026-08-29: "What size and design should this envelope
+// have? On the thank you card and envelope, we don't see the size neither the
+// design of the envelope." She was right -- the envelope was named in the spec
+// sheet with no dimension and no artwork file. There was nothing to quote and
+// nothing to print.
+//
+// ⚠️ IT IS LANDSCAPE: 162 WIDE, 114 TALL. The first version of this file was
+// drawn 114 x 162, portrait, and the founder caught it: "this is not how
+// envelopes and thank you cards look." She is right, and the distinction is a
+// real one in envelope manufacture, not a matter of taste:
+//
+//   WALLET  flap hinged on the LONG edge -> used landscape. Greeting cards,
+//           invitations, thank-you cards. Big pointed flap. This one.
+//   POCKET  flap hinged on the SHORT edge -> used portrait. Invoices,
+//           statements, documents. That is what I drew.
+//
+// Same C6 sheet size either way, so the paper cost does not move -- but a
+// pocket envelope in a parcel like this reads as post, not as a note.
+//
+// C6 IS NOT A DESIGN DECISION, IT IS THE SIZE THAT FITS. The card is A6,
+// 105 x 148 mm. A C6 is 114 x 162, so the card goes in with about 7 mm of
+// clearance along the long edge and 4.5 mm along the short one. Off the shelf
+// everywhere, so there is no die to pay for.
+//
+// THE FRONT IS DELIBERATELY BLANK. This envelope never travels on its own --
+// it sits inside the linen bag, inside the mailer -- so it carries no address
+// panel, no stamp box and no mark. Printing the front would mean a second pass
+// on the press for something nobody sees until the bag is open.
+//
+// Drawn as the BACK, flap closed, because that is the only face that prints.
+const ENV_W = 162, ENV_H = 114;
+
+makePdf("05b-thank-you-envelope-back", ENV_W, ENV_H, (doc, w, h) => {
+  // The flap: hinged on the long top edge and pointed, which is what makes it
+  // read as a card envelope rather than a document one. Drawn as a GUIDE ONLY
+  // -- it is scored and folded by the envelope maker, not printed.
+  //
+  // It is TINTED, not merely outlined. The first version drew the flap and the
+  // two lower back seams as bare dashed lines to the same centre point, which
+  // came out as a symmetrical X across the whole envelope: technically the
+  // seams of an envelope back, but you could not tell which triangle was the
+  // flap. A faint fill answers that in one glance, so the lower seams are not
+  // needed and are gone.
+  const flapY = h * 0.58;
+  doc.moveTo(0, 0).lineTo(w / 2, flapY).lineTo(w, 0).closePath().fill("#F1EBDF");
+  doc.lineWidth(0.4).strokeColor("#D6CEBE").dash(3, { space: 3 });
+  doc.moveTo(0, 0).lineTo(w / 2, flapY).lineTo(w, 0).stroke();
+  doc.undash();
+
+  // The monogram sits in the lower panel, a little above its centre so it reads
+  // as hanging from the flap point rather than floating at the bottom edge. NOT
+  // on the flap itself: on a gummed flap the ink meets the adhesive, and on a
+  // self-seal flap it is under the strip -- either way it smears or is covered.
+  const inkH = 9 * MM;
+  monogram(doc, w / 2, flapY + (h - flapY) * 0.42 + inkH / 2, inkH, INK);
+
+  doc.font("Helvetica").fontSize(5.5).fillColor("#B9B1A2")
+    .text("C6 LANDSCAPE, 162 x 114 mm — WALLET flap, hinged on the long edge. THE TINTED TRIANGLE IS THE FLAP AND DOES NOT PRINT. " +
+      "The only ink on this envelope is the monogram, 9 mm, below the flap point. FRONT PRINTS NOTHING.",
+      14 * MM, h - 8 * MM, { width: w - 28 * MM, align: "center" });
+}, "C6 LANDSCAPE, wallet flap. Back only — the front is blank");
 
 // 6. TISSUE SEAL STICKER 40 mm circle ---------------------------------------
 makePdf("06-tissue-seal-40mm", 40, 40, (doc, w, h) => {
@@ -420,22 +503,67 @@ makePdf("07-tissue-wrap-repeat-tile", 250, 250, (doc, w, h) => {
   }
 }, "step and repeat across the 50x70cm sheet, keep it faint");
 
-// 8. LINEN BAG PRINT 400 x 500 mm ------------------------------------------
-makePdf("08-linen-bag-print", 400, 500, (doc, w, h) => {
-  // The print area only. The mark sits at one third of the bag height.
-  lockup(doc, w / 2, h * 0.30, 90 * MM, INK, INK);
-  doc.font("Helvetica").fontSize(7).fillColor("#C9C0AE")
-    .text("Print area guide only. Mark is 90 mm wide, centred, at one third of the bag height. One colour.",
-      20 * MM, h - 18 * MM, { width: w - 40 * MM, align: "center" });
-}, "one colour, 90mm wide, at a third of the bag height");
+// 8. LINEN BAG PRINT 500 x 400 mm, LANDSCAPE -------------------------------
+//
+// ⚠️ WAS 400 x 500, PORTRAIT. Founder, 2026-08-29: the bag will be landscape,
+// "more long horizontally". Same rectangle turned on its side.
+//
+// She asked whether that changed anything and the honest answer is: almost
+// nothing, but not nothing. It is the SAME piece of cloth -- same area, same
+// long side, so the fold is the same and the mailer minimum does not move --
+// but this file has to be rebuilt anyway, because the mark is placed as a
+// FRACTION OF THE BAG'S HEIGHT. Turn the bag and "a third of the way down"
+// lands somewhere else in absolute millimetres: 150 mm on a 500 mm bag,
+// 120 mm on a 400 mm one. A placement guide written in proportions is not
+// orientation-free, which is easy to assume and wrong.
+//
+// ⚠️ THE MARK IS 110 MM, RAISED FROM 90 ON 2026-08-29. Founder's call, and the
+// reason is proportion rather than size: at 90 mm the mark was 22.5% of a
+// 400 mm bag and only 18% of a 500 mm one. It had not shrunk -- the bag got
+// wider -- but it read smaller than the version she approved. 110 mm on 500
+// restores that 22%. Screen printing is priced by the run and not by the size
+// of the image, so this costs nothing.
+const BAG_W = 500, BAG_H = 400;
 
-// 9. MAILER PLACEMENT 250 x 350 mm -----------------------------------------
-makePdf("09-mailer-placement", 250, 350, (doc, w, h) => {
+makePdf("08-linen-bag-print", BAG_W, BAG_H, (doc, w, h) => {
+  // The print area only. The mark sits at roughly a third of the bag height.
+  lockup(doc, w / 2, h * 0.30, 110 * MM, INK, INK);
+  doc.font("Helvetica").fontSize(7).fillColor("#C9C0AE")
+    .text("Print area guide only. Bag is LANDSCAPE, 500 wide x 400 tall. Mark is 110 mm wide, centred, at one third of the bag height. One colour.",
+      20 * MM, h - 18 * MM, { width: w - 40 * MM, align: "center" });
+}, "LANDSCAPE. one colour, 110mm wide, at a third of the bag height");
+
+// 9. MAILER PLACEMENT 320 x 400 mm -----------------------------------------
+//
+// ⚠️ WAS 250 x 350 AND THAT WAS TOO SMALL. Founder's call, 2026-08-29, after
+// the supplier quoted against her own standard courier bag because our file
+// carried no stated dimension. Measure what actually goes in:
+//
+//     garment folded          ~300 x 220 x 40 mm
+//     + the linen bag         ~300 x 250 mm with loft
+//     + tissue, card, tag
+//     ------------------------------------------------
+//     minimum internal        320 x 400 mm
+//
+// A shirt fits 250 x 350. A folded trouser in a 40 x 50 cm cotton bag does not,
+// and a mailer you have to force is a mailer that splits at the seal.
+//
+// THIS IS A MINIMUM, NOT A SPECIFICATION. The mailer is the one item the
+// customer never keeps, so it is the wrong place to pay for a custom size --
+// the supplier's nearest stock size at or above this is the right answer and
+// the cheapest one. The artwork is a placement guide: the monogram is fixed in
+// millimetres from the lower-right corner, so it stays correct at any bag size.
+const MAILER_W = 320, MAILER_H = 400;
+
+makePdf("09-mailer-placement", MAILER_W, MAILER_H, (doc, w, h) => {
   doc.rect(0, 0, w, h).lineWidth(0.5).strokeColor("#D6CEBE").dash(4, { space: 4 }).stroke().undash();
   monogram(doc, w - 34 * MM, h - 28 * MM, 11 * MM, INK);
   doc.font("Helvetica").fontSize(7).fillColor("#B9B1A2")
-    .text("Monogram only, 11 mm, lower right. Nothing else prints on the outside.",
-      18 * MM, 18 * MM, { width: w - 36 * MM });
+    .text("Kraft paper, 120 gsm or heavier, self-seal strip. MINIMUM internal size 320 x 400 mm — " +
+      "your nearest stock size at or above this is fine, no custom size needed. " +
+      "Monogram only, 11 mm, measured 34 mm from the right edge and 28 mm from the bottom. " +
+      "Nothing else prints on the outside.",
+      18 * MM, 18 * MM, { width: w - 36 * MM, lineGap: 2 });
 }, "small monogram only, deliberately plain");
 
 // 10. BUSINESS CARD 90 x 50 mm ---------------------------------------------

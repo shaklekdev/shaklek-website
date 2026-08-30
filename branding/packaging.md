@@ -45,7 +45,7 @@ Ordered by whether the launch can happen without it.
 
 | Element | Spec | Qty (first run) | Est. AED/unit | Notes |
 |---|---|---|---|---|
-| **Fabric bag** | Cotton or linen drawstring, garment-sized (~40x50cm). Logo one side. | 100–200 | 6–11 | **The centrepiece.** Reusable, on-brand, doubles as the "box". Cheaper per unit at 200. |
+| **Fabric bag** | Cotton or linen drawstring, garment-sized, **landscape ~50x40cm**. Logo one side. | 100–200 | 6–11 | **The centrepiece.** Reusable, on-brand, doubles as the "box". Cheaper per unit at 200. |
 | **Paper wrap** | Unbleached tissue, ~50x70cm, logo repeat or a single stamp | 500 | 0.2–0.5 | Only needed because there is no box. Two sheets per garment. |
 | **Brand label** | Woven, sewn into the garment. **No size on it** (founder). | 500 min | 0.8–2.0 | Woven minimums are high; 500 is usually the floor. See the size note below. |
 | **Mailer** | Recycled kraft or reusable poly, AE courier-rated | 200 | 1.5–3 | The bit the customer never keeps. Do not spend here. |
@@ -163,6 +163,90 @@ looked deliberate:
 - the shaper does not apply the bidirectional algorithm, so "كتان 100%" as one
   string printed "%001", the digits backwards
 - once split into two runs, an unmeasured text box wrapped "100%" onto two lines
+
+## Dimensions, settled 2026-08-29
+
+The supplier could not quote without these and asked for them outright. Every
+one is now in `send-to-supplier/artwork/` as a file at that exact size, and the
+spec sheet checks itself against those files on every build.
+
+| Item | Size | Material | Note |
+|---|---|---|---|
+| Linen bag | **500 x 400 mm (LANDSCAPE)** | cotton or linen | the centrepiece; replaces a box |
+| Woven brand label | 45 x 18 mm | woven | no size, no care text |
+| Care label | 25 x 45 mm | satin, side seam | dry clean only, Arabic required |
+| Hang tag | 50 x 90 mm | uncoated card 300 gsm | double sided, bulk stock |
+| Thank-you card | **148 x 105 mm (A6 LANDSCAPE)** | uncoated 300 gsm | double sided |
+| **Envelope** | **162 x 114 mm (C6 LANDSCAPE)** | uncoated, wallet flap | **back prints only** |
+| Business card | 90 x 50 trim (96 x 56 with 3 mm bleed) | uncoated 350 gsm | double sided |
+| Tissue seal | 40 mm dia | matt sticker | gold ground |
+| Tissue wrap | 500 x 700 mm sheet, 250 x 250 tile | unbleached 17 gsm | step and repeat |
+| **Mailer** | **320 x 400 mm internal, MINIMUM** | **kraft 120 gsm+, self-seal** | her stock size is fine |
+
+**The envelope is C6 because the card is A6** — C6 is the shelf envelope for an
+A6 card, so there is no die to pay for. Both are used landscape here: envelope
+162 x 114, card 148 x 105. The front prints nothing: it never travels alone, it
+sits inside the bag inside the mailer, so it needs no address panel. The
+monogram goes below the point of the flap, not on the flap, where it would sit
+under the adhesive.
+
+**The card is landscape too, 148 x 105.** Founder, 2026-08-29: "the thank you
+card should be same as envelope." Same A6 sheet turned on its side — same paper,
+same price. A portrait card in a landscape envelope has to be turned ninety
+degrees to go in and turned back to be read, which is a small constant
+awkwardness in the one moment of the unboxing that is meant to feel considered.
+Matched, it slides straight in. The layout was re-proportioned rather than
+rotated: a wider card fits more words per line, and the paragraphs dropping to
+fewer lines is what buys back the 43 mm of height that turning it costs.
+
+⚠️ **It is LANDSCAPE — 162 wide, 114 tall — and it must be a WALLET envelope.**
+Founder's correction, 2026-08-29: the first artwork was drawn portrait and she
+said, correctly, "this is not how envelopes and thank you cards look." The
+distinction is manufacture, not taste:
+
+| | flap hinged on | used | that is |
+|---|---|---|---|
+| **Wallet** | the **long** edge | landscape | cards, invitations, thank-you notes |
+| Pocket | the short edge | portrait | invoices, statements, documents |
+
+Same C6 sheet and the same price either way, so nothing is saved by getting it
+wrong — a pocket envelope in this parcel simply reads as post rather than as a
+note. **State "C6 wallet, landscape" when ordering; "C6" alone does not say it.**
+
+**The cotton bag is LANDSCAPE, 500 x 400 mm.** Founder, 2026-08-29. It is the
+same rectangle turned on its side — same cloth, same area, same long edge — so
+the fold, the mailer minimum and the cost are all unchanged. The one thing it
+did move is `08-linen-bag-print.pdf`, because the mark is placed as a fraction
+of the bag's *height*: "a third of the way down" is 150 mm on a 500 mm bag and
+120 mm on a 400 mm one. **A placement guide written in proportions is not
+orientation-free** — easy to assume, and wrong.
+
+**The mark on the bag went from 90 mm to 110 mm** at the same time, and for
+proportion rather than size: 90 mm was 22.5% of a 400 mm bag and only 18% of a
+500 mm one. It had not shrunk — the bag got wider — but it read smaller than
+the version already approved. 110 mm restores that 22%. **Screen printing is
+priced by the run, not by the size of the image, so this costs nothing.**
+
+**The mailer was 250 x 350 and that was too small.** A folded garment is about
+300 x 220 x 40 mm and the cotton bag folds to roughly 300 x 250 with loft. A
+shirt fits 250 x 350; a folded trouser does not. It is stated as a **minimum**
+rather than a size, because the mailer is the one item the customer never keeps
+and is the wrong place to pay for a custom cut.
+
+**Kraft is sturdy enough, and the supplier was right to ask.** A folded garment
+is soft goods, so the failure mode is the seal opening or an edge tearing, not
+the panel crushing — which makes weight and closure the whole specification:
+120 gsm or heavier, full-width self-seal, no padded lining. Recycled poly is
+tougher and cheaper and was rejected: plastic contradicts the brand.
+
+⚠️ **Her question came from a real gap in our document, not a misunderstanding
+on her side.** She asked whether we meant to wrap cotton bags in kraft paper.
+We had sent a flat list of ten items with no drawing of the assembled parcel,
+so "kraft mailer" and "paper wrap" read as the same layer. The spec sheet now
+draws the five layers in section. **A list of parts does not say how the parts
+nest** — that is the general lesson, and it applies to the tech pack too.
+
+---
 
 ## Print rules — "print logo everywhere"
 

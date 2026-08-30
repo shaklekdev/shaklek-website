@@ -2092,3 +2092,179 @@ Also still open and not blocked by the above:
   wants its own careful job.
 - The remake request flow: designed, not built. The order reference is now
   visible to the customer, which was its prerequisite.
+
+---
+
+## 2026-08-29 — the supplier could not quote, and it was our document's fault
+
+**Status: BUILT AND VERIFIED, NOT COMMITTED. Holding these files:**
+- `branding/send-to-supplier/READ-ME-FIRST-Shaklek-artwork.pdf` (4 pages -> 7)
+- `branding/send-to-supplier/READ-ME-FIRST.txt`
+- `branding/send-to-supplier/artwork/05b-thank-you-envelope-back.pdf` (new)
+- `branding/send-to-supplier/artwork/09-mailer-placement.pdf` (resized)
+- `website/scripts/brand/generate-supplier-pdf.mjs`
+- `website/scripts/brand/generate-packaging-artwork.mjs`
+- `branding/packaging.md`
+
+She wrote back with four things: no envelope size or design, no mailer
+dimensions, no business cards in the file, and "you want to use kraft paper to
+wrap cotton bags — will that be sturdy enough?" She also quoted the mailer
+against her own standard courier bag, because there was no dimension on the
+page to quote against.
+
+**The root cause is not the missing sizes. It is that the artwork is generated
+by one script and described by another, and only the first one was re-run.**
+The business card was added on 2026-08-28; the spec sheet was last built on
+2026-08-27. So she received twelve files and a document describing ten of them
+— and that document also still drew a hang tag with an order number on it, a
+design withdrawn the day before, and a care label saying "wash symbols" when
+the artwork says DRY CLEAN ONLY.
+
+⚠️ **Nothing would have caught that.** The two scripts had no relationship a
+machine could check, so staying in sync depended on someone remembering. The
+fix is not another rule in CLAUDE.md — it is `auditArtworkAgainstSizes()` in
+`generate-supplier-pdf.mjs`, which reads the artwork folder and refuses to
+write the PDF if a file exists that the document never mentions, if the
+document names a file that is not there, or if a printed size disagrees with
+the file's actual MediaBox. Both failure modes were tested by breaking them on
+purpose and confirming exit code 1.
+
+**Three more guards, all of which caught something real on the first run:**
+- a caption-overflow check in `mockPage` — caught the Mailer caption running
+  9pt into the cell below it
+- a 4-items-per-page check — one group had five, and **pdfkit had silently
+  auto-paginated the document to twelve pages** without a word
+- an asserted `EXPECTED_PAGES = 7`
+
+**Founder's decisions, 2026-08-29:** envelope is C6 114 x 162 (back prints
+only); mailer is a MINIMUM of 320 x 400 internal, her stock size welcome;
+kraft at 120 gsm+ with a self-seal strip, no poly. All recorded in
+`branding/packaging.md`.
+
+**Instrument note, for the running list of them:** the first PDF text extractor
+reported 0 of 14 phrases present in a document that contained all of them — it
+looked for `Tj` and pdfkit writes hex `TJ` arrays. Second version found 13 and
+missed one to its own double-space at a line break. Consistent with the rule:
+"cannot be true" means audit the instrument.
+
+**Not done, hers:** send the folder back to the supplier, and ask her for a
+sample of the 120 gsm kraft before any run.
+
+### Correction, same day: the envelope was drawn portrait
+
+Founder: "I need the envelope to be horizontally taller than vertically, this
+is not how envelopes and thank you cards look." She was right.
+
+C6 is 114 x 162 as a sheet, and I wrote the dimension down correctly and then
+drew it the wrong way up. The distinction is manufacture, not taste:
+
+  WALLET  flap hinged on the LONG edge  -> landscape. Cards, invitations.
+  POCKET  flap hinged on the SHORT edge -> portrait.  Invoices, statements.
+
+Same sheet, same price, so nothing was saved by getting it wrong — a pocket
+envelope in this parcel just reads as post rather than as a note. **"C6" alone
+does not specify it; the order has to say "C6 wallet, landscape".**
+
+⚠️ **The artwork audit did not catch this and could not have.** It compares the
+declared size against the file's MediaBox, and both said 114 x 162 — the
+document and the artwork agreed with each other and were both wrong. A
+consistency check cannot see outside the pair it is checking. This one needed
+an eye, and it needed the founder's, because I looked at the render and saw a
+correct C6.
+
+Second version also failed on first look: the flap and the two lower back seams
+were bare dashed lines to the same centre point, which drew a symmetrical X
+across the whole envelope. Technically the seams of an envelope back; you could
+not tell which triangle was the flap. Tinting the flap fixed it in one glance,
+and the lower seams turned out to be unnecessary. The tint is a guide, so the
+file now says on its face that it does not print.
+
+**Left as it is, and worth her deciding:** the thank-you card stays A6 PORTRAIT,
+105 x 148. It goes into a landscape envelope turned on its side, which is
+normal for a card. If she wants it to slide in without turning, the card becomes
+A6 landscape and 04 + 05 are a real redesign — the wordmark, the paragraph, the
+ruled handwriting guides and the QR all re-place.
+
+### And the cotton bag turned landscape too
+
+Founder, same day: "the cotton bag will be in landscape as well, more long
+horizontally, it doesn't change anything for you right?"
+
+Almost right, and the almost is worth writing down. **It is the same rectangle
+turned on its side** — 400 x 500 becomes 500 x 400, same cloth, same area, same
+long edge — so the fold is the same, the packed bundle is the same, and the
+**mailer minimum of 320 x 400 does not move.** Cost and fabric unaffected.
+
+But `08-linen-bag-print.pdf` still had to be rebuilt, because **the mark is
+placed as a fraction of the bag's HEIGHT.** "A third of the way down" is 150 mm
+on a 500 mm bag and 120 mm on a 400 mm one. A placement guide written in
+proportions is not orientation-free — easy to assume, and wrong.
+
+Caught while redrawing it: the mockup drew the bag's wordmark at **62% of the
+bag width when 90 mm on a 500 mm bag is 18%** — roughly three times life size,
+on a page whose own title says "drawn to proportion" and from which a supplier
+may set up the screen. Now drawn to true scale. It looks modest because it is.
+
+⚠️ **Open, and hers:** the mark is still 90 mm, which is 18% of a 500 mm width
+where it was 22.5% of 400 mm. It has not shrunk but it reads smaller on a wider
+bag. Left at 90 mm deliberately — a print size she already settled should not
+change as a side effect of turning the bag. **About 110 mm restores the old
+proportion.**
+
+### The card follows the envelope, and the bag mark goes to 110 mm
+
+Founder, 2026-08-29: "the thank you card should be same as envelope."
+
+**04 and 05 are now A6 LANDSCAPE, 148 x 105.** Same sheet turned on its side,
+so paper and price do not move. The reason is the handling, not the look: a
+portrait card in a landscape envelope has to be turned ninety degrees to go in
+and turned back to be read — a small constant awkwardness in the one moment the
+unboxing is meant to feel considered. Matched, it slides straight in.
+
+The layout was **re-proportioned, not rotated.** A wider card fits more words
+per line, so the paragraphs drop to fewer lines, and that is what buys back the
+43 mm of height turning it costs. The back's QR went 30 mm -> 28 mm and
+`qr()` reports 0.76 mm per module, well clear of the 0.4 mm floor. Both faces
+were rendered and looked at, not just built.
+
+**Bag mark: 90 mm -> 110 mm.** Her call, on proportion rather than size — 90 mm
+was 22.5% of a 400 mm bag and only 18% of a 500 mm one. It had not shrunk, the
+bag got wider, but it read smaller than the version she had approved. Verified
+by measuring the rendered file rather than trusting the build log: ink spans
+21.5% of the width, about 108 mm against a 110 mm nominal (the 2 mm is the
+right sidebearing of the last letter, which is expected).
+
+**Screen printing is priced by the run, not by image size, so this is free.**
+
+Note for whoever writes the next supplier answer: she asked "what did you
+correct exactly" and was right to — an earlier reply had run the artwork file
+and the illustration of it together in one sentence, so it read as though the
+thing she prints from had been wrong. It never was. **Say which artefact
+changed, every time: the print file, the drawing of it, or the words about it.**
+
+### Packaged for Ada, and the README was audited because it was wrong
+
+`~/Desktop/Shaklek-artwork-for-Ada-2026-08-29.zip` — 27 files, 413 KB. Contains
+`branding/send-to-supplier/` only, so nothing personal from the repo root.
+
+⚠️ **READ-ME-FIRST.txt had gone stale twice over while the PDF and the artwork
+were kept current.** It still said the bag mark was "90 mm wide" after it went
+to 110, and still described the card as "105 x 148" after it turned landscape.
+It is a HAND-WRITTEN text file describing GENERATED artwork — the pairing that
+always drifts — and it is the document a supplier opens first. Its section
+heading also said "SEVEN NOTES" over eight notes.
+
+**So the build now audits it**, alongside the spec sheet: every `artwork/*.pdf`
+line in the README has its stated size compared against the file's real
+MediaBox, every artwork file must be listed, and a short list of prose values
+that have each been wrong at least once is checked for presence (110 mm,
+148 x 105, 162 x 114, 120 gsm, WALLET) and absence (the old 90 mm, the old
+250 x 350, the withdrawn A7F3C210). Both failure modes were tested by
+reintroducing the exact errors and confirming the build refuses.
+
+The notes are now numbered 1-8 with **no count in the heading** — a total that
+has to be maintained by hand is another thing that goes stale.
+
+**The general shape of every defect this session:** one artefact regenerated,
+its sibling not. Artwork vs spec sheet, spec sheet vs README, print file vs the
+drawing of it. None of it was missing knowledge.
