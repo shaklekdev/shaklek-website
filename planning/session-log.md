@@ -18,6 +18,128 @@ Rules that make this work:
 
 ## Active claims
 
+### THE LIST FOR 2026-08-31 — REWRITTEN after three Fable agent reviews
+
+Supersedes the earlier "THE LIST FOR 2026-08-31" below. Three agents ran on the
+founder's instruction: `shaklek-security` on tonight's code, `shaklek-security`
+on the live configuration, and `shaklek-marketing` on the site against 26
+principles she supplied (`planning/marketing/26-principles.md`).
+
+**No Critical and no High findings anywhere.** Both security agents independently
+re-verified the §0 non-negotiables on what is deployed and found them holding:
+server-owned pricing, gated webhook transitions, guards on every write route,
+`isUuid`, `envGuard`, security headers, no secrets committed. The Svix verifier
+was attacked with 16 adversarial inputs plus Svix's published vector and holds.
+`a601ded` was judged correct.
+
+**Shipped tonight (`519030d`, staging job 5 then production job 288, both green,
+production re-verified on the right commit):** the PII log line, the Postgres
+error-message log, the stale "changes no state" comment, and three ready-to-post
+captions that claimed "cotton or linen" when cotton is `available: false`.
+
+---
+
+#### 1. ⚠️ EMAIL CASING — DO THIS FIRST. I caused it, and I did not fix it.
+
+`e8d003b` made the webhook write `customers.email` **lowercased**. That was the
+right call in isolation, and it turned a latent inconsistency into a
+deterministic one: `persistOrder` (`api/orders/route.ts:64`) inserts the address
+**as typed**, and `/account`, `measurements` and `profile` all match with
+case-sensitive `eq()`, while `fit-feedback` uses `lower()`.
+
+**The failure:** Jane signs up, webhook writes `jane@x.com`. She checks out
+typing `Jane@X.com`. `onConflictDoNothing` does not fire (different case), a
+**second** customer row is created, her order links to it, and **her order does
+not appear on her own account**. Measurements can land on a third row.
+
+**Nobody is affected today** — production has **0 addresses stored with a
+capital**, re-verified tonight. That is why I left it: it touches `persistOrder`
+and four `/account` call sites, and shipping that unsupervised at night is the
+change class that broke `/account` on 2026-08-28.
+
+**Two options, hers to pick.** (a) Lowercase at every write and lookup — code
+only, no migration, no Deploy Trap 3. (b) A `unique index on customers
+(lower(email))` and match on `lower()` everywhere — permanent, but it is a
+migration, so index first, code second. **Staging now exists to prove either
+one before it goes near a live card.**
+
+#### 2. Staging holds production secrets, and they should be rotated
+
+Both agents found this independently. `CLERK_WEBHOOK_SECRET` and
+`RECONCILE_TOKEN` are inherited unchanged; staging `/api/admin/reconcile`
+returns **401 not 404**, which proves the production token is live on a public
+host. `RESEND_API_KEY`, `STAFF_EMAILS` and `TAILOR_WHATSAPP_NUMBER` are shared
+too — so anyone can drive public staging's `/api/waitlist` to send mail **from
+the production sending domain to the founder's inbox**, burning the quota of the
+one alerting channel this project depends on.
+
+**Do:** override all five on the staging branch (own Resend key, a drain or
+`+staging` address, the dev Clerk instance's own webhook secret, a separate
+reconcile token), **then rotate `RECONCILE_TOKEN` and `CLERK_WEBHOOK_SECRET` on
+production**, since both have now been copied to a lower-trust host. The
+build-spec allowlist already carries every name, so **no spec edit is needed** —
+branch overrides are enough. ⚠️ I am blocked from doing this: the permission
+classifier refuses Amplify writes, correctly.
+
+#### 3. `/api/orders/[id]` is the one route that bypasses `getVerifiedEmail()`
+
+It reads `user.primaryEmailAddress.emailAddress` directly (~line 45). Not
+exploitable today — the production Clerk instance was checked live and enforces
+`required: true` + `verify_at_sign_up: true` — but it depends on a Dashboard
+toggle staying correct, which is exactly what `authEmail.ts` exists to avoid.
+One-line fix.
+
+#### 4. Smaller, all Low
+
+- `rejectOversizedBody` trusts `Content-Length`, so a chunked body reaches
+  `req.text()` before the signature check on a public endpoint. Pre-existing,
+  same on `/api/orders`; CloudFront caps upstream.
+- Staging's noindex is `robots.txt` only. An `X-Robots-Tag` header gated the same
+  `AWS_BRANCH` way would be a second layer. ⚠️ **Get the condition right** — a
+  noindex leaking onto production would be far worse than the risk it closes.
+- Clerk retries re-send the notification email (no `svix-id` dedupe). Harmless.
+
+#### 5. Marketing — the audit's verdict, and it is a good one
+
+**#23 Protect long-term trust is the site's strongest principle**, and the agent
+found evidence: the false "real photograph" claim was removed, the pre-shrink
+disclosure was cut, the 192-ways figure is computed rather than typed. **#3, #15,
+#17, #22 are already done well.**
+
+The real gap is **#2 / #9 / #18** — the site leads with what the product IS, not
+what it does for the customer. Named exactly: the hero
+`"Customisable pieces for you, by you, always at the same price."`, STEPS[0]
+`"Timeless essentials in 100% linen."`, and the catalog intro. Meanwhile the
+site's best customer-first lines — `"Your body isn't standard. Why should your
+clothes be?"` — sit at the **bottom of /our-story**, the least-read position.
+
+**Her three highest-value moves**, in the agent's order:
+1. The false-claim captions — **done tonight**.
+2. **Move the fit promise to where money is decided.** "One free alteration or
+   remake within 14 days" is the brand's whole answer to "will it fit", and it
+   currently debuts inside a *collapsed FAQ*. ⚠️ Note the precedent: she
+   deliberately cut a *refund* remedy from a caption. The alteration promise is a
+   different and safer claim, but the call is hers.
+3. **Promote her own thesis line out of the /our-story basement** — it is already
+   her published sentence, and it converts the hero from IS to DOES.
+
+Four new files in `planning/marketing/`: `homepage-propositions.md`,
+`objection-handling.md`, `founder-story-angle.md`,
+`organic-content-additions.md`. All permit-free, no invented testimonials, no
+manufactured urgency, no em dashes.
+
+**Two more staleness flags it found, not fixed:** `src/lib/seo.ts` still comments
+that the apex 404s (it 301-redirects), and the delivery promise reads "ten
+**working** days" on the home FAQ but "ten days" on `/faq`.
+
+#### 6. Blocked on her, unchanged
+
+Bloom MCP is connected at the CLI but its tools load at session start, so **a
+Claude Code restart is needed** before it can be used. Plus: the pricing reopen
+(packaging 36.15/order, margins 56–61% against a 65–72% band), the Clerk dev
+webhook, `/upload`, the supplier's written "W300235 is 100% linen" and fabric
+width, Arimo, two AED 3.89 refunds, Sentry, Meta, DET permit, TikTok, lawyer hour.
+
 ### THE LIST FOR 2026-08-31 — written 2026-08-30, checked against live systems
 
 **Production verified tonight, so nobody re-checks it:** 5 customers, 12 orders,
