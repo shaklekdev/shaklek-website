@@ -55,6 +55,36 @@ bypass closed · staging noindexed at the header · the repo moved out of iCloud
 
 #### Mine, unblocked
 
+0. **A public coming-soon page, with everything else still gated.** Founder
+   asked 2026-08-31, after asking whether the site could keep gaining SEO while
+   hidden.
+
+   ⚠️ **The premise had to be corrected first, and the correction matters more
+   than the feature.** There is no way to show Google the full catalogue while
+   showing visitors a login. Serving crawlers different content from people is
+   **cloaking**, one of the few things Google actually penalises. The sanctioned
+   paywall markup requires genuinely handing Googlebot the content and is built
+   for subscription publishers.
+
+   **And the SEO being protected is worth roughly nothing today.** A search for
+   pages on the domain returns zero — the site is two weeks old, never promoted,
+   and was not meaningfully indexed before the gate went up. There is no clock
+   running out. **Do this for the email list, not for search.**
+
+   The shape: one public page — brand, what she makes, launch timing, email
+   capture — with catalogue, prices and checkout still closed. `/api/waitlist`
+   already exists and works; it is what powers the Shaklek+ early-access mails
+   she has been receiving.
+
+   ⚠️ **Amplify basic auth is all-or-nothing and cannot exclude a path** —
+   measured on staging 2026-08-30. So selective access means moving the gate
+   **into the code** (`src/proxy.ts`), which is a request-path change on a site
+   that takes live cards. **Through staging first, and mind that the webhook
+   routes must stay reachable** or the same 401 problem returns by a different
+   route. Also needs the noindex logic revisited: the public page should be
+   indexable while everything behind it is not.
+
+
 6. **The marketing agent's three highest-value changes** — the false-claim
    captions are already fixed; the remaining two are hers to approve: move the
    fit promise out of a collapsed FAQ to where money is decided, and promote her

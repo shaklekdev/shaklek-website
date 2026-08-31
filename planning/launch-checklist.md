@@ -54,6 +54,23 @@ removed. So while production is closed:
    happens, nothing proves money completes.
 6. Resubmit the sitemap in Google Search Console to speed re-indexing.
 
+
+## Being considered: a public coming-soon page instead of a full gate
+
+The founder asked whether the site could stay hidden while still gaining SEO.
+**It cannot** — showing Google content that visitors cannot see is cloaking, and
+Google penalises it. And the SEO at stake is currently nil: a search for pages on
+the domain returns zero results, because the site is new and was never promoted.
+
+The option on the table is a single **public** coming-soon page (brand, what she
+makes, launch timing, email capture via the existing `/api/waitlist`) with
+catalogue, prices and checkout still closed. **Its value is the email list, not
+search.**
+
+⚠️ It requires moving the gate out of Amplify and into `src/proxy.ts`, because
+Amplify basic auth cannot exclude a path. That is a request-path change on a
+card-taking site: staging first, and the webhook routes must stay reachable.
+
 ## Still open before launch (see session-log for detail)
 
 - `/upload` is live and indexed and loses the customer's photo — remove it or
