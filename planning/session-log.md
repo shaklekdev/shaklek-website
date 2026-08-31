@@ -39,29 +39,54 @@ captions that claimed "cotton or linen" when cotton is `available: false`.
 
 ---
 
-#### 1. ⚠️ EMAIL CASING — DO THIS FIRST. I caused it, and I did not fix it.
+#### 1. ✅ EMAIL CASING — FIXED AND PROVEN (`17829eb`, production job 291)
 
-`e8d003b` made the webhook write `customers.email` **lowercased**. That was the
-right call in isolation, and it turned a latent inconsistency into a
-deterministic one: `persistOrder` (`api/orders/route.ts:64`) inserts the address
-**as typed**, and `/account`, `measurements` and `profile` all match with
-case-sensitive `eq()`, while `fit-feedback` uses `lower()`.
+**Founder, 2026-08-31: "fix what you've broken first, nothing has to be broken."**
+Fair. Done, and proven on staging before production — the first bug on this
+project to be caught by a review, reproduced in a real environment, and fixed
+without a customer ever meeting it.
 
-**The failure:** Jane signs up, webhook writes `jane@x.com`. She checks out
-typing `Jane@X.com`. `onConflictDoNothing` does not fire (different case), a
-**second** customer row is created, her order links to it, and **her order does
-not appear on her own account**. Measurements can land on a third row.
+**What it was.** `customers` is keyed by email and a Postgres `text` unique index
+is CASE-SENSITIVE, so `jane@x.com` and `Jane@X.com` were two customers. `e8d003b`
+made the signup webhook write lowercase — right in itself — which turned a latent
+inconsistency into a deterministic one: `persistOrder` stored the address AS
+TYPED and the `/account` readers matched case-sensitively. Sign up, then type a
+capital at checkout, and you get a second customers row, your order attaches to
+it, **and it stops appearing on your own account.**
 
-**Nobody is affected today** — production has **0 addresses stored with a
-capital**, re-verified tonight. That is why I left it: it touches `persistOrder`
-and four `/account` call sites, and shipping that unsupervised at night is the
-change class that broke `/account` on 2026-08-28.
+**Checked before changing anything:** both databases hold **zero** mixed-case
+addresses and distinct-case-insensitive equals total, so nothing needed
+migrating and no existing row was orphaned.
 
-**Two options, hers to pick.** (a) Lowercase at every write and lookup — code
-only, no migration, no Deploy Trap 3. (b) A `unique index on customers
-(lower(email))` and match on `lower()` everywhere — permanent, but it is a
-migration, so index first, code second. **Staging now exists to prove either
-one before it goes near a live card.**
+**The fix.** Normalised at the DATABASE BOUNDARY in `persistOrder`, not at the
+top of the handler — the address the customer typed is still what Stripe shows
+her and what her confirmation is addressed to; only the key is canonical. The
+four `/account` call sites moved to `getVerifiedEmailLower()`, which already
+existed.
+
+**`/api/orders/[id]` fixed in the same pass** (was security finding #3): it read
+`currentUser().primaryEmailAddress` directly, the only customer-facing route
+bypassing `getVerifiedEmail`, so it skipped the verification check that exists
+so authorization never trusts an unverified address. Not reachable today only
+because a Clerk Dashboard toggle is set — which is the dependency the helper
+exists to remove.
+
+**Proven, not asserted.** On staging, the exact broken scenario:
+
+| step | result |
+|---|---|
+| order as `casetest@example.com` | 1 customer row |
+| order as `CaseTest@Example.COM` | **still 1 row** |
+| both orders on one customer id | **PASS — 2 orders, 1 customer** |
+
+Before the fix that second order created a second customer and vanished from
+`/account`. Production after deploy: home/catalog/checkout 200, `/account` 307,
+origin guard 400/403, an unauthorised order read still 404, and data untouched
+at 5 customers / 12 orders / 2 paid / 0 mixed-case.
+
+⚠️ **Still worth doing, separately:** a `unique index on customers (lower(email))`
+so the DATABASE enforces this instead of four call sites remembering to. That is
+a migration — index first, then code, per Deploy Trap 3.
 
 #### 2. Staging holds production secrets, and they should be rotated
 
