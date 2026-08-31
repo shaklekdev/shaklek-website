@@ -18,6 +18,69 @@ Rules that make this work:
 
 ## Active claims
 
+### THE LIST FOR 2026-09-01 — rewritten after everything below landed
+
+**Site status: `www.shaklek.com` is PRIVATE.** Amplify basic auth on `main`,
+founder's call, credentials hers and not in this repo. See
+`planning/launch-checklist.md` for exactly how to open it again — the checklist
+exists because the gate breaks the Stripe and Clerk webhooks and the 06:00
+reconcile job, and those have to come back in the right order.
+
+**Closed since last night, all verified on live systems, none of it broken:**
+P0 staging built and proving a full test checkout · signup notifications working
+end to end · the email-casing defect fixed *and* now enforced by a database index
+· the free-confirmed-order fallback closed · staging stripped of every production
+secret · `RECONCILE_TOKEN` rotated in both places it lives · the chunked-body
+bypass closed · staging noindexed at the header · the repo moved out of iCloud.
+
+#### Hers, and the gate makes two of them urgent
+
+1. ⚠️ **`/upload` — decide BEFORE the gate comes down.** It is live, was in the
+   sitemap, and loses the customer's reference photo: the tailor receives a
+   boolean. Zero orders have hit it. Remove it properly, or pay for image
+   storage. While the site is private this is free to fix; the day it opens it
+   is a live defect again.
+2. ⚠️ **The pricing reopen.** Packaging is **36.15 per order**, not the 2 the
+   file assumed, so margins are **56–61%** against a 65–72% design band. The
+   "+49 is off" conclusion of 2026-08-28 rested on the wrong number. **Nobody is
+   buying and the site is now closed, so this is the cheapest this decision will
+   ever be.** It stops being cheap the day the gate lifts.
+3. **`CLERK_WEBHOOK_SECRET` rotation** — Clerk dashboard only, belt-and-braces
+   now that staging no longer holds production's copy.
+4. **A test Resend key for staging**, if she wants email flows testable there.
+   Staging currently cannot send mail at all, deliberately.
+5. Supplier: fabric width, and one line in writing that **W300235 as sold to us
+   is 100% linen**. Two AED 3.89 refunds. Sentry. Meta pixel. DET permit before
+   any advertised discount. TikTok account. One lawyer hour. Arimo font swap.
+
+#### Mine, unblocked
+
+6. **The marketing agent's three highest-value changes** — the false-claim
+   captions are already fixed; the remaining two are hers to approve: move the
+   fit promise out of a collapsed FAQ to where money is decided, and promote her
+   own thesis line out of the /our-story basement. Four content files are ready
+   in `planning/marketing/`.
+7. **P2 the remake flow.** Still needs a delivery date recorded and a
+   "remake used" flag, or "one free remake within 14 days" is unenforceable.
+8. **Two staleness flags** the marketing audit found: `src/lib/seo.ts` still
+   comments that the apex 404s (it 301-redirects), and the delivery promise reads
+   "ten **working** days" on the home FAQ but "ten days" on `/faq`.
+9. **`CLAUDE.md` still warns the repo root holds passport/Emirates ID/visa.** It
+   does not — the root is project directories only and those live in
+   `~/Desktop/shak-docs`. The `never git add -A` advice stands; its stated reason
+   is stale. **Left for her**, because a safety warning that is wrong about WHY
+   is one people eventually stop believing.
+
+#### Worth knowing
+
+- **iCloud is still duplicating her Desktop files outside the repo** —
+  `send-to-supplier` and `send-to-supplier 2` both exist, with *different* file
+  counts, so they have genuinely diverged. Moving the repo fixed the repo, not
+  the Desktop. Turning off iCloud Desktop & Documents sync is hers to decide.
+- **Everyone must restart Claude Code from `~/dev/Shaklek`.**
+- **Bloom MCP is connected but its tools load at session start** — the restart
+  picks it up.
+
 ### The three open security items are CLOSED (2026-08-31, founder awake and approving)
 
 #### 1. Staging no longer holds anything of production's
