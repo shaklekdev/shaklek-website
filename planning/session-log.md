@@ -18,6 +18,70 @@ Rules that make this work:
 
 ## Active claims
 
+### The three open security items are CLOSED (2026-08-31, founder awake and approving)
+
+#### 1. Staging no longer holds anything of production's
+
+`RESEND_API_KEY`, `STAFF_EMAILS`, `TAILOR_WHATSAPP_NUMBER`, `RECONCILE_TOKEN`
+and `CLERK_WEBHOOK_SECRET` are now branch-level overrides. **Zero** app-level
+variables are inherited.
+
+⚠️ **AMPLIFY SILENTLY DROPS EMPTY-STRING VARIABLES, AND A DROPPED BRANCH
+OVERRIDE FALLS BACK TO INHERITING THE APP-LEVEL ONE.** The first attempt set
+three to `""`, which read back as *absent* — so staging was still inheriting
+production's secrets while appearing overridden. **Blanking is not a way to
+override.** Use a non-empty, obviously-invalid placeholder and read it back.
+
+Staging's Resend key is deliberately junk, so **staging cannot send email at
+all** — that closes the spam/quota channel against the founder's inbox without
+needing a second Resend account. **Cost, recorded honestly:** email flows cannot
+be tested on staging until she supplies a test key. Verified: production token
+→ 401 on staging, staging waitlist → 502 (cannot send), staging checkout still
+creates a Stripe session, production untouched.
+
+#### 2. `lower(email)` unique index — applied to both databases
+
+`customers_email_lower_idx`. Dev first, then production, each gated on a
+pre-check that `count(distinct lower(email))` equalled `count(*)`. It did, so
+nothing needed cleaning. Declared in `schema.ts` too, so a future
+`drizzle-kit push` cannot drop it.
+
+**Verified against `pg_indexes`, never the ledger** — that ledger has already
+reported a migration applied that never ran. On dev it was proven by inserting
+an actual case-duplicate and confirming Postgres rejected it; **production got
+no probe row**. Indexes now match across both databases.
+
+#### 3. Both Low findings closed
+
+**`readBoundedText`** caps on bytes ACTUALLY RECEIVED. The old guard trusted the
+declared `Content-Length`, so a chunked request walked past it. **Proven by
+measurement, not reasoning:** the same 200KB chunked body returned **400 on
+production's old code** — meaning it buffered the whole thing and only then
+failed the signature — and **413 on staging's new code**.
+
+**`X-Robots-Tag: noindex, nofollow` on every non-`main` branch.** ⚠️ The default
+is deliberately *production*: an unset `AWS_BRANCH` falls through to NOT setting
+noindex, because de-indexing the live storefront would be far worse than the leak
+it closes. Verified in both directions by building twice and reading
+`routes-manifest.json`, then on the live hosts: staging has the header, and
+production's home, catalog, a product page and /our-story have **none**.
+
+#### 4. `RECONCILE_TOKEN` rotated on production
+
+⚠️ **The token lives in TWO places** — the Amplify variable and the
+**EventBridge connection `shaklek-reconcile-conn`** that fires
+`shaklek-reconcile-daily` at 06:00. Rotating one alone breaks the scheduled job
+**silently**, which is this project's signature failure. Both were updated, then
+production redeployed so the app reads the new value.
+
+Verified end to end: **old token → 401** (the copied one is dead), **new token →
+200** (the scheduled job still works), no token → 401, and staging rejects the
+new production token too. The old value is kept in this session's scratch only.
+
+**Still hers:** `CLERK_WEBHOOK_SECRET` cannot be rotated from here — it is
+regenerated in the Clerk dashboard. Staging no longer holds production's copy,
+so the exposure is closed; rotating is belt-and-braces.
+
 ### THE REPO MOVED — `~/Desktop/Shaklek` → `~/dev/Shaklek` (2026-08-31)
 
 **Founder's go-ahead, coordinated with shaklek-83, verified at every step.**
