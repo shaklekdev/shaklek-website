@@ -22,15 +22,21 @@ import { catalog } from "../src/data/catalog.ts";
 import { renderParamsForCategory } from "../src/data/parameterSliders.ts";
 import { colors } from "../src/data/colors.ts";
 import { versionsForItem } from "../src/data/versionIds.ts";
+import { fileURLToPath } from "node:url";
 
 // Inspection flags. `sips` and qlmanage can only rasterise page one, so
 // checking an item page meant either shipping a layout nobody had looked at or
 // building a way to put one first. CB_ONLY=<slug> CB_NO_COVER=1 does that.
 const ONLY = process.env.CB_ONLY ?? null;
 const NO_COVER = process.env.CB_NO_COVER === "1";
+// Repo root, derived from this file's own location instead of hardcoded.
+// It was the literal "/Users/nadatlohi/Desktop/Shaklek" until 2026-08-31, when
+// the repo moved off the iCloud-synced Desktop and every one of these scripts
+// would have broken. Derived, the next move costs nothing.
+const REPO_ROOT = fileURLToPath(new URL("../../", import.meta.url)).replace(/\/$/, "");
 const OUT = ONLY
   ? `/tmp/collection-book-${ONLY}.pdf`
-  : "/Users/nadatlohi/Desktop/Shaklek/brand-assets/tailor-samples/collection-book.pdf";
+  : `${REPO_ROOT}/brand-assets/tailor-samples/collection-book.pdf`;
 const SHOWN_IN = "Ivory"; // detail reads better on a pale cloth than on navy
 const PAGE = { size: "A4", margin: 40 };
 const INK = "#111", MUTED = "#777", RULE = "#ddd";

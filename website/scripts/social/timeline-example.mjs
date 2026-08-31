@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 const F=`${process.cwd()}/f8`;
 const m=JSON.parse(readFileSync(`${F}/manifest.json`,"utf8"));
 const p=k=>`${F}/${m[k]}`;
@@ -17,4 +18,9 @@ hold("pc0", 34);
 hold("end", 96);
 
 console.log(seq.length,"frames =",(seq.length/30).toFixed(1),"s");
-execFileSync("./encode",["/Users/nadatlohi/Desktop/Shaklek/brand-assets/social/reel-grid-4up.mp4","30","1080","1920",...seq],{stdio:"inherit"});
+// Repo root, derived from this file's own location instead of hardcoded.
+// It was the literal "/Users/nadatlohi/Desktop/Shaklek" until 2026-08-31, when
+// the repo moved off the iCloud-synced Desktop and every one of these scripts
+// would have broken. Derived, the next move costs nothing.
+const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url)).replace(/\/$/, "");
+execFileSync("./encode",[`${REPO_ROOT}/brand-assets/social/reel-grid-4up.mp4`,"30","1080","1920",...seq],{stdio:"inherit"});

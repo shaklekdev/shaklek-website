@@ -1,6 +1,6 @@
 # Frontend — TODO
 
-Status: core purchase flow is built and interaction-tested (Next.js 16, TypeScript, Tailwind, at `~/Desktop/Shaklek/website`).
+Status: core purchase flow is built and interaction-tested (Next.js 16, TypeScript, Tailwind, at `~/dev/Shaklek/website`).
 
 ## Done
 - [x] Catalog page (`/`) — 8 items, correct finalized pricing, dress tiers, real photography with per-color image variants (see below — the placeholder-gradient gap is closed)

@@ -20,8 +20,14 @@
 import fs from "node:fs";
 import { lint } from "./copy-rules.mjs";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
-const ROOT = "/Users/nadatlohi/Desktop/Shaklek";
+// Repo root, derived from this file's own location instead of hardcoded.
+// It was the literal "/Users/nadatlohi/Desktop/Shaklek" until 2026-08-31, when
+// the repo moved off the iCloud-synced Desktop and every one of these scripts
+// would have broken. Derived, the next move costs nothing.
+const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url)).replace(/\/$/, "");
+const ROOT = REPO_ROOT;
 const OUT_TT = `${ROOT}/brand-assets/TIKTOK/carousels`;
 const OUT_IG = `${ROOT}/brand-assets/INSTA/carousels`;
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";

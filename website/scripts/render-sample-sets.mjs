@@ -25,6 +25,7 @@
 //   SET 4  drape, which seams cannot fix
 import fs from "node:fs";
 import { buildPdf } from "../src/lib/techPack.ts";
+import { fileURLToPath } from "node:url";
 
 const measurements = process.argv[2] ?? null;
 
@@ -39,7 +40,12 @@ const WEARER_HEIGHT_CM = 168;
 const HEIGHT_NOTE =
   `All four sets are size S for one person, ${WEARER_HEIGHT_CM}cm tall. ` +
   `Our size chart carries no height, so please cut every trouser length to that.`;
-const OUT = "/Users/nadatlohi/Desktop/Shaklek/brand-assets/tailor-samples";
+// Repo root, derived from this file's own location instead of hardcoded.
+// It was the literal "/Users/nadatlohi/Desktop/Shaklek" until 2026-08-31, when
+// the repo moved off the iCloud-synced Desktop and every one of these scripts
+// would have broken. Derived, the next move costs nothing.
+const REPO_ROOT = fileURLToPath(new URL("../../", import.meta.url)).replace(/\/$/, "");
+const OUT = `${REPO_ROOT}/brand-assets/tailor-samples`;
 
 const SETS = [
   {

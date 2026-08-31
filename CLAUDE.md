@@ -541,6 +541,36 @@ settle `wide:full` front first, get it approved, then generate the rest from it.
 
 ## 6. Workflow
 
+> ⚠️ **THE REPO LIVES AT `~/dev/Shaklek`. IT MOVED OFF `~/Desktop` ON
+> 2026-08-31, AND IT MUST NOT GO BACK.**
+>
+> `~/Desktop` is synced by iCloud Desktop & Documents, so a file syncer and git
+> were writing the same files, and only one of them understands git. What that
+> actually did, found on 2026-08-31: **nineteen copies of `.git/index`** — the
+> file git rewrites on every `git add` — plus a null-sha1
+> `refs/remotes/origin/main 2` that made `git fsck` error. The repository
+> survived, but a corrupted index loses staged work.
+>
+> It had been logged four times as a cosmetic "file 2" curiosity before anyone
+> looked in `.git`. The visible symptoms were: `tsc` failing with phantom
+> duplicate-identifier errors from `.next/types`, 143 resurrected `.png` twins
+> in `public/catalog`, and five copies of files written minutes earlier. An
+> iCloud container reset on 2026-08-26 (`brctl status`) is the likely trigger
+> for the catalog batch.
+>
+> Two guards remain, and both are bandages rather than the fix: `.gitignore`
+> excludes `* <digits>` patterns, and
+> `website/scripts/clean-icloud-duplicates.mjs` runs first in `npm run build`
+> and `npm run verify` — before `tsc`, since a stale `.next/types` copy is what
+> breaks the typecheck. It deletes copies under `.next/` only and merely
+> reports any elsewhere.
+>
+> **Never put a git working tree inside iCloud, Dropbox or any file syncer.**
+> And do not hardcode an absolute repo path in a script: the nine that did were
+> changed to derive it from `import.meta.url`, because every one of them would
+> have broken silently on the move.
+
+
 ```bash
 cd website
 npm run dev          # localhost:3000

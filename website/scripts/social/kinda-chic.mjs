@@ -22,8 +22,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import sharp from "../../node_modules/sharp/dist/index.cjs";
+import { fileURLToPath } from "node:url";
 
-const OUT = "/Users/nadatlohi/Desktop/Shaklek/brand-assets/INSTA/kinda-chic";
+// Repo root, derived from this file's own location instead of hardcoded.
+// It was the literal "/Users/nadatlohi/Desktop/Shaklek" until 2026-08-31, when
+// the repo moved off the iCloud-synced Desktop and every one of these scripts
+// would have broken. Derived, the next move costs nothing.
+const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url)).replace(/\/$/, "");
+const OUT = `${REPO_ROOT}/brand-assets/INSTA/kinda-chic`;
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const TMP = "/tmp/kc-frames";
 
