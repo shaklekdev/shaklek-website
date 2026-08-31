@@ -40,16 +40,52 @@ bypass closed · staging noindexed at the header · the repo moved out of iCloud
    boolean. Zero orders have hit it. Remove it properly, or pay for image
    storage. While the site is private this is free to fix; the day it opens it
    is a live defect again.
-2. ⚠️ **The pricing reopen.** Packaging is **36.15 per order**, not the 2 the
-   file assumed, so margins are **56–61%** against a 65–72% design band. The
-   "+49 is off" conclusion of 2026-08-28 rested on the wrong number. **Nobody is
-   buying and the site is now closed, so this is the cheapest this decision will
-   ever be.** It stops being cheap the day the gate lifts.
-3. **`CLERK_WEBHOOK_SECRET` rotation** — Clerk dashboard only, belt-and-braces
+2. **Pricing — the analysis is DONE, do not redo it.** ⚠️ An earlier version of
+   this list said "packaging 36.15, margins 56–61%". **Both numbers are stale**
+   and shaklek-83 corrected them; verified against `ec111f7`. The real Fitoor
+   quote landed (100-unit pricing is far worse than the 500-unit estimates), and
+   the founder then changed strategy: **cotton base at today's prices, linen a
+   +90 upgrade, packaging local except the cotton bag.** That earns **62.4%
+   cotton / 60.9% linen** and is the first version that is profitable at a 250
+   CAC. Full working in `planning/pricing-todo.md` under "THE PLAN AS IT STANDS,
+   2026-08-31".
+
+   **What is left is not analysis — it is two prices the founder is sourcing this
+   week:** a 100% cotton quote in the four colourways (ask **width and gsm**, not
+   just price per metre — width moves the answer more), and a cotton bag at or
+   near AED 10. Nothing further can be computed until those land.
+
+3. ⚠️ **BLOCKER — the care label and hang tag both say 100% LINEN.** Its own
+   line, because it is not a pricing question: it is the legal fibre disclosure,
+   and the Fitoor quote covers **500** care labels reading `كتان 100% / 100%
+   LINEN`. Under a cotton-base catalogue those are wrong on most garments.
+   **The packaging order cannot be placed until this artwork is settled.**
+
+4. ⚠️ **AND THE SAME PROBLEM REACHES THE WHOLE SITE, WHICH NOBODY HAS COSTED.**
+   Cotton as the base fabric is not only a labelling change. **14 customer-facing
+   files assert "100% linen"** — the catalogue intro, `/how-it-works`,
+   `/our-story`, both FAQs, `/upload`, the customizer, `homeContent.ts`,
+   `seo.ts`, `productDisclosure.ts` — **and `/feed/meta.xml` emits
+   `<g:material>100% linen</g:material>` to Meta's ad catalogue.** Selling a
+   cotton garment against any of those is a false claim, and the ad feed one is a
+   false claim inside an ad platform.
+
+   Three more things inherit it: `fabrics.ts` still has cotton `available:
+   false`; **every catalog photograph was generated in linen** (CLAUDE.md is
+   explicit that selling cotton against a linen photograph is the same defect in
+   the other direction); and the supplier certificate verified last night covers
+   **linen article W300235 only** — a cotton base needs its own written
+   confirmation.
+
+   **This is the cheapest it will ever be to fix, because the site is closed.**
+   The day the gate lifts it is a live false-claim problem across 14 pages and an
+   ad feed. It is also large enough that it should be scoped before the fabric
+   decision is finalised, not after.
+5. **`CLERK_WEBHOOK_SECRET` rotation** — Clerk dashboard only, belt-and-braces
    now that staging no longer holds production's copy.
-4. **A test Resend key for staging**, if she wants email flows testable there.
+6. **A test Resend key for staging**, if she wants email flows testable there.
    Staging currently cannot send mail at all, deliberately.
-5. Supplier: fabric width, and one line in writing that **W300235 as sold to us
+7. Supplier: fabric width, and one line in writing that **W300235 as sold to us
    is 100% linen**. Two AED 3.89 refunds. Sentry. Meta pixel. DET permit before
    any advertised discount. TikTok account. One lawyer hour. Arimo font swap.
 
