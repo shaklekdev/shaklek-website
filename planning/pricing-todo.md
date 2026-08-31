@@ -17,6 +17,101 @@ the first campaign runs.
 
 ---
 
+## 📌 THE PLAN AS IT STANDS, 2026-08-31 — two things to source, then decide
+
+Founder's strategy, agreed this evening. **Nothing is ordered yet.** Two prices
+are missing and one artwork problem blocks the packaging order.
+
+### The shape
+
+**Cotton is the base fabric at today's prices. Linen is a +90 upgrade.**
+Shirt 389 cotton / 479 linen. Pants 429 / 519.
+
+This is the shape this file argued for on 2026-08-26 — *"linen at the current
+price with cotton priced below it, not a supplement on linen"* — and it solves
+the margin problem the withdrawn +49 was for, without a price rise anyone has
+to have explained to them. A customer choosing an upgrade understands paying
+more.
+
+**+90 is about the right size.** At cotton 20 AED/m and linen 36 landed, the
+two versions earn within 0.2 points of each other. It is light if cotton comes
+in cheap or linen is bought locally at 45 — at cotton 12-15, the honest number
+is 110-120.
+
+**Packaging: everything local from Fitoor EXCEPT the cotton bag**, which is
+sourced from China or from printed blanks. Fitoor is AED 20 on that one item
+against roughly 10 landed elsewhere, and it is 2.5 margin points on every line.
+The tissue wrap, tissue seal and business card are dropped.
+
+### What that earns
+
+| | Packaging | Cotton 15 | Cotton 18 | Cotton 20 |
+|---|---|---|---|---|
+| **Cotton shirt 389** | 30.76 | 64.0% | **62.4%** | 61.3% |
+
+| | | Linen 36 | Linen 45 |
+|---|---|---|---|
+| **Linen shirt 479** | 30.76 | **60.9%** | 57.0% |
+
+After ads, linen at 479 clears **+158 at CAC 134, +92 at 200 and +42 even at
+250** — profitable across the whole plausible range, which nothing in this file
+has managed before. Cotton at 389 clears at 134 and 200 and wobbles at 250.
+
+Cash to start: **~AED 6,294** (Fitoor revised 2,594 + 100 bags ~1,000 + 60m
+local linen 2,700), before any ad spend.
+
+### ⏳ TWO THINGS TO SOURCE — the founder is doing this during w/c 2026-08-31
+
+1. **A cotton fabric price**, 100% cotton, in Ivory / White / Navy / Burgundy.
+   Everything above assumes **15-20 AED/m and there is no quote**. At 25 the
+   cotton shirt drops to 58.8% and +90 gets tight. Ask **width and gsm**, not
+   just price — at 110cm instead of 140cm consumption rises ~25%, which moves
+   the answer more than the price per metre does.
+2. **A cotton bag at or near AED 10.** Options open: other China suppliers,
+   Ada (her core product, ~10.87 landed, 25 days production), or a plain
+   drawstring blank printed locally. The Amazon SOLSTICE cover at 5.02 was
+   rejected by the founder — it is a saree cover with a mesh window, 28%
+   smaller than the design intent, and it gives away the reveal.
+
+### ⚠️ BLOCKER on the packaging order
+
+**The care label and the hang tag both say 100% LINEN.** The Fitoor quote
+covers 500 care labels reading `كتان 100% / 100% LINEN` and 100 hang tags
+reading `100% NATURAL LINEN`. Under a cotton-base catalogue those are wrong on
+most garments, and **the care label is the legal disclosure** — Federal Law
+15/2020, AED 3,000 to 200,000.
+
+Two versions of each, or wording that covers both fabrics. **Do not send that
+order until this is settled.** It is an artwork change and it changes the
+quantities.
+
+Also unresolved: **every catalog photograph is linen.** If cotton becomes the
+pictured default at the headline price, the photographs show the upgrade.
+
+### Supplier prices on record, 2026-08-31
+
+| | | |
+|---|---|---|
+| **Fitoor Packaging LLC** (Ajman, local) | estimate FRP2608-1149 | AED 5,370.75 for the full ten items, VAT in |
+| — cotton bag 35x45, 100 | AED 20.00 | the expensive line, 39% of the quote |
+| — hand bag 35x30x6, 100 | AED 9.20 | 1 colour |
+| — woven brand label, 500 | AED 0.70 | |
+| — care label, 500 | AED 0.74 | ⚠️ quoted as a STICKER; must be sewn satin |
+| — hang tag / card / envelope / business card, 100 | 2.30 / 2.70 / 3.30 / 1.80 | |
+| — tissue seal / tissue wrap, 100 | 0.85 / 3.80 | both dropped |
+| Terms | 50% advance, **14-21 business days**, samples before production | |
+| **Ada Zhang** (China) | 100 cotton bags, 1 colour | $1.93 EXW ≈ **AED 10.87 landed** express |
+| **Helen Wu** (China) | pure linen 195gsm, 100m minimum | $6.25/m + $360 ship/duty ≈ **AED 36.17/m landed** |
+| **Local linen** | 100% linen, in store | **AED 45/m**, no minimum, seen before buying |
+
+⚠️ **Helen's price moved three times: AED 22.95 → 32.13 → 36.17**, each time
+because something was excluded from the previous number. She has still not
+given a lead time, asked twice. **Every China quote in this file is EXW until
+proven otherwise** — that error has now been made twice, on fabric and on
+packaging.
+
+---
+
 ## ⚠️ REVISED 2026-08-30 — two under-counted inputs, and the 28 August conclusion does not hold
 
 Two costs in this file were recorded at less than they are: packaging at 2 AED
