@@ -49,6 +49,54 @@ export function rejectOversizedBody(req: NextRequest, maxBytes: number): NextRes
   return null;
 }
 
+// `rejectOversizedBody` above trusts the DECLARED `Content-Length`. A request
+// sending `Transfer-Encoding: chunked`, or simply omitting the header, skips it
+// entirely -- and `req.text()` then buffers the whole body into memory before
+// any signature or auth check has run. On a public, pre-auth endpoint that is a
+// free memory-DoS.
+//
+// This reads the body itself and stops at the cap, so the limit lands on bytes
+// actually received rather than on a number the caller supplied. Returns null
+// when the cap is exceeded; the caller should answer 413 and read no further.
+//
+// Flagged by the security review 2026-08-30, which noted CloudFront imposes its
+// own ceiling upstream. This closes it at the application, where it does not
+// depend on the CDN's configuration staying as it is today.
+//
+// The decoded string is byte-identical to what `req.text()` returns, which
+// matters: a webhook signature is computed over the exact bytes received, so a
+// caller can verify against this safely.
+export async function readBoundedText(req: NextRequest, maxBytes: number): Promise<string | null> {
+  const body = req.body;
+  if (!body) return "";
+
+  const reader = body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        // Stop pulling. Without the cancel the sender can keep streaming at us
+        // even though the answer is already decided.
+        await reader.cancel().catch(() => {});
+        return null;
+      }
+      chunks.push(value);
+    }
+  } catch {
+    // A truncated or aborted upload is not a body we can verify. Refuse it
+    // rather than act on a partial payload.
+    return null;
+  }
+
+  return Buffer.concat(chunks.map((c) => Buffer.from(c))).toString("utf8");
+}
+
 // Free-text fields reach the DB, the stylist's email and the PDF spec sheet.
 // Cap every one of them at the boundary.
 export function boundedText(value: unknown, max: number): string | null {

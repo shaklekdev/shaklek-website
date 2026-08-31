@@ -102,7 +102,33 @@ const buildConfig = (isDev: boolean): NextConfig => ({
   // the Referer header of any cross-origin request the page makes.
   //
   async headers() {
+    // ⚠️ NON-PRODUCTION BRANCHES MUST NOT BE INDEXED, AND `robots.txt` ALONE IS
+    // ADVISORY. Staging serves the whole storefront on a public URL with test
+    // Stripe keys, so a customer who found it in a search result would be handed
+    // a checkout that cannot take a real card. `src/app/robots.ts` already
+    // returns `Disallow: /` there; this header is the second layer, because
+    // robots.txt asks a crawler not to crawl and does not stop a linked URL
+    // being indexed.
+    //
+    // Amplify sets AWS_BRANCH in every build, and this file is evaluated at
+    // BUILD time, so no new variable and no build-spec allowlist entry is
+    // needed -- the same reasoning as robots.ts.
+    //
+    // ⚠️ THE DEFAULT IS DELIBERATELY "PRODUCTION". An unset AWS_BRANCH (local
+    // `next build`, or Amplify ever renaming the variable) must fall through to
+    // NOT setting noindex. Getting this backwards would de-index the live
+    // storefront, which is far worse than the leak it closes.
+    const isProductionBranch = (process.env.AWS_BRANCH ?? "main") === "main";
+
     return [
+      ...(isProductionBranch
+        ? []
+        : [
+            {
+              source: "/:path*",
+              headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+            },
+          ]),
       {
         source: "/:path*",
         headers: [

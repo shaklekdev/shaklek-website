@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, schema } from "@/db/client";
-import { rejectOversizedBody } from "@/lib/requestGuards";
+import { readBoundedText, rejectOversizedBody } from "@/lib/requestGuards";
 import { verifySvixSignature } from "@/lib/svixVerify";
 
 // Clerk calls this when a customer creates an account.
@@ -68,13 +68,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Clerk webhook not configured" }, { status: 501 });
   }
 
+  // Declared-length check first: it is free and rejects the common case before
+  // a single byte is read.
   const oversized = rejectOversizedBody(req, MAX_BODY_BYTES);
   if (oversized) return oversized;
 
-  // NOTE: `req.text()`, never `req.json()`. The signature covers the exact
-  // bytes received; re-serialising parsed JSON changes key order and
-  // whitespace and would fail verification on every genuine delivery.
-  const rawBody = await req.text();
+  // NOTE: raw text, never `req.json()`. The signature covers the exact bytes
+  // received; re-serialising parsed JSON changes key order and whitespace and
+  // would fail verification on every genuine delivery.
+  //
+  // And `readBoundedText`, not `req.text()`: the check above trusts the DECLARED
+  // Content-Length, so a chunked or header-less request walks straight past it
+  // and `req.text()` would buffer the whole thing before the signature is
+  // verified. This is a public, pre-auth endpoint, so the cap has to hold on
+  // bytes actually received.
+  const rawBody = await readBoundedText(req, MAX_BODY_BYTES);
+  if (rawBody === null) {
+    return NextResponse.json({ ok: false, error: "Request body too large" }, { status: 413 });
+  }
 
   // A cross-origin guard is deliberately NOT applied here. Clerk's servers
   // send no Origin header, so `rejectCrossOrigin` would reject every real
