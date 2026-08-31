@@ -1,4 +1,4 @@
-import { getVerifiedEmail } from "@/lib/authEmail";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { desc, eq, sql } from "drizzle-orm";
 import Header from "@/components/Header";
 import { SignOutButton } from "@clerk/nextjs";
@@ -100,7 +100,7 @@ async function getOrdersForEmail(email: string) {
 }
 
 export default async function AccountPage() {
-  const email = await getVerifiedEmail();
+  const email = await getVerifiedEmailLower();
   const name = email ? await getNameForEmail(email) : null;
   const orders = email ? await getOrdersForEmail(email) : null;
   const fitFeedback = email ? await getFitFeedbackForEmail(email) : [];

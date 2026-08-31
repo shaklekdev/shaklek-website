@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getVerifiedEmail } from "@/lib/authEmail";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
@@ -8,7 +8,9 @@ import { parseMeasurements } from "@/lib/measurements";
 // Verified primary address only -- see src/lib/authEmail.ts. These rows are
 // matched to a customer by email, so an unverified address must never
 // authorize a read or a write.
-const getEmail = getVerifiedEmail;
+// Lowercased -- see the note in /api/orders persistOrder. Measurements landing
+// on a second, differently-cased customers row is exactly the bug this fixes.
+const getEmail = getVerifiedEmailLower;
 
 export async function GET() {
   const email = await getEmail();

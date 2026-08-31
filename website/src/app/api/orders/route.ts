@@ -59,15 +59,41 @@ async function persistOrder(
   const db = getDb();
   if (!db) return null;
 
+  // ⚠️ THE CUSTOMER KEY IS ALWAYS LOWERCASE. Do not store the address as typed.
+  //
+  // Customers are keyed by email (see src/db/schema.ts), and a Postgres `text`
+  // unique index is CASE-SENSITIVE -- so `jane@x.com` and `Jane@X.com` are two
+  // different customers as far as the database is concerned.
+  //
+  // What that cost: the signup webhook writes the address lowercased, so a
+  // customer who signed up and then typed a capital at checkout got a SECOND
+  // customers row (onConflictDoNothing does not fire across a case difference),
+  // her order attached to it, and the order stopped appearing on her own
+  // /account page. Her measurements could land on a third row again.
+  //
+  // Found by the security review 2026-08-30, before it reached a real customer:
+  // both databases were checked and hold ZERO mixed-case addresses, so nothing
+  // had to be migrated and no existing row is orphaned by this.
+  //
+  // Normalised HERE, at the database boundary, rather than at the top of the
+  // handler: the address the customer typed is still what Stripe shows her and
+  // what the confirmation email is addressed to. Only the key is canonicalised.
+  //
+  // The permanent version of this is a `unique index on customers (lower(email))`
+  // so the database enforces it rather than four call sites remembering to.
+  // That is a migration, so it is a deliberate, separate job -- see the
+  // session log.
+  const emailKey = email.toLowerCase();
+
   const [customer] = await db
     .insert(schema.customers)
-    .values({ email })
+    .values({ email: emailKey })
     .onConflictDoNothing({ target: schema.customers.email })
     .returning();
 
   const customerRow =
     customer ??
-    (await db.select().from(schema.customers).where(eq(schema.customers.email, email)))[0];
+    (await db.select().from(schema.customers).where(eq(schema.customers.email, emailKey)))[0];
 
   const [orderRow] = await db
     .insert(schema.orders)

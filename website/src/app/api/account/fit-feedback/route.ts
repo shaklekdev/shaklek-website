@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
-import { getVerifiedEmail } from "@/lib/authEmail";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { getDb, schema } from "@/db/client";
 import { rejectCrossOrigin } from "@/lib/requestGuards";
 
@@ -26,7 +26,7 @@ export async function DELETE(req: NextRequest) {
   const crossOrigin = rejectCrossOrigin(req);
   if (crossOrigin) return crossOrigin;
 
-  const email = await getVerifiedEmail();
+  const email = await getVerifiedEmailLower();
   if (!email) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
 
   const db = getDb();

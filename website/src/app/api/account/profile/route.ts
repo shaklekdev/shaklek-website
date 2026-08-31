@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getVerifiedEmail } from "@/lib/authEmail";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { getDb, schema } from "@/db/client";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
 
 // Verified primary address only -- see src/lib/authEmail.ts. These rows are
 // matched to a customer by email, so an unverified address must never
 // authorize a read or a write.
-const getEmail = getVerifiedEmail;
+// Lowercased: the customers row is keyed by the canonical address (see the
+// note in /api/orders persistOrder). Looking up by the as-typed address would
+// miss the row and upsert a duplicate customer.
+const getEmail = getVerifiedEmailLower;
 
 export async function POST(req: NextRequest) {
   const crossOrigin = rejectCrossOrigin(req);

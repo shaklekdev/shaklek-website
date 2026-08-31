@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { getVerifiedEmailLower } from "@/lib/authEmail";
 import { verifyOrderAccessToken } from "@/lib/orderAccess";
 
 // Used by /order-confirmed to render a real order once Stripe redirects back.
@@ -42,9 +42,24 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   let authorized = hasToken;
   if (!authorized) {
-    const user = await currentUser();
-    const email = user?.primaryEmailAddress?.emailAddress ?? null;
-    authorized = Boolean(email && email === order.customers.email);
+    // ⚠️ THIS USED TO READ `currentUser().primaryEmailAddress` DIRECTLY, and it
+    // was the only customer-facing route that did. Two problems, both fixed by
+    // going through the helper:
+    //
+    // 1. It skipped the VERIFICATION check. `getVerifiedEmail` exists precisely
+    //    so authorization never trusts an unverified address -- customers are
+    //    keyed by email, so anyone who registers a victim's address and knows
+    //    the order UUID would read her measurements and order contents. Not
+    //    reachable today, because the production Clerk instance requires
+    //    verification at sign-up; but that is a Dashboard toggle, and this file
+    //    was the one place the code depended on it staying set.
+    // 2. It compared CASE-SENSITIVELY against a key that is now always stored
+    //    lowercase, so a customer whose Clerk address carries a capital would
+    //    fail to match her own order.
+    //
+    // Both found by the security review, 2026-08-30.
+    const email = await getVerifiedEmailLower();
+    authorized = Boolean(email && email === order.customers.email.toLowerCase());
   }
 
   if (!authorized) return notFound;
