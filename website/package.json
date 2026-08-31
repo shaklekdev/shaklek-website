@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/verify-catalog.mjs && node scripts/verify-imports.mjs && npx tsx scripts/test-auth-redirects.mjs && node scripts/test-techpack-origins.mjs && next build",
-    "verify": "node scripts/verify-catalog.mjs && node scripts/verify-imports.mjs && node scripts/test-techpack-origins.mjs",
+    "build": "node scripts/clean-icloud-duplicates.mjs && node scripts/verify-catalog.mjs && node scripts/verify-imports.mjs && npx tsx scripts/test-auth-redirects.mjs && node scripts/test-techpack-origins.mjs && next build",
+    "verify": "node scripts/clean-icloud-duplicates.mjs && node scripts/verify-catalog.mjs && node scripts/verify-imports.mjs && node scripts/test-techpack-origins.mjs",
     "start": "next start",
     "lint": "eslint"
   },

@@ -18,6 +18,58 @@ Rules that make this work:
 
 ## Active claims
 
+### iCloud is syncing the git repository, and that is the actual bug (2026-08-31)
+
+The "file 2" duplicates have been logged four separate times as a curiosity.
+They are not a curiosity. **`~/Desktop` is synced by iCloud Desktop & Documents,
+and this repo lives in it**, so a file syncer and git are writing the same files
+and only one of them understands git.
+
+⚠️ **WHAT WAS ACTUALLY FOUND ON 2026-08-31: NINETEEN COPIES OF `.git/index`.**
+That is git's staging area, the file rewritten on every `git add`. iCloud was
+racing git's own writes to it. Also `.git/refs/remotes/origin/main 2`, a
+null-sha1 ref that made `git fsck` report an error and every `git branch` print
+a warning.
+
+The repository was checked and is **healthy** — `HEAD` matches `origin/main`,
+`fsck`'s only error was that ref, dangling objects are normal. All 20 stray
+files removed; `fsck` and `git branch` are now clean. **But a corrupted index
+loses staged work, and nothing about this arrangement stops it happening again.**
+
+`brctl status` also shows `last-reset: 2026-08-26 (CKUnderlyingErrorContainerReset)`
+— an iCloud container reset, which forces a full reconcile. That is almost
+certainly what produced the 143 catalog `.png` twins noticed two days later.
+
+**Where it has bitten, worst first:**
+`.git/index` (19 copies) · `.git/refs` (broken ref) · `.next/types` (breaks
+`tsc` with phantom duplicate-identifier errors, the one that actually stops
+work) · `public/catalog` + `public/marketing` (143 twins) · `planning/marketing`
+(5 copies, twice in one night).
+
+**Done, and it is a bandage:**
+- `.gitignore` now excludes `* <digits>` and `* <digits>.*`. Verified it catches
+  the real cases and that **no tracked file becomes ignored**.
+- `website/scripts/clean-icloud-duplicates.mjs`, wired first into `npm run build`
+  and `npm run verify` — before `tsc`, since a stale `.next/types` copy is what
+  breaks the typecheck. It **deletes copies under `.next/` only** (generated,
+  reproducible) and merely **reports** any elsewhere, even byte-identical ones:
+  source and planning files are not a script's to delete, per the standing rule
+  that `rm` has no undo. **Always exits 0** — a sync artefact must never be why
+  a deploy fails. Tested by planting the exact `.next/types` file that broke
+  `tsc` plus a source-dir copy, and confirming it removed the first, spared the
+  second, and left `tsc` clean.
+
+⚠️ **THE REAL FIX IS THE FOUNDER'S CALL AND I DID NOT TAKE IT: move the repo out
+of `~/Desktop`** (e.g. `~/dev/Shaklek`), or turn off iCloud's Desktop &
+Documents sync. Everything above only stops the mess reaching git history; it
+does not stop iCloud writing into `.git`.
+
+**I did not move it unilaterally, deliberately.** Another Claude session shares
+this working tree, `CLAUDE.md` and the planning docs carry absolute
+`~/Desktop/Shaklek` paths, and the Claude Code project directory is keyed to the
+path. Moving it out from under a live session is exactly the class of action
+that needs her awake.
+
 ### THE LIST FOR 2026-08-31 — REWRITTEN after three Fable agent reviews
 
 Supersedes the earlier "THE LIST FOR 2026-08-31" below. Three agents ran on the

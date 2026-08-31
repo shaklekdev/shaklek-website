@@ -69,3 +69,32 @@ website/scripts/social/encode
 
 # Generated supplier hand-off folder, rebuilt by build-final-folder.mjs
 /send-to-packagin-supplier-final/
+
+# ─── iCloud conflict copies ─────────────────────────────────────────────────
+#
+# ⚠️ THIS REPO LIVES IN ~/Desktop, AND DESKTOP IS SYNCED BY iCLOUD. That is the
+# root cause of a bug this project has now hit SIX times in three weeks. When
+# iCloud reconciles a file it thinks changed in two places, it keeps both and
+# names the loser "<name> 2.<ext>".
+#
+# Where it has bitten, in order of severity:
+#   - `.git/index` — NINETEEN copies found 2026-08-31. That is git's staging
+#     area, rewritten on every `git add`. iCloud was racing git's own writes.
+#   - `.git/refs/remotes/origin/main 2` — a null-sha1 ref that made `git fsck`
+#     report an error and `git branch` print a warning on every call.
+#   - `.next/types/*` — broke `tsc` with phantom duplicate-identifier errors.
+#   - `public/catalog/`, `public/marketing/` — 143 resurrected .png twins.
+#   - `planning/marketing/` — five copies of files written minutes earlier.
+#
+# THE REAL FIX IS TO MOVE THIS REPO OUT OF ~/Desktop (or turn off iCloud's
+# Desktop & Documents sync). A git working tree does not belong in a file
+# syncer: they both write the same files, and only one of them understands git.
+# These rules only stop the mess reaching history — they do not stop it
+# happening. See planning/session-log.md, 2026-08-31.
+#
+# Matches "foo 2.md", "bar 3.png", "index 19" — a space, digits, then end or an
+# extension. Nothing in this repo is legitimately named that way.
+* [0-9]
+* [0-9].*
+* [0-9][0-9]
+* [0-9][0-9].*
