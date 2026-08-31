@@ -33,6 +33,27 @@ end to end · the email-casing defect fixed *and* now enforced by a database ind
 secret · `RECONCILE_TOKEN` rotated in both places it lives · the chunked-body
 bypass closed · staging noindexed at the header · the repo moved out of iCloud.
 
+#### ⚠️ FOUNDER'S SEQUENCE, 2026-08-31. DO NOT WORK OUT OF ORDER.
+
+Her words: *"let me first verify my fabrics and the production, then we can
+update the packaging and website, first the fabrics and margins."*
+
+    1. FABRIC + PRODUCTION  <- hers, in progress, everything waits on it
+    2. MARGINS              <- falls out of (1); the model is already built
+    3. PACKAGING ARTWORK    <- care label / hang tag fibre wording
+    4. WEBSITE COPY         <- the 14 files and the Meta feed
+
+**This is the correct order and it is not merely a preference.** Items 3 and 4
+are both *"change what the fibre says"*, and neither can be done twice cheaply:
+the care labels are a 500-unit print run, and rewriting 14 customer-facing files
+to say "cotton or linen" before cotton is confirmed would create a false claim in
+the other direction — which is exactly the mistake that put "cotton or linen"
+into three ready-to-post captions in the first place.
+
+**The site being closed is what makes this sequence free.** There is no live
+false claim while nobody can reach the site, so there is no reason to pre-empt
+her decision. **Nobody should start 3 or 4 until she confirms the fabric.**
+
 #### Hers, and the gate makes two of them urgent
 
 1. ⚠️ **`/upload` — decide BEFORE the gate comes down.** It is live, was in the
