@@ -55,6 +55,24 @@ project directory to the path it started in, so this session kept trying to
 reset its shell to a directory that no longer exists. The founder needs a
 restart anyway to pick up the Bloom MCP connector.
 
+**Follow-up, same night — the old path came back, and was cleaned.**
+`~/Desktop/Shaklek` reappeared holding 13 files, 872 KB, entirely
+`website/.next/build` turbopack output written *after* the move. No `.git`, and
+zero files outside `.next/`, so it was disposable. shaklek-83 spotted it; the
+cause is that **a Claude Code session keys its project directory to the path it
+started in**, so both sessions' shells kept resolving to a directory that no
+longer existed and something recreated it. Checked for `.git` and for any file
+outside `.next/` before `rm -rf`, then confirmed it did not return. The shell
+then reported the deletion outright — `working directory was deleted, cwd
+recovered to ~` — which is the clearest possible argument for restarting.
+
+⚠️ **iCloud is still duplicating her working files outside the repo.**
+`~/Desktop` holds both `send-to-supplier` and `send-to-supplier 2`. Moving the
+repo fixed the repo; it did not fix the Desktop. If the packaging or artwork
+folders on her Desktop matter, they carry the same exposure the catalog images
+had — **the real remedy is turning off iCloud Desktop & Documents sync, which is
+hers to decide.**
+
 **Not done, and worth knowing:** `CLAUDE.md` still warns that the repo root
 holds untracked personal documents (passport, Emirates ID, visa). **It no longer
 does** — the root is now project directories only, and those files live in
