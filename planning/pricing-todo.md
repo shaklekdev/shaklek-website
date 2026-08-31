@@ -73,6 +73,47 @@ local linen 2,700), before any ad spend.
    rejected by the founder — it is a saree cover with a mesh window, 28%
    smaller than the design intent, and it gives away the reveal.
 
+### ⚠️ THE LINEN CLAIM IS EVERYWHERE, NOT JUST ON THE LABEL
+
+Scoped 2026-08-31 and verified by grep, not assumed. **Fourteen customer-facing
+files assert 100% linen:** the catalogue page, /how-it-works, /our-story, both
+FAQs, /upload and its layout, the customizer, FabricColorPicker, homeContent.ts,
+productDisclosure.ts, seo.ts, fabrics.ts — and
+`src/app/feed/meta.xml/route.ts`, which emits
+`<g:material>100% linen</g:material>` **into Meta's ad catalogue**.
+
+Three more things inherit it:
+
+- `fabrics.ts` has cotton at `available: false`, so the picker will not offer it
+- **every catalog photograph was generated in linen**, and CLAUDE.md is explicit
+  that selling cotton against a linen photograph is the same defect
+- the supplier certificate on file covers **linen article W300235 only**; a
+  cotton base needs its own written confirmation
+
+**So cotton-as-base is not a pricing change, it is a product change.** Under it,
+selling a cotton garment against any of those is a false claim, and the feed one
+is a false claim inside an ad platform. It is cheapest to fix now, while the
+site is gated; the day the gate lifts it is live across fourteen pages.
+
+### Which is the default matters more than which is cheaper
+
+Both shapes give the same two prices — cotton 389, linen 479 — and the same
+margins. They differ entirely in how much has to be rewritten:
+
+| | Cotton as base | **Linen stays the default** |
+|---|---|---|
+| The 14 linen claims | contradicted, all need rewriting | still true of the default |
+| The photographs | show the upgrade, not the base | still show what is pictured |
+| The Meta feed | `100% linen` becomes false | stays true |
+| The care label | needs two versions | needs two versions either way |
+| The copy job | remove a claim from 14 files | add cotton as an option |
+
+**The second is the same commercial decision with a fraction of the work**, and
+it is what the 2026-08-26 note already argued for: *"linen at the current price
+with cotton priced below it."* The only real difference is that "linen 479" is a
+price rise that has to be explained, where "cotton 389" is an option that does
+not. Worth deciding deliberately rather than by which sentence was written first.
+
 ### ⚠️ BLOCKER on the packaging order
 
 **The care label and the hang tag both say 100% LINEN.** The Fitoor quote
