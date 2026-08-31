@@ -18,6 +18,50 @@ Rules that make this work:
 
 ## Active claims
 
+### THE REPO MOVED — `~/Desktop/Shaklek` → `~/dev/Shaklek` (2026-08-31)
+
+**Founder's go-ahead, coordinated with shaklek-83, verified at every step.**
+`~/Desktop` is synced by iCloud Desktop & Documents; the full reasoning and what
+iCloud actually did to `.git` is now in **CLAUDE.md §6**, because a repo location
+is environment state and this had been written off four times as a cosmetic
+curiosity.
+
+**Pre-move gate, all checked before touching anything:** tree clean, `main` and
+`staging` both level with origin, zero stashes, no build or dev server running,
+no open write handles into the repo. The only processes holding a cwd inside it
+were the two Claude sessions.
+
+**The move was `mv` on the same volume — an atomic rename.** Nothing was copied
+and nothing deleted, which matters because the repo carries 2.1 GB and four
+**gitignored** trees that git could not have restored:
+`send-to-packagin-supplier-final` (15 files, the founder's packaging hand-off),
+`brand-assets` (433), `insparation` (105), `catalog-archive` (369), and
+`website/.env.local`.
+
+**Verified after:** file list **identical, 37,562 before and 37,562 after**, all
+five gitignored items present, `git fsck` clean, HEAD and remote intact,
+`npm run build` exit 0, `tsc` exit 0, and the derived `REPO_ROOT` in the patched
+scripts now resolves to the new path.
+
+⚠️ **Nine scripts hardcoded the old absolute path and would have broken
+SILENTLY.** They now derive it from `import.meta.url`. shaklek-83 found and
+fixed a tenth independently (`build-final-folder.mjs`, `a618366`) — its
+suggestion, `grep -rn '/Users/nadatlohi'` across the whole tree rather than
+trusting the docs, is what caught the ones the planning files never mentioned.
+**Do that sweep before any future move.**
+
+**Everyone must restart from `~/dev/Shaklek`.** A Claude Code session keys its
+project directory to the path it started in, so this session kept trying to
+reset its shell to a directory that no longer exists. The founder needs a
+restart anyway to pick up the Bloom MCP connector.
+
+**Not done, and worth knowing:** `CLAUDE.md` still warns that the repo root
+holds untracked personal documents (passport, Emirates ID, visa). **It no longer
+does** — the root is now project directories only, and those files live in
+`~/Desktop/shak-docs`, outside the repo. The `git add -A` warning is still good
+advice, but its stated reason is stale. Left for the founder rather than edited,
+since it is a safety warning and softening one is her call.
+
 ### iCloud is syncing the git repository, and that is the actual bug (2026-08-31)
 
 The "file 2" duplicates have been logged four separate times as a curiosity.
