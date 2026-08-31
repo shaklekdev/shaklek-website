@@ -1,0 +1,12 @@
+-- Customers are keyed by email, and a Postgres `text` unique index is
+-- case-sensitive -- so jane@x.com and Jane@X.com satisfied `customers_email_unique`
+-- as two separate customers. One person became two rows, her order attached to
+-- the second, and it stopped appearing on her own /account page.
+--
+-- Every write path lower-cases at the boundary as of 2026-08-30. This index makes
+-- that a guarantee the database enforces, so a future route cannot reintroduce it.
+--
+-- Safe to apply: both databases were checked first and hold zero violations
+-- (count(distinct lower(email)) equals count(*)). Additive, and the running code
+-- neither depends on it nor conflicts with it.
+CREATE UNIQUE INDEX IF NOT EXISTS "customers_email_lower_idx" ON "customers" (lower("email"));

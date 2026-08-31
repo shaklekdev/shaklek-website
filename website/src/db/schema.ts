@@ -1,4 +1,5 @@
-import { boolean, index, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, numeric, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // Tailor and catalog tables aren't defined yet — nothing writes to them
 // until the tailor swipe tool and catalog admin tool exist (backend-todo.md).
@@ -24,7 +25,25 @@ export const customers = pgTable("customers", {
   measurementHip: text("measurement_hip"),
   measurementHeight: text("measurement_height"),
   measurementNotes: text("measurement_notes"),
-});
+}, (t) => [
+  // ⚠️ THE CUSTOMER KEY IS CASE-INSENSITIVE, AND THE DATABASE ENFORCES IT HERE.
+  //
+  // `email` already carries a plain unique constraint, but a Postgres `text`
+  // index is CASE-SENSITIVE -- so `jane@x.com` and `Jane@X.com` satisfied it as
+  // two different customers. Customers are keyed by email, so that meant one
+  // person could end up as two rows: her order attached to the second, and
+  // stopped appearing on her own /account page. Found 2026-08-30 by the
+  // security review, before any real customer met it.
+  //
+  // Every write path now lower-cases at the boundary. This index is what makes
+  // that a GUARANTEE rather than four call sites remembering to -- the next
+  // route someone adds cannot reintroduce the split, because the insert fails
+  // instead of quietly succeeding.
+  //
+  // Applied to dev and production on 2026-08-31 after confirming zero existing
+  // violations in either (distinct-case-insensitive equalled total row count).
+  uniqueIndex("customers_email_lower_idx").on(sql`lower(${t.email})`),
+]);
 
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
