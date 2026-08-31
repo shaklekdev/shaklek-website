@@ -20,7 +20,10 @@ import os from "node:os";
 import { PT, ARTWORK } from "./generate-quote-sheet.mjs";
 import { SPEC, outName } from "./generate-simple-spec.mjs";
 
-const DEST = "/Users/nadatlohi/Desktop/Shaklek/send-to-packagin-supplier-final";
+// Derived from the artwork path, not hard-coded: the repo moved off ~/Desktop
+// on 2026-08-31 (iCloud Desktop sync was writing into .git alongside git) and
+// an absolute path here would have broken silently at the next build.
+const DEST = path.resolve(ARTWORK, "../../../send-to-packagin-supplier-final");
 const SUPPLIER_DIR = path.resolve(ARTWORK, "..");
 const ORDER_SHEET = path.join(os.homedir(), "Desktop", "Shaklek-order-sheet.pdf");
 const SHEET_NAME = "00-ORDER-SHEET-read-this-first.pdf";
