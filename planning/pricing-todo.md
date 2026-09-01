@@ -17,7 +17,74 @@ the first campaign runs.
 
 ---
 
-## 📌 THE PLAN AS IT STANDS, 2026-08-31 — two things to source, then decide
+## 📌 THE PLAN AS IT STANDS, 2026-09-01 — three fabrics, and the model moved to a script
+
+⚠️ **THE MARGIN NUMBERS NO LONGER LIVE IN THIS FILE.** They are computed by
+`planning/margins.mjs`, which reads prices from `catalog.ts` and holds every
+cost input in one editable block. The narrative answer — viability, cash
+exposure, the MVP sequence — is `planning/unit-economics.md`.
+
+```bash
+node planning/margins.mjs
+```
+
+**Everything below this section is decision history.** It is kept because the
+reasoning matters, but any figure in it may be stale. Re-run the script.
+
+### What changed on 2026-09-01
+
+**1. Local fabric beat China, and not on price.** Shirley (Guangzhou) quoted
+W300235 at 48.5 RMB/m (145gsm, 138cm) ≈ **AED 37.50 landed**, and W300207 at
+50.5 RMB (190gsm) ≈ **AED 41 landed**, against local in-store linen at 45.
+The 4–8 AED/m saving was declined because **150m is ~75 garments bought before
+a customer exists** — the one risk made-to-order does not have to take. Shipping
+was never quoted; both landed figures use Helen Wu's implied $9.29/kg.
+
+⚠️ **An FX error was made and corrected here.** 48.5 RMB was first converted at
+a remembered rate (7.15 CNY/USD) giving AED 24.91 ex-works. The founder's own
+conversion — ~27 — was right; the live rate is **1 RMB = 0.545 AED**. Check the
+rate, do not remember it.
+
+**2. The entry fabric is a linen/cotton blend, not cotton — founder's idea, and
+it is better than the cotton-base plan this file argued on 2026-08-31.** A blend
+reads as linen, so **the catalogue photography survives**; cotton-as-base
+quietly required reshooting the largest asset in the repo. Full reasoning in
+`unit-economics.md`. Three fabrics now:
+
+| | Fabric | Price | Job |
+|---|---|---|---|
+| Samples | 30% linen | 10/m | 4 fit sets, bought 2026-09-01, **never sold** |
+| **Entry** | linen/cotton blend | **~20/m** ⏳ linen % unconfirmed | 389 / 429 |
+| Upgrade | 100% linen | 45/m | 479 / 519 (+90) |
+
+⚠️ **The blend only works at 60–70% linen.** At 30% it is a cotton fabric and
+the label reads *70% cotton*. And **the blend ratio is a legal fibre
+disclosure** — the exact composition is needed in writing, which is *more*
+paperwork than a pure-linen base, not less.
+
+**3. No price on the site changes.** 389 / 429 stand, +90 for linen. The earlier
+suggestion of 509 was solving for a 61% margin that was never a target — 479
+clears at every plausible CAC, and the doc's own standard is *"56–61% is a
+healthy margin for a made-to-order label"*.
+
+**4. The cotton bag: AED 15 asked of Hashir Packaging Dubai.** Fitoor wanted 20
+(39% of their quote, ~2.5 margin points); Ada Zhang ~10.87 landed, 25 days.
+Each AED on the bag ≈ 0.26 margin points. **Still to ask: 300 and 500 pricing** —
+at 100 units the setup cost dominates and that is where the saving hides.
+
+**5. ⚠️ A gsm contradiction on W300235, and it lands on the fibre certificate.**
+Shirley says 145gsm; Helen Wu's cloth is on record at 195gsm with no article
+number captured. The certificate is the only paper behind "100% linen" on ~20
+pages, and `W300235` appears only in the supplier's *filename*, never in the lab
+report. Resolve before ordering from either.
+
+**Still blocked, unchanged:** the care-label artwork (now needs two versions,
+blend and 100% linen), and the fourteen files plus the Meta feed asserting
+"100% linen".
+
+---
+
+## ~~📌 THE PLAN AS IT STANDS, 2026-08-31~~ — SUPERSEDED 2026-09-01, kept for the reasoning
 
 Founder's strategy, agreed this evening. **Nothing is ordered yet.** Two prices
 are missing and one artwork problem blocks the packaging order.
