@@ -99,7 +99,7 @@ const INPUTS = {
       envelope: { aed: 3.3, qty: 100, keep: true, from: "Fitoor",
         note: "Exists ONLY to hold the thank-you card. Never keep it without the card" },
       businessCard: { aed: 1.8, qty: 100, keep: false, from: "Fitoor",
-        note: "Dropped. A card in a parcel, from a brand with no shopfront, does little" },
+        note: "⚠️ ASK WHERE IT GOES BEFORE COSTING IT. In every parcel it is 0.49 margin points on every order forever, and a card in a parcel from a brand with no shopfront does little. In the founder's wallet for markets, suppliers and press it is a ONE-OFF 189 AED marketing spend and costs zero margin -- in that case keep: false is correct here and the 189 is simply not COGS" },
       tissueSeal: { aed: 0.85, qty: 100, keep: false, from: "Fitoor",
         note: "Dropped. Only earns a place if there is tissue to seal" },
       tissueWrap: { aed: 3.8, qty: 100, keep: false, from: "Fitoor",
@@ -211,6 +211,7 @@ const BASKETS = {
   "Everything on the quote": { businessCard: true, tissueSeal: true, tissueWrap: true },
   "PLAN - Dubai (hand bag)": {},
   "Outside Dubai (mailer)": { handBag: false, __addAed: MAILER_AED },
+  "+ business card in parcel": { businessCard: true },
   "If the note were cut": { thankYouCard: false, envelope: false },
 };
 console.log(`\nBASKETS — what each one earns on a ${SHIRT_PRICE} shirt`);
