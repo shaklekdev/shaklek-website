@@ -18,6 +18,66 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-02 — the packaging order is unblocked and placed. One number left.
+
+**Files touched, all committed:** `planning/margins.mjs`, `planning/unit-economics.md`,
+`planning/pricing-todo.md`, `branding/packaging.md`,
+`branding/send-to-supplier/artwork/03b-hang-tag-back.pdf`,
+`branding/send-to-supplier/READ-ME-FIRST-Shaklek-artwork.pdf`, and the three
+brand generators in `website/scripts/brand/`. No app code, no price changes.
+
+**Margins, current: shirt 60.1% (keeps 234), trousers 58.7% (keeps 252).**
+Committed cash before the first order **4,294**, payback **19 shirts**.
+Run `node planning/margins.mjs` — never retype these.
+
+**Settled today:**
+
+1. **Cotton bag AED 17** with Hashir, down from Fitoor's 20. Founder asked 15.
+2. **The full Fitoor quote FRP2608-1149 is verified line by line** against the
+   document itself — all ten lines reconstruct its 5,115.00 + 255.75 VAT =
+   5,370.75 exactly. This also closed the 0.87 packaging discrepancy left open
+   on 09-01: the itemised figure is 19.89 inc VAT and the old 30.76 was
+   overstated.
+3. **Every packaging line is now switchable in `margins.mjs`** with its cost in
+   margin points and cash. Flip `keep`, re-run.
+4. **Hang tag no longer names a fibre.** Was "100% NATURAL LINEN"; now
+   "100% PLANT BASED FABRIC" — true of linen and of the blend, printed once.
+   ⚠️ **FABRIC, not MATERIALS** — the founder's original wording claimed the
+   whole garment, and sewing thread is normally polyester.
+5. **Care label goes to a split run: 200 × 100% LINEN now, 300 × blend later.**
+   Correct way round — the blend is the entry fabric, so it is the volume one.
+6. **Business card, tissue wrap and tissue seal delayed**, as already modelled.
+
+**⚠️ Do not re-litigate these two.** Both were reasoned through today:
+
+- **The hand bag is NOT droppable.** In Dubai the delivery IS done with a hand
+  bag; it is the delivery vehicle, not a layer inside a mailer. A margin review
+  today nearly cut it for 2.5 points off the back of `packaging.md`'s "only if
+  there is a physical handover", which has now been corrected at source.
+- **DRY CLEAN ONLY stays.** Founder's decision 2026-08-28, and a *fit* decision:
+  unwashed linen shrinks 4-10%, garments are cut to measurements, and the remake
+  is free under our own policy. The route back is pre-washing before cutting.
+
+**⏳ The one number still outstanding: the linen % in the ~20 AED/m blend.**
+60-70% and the catalogue photography stays honest; at 30% it is a cotton fabric.
+Everything else about the packaging order can proceed without it, except the
+300 blend care labels.
+
+**Also asked of the suppliers, not yet answered:** 300/500 unit bag pricing,
+whether Hashir's 17 is ex-VAT (Fitoor's rates all are), whether the care-label
+split carries a setup charge, and confirmation that the bag is 500x400 landscape
+rather than the 35x45 Fitoor quoted. The quote is also addressed to
+"Shakalek Cafe" and needs reissuing for VAT.
+
+**Bloom: still zero brands, zero images.** Its tools finally loaded this session
+but `bloom_onboard_brand` accepts only a website or Instagram URL, and
+`www.shaklek.com` is 401. **Needs the founder's Instagram handle.** Balance is
+**10 credits** — one small batch. Note that `brand-assets/` already holds six
+rendered TikTok videos with captions and ~30 Instagram statics from 08-27; the
+TikTok gap is an account, not creative. ⚠️ `00-you-are-the-designer.caption.txt`
+says "100% linen, from AED 389" and is false under the blend — left alone
+deliberately, it goes with the other fourteen files.
+
 ### 2026-09-01 evening — step 1 of the founder's sequence moved. Fabric is close to settled.
 
 **Files touched (no longer claimed, all committed):** `planning/margins.mjs`
