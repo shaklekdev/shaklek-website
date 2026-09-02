@@ -72,31 +72,39 @@ const INPUTS = {
   // Fitoor Packaging LLC (Ajman), estimate FRP2608-1149, 100-unit pricing.
   // The cotton bag is deliberately NOT bought from Fitoor — at AED 20 it was
   // 39% of their whole quote and worth ~2.5 margin points on every garment.
+  // ✅ VERIFIED 2026-09-02 against the actual quote (FRP2608-1149, 31/08/2026),
+  // not against a summary of it. All ten lines reconstruct the document's own
+  // subtotal of 5,115.00 + 255.75 VAT = 5,370.75 exactly. Rates are EX-VAT on
+  // the quote; VAT is added at the bottom.
+  //
+  // TO TEST AN ORDER: flip `keep` and re-run. Every margin below moves with it.
   packaging: {
-    cottonBagAed: 17, // AGREED with Hashir Packaging Dubai, 2026-09-02.
-    //                   Negotiated down from Fitoor's 20; founder asked 15,
-    //                   settled at 17. Ada Zhang (China) was ~10.87 landed but
-    //                   25 days production. NOT YET ASKED: 300/500 unit pricing,
-    //                   which is where the real saving usually sits at these
-    //                   quantities -- at 100 units the setup cost dominates.
-    // ✅ VERIFIED 2026-09-02 against the actual quote (FRP2608-1149, 31/08/2026),
-    // not against a summary of it. All ten lines reconstruct the document's
-    // own subtotal of 5,115.00 + 255.75 VAT = 5,370.75 exactly. Rates are
-    // EX-VAT on the quote; VAT is added at the bottom.
-    fitoorLines: {
-      handBag: 9.2,
-      wovenBrandLabel: 0.7,
-      careLabel: 0.74, // ⚠️ quoted under ACTIVITY "Sticker"; must be sewn satin
-      hangTag: 2.3, //     ⚠️ reads "100% NATURAL LINEN" -- blocked on the fabric
-      thankYouCard: 2.7,
-      envelope: 3.3,
-    },
-    // Dropped from the order but present on the quote: businessCard 1.80,
-    // tissueSeal 0.85, tissueWrap 3.80. The cotton bag (Fitoor 20.00) is
-    // bought from Hashir instead.
-    // Dropped from the order: tissue seal (0.85), tissue wrap (3.80),
-    // business card (1.80).
     vatRate: 0.05,
+    lines: {
+      // qty is Fitoor's MINIMUM, not what one order consumes. Labels come in
+      // 500s, everything else in 100s. Per-order cost is the unit rate either
+      // way -- one label per garment.
+      cottonBag: { aed: 17, qty: 100, keep: true, from: "Hashir",
+        note: "THE CENTREPIECE, and the reveal. Fitoor 20; Hashir 17 agreed 2026-09-02. WARNING Fitoor quoted 35x45 but the approved spec is 500x400 landscape -- 27% more cloth" },
+      handBag: { aed: 9.2, qty: 100, keep: true, from: "Fitoor",
+        note: "THE BIGGEST OPTIONAL LINE. branding/packaging.md flagged the paper bag as 'only if there is a physical handover' before it was ordered anyway" },
+      wovenBrandLabel: { aed: 0.7, qty: 500, keep: true, from: "Fitoor",
+        note: "Sewn into the garment. No size, no care text (founder)" },
+      careLabel: { aed: 0.74, qty: 500, keep: true, from: "Fitoor", mandatory: true,
+        note: "LEGAL FIBRE DISCLOSURE, not optional. Quoted under ACTIVITY 'Sticker' -- must be sewn satin. Reads 100% LINEN, so blocked on the fabric" },
+      hangTag: { aed: 2.3, qty: 100, keep: true, from: "Fitoor",
+        note: "Reads '100% NATURAL LINEN' -- blocked on the fabric decision" },
+      thankYouCard: { aed: 2.7, qty: 100, keep: true, from: "Fitoor",
+        note: "The note moment. Drop this and the envelope has no job left" },
+      envelope: { aed: 3.3, qty: 100, keep: true, from: "Fitoor",
+        note: "Exists ONLY to hold the thank-you card. Never keep it without the card" },
+      businessCard: { aed: 1.8, qty: 100, keep: false, from: "Fitoor",
+        note: "Dropped. A card in a parcel, from a brand with no shopfront, does little" },
+      tissueSeal: { aed: 0.85, qty: 100, keep: false, from: "Fitoor",
+        note: "Dropped. Only earns a place if there is tissue to seal" },
+      tissueWrap: { aed: 3.8, qty: 100, keep: false, from: "Fitoor",
+        note: "Dropped. The cotton bag already is the wrap" },
+    },
   },
 
   // ⚠️ Still unverified against Stripe UAE's actual published rate.
@@ -111,17 +119,34 @@ const INPUTS = {
   // decides whether the business scales, and nobody has measured it.
   cacScenariosAed: [134, 200, 250],
 
-  // Cash that must be committed before the first order can ship.
-  packagingOrderAed: 2594, // Fitoor revised, everything except the cotton bag
-  cottonBagOrderQty: 100, // their minimum
 };
 
 // ---------------------------------------------------------------------------
 
-function packagingPerOrder() {
-  const { fitoorLines, cottonBagAed, vatRate } = INPUTS.packaging;
-  const fitoor = Object.values(fitoorLines).reduce((a, b) => a + b, 0);
-  return { fitoor, withVat: fitoor * (1 + vatRate), total: fitoor * (1 + vatRate) + cottonBagAed };
+// Landed per-order cost of one packaging line. Fitoor's rates are ex-VAT;
+// Hashir's 17 is ASSUMED VAT-inclusive and that assumption is printed loudly.
+function lineCost(l) {
+  return l.from === "Fitoor" ? l.aed * (1 + INPUTS.packaging.vatRate) : l.aed;
+}
+
+function packagingPerOrder(overrides = {}) {
+  let total = 0;
+  for (const [key, l] of Object.entries(INPUTS.packaging.lines)) {
+    const keep = key in overrides ? overrides[key] : l.keep;
+    if (keep) total += lineCost(l);
+  }
+  return total;
+}
+
+// Up-front cash for a given basket. Labels come in 500s, so their cash cost is
+// five times a 100-unit line even though per-order they are pennies.
+function packagingCash(overrides = {}) {
+  let cash = 0;
+  for (const [key, l] of Object.entries(INPUTS.packaging.lines)) {
+    const keep = key in overrides ? overrides[key] : l.keep;
+    if (keep) cash += lineCost(l) * l.qty;
+  }
+  return cash;
 }
 
 function unitEconomics(price, category, fabricAedPerMetre) {
@@ -129,7 +154,7 @@ function unitEconomics(price, category, fabricAedPerMetre) {
   const tailoring = INPUTS.tailoringAed[category];
   const fabric = metres * fabricAedPerMetre;
   const make = fabric + tailoring;
-  const pack = packagingPerOrder().total;
+  const pack = packagingPerOrder();
   const fees = price * INPUTS.paymentFee.pct + INPUTS.paymentFee.fixedAed;
   // A remake costs the make and the second shipment, not the packaging again.
   const remake = INPUTS.remakeRate * (make + INPUTS.shippingAed);
@@ -151,26 +176,48 @@ const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 // ---------------------------------------------------------------------------
 
 const items = readCatalog();
+const SHIRT_PRICE = (items.find((i) => i.category === "Shirt") || { price: 389 }).price;
 if (!items.length) {
   console.error("Could not parse website/src/data/catalog.ts — has its shape changed?");
   process.exit(1);
 }
 
-const p = packagingPerOrder();
 console.log("\nSHAKLEK — UNIT ECONOMICS");
 console.log("=".repeat(78));
-console.log(`Prices read from catalog.ts (${items.length} items). Run date: ${new Date().toISOString().slice(0, 10)}`);
+console.log(`Prices read from catalog.ts (${items.length} items). Run: ${new Date().toISOString().slice(0, 10)}`);
 
-console.log(`\nPACKAGING PER ORDER`);
-console.log(`  Fitoor lines (ex VAT)          ${aed(p.fitoor)}`);
-console.log(`  + VAT ${(INPUTS.packaging.vatRate * 100).toFixed(0)}%                       ${aed(p.withVat - p.fitoor)}`);
-console.log(`  + cotton bag (Hashir, agreed)  ${aed(INPUTS.packaging.cottonBagAed)}   <- 2026-09-02`);
-console.log(`  ${"".padEnd(30)} ${aed(p.total)}`);
-console.log(`  ✅ RECONCILED 2026-09-02 against quote FRP2608-1149. The 2026-08-31`);
-console.log(`  plan's 30.76 implied 20.76 ex-bag; the document itemises ${p.withVat.toFixed(2)}.`);
-console.log(`  That earlier figure was overstated by 0.87. This one is the quote.`);
-console.log(`  ⚠️ Hashir's 17 is assumed VAT-INCLUSIVE. Fitoor's rates are ex-VAT;`);
-console.log(`  if Hashir's is too, the bag is 17.85 and margins drop ~0.2 pts.`);
+const packTotal = packagingPerOrder();
+console.log(`\nPACKAGING — EVERY LINE, AND WHAT IT COSTS YOU`);
+console.log(`  Quote FRP2608-1149 reconstructs exactly: 5,115.00 + 255.75 VAT = 5,370.75.`);
+console.log(`  "cost" is per order, landed. "pts" is margin points on a ${SHIRT_PRICE} shirt.`);
+console.log(`  Flip \`keep\` in INPUTS.packaging.lines and re-run to test a basket.\n`);
+console.log(`  ${"".padEnd(3)}${"line".padEnd(18)}${"rate".padStart(7)}${"cost".padStart(8)}${"pts".padStart(7)}${"cash".padStart(9)}  from`);
+for (const [key, l] of Object.entries(INPUTS.packaging.lines)) {
+  const c = lineCost(l);
+  const mark = l.mandatory ? "[L]" : l.keep ? " + " : " - ";
+  console.log(`  ${mark}${key.padEnd(18)}${l.aed.toFixed(2).padStart(7)}${c.toFixed(2).padStart(8)}${(c / SHIRT_PRICE * 100).toFixed(2).padStart(7)}${(c * l.qty).toFixed(0).padStart(9)}  ${l.from} x${l.qty}`);
+}
+console.log(`  ${"".padEnd(3)}${"IN THIS BASKET".padEnd(18)}${"".padStart(7)}${packTotal.toFixed(2).padStart(8)}${"".padStart(7)}${packagingCash().toFixed(0).padStart(9)}`);
+console.log(`  [L] = legally required.  + = ordering.  - = dropped.`);
+console.log(`  ⚠️ Hashir's 17 is assumed VAT-INCLUSIVE. Fitoor's rates are all ex-VAT;`);
+console.log(`     if his is too, the bag is 17.85 and every margin drops ~0.2 pts.`);
+
+// Baskets worth comparing. Each is a set of overrides on the `keep` flags.
+const BASKETS = {
+  "Everything on the quote": { businessCard: true, tissueSeal: true, tissueWrap: true },
+  "Current plan": {},
+  "Drop the hand bag": { handBag: false },
+  "Bag + card only": { handBag: false, hangTag: false },
+  "Leanest legal": { handBag: false, hangTag: false, thankYouCard: false, envelope: false },
+};
+console.log(`\nBASKETS — what each one earns on a ${SHIRT_PRICE} shirt`);
+console.log(`  ${"basket".padEnd(26)}${"pack".padStart(7)}${"margin".padStart(8)}${"gross".padStart(8)}${"cash".padStart(9)}`);
+for (const [name, ov] of Object.entries(BASKETS)) {
+  const pk = packagingPerOrder(ov);
+  const cogsNoPack = unitEconomics(SHIRT_PRICE, "Shirt", INPUTS.fabrics.entry.aedPerMetre).cogs - packagingPerOrder();
+  const cogs = cogsNoPack + pk, g = SHIRT_PRICE - cogs;
+  console.log(`  ${name.padEnd(26)}${pk.toFixed(2).padStart(7)}${((g / SHIRT_PRICE) * 100).toFixed(1).padStart(7)}%${g.toFixed(0).padStart(8)}${packagingCash(ov).toFixed(0).padStart(9)}`);
+}
 
 for (const [key, fab] of [["entry", INPUTS.fabrics.entry], ["linen", INPUTS.fabrics.linen]]) {
   const upgrade = key === "linen" ? INPUTS.linenUpgradeAed : 0;
@@ -188,14 +235,15 @@ for (const [key, fab] of [["entry", INPUTS.fabrics.entry], ["linen", INPUTS.fabr
 }
 
 // Exposure and payback — the "can I do this without losing money" question.
-const bagOrder = INPUTS.packaging.cottonBagAed * INPUTS.cottonBagOrderQty;
-const exposure = INPUTS.packagingOrderAed + bagOrder;
+const bagLine = INPUTS.packaging.lines.cottonBag;
+const bagOrder = lineCost(bagLine) * bagLine.qty;
+const exposure = packagingCash();
 const shirt = items.find((i) => i.category === "Shirt");
 const shirtGross = unitEconomics(shirt.price, shirt.category, INPUTS.fabrics.entry.aedPerMetre).gross;
 
 console.log(`\nCASH EXPOSURE — the only money committed before an order exists`);
-console.log(`  Fitoor order (ex bag)          ${aed(INPUTS.packagingOrderAed)}`);
-console.log(`  ${INPUTS.cottonBagOrderQty} cotton bags @ ${INPUTS.packaging.cottonBagAed}          ${aed(bagOrder)}   <- 100 is their minimum`);
+console.log(`  Fitoor lines in the basket     ${aed(exposure - bagOrder)}`);
+console.log(`  ${bagLine.qty} cotton bags @ ${bagLine.aed}          ${aed(bagOrder)}   <- 100 is their minimum`);
 console.log(`  ${"TOTAL".padEnd(30)} ${aed(exposure)}`);
 console.log(`  Pays back in ${Math.ceil(exposure / shirtGross)} shirts. Bags and labels do not expire.`);
 console.log(`  Fabric is bought per order from a local shop — no inventory risk.`);
@@ -212,7 +260,7 @@ INPUTS.remakeRate = saved;
 
 console.log(`\nPENDING INPUTS — every one of these moves the numbers above`);
 console.log(`  1. Linen % in the ${INPUTS.fabrics.entry.aedPerMetre} AED blend      (product risk, not margin)`);
-console.log(`  2. Cotton bag at 300/500 units    (${INPUTS.packaging.cottonBagAed} agreed at 100; each AED = ~0.26 margin pts)`);
+console.log(`  2. Cotton bag at 300/500 units    (${bagLine.aed} agreed at 100; each AED = ~0.26 margin pts)`);
 console.log(`  3. Metres per garment             (PLACEHOLDER since 2026-08-28)`);
 console.log(`  4. Stripe UAE's actual fee        (assumed 2.9% + 1)`);
 console.log(`  5. Real CAC                       (134 is an assumption, never measured)`);
