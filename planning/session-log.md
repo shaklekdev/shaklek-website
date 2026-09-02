@@ -48,8 +48,10 @@ the cotton bags.** When those land, they go in `margins.mjs`, not in prose.
    linen, so **the catalogue photography survives**. Cotton-as-base quietly
    required reshooting the largest asset in the repo.
 3. **No price changes.** 389 / 429 stand, +90 for linen (479 / 519).
-4. **Cotton bag: AED 15 asked of Hashir Packaging Dubai.** Fitoor wanted 20.
-   Still to ask: 300 and 500 unit pricing.
+4. **Cotton bag: AED 17, AGREED with Hashir Packaging Dubai 2026-09-02.**
+   Fitoor wanted 20; founder asked 15, settled at 17. Already in `margins.mjs`.
+   **Still to ask: 300 and 500 unit pricing** — at 100 units the setup cost
+   dominates, which is where the saving actually is.
 5. **30% linen at 10 AED/m bought for 4 fit-sample sets.** Never product fabric.
 
 **⚠️ Two things a future session must not get wrong:**

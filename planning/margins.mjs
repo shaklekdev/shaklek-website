@@ -73,8 +73,12 @@ const INPUTS = {
   // The cotton bag is deliberately NOT bought from Fitoor — at AED 20 it was
   // 39% of their whole quote and worth ~2.5 margin points on every garment.
   packaging: {
-    cottonBagAed: 15, //  PENDING — asked of Hashir Packaging Dubai 2026-09-01.
-    //                     Fitoor 20 · Ada Zhang (China) ~10.87 landed, 25 days.
+    cottonBagAed: 17, // AGREED with Hashir Packaging Dubai, 2026-09-02.
+    //                   Negotiated down from Fitoor's 20; founder asked 15,
+    //                   settled at 17. Ada Zhang (China) was ~10.87 landed but
+    //                   25 days production. NOT YET ASKED: 300/500 unit pricing,
+    //                   which is where the real saving usually sits at these
+    //                   quantities -- at 100 units the setup cost dominates.
     fitoorLines: {
       handBag: 9.2,
       wovenBrandLabel: 0.7,
@@ -153,7 +157,7 @@ console.log(`Prices read from catalog.ts (${items.length} items). Run date: ${ne
 console.log(`\nPACKAGING PER ORDER`);
 console.log(`  Fitoor lines (ex VAT)          ${aed(p.fitoor)}`);
 console.log(`  + VAT ${(INPUTS.packaging.vatRate * 100).toFixed(0)}%                       ${aed(p.withVat - p.fitoor)}`);
-console.log(`  + cotton bag (elsewhere)       ${aed(INPUTS.packaging.cottonBagAed)}   <- PENDING, asked of Hashir`);
+console.log(`  + cotton bag (Hashir, agreed)  ${aed(INPUTS.packaging.cottonBagAed)}   <- 2026-09-02`);
 console.log(`  ${"".padEnd(30)} ${aed(p.total)}`);
 console.log(`  NOTE: the 2026-08-31 plan used 30.76 on a ~10 bag, implying 20.76 ex-bag`);
 console.log(`  against ${p.withVat.toFixed(2)} itemised here. Reconcile against the actual invoice.`);
@@ -198,7 +202,7 @@ INPUTS.remakeRate = saved;
 
 console.log(`\nPENDING INPUTS — every one of these moves the numbers above`);
 console.log(`  1. Linen % in the ${INPUTS.fabrics.entry.aedPerMetre} AED blend      (product risk, not margin)`);
-console.log(`  2. Cotton bag price               (asked ${INPUTS.packaging.cottonBagAed}; each AED = ~0.26 margin pts)`);
+console.log(`  2. Cotton bag at 300/500 units    (${INPUTS.packaging.cottonBagAed} agreed at 100; each AED = ~0.26 margin pts)`);
 console.log(`  3. Metres per garment             (PLACEHOLDER since 2026-08-28)`);
 console.log(`  4. Stripe UAE's actual fee        (assumed 2.9% + 1)`);
 console.log(`  5. Real CAC                       (134 is an assumption, never measured)`);

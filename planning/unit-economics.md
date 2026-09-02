@@ -1,6 +1,6 @@
 # Unit economics, and whether this MVP can run without losing money
 
-**Written 2026-09-01**, after the evening's supplier calls. This file answers
+**Written 2026-09-01**, updated 2026-09-02 (cotton bag agreed at 17). This file answers
 one question the founder asked directly: *"how can this business be profitable
 and viable and do this MVP without losing money?"*
 
@@ -31,8 +31,8 @@ founder controls rather than a number that can sink her.
 | | |
 |---|---|
 | Gross margin | **~60% entry, ~56% upgrade** |
-| Cash committed before the first order | **~AED 4,094** (packaging only) |
-| Orders to pay that back | **18 shirts** |
+| Cash committed before the first order | **~AED 4,294** (packaging only) |
+| Orders to pay that back | **19 shirts** |
 | Inventory risk | **None.** Fabric is bought per order, locally, no minimum |
 | The thing that could still break it | Acquisition cost, and fit |
 
@@ -42,10 +42,10 @@ Run `node planning/margins.mjs` for the full eight-item table. The shape:
 
 | | Sells for | Costs | Keeps | Margin |
 |---|---|---|---|---|
-| Shirt, entry blend | 389 | 153 | **236** | 60.6% |
-| Trousers, entry blend | 429 | 175 | **254** | 59.1% |
-| Shirt, 100% linen | 479 | 208 | **271** | 56.5% |
-| Trousers, 100% linen | 519 | 230 | **289** | 55.6% |
+| Shirt, entry blend | 389 | 155 | **234** | 60.1% |
+| Trousers, entry blend | 429 | 177 | **252** | 58.7% |
+| Shirt, 100% linen | 479 | 210 | **269** | 56.1% |
+| Trousers, 100% linen | 519 | 232 | **287** | 55.2% |
 
 That includes fabric, cut-and-sew, shipping, packaging, Stripe's cut and a 5%
 remake allowance. **No price on the site has to change** — 389 and 429 stand.
@@ -150,23 +150,23 @@ only real risk left, and it is not yet answerable.
 | | AED |
 |---|---|
 | Fitoor packaging order (everything except the cotton bag) | 2,594 |
-| 100 cotton bags @ 15 — 100 is their minimum | 1,500 |
-| **Total committed before a single order** | **4,094** |
-| Pays back in | **18 shirts** |
+| 100 cotton bags @ 17 — 100 is their minimum | 1,700 |
+| **Total committed before a single order** | **4,294** |
+| Pays back in | **19 shirts** |
 
 Bags and labels do not expire. If it takes six months, nothing is lost — the
 cash was merely early.
 
 ### The acquisition question, stated honestly
 
-A shirt keeps **236 AED**, so up to 236 can be spent finding a buyer before the
+A shirt keeps **234 AED**, so up to 234 can be spent finding a buyer before the
 sale loses money.
 
 | Cost to acquire a customer | Shirt | Trousers |
 |---|---|---|
-| 134 — the working estimate | +102 | +120 |
-| 200 | +36 | +54 |
-| 250 | **−14** | +4 |
+| 134 — the working estimate | +100 | +118 |
+| 200 | +34 | +52 |
+| 250 | **−16** | +2 |
 
 ⚠️ **134 is an industry assumption and has never been measured for this brand.**
 It could be 80. It could be 300. Note that the **entry price is thinner than the
@@ -182,7 +182,7 @@ linen one.
    bought. This is the highest-value spend in the whole plan.
 2. **Sell the first ten organically. Zero ad spend.** Own network, Instagram,
    TikTok — the launch grid, captions and posting calendar are already written
-   in `planning/marketing/`. Ten sales is ~2,350 AED and covers most of the
+   in `planning/marketing/`. Ten sales is ~2,340 AED and covers most of the
    packaging order. More importantly it answers the two things that cannot be
    guessed: **do people buy at 389, and does the garment fit on arrival.**
 3. **Only then test ads, with money that can be afforded as a loss.**
@@ -197,9 +197,9 @@ file that could be wrong by a factor of two.
 
 | Remake rate | Margin on a 389 shirt |
 |---|---|
-| 5% (the assumption) | 60.6% |
-| 15% | 58.0% |
-| 30% | 54.1% |
+| 5% (the assumption) | 60.1% |
+| 15% | 57.5% |
+| 30% | 53.6% |
 
 Even 30% does not destroy the margin — but it destroys the brand and the
 founder's time. **This is why the four fit-sample sets matter more than every
@@ -217,7 +217,7 @@ days" is unenforceable today — no delivery date is recorded and there is no
 | | What | Why it matters |
 |---|---|---|
 | 1 | **Linen % in the 20 AED blend** | Product risk, not margin. 60–70% keeps the photographs honest |
-| 2 | **Cotton bag price** — asked 15 of Hashir | Each AED ≈ 0.26 margin points. Ask 300/500 pricing too |
+| 2 | **Cotton bag at 300/500 units** | **17 agreed with Hashir at 100 units, 2026-09-02.** Each AED ≈ 0.26 margin points; at 100 units the setup cost dominates, so volume is where the saving is |
 | 3 | **Colour match, blend vs 100% linen** | One photo set serves both fabrics. Check all four against `#f5f0e8` `#fafafa` `#0a2d4a` `#4a1a2d` in daylight |
 | 4 | **Both compositions in writing** | The blend ratio is a legal disclosure; the linen line is still outstanding |
 | 5 | **Metres per garment** | PLACEHOLDER since 2026-08-28. 2.5m instead of 2.0 costs a shirt ~3 points |

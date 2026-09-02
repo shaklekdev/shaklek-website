@@ -67,10 +67,11 @@ suggestion of 509 was solving for a 61% margin that was never a target — 479
 clears at every plausible CAC, and the doc's own standard is *"56–61% is a
 healthy margin for a made-to-order label"*.
 
-**4. The cotton bag: AED 15 asked of Hashir Packaging Dubai.** Fitoor wanted 20
-(39% of their quote, ~2.5 margin points); Ada Zhang ~10.87 landed, 25 days.
-Each AED on the bag ≈ 0.26 margin points. **Still to ask: 300 and 500 pricing** —
-at 100 units the setup cost dominates and that is where the saving hides.
+**4. The cotton bag: AED 17, agreed with Hashir Packaging Dubai 2026-09-02.**
+Fitoor wanted 20 (39% of their quote, ~2.5 margin points); the founder asked 15
+and settled at 17. Ada Zhang ~10.87 landed but 25 days production. Each AED on
+the bag ≈ 0.26 margin points. **Still to ask: 300 and 500 pricing** — at 100
+units the setup cost dominates and that is where the saving hides.
 
 **5. ⚠️ A gsm contradiction on W300235, and it lands on the fibre certificate.**
 Shirley says 145gsm; Helen Wu's cloth is on record at 195gsm with no article
