@@ -1,6 +1,7 @@
 # Unit economics, and whether this MVP can run without losing money
 
-**Written 2026-09-01**, updated 2026-09-02 (cotton bag agreed at 17). This file answers
+**Written 2026-09-01**, updated 2026-09-02 (bag at 17; care label split; hang tag
+fixed). This file answers
 one question the founder asked directly: *"how can this business be profitable
 and viable and do this MVP without losing money?"*
 
@@ -89,9 +90,22 @@ the fibre disclosure, not marketing copy. So the paperwork requirement goes
 **up**, not down: a pure-linen base needed one line confirming 100% linen; a
 blend needs the exact composition in writing from the supplier.
 
-Two label versions are now required either way: the blend and the 100% linen.
-**The packaging order still cannot be placed until that artwork is settled** —
-the Fitoor quote covers 500 care labels reading `كتان 100% / 100% LINEN`.
+**RESOLVED 2026-09-02, and the packaging order is no longer blocked by it.**
+Two things happened:
+
+- **The care label goes to a split run: 200 reading `كتان 100% / 100% LINEN`,
+  300 carrying the blend ratio** once the percentage is confirmed. Right way
+  round — the blend is the entry fabric, so it is the volume one. ⚠️ The 0.74
+  rate assumes a single artwork; ask what the split costs.
+- **The hang tag stopped naming a fibre.** It read `100% NATURAL LINEN`, which
+  would need reprinting for every fabric the brand ever sells. It now reads
+  **`100% PLANT BASED FABRIC`** — true of linen, true of the blend, printed
+  once. ⚠️ **FABRIC, not MATERIALS**: "materials" claims the whole garment
+  including thread and buttons, and sewing thread is normally polyester, which
+  would turn a fair claim into a false environmental one.
+
+So only the **300 blend care labels** now wait on the fabric. Everything else
+can be ordered.
 
 ### Why local at 45 beat China at ~37
 
@@ -203,7 +217,7 @@ file that could be wrong by a factor of two.
 
 Even 30% does not destroy the margin — but it destroys the brand and the
 founder's time. **This is why the four fit-sample sets matter more than every
-price negotiated this evening.** The remake rate is currently an assumption;
+price negotiated across these two days.** The remake rate is currently an assumption;
 the samples are what turn it into a measurement.
 
 Related and still open: **P2, the remake flow.** "One free remake within 14
@@ -217,7 +231,7 @@ days" is unenforceable today — no delivery date is recorded and there is no
 | | What | Why it matters |
 |---|---|---|
 | 1 | **Linen % in the 20 AED blend** | Product risk, not margin. 60–70% keeps the photographs honest |
-| 2 | **Cotton bag at 300/500 units** | **17 agreed with Hashir at 100 units, 2026-09-02.** Each AED ≈ 0.26 margin points; at 100 units the setup cost dominates, so volume is where the saving is |
+| 2 | **Cotton bag at 300/500 units** | **17 agreed with Hashir at 100 units, 2026-09-02.** Each AED ≈ 0.26 margin points; at 100 units the setup cost dominates, so volume is where the saving is. Also unanswered: is the 17 ex-VAT, and is it for the 500x400 landscape spec rather than the 35x45 Fitoor quoted |
 | 3 | **Colour match, blend vs 100% linen** | One photo set serves both fabrics. Check all four against `#f5f0e8` `#fafafa` `#0a2d4a` `#4a1a2d` in daylight |
 | 4 | **Both compositions in writing** | The blend ratio is a legal disclosure; the linen line is still outstanding |
 | 5 | **Metres per garment** | PLACEHOLDER since 2026-08-28. 2.5m instead of 2.0 costs a shirt ~3 points |
