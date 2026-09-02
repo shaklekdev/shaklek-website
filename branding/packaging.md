@@ -227,6 +227,14 @@ proportion rather than size: 90 mm was 22.5% of a 400 mm bag and only 18% of a
 the version already approved. 110 mm restores that 22%. **Screen printing is
 priced by the run, not by the size of the image, so this costs nothing.**
 
+⚠️ **CORRECTION 2026-09-02, founder: in Dubai the delivery is done WITH the
+hand bag.** Earlier wording in this file called the paper bag "only if there is
+a physical handover", which read as though it were an optional extra layer
+inside a posted parcel. It is not. Local delivery *is* a handover, so the hand
+bag is the delivery vehicle for Dubai orders and the kraft mailer is for orders
+shipped outside it. A margin review on 2026-09-02 nearly cut the hand bag on the
+strength of that sentence. **Do not treat it as optional.**
+
 **The mailer was 250 x 350 and that was too small.** A folded garment is about
 300 x 220 x 40 mm and the cotton bag folds to roughly 300 x 250 with loft. A
 shirt fits 250 x 350; a folded trouser does not. It is stated as a **minimum**

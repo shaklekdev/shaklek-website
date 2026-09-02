@@ -87,7 +87,7 @@ const INPUTS = {
       cottonBag: { aed: 17, qty: 100, keep: true, from: "Hashir",
         note: "THE CENTREPIECE, and the reveal. Fitoor 20; Hashir 17 agreed 2026-09-02. WARNING Fitoor quoted 35x45 but the approved spec is 500x400 landscape -- 27% more cloth" },
       handBag: { aed: 9.2, qty: 100, keep: true, from: "Fitoor",
-        note: "THE BIGGEST OPTIONAL LINE. branding/packaging.md flagged the paper bag as 'only if there is a physical handover' before it was ordered anyway" },
+        note: "NOT OPTIONAL, AND NOT A SECOND LAYER. Founder, 2026-09-02: in Dubai delivery IS done with a hand bag -- it is the delivery vehicle, not packaging inside a mailer. branding/packaging.md's 'only if there is a physical handover' is misleading here, because local delivery is a handover. The kraft mailer is for orders shipped OUTSIDE Dubai" },
       wovenBrandLabel: { aed: 0.7, qty: 500, keep: true, from: "Fitoor",
         note: "Sewn into the garment. No size, no care text (founder)" },
       careLabel: { aed: 0.74, qty: 500, keep: true, from: "Fitoor", mandatory: true,
@@ -203,20 +203,24 @@ console.log(`  ⚠️ Hashir's 17 is assumed VAT-INCLUSIVE. Fitoor's rates are a
 console.log(`     if his is too, the bag is 17.85 and every margin drops ~0.2 pts.`);
 
 // Baskets worth comparing. Each is a set of overrides on the `keep` flags.
+// The hand bag is NOT a droppable line -- in Dubai it is how the order is
+// delivered (founder, 2026-09-02). The real variant is an order shipped
+// OUTSIDE Dubai, where a ~2 AED kraft mailer replaces it.
+const MAILER_AED = 2.0; // her own stock, not on the Fitoor quote
 const BASKETS = {
   "Everything on the quote": { businessCard: true, tissueSeal: true, tissueWrap: true },
-  "Current plan": {},
-  "Drop the hand bag": { handBag: false },
-  "Bag + card only": { handBag: false, hangTag: false },
-  "Leanest legal": { handBag: false, hangTag: false, thankYouCard: false, envelope: false },
+  "PLAN - Dubai (hand bag)": {},
+  "Outside Dubai (mailer)": { handBag: false, __addAed: MAILER_AED },
+  "If the note were cut": { thankYouCard: false, envelope: false },
 };
 console.log(`\nBASKETS — what each one earns on a ${SHIRT_PRICE} shirt`);
 console.log(`  ${"basket".padEnd(26)}${"pack".padStart(7)}${"margin".padStart(8)}${"gross".padStart(8)}${"cash".padStart(9)}`);
 for (const [name, ov] of Object.entries(BASKETS)) {
-  const pk = packagingPerOrder(ov);
+  const { __addAed = 0, ...flags } = ov;
+  const pk = packagingPerOrder(flags) + __addAed;
   const cogsNoPack = unitEconomics(SHIRT_PRICE, "Shirt", INPUTS.fabrics.entry.aedPerMetre).cogs - packagingPerOrder();
   const cogs = cogsNoPack + pk, g = SHIRT_PRICE - cogs;
-  console.log(`  ${name.padEnd(26)}${pk.toFixed(2).padStart(7)}${((g / SHIRT_PRICE) * 100).toFixed(1).padStart(7)}%${g.toFixed(0).padStart(8)}${packagingCash(ov).toFixed(0).padStart(9)}`);
+  console.log(`  ${name.padEnd(26)}${pk.toFixed(2).padStart(7)}${((g / SHIRT_PRICE) * 100).toFixed(1).padStart(7)}%${g.toFixed(0).padStart(8)}${(packagingCash(flags) + __addAed * 100).toFixed(0).padStart(9)}`);
 }
 
 for (const [key, fab] of [["entry", INPUTS.fabrics.entry], ["linen", INPUTS.fabrics.linen]]) {
