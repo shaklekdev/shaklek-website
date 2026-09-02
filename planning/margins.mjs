@@ -79,14 +79,21 @@ const INPUTS = {
     //                   25 days production. NOT YET ASKED: 300/500 unit pricing,
     //                   which is where the real saving usually sits at these
     //                   quantities -- at 100 units the setup cost dominates.
+    // ✅ VERIFIED 2026-09-02 against the actual quote (FRP2608-1149, 31/08/2026),
+    // not against a summary of it. All ten lines reconstruct the document's
+    // own subtotal of 5,115.00 + 255.75 VAT = 5,370.75 exactly. Rates are
+    // EX-VAT on the quote; VAT is added at the bottom.
     fitoorLines: {
       handBag: 9.2,
       wovenBrandLabel: 0.7,
-      careLabel: 0.74, // ⚠️ quoted as a STICKER; must be re-quoted as sewn satin
-      hangTag: 2.3,
+      careLabel: 0.74, // ⚠️ quoted under ACTIVITY "Sticker"; must be sewn satin
+      hangTag: 2.3, //     ⚠️ reads "100% NATURAL LINEN" -- blocked on the fabric
       thankYouCard: 2.7,
       envelope: 3.3,
     },
+    // Dropped from the order but present on the quote: businessCard 1.80,
+    // tissueSeal 0.85, tissueWrap 3.80. The cotton bag (Fitoor 20.00) is
+    // bought from Hashir instead.
     // Dropped from the order: tissue seal (0.85), tissue wrap (3.80),
     // business card (1.80).
     vatRate: 0.05,
@@ -159,8 +166,11 @@ console.log(`  Fitoor lines (ex VAT)          ${aed(p.fitoor)}`);
 console.log(`  + VAT ${(INPUTS.packaging.vatRate * 100).toFixed(0)}%                       ${aed(p.withVat - p.fitoor)}`);
 console.log(`  + cotton bag (Hashir, agreed)  ${aed(INPUTS.packaging.cottonBagAed)}   <- 2026-09-02`);
 console.log(`  ${"".padEnd(30)} ${aed(p.total)}`);
-console.log(`  NOTE: the 2026-08-31 plan used 30.76 on a ~10 bag, implying 20.76 ex-bag`);
-console.log(`  against ${p.withVat.toFixed(2)} itemised here. Reconcile against the actual invoice.`);
+console.log(`  ✅ RECONCILED 2026-09-02 against quote FRP2608-1149. The 2026-08-31`);
+console.log(`  plan's 30.76 implied 20.76 ex-bag; the document itemises ${p.withVat.toFixed(2)}.`);
+console.log(`  That earlier figure was overstated by 0.87. This one is the quote.`);
+console.log(`  ⚠️ Hashir's 17 is assumed VAT-INCLUSIVE. Fitoor's rates are ex-VAT;`);
+console.log(`  if Hashir's is too, the bag is 17.85 and margins drop ~0.2 pts.`);
 
 for (const [key, fab] of [["entry", INPUTS.fabrics.entry], ["linen", INPUTS.fabrics.linen]]) {
   const upgrade = key === "linen" ? INPUTS.linenUpgradeAed : 0;
