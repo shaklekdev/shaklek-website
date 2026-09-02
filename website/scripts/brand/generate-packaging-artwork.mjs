@@ -299,9 +299,19 @@ makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
   // object in the parcel whose only job is to feel like the brand. The claim
   // itself is good and stays on the website, where a shopper is deciding; it
   // does not belong on a garment she has already bought.
+  // ⚠️ NO FIBRE NAME. This said "100% natural linen" until 2026-09-02, which
+  // would have needed a reprint for every fabric the brand ever sells -- and
+  // the entry cloth is becoming a linen/cotton blend. A fabric-agnostic line
+  // is printed once and stays true.
+  //
+  // ⚠️ AND IT SAYS FABRIC, NOT MATERIALS. "Materials" claims the whole garment,
+  // thread and buttons included, and sewing thread is normally polyester
+  // because cotton thread is weaker. That would turn a green claim into a
+  // false one for the sake of one word. The legal fibre disclosure is the
+  // CARE LABEL (02), which carries the real percentages; this tag is brand.
   const items = [
     "100% custom-made",
-    "100% natural linen",
+    "100% plant based fabric",
     "Made in the UAE",
   ];
   // Three, not four, so the spacing opens up rather than leaving a gap where

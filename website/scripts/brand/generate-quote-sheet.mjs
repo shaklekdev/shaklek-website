@@ -150,7 +150,7 @@ export const ITEMS = [
     process: "Print both sides. Hole 4.4 mm",
     files: ["03-hang-tag", "03b-hang-tag-back"], mm: [50, 90],
     bullets: [
-      ["BOTH FACES PRINT, so this is a two-sided job. Front: the wordmark. Back: 100% CUSTOM-MADE / 100% NATURAL LINEN / MADE IN THE UAE.", 0],
+      ["BOTH FACES PRINT, so this is a two-sided job. Front: the wordmark. Back: 100% CUSTOM-MADE / 100% PLANT BASED FABRIC / MADE IN THE UAE.", 0],
       ["The hole is already in the artwork: 4.4 mm across, centred, 6.9 mm down from the top edge.", 0],
       ["The STRING is not specified. Ask what they offer and in what colour. No plastic loops.", 1],
       ["Ask whether the string and the threading are included in the price.", 1],

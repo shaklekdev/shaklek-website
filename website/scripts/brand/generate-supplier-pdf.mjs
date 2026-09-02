@@ -683,7 +683,8 @@ mockPage("What goes on what, continued", [
       const tw = 78, th = 150, tx = cx - tw / 2, ty = cy + 50;
       doc.roundedRect(tx, ty, tw, th, 2).fillAndStroke("#EFE9DD", HAIR2);
       doc.circle(cx, ty + 15, 4).lineWidth(0.7).strokeColor("#B6AB94").stroke();
-      const vals = ["100% CUSTOM-MADE", "100% NATURAL LINEN", "MADE IN THE UAE"];
+      // Fabric-agnostic since 2026-09-02 -- see generate-packaging-artwork.mjs.
+      const vals = ["100% CUSTOM-MADE", "100% PLANT BASED FABRIC", "MADE IN THE UAE"];
       vals.forEach((t, i) => {
         const vy = ty + 46 + i * 25;
         doc.rect(cx - 9, vy - 3, 18, 0.8).fill(GOLD);
