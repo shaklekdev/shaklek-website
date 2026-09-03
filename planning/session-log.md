@@ -46,7 +46,12 @@ Run `node planning/margins.mjs` — never retype these.
    whole garment, and sewing thread is normally polyester.
 5. **Care label goes to a split run: 200 × 100% LINEN now, 300 × blend later.**
    Correct way round — the blend is the entry fabric, so it is the volume one.
-6. **Business card, tissue wrap and tissue seal delayed**, as already modelled.
+6. **Tissue wrap and tissue seal delayed.** ⚠️ **The business card is KEPT** —
+   but for the founder's wallet (markets, suppliers, press), **not for the
+   parcel**. That distinction is the whole answer: in every parcel it is 0.49
+   margin points forever; carried by her it is a one-off 189 AED of marketing
+   that never touches COGS. So margins stay at 60.1% and `keep: false` on that
+   line in `margins.mjs` is correct — do not "fix" it.
 
 **⚠️ Do not re-litigate these two.** Both were reasoned through today:
 
