@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { catalog } from "@/data/catalog";
+import { articles } from "@/data/blog";
 import { SITE_URL } from "@/lib/seo";
 
 // Public, crawlable routes. /dashboard, /account, /sign-in, /sign-up, /cart,
@@ -17,6 +18,10 @@ const STATIC_ROUTES: {
   { path: "/how-it-works", changeFrequency: "monthly", priority: 0.8 },
   { path: "/our-story", changeFrequency: "monthly", priority: 0.7 },
   { path: "/upload", changeFrequency: "monthly", priority: 0.8 },
+  // The journal is the only part of the site that can rank for informational
+  // searches. Product pages answer "buy a linen shirt Dubai"; nothing here
+  // answered "what fabric is best in Dubai heat" until these existed.
+  { path: "/blog", changeFrequency: "weekly", priority: 0.7 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.6 },
   { path: "/size-guide", changeFrequency: "monthly", priority: 0.6 },
   { path: "/shipping", changeFrequency: "monthly", priority: 0.5 },
@@ -33,6 +38,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency,
       priority,
+    })),
+    // One entry per article, using the article's own date rather than the
+    // build date -- an article that has not changed should not claim it has.
+    ...articles.map((article) => ({
+      url: `${SITE_URL}/blog/${article.slug}`,
+      lastModified: new Date(article.updated ?? article.published),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
     // One entry per catalog item, so the design pages stay in step with
     // catalog.ts without a second list to maintain.
