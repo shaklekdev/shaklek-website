@@ -34,30 +34,55 @@ const REPO = dirname(dirname(fileURLToPath(import.meta.url)));
 // ---------------------------------------------------------------------------
 
 const INPUTS = {
+  // EVERY FABRIC QUOTE ON RECORD, 2026-09-06. All prices are AED PER METRE
+  // LANDED, so they can be compared directly. Nothing here is an assumption:
+  // the earlier model carried a linen/cotton blend at 20 and linen at 45, and
+  // BOTH TURNED OUT NOT TO EXIST at those prices.
   fabrics: {
-    // The three fabrics do three different jobs. Only two are ever sold.
-    sample: {
-      label: "30% linen (fit samples only, never sold)",
-      aedPerMetre: 10,
-      source: "Founder, bought 2026-09-01 — 4 sample sets",
-    },
-    entry: {
-      label: "Linen/cotton blend — the ENTRY fabric",
+    localCotton: {
+      label: "Local cotton, 100%, NOT organic",
       aedPerMetre: 20,
-      pending: "LINEN % NOT CONFIRMED. Needs 60-70% to look like the catalogue photographs.",
-      source: "Founder, 2026-09-01, same local supplier as the 100% linen",
+      source: "Local seller, 2026-09-05",
+      note: "⚠️ NOT ORGANIC. fabrics.ts still labels its cotton option 'Organic cotton' -- that label becomes false the day this is bought. Width and gsm STILL NOT GIVEN.",
     },
-    linen: {
-      label: "100% linen — the UPGRADE fabric",
-      aedPerMetre: 45,
-      source: "Local in-store, on record 2026-08-31. Chosen over China 2026-09-01.",
+    localBlend: {
+      label: "Local 80% linen / 20% VISCOSE",
+      aedPerMetre: 35,
+      source: "Local seller, 2026-09-05",
+      note: "⚠️ VISCOSE IS NOT A NATURAL FIBRE. It is regenerated cellulose: plant-derived but chemically man-made. The hang tag's '100% PLANT BASED FABRIC' survives it; '100% natural' would not. Recommended AGAINST on identity grounds -- it is the only non-natural fibre in the running, and it would sit in the UPGRADE tier.",
+    },
+    localLinen: {
+      label: "Local 100% linen, UNWASHED",
+      aedPerMetre: 65,
+      source: "Local seller, 2026-09-05",
+      note: "⚠️ 65, not the 45 this file carried for a week. Unwashed, so it shrinks 4-10% and dry-clean-only stays mandatory. Twice the China price.",
+    },
+    chinaLinen: {
+      label: "China W300235, 100% linen, PRE-WASHED",
+      aedPerMetre: 32.72,
+      source: "Shirley Gz, mixed-colour price 50.5 RMB/m, landed 2026-09-06",
+      note: "✅ 138cm / 145gsm CONFIRMED by the supplier 2026-09-06, and CONFIRMED SUITABLE FOR SHIRTS the same day (her spec sheet had listed only dress/skirts/pants, and four of eight catalogue items are shirts). Water-washed and softened at the mill, which is the pre-shrink step branding/packaging.md names as the route back to a machine-washable garment. ⏳ RESIDUAL SHRINKAGE STILL UNASKED -- under ~2-3% and dry-clean-only can be dropped. Landed = 27.53 ex-works + 0.83 Shirley's 3% (of fabric, excl. shipping, as she worded it) + 4.36 air freight at 40 RMB/kg door-to-door TAX INCLUDED. ⏳ EXCLUDES the mill-to-agent inland leg, which she excluded in writing.",
+    },
+    chinaCotton: {
+      label: "China combed cotton, 148cm/154gsm",
+      aedPerMetre: 20.69,
+      source: "Shirley Gz, 28 RMB/m, landed 2026-09-06",
+      note: "DO NOT IMPORT. Lands 0.69/m WORSE than buying cotton in Dubai, before counting a 100m minimum and two weeks of lead time. Recorded so nobody re-derives it.",
     },
   },
 
-  // Charged on top of the entry price when the customer picks 100% linen.
-  // Sized so the upgrade earns comparably to the base; re-check if either
-  // fabric price moves.
-  linenUpgradeAed: 90,
+  // ⏳ THE DECISION IS THE FOUNDER'S AND IS NOT MADE. The recommendation on
+  // record is LINEN-ONLY at 479/519 on chinaLinen: 61.5% on a shirt, all
+  // fourteen "100% linen" files already true, the catalogue photography
+  // already correct, and NO code in the payment path -- it is two numbers in
+  // catalog.ts. Cotton is added later at 389 as a price DROP, which is a far
+  // easier announcement than a rise.
+  launchOptions: [
+    { label: "LINEN ONLY (recommended)", shirt: 479, pants: 519, fabric: "chinaLinen" },
+    { label: "Linen only, local cloth", shirt: 479, pants: 519, fabric: "localLinen" },
+    { label: "Cotton only, today's prices", shirt: 389, pants: 429, fabric: "localCotton" },
+    { label: "Blend only", shirt: 439, pants: 479, fabric: "localBlend" },
+  ],
 
   // ⏳ PLACEHOLDER since 2026-08-28. Never measured against a real cut.
   // This is the single largest unverified input in the model: at 2.5m instead
@@ -177,6 +202,12 @@ const pct = (n) => (n * 100).toFixed(1).padStart(5) + "%";
 
 const items = readCatalog();
 const SHIRT_PRICE = (items.find((i) => i.category === "Shirt") || { price: 389 }).price;
+// The packaging baskets and payback below need ONE fabric to price against.
+// They use the recommended launch option so they move with the decision
+// instead of pointing at a fabric quote that turned out not to exist.
+const REF = INPUTS.launchOptions[0];
+const REF_PER_M = INPUTS.fabrics[REF.fabric].aedPerMetre;
+const REF_PRICE = REF.shirt;
 if (!items.length) {
   console.error("Could not parse website/src/data/catalog.ts — has its shape changed?");
   process.exit(1);
@@ -189,13 +220,13 @@ console.log(`Prices read from catalog.ts (${items.length} items). Run: ${new Dat
 const packTotal = packagingPerOrder();
 console.log(`\nPACKAGING — EVERY LINE, AND WHAT IT COSTS YOU`);
 console.log(`  Quote FRP2608-1149 reconstructs exactly: 5,115.00 + 255.75 VAT = 5,370.75.`);
-console.log(`  "cost" is per order, landed. "pts" is margin points on a ${SHIRT_PRICE} shirt.`);
+console.log(`  "cost" is per order, landed. "pts" is margin points on a ${REF_PRICE} shirt.`);
 console.log(`  Flip \`keep\` in INPUTS.packaging.lines and re-run to test a basket.\n`);
 console.log(`  ${"".padEnd(3)}${"line".padEnd(18)}${"rate".padStart(7)}${"cost".padStart(8)}${"pts".padStart(7)}${"cash".padStart(9)}  from`);
 for (const [key, l] of Object.entries(INPUTS.packaging.lines)) {
   const c = lineCost(l);
   const mark = l.mandatory ? "[L]" : l.keep ? " + " : " - ";
-  console.log(`  ${mark}${key.padEnd(18)}${l.aed.toFixed(2).padStart(7)}${c.toFixed(2).padStart(8)}${(c / SHIRT_PRICE * 100).toFixed(2).padStart(7)}${(c * l.qty).toFixed(0).padStart(9)}  ${l.from} x${l.qty}`);
+  console.log(`  ${mark}${key.padEnd(18)}${l.aed.toFixed(2).padStart(7)}${c.toFixed(2).padStart(8)}${(c / REF_PRICE * 100).toFixed(2).padStart(7)}${(c * l.qty).toFixed(0).padStart(9)}  ${l.from} x${l.qty}`);
 }
 console.log(`  ${"".padEnd(3)}${"IN THIS BASKET".padEnd(18)}${"".padStart(7)}${packTotal.toFixed(2).padStart(8)}${"".padStart(7)}${packagingCash().toFixed(0).padStart(9)}`);
 console.log(`  [L] = legally required.  + = ordering.  - = dropped.`);
@@ -214,57 +245,70 @@ const BASKETS = {
   "+ business card in parcel": { businessCard: true },
   "If the note were cut": { thankYouCard: false, envelope: false },
 };
-console.log(`\nBASKETS — what each one earns on a ${SHIRT_PRICE} shirt`);
+console.log(`\nBASKETS — what each one earns on a ${REF_PRICE} shirt (${REF.label})`);
 console.log(`  ${"basket".padEnd(26)}${"pack".padStart(7)}${"margin".padStart(8)}${"gross".padStart(8)}${"cash".padStart(9)}`);
 for (const [name, ov] of Object.entries(BASKETS)) {
   const { __addAed = 0, ...flags } = ov;
   const pk = packagingPerOrder(flags) + __addAed;
-  const cogsNoPack = unitEconomics(SHIRT_PRICE, "Shirt", INPUTS.fabrics.entry.aedPerMetre).cogs - packagingPerOrder();
-  const cogs = cogsNoPack + pk, g = SHIRT_PRICE - cogs;
-  console.log(`  ${name.padEnd(26)}${pk.toFixed(2).padStart(7)}${((g / SHIRT_PRICE) * 100).toFixed(1).padStart(7)}%${g.toFixed(0).padStart(8)}${(packagingCash(flags) + __addAed * 100).toFixed(0).padStart(9)}`);
+  const cogsNoPack = unitEconomics(REF_PRICE, "Shirt", REF_PER_M).cogs - packagingPerOrder();
+  const cogs = cogsNoPack + pk, g = REF_PRICE - cogs;
+  console.log(`  ${name.padEnd(26)}${pk.toFixed(2).padStart(7)}${((g / REF_PRICE) * 100).toFixed(1).padStart(7)}%${g.toFixed(0).padStart(8)}${(packagingCash(flags) + __addAed * 100).toFixed(0).padStart(9)}`);
 }
 
-for (const [key, fab] of [["entry", INPUTS.fabrics.entry], ["linen", INPUTS.fabrics.linen]]) {
-  const upgrade = key === "linen" ? INPUTS.linenUpgradeAed : 0;
-  console.log(`\n${fab.label.toUpperCase()} — ${fab.aedPerMetre} AED/m${upgrade ? `, +${upgrade} upgrade` : ""}`);
-  if (fab.pending) console.log(`  PENDING: ${fab.pending}`);
-  console.log(`  ${"item".padEnd(22)}${"price".padStart(8)}${"cogs".padStart(9)}${"gross".padStart(9)}${"margin".padStart(8)}   after ads at ${INPUTS.cacScenariosAed.join(" / ")}`);
-  for (const it of items) {
-    const u = unitEconomics(it.price + upgrade, it.category, fab.aedPerMetre);
-    const cac = INPUTS.cacScenariosAed
-      .map((c) => (u.gross - c >= 0 ? "+" : "") + (u.gross - c).toFixed(0))
-      .map((s) => s.padStart(6))
-      .join(" ");
-    console.log(`  ${it.name.padEnd(22)}${aed(u.price)}${aed(u.cogs)}${aed(u.gross)}${pct(u.gm)}  ${cac}`);
-  }
+console.log(`\nFABRIC QUOTES ON RECORD  (AED per metre, LANDED, directly comparable)`);
+for (const [key, f] of Object.entries(INPUTS.fabrics)) {
+  console.log(`  ${f.aedPerMetre.toFixed(2).padStart(6)}  ${f.label}`);
 }
+
+console.log(`\nLAUNCH OPTIONS  (⏳ the choice is the founder's and is NOT made)`);
+console.log(`  ${"option".padEnd(28)}${"fabric".padStart(7)}${"shirt".padStart(9)}${"margin".padStart(8)}${"pants".padStart(8)}${"margin".padStart(8)}   after ads at ${INPUTS.cacScenariosAed.join(" / ")}`);
+for (const opt of INPUTS.launchOptions) {
+  const perM = INPUTS.fabrics[opt.fabric].aedPerMetre;
+  const sh = unitEconomics(opt.shirt, "Shirt", perM);
+  const pt = unitEconomics(opt.pants, "Pants", perM);
+  const cac = INPUTS.cacScenariosAed
+    .map((c) => (sh.gross - c >= 0 ? "+" : "") + (sh.gross - c).toFixed(0))
+    .map((x) => x.padStart(6))
+    .join(" ");
+  console.log(`  ${opt.label.padEnd(28)}${perM.toFixed(2).padStart(7)}${aed(opt.shirt)}${pct(sh.gm)}${aed(opt.pants)}${pct(pt.gm)}  ${cac}`);
+}
+console.log(`  Margins are on a SHIRT for the ads columns. Full per-item table needs a chosen fabric.`);
+
+console.log(`\n⚠️ WHITE IS SEE-THROUGH IN THIS LINEN.  Supplier, twice: W300207 "better not to`);
+console.log(`   make trousers", W300235 "white color is a little bit see through". White is one`);
+console.log(`   of four colourways and FOUR OF EIGHT ITEMS ARE TROUSERS. Decide before ordering:`);
+console.log(`   white on shirts only, line the white trousers (lining is currently BLOCKED in the`);
+console.log(`   customizer as a constraint violation), or drop white from trousers entirely.`);
 
 // Exposure and payback — the "can I do this without losing money" question.
 const bagLine = INPUTS.packaging.lines.cottonBag;
 const bagOrder = lineCost(bagLine) * bagLine.qty;
 const exposure = packagingCash();
 const shirt = items.find((i) => i.category === "Shirt");
-const shirtGross = unitEconomics(shirt.price, shirt.category, INPUTS.fabrics.entry.aedPerMetre).gross;
+const shirtGross = unitEconomics(REF_PRICE, "Shirt", REF_PER_M).gross;
 
 console.log(`\nCASH EXPOSURE — the only money committed before an order exists`);
 console.log(`  Fitoor lines in the basket     ${aed(exposure - bagOrder)}`);
 console.log(`  ${bagLine.qty} cotton bags @ ${bagLine.aed}          ${aed(bagOrder)}   <- 100 is their minimum`);
 console.log(`  ${"TOTAL".padEnd(30)} ${aed(exposure)}`);
 console.log(`  Pays back in ${Math.ceil(exposure / shirtGross)} shirts. Bags and labels do not expire.`);
-console.log(`  Fabric is bought per order from a local shop — no inventory risk.`);
+console.log(`  ⚠️ FABRIC IS NOT IN THIS FIGURE. Buying local means no fabric commitment at`);
+console.log(`     all. Importing means a 100-150m roll BEFORE any customer exists:`);
+console.log(`     150m of China linen = AED ${(150 * INPUTS.fabrics.chinaLinen.aedPerMetre).toFixed(0)}, taking total exposure to`);
+console.log(`     AED ${(exposure + 150 * INPUTS.fabrics.chinaLinen.aedPerMetre).toFixed(0)}. That is the real trade, not the per-metre price.`);
 
-console.log(`\nREMAKE SENSITIVITY — a ${shirt.name} at ${shirt.price}`);
+console.log(`\nREMAKE SENSITIVITY — a shirt at ${REF_PRICE} (${REF.label})`);
 console.log(`  This, not the fabric price, is what a made-to-order brand dies of.`);
 const saved = INPUTS.remakeRate;
 for (const r of [0.05, 0.15, 0.3]) {
   INPUTS.remakeRate = r;
-  const u = unitEconomics(shirt.price, shirt.category, INPUTS.fabrics.entry.aedPerMetre);
+  const u = unitEconomics(REF_PRICE, "Shirt", REF_PER_M);
   console.log(`  ${(r * 100).toFixed(0).padStart(3)}% remakes   margin ${pct(u.gm)}   gross ${aed(u.gross)}`);
 }
 INPUTS.remakeRate = saved;
 
 console.log(`\nPENDING INPUTS — every one of these moves the numbers above`);
-console.log(`  1. Linen % in the ${INPUTS.fabrics.entry.aedPerMetre} AED blend      (product risk, not margin)`);
+console.log(`  1. Residual shrinkage on the China linen  (decides dry-clean vs machine washable)`);
 console.log(`  2. Cotton bag at 300/500 units    (${bagLine.aed} agreed at 100; each AED = ~0.26 margin pts)`);
 console.log(`  3. Metres per garment             (PLACEHOLDER since 2026-08-28)`);
 console.log(`  4. Stripe UAE's actual fee        (assumed 2.9% + 1)`);
