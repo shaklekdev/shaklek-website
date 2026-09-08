@@ -51,6 +51,30 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     ),
   },
   {
+    // Founder, 2026-09-08. Sits directly after the measurements question,
+    // because "do I have to send my measurements" and "can you just take them"
+    // are the same worry asked twice.
+    //
+    // ⚠️ WHAT THIS PROMISE IS, EXACTLY: Dubai only, free, and it happens AFTER
+    // the order rather than before. There is no booking system and this copy
+    // must not imply one. Only paying customers get an appointment, which is
+    // what makes it affordable to offer at all.
+    q: "Can you take my measurements for me?",
+    a: (
+      <>
+        If you are in Dubai, yes, and it is free. Order with your best estimate
+        and we will contact you to arrange an appointment before anything is
+        cut. We take the full set our tailor works from, which is more than any
+        online form sensibly asks for, and two of them are close to impossible
+        to take accurately on yourself.
+        <br />
+        <br />
+        Outside Dubai we cannot do this yet. Send your measurements with the
+        order and tell us anything we should know in the notes.
+      </>
+    ),
+  },
+  {
     q: "What if it doesn't fit?",
     a: (
       <>

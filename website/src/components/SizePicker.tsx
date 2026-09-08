@@ -160,6 +160,33 @@ export default function SizePicker({
           </button>
         ))}
       </div>
+      {/* THE DUBAI FITTING OFFER. Founder, 2026-09-08.
+          It sits under the toggle rather than inside Tailored on purpose: the
+          customer who most needs it is the one about to pick Standard BECAUSE
+          she does not know her measurements, and she never opens the Tailored
+          panel to find out this exists.
+
+          WHY IT PROMISES WHAT IT PROMISES: the tailor's own list is SEVENTEEN
+          measurements (planning/frontend-todo.md), of which this form collects
+          four. Shoulder and crotch cannot be self-measured reliably at all, and
+          shoulder is the one that cannot be altered once the garment is cut. So
+          the appointment is not a nicety, it is how the garment actually gets
+          cut to a person rather than to four numbers and thirteen assumptions.
+
+          THE SEQUENCE IS: SHE PAYS, THEN WE REACH OUT. Founder's decision, and
+          it is what keeps this affordable -- only paying customers get an hour
+          of her time. Do not reword this into a booking that happens before the
+          order; there is no booking system and nothing here should imply one.
+          Whatever she enters below is a starting point, and the appointment is
+          what settles it before anything is cut.
+
+          DUBAI ONLY, AND IT SAYS SO. Somebody in Sharjah reading a promise that
+          does not name a city has been mis-sold. */}
+      <p className="mt-2.5 border-l-2 border-gold bg-surface-2 px-3 py-2 text-[11px] leading-relaxed text-text-2">
+        <span className="font-medium text-text">In Dubai? We will measure you.</span>{" "}
+        Order with your best estimate, and we will contact you to arrange a free
+        measuring appointment before anything is cut.
+      </p>
       {/* No helper line under this toggle. It said "Cut to your measurements,
           at no extra cost" and "Pick XS to XXL, or switch to Tailored..." --
           both of which the two buttons already say, one of them with the word
