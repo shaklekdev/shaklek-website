@@ -18,6 +18,74 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-08 — THE LAUNCH SHAPE IS DECIDED. Linen only, 449 / 519.
+
+**Committed, not pushed.** The site is still gated (401) and the gate comes down
+on the founder's word, following `planning/launch-checklist.md`.
+
+**Files touched:** `catalog.ts`, `fabrics.ts`, `homeContent.ts`, `faq/page.tsx`,
+`HomeFaq.tsx`, `how-it-works/page.tsx`, `SizePicker.tsx`, `productDisclosure.ts`,
+`src/data/blog.ts` + `app/blog/**` (new), `sitemap.ts`,
+`scripts/brand/generate-packaging-artwork.mjs`, `branding/packaging.md`,
+`02-care-label.pdf`, `planning/margins.mjs`, `unit-economics.md`,
+`pricing-todo.md`, `frontend-todo.md`, `tailor-capacity.md`,
+`marketing/todo.md` (new).
+
+#### The decisions, and why
+
+1. **LINEN ONLY at 449 / 519** (was 389 / 429). Not a mark-up: **449 is Massimo
+   Dutti's own price for a regular-fit 100% linen shirt**, so parity makes their
+   price argue for us. Trousers 519 against their 600. **389 on real linen was
+   49.5% and underwater against a 200 CAC** — it was never the cheap option, it
+   was a loss. One fabric also means **no server-side surcharge and therefore no
+   security review of the money path**, and all fourteen "100% linen" files stay
+   true with the photography already correct.
+2. **Cotton is added LATER at 389** as a price *drop*, when there is evidence
+   price is the objection. It needs **no fabric commitment**: 25 AED/m buys it
+   2.2m at a time, 20 at 100m.
+3. **"Organic cotton" is gone from the site.** The only cotton anyone can quote
+   here is explicitly NOT organic. `fabrics.ts` label is now plain "Cotton", the
+   entry still switched off rather than deleted.
+4. **Care is now GENTLE MACHINE WASH 30**, not dry clean only — because the
+   *cloth* changed, not because the old rule was wrong. Shirley's W300235 is
+   mill-washed, ~1% residual. Both competitors print machine wash.
+5. **A free Dubai measuring appointment** is offered under the size toggle and
+   in the FAQ. She pays, then we reach out. Only paying customers get an hour.
+6. **/blog is built** with three articles, deliberately carrying **no fibre
+   claim and no price** so nothing needed rewriting when the above landed.
+
+#### ⚠️ Corrections a future session must not undo
+
+- **HASHIR IS FITOOR'S CONTACT, NOT A SECOND SUPPLIER.** This model treated him
+  as one and therefore treated the bag's 17 as VAT-inclusive. Every line on
+  their quote is ex-VAT, so the bag is **17.85**, packaging is **37.74**, and a
+  449 shirt is **55.6%**.
+- **The margin model now carries Shirley's own quoted total (36.08/m landed),
+  not an estimate of it**, and **2.2m** consumption, not an optimistic 2.0.
+- **Dry-clean-only was correct for unwashed cloth** and returns with it. Kept in
+  `packaging.md` rather than deleted.
+
+#### ⏳ Blocking, and small
+
+- **Founder must read the new Arabic** on the care label: `غسيل آلي لطيف`. The
+  row is marked pending in `productDisclosure.ts`, not approved.
+- **Wash a swatch of W300235 before printing 500 care labels.** "Around 1%" is a
+  supplier's sentence, and the four fit-sample sets are cut from a *different*
+  fabric so they prove nothing. Above ~2%, dry-clean-only goes back on.
+- **Fitoor quoted 1,000 care labels (500 of each of two designs) and the wrong
+  bag** — 35x45 with a handle, against the approved 500x400 landscape
+  drawstring. Both corrections sent 2026-09-08. **Do not pay the 50% advance
+  until the bag line is right**; 27% more cloth may move the 17.
+- **The measurement form collects 4 of the tailor's 17**, and height is on
+  neither of his lists. Full analysis in `frontend-todo.md`; his list and the
+  three ambiguous items in `tailor-capacity.md`.
+
+#### Money committed once the corrections land
+
+Packaging **~4,568** (of which 189 is business cards, marketing not COGS) plus
+**124m of linen at 4,474**. Break-even against buying linen locally: 32 garments.
+
+
 ### 2026-09-05 — feedback and returns separated; delivery date, fit-remake flag, per-garment feedback
 
 **Files touched (no longer claimed):** `website/drizzle/0008_delivery_and_fit_remake.sql`
