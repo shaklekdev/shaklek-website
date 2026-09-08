@@ -13,6 +13,66 @@ Status: core purchase flow is built and interaction-tested (Next.js 16, TypeScri
 - [x] Shared header/footer, brand styling ported from prototype
 - [x] **Unified customize flow** — `src/data/designSpec.ts` (shared spec schema, catalog-start or upload-start), `CustomizeChat.tsx` + `FabricColorPicker.tsx` (shared between `/design/[slug]` and `/upload`), `/api/customize` (rule-based intent parsing — see `ai-integration-todo.md`, this is explicitly a stand-in for real NLP, not Phase 2 itself). Constraint violations (second fabric, lining, logo) block Continue/Send until the customer clears the flagged request or drops it.
 
+## ⚠️ THE MEASUREMENTS COLLECTED DO NOT MATCH THE GARMENTS SOLD
+
+**Founder, 2026-09-08, and she is right.** `src/lib/measurements.ts` defines four
+fields: **bust, waist, hip, height**. Both entry points use them -- `SizePicker`
+tailored mode per order item, and `/account` per customer.
+
+**The defect: the customizer sells length options that these four cannot
+execute.** `PANTS_PARAMS` offers cropped/full; shirts offer normal/longer.
+Cropped *against what?* There is no leg measurement, so the tailor derives leg
+length from total height using a population ratio -- which is the average-body
+assumption this brand exists to reject, reintroduced in the one place it must
+not be. Two people at 165cm have very different leg-to-torso proportions.
+
+**What is missing, and why each one matters:**
+
+| Missing | Needed for | Why |
+|---|---|---|
+| **Shoulder width** | Shirts | ⚠️ The one measurement that CANNOT be altered after cutting. Everything hangs from it. |
+| **Sleeve length** | Shirts | On a size chart it is tied to chest. On a person it is not. |
+| **Shirt length** | Shirts | The "longer" slider has nothing to measure against. |
+| **Inseam** | Trousers | The "cropped/full" slider has nothing to measure against. |
+| Thigh, rise | Trousers | Straight vs wide fit through the leg. |
+
+**Height is arguably the wrong fourth field.** It tells the tailor almost nothing
+actionable on its own; inseam tells them exactly where to cut.
+
+### The shape of the fix -- fields should follow the GARMENT, not the customer
+
+Nobody should be asked for an inseam to buy a shirt. Roughly:
+
+- **Shirt:** bust, waist, shoulder, sleeve, length
+- **Trousers:** waist, hip, inseam, thigh
+
+⚠️ **BUT MORE FIELDS MEANS MORE ABANDONMENT**, and shoulder width is genuinely
+hard to measure on yourself. That tension is real and it is the argument for the
+in-person fitting (`planning/marketing/todo.md` §2): **the website form stays
+short, the fitting captures the full set** and puts the extras in the notes
+field. The fitting does not just reduce errors, it produces a better-fitting
+garment than the form can.
+
+### ⏳ ASK THE TAILOR FIRST. Do not design this list from first principles.
+
+The tailor has to cut from these numbers, so the tailor's list is the correct
+one -- exactly like the metres-per-garment question in `planning/pricing-todo.md`,
+which is still a placeholder for the same reason. **Ask what they need per
+pattern, and agree the convention for each** (a "waist" at the narrowest point
+and a "waist" where trousers sit are 3-5cm apart; measuring one while the tailor
+cuts to the other makes every garment wrong and looks like a fit problem).
+
+### ⚠️ When it is built
+
+- `customers` carries four `measurement_*` columns and `order_items.measurements`
+  is a composed string (`composeMeasurements`). New fields are a **schema
+  change**, so read CLAUDE.md's Trap 3: Amplify never runs a migration, additive
+  nullable columns only, **migrate production BEFORE deploying the code**, use
+  `node scripts/db-migrate.mjs --target=prod`, and verify against
+  `information_schema` rather than the exit code.
+- This is the cheapest moment it will ever be. Nobody has ordered, so no stored
+  measurement has to be migrated or re-asked.
+
 ## Open decisions
 - [ ] **Multi-item cart or one-design-at-a-time checkout?** Currently built single-item — flagged to the founder, not yet decided. This affects checkout, order data shape, and confirmation copy if it changes.
 
