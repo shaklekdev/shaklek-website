@@ -74,7 +74,13 @@ export const FABRIC_OPTIONS: FabricOption[] = [
     // scratch; `available: false` is the whole hold, and flipping it is the
     // whole restore.
     id: "cotton",
-    label: "Organic cotton",
+    // ⚠️ WAS "Organic cotton" UNTIL 2026-09-08, AND THAT WORD WAS A FALSE
+    // CLAIM WAITING TO SHIP. The cotton actually quotable from the local
+    // supplier is 100% cotton and explicitly NOT organic (20 AED/m at 100m,
+    // 25 below that). Nobody has an organic cotton supplier and nobody ever
+    // did. If this is ever switched on against that cloth, the label must not
+    // say organic. Do not put the word back without a certificate.
+    label: "Cotton",
     available: false,
     surchargeAed: 0,
     note: "coming soon",

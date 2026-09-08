@@ -59,8 +59,8 @@ const INPUTS = {
     },
     chinaLinen: {
       label: "China W300235, 100% linen, PRE-WASHED",
-      aedPerMetre: 32.72,
-      source: "Shirley Gz, mixed-colour price 50.5 RMB/m, landed 2026-09-06",
+      aedPerMetre: 36.08,
+      source: "Shirley Gz, HER OWN QUOTED TOTAL 2026-09-08: 7,941.8 RMB for 120m = AED 4,330",
       note: "✅ 138cm / 145gsm CONFIRMED by the supplier 2026-09-06, and CONFIRMED SUITABLE FOR SHIRTS the same day (her spec sheet had listed only dress/skirts/pants, and four of eight catalogue items are shirts). Water-washed and softened at the mill, which is the pre-shrink step branding/packaging.md names as the route back to a machine-washable garment. ⏳ RESIDUAL SHRINKAGE STILL UNASKED -- under ~2-3% and dry-clean-only can be dropped. Landed = 27.53 ex-works + 0.83 Shirley's 3% (of fabric, excl. shipping, as she worded it) + 4.36 air freight at 40 RMB/kg door-to-door TAX INCLUDED. ⏳ EXCLUDES the mill-to-agent inland leg, which she excluded in writing.",
     },
     chinaCotton: {
@@ -71,23 +71,32 @@ const INPUTS = {
     },
   },
 
-  // ⏳ THE DECISION IS THE FOUNDER'S AND IS NOT MADE. The recommendation on
-  // record is LINEN-ONLY at 479/519 on chinaLinen: 61.5% on a shirt, all
-  // fourteen "100% linen" files already true, the catalogue photography
-  // already correct, and NO code in the payment path -- it is two numbers in
-  // catalog.ts. Cotton is added later at 389 as a price DROP, which is a far
-  // easier announcement than a rise.
+  // ✅ DECIDED 2026-09-08: LINEN ONLY, 449 / 519, on chinaLinen.
+  // catalog.ts now carries these prices (was 389/429). The reasoning:
+  //   - all fourteen "100% linen" files stay TRUE, nothing to rewrite
+  //   - the catalogue photography is already linen, so nothing to reshoot
+  //   - NO code in the payment path: one fabric needs no server-side surcharge
+  //     and therefore no security review before it takes a card
+  //   - 449 sits exactly on Massimo Dutti's 450 regular-fit linen shirt, so the
+  //     comparison argues FOR us: same price, cut to measure. 519 trousers sit
+  //     81 UNDER their 600 linen trousers.
+  // Cotton is added LATER at 389 as a price DROP (an easy announcement), and
+  // needs no fabric commitment at all: 25 AED/m buys it 2.2m at a time, 20 at
+  // 100m. The trigger is evidence that price is the objection, not a guess.
   launchOptions: [
-    { label: "LINEN ONLY (recommended)", shirt: 479, pants: 519, fabric: "chinaLinen" },
-    { label: "Linen only, local cloth", shirt: 479, pants: 519, fabric: "localLinen" },
-    { label: "Cotton only, today's prices", shirt: 389, pants: 429, fabric: "localCotton" },
-    { label: "Blend only", shirt: 439, pants: 479, fabric: "localBlend" },
+    { label: "LINEN ONLY (chosen)", shirt: 449, pants: 519, fabric: "chinaLinen" },
+    { label: "...on local cloth instead", shirt: 449, pants: 519, fabric: "localLinen" },
+    { label: "Cotton tier, added later", shirt: 389, pants: 429, fabric: "localCotton" },
   ],
 
   // ⏳ PLACEHOLDER since 2026-08-28. Never measured against a real cut.
   // This is the single largest unverified input in the model: at 2.5m instead
   // of 2.0m a shirt loses ~3 margin points.
-  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 3.0 },
+  // ⏳ STILL AN ESTIMATE, from 2026-08-28, never measured against a real cut.
+  // 2.2 for shirt/pants at 140cm INCLUDING ~10% cutting waste; wide-leg cuts
+  // are 2.7-2.9 and are the item that eats cloth. Worth up to 3 margin points.
+  // On the tailor's question list -- have him cut one of each and report.
+  metresPerGarment: { Shirt: 2.2, Skirt: 1.5, Pants: 2.2, Dress: 3.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
   tailoringAed: { Shirt: 40, Skirt: 60, Pants: 60, Dress: 85 },
@@ -260,7 +269,7 @@ for (const [key, f] of Object.entries(INPUTS.fabrics)) {
   console.log(`  ${f.aedPerMetre.toFixed(2).padStart(6)}  ${f.label}`);
 }
 
-console.log(`\nLAUNCH OPTIONS  (⏳ the choice is the founder's and is NOT made)`);
+console.log(`\nLAUNCH OPTIONS  (✅ DECIDED 2026-09-08: linen only, 449/519, China cloth)`);
 console.log(`  ${"option".padEnd(28)}${"fabric".padStart(7)}${"shirt".padStart(9)}${"margin".padStart(8)}${"pants".padStart(8)}${"margin".padStart(8)}   after ads at ${INPUTS.cacScenariosAed.join(" / ")}`);
 for (const opt of INPUTS.launchOptions) {
   const perM = INPUTS.fabrics[opt.fabric].aedPerMetre;
@@ -294,8 +303,9 @@ console.log(`  ${"TOTAL".padEnd(30)} ${aed(exposure)}`);
 console.log(`  Pays back in ${Math.ceil(exposure / shirtGross)} shirts. Bags and labels do not expire.`);
 console.log(`  ⚠️ FABRIC IS NOT IN THIS FIGURE. Buying local means no fabric commitment at`);
 console.log(`     all. Importing means a 100-150m roll BEFORE any customer exists:`);
-console.log(`     150m of China linen = AED ${(150 * INPUTS.fabrics.chinaLinen.aedPerMetre).toFixed(0)}, taking total exposure to`);
-console.log(`     AED ${(exposure + 150 * INPUTS.fabrics.chinaLinen.aedPerMetre).toFixed(0)}. That is the real trade, not the per-metre price.`);
+console.log(`     124m ordered from Shirley = AED ${(124 * INPUTS.fabrics.chinaLinen.aedPerMetre).toFixed(0)} (~${Math.floor(124/2.2)} garments),`);
+console.log(`     taking total committed to AED ${(exposure + 124 * INPUTS.fabrics.chinaLinen.aedPerMetre).toFixed(0)} before one customer exists.`);
+console.log(`     Break-even vs buying local at 65/m: ${Math.ceil((124*INPUTS.fabrics.chinaLinen.aedPerMetre)/(65*2.2))} garments.`);
 
 console.log(`\nREMAKE SENSITIVITY — a shirt at ${REF_PRICE} (${REF.label})`);
 console.log(`  This, not the fabric price, is what a made-to-order brand dies of.`);

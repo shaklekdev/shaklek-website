@@ -133,7 +133,7 @@ export const VALUES = [
   },
   {
     k: "Kind to your skin",
-    v: "100% linen, and nothing else. Breathable natural fibre against your skin all day, never synthetic. Organic cotton follows once we can cut it.",
+    v: "100% linen, and nothing else. Breathable natural fibre against your skin all day, never synthetic.",
   },
   {
     k: "Tailoring is never an upgrade",
