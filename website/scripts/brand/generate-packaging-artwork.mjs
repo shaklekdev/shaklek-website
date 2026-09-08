@@ -126,34 +126,61 @@ function plain(doc, cx, baseY, text, sizePt, fill = INK, tracking = 0) {
 // simple geometric figure; getting one wrong is a consumer-protection issue,
 // so they are drawn precisely and listed on the proof sheet for confirmation.
 /**
- * DRY CLEAN ONLY. Founder's decision, 2026-08-28.
+ * MACHINE WASH 30 GENTLE. Founder's decision, 2026-09-08, replacing DRY CLEAN
+ * ONLY -- and the replacement is only valid because the CLOTH CHANGED.
  *
- * The reasoning is worth keeping, because it is a fit decision and not a
- * laundry one. Unwashed linen shrinks roughly 4 to 10% on its first wash. These
- * garments are cut to a customer's own measurements, so a "wash at 30" label on
- * fabric that was never pre-shrunk produces a piece that fits perfectly once and
- * then does not, and the remake is free under Shaklek's own returns policy.
- * Dry cleaning removes that failure entirely.
+ * The old rule was a fit decision, not a laundry one: unwashed linen shrinks
+ * 4-10% on its first wash, these garments are cut to a customer's own
+ * measurements, and a shrunk garment fits perfectly once and then does not,
+ * with the remake free at our cost. That reasoning was correct and is not being
+ * overturned.
  *
- * The alternative, if she ever wants home washing back: pre-wash the fabric
- * before cutting. Then wash-at-30 becomes true and the customer keeps a garment
- * she can look after herself.
+ * What changed: the fabric is now Shirley's W300235, which the mill
+ * WATER-WASHES AND SOFTENS before selling. That is exactly the pre-shrink step
+ * branding/packaging.md named as the route back to home washing. Stated
+ * residual shrinkage is ~1%, which on a 70cm shirt length is 7mm.
  *
- * The set: do not wash, do not bleach, do not tumble dry, iron medium,
- * professional dry clean (P).
+ * ⚠️ AND IT IS ALSO COMPETITIVE, NOT ONLY A KINDNESS. Zara and Massimo Dutti
+ * both print machine wash on their 100% linen shirts. A dry-clean-only label
+ * beside theirs reads as the worse garment on the one spec a shopper can
+ * compare directly.
+ *
+ * ⚠️ 30 AND NOT 40. Massimo Dutti prints 30 gentle, Zara prints 40. Take the
+ * lower one: these garments have no spare ease to lose, and 30 is the more
+ * cautious of the two real precedents.
+ *
+ * ⏳ DO NOT PRINT 500 OF THESE UNTIL A PIECE OF THE ACTUAL CLOTH HAS BEEN
+ * WASHED AND MEASURED. "Around 1%" is a supplier's sentence, not a test, and
+ * the four fit-sample sets are cut from a DIFFERENT fabric (the local 30% linen
+ * at 10 AED/m) so they prove nothing about this one. Ask Shirley to courier a
+ * swatch ahead of the roll. Above ~2% residual, dry-clean-only goes back on.
+ *
+ * The set: machine wash 30 gentle, do not bleach, do not tumble dry, iron
+ * medium, professional dry clean (P) -- the dry-clean symbol STAYS, exactly as
+ * both competitors do it, where beside a wash symbol it reads as "may also be
+ * dry cleaned" rather than "must be".
  */
 function careSymbols(doc, x, y, h, gap, fill = INK) {
   const lw = h * 0.09;
   doc.lineWidth(lw).strokeColor(fill);
   const at = (i) => x + (h + gap) * i;
-  // 1. wash tub, crossed: DO NOT WASH
+  // 1. wash tub with 30 and one bar: MACHINE WASH 30, GENTLE (ISO 3758 mild
+  //    process). Was a crossed tub (do not wash) until 2026-09-08 -- see the
+  //    block above for why the cloth, and therefore the rule, changed.
+  //    THE TEMPERATURE LIVES HERE, NOT IN THE WORDS. That is the standard form
+  //    and it keeps digits out of the Arabic line, which is what printed
+  //    "%001" backwards three times on this same label.
   let cx = at(0);
   doc.moveTo(cx, y + h * 0.30).lineTo(cx + h * 0.06, y + h * 0.30)
      .lineTo(cx + h * 0.12, y + h * 0.22).lineTo(cx + h * 0.88, y + h * 0.22)
      .lineTo(cx + h * 0.94, y + h * 0.30).lineTo(cx + h, y + h * 0.30).stroke();
   doc.moveTo(cx + h * 0.05, y + h * 0.30).lineTo(cx + h * 0.16, y + h * 0.88)
      .lineTo(cx + h * 0.84, y + h * 0.88).lineTo(cx + h * 0.95, y + h * 0.30).stroke();
-  doc.moveTo(cx + h * 0.02, y + h * 0.16).lineTo(cx + h * 0.98, y + h * 0.94).stroke();
+  // "30" inside the tub. Sized off the tub height so it scales with the symbol.
+  doc.font("Helvetica-Bold").fontSize(h * 0.34).fillColor(fill)
+     .text("30", cx, y + h * 0.44, { width: h, align: "center", lineBreak: false });
+  // the single bar under the tub = mild/gentle process
+  doc.moveTo(cx + h * 0.18, y + h * 1.02).lineTo(cx + h * 0.82, y + h * 1.02).stroke();
   // 2. triangle, crossed: do not bleach
   cx = at(1);
   doc.moveTo(cx + h / 2, y + h * 0.16).lineTo(cx + h * 0.92, y + h * 0.88)
@@ -255,13 +282,17 @@ makePdf("02-care-label", 25, 45, (doc, w, h) => {
   careSymbols2(doc, (w - (sh * 2 + gap)) / 2, 24.5 * MM, sh, gap);
   // The symbols are the legal form, but almost nobody reads them. The words say
   // the same thing so the customer actually knows.
-  arabic(doc, w / 2, 32 * MM, "تنظيف جاف فقط", 2.5 * MM);
-  plain(doc, w / 2, 35.5 * MM, "DRY CLEAN ONLY", 5.6, INK, 0.9);
+  // ⚠️ AN ARABIC SPEAKER MUST READ THIS BEFORE PRINTING. Founder to approve.
+  // No digits in the Arabic on purpose: the temperature is in the tub symbol
+  // above, which is the standard form and avoids the bidi failure that printed
+  // "%001" on this label three separate times.
+  arabic(doc, w / 2, 32 * MM, "غسيل آلي لطيف", 2.5 * MM);
+  plain(doc, w / 2, 35.5 * MM, "GENTLE MACHINE WASH", 5.0, INK, 0.6);
 
   doc.moveTo(4 * MM, 37.5 * MM).lineTo(w - 4 * MM, 37.5 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
   arabic(doc, w / 2, 41 * MM, "صنع في الإمارات", 2.4 * MM);
   plain(doc, w / 2, 44 * MM, "MADE IN UAE", 5.4, INK, 1.0);
-}, "dry clean only. ⚠️ the Arabic needs a native reader before printing");
+}, "machine wash 30 gentle. ⚠️ the Arabic needs a native reader before printing");
 
 // 3. HANG TAG 50 x 90 mm ----------------------------------------------------
 //

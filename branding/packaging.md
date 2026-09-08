@@ -129,15 +129,25 @@ started this — and a system font is weak ground for a brand mark regardless.
 
 ## Care and compliance, settled 2026-08-28
 
-**DRY CLEAN ONLY.** Founder's decision, and it is a fit decision rather than a
-laundry one. Unwashed linen shrinks roughly 4 to 10% on its first wash, and
-these garments are cut to a customer's own measurements: a "wash at 30" label on
-fabric that was never pre-shrunk gives her a piece that fits perfectly once and
-then does not, with the remake free under Shaklek's own returns policy.
+⚠️ **SUPERSEDED 2026-09-08. IT IS NOW GENTLE MACHINE WASH AT 30.** The route
+back that this section named has actually happened: **the mill pre-washes the
+cloth.** Shirley's W300235 is water-washed and softened before sale, stated
+residual shrinkage ~1%, which on a 70cm shirt length is 7mm. Both Zara and
+Massimo Dutti print machine wash on their 100% linen shirts, so a dry-clean-only
+label now reads as the worse garment on the one spec a shopper compares
+directly. **30 rather than Zara's 40**, because a garment cut to measurements
+has no spare ease to lose. ⏳ **Wash a swatch and measure it before 500 labels
+are printed** -- "around 1%" is a supplier's sentence, and the four fit-sample
+sets are cut from a different fabric so they prove nothing about this one.
 
-**If home washing is ever wanted back, the route is to pre-wash the fabric
-before cutting.** Then wash-at-30 becomes true. Worth revisiting, because dry
-cleaning is a real running cost to the customer and some will wash it anyway.
+~~**DRY CLEAN ONLY.** Founder's decision, and it is a fit decision rather than a
+laundry one.~~ The original reasoning is kept because it was correct and still
+governs any fabric that is NOT pre-shrunk: unwashed linen shrinks roughly 4 to
+10% on its first wash, and these garments are cut to a customer's own
+measurements, so a "wash at 30" label on fabric that was never pre-shrunk gives
+her a piece that fits perfectly once and then does not, with the remake free
+under Shaklek's own returns policy. **If the fabric ever changes back to
+unwashed cloth, dry-clean-only goes back on with it.**
 
 **Arabic is mandatory on the label.** Federal Law 15/2020 Art. 26: consumer data
 "shall be made in Arabic, and other languages may be used in addition to

@@ -36,9 +36,14 @@
  * consequences in branding/packaging.md. That is a lawyer's call, not this
  * file's.
  *
- * CARE IS DRY CLEAN ONLY: founder's decision, taken twice and held. The
- * residual risk is accepted, not solved -- unwashed linen shrinks 4-10%, and we
- * promise a free remake if the fit is wrong. Recorded, closed, do not reopen.
+ * ⚠️ CARE CHANGED 2026-09-08: GENTLE MACHINE WASH, replacing DRY CLEAN ONLY.
+ * The old rule was right for the cloth it was written against -- unwashed linen
+ * shrinks 4-10% and these garments are cut to measurements, so a shrunk piece
+ * fits once and the remake is free at our cost. What changed is the cloth:
+ * Shirley's W300235 is water-washed and softened at the mill (~1% stated
+ * residual), which is the pre-shrink step that makes home washing honest. Both
+ * competitors print machine wash, so this is competitive as well as kinder.
+ * ⏳ A SWATCH MUST BE WASHED AND MEASURED before 500 labels are printed.
  *
  * ⚠️ NO PRE-SHRINK WARNING ON THIS PAGE, AND DO NOT ADD ONE BACK. A row saying
  * "the linen is not pre-shrunk, washing will change the fit" shipped briefly
@@ -99,11 +104,23 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
     {
       label: "Care",
       labelAr: "العناية",
-      // ✅ FOUNDER-VERIFIED on the printed proof, 2026-08-28. Exactly this
-      // string, unextended -- adding a second sentence would put unapproved
-      // Arabic inside an approved row.
-      value: "Dry clean only",
-      valueAr: "تنظيف جاف فقط",
+      // ⏳ CHANGED 2026-09-08 FROM "Dry clean only" / "تنظيف جاف فقط", WHICH
+      // WERE FOUNDER-VERIFIED ON THE PRINTED PROOF. THE NEW ARABIC IS NOT YET
+      // READ BY HER. She has said she will; until she confirms, treat this row
+      // as pending rather than approved, and do not print 500 care labels
+      // against it.
+      //
+      // The change is only valid because the CLOTH changed: Shirley's W300235
+      // is water-washed and softened at the mill, with ~1% stated residual
+      // shrinkage, which is the pre-shrink step that makes home washing honest
+      // on a garment cut to measurements. See generate-packaging-artwork.mjs.
+      //
+      // The temperature deliberately is NOT in this string. It lives in the
+      // tub symbol on the label, which is the standard form -- and it keeps
+      // digits out of an Arabic run, which is what printed "%001" backwards on
+      // this label three times.
+      value: "Gentle machine wash",
+      valueAr: "غسيل آلي لطيف",
     },
     {
       // ✅ FOUNDER-READ AND APPROVED 2026-08-28.
