@@ -100,8 +100,20 @@ elsewhere. He is Danish, Taylor Moon Shine.
    a shirt and 2.8m for a wide-leg trouser, and both are estimates from
    2026-08-28 that have never been measured. Worth up to **3 margin points** on
    every garment. Have him cut one of each and report the actual metres.
-4. **Confirm his prices.** On record: shirt 40, skirt 60, trousers 60, dress 85.
-   Verify rather than inherit.
+4. **Confirm his prices, and get the volume tiers.** On record: shirt 40, skirt
+   60, trousers 60, dress 85. **He has confirmed the rate comes down with volume
+   (2026-09-08)** — so ask for the actual numbers at 10, 20 and 30 pieces a
+   month and put them in `margins.mjs`. Worth about **4.5 margin points** if it
+   reaches 20 AED a shirt.
+
+   ⚠️ **This is why hiring tailors is off the table for now, and the reasoning
+   should not be re-derived.** Subcontracting is a purely variable cost: sell
+   nothing, pay nothing, and his premises and machines are included in the rate.
+   An employed tailor is fixed cost plus a workshop plus visa sponsorship, and
+   against 40 AED a piece it only breaks even somewhere above 60-125 pieces a
+   month depending on the all-in package. At 20 orders a month employing costs
+   three to six times MORE per garment, not less. Revisit only when volume is
+   consistently past that break-even.
 
 ### Blocking the care label (500 units, unordered)
 
