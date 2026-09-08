@@ -73,3 +73,55 @@ WhatsApp handoff, which happens per order anyway.
 - [ ] How many tailors are on the bench, and are they available concurrently?
 - [ ] Real make time per category, measured, not estimated
 - [ ] Confirm every tailor works from the same spec sheet
+
+---
+
+## ⏳ OPEN WITH THE TAILOR — ask these in one visit (2026-09-08)
+
+Eight questions, all cheap, and four of them are blocking real decisions
+elsewhere. He is Danish, Taylor Moon Shine.
+
+### Blocking the measurement form
+
+1. **Demonstrate all seventeen measurements**, do not just name them. His list is
+   in `planning/frontend-todo.md`. **Three are ambiguous and must not be guessed
+   into a form:** "Need" (almost certainly Knee), "Hand length"
+   (shoulder-to-wrist, or wrist-to-fingertip?), and trouser "Length" (outseam
+   from the waist, or from where?).
+2. **Agree the convention for each one, and write it down.** A waist at the
+   narrowest point and a waist where trousers sit are 3-5cm apart. If the
+   founder measures one while he cuts to the other, every garment is wrong and
+   it presents as a fit failure rather than a definition mismatch. This is the
+   single largest risk in the whole fitting service.
+
+### Blocking the margin model
+
+3. **Metres per garment, per pattern.** `planning/margins.mjs` uses **2.2m** for
+   a shirt and 2.8m for a wide-leg trouser, and both are estimates from
+   2026-08-28 that have never been measured. Worth up to **3 margin points** on
+   every garment. Have him cut one of each and report the actual metres.
+4. **Confirm his prices.** On record: shirt 40, skirt 60, trousers 60, dress 85.
+   Verify rather than inherit.
+
+### Blocking the care label (500 units, unordered)
+
+5. **Wash a sample.** Shirley states the China linen is water-washed with **~1%
+   residual shrinkage**, which would let the label say machine washable instead
+   of dry clean only. That is a supplier's sentence, not a test. Wash one of the
+   four fit-sample sets and measure it before 500 labels are printed. **Both
+   Zara and Massimo Dutti print machine wash**, so this is now competitive, not
+   just a customer nicety.
+6. **What thread does he sew with?** If it is polyester, the hang tag's
+   "100% PLANT BASED FABRIC" is still true (it says fabric) but "100% natural
+   materials" in any marketing copy would not be. Cotton thread is weaker, so
+   this is a real trade-off, not an obvious switch.
+
+### Blocking growth, and the one nobody has costed
+
+7. **Capacity: how many pieces per week, realistically?** Make time on record is
+   1-2 days per piece per tailor. **Fulfilment is the ceiling on this business,
+   not demand** — see the scaling note in `planning/unit-economics.md`. Ask what
+   happens at 5 pieces a week, and at 20.
+8. **When can he make the four fit-sample sets?** The 30% linen at 10 AED/m is
+   already bought for exactly this, and the samples are what turn the 5% remake
+   assumption into a measured number.
