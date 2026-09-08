@@ -61,7 +61,7 @@ const INPUTS = {
       label: "China W300235, 100% linen, PRE-WASHED",
       aedPerMetre: 36.08,
       source: "Shirley Gz, HER OWN QUOTED TOTAL 2026-09-08: 7,941.8 RMB for 120m = AED 4,330",
-      note: "✅ 138cm / 145gsm CONFIRMED by the supplier 2026-09-06, and CONFIRMED SUITABLE FOR SHIRTS the same day (her spec sheet had listed only dress/skirts/pants, and four of eight catalogue items are shirts). Water-washed and softened at the mill, which is the pre-shrink step branding/packaging.md names as the route back to a machine-washable garment. ⏳ RESIDUAL SHRINKAGE STILL UNASKED -- under ~2-3% and dry-clean-only can be dropped. Landed = 27.53 ex-works + 0.83 Shirley's 3% (of fabric, excl. shipping, as she worded it) + 4.36 air freight at 40 RMB/kg door-to-door TAX INCLUDED. ⏳ EXCLUDES the mill-to-agent inland leg, which she excluded in writing.",
+      note: "✅ FULLY QUOTED, NOTHING OUTSTANDING ON COST. 138cm / 145gsm confirmed 2026-09-06, and confirmed SUITABLE FOR SHIRTS the same day (her spec sheet had listed only dress/skirts/pants, and four of eight catalogue items are shirts). ✅ SHRINKAGE ANSWERED 2026-09-08: ~1% residual, machine washable at regular temperature -- the cloth is water-washed and softened at the mill, which is the pre-shrink step branding/packaging.md named as the route back to home washing, and the care label changed on the strength of it. ✅ THE INLAND LEG IS NO LONGER EXCLUDED: her 500 RMB line explicitly covers to-door delivery AND warehouse transportation, which is the gap she had excluded in writing on 2026-09-02. 36.08/m is HER OWN TOTAL, not an estimate of it: 120m x 50.5 x 1.03 = 6,241.8 fabric-plus-fee, + 1,700 shipping = 7,941.8 RMB = AED 4,330. ⏳ The only open item is her billing 30kg against ~24kg of actual cloth; ask whether the invoice is on actual weight, worth about AED 87."
     },
     chinaCotton: {
       label: "China combed cotton, 148cm/154gsm",
@@ -321,7 +321,7 @@ for (const r of [0.05, 0.15, 0.3]) {
 INPUTS.remakeRate = saved;
 
 console.log(`\nPENDING INPUTS — every one of these moves the numbers above`);
-console.log(`  1. Residual shrinkage on the China linen  (decides dry-clean vs machine washable)`);
+console.log(`  1. Fitoor: one care-label design not two, and the bag at 500x400 drawstring`);
 console.log(`  2. Cotton bag at 300/500 units    (${bagLine.aed} agreed at 100; each AED = ~0.26 margin pts)`);
 console.log(`  3. Metres per garment             (PLACEHOLDER since 2026-08-28)`);
 console.log(`  4. Stripe UAE's actual fee        (assumed 2.9% + 1)`);

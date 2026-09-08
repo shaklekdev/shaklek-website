@@ -69,9 +69,19 @@ on the founder's word, following `planning/launch-checklist.md`.
 
 - **Founder must read the new Arabic** on the care label: `غسيل آلي لطيف`. The
   row is marked pending in `productDisclosure.ts`, not approved.
-- **Wash a swatch of W300235 before printing 500 care labels.** "Around 1%" is a
+- **Wash a piece of W300235 before printing 500 care labels.** "Around 1%" is a
   supplier's sentence, and the four fit-sample sets are cut from a *different*
-  fabric so they prove nothing. Above ~2%, dry-clean-only goes back on.
+  fabric so they prove nothing. Above ~2%, dry-clean-only goes back on. This can
+  be a piece of the roll on arrival rather than a couriered swatch — Fitoor's
+  14-21 business days and the fabric's ~3 weeks land at roughly the same time,
+  and the labels are held by the correction round anyway.
+
+**✅ NOTHING IS OUTSTANDING WITH SHIRLEY ON COST.** Shrinkage answered (~1%),
+and the inland leg she had excluded on 02-09 is covered by the 500 RMB line,
+which she states includes to-door delivery and warehouse transportation. The
+only open questions with her are the **flax origin** (asked 2026-09-08) and
+whether the invoice bills **actual weight** — she charged 30kg against ~24kg of
+cloth, worth about AED 87.
 - **Fitoor quoted 1,000 care labels (500 of each of two designs) and the wrong
   bag** — 35x45 with a handle, against the approved 500x400 landscape
   drawstring. Both corrections sent 2026-09-08. **Do not pay the 50% advance
