@@ -32,7 +32,7 @@ founder controls rather than a number that can sink her.
 | | |
 |---|---|
 | Gross margin | **~60% entry, ~56% upgrade** |
-| Cash committed before the first order | **~AED 4,294** (packaging only) |
+| Cash committed before the first order | **~AED 4,379** packaging + **4,474** fabric |
 | Orders to pay that back | **19 shirts** |
 | Inventory risk | **None.** Fabric is bought per order, locally, no minimum |
 | The thing that could still break it | Acquisition cost, and fit |
@@ -164,8 +164,8 @@ only real risk left, and it is not yet answerable.
 | | AED |
 |---|---|
 | Fitoor packaging order (everything except the cotton bag) | 2,594 |
-| 100 cotton bags @ 17 — 100 is their minimum | 1,700 |
-| **Total committed before a single order** | **4,294** |
+| 100 cotton bags @ 17 + VAT — 100 is their minimum | 1,785 |
+| **Total committed before a single order** | **4,379** |
 | Pays back in | **19 shirts** |
 
 Bags and labels do not expire. If it takes six months, nothing is lost — the
@@ -231,7 +231,7 @@ days" is unenforceable today — no delivery date is recorded and there is no
 | | What | Why it matters |
 |---|---|---|
 | 1 | **Linen % in the 20 AED blend** | Product risk, not margin. 60–70% keeps the photographs honest |
-| 2 | **Cotton bag at 300/500 units** | **17 agreed with Hashir at 100 units, 2026-09-02.** Each AED ≈ 0.26 margin points; at 100 units the setup cost dominates, so volume is where the saving is. Also unanswered: is the 17 ex-VAT, and is it for the 500x400 landscape spec rather than the 35x45 Fitoor quoted |
+| 2 | **Cotton bag at 300/500 units** | **17 agreed at 100 units, 2026-09-02.** ⚠️ Hashir is Fitoor's contact, not a second supplier, so the 17 is ex-VAT like every other line and the bag lands at 17.85. Each AED ≈ 0.26 margin points; at 100 units the setup cost dominates, so volume is where the saving is. Still unanswered: is it for the 500x400 landscape spec rather than the 35x45 they quoted |
 | 3 | **Colour match, blend vs 100% linen** | One photo set serves both fabrics. Check all four against `#f5f0e8` `#fafafa` `#0a2d4a` `#4a1a2d` in daylight |
 | 4 | **Both compositions in writing** | The blend ratio is a legal disclosure; the linen line is still outstanding |
 | 5 | **Metres per garment** | PLACEHOLDER since 2026-08-28. 2.5m instead of 2.0 costs a shirt ~3 points |

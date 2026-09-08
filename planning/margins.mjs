@@ -118,8 +118,8 @@ const INPUTS = {
       // qty is Fitoor's MINIMUM, not what one order consumes. Labels come in
       // 500s, everything else in 100s. Per-order cost is the unit rate either
       // way -- one label per garment.
-      cottonBag: { aed: 17, qty: 100, keep: true, from: "Hashir",
-        note: "THE CENTREPIECE, and the reveal. Fitoor 20; Hashir 17 agreed 2026-09-02. WARNING Fitoor quoted 35x45 but the approved spec is 500x400 landscape -- 27% more cloth" },
+      cottonBag: { aed: 17, qty: 100, keep: true, from: "Fitoor",
+        note: "THE CENTREPIECE, and the reveal. ⚠️ HASHIR IS FITOOR -- he is the contact there, NOT a second supplier. This model treated him as one until 2026-09-08 and therefore treated his 17 as VAT-inclusive; it is ex-VAT like every other line on quote FRP2608-1149, so the bag lands at 17.85. Negotiated down from their own 20 (the founder asked 15, settled at 17). ⚠️ They quoted 35x45 but the approved spec is 500x400 landscape, 27% more cloth -- confirm which the 17 is for. Still to ask: 300/500 unit pricing" },
       handBag: { aed: 9.2, qty: 100, keep: true, from: "Fitoor",
         note: "NOT OPTIONAL, AND NOT A SECOND LAYER. Founder, 2026-09-02: in Dubai delivery IS done with a hand bag -- it is the delivery vehicle, not packaging inside a mailer. branding/packaging.md's 'only if there is a physical handover' is misleading here, because local delivery is a handover. The kraft mailer is for orders shipped OUTSIDE Dubai" },
       wovenBrandLabel: { aed: 0.7, qty: 500, keep: true, from: "Fitoor",
@@ -157,8 +157,10 @@ const INPUTS = {
 
 // ---------------------------------------------------------------------------
 
-// Landed per-order cost of one packaging line. Fitoor's rates are ex-VAT;
-// Hashir's 17 is ASSUMED VAT-inclusive and that assumption is printed loudly.
+// Landed per-order cost of one packaging line. Every rate on quote
+// FRP2608-1149 is ex-VAT, and there is only ONE packaging supplier, so VAT
+// applies to all of them. The `from` field is kept for the day a line really
+// is bought elsewhere.
 function lineCost(l) {
   return l.from === "Fitoor" ? l.aed * (1 + INPUTS.packaging.vatRate) : l.aed;
 }
@@ -297,8 +299,9 @@ const shirt = items.find((i) => i.category === "Shirt");
 const shirtGross = unitEconomics(REF_PRICE, "Shirt", REF_PER_M).gross;
 
 console.log(`\nCASH EXPOSURE — the only money committed before an order exists`);
-console.log(`  Fitoor lines in the basket     ${aed(exposure - bagOrder)}`);
-console.log(`  ${bagLine.qty} cotton bags @ ${bagLine.aed}          ${aed(bagOrder)}   <- 100 is their minimum`);
+console.log(`  Fitoor, everything but the bag ${aed(exposure - bagOrder)}`);
+console.log(`  ${bagLine.qty} cotton bags @ ${bagLine.aed} +VAT     ${aed(bagOrder)}   <- 100 is their minimum`);
+console.log(`  ONE invoice, ONE 50% advance, 14-21 business days.`);
 console.log(`  ${"TOTAL".padEnd(30)} ${aed(exposure)}`);
 console.log(`  Pays back in ${Math.ceil(exposure / shirtGross)} shirts. Bags and labels do not expire.`);
 console.log(`  ⚠️ FABRIC IS NOT IN THIS FIGURE. Buying local means no fabric commitment at`);

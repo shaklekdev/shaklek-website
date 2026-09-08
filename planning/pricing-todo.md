@@ -67,7 +67,9 @@ suggestion of 509 was solving for a 61% margin that was never a target — 479
 clears at every plausible CAC, and the doc's own standard is *"56–61% is a
 healthy margin for a made-to-order label"*.
 
-**4. The cotton bag: AED 17, agreed with Hashir Packaging Dubai 2026-09-02.**
+**4. The cotton bag: AED 17, agreed 2026-09-08.** ⚠️ **Hashir is Fitoor's
+contact, not a separate supplier** -- so the 17 is ex-VAT like every line on
+their quote and the bag lands at 17.85, not 17.
 Fitoor wanted 20 (39% of their quote, ~2.5 margin points); the founder asked 15
 and settled at 17. Ada Zhang ~10.87 landed but 25 days production. Each AED on
 the bag ≈ 0.26 margin points. **Still to ask: 300 and 500 pricing** — at 100

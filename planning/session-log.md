@@ -18,6 +18,147 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-05 — feedback and returns separated; delivery date, fit-remake flag, per-garment feedback
+
+**Files touched (no longer claimed):** `website/drizzle/0008_delivery_and_fit_remake.sql`
+(new), `website/scripts/test-fit-attribution.mjs` (new),
+`website/src/db/schema.ts`, `website/src/app/api/dashboard/orders/[id]/status/route.ts`,
+`website/src/app/api/dashboard/orders/[id]/spec-sheet/route.ts`,
+`website/src/app/api/fit-feedback/route.ts`, `website/src/lib/techPack.ts`,
+`website/src/data/fitFeedback.ts`, `website/src/components/FitFeedbackForm.tsx`,
+`website/src/components/OrderStatusButtons.tsx`,
+`website/src/app/dashboard/orders/page.tsx`, `website/scripts/test-techpack.mjs`.
+
+⚠️ **STATE AT THE TIME OF WRITING: MIGRATION APPLIED TO DEV ONLY. NOT PUSHED.**
+Do not push this branch until `--target=prod` has run. See the trap below.
+
+#### The founder's decision, and it is the useful part
+
+**Feedback and returns are two processes, not one.** They had been described as
+one survey doing both. They have opposite shapes:
+
+| | Feedback | Returns |
+|---|---|---|
+| Value | Compounding asset — the next order starts from the last | Insurance — makes the purchase safe enough to happen |
+| Volume | Every order, optional | ~5%, obligatory |
+| Timing | Days to weeks later, casual | Immediately, urgent, 14-day deadline |
+| Failure | Silent and slow; nobody harmed | Loud; a customer with a garment that does not fit |
+
+**They must not share a form**, and `fitFeedback.ts` already contained the
+reason before anyone looked: *"What can we improve for you?"* was rejected
+because negative framing *"selects respondents: only the dissatisfied fill in a
+complaint form."* Adding "would you like a remake?" to the survey would poison
+the only fit dataset there is, **advertise the remake to people who were not
+going to ask** — and remake rate is the number `unit-economics.md` says the
+business dies of — and serve an unhappy customer badly by putting five
+questions about shoulders in front of her problem.
+
+**So the survey stays purely feedback. Returns stay on WhatsApp**, which is
+also what the printed card already says, and where a photo is free and is the
+best abuse filter available.
+
+#### What the card decides, and what it does not
+
+The thank-you card is the only uncorrectable part. It reads
+*"one free alteration or remake within 14 days of delivery. Message us on
+WhatsApp"* — so returns are a human process by design, and **the QR is a bare
+`/fit` with no token**, which means every survey defect below was fixable in
+software without a reprint. **Verify `TAILOR_WHATSAPP_NUMBER` before any print
+run** — the card comment already records two wording drifts caught late.
+
+#### Three columns, and why each is where it is
+
+`0008_delivery_and_fit_remake.sql`, all additive and nullable.
+
+1. **`orders.delivered_at`** — the 14 days counted from nothing. **Not
+   derivable from `status`**: that is one overwritable field, so delivered then
+   canceled loses the date. Written once, via `coalesce`, on the first
+   transition into `delivered`, so a second click cannot extend a deadline.
+2. **`order_items.fit_remake_used_at`** — **on the item, not the order.**
+   `/legal/terms` files the promise under "If the fit isn't right" and
+   `/shipping` opens it "Try it on promptly", so a customer whose shirt *and*
+   trousers both fit badly gets both fixed. Quantity already expands to one row
+   per garment. **The `fit_` prefix is load-bearing**: `/shipping` says a faulty
+   or wrong-item remake *"is separate from the fit guarantee and does not use it
+   up"*, so a column called `remake_used` would invite the next person to spend
+   a promise the customer still has.
+3. **`fit_feedback.order_item_id`** — see the defect below.
+
+`delivered` added to `ALLOWED_STATUSES` and to the dashboard buttons; it is the
+founder's own step, since the courier collects from her.
+
+#### The defect this actually fixes — wrong instructions to a tailor
+
+One card is packed in a parcel that may hold two garments, and the five survey
+questions are garment-agnostic. So "the length was shorter than I like" on a
+shirt-and-trousers order attached to the **order**, and the tech pack block that
+prints it **sits inside the per-spec loop** — so it printed on *both* specs,
+headed HOW HER LAST PIECE FITTED, directly under the measurements. A trousers
+spec carrying a shirt's feedback is not missing data, it is **wrong instructions
+to the person cutting**, which is worse than printing nothing.
+
+Fixed at both ends: `/fit` now asks **"which piece is this about?"**, and the
+tech pack takes its own category first, then the entry that names no garment,
+then nothing — **never another category's entry**.
+
+⚠️ **THE QUESTION IS NOT AN ORDER LOOKUP, AND THAT IS THE WHOLE SAFETY
+ARGUMENT.** The standing rule forbids *showing* an unauthenticated visitor what
+a typed email has bought. Asking her what is in her hand runs the other way: she
+tells us, we tell her nothing, and a wrong answer costs one unattributed row.
+The order number stays off the form — `FitFeedbackForm.tsx` is explicit that
+each extra field loses most of the people who scanned.
+
+⚠️ **RESIDUAL, AND IT IS DELIBERATE.** Rows written before today name no
+garment, so they still print on every spec. There is no better information
+about them and dropping them would lose real data. New rows are attributed.
+
+#### ⚠️ THE TRAP THIS ALMOST WALKED INTO, AND IT WAS ALREADY WRITTEN DOWN
+
+`/api/fit-feedback` filtered on **`o.status = 'paid'`**. That was correct only
+while `paid` was where an order sat forever. Fulfilment now moves it to
+`in_progress -> shipped -> delivered`, so **the first parcel the founder marked
+delivered would have made the survey match nothing** — no error, no alarm, just
+no rows, for exactly the customers who had received something. Now
+`o.status in ('paid','in_progress','shipped','delivered')`, and the ordering is
+`delivered_at desc nulls last, created_at desc` so it degrades to the old
+behaviour if the status is never set.
+
+This is the CLAUDE.md rule about a trust boundary moving, in a new costume:
+**a status value that was terminal stopped being terminal, and every query that
+read it was a new question.** The other four `'paid'` comparisons were checked
+and are all correct.
+
+#### ⚠️ AND THE ONE THAT MUST NOT BE GOT WRONG ON THE WAY OUT
+
+**Migrate prod BEFORE pushing.** Not a preference — `db.select()` expands to an
+explicit column list, and bare selects on `orders`/`order_items` sit in
+**`api/webhooks/stripe/route.ts`** and `api/orders/[id]`. Deploying first means
+cards are charged and orders are never marked paid. Exactly Trap 3, on the two
+routes it names.
+
+    node scripts/db-migrate.mjs --target=prod    # then verify information_schema
+
+#### Verified, not assumed
+
+- `npx tsc --noEmit` clean; `npm run build` green.
+- `scripts/test-techpack.mjs` extended with four assertions on per-garment
+  feedback. **Confirmed they fail against the old selection logic** (3
+  failures) and pass against the new — a test that passes both ways proves
+  nothing.
+- `scripts/test-fit-attribution.mjs` (new) exercises the real insert against
+  the **dev** branch inside a rolled-back transaction: right garment, right
+  parcel, null rather than a guess, canceled skipped, delivered found, unknown
+  email inserts nothing. Leftover rows asserted to be 0.
+- Dev migration verified against `information_schema` — three columns, all
+  nullable, FK present. Prod confirmed to have none of them yet.
+
+#### Still open on this thread
+
+- **P2 is now unblocked but not built**: nothing yet *sets*
+  `fit_remake_used_at`. The columns make the promise enforceable; a human still
+  has to record that a remake was given.
+- `/account` does not show which garment a feedback entry was about.
+
 ### 2026-09-02 — the packaging order is unblocked and placed. One number left.
 
 **Files touched, all committed:** `planning/margins.mjs`, `planning/unit-economics.md`,
@@ -32,7 +173,12 @@ Run `node planning/margins.mjs` — never retype these.
 
 **Settled today:**
 
-1. **Cotton bag AED 17** with Hashir, down from Fitoor's 20. Founder asked 15.
+1. **Cotton bag AED 17**, down from their own 20. Founder asked 15.
+   ⚠️ **HASHIR IS FITOOR'S CONTACT, NOT A SECOND SUPPLIER** (corrected
+   2026-09-08). There is ONE packaging supplier, one invoice, one 50% advance.
+   The margin model briefly treated him as a separate vendor and therefore
+   treated the 17 as VAT-inclusive; it is ex-VAT like every line on quote
+   FRP2608-1149, so the bag lands at **17.85**.
 2. **The full Fitoor quote FRP2608-1149 is verified line by line** against the
    document itself — all ten lines reconstruct its 5,115.00 + 255.75 VAT =
    5,370.75 exactly. This also closed the 0.87 packaging discrepancy left open
@@ -69,7 +215,7 @@ Everything else about the packaging order can proceed without it, except the
 300 blend care labels.
 
 **Also asked of the suppliers, not yet answered:** 300/500 unit bag pricing,
-whether Hashir's 17 is ex-VAT (Fitoor's rates all are), whether the care-label
+whether the care-label
 split carries a setup charge, and confirmation that the bag is 500x400 landscape
 rather than the 35x45 Fitoor quoted. The quote is also addressed to
 "Shakalek Cafe" and needs reissuing for VAT.
@@ -113,7 +259,7 @@ the cotton bags.** When those land, they go in `margins.mjs`, not in prose.
    linen, so **the catalogue photography survives**. Cotton-as-base quietly
    required reshooting the largest asset in the repo.
 3. **No price changes.** 389 / 429 stand, +90 for linen (479 / 519).
-4. **Cotton bag: AED 17, AGREED with Hashir Packaging Dubai 2026-09-02.**
+4. **Cotton bag: AED 17, AGREED with Fitoor (Hashir is their contact) 2026-09-02.**
    Fitoor wanted 20; founder asked 15, settled at 17. Already in `margins.mjs`.
    **Still to ask: 300 and 500 unit pricing** — at 100 units the setup cost
    dominates, which is where the saving actually is.
