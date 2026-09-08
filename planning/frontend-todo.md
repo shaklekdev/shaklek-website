@@ -26,18 +26,50 @@ length from total height using a population ratio -- which is the average-body
 assumption this brand exists to reject, reintroduced in the one place it must
 not be. Two people at 165cm have very different leg-to-torso proportions.
 
-**What is missing, and why each one matters:**
+### ✅ THE TAILOR'S ACTUAL LIST (Danish, Taylor Moon Shine, 2026-08-30)
 
-| Missing | Needed for | Why |
-|---|---|---|
-| **Shoulder width** | Shirts | ⚠️ The one measurement that CANNOT be altered after cutting. Everything hangs from it. |
-| **Sleeve length** | Shirts | On a size chart it is tied to chest. On a person it is not. |
-| **Shirt length** | Shirts | The "longer" slider has nothing to measure against. |
-| **Inseam** | Trousers | The "cropped/full" slider has nothing to measure against. |
-| Thigh, rise | Trousers | Straight vs wide fit through the leg. |
+Not designed here. This is what the person cutting the garment asked for.
+**Seventeen measurements. The site collects four, and one of those four is not
+on either list.**
 
-**Height is arguably the wrong fourth field.** It tells the tailor almost nothing
-actionable on its own; inseam tells them exactly where to cut.
+| # | TROUSERS (7) | Site has it? |   | # | SHIRT (10) | Site has it? |
+|---|---|---|---|---|---|---|
+| 1 | Length | ✗ | | 1 | Shirt length | ✗ |
+| 2 | Waist | ✅ | | 2 | Shoulder | ✗ |
+| 3 | Hips | ✅ | | 3 | Chest | ✅ (bust) |
+| 4 | Crotch (rise) | ✗ | | 4 | Stomach | ✅ (waist) |
+| 5 | Thigh | ✗ | | 5 | Hips | ✅ |
+| 6 | Knee ⏳ | ✗ | | 6 | Hand length (sleeve) | ✗ |
+| 7 | Bottom (hem opening) | ✗ | | 7 | Biceps | ✗ |
+| | | | | 8 | Elbow | ✗ |
+| | | | | 9 | Cuff | ✗ |
+| | | | | 10 | Neck | ✗ |
+
+**3 of 7 for trousers. 3 of 10 for shirts.**
+
+⚠️ **HEIGHT IS ON NEITHER LIST.** The tailor never asked for it. The site's
+fourth field is one nobody cutting a garment uses.
+
+⏳ **Three items need the tailor to confirm before anyone builds a form:**
+"Need" is almost certainly **Knee** but is not certain; **"Hand length"** could
+be shoulder-to-wrist or wrist-to-fingertip; and trouser **"Length"** could be
+outseam from the waist or something else. **Have him demonstrate each one.**
+
+### Seventeen is too many to ask online -- but not all seventeen are body facts
+
+Three different kinds of number are mixed together in that list:
+
+- **Body, and only the customer has it:** waist, hips, chest, stomach, shoulder,
+  neck, thigh, crotch, shirt length, sleeve length, trouser length.
+- **STYLE, and the customizer already decides it:** **Bottom** is the leg opening
+  -- that is the straight/wide slider, not a fact about a leg. Knee is largely
+  the same. **Do not ask the customer for these; derive them from the chosen
+  combination.**
+- **Derivable within a loose fit's tolerance:** biceps, elbow, cuff, from chest
+  plus an ease allowance -- or taken properly at a fitting.
+
+**That is the design.** The form asks only for the first group, the customizer
+supplies the second, and the third is derived or measured in person.
 
 ### The shape of the fix -- fields should follow the GARMENT, not the customer
 
