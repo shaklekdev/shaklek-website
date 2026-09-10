@@ -66,9 +66,18 @@ themselves. In priority order:
 2. **The tailor visit.** Eight questions in `tailor-capacity.md`, four blocking:
    the seventeen measurements demonstrated, the three ambiguous ones, metres per
    garment (still a placeholder worth ~3 margin points), and his volume rate.
-3. **The four fit-sample sets**, from the 30% linen already bought. These turn
-   the 5% remake assumption into a measurement, and the remake rate is what a
-   made-to-order brand actually dies of.
+3. ✅ **The four fit-sample sets are IN PROGRESS with the tailor** (2026-09-10).
+   ⏳ **He is cutting now, so ask TODAY for the actual metres used per piece** --
+   `metresPerGarment` in `margins.mjs` has been a placeholder since 2026-08-28,
+   it is worth up to 3 margin points, and once the cloth is cut the number is
+   gone unless somebody writes it down.
+   ⚠️ **These are cut in the 30% linen at 10 AED/m, not W300235.** They answer
+   FIT and nothing else -- not drape, not hand, not shrinkage. The shrinkage test
+   still needs a piece of the real roll.
+   ⚠️ **And a sample only counts if the finished garment is MEASURED** and
+   compared against the measurements that went in. That difference is the real
+   remake risk and the thing that says whether 5% was optimistic. Having them
+   made is not the test; measuring them is.
 4. **Read the Arabic** on the care label: `غسيل آلي لطيف`. Marked pending, not
    approved, in `productDisclosure.ts`.
 5. **Wash a piece of the linen when it lands**, before 500 care labels are
