@@ -2,7 +2,7 @@
 
 The earlier tiles restated the website. These don't: every line opens on a
 tension the viewer already feels, and the sub-line pays it off. Assets in
-`brand-assets/social/`.
+`brand-assets/_archive/social/`.
 
 Three renders of each: `ig-` square 1080×1080 · `tt-` vertical 1080×1920 ·
 `ad-` 1080×1350 (the tallest Instagram allows in feed, so the best paid format).

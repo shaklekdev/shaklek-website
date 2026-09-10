@@ -23,4 +23,4 @@ console.log(seq.length,"frames =",(seq.length/30).toFixed(1),"s");
 // the repo moved off the iCloud-synced Desktop and every one of these scripts
 // would have broken. Derived, the next move costs nothing.
 const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url)).replace(/\/$/, "");
-execFileSync("./encode",[`${REPO_ROOT}/brand-assets/social/reel-grid-4up.mp4`,"30","1080","1920",...seq],{stdio:"inherit"});
+execFileSync("./encode",[`${REPO_ROOT}/brand-assets/_archive/social/reel-grid-4up.mp4`,"30","1080","1920",...seq],{stdio:"inherit"});

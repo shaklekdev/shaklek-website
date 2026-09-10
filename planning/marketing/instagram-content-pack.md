@@ -1,6 +1,6 @@
 # Instagram content pack, ready to post
 
-26 finished 1080×1080 images in `brand-assets/instagram/`. Every claim below is
+26 finished 1080×1080 images in `brand-assets/_archive/instagram/`. Every claim below is
 checked against the shipped site; the source line is noted where it matters.
 
 **Bio link must be `https://www.shaklek.com`**, the apex 404s on deep links.
