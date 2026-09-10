@@ -18,6 +18,76 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-10 — PAID. Both orders placed, and the clock has started.
+
+**Fabric, Shirley Gz:** 124m of W300235, invoice 6,449.86 RMB = **AED 3,516**
+(6,262 goods + 187.86 at 3%). Every line checked against the metres ordered.
+Shipping billed **separately after weighing** at the agent's warehouse, which is
+what the weight question was for -- expect ~27kg, so about 1,580 RMB / AED 861.
+**All in roughly AED 4,378, or 36.08/m**, which is what the model already uses.
+
+⚠️ **THE MILL'S SHADE CODES. A REORDER MUST QUOTE THESE** or the cloth will not
+match photography that is already shot and already correct:
+**#3 White 22m · #4 Ivory 43m · #440 Navy 32m · #29 Burgundy 27m.**
+
+**Packaging, Fitoor:** quote FRP2609-1113, **AED 4,567.50** inc VAT, 50% advance
+paid. Eight lines. Catching their duplicate care-label design (they had quoted
+500 of EACH of two designs when the blend was dropped) saved 388.50.
+
+**Total committed: ~AED 8,900.** Break-even against buying linen locally is 32
+garments; the packaging pays back in 18.
+
+#### Expected dates
+
+- Fabric: 5-6 days production, then 12-15 days air. **Late September.**
+- Packaging: 14-21 business days. **Late September / early October.**
+- So a realistic opening is **early-to-mid October**, and the ~3 weeks between
+  now and then is the most valuable window in the plan (see below).
+
+#### ⏳ What the waiting period is FOR
+
+Nothing about the launch is blocked by these deliveries except the goods
+themselves. In priority order:
+
+1. **The TikTok account.** ⚠️ **Six videos and ~30 Instagram statics have been
+   sitting rendered in `brand-assets/` since 2026-08-27 and there is still no
+   account.** Organic reach takes weeks to build, the MVP plan calls for ten
+   organic sales before any ad spend, and this is the only item whose value
+   *decreases* the longer it waits. ⚠️ One caption
+   (`00-you-are-the-designer.caption.txt`) says "100% linen, from AED 389" --
+   the fibre is right now, the price is not.
+2. **The tailor visit.** Eight questions in `tailor-capacity.md`, four blocking:
+   the seventeen measurements demonstrated, the three ambiguous ones, metres per
+   garment (still a placeholder worth ~3 margin points), and his volume rate.
+3. **The four fit-sample sets**, from the 30% linen already bought. These turn
+   the 5% remake assumption into a measurement, and the remake rate is what a
+   made-to-order brand actually dies of.
+4. **Read the Arabic** on the care label: `غسيل آلي لطيف`. Marked pending, not
+   approved, in `productDisclosure.ts`.
+5. **Wash a piece of the linen when it lands**, before 500 care labels are
+   printed. Above ~2% residual, dry-clean-only goes back on.
+
+#### Still open with the suppliers
+
+- **Composition certificate naming W300235** (Shirley chasing the mill). This is
+  what backs "100% linen" on ~20 pages; the 2022 certificate on file names the
+  article only in its filename.
+- **Flax origin** -- a marketing nice-to-have, not worth blocking on. If it is
+  Chinese-grown, compete on fit rather than provenance.
+- **Fitoor:** the invoice reads "Shakalek"; the company is **Shaklek For Online
+  Selling** (licence 1645657). And the cotton bag line still reads 35x45 with a
+  handle against the approved 500x400 landscape drawstring. Their sample step
+  confirms the product but **not the price** -- 50x40 is 27% more cloth.
+
+⚠️ **Do not reopen the invoice-name question with Shirley.** She said "I am not
+good at documentation", and she is a sourcing agent on WhatsApp, not a company
+with a finance department. Shaklek is a **sole establishment**, so the owner and
+the business are one legal person and an invoice addressed to Nada is not a
+lesser document. The itemised sheet plus the Alipay record is a complete expense
+record. She has been generous where Helen was not; do not spend that on
+paperwork that does not matter.
+
+
 ### 2026-09-08 — THE LAUNCH SHAPE IS DECIDED. Linen only, 449 / 519.
 
 **Committed, not pushed.** The site is still gated (401) and the gate comes down
