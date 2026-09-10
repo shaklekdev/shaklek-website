@@ -38,10 +38,13 @@ export type Block =
   | { type: "image"; src: string; alt: string; caption?: string; w: number; h: number }
   /** Two portrait shots side by side, for comparisons. */
   | { type: "pair"; a: { src: string; alt: string }; b: { src: string; alt: string }; caption?: string }
-  /** Two complete LOOKS, each a shirt above its trousers. Use where the point
-   *  is that the customer chooses, not that two garments differ -- a sleeve
-   *  and a leg changing together says it far better than two near-identical
-   *  trouser shots. Founder, 2026-09-10. */
+  /** Two complete LOOKS, each a shirt above its trousers.
+   *  ⚠️ DO NOT LABEL THESE BY SLEEVE LENGTH. Checked 2026-09-10: there is no
+   *  photograph in the catalogue of a shirt with the sleeves DOWN. Every
+   *  long-sleeve shot is rolled to the forearm, and the blouse, utility shirt
+   *  and wrap top are all short-sleeved. A label reading "long sleeve" against
+   *  a rolled cuff is a claim the picture does not support, which the founder
+   *  caught. Label by the trouser cut, which is unambiguous and visible. */
   | { type: "looks"; a: { top: string; bottom: string; label: string };
       b: { top: string; bottom: string; label: string }; caption?: string };
 
@@ -356,14 +359,14 @@ export const articles: Article[] = [
         a: {
           top: "/catalog/oversized-shirt/oversized-shirt-front.jpg",
           bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg",
-          label: "Long sleeve, wide leg, full length",
+          label: "Wide leg, full length",
         },
         b: {
           top: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-front.jpg",
           bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.jpg",
-          label: "Short sleeve, straight leg, cropped",
+          label: "Straight leg, cropped",
         },
-        caption: "The same two pieces, four choices. You pick the sleeve and the leg, and nothing is cut until you do.",
+        caption: "The same trouser, two cuts. You choose which one gets made, and nothing is cut until you do.",
       },
       { type: "h2", text: "What it does not change, and this matters" },
       {
