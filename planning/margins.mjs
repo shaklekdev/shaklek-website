@@ -258,8 +258,13 @@ for (const [key, l] of Object.entries(INPUTS.packaging.lines)) {
 }
 console.log(`  ${"".padEnd(3)}${"IN THIS BASKET".padEnd(18)}${"".padStart(7)}${packTotal.toFixed(2).padStart(8)}${"".padStart(7)}${packagingCash().toFixed(0).padStart(9)}`);
 console.log(`  [L] = legally required.  + = ordering.  - = dropped.`);
-console.log(`  ⚠️ Hashir's 17 is assumed VAT-INCLUSIVE. Fitoor's rates are all ex-VAT;`);
-console.log(`     if his is too, the bag is 17.85 and every margin drops ~0.2 pts.`);
+console.log(`  ✅ ONE SUPPLIER. Hashir is Fitoor's contact, not a second vendor -- this`);
+console.log(`     model had that wrong until 2026-09-08 and therefore treated the bag's`);
+console.log(`     17 as VAT-inclusive. Every line is ex-VAT, so the bag lands at 17.85.`);
+console.log(`  ⏳ THE BAG LINE STILL READS 35x45 WITH A HANDLE on FRP2609-1113. The`);
+console.log(`     approved spec is 500x400 LANDSCAPE, DRAWSTRING -- 27% more cloth. Their`);
+console.log(`     sample step confirms the product; it does NOT confirm the price. Settle`);
+console.log(`     the 17 at the real size BEFORE the 50% advance.`);
 
 // Baskets worth comparing. Each is a set of overrides on the `keep` flags.
 // The hand bag is NOT a droppable line -- in Dubai it is how the order is
