@@ -83,13 +83,13 @@ function stack(latin, arabic, ruleH, gapRatio = 0.26) {
  * Default stays true. Anything that ships attached to a garment should never
  * pass false.
  */
-function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD, withArabic = true) {
+function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD, withArabic = true, gapRatio = 0.26) {
   const probe = shape("Italiana-Regular.ttf", "Shaklek", 46, (46 * 4) / 29);
   const size = (targetW / probe.width) * 46;
   const la = shape("Italiana-Regular.ttf", "Shaklek", size, (size * 4) / 29);
   const ar = withArabic ? shape("ReemKufi-Regular.ttf", "شكلك", size * 0.42) : null;
   const rh = Math.max(0.35, size * 0.022);
-  const st = stack(la, ar, rh);
+  const st = stack(la, ar, rh, gapRatio);
   draw(doc, la.segs, cx - la.width / 2, topY + st.latBase, ink);
   doc.rect(cx - (la.width * 0.32) / 2, topY + st.ruleY, la.width * 0.32, rh).fill(gold);
   if (ar) draw(doc, ar.segs, cx - ar.width / 2, topY + st.arBase, ink);
@@ -103,12 +103,12 @@ function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD, withArabic = tru
  * eye puts its centre, and "just use h/2" hangs it high. Same probe maths as
  * lockup() -- change one and change both.
  */
-function lockupHeight(targetW, withArabic = true) {
+function lockupHeight(targetW, withArabic = true, gapRatio = 0.26) {
   const probe = shape("Italiana-Regular.ttf", "Shaklek", 46, (46 * 4) / 29);
   const size = (targetW / probe.width) * 46;
   const la = shape("Italiana-Regular.ttf", "Shaklek", size, (size * 4) / 29);
   const ar = withArabic ? shape("ReemKufi-Regular.ttf", "\u0634\u0643\u0644\u0643", size * 0.42) : null;
-  return stack(la, ar, Math.max(0.35, size * 0.022)).height;
+  return stack(la, ar, Math.max(0.35, size * 0.022), gapRatio).height;
 }
 function monogram(doc, cx, baseY, inkHeight, fill = INK) {
   const sh = shape("ReemKufi-Regular.ttf", "ش", inkHeight / 0.72);
@@ -785,9 +785,21 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   // of copy is too much for 90 x 50 mm. Legal to drop here and ONLY here --
   // Art. 26's Arabic requirement is about data on a product, so the care label,
   // the brand label and the hang tag all keep theirs.
-  const markW = CARD_W * 0.34 * MM;
+  // ⚠️ THE MARK LEADS, THE CLAIM FOLLOWS. Founder, 2026-09-10: the slogan read
+  // too big against the brand name. On a card handed over in three seconds the
+  // name has to be the first thing seen, so the mark grew and the claim shrank
+  // -- both, because moving only one of them just changes the size of the card
+  // rather than the relationship between the two.
+  const markW = CARD_W * 0.42 * MM;
   doc.save();
-  lockup(doc, w / 2, B + CARD_H * 0.17 * MM, markW, CREAM, GOLD, false);
+  // ⚠️ WIDER RULE GAP THAN EVERYWHERE ELSE, AND ONLY HERE. Founder,
+  // 2026-09-10: the rule sat too close under the wordmark and did not match the
+  // breathing room the rule above "Made in the UAE" has. The default 0.26 is
+  // tuned for the full lockup, where the Arabic below the rule balances it;
+  // with the Arabic gone the rule has nothing under it and reads as an
+  // underline rather than a divider. Raising the ratio for this card only
+  // leaves every other piece untouched.
+  lockup(doc, w / 2, B + CARD_H * 0.13 * MM, markW, CREAM, GOLD, false, 0.62);
   doc.restore();
 
   // The claim, cream on ink, the same reversal as the mark.
@@ -803,8 +815,8 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   // anywhere else makes the reader work at the one moment she has not decided
   // to. The widths are measured and asserted below rather than eyeballed.
   const claimW = Math.max(
-    line(doc, w / 2, B + 27.5 * MM, CARD_LINE_1, 4.1 * MM, CREAM, 0.5),
-    line(doc, w / 2, B + 34.4 * MM, CARD_LINE_2, 4.1 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 28.5 * MM, CARD_LINE_1, 3.5 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 34.4 * MM, CARD_LINE_2, 3.5 * MM, CREAM, 0.5),
   );
   // ⚠️ A CARD IS TRIMMED, SO TYPE NEAR THE EDGE IS TYPE THAT GETS CUT. The
   // guillotine drifts; 6 mm of quiet margin each side is the floor. This has to
@@ -817,13 +829,17 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
     process.exitCode = 1;
   }
 
-  // A hairline, not a divider. It separates the claim from the facts beneath
-  // without turning a 90 x 50 card into two boxes.
-  doc.rect(w / 2 - 6 * MM, B + 38.6 * MM, 12 * MM, 0.3).fill(GOLD);
+  // ⚠️ THERE IS NO SECOND RULE, AND THE CHOICE OF WHICH ONE TO DROP MATTERS.
+  // Founder, 2026-09-10: two gold rules on one small card is too much. The one
+  // that stays is the one UNDER THE WORDMARK, because it is part of the mark
+  // itself -- it is on the hang tag, the care label, the woven brand label and
+  // both bag prints. Dropping that one would make the card the only piece in
+  // the parcel whose mark is different. The rule that went was a divider added
+  // to this card alone, so nothing else in the system loses anything.
 
   // Smaller and warm grey so it reads as a footnote to the claim rather than
   // a third sentence competing with it.
-  plain(doc, w / 2, B + 43.6 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 0.5);
+  plain(doc, w / 2, B + 43.2 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 0.5);
 }, "trim 90x50, 3mm bleed. Ink ground, mark reversed, the founder's line beneath");
 
 makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
