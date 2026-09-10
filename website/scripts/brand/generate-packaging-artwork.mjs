@@ -55,25 +55,44 @@ const draw = (doc, segs, dx, dy, fill) => {
   for (const s of segs) doc.save().translate(s.x, s.y).scale(s.s, -s.s).path(s.d).fill(fill).restore();
   doc.restore();
 };
-/** stack the lockup so the gaps above and below the rule are equal */
+/** stack the lockup so the gaps above and below the rule are equal.
+ *  `arabic` may be null, for the Latin-only lockup -- see lockup(). */
 function stack(latin, arabic, ruleH, gapRatio = 0.26) {
   const gap = latin.above * gapRatio;
   const latBase = latin.above;
   const ruleY = latBase + latin.below + gap;
+  // Latin-only: the mark ends at the rule, so the rule is the bottom edge and
+  // there is no second gap. Returning arabic's gap here would hang the mark
+  // high by exactly the space the Arabic used to fill.
+  if (!arabic) return { latBase, ruleY, arBase: null, height: ruleY + ruleH };
   const arBase = ruleY + ruleH + gap + arabic.above;
   return { latBase, ruleY, arBase, height: arBase + arabic.below };
 }
-/** full lockup centred on cx, top edge at topY, drawn to targetW */
-function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD) {
+/**
+ * Full lockup centred on cx, top edge at topY, drawn to targetW.
+ *
+ * `withArabic: false` draws the Latin wordmark and the gold rule only.
+ *
+ * ⚠️ THE ARABIC IS NOT OPTIONAL EVERYWHERE, so this flag has a narrow purpose.
+ * Federal Law 15/2020 Art. 26 requires Arabic on data addressed to the consumer
+ * ON A PRODUCT -- which is the care label, the brand label and the hang tag,
+ * and those must keep it. A business card is not a product label, so the mark
+ * there is a matter of taste, and the founder's (2026-09-10) is that two
+ * scripts plus two lines of copy is too much for 90 x 50 mm.
+ *
+ * Default stays true. Anything that ships attached to a garment should never
+ * pass false.
+ */
+function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD, withArabic = true) {
   const probe = shape("Italiana-Regular.ttf", "Shaklek", 46, (46 * 4) / 29);
   const size = (targetW / probe.width) * 46;
   const la = shape("Italiana-Regular.ttf", "Shaklek", size, (size * 4) / 29);
-  const ar = shape("ReemKufi-Regular.ttf", "شكلك", size * 0.42);
+  const ar = withArabic ? shape("ReemKufi-Regular.ttf", "شكلك", size * 0.42) : null;
   const rh = Math.max(0.35, size * 0.022);
   const st = stack(la, ar, rh);
   draw(doc, la.segs, cx - la.width / 2, topY + st.latBase, ink);
   doc.rect(cx - (la.width * 0.32) / 2, topY + st.ruleY, la.width * 0.32, rh).fill(gold);
-  draw(doc, ar.segs, cx - ar.width / 2, topY + st.arBase, ink);
+  if (ar) draw(doc, ar.segs, cx - ar.width / 2, topY + st.arBase, ink);
   return st.height;
 }
 /**
@@ -84,11 +103,11 @@ function lockup(doc, cx, topY, targetW, ink = INK, gold = GOLD) {
  * eye puts its centre, and "just use h/2" hangs it high. Same probe maths as
  * lockup() -- change one and change both.
  */
-function lockupHeight(targetW) {
+function lockupHeight(targetW, withArabic = true) {
   const probe = shape("Italiana-Regular.ttf", "Shaklek", 46, (46 * 4) / 29);
   const size = (targetW / probe.width) * 46;
   const la = shape("Italiana-Regular.ttf", "Shaklek", size, (size * 4) / 29);
-  const ar = shape("ReemKufi-Regular.ttf", "\u0634\u0643\u0644\u0643", size * 0.42);
+  const ar = withArabic ? shape("ReemKufi-Regular.ttf", "\u0634\u0643\u0644\u0643", size * 0.42) : null;
   return stack(la, ar, Math.max(0.35, size * 0.022)).height;
 }
 function monogram(doc, cx, baseY, inkHeight, fill = INK) {
@@ -756,9 +775,19 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   //
   // Sized and placed in FRACTIONS OF THE CARD, never in fixed points, so this
   // stays right if the trim ever moves. The bag print got that wrong twice.
+  //
+  // ⚠️ EVERY Y BELOW WAS RE-BALANCED WHEN THE ARABIC CAME OFF. Dropping it made
+  // the lockup shorter without moving anything under it, which left a hole
+  // between the mark and the claim. Removing an element from a stack is not a
+  // deletion, it is a re-layout.
+  //
+  // ⚠️ LATIN ONLY ON THIS CARD. Founder, 2026-09-10: two scripts plus two lines
+  // of copy is too much for 90 x 50 mm. Legal to drop here and ONLY here --
+  // Art. 26's Arabic requirement is about data on a product, so the care label,
+  // the brand label and the hang tag all keep theirs.
   const markW = CARD_W * 0.34 * MM;
   doc.save();
-  lockup(doc, w / 2, B + CARD_H * 0.13 * MM, markW, CREAM, GOLD);
+  lockup(doc, w / 2, B + CARD_H * 0.17 * MM, markW, CREAM, GOLD, false);
   doc.restore();
 
   // The claim, cream on ink, the same reversal as the mark.
@@ -774,8 +803,8 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   // anywhere else makes the reader work at the one moment she has not decided
   // to. The widths are measured and asserted below rather than eyeballed.
   const claimW = Math.max(
-    line(doc, w / 2, B + 30 * MM, CARD_LINE_1, 4.1 * MM, CREAM, 0.5),
-    line(doc, w / 2, B + 37 * MM, CARD_LINE_2, 4.1 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 27.5 * MM, CARD_LINE_1, 4.1 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 34.4 * MM, CARD_LINE_2, 4.1 * MM, CREAM, 0.5),
   );
   // ⚠️ A CARD IS TRIMMED, SO TYPE NEAR THE EDGE IS TYPE THAT GETS CUT. The
   // guillotine drifts; 6 mm of quiet margin each side is the floor. This has to
@@ -790,11 +819,11 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
 
   // A hairline, not a divider. It separates the claim from the facts beneath
   // without turning a 90 x 50 card into two boxes.
-  doc.rect(w / 2 - 6 * MM, B + 41.2 * MM, 12 * MM, 0.3).fill(GOLD);
+  doc.rect(w / 2 - 6 * MM, B + 38.6 * MM, 12 * MM, 0.3).fill(GOLD);
 
   // Smaller and warm grey so it reads as a footnote to the claim rather than
   // a third sentence competing with it.
-  plain(doc, w / 2, B + 46.2 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 0.5);
+  plain(doc, w / 2, B + 43.6 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 0.5);
 }, "trim 90x50, 3mm bleed. Ink ground, mark reversed, the founder's line beneath");
 
 makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
