@@ -39,10 +39,17 @@ garments; the packaging pays back in 18.
 
 #### Expected dates
 
-- Fabric: 5-6 days production, then 12-15 days air. **Late September.**
-- Packaging: 14-21 business days. **Late September / early October.**
-- So a realistic opening is **early-to-mid October**, and the ~3 weeks between
-  now and then is the most valuable window in the plan (see below).
+- **Fabric: 27 September - 1 October.** 5-6 days production, then 12-15 air.
+- **Packaging: ~29 September.** ⚠️ NOT the 14-21 business days on their written
+  terms, which would have been 30 Sept - 9 Oct. Hashir told the founder directly
+  (2026-09-10) it is **two weeks starting next week, once she approves the
+  samples**. Her word from the supplier beats the printed terms; the samples are
+  made first and the production clock starts at her approval.
+- **The two deliveries converge**, so a realistic opening is the **first week of
+  October**. Packaging is still the item that decides it -- the care label is the
+  legal fibre disclosure, so nothing ships without it.
+- The ~3 weeks between now and then is the most valuable window in the plan
+  (see below), and nothing in it depends on either delivery.
 
 #### ⏳ What the waiting period is FOR
 
