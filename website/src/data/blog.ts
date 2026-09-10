@@ -37,7 +37,13 @@ export type Block =
    *  not decoration. An article about how linen behaves in heat shows linen. */
   | { type: "image"; src: string; alt: string; caption?: string; w: number; h: number }
   /** Two portrait shots side by side, for comparisons. */
-  | { type: "pair"; a: { src: string; alt: string }; b: { src: string; alt: string }; caption?: string };
+  | { type: "pair"; a: { src: string; alt: string }; b: { src: string; alt: string }; caption?: string }
+  /** Two complete LOOKS, each a shirt above its trousers. Use where the point
+   *  is that the customer chooses, not that two garments differ -- a sleeve
+   *  and a leg changing together says it far better than two near-identical
+   *  trouser shots. Founder, 2026-09-10. */
+  | { type: "looks"; a: { top: string; bottom: string; label: string };
+      b: { top: string; bottom: string; label: string }; caption?: string };
 
 export type Article = {
   slug: string;
@@ -105,10 +111,10 @@ export const articles: Article[] = [
 
       {
         type: "image",
-        src: "/catalog/oversized-shirt/oversized-shirt-front.jpg",
-        alt: "An oversized linen shirt, cut loose through the body.",
-        caption: "Linen holds itself slightly off the skin. That gap is where the air moves, and moving air is what carries sweat away.",
-        w: 848, h: 1264,
+        src: "/marketing/story-hero.jpg",
+        alt: "Linen, close.",
+        caption: "Linen holds itself slightly off the skin. That gap is where the air moves.",
+        w: 1584, h: 672,
       },
       { type: "h2", text: "What sits against your skin all day" },
       {
@@ -346,10 +352,18 @@ export const articles: Article[] = [
       },
 
       {
-        type: "pair",
-        a: { src: "/catalog/banded-trousers/banded-trousers-navy-front.jpg", alt: "Banded trousers, straight leg." },
-        b: { src: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg", alt: "The same trousers cut wide." },
-        caption: "The same piece, two cuts. You choose which one gets made, and nothing is cut until you do.",
+        type: "looks",
+        a: {
+          top: "/catalog/oversized-shirt/oversized-shirt-front.jpg",
+          bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg",
+          label: "Long sleeve, wide leg, full length",
+        },
+        b: {
+          top: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-front.jpg",
+          bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.jpg",
+          label: "Short sleeve, straight leg, cropped",
+        },
+        caption: "The same two pieces, four choices. You pick the sleeve and the leg, and nothing is cut until you do.",
       },
       { type: "h2", text: "What it does not change, and this matters" },
       {

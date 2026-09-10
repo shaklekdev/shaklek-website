@@ -47,6 +47,12 @@ export async function generateMetadata({
  * wrong for long paragraphs.
  */
 const TEXT = "mx-auto w-full max-w-[34rem]";
+// ⚠️ JUSTIFIED, with hyphenation. Founder, 2026-09-10: "the text is still not
+// square, lines finish at different parts". Ragged-right is the typographic
+// default and she does not want it. hyphens-auto is NOT optional alongside it --
+// justifying at this measure without hyphenation opens rivers of white space.
+// Same treatment LegalPage already uses.
+const PROSE = `${TEXT} text-justify hyphens-auto`;
 
 function renderBlock(block: Block, i: number) {
   switch (block.type) {
@@ -64,7 +70,7 @@ function renderBlock(block: Block, i: number) {
       );
     case "ul":
       return (
-        <ul key={i} className={`${TEXT} mt-5 space-y-3.5 pl-5`}>
+        <ul key={i} className={`${TEXT} mt-5 space-y-3.5 pl-5 text-justify hyphens-auto`}>
           {block.items.map((item, j) => (
             <li key={j} className="list-disc pl-1 marker:text-gold">
               {item}
@@ -74,7 +80,7 @@ function renderBlock(block: Block, i: number) {
       );
     case "callout":
       return (
-        <p key={i} className={`${TEXT} mt-8 border-l-2 border-gold bg-surface-2 px-6 py-5 text-text`}>
+        <p key={i} className={`${PROSE} mt-8 border-l-2 border-gold bg-surface-2 px-6 py-5 text-text`}>
           {block.text}
         </p>
       );
@@ -98,7 +104,7 @@ function renderBlock(block: Block, i: number) {
             width={block.w}
             height={block.h}
             sizes="(min-width: 768px) 44rem, 100vw"
-            className="w-full bg-surface-2 object-cover"
+            className="max-h-[420px] w-full bg-surface-2 object-cover"
           />
           {block.caption && (
             <figcaption className={`${TEXT} mt-3 text-[13px] leading-relaxed text-text-3`}>
@@ -130,9 +136,43 @@ function renderBlock(block: Block, i: number) {
           )}
         </figure>
       );
+    case "looks":
+      // Two complete outfits, each a shirt above its trousers, so the eye reads
+      // DOWN a column as one look rather than across as four separate garments.
+      return (
+        <figure key={i} className="my-12">
+          <div className="grid grid-cols-2 gap-3">
+            {[block.a, block.b].map((look, j) => (
+              <div key={j}>
+                <div className="space-y-1.5">
+                  {[look.top, look.bottom].map((src, k) => (
+                    <Image
+                      key={k}
+                      src={src}
+                      alt={look.label}
+                      width={848}
+                      height={1264}
+                      sizes="(min-width: 768px) 22rem, 50vw"
+                      className="w-full bg-surface-2 object-cover"
+                    />
+                  ))}
+                </div>
+                <p className="mt-2.5 text-[12px] uppercase tracking-[0.08em] text-text-3">
+                  {look.label}
+                </p>
+              </div>
+            ))}
+          </div>
+          {block.caption && (
+            <figcaption className={`${TEXT} mt-4 text-[13px] leading-relaxed text-text-3`}>
+              {block.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
     default:
       return (
-        <p key={i} className={`${TEXT} mt-5`}>
+        <p key={i} className={`${PROSE} mt-5`}>
           {block.text}
         </p>
       );
@@ -202,7 +242,7 @@ export default async function ArticlePage({
               {article.title}
             </h1>
 
-            <p className="mt-5 text-[19px] leading-[1.6] text-text-2">{article.intro}</p>
+            <p className="mt-5 text-justify text-[19px] leading-[1.6] text-text-2 hyphens-auto">{article.intro}</p>
 
             <p className="mt-6 text-[12px] uppercase tracking-[0.1em] text-text-3">
               <time dateTime={article.published}>{published}</time>
