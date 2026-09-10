@@ -698,6 +698,25 @@ git add website/public/catalog/ website/src/data/catalog.ts
 These cost more than any technical problem in this project. Every one is from
 a real failure on 2026-08-20/21.
 
+### Answer in a few lines. She is the founder, not a reviewer.
+
+Founder's instruction, 2026-09-10, given with real frustration: *"i never
+uderstand what you're saying !!!! you talk way too much give me infor straight
+to the point"* — *"i want updates, clear, concise"*.
+
+**No multi-section reports. No tables. No headers. No restating reasoning
+behind a decision she has already made.** A status question — "what's missing",
+"where do we stand", "give me the todolist" — gets a short list: what is done,
+what is blocked, what is needed from her. Lead with the thing she has to act on.
+
+Detail belongs in `planning/session-log.md` and in code comments, where the
+next session will find it. It does not belong in the reply. The exception is a
+warning that costs money or breaks production — say that plainly, still short.
+
+This is not a style note. Long answers bury the one line she has to act on,
+which is the same failure as a stale doc: the information exists and nobody
+can use it.
+
 ### Verify before you claim it worked
 
 The worst habit, by far, was announcing success and being corrected. Every

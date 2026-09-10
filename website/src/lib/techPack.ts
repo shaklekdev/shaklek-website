@@ -126,11 +126,25 @@ export function buildPdf(
     // tells her the feedback goes to her tailor and her next piece starts from
     // it -- so if this never reached this document, we would be printing a
     // claim about a feature that does not exist, in ink, on a card we cannot
-    // recall. It is per-CUSTOMER, not per-item, which is why it arrives here
-    // rather than on SpecItem.
+    // recall.
+    //
+    // ⚠️ TWO FIELDS SINCE 2026-09-05, AND THE ORDER THEY ARE TRIED IN MATTERS.
+    // The block that prints this sits INSIDE the per-spec loop, so a single
+    // per-customer value was printed on every spec in the order -- putting a
+    // shirt's feedback on a trousers spec, headed as her last piece. The
+    // by-category map fixes that; `pastFit` remains the entry that names no
+    // garment, which is every row written before fit_feedback.order_item_id
+    // existed.
+    //
+    // A spec takes its own category first, then the unattributed entry, then
+    // nothing. NEVER another category's entry -- that is the defect.
     //
     // Still no identity: lines and a sentence, never a name or an address.
     pastFit?: { answers: Record<string, string>; note: string | null; at: Date } | null;
+    pastFitByCategory?: Record<
+      string,
+      { answers: Record<string, string>; note: string | null; at: Date }
+    >;
   },
   // Uncompressed output exists so scripts/test-techpack.mjs can read the text
   // back and assert on it. A tech pack that renders without error but prints
@@ -529,8 +543,15 @@ export function buildPdf(
       // to a stranger's instructions". It now says plainly that nobody has
       // checked it and that it does not replace the numbers. Keep it that way
       // unless /fit gains a signed per-order link.
-      const pastLines = order.pastFit ? fitFeedbackLines(order.pastFit.answers) : [];
-      const pastNote = order.pastFit?.note?.trim();
+      // This spec's own garment first, then the entry that names no garment.
+      // Falling through to a different category's entry is exactly the bug
+      // this replaced, so there is no third branch.
+      const pastEntry =
+        (item.category ? order.pastFitByCategory?.[item.category] : undefined) ??
+        order.pastFit ??
+        null;
+      const pastLines = pastEntry ? fitFeedbackLines(pastEntry.answers) : [];
+      const pastNote = pastEntry?.note?.trim();
       if (pastLines.length > 0 || pastNote) {
         doc.moveDown(0.45);
         doc
@@ -540,7 +561,7 @@ export function buildPdf(
           .text("HOW HER LAST PIECE FITTED", left, doc.y, { width });
         doc.moveDown(0.15);
         para(
-          `Reported by the customer after wearing an earlier piece, ${order.pastFit!.at.toISOString().slice(0, 10)}. Her own impression of a real garment, so it is worth more than a chart -- but it is not a measurement and nobody here has checked it. Weigh it against the numbers above; it does not replace them.`,
+          `Reported by the customer after wearing an earlier piece, ${pastEntry!.at.toISOString().slice(0, 10)}. Her own impression of a real garment, so it is worth more than a chart -- but it is not a measurement and nobody here has checked it. Weigh it against the numbers above; it does not replace them.`,
           MUTED,
           9,
         );

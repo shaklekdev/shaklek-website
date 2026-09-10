@@ -1,0 +1,51 @@
+-- Three additive nullable columns that make "one free alteration or remake
+-- within 14 days of delivery" a thing the system can actually compute. That
+-- sentence is printed on the thank-you card, which cannot be recalled, and
+-- until now nothing recorded either end of it: no delivery date, so the 14
+-- days counted from nothing, and no record of the remedy being used, so "one"
+-- could not be enforced.
+--
+-- 1. orders.delivered_at
+--    The status column alone is not enough and cannot be made enough. It is a
+--    single overwritable field: mark an order delivered, then cancel it, and
+--    the delivery date is gone. The status is what staff click; this is what
+--    the promise is measured from, and it is written once (see the coalesce in
+--    the status route) so a second click cannot silently extend a deadline.
+--
+-- 2. order_items.fit_remake_used_at -- ON THE ITEM, NOT THE ORDER, and the
+--    name is deliberate on both halves.
+--
+--    Per item, because the promise is written about a garment: /legal/terms
+--    puts it under "If the fit isn't right" and /shipping opens it with "Try
+--    it on promptly". A customer who orders a shirt and trousers and finds
+--    both wrong would read one remake per piece, and refusing the second on
+--    the grounds that an *order* has one is a reading the published wording
+--    does not support. Quantity already expands to one row per garment in
+--    /api/orders, so a pair of the same shirt gets a remedy each.
+--
+--    "fit_" because there are TWO remedies and only this one is consumable.
+--    /shipping is explicit that a faulty or wrong-item remake "is separate
+--    from the fit guarantee and does not use it up". A column called
+--    remake_used would invite the next person to set it from either path and
+--    quietly take away a promise the customer still has.
+--
+-- 3. fit_feedback.order_item_id
+--    The survey is reached by a QR printed in bulk, so one card arrives in a
+--    parcel that may hold several garments. Today the answers attach to the
+--    ORDER, and the five questions are garment-agnostic, so "the length was
+--    short" on a two-piece order is unattributable -- and the tech pack prints
+--    it under HOW HER LAST PIECE FITTED against whatever is being cut next.
+--    That is not missing data, it is wrong instructions handed to a tailor.
+--
+--    Nullable, and it stays nullable: every row written before today has no
+--    item, and a customer who skips the new question still gets her feedback
+--    stored against the order rather than discarded.
+--
+-- Safe to apply before the code that reads it. All three are additive and
+-- nullable, so the running app ignores them -- which is the order CLAUDE.md's
+-- Trap 3 requires, because reversing it puts a window with live cards in it.
+ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "delivered_at" timestamp with time zone;
+--> statement-breakpoint
+ALTER TABLE "order_items" ADD COLUMN IF NOT EXISTS "fit_remake_used_at" timestamp with time zone;
+--> statement-breakpoint
+ALTER TABLE "fit_feedback" ADD COLUMN IF NOT EXISTS "order_item_id" uuid REFERENCES "order_items"("id");

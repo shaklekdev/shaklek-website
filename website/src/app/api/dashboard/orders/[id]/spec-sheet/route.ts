@@ -53,17 +53,39 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   // nothing: a tailor who believes it will alter a garment to correct a fault
   // it does not have yet.
   //
-  // The comparison is against createdAt rather than a delivery date because no
-  // fulfilment timestamp exists yet (see the status comment in schema.ts). It
-  // errs conservative: feedback about an older piece that happens to arrive
+  // The comparison is against this order's createdAt. orders.delivered_at now
+  // exists (added 2026-09-05) and this rule deliberately does NOT use it: the
+  // question here is "could this entry be about the garment on the table", and
+  // anything submitted before the order was even placed certainly is not. It
+  // errs conservative -- feedback about an older piece that happens to arrive
   // after this order was placed is dropped rather than risked.
   //
-  // The most recent qualifying entry only. The table keeps every submission,
-  // and a tailor cutting one garment needs the latest read on this body, not a
-  // year of them -- the full history is on her account page and in the table.
-  const [previous] = await db
-    .select()
+  // ⚠️ MATCHED BY GARMENT SINCE 2026-09-05, and that is the whole point of
+  // fit_feedback.order_item_id. This used to take the single most recent entry
+  // and print it on EVERY spec in the order, because the block below sits
+  // inside the per-spec loop. On a two-piece parcel that put "the length was
+  // shorter than I like" -- said about a shirt -- on the trousers spec, under
+  // a heading telling the tailor it describes her last piece. Wrong
+  // instructions to the person cutting, which is worse than printing nothing.
+  //
+  // So: the latest entry PER CATEGORY, plus the latest entry that names no
+  // garment at all. A spec takes its own category's entry, falls back to the
+  // unattributed one (everything written before this column existed), and
+  // otherwise prints nothing. It must never fall back to a DIFFERENT
+  // garment's entry -- that is the defect being fixed.
+  //
+  // 20 rows is a bound, not a page: it only has to be deep enough to find the
+  // newest entry for each of four categories, and this route is staff-only so
+  // the constant-work rule that governs /api/fit-feedback does not apply.
+  const recent = await db
+    .select({
+      answers: schema.fitFeedback.answers,
+      note: schema.fitFeedback.note,
+      createdAt: schema.fitFeedback.createdAt,
+      category: schema.orderItems.category,
+    })
     .from(schema.fitFeedback)
+    .leftJoin(schema.orderItems, eq(schema.fitFeedback.orderItemId, schema.orderItems.id))
     .where(
       and(
         eq(schema.fitFeedback.customerId, row.customers.id),
@@ -71,28 +93,38 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       ),
     )
     .orderBy(desc(schema.fitFeedback.createdAt))
-    .limit(1);
+    .limit(20);
 
-  let pastFit = null;
-  if (previous) {
+  // SHAPE, not just syntax. JSON.parse("null") succeeds and returns null,
+  // sails through a catch, and then throws inside buildPdf when the print
+  // block reads a property off it -- so the guard added to keep a bad row from
+  // taking down a tech pack did not stop the one value that takes down a tech
+  // pack. Found by a security review. A bad row must not take down the
+  // document the tailor cuts from, so it is skipped, not raised.
+  function parseEntry(r: (typeof recent)[number]) {
     try {
-      const parsed: unknown = JSON.parse(previous.answers);
-      // SHAPE, not just syntax. JSON.parse("null") succeeds and returns null,
-      // sails through this catch, and then throws inside buildPdf when the
-      // print block reads a property off it -- so the guard added to keep a bad
-      // row from taking down a tech pack did not stop the one value that takes
-      // down a tech pack. Found by a security review.
-      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-        throw new Error("unexpected shape");
-      }
-      pastFit = {
+      const parsed: unknown = JSON.parse(r.answers);
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return null;
+      return {
         answers: parsed as Record<string, string>,
-        note: previous.note,
-        at: previous.createdAt,
+        note: r.note,
+        at: r.createdAt,
       };
     } catch {
-      // A bad row must not take down the document the tailor cuts from.
-      pastFit = null;
+      return null;
+    }
+  }
+
+  // Newest first, so the first entry seen for a category is the latest one.
+  let pastFit = null;
+  const pastFitByCategory: Record<string, NonNullable<ReturnType<typeof parseEntry>>> = {};
+  for (const r of recent) {
+    const entry = parseEntry(r);
+    if (!entry) continue;
+    if (r.category) {
+      if (!pastFitByCategory[r.category]) pastFitByCategory[r.category] = entry;
+    } else if (!pastFit) {
+      pastFit = entry;
     }
   }
 
@@ -101,6 +133,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     createdAt: row.orders.createdAt,
     items,
     pastFit,
+    pastFitByCategory,
   });
 
   return new NextResponse(new Uint8Array(pdf), {

@@ -220,5 +220,62 @@ for (const brand of ["Shaklek", "SHAKLEK", "shaklek"])
   check(says(blankNote, "the customer added no special request"), "whitespace-only note rendered as a real request");
 }
 
+// --- 8. past fit feedback lands on the RIGHT garment, and only that one.
+//
+// The block that prints it sits inside the per-spec loop, so before
+// fit_feedback.order_item_id existed a single per-customer entry was printed on
+// every spec in the order. On a shirt-and-trousers parcel that put a shirt's
+// "the length was shorter than I like" onto the trousers spec, under a heading
+// telling the tailor it describes her last piece. Wrong instructions to the
+// person cutting, which is worse than printing nothing -- so these assert on
+// the count, not merely on presence.
+{
+  const at = new Date("2026-08-20T09:00:00Z");
+  const shirtFit = { answers: { length: "short" }, note: null, at };
+  const LINE = "The length: shorter than i like";
+  const countOf = (text, phrase) =>
+    (text.replace(/\s+/g, " ").match(new RegExp(phrase.replace(/\s+/g, " ").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) ?? []).length;
+
+  const perGarment = textOf(await buildPdf({
+    ...base, items: [shirt, trousers],
+    pastFit: null,
+    pastFitByCategory: { Shirt: shirtFit },
+  }, { compress: false }));
+  check(countOf(perGarment, LINE) === 1,
+    `shirt feedback printed ${countOf(perGarment, LINE)} time(s) on a shirt+trousers order — it belongs on the shirt spec only`);
+  check(perGarment.includes("HOW HER LAST PIECE FITTED"),
+    "the past-fit heading vanished entirely — the feedback loop stopped reaching the tailor");
+
+  // A category with no entry of its own must print NOTHING, never another
+  // garment's entry. This is the defect, so it gets its own assertion.
+  const trousersOnly = textOf(await buildPdf({
+    ...base, items: [trousers],
+    pastFit: null,
+    pastFitByCategory: { Shirt: shirtFit },
+  }, { compress: false }));
+  check(countOf(trousersOnly, LINE) === 0,
+    "a shirt's feedback was printed on a trousers-only tech pack");
+  check(!trousersOnly.includes("HOW HER LAST PIECE FITTED"),
+    "the past-fit heading printed with no feedback under it");
+
+  // Back-compat: every row written before order_item_id names no garment, and
+  // those must still reach the tailor on whatever is being cut.
+  const unattributed = textOf(await buildPdf({
+    ...base, items: [trousers],
+    pastFit: shirtFit,
+  }, { compress: false }));
+  check(countOf(unattributed, LINE) === 1,
+    "feedback with no garment attached stopped reaching the tailor — pre-2026-09-05 rows would go dark");
+
+  // The garment's own entry wins over the unattributed one.
+  const both = textOf(await buildPdf({
+    ...base, items: [shirt],
+    pastFit: { answers: { waist: "tight" }, note: null, at },
+    pastFitByCategory: { Shirt: shirtFit },
+  }, { compress: false }));
+  check(countOf(both, LINE) === 1 && countOf(both, "At the waist: a little tight") === 0,
+    "the unattributed entry beat the garment's own entry");
+}
+
 console.log(fail === 0 ? "ok — tech pack prints the right numbers, groups correctly, invents nothing" : `${fail} failure(s)`);
 process.exit(fail === 0 ? 0 : 1);

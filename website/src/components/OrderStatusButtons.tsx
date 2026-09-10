@@ -6,6 +6,12 @@ import { useRouter } from "next/navigation";
 const STEPS: { status: string; label: string }[] = [
   { status: "in_progress", label: "Start tailoring" },
   { status: "shipped", label: "Mark shipped" },
+  // ⚠️ NOT A COSMETIC LAST STEP. The courier collects from the founder and
+  // hands over at the door, so this button is the only moment the system can
+  // learn the parcel arrived -- and it is what starts the 14 days on the
+  // alteration promise printed on the thank-you card. The route stamps
+  // orders.delivered_at on this transition, once.
+  { status: "delivered", label: "Mark delivered" },
 ];
 
 export default function OrderStatusButtons({ orderId, status }: { orderId: string; status: string }) {
@@ -15,7 +21,11 @@ export default function OrderStatusButtons({ orderId, status }: { orderId: strin
   // Fulfillment is a one-way line for now (paid -> in_progress -> shipped),
   // so only offer the next step forward plus cancel -- no dropdown of every
   // status, since going backwards isn't a real scenario yet.
-  const next = status === "paid" ? STEPS[0] : status === "in_progress" ? STEPS[1] : null;
+  const next =
+    status === "paid" ? STEPS[0]
+    : status === "in_progress" ? STEPS[1]
+    : status === "shipped" ? STEPS[2]
+    : null;
 
   async function setStatus(newStatus: string) {
     setUpdating(newStatus);
@@ -31,7 +41,7 @@ export default function OrderStatusButtons({ orderId, status }: { orderId: strin
     }
   }
 
-  if (status === "shipped" || status === "canceled") {
+  if (status === "delivered" || status === "canceled") {
     return null;
   }
 

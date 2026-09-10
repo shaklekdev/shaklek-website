@@ -1,0 +1,14 @@
+-- order_items is filtered by order_id on every read path that matters -- the
+-- Stripe webhook, the spec sheet, /account, the dashboard, and the correlated
+-- subselect that /api/fit-feedback uses to attach feedback to a garment. A
+-- foreign key does NOT create an index in Postgres, so every one of those was
+-- a sequential scan of the whole table.
+--
+-- It matters most on /api/fit-feedback, which is unauthenticated and public.
+-- That route is deliberately CONSTANT WORK: a security review once found a
+-- customer-list oracle rebuilt out of its latency, so it does the same work
+-- whether or not the email belongs to a customer. An unindexed scan there is a
+-- timing residual that GROWS with the table. This keeps it flat.
+--
+-- Additive. Nothing depends on it; it only makes existing queries cheaper.
+CREATE INDEX IF NOT EXISTS "order_items_order_id_idx" ON "order_items" ("order_id");

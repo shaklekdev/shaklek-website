@@ -18,6 +18,74 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-10 (later) — the fit guarantee is now enforceable. ⚠️ PROD MIGRATION STILL PENDING.
+
+**Committed, nothing held.** New: `website/drizzle/0008_delivery_and_fit_remake.sql`,
+`0009_order_items_order_id_idx.sql`, `website/src/components/FitRemakeButton.tsx`,
+`website/src/app/api/dashboard/orders/[id]/items/[itemId]/remake/route.ts`,
+`website/scripts/test-fit-pipeline.mjs`. Modified: `CLAUDE.md`, `schema.ts`,
+the status / spec-sheet / fit-feedback routes, `techPack.ts`, `fitFeedback.ts`,
+`FitFeedbackForm.tsx`, `OrderStatusButtons.tsx`, `dashboard/orders/page.tsx`,
+`scripts/test-techpack.mjs`.
+
+> ⚠️ **DO NOT PUSH UNTIL `node scripts/db-migrate.mjs --target=prod` HAS RUN.**
+> Dev is at 0009; **prod is still at 0007**. `db.select()` expands to an
+> explicit column list, so deploying first makes the **Stripe webhook** mark an
+> order `paid` and then 500 on the very next statement — Stripe retries, the
+> `pending_payment -> paid` gate swallows it, and the result is **a paid order
+> with no staff notification and no customer confirmation, which the 06:00
+> reconcile cannot see** because everything looks correct. Five other surfaces
+> 500 outright. Verified by the security agent, not assumed.
+
+**What this closes.** 2026-09-05 added three columns and nothing wrote
+`fit_remake_used_at`, so "ONE free alteration or remake within 14 days" was
+still unenforceable. There is now a staff route and a per-garment dashboard
+control that records it.
+
+**Three deliberate choices, all reversible if the founder disagrees:**
+
+- **The 14-day window is shown, never enforced.** Day 15 still gets a button. A
+  deadline is a promise about what she MUST do, not a ceiling on what she MAY
+  choose, and a dashboard that silently refused a goodwill remake would take
+  that decision away from her.
+- **Undo always works, and is never gated.** A mis-click TAKES A PROMISE AWAY
+  from a customer; a record with no undo makes that permanent and invisible.
+- **Delivery is required before a guarantee can be spent**, and an unpaid order
+  cannot be marked delivered. Both stop one mis-click creating an obligation
+  against a parcel that does not exist.
+
+⚠️ **The route must NOT be called for a faulty or wrong-item remake.**
+`/shipping` says that remedy "is separate from the fit guarantee and does not
+use it up". Commented at the top of the route; do not wire it to that path.
+
+**Security agent run (required by CLAUDE.md for a new route reading a body).
+No holes.** It confirmed authorization matches the status route, the order id
+in the WHERE genuinely prevents spending another order's guarantee, and the new
+public `garment` field resists injection and prototype strings and cannot
+change the response body. Four Low findings; **three fixed**:
+
+- `rejectOversizedBody` was missing on BOTH staff routes — added. It was a real
+  gap against CLAUDE.md's "every write route" rule, not just the new one.
+- `scripts/test-fit-pipeline.mjs` now **refuses any host that is not
+  `ep-jolly-cloud`**, the same guard `db-migrate.mjs` uses. It INSERTS rows; the
+  rollback is what makes it safe, not what makes it safe to aim at production.
+- **`order_items` had no index on `order_id`** — a foreign key does not create
+  one in Postgres, so the webhook, spec sheet, `/account`, the dashboard and the
+  new subselect were all sequential scans. `0009` adds it. It matters most on
+  `/api/fit-feedback`, which is public and deliberately constant-work: an
+  unindexed scan there is a timing residual that GROWS with the table.
+
+**Not fixed, judged not worth it:** clearing a guarantee leaves no audit trail
+of who or when. Two allowlisted staff addresses; say so if that changes.
+
+**Verified, not claimed.** `tsc` clean, `npm run build` green,
+`test-techpack.mjs` (its four per-garment assertions confirmed to FAIL against
+the old selection logic), and `test-fit-pipeline.mjs` — **21 assertions**
+against the dev branch in a rolled-back transaction, leftover rows asserted 0.
+
+**Founder instruction, and it is now §7 of `CLAUDE.md`:** *"i want updates,
+clear, concise"*. No multi-section reports in replies. Detail goes here.
+
 ### 2026-09-10 — PAID. Both orders placed, and the clock has started.
 
 **Fabric, Shirley Gz:** 124m of W300235, invoice 6,449.86 RMB = **AED 3,516**

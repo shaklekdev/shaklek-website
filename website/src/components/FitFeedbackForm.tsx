@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FIT_QUESTIONS, FIT_NOTE_MAX } from "@/data/fitFeedback";
+import {
+  FIT_QUESTIONS,
+  FIT_NOTE_MAX,
+  FIT_GARMENT_LIST,
+  GARMENT_QUESTION,
+  garmentHasSleeves,
+} from "@/data/fitFeedback";
 
 /**
  * The form behind the QR on the thank-you card.
@@ -13,6 +19,12 @@ import { FIT_QUESTIONS, FIT_NOTE_MAX } from "@/data/fitFeedback";
  *
  * - NO ACCOUNT, NO PASSWORD, NO ORDER NUMBER. Each one of those loses most of
  *   the people who scanned, and the email is enough for the server to find her.
+ * - ONE EXCEPTION, ADDED 2026-09-05: "which piece is this about?", a single tap
+ *   at the top. It is not an order lookup and it is not a reference number --
+ *   she answers it by looking at what is in her hand. It exists because one
+ *   card arrives in a parcel that may hold two garments, and without it the
+ *   answers attach to the order and reach the tailor unattributable. It is
+ *   also what lets the sleeves question disappear for trousers.
  * - TAP TARGETS, NOT A DROPDOWN. Five questions, three or four options each,
  *   all visible at once. A <select> on a phone is a modal per question.
  * - NOTHING IS PRE-SELECTED. "Just right" sits in the middle of every row
@@ -25,12 +37,19 @@ import { FIT_QUESTIONS, FIT_NOTE_MAX } from "@/data/fitFeedback";
  */
 export default function FitFeedbackForm() {
   const [email, setEmail] = useState("");
+  const [garment, setGarment] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [note, setNote] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const emailLooksValid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim());
+  // Hide the sleeves question for a garment that has none, rather than making
+  // her pick "No sleeves on this piece". Unknown or unanswered keeps it, so
+  // skipping the garment question never removes a question she could answer.
+  const questions = FIT_QUESTIONS.filter(
+    (q) => q.id !== "sleeves" || garmentHasSleeves(garment),
+  );
   const answered = Object.keys(answers).length > 0 || note.trim().length > 0;
   const canSend = emailLooksValid && answered && state === "idle";
 
@@ -43,7 +62,7 @@ export default function FitFeedbackForm() {
       const res = await fetch("/api/fit-feedback", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), answers, note: note.trim() }),
+        body: JSON.stringify({ email: email.trim(), garment, answers, note: note.trim() }),
       });
       if (!res.ok) throw new Error("failed");
       setState("done");
@@ -72,7 +91,44 @@ export default function FitFeedbackForm() {
 
   return (
     <form onSubmit={submit} className="mt-8 space-y-9">
-      {FIT_QUESTIONS.map((q) => (
+      <fieldset>
+        <legend className="text-[15px] text-text">{GARMENT_QUESTION}</legend>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {FIT_GARMENT_LIST.map((g) => {
+            const picked = garment === g.id;
+            return (
+              <button
+                key={g.id}
+                type="button"
+                aria-pressed={picked}
+                onClick={() => {
+                  const next = picked ? null : g.id;
+                  setGarment(next);
+                  // ⚠️ CLEAR A SLEEVES ANSWER THE QUESTION NO LONGER ASKS.
+                  // Answer the sleeves row, then tap Trousers, and without
+                  // this the row stays in state and is submitted for a
+                  // garment that has no sleeves -- an answer she can no
+                  // longer see, correct or withdraw.
+                  if (!garmentHasSleeves(next)) {
+                    setAnswers((a) =>
+                      Object.fromEntries(Object.entries(a).filter(([k]) => k !== "sleeves")),
+                    );
+                  }
+                }}
+                className={`min-h-11 rounded-full border px-4 py-2 text-[13px] transition-colors ${
+                  picked
+                    ? "border-text bg-text text-white"
+                    : "border-[#DDD6C8] text-text-2 hover:border-text"
+                }`}
+              >
+                {g.label}
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      {questions.map((q) => (
         <fieldset key={q.id}>
           <legend className="text-[15px] text-text">{q.label}</legend>
           <div className="mt-3 flex flex-wrap gap-2">

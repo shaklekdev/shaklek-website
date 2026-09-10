@@ -3,7 +3,7 @@ import { sql } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
-import { FIT_NOTE_MAX, resolveFitFeedback } from "@/data/fitFeedback";
+import { FIT_NOTE_MAX, resolveFitFeedback, categoryForGarment } from "@/data/fitFeedback";
 
 /**
  * Post-delivery fit feedback, reached by the QR on the thank-you card.
@@ -113,6 +113,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(SAME_ANSWER_FOR_EVERYONE);
   }
 
+  // Which garment she says she is holding, resolved to the catalogue category
+  // the order row stores. Never trusted as a label and never echoed back: an
+  // unknown or absent answer becomes null, and null simply means the row
+  // attaches to the order the way every row did before 2026-09-05.
+  const garmentCategory = categoryForGarment(payload.garment);
+
   const answers = resolveFitFeedback(payload.answers);
   const note = sanitise(boundedText(payload.note, FIT_NOTE_MAX)) || null;
   // Nothing to record. Still answered identically.
@@ -141,15 +147,38 @@ export async function POST(req: NextRequest) {
     //
     // The join picks the order for us -- the founder's own rule, and the only
     // safe one: /fit has no sign-in, so it must never show a visitor a list of
-    // orders for a typed email. Her most recent PAID order is the parcel she is
-    // holding while she scans the card.
+    // orders for a typed email. The most recently DELIVERED order is the parcel
+    // she is holding while she scans the card; see the order-by below.
+    //
+    // ⚠️ THE ITEM IS A CORRELATED SUBSELECT, NOT A SECOND QUERY. Resolving it
+    // in a round trip of its own would rebuild the latency oracle the comment
+    // above says was already found and closed here once.
     await db.execute(sql`
-      insert into fit_feedback (customer_id, order_id, answers, note)
-      select o.customer_id, o.id, ${JSON.stringify(answers)}, ${note}
+      insert into fit_feedback (customer_id, order_id, order_item_id, answers, note)
+      select o.customer_id, o.id,
+        -- WHICH GARMENT. Null when she skipped the question or named a
+        -- category this order does not contain: the answers still land, on the
+        -- order, exactly as they did before. Never a guess -- an unattributed
+        -- row is honest, and a wrong one reaches a tailor as an instruction.
+        --
+        -- Quantity expands to one row per garment in /api/orders, so two of the
+        -- same shirt are two identical rows; ordering by oi.id picks one
+        -- deterministically and either is the same garment.
+        (select oi.id from order_items oi
+          where oi.order_id = o.id and oi.category = ${garmentCategory}
+          order by oi.id limit 1),
+        ${JSON.stringify(answers)}, ${note}
       from orders o
       join customers c on c.id = o.customer_id
       where lower(c.email) = ${email}
-        and o.status = 'paid'
+        -- ⚠️ EVERY POST-PAYMENT STATUS, NOT JUST 'paid'. This read status =
+        -- 'paid' until 2026-09-05, which was correct only while 'paid' was
+        -- where an order sat forever. Fulfilment moves it to in_progress ->
+        -- shipped -> delivered, so the day the founder started marking parcels
+        -- delivered that filter would have matched nothing and the survey would
+        -- have gone silently dead for exactly the customers who had received
+        -- something. pending_payment, payment_failed and canceled stay out.
+        and o.status in ('paid', 'in_progress', 'shipped', 'delivered')
         -- ⚠️ A CEILING ON AN APPEND-ONLY TABLE WITH AN UNAUTHENTICATED WRITE.
         -- Nothing here overwrites, by the founder's instruction, so without a
         -- cap someone who knows a paying customer's address can add rows until
@@ -159,7 +188,12 @@ export async function POST(req: NextRequest) {
         -- rotating addresses raises the ceiling. This keeps the statement
         -- single and constant-shaped.
         and (select count(*) from fit_feedback f where f.customer_id = o.customer_id) < 100
-      order by o.created_at desc
+      -- ⚠️ DELIVERED FIRST, THEN NEWEST. She is holding a parcel that arrived;
+      -- an order placed later but still being cut is not the one in her hands.
+      -- nulls last is what keeps this from becoming a new silent failure: if
+      -- the delivered status is never set, every row has a null date and this
+      -- degrades exactly to the created_at ordering it replaced.
+      order by o.delivered_at desc nulls last, o.created_at desc
       limit 1
     `);
   } catch (err) {

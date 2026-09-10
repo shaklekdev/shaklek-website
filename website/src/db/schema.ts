@@ -55,9 +55,14 @@ export const orders = pgTable("orders", {
   // pending_payment -> paid (checkout.session.completed) or -> payment_failed
   // (checkout.session.expired, ~24h checkout timeout) -- both set by the
   // Stripe webhook, api/webhooks/stripe/route.ts. Stays pending_payment
-  // forever if Stripe isn't configured -- see /api/orders. Fulfillment
-  // statuses (in progress, shipped, canceled) don't exist yet -- no
-  // external system can set those automatically, needs a staff UI.
+  // forever if Stripe isn't configured -- see /api/orders.
+  //
+  // Fulfillment statuses ARE set by staff, by hand, from /dashboard/orders:
+  // paid -> in_progress -> shipped -> delivered, plus canceled. The allowed
+  // list lives in api/dashboard/orders/[id]/status/route.ts, which is the
+  // authority -- this comment said they "don't exist yet, needs a staff UI"
+  // for a week after the staff UI shipped, and that stale line was read back
+  // to the founder as current on 2026-09-05.
   status: text("status").notNull().default("pending_payment"),
   stripeSessionId: text("stripe_session_id"),
   // Where the garment actually goes. Collected by Stripe Checkout and written
@@ -73,6 +78,18 @@ export const orders = pgTable("orders", {
   shippingState: text("shipping_state"),
   shippingPostalCode: text("shipping_postal_code"),
   shippingCountry: text("shipping_country"),
+  // WHEN THE PARCEL REACHED HER. The anchor for "one free alteration or remake
+  // within 14 days of delivery" -- printed on the thank-you card, which cannot
+  // be recalled, so this is not optional bookkeeping.
+  //
+  // ⚠️ NOT DERIVABLE FROM `status`. That is one overwritable field: mark an
+  // order delivered and then cancel it and the date is gone. Written once, on
+  // the first transition into `delivered` (the status route coalesces), so a
+  // second click cannot quietly extend a customer's deadline.
+  //
+  // Nullable: every order placed before 2026-09-05 has none, and an order that
+  // has not arrived yet has none by definition.
+  deliveredAt: timestamp("delivered_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
@@ -99,7 +116,28 @@ export const orderItems = pgTable("order_items", {
   freeformNotes: text("freeform_notes"),
   priceAed: numeric("price_aed", { precision: 10, scale: 2 }).notNull(),
   hasReferenceImage: boolean("has_reference_image").notNull().default(false),
-});
+  // THE FIT GUARANTEE, SPENT. Null means she still has it.
+  //
+  // ⚠️ ON THE ITEM, NOT THE ORDER. The promise is written about a garment --
+  // /legal/terms files it under "If the fit isn't right", /shipping opens with
+  // "Try it on promptly" -- so a customer whose shirt AND trousers both fit
+  // badly gets both fixed. Quantity expands to one row per garment in
+  // /api/orders, so two of the same shirt carry a remedy each.
+  //
+  // ⚠️ AND ONLY THE FIT REMEDY. /shipping is explicit that a faulty or
+  // wrong-item remake "is separate from the fit guarantee and does not use it
+  // up". Do not set this from that path, and do not rename it to something
+  // that invites it.
+  fitRemakeUsedAt: timestamp("fit_remake_used_at", { withTimezone: true }),
+}, (t) => [
+  // A foreign key does NOT create an index in Postgres. Every read path that
+  // matters filters on this -- the Stripe webhook, the spec sheet, /account,
+  // the dashboard, and the subselect in /api/fit-feedback that attaches
+  // feedback to a garment. That last one is public and unauthenticated and is
+  // deliberately constant-work, so an unindexed scan there is a timing
+  // residual that grows with the table.
+  index("order_items_order_id_idx").on(t.orderId),
+]);
 
 /**
  * Every piece of fit feedback a customer has ever sent from /fit.
@@ -139,6 +177,22 @@ export const fitFeedback = pgTable("fit_feedback", {
   // Nullable because the reference must survive an order being removed for any
   // reason; the feedback itself is still true about her body.
   orderId: uuid("order_id").references(() => orders.id),
+  // WHICH GARMENT IN THAT ORDER. One card is packed in a parcel that may hold
+  // several pieces, and the five questions are garment-agnostic, so without
+  // this "the length was shorter than I like" on a two-piece order cannot be
+  // attributed -- and the tech pack prints it under HOW HER LAST PIECE FITTED
+  // against whatever is being cut next. Wrong instructions to a tailor, not a
+  // gap in a report.
+  //
+  // Resolved on the server from a question she answers about the garment IN
+  // HER HAND ("which piece is this about?"), never by showing her a list of
+  // what she bought -- that would be the account-enumeration leak the whole
+  // route is built to avoid. She tells us; we tell her nothing.
+  //
+  // Nullable and staying that way: every row before 2026-09-05 has none, and a
+  // customer who skips the question still gets her answers stored against the
+  // order rather than thrown away.
+  orderItemId: uuid("order_item_id").references(() => orderItems.id),
   // JSON of {questionId: optionId}. Ids only, never labels: labels are copy
   // and get reworded, ids reach a tailor's document and must not move.
   answers: text("answers").notNull(),

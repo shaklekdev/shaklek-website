@@ -3,6 +3,7 @@ import { orderRef } from "@/lib/orderRef";
 import { desc, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import OrderStatusButtons from "@/components/OrderStatusButtons";
+import FitRemakeButton from "@/components/FitRemakeButton";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,10 @@ const STATUS_STYLE: Record<string, string> = {
   payment_failed: "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200",
   in_progress: "bg-blue-50 text-blue-800 ring-1 ring-inset ring-blue-200",
   shipped: "bg-violet-50 text-violet-800 ring-1 ring-inset ring-violet-200",
+  // Distinct from shipped on purpose: this is the one status with a clock
+  // attached to it, and reading it off a row at a glance is how she will know
+  // whether an alteration request is still inside the 14 days.
+  delivered: "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200",
   canceled: "bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-300",
 };
 
@@ -47,6 +52,7 @@ async function getOrders() {
     status: row.orders.status,
     total: Number(row.orders.totalAed),
     method: row.orders.paymentMethod,
+    deliveredAt: row.orders.deliveredAt,
     email: row.customers.email,
     createdAt: row.orders.createdAt,
     shipping: {
@@ -163,6 +169,15 @@ export default async function OrdersDashboardPage() {
                           {item.fabric ? ` · ${item.fabric}` : ""}
                           {item.color ? ` · ${item.color}` : ""}
                           {item.size ? ` · Size ${item.size}` : ""}
+                          {/* Per garment, because the promise is per garment.
+                              A shirt and trousers in one parcel each carry
+                              their own remake. */}
+                          <FitRemakeButton
+                            orderId={order.id}
+                            itemId={item.id}
+                            deliveredAt={order.deliveredAt ? new Date(order.deliveredAt).toISOString() : null}
+                            usedAt={item.fitRemakeUsedAt ? new Date(item.fitRemakeUsedAt).toISOString() : null}
+                          />
                         </div>
                       ))}
                     </td>
