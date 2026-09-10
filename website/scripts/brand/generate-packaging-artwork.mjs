@@ -716,15 +716,86 @@ function qr(doc, text, x, y, sizeMm, dark = INK) {
   }
 }
 
+// ⚠️ THIS CARD IS A PROSPECTING TOOL, NOT A CONTACT CARD. Founder, 2026-09-10:
+// she hands it to strangers in coffee shops and on the street, so it has three
+// seconds and one job -- make the right woman recognise herself. The line is
+// HERS, arrived at over several passes, and it describes the CUSTOMER rather
+// than the brand. Do not rewrite it into a description of Shaklek.
+//
+// ⚠️ EVERY WORD OF IT SURVIVED A TRUTH TEST, AND THREE EARLIER DRAFTS DID NOT.
+// "100% plant based" was cut because the garments carry buttons and a zip fly,
+// polyester thread and a satin care label: the FABRIC is 100% plant, the
+// GARMENT is not, and that is a false claim on a card that cannot be recalled.
+// "100% tailored" was cut because standard sizes are sold at the same price by
+// deliberate choice. "100% made in the UAE" was cut because the cloth is milled
+// in Guangzhou; plain "made in the UAE" is the same claim the care label makes
+// and is correct. What is left: 100% linen is the legal composition claim,
+// "tailored" describes who makes it rather than how it is sized, and the origin
+// matches the label.
+//
+// The line sits on the FRONT so nothing is cut from the back, which needs its
+// QR, the site that catches a QR that fails, and the phone.
+const CARD_LINE_1 = "Your skin breathing.";
+const CARD_LINE_2 = "Your clothes fitting.";
+// ⚠️ AND THEN CUT BACK TO THIS. A version reading "100% linen, tailored, and
+// made in the UAE" was set and looked at; the founder's call was that the
+// origin alone is enough. She is right, and it is worth saying why so nobody
+// restores the longer line as an improvement: the two sentences above are
+// about HER, and every extra clause here drags the card back to being about
+// the garment. The fabric and the fit are already implied by "breathing" and
+// "fitting", and the legal composition claim lives on the care label, which is
+// where it is actually required.
+const CARD_LINE_3 = "Made in the UAE.";
+
 makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
   doc.rect(0, 0, w, h).fill(INK);
+  const B = BLEED * MM;
+
   // Centred on MEASURED ink, not on a guessed y. The lockup is three stacked
   // pieces of different heights and its optical centre is not its box centre.
-  const markW = CARD_W * 0.40 * MM;
+  //
+  // Sized and placed in FRACTIONS OF THE CARD, never in fixed points, so this
+  // stays right if the trim ever moves. The bag print got that wrong twice.
+  const markW = CARD_W * 0.34 * MM;
   doc.save();
-  lockup(doc, w / 2, (h - lockupHeight(markW)) / 2, markW, CREAM, GOLD);
+  lockup(doc, w / 2, B + CARD_H * 0.13 * MM, markW, CREAM, GOLD);
   doc.restore();
-}, "trim 90x50, 3mm bleed. Ink ground, mark reversed");
+
+  // The claim, cream on ink, the same reversal as the mark.
+  //
+  // ⚠️ SET IN ITALIANA, NOT HELVETICA, AND THAT IS THE WHOLE DIFFERENCE. In the
+  // plain face this read like a slide: a fine display serif above two lines of
+  // system sans is a card that looks unfinished at arm's length, which is the
+  // only distance this card is ever seen at. The rule in plain()'s own comment
+  // is "READ rather than admired" -- fibre content and reference numbers. This
+  // line is the hook, so it is admired.
+  //
+  // Two short sentences on two lines: they are a pair, and breaking them
+  // anywhere else makes the reader work at the one moment she has not decided
+  // to. The widths are measured and asserted below rather than eyeballed.
+  const claimW = Math.max(
+    line(doc, w / 2, B + 30 * MM, CARD_LINE_1, 4.1 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 37 * MM, CARD_LINE_2, 4.1 * MM, CREAM, 0.5),
+  );
+  // ⚠️ A CARD IS TRIMMED, SO TYPE NEAR THE EDGE IS TYPE THAT GETS CUT. The
+  // guillotine drifts; 6 mm of quiet margin each side is the floor. This has to
+  // be a check rather than a comment, because the line is the founder's and
+  // will be reworded, and a longer sentence fails silently at the printer.
+  const safeW = (CARD_W - 12) * MM;
+  if (claimW > safeW) {
+    console.error(`\n  ✗ business card: the claim is ${(claimW / MM).toFixed(1)} mm wide, over the ${(safeW / MM).toFixed(0)} mm safe width.`);
+    console.error("    Shorten the line or drop the point size. Do not let it run to the trim.\n");
+    process.exitCode = 1;
+  }
+
+  // A hairline, not a divider. It separates the claim from the facts beneath
+  // without turning a 90 x 50 card into two boxes.
+  doc.rect(w / 2 - 6 * MM, B + 41.2 * MM, 12 * MM, 0.3).fill(GOLD);
+
+  // Smaller and warm grey so it reads as a footnote to the claim rather than
+  // a third sentence competing with it.
+  plain(doc, w / 2, B + 46.2 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 0.5);
+}, "trim 90x50, 3mm bleed. Ink ground, mark reversed, the founder's line beneath");
 
 makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
   doc.rect(0, 0, w, h).fill(CREAM);
