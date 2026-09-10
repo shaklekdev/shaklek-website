@@ -43,7 +43,11 @@
  * Shirley's W300235 is water-washed and softened at the mill (~1% stated
  * residual), which is the pre-shrink step that makes home washing honest. Both
  * competitors print machine wash, so this is competitive as well as kinder.
- * ⏳ A SWATCH MUST BE WASHED AND MEASURED before 500 labels are printed.
+ * ✅ The care line is approved (2026-09-10) and W300235 is mill pre-washed,
+ * confirmed by the supplier. A swatch is still washed and measured when the
+ * roll lands -- before any label is SEWN IN, which the delivery dates allow --
+ * because "pre-washed" is a supplier's sentence and this is the one line that
+ * can shrink a garment cut to a customer's own numbers.
  *
  * ⚠️ NO PRE-SHRINK WARNING ON THIS PAGE, AND DO NOT ADD ONE BACK. A row saying
  * "the linen is not pre-shrunk, washing will change the fit" shipped briefly
@@ -104,15 +108,14 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
     {
       label: "Care",
       labelAr: "العناية",
-      // ⏳ CHANGED 2026-09-08 FROM "Dry clean only" / "تنظيف جاف فقط", WHICH
-      // WERE FOUNDER-VERIFIED ON THE PRINTED PROOF. Still PENDING her sign-off
-      // on the Arabic; do not print 500 care labels until she gives it.
+      // ✅ FOUNDER-READ AND APPROVED 2026-09-10, replacing "Dry clean only" /
+      // "تنظيف جاف فقط" (her 2026-09-08 decision). Her words on the Arabic:
+      // "this looks good to me".
       //
       // The Arabic reads "gentle machine wash" -- غسيل = wash, آلي = machine,
       // لطيف = gentle. It matches the English line exactly, carries no
       // temperature (that is the tub symbol's job) and contains no digits,
       // which is what printed "%001" backwards on this label three times.
-      // Read out 2026-09-10; the approval is hers, not this file's.
       //
       // ✅ THE CLOTH FACT BEHIND THE CHANGE IS NOW CONFIRMED BY THE SUPPLIER.
       // Shirley confirmed to the founder (2026-09-10) that W300235 is
