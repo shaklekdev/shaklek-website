@@ -18,6 +18,41 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-10 (later still) — the care label's Arabic is read, and the swatch stopped being a blocker
+
+**Committed, nothing held.** `website/src/data/productDisclosure.ts`,
+`website/scripts/brand/generate-packaging-artwork.mjs`. **No artwork PDF
+changed** — running the generator rewrites all 13, so they were reverted per
+file; the order is already placed with Fitoor at 50% advance and a diff there
+would imply the artwork moved when only comments did.
+
+**The Arabic reads what it should.** `غسيل آلي لطيف` = "gentle machine wash"
+(غسيل wash · آلي machine · لطيف gentle). It matches the English line exactly,
+carries no temperature — that is the tub symbol's job — and no digits, which is
+the thing that printed `%001` backwards on this label three times.
+**Still pending HER sign-off**, which is the founder's to give, not this repo's.
+
+**✅ Shirley confirmed W300235 is PRE-WASHED (2026-09-10).** This is the mill
+step the whole care decision rests on, and it is no longer inferred from a gsm
+sheet. It removes the swatch test as a blocker on printing 500 care labels.
+
+⚠️ **But the swatch test still happens, before any label is SEWN IN.**
+"Pre-washed" and "around 1%" are both a supplier's sentences, not a
+measurement, and this is the one line on the label that can shrink a garment cut
+to a customer's own numbers. The four fit-sample sets prove nothing about it —
+different cloth (local 30% linen at 10 AED/m). Above ~2% residual,
+dry-clean-only goes back on. The timing works either way: fabric lands
+27 Sep – 1 Oct, labels ~29 Sep, so the test lands before the first garment is
+made. **Printing early is now the cheaper risk; sewing in an untested claim is
+not.**
+
+⚠️ **A STALE LINE WAS FOUND AND FIXED, AND IT IS THE USUAL SHAPE.** The
+generator's own summary output still announced `care = DRY CLEAN ONLY` two days
+after she changed it — while the label it was generating printed MACHINE WASH 30
+GENTLE. The script was contradicting its own artwork **in the text a human reads
+to check that artwork**. Nothing failed; it would simply have told the next
+person the wrong thing.
+
 ### 2026-09-10 (later) — the fit guarantee is now enforceable. ⚠️ PROD MIGRATION STILL PENDING.
 
 **Committed, nothing held.** New: `website/drizzle/0008_delivery_and_fit_remake.sql`,

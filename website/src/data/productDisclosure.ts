@@ -105,15 +105,22 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       label: "Care",
       labelAr: "العناية",
       // ⏳ CHANGED 2026-09-08 FROM "Dry clean only" / "تنظيف جاف فقط", WHICH
-      // WERE FOUNDER-VERIFIED ON THE PRINTED PROOF. THE NEW ARABIC IS NOT YET
-      // READ BY HER. She has said she will; until she confirms, treat this row
-      // as pending rather than approved, and do not print 500 care labels
-      // against it.
+      // WERE FOUNDER-VERIFIED ON THE PRINTED PROOF. Still PENDING her sign-off
+      // on the Arabic; do not print 500 care labels until she gives it.
       //
-      // The change is only valid because the CLOTH changed: Shirley's W300235
-      // is water-washed and softened at the mill, with ~1% stated residual
-      // shrinkage, which is the pre-shrink step that makes home washing honest
-      // on a garment cut to measurements. See generate-packaging-artwork.mjs.
+      // The Arabic reads "gentle machine wash" -- غسيل = wash, آلي = machine,
+      // لطيف = gentle. It matches the English line exactly, carries no
+      // temperature (that is the tub symbol's job) and contains no digits,
+      // which is what printed "%001" backwards on this label three times.
+      // Read out 2026-09-10; the approval is hers, not this file's.
+      //
+      // ✅ THE CLOTH FACT BEHIND THE CHANGE IS NOW CONFIRMED BY THE SUPPLIER.
+      // Shirley confirmed to the founder (2026-09-10) that W300235 is
+      // PRE-WASHED. That is the pre-shrink step which makes home washing
+      // honest on a garment cut to a customer's measurements -- without it,
+      // "gentle machine wash" invites her to shrink a made-to-measure piece.
+      // It also closes the open task of washing a swatch before the label run:
+      // the mill has already done it. See generate-packaging-artwork.mjs.
       //
       // The temperature deliberately is NOT in this string. It lives in the
       // tub symbol on the label, which is the standard form -- and it keeps

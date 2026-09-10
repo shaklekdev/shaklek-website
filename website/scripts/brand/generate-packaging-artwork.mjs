@@ -149,11 +149,21 @@ function plain(doc, cx, baseY, text, sizePt, fill = INK, tracking = 0) {
  * lower one: these garments have no spare ease to lose, and 30 is the more
  * cautious of the two real precedents.
  *
- * ⏳ DO NOT PRINT 500 OF THESE UNTIL A PIECE OF THE ACTUAL CLOTH HAS BEEN
- * WASHED AND MEASURED. "Around 1%" is a supplier's sentence, not a test, and
- * the four fit-sample sets are cut from a DIFFERENT fabric (the local 30% linen
- * at 10 AED/m) so they prove nothing about this one. Ask Shirley to courier a
- * swatch ahead of the roll. Above ~2% residual, dry-clean-only goes back on.
+ * ✅ SHIRLEY CONFIRMED W300235 IS PRE-WASHED (to the founder, 2026-09-10).
+ * That is the mill step this whole decision rests on, and it is no longer an
+ * inference from a gsm sheet -- it is the supplier saying so directly. It also
+ * means the swatch no longer blocks the print run.
+ *
+ * ⏳ BUT STILL WASH A PIECE WHEN THE ROLL LANDS, BEFORE ANY LABEL IS SEWN IN.
+ * "Pre-washed" and "around 1%" are both a supplier's sentences, not a
+ * measurement, and this is the one claim on the label that can shrink a
+ * garment cut to a customer's own numbers. The four fit-sample sets prove
+ * nothing about it -- they are cut from a DIFFERENT cloth (the local 30% linen
+ * at 10 AED/m). Above ~2% residual, dry-clean-only goes back on.
+ *
+ * The timing works: fabric lands 27 Sep - 1 Oct and labels arrive ~29 Sep, so
+ * the test happens before the first garment is made either way. Printing early
+ * is now the cheaper risk; sewing in an untested claim is not.
  *
  * The set: machine wash 30 gentle, do not bleach, do not tumble dry, iron
  * medium, professional dry clean (P) -- the dry-clean symbol STAYS, exactly as
@@ -693,9 +703,14 @@ makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   plain(doc, w / 2, B + 44.5 * MM, "HELLO@SHAKLEK.COM", 6.6, MUTED, 0.9);
 }, "trim 90x50, 3mm bleed. QR to the home page");
 
-console.log("\nConfirmed by the founder on 2026-08-28, no longer open questions:");
-console.log("   care  = DRY CLEAN ONLY (see the note on careSymbols above -- it is a fit");
-console.log("           decision, not a laundry one: unwashed linen shrinks 4-10%)");
+console.log("\nConfirmed by the founder, no longer open questions:");
+// ⚠️ THIS LINE SAID "DRY CLEAN ONLY" UNTIL 2026-09-10, TWO DAYS AFTER SHE
+// CHANGED IT. The label itself was already printing MACHINE WASH 30 GENTLE, so
+// the script was contradicting its own artwork in the output a human reads to
+// check the artwork. Exactly the staleness CLAUDE.md is about.
+console.log("   care  = MACHINE WASH 30 GENTLE + professional-dry-clean symbol");
+console.log("           (2026-09-08; valid because W300235 is mill pre-washed --");
+console.log("            Shirley confirmed 2026-09-10. Unwashed linen shrinks 4-10%.)");
 console.log("   origin = MADE IN UAE");
 console.log("Both are legal disclosures on a garment sold in the UAE. Do not change either");
 console.log("without her, and re-read that note before proposing wash-at-30.");
