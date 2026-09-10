@@ -1669,7 +1669,7 @@ connector labels that only showed up in the render.
 DATABASE_URL isn't set anywhere".** False since 2026-08-22 and actively
 misleading about which database this is. Corrected.
 
-`planning/aws-infrastructure-todo.md` was checked and is accurate — it already
+`planning/archive/aws-infrastructure-todo.md` was checked and is accurate — it already
 says Neon-not-RDS and correctly marks S3 as not done. No change.
 
 #### The reported lag is Clerk, not the images. Measured, not guessed.
@@ -1778,7 +1778,7 @@ whole flow still works after switching to Tailored.
 #### Monitoring — BUILT, verified end to end (was genuinely at zero)
 
 Founder chose **hello@shaklek.com** as the alert address; subscription
-confirmed. Full runbook in `planning/aws-infrastructure-todo.md`. Four alerts:
+confirmed. Full runbook in `planning/archive/aws-infrastructure-todo.md`. Four alerts:
 any 5xx, zero requests for an hour, p90 latency over 3s, and a failed Amplify
 deploy. **~$0.30/month.**
 
