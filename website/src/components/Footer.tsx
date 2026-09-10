@@ -10,6 +10,17 @@ export default function Footer() {
           <Link href="/faq" className="hover:text-text-2">
             Questions
           </Link>
+          {/* The journal is NOT in the header nav, deliberately. Three articles
+              do not earn a slot beside Catalog, and the traffic path for them is
+              Google -> article -> catalogue, not homepage -> blog. But the
+              sitemap listed them while nothing on the site linked to them at
+              all, which is backwards: a page no page links to is an orphan, and
+              orphans rank badly. Footer plus one contextual link from the FAQ
+              fabric answer is the right weight for now. Revisit the header once
+              there are enough articles to be worth browsing. */}
+          <Link href="/blog" className="hover:text-text-2">
+            Journal
+          </Link>
           <Link href="/size-guide" className="hover:text-text-2">
             Size guide
           </Link>

@@ -106,7 +106,11 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       <>
         100% linen, and nothing else. It is a natural fibre that breathes in
         Gulf heat and softens with wear. Linen creases. That is the fibre
-        behaving normally, not a fault.
+        behaving normally, not a fault. We wrote about{" "}
+        <Link href="/blog/natural-fabrics-better-for-your-body" className="underline">
+          why natural fabrics suit a body better
+        </Link>{" "}
+        if you want the longer answer.
       </>
     ),
   },
