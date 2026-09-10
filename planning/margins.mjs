@@ -247,7 +247,7 @@ console.log(`Prices read from catalog.ts (${items.length} items). Run: ${new Dat
 
 const packTotal = packagingPerOrder();
 console.log(`\nPACKAGING — EVERY LINE, AND WHAT IT COSTS YOU`);
-console.log(`  Quote FRP2608-1149 reconstructs exactly: 5,115.00 + 255.75 VAT = 5,370.75.`);
+console.log(`  Quote FRP2609-1113 (07/09/2026) reconstructs exactly: 4,350.00 + 217.50 = 4,567.50.`);
 console.log(`  "cost" is per order, landed. "pts" is margin points on a ${REF_PRICE} shirt.`);
 console.log(`  Flip \`keep\` in INPUTS.packaging.lines and re-run to test a basket.\n`);
 console.log(`  ${"".padEnd(3)}${"line".padEnd(18)}${"rate".padStart(7)}${"cost".padStart(8)}${"pts".padStart(7)}${"cash".padStart(9)}  from`);
