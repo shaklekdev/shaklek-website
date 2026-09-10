@@ -14,6 +14,10 @@ import { openSync } from "fontkit";
 import PDFDocument from "pdfkit";
 import { createWriteStream, existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+// Derived from this file, not from cwd -- CLAUDE.md: nine scripts hardcoded an
+// absolute repo path and every one would have broken silently on the move.
+import { fileURLToPath } from "node:url";
+const HERE = path.dirname(fileURLToPath(import.meta.url));
 
 const ROOT = path.resolve(process.cwd(), "..");
 const OUT = path.join(ROOT, "branding");
@@ -68,17 +72,48 @@ function stack(latin, arabic, ruleH, gapRatio = 0.26) {
 // the business card file is 96 x 56 because it carries 3 mm of bleed and trims
 // to 90 x 50, and the tissue file is one 250 x 250 tile for a 500 x 700 sheet.
 // `size` is what the supplier reads; `mm` is what the file actually is.
+// The bag wordmark width, in mm -- ~22.5% of the bag width, which is the
+// proportion the founder approved, so it changes whenever the bag size does.
+//
+// ⚠️ READ OUT OF THE ARTWORK SCRIPT, NOT RETYPED. Two files holding the same
+// number is how this went wrong twice: the artwork moved to 110 and then to 79
+// while the checker went on asserting the number before it. A comment saying
+// "keep these equal" is not a control, so the value is parsed from the one
+// place it is actually used, and a rename there fails loudly here.
+const BAG_MARK_MM = (() => {
+  const src = readFileSync(path.join(HERE, "generate-packaging-artwork.mjs"), "utf8");
+  const m = src.match(/^const BAG_MARK = (\d+(?:\.\d+)?);/m);
+  if (!m) {
+    console.error("Cannot find BAG_MARK in generate-packaging-artwork.mjs.");
+    console.error("If it was renamed, update this parser -- do not hardcode the number.");
+    process.exit(1);
+  }
+  return Number(m[1]);
+})();
+
+// ⚠️ QUANTITIES ARE FITOOR'S QUOTED LINES, NOT ESTIMATES. Quote FRP2609-1113,
+// AED 4,567.50 inc VAT, 50% advance paid 2026-09-10. Until that date every qty
+// here was a pre-quote guess and FIVE OF EIGHT disagreed with what was actually
+// ordered -- care label said 200 against 500, hang tag 500 against 100,
+// thank-you card and envelope 200 against 100, business card "200-500" against
+// 100. A spec sheet the supplier reads must not argue with the order they are
+// printing from. If a quantity changes, change it here and re-run.
 const SIZES = [
-  { item: "Linen drawstring bag", size: "500 x 400  (LANDSCAPE)", mat: "Cotton or linen, natural", print: "Screen print, 1 colour", files: ["08-linen-bag-print"], qty: "100–200", mm: [500, 400] },
+  { item: "Cotton bag, with handle", size: "350 x 450  (PORTRAIT)", mat: "Cotton, natural", print: "Screen print, 1 colour", files: ["08-linen-bag-print"], qty: "100", mm: [350, 450] },
+  { item: "Hand bag", size: "350 x 300 face, 60 gusset", mat: "Cotton, natural", print: "Screen print, 1 colour", files: ["11-hand-bag-print"], qty: "100", mm: [350, 300] },
   { item: "Woven brand label", size: "45 x 18", mat: "Woven, folded ends", print: "Woven", files: ["01-woven-brand-label"], qty: "500", mm: [45, 18] },
-  { item: "Care label", size: "25 x 45", mat: "Satin, side seam", print: "Printed", files: ["02-care-label"], qty: "200", mm: [25, 45] },
-  { item: "Hang tag", size: "50 x 90", mat: "Uncoated card, 300 gsm", print: "Print both sides", files: ["03-hang-tag", "03b-hang-tag-back"], qty: "500", mm: [50, 90] },
-  { item: "Thank-you card", size: "148 x 105  (A6, LANDSCAPE)", mat: "Uncoated, 300 gsm", print: "Letterpress or foil", files: ["04-thank-you-card-front", "05-thank-you-card-back"], qty: "200", mm: [148, 105] },
-  { item: "Envelope", size: "162 x 114  (C6, LANDSCAPE)", mat: "Uncoated, to match the card", print: "Back only, 1 colour", files: ["05b-thank-you-envelope-back"], qty: "200", mm: [162, 114] },
-  { item: "Business card", size: "90 x 50 trim, 96 x 56 with bleed", mat: "Uncoated, 350 gsm", print: "Print both sides", files: ["10-business-card-front", "10b-business-card-back"], qty: "200–500", mm: [96, 56] },
-  { item: "Tissue seal sticker", size: "40 diameter", mat: "Matt sticker, gold ground", print: "1 colour on gold", files: ["06-tissue-seal-40mm"], qty: "500", mm: [40, 40] },
-  { item: "Tissue wrap sheet", size: "500 x 700  (tile is 250 x 250)", mat: "Unbleached tissue, 17 gsm", print: "Step and repeat, faint", files: ["07-tissue-wrap-repeat-tile"], qty: "500", mm: [250, 250] },
-  { item: "Mailer", size: "320 x 400 internal, MINIMUM", mat: "Kraft paper, 120 gsm+, self-seal", print: "1 colour, small", files: ["09-mailer-placement"], qty: "200", mm: [320, 400] },
+  { item: "Care label", size: "25 x 45", mat: "SEWN SATIN, side seam", print: "Printed", files: ["02-care-label"], qty: "500", mm: [25, 45] },
+  { item: "Hang tag", size: "50 x 90", mat: "Uncoated card, 300 gsm", print: "Print both sides", files: ["03-hang-tag", "03b-hang-tag-back"], qty: "100", mm: [50, 90] },
+  { item: "Thank-you card", size: "148 x 105  (A6, LANDSCAPE)", mat: "Uncoated, 300 gsm", print: "Letterpress or foil", files: ["04-thank-you-card-front", "05-thank-you-card-back"], qty: "100", mm: [148, 105] },
+  { item: "Envelope", size: "162 x 114  (C6, LANDSCAPE)", mat: "Uncoated, to match the card", print: "Back only, 1 colour", files: ["05b-thank-you-envelope-back"], qty: "100", mm: [162, 114] },
+  { item: "Business card", size: "90 x 50 trim, 96 x 56 with bleed", mat: "Uncoated, 350 gsm", print: "Print both sides", files: ["10-business-card-front", "10b-business-card-back"], qty: "100", mm: [96, 56] },
+  // ⚠️ THE THREE BELOW ARE NOT ON THE FITOOR ORDER. The quote is eight lines
+  // and these are not among them. The artwork is kept and correct so they can
+  // be ordered later, here or elsewhere, but nobody should read this sheet and
+  // believe they are being printed.
+  { item: "Tissue seal sticker  (NOT ON THIS ORDER)", size: "40 diameter", mat: "Matt sticker, gold ground", print: "1 colour on gold", files: ["06-tissue-seal-40mm"], qty: "not ordered", mm: [40, 40] },
+  { item: "Tissue wrap sheet  (NOT ON THIS ORDER)", size: "500 x 700  (tile is 250 x 250)", mat: "Unbleached tissue, 17 gsm", print: "Step and repeat, faint", files: ["07-tissue-wrap-repeat-tile"], qty: "not ordered", mm: [250, 250] },
+  { item: "Mailer  (NOT ON THIS ORDER)", size: "320 x 400 internal, MINIMUM", mat: "Kraft paper, 120 gsm+, self-seal", print: "1 colour, small", files: ["09-mailer-placement"], qty: "not ordered", mm: [320, 400] },
 ];
 
 /**
@@ -161,7 +196,13 @@ function auditArtworkAgainstSizes() {
     // Each one has been wrong at least once. Keep this list short and real:
     // it is worth having only while every entry is a value a supplier acts on.
     const mustSay = [
-      [/110\s*mm/i, "the bag wordmark width (110 mm)"],
+      // ⚠️ THIS NUMBER HAS NOW BEEN WRONG TWICE, and both times the check
+      // itself was the thing that went stale -- it asserted 90 mm after the
+      // mark became 110, and 110 after it became 79. A guard that hardcodes
+      // the value it is guarding fails in exactly the same direction as the
+      // document. BAG_MARK_MM below is the single place it is written; keep it
+      // equal to BAG_MARK in generate-packaging-artwork.mjs.
+      [new RegExp(`${BAG_MARK_MM}\\s*mm`, "i"), `the bag wordmark width (${BAG_MARK_MM} mm)`],
       [/148\s*(mm\s*)?(WIDE\s*)?x\s*105/i, "the landscape card size (148 x 105)"],
       [/162\s*(mm\s*)?(WIDE\s*)?x\s*114/i, "the landscape envelope size (162 x 114)"],
       [/120\s*gsm/i, "the kraft mailer weight (120 gsm)"],
@@ -172,6 +213,8 @@ function auditArtworkAgainstSizes() {
 
     const mustNotSay = [
       [/90\s*mm\s*(wide|WIDE)/, "the old 90 mm bag mark"],
+      [/110\s*mm\s*(wide|WIDE)/i, "the old 110 mm bag mark (500 x 400 landscape bag)"],
+      [/500\s*(mm\s*)?(WIDE\s*)?x\s*400/i, "the old 500 x 400 landscape bag"],
       [/250\s*x\s*350/, "the old 250 x 350 mailer"],
       [/A7F3C210/, "the withdrawn hang-tag order number"],
     ];

@@ -65,6 +65,20 @@ function raster(stem) {
 // exist. Ada quoted item 3 against that stale line on 29/08.
 
 const SPEC_RAW = [
+// ⚠️ EVERY qty BELOW IS A LINE ON FITOOR'S QUOTE FRP2609-1113 (AED 4,567.50
+// inc VAT, 50% advance paid 2026-09-10). They are NOT estimates any more, and
+// they must not be edited to a guess.
+//
+// Two were wrong until 2026-09-10 and both were wrong the same way -- 100 where
+// the order says 500, for the woven brand label and the care label. The labels
+// are ordered at 500 because they are per GARMENT, while bags, tags and cards
+// are ordered at 100 because they are per PARCEL. A sheet that tells the
+// supplier 100 when the invoice says 500 is a sheet that gets 400 labels short.
+//
+// The tissue seal and tissue wrap are NOT on this order. The quote is eight
+// lines and neither is among them. Their artwork stays because it is correct
+// and may be ordered later; the quantity says so out loud rather than implying
+// a run nobody bought.
   { n: "1", item: "Cotton bag", size: "35 x 45 cm", mat: "Natural cotton, ribbon drawstring",
     qty: "100", file: "shaklek-logo-one-colour", checkSize: false,
     fileNote: "file is the LOGO - print it 110 mm wide",
@@ -82,14 +96,14 @@ const SPEC_RAW = [
     plain: "The cotton bag goes inside this one. Please use your nearest stock size that fits — do not cut a custom size. Logo on one side, centred.",
     note: "The outer bag — the cotton bag goes inside it. Please use your nearest stock size that fits those contents; do not cut a custom size. Logo centred, one side." },
   { n: "2", item: "Woven brand label", size: "45 x 18 mm", mat: "Woven, single-sided",
-    qty: "100", file: "01-woven-brand-label", checkSize: true,
+    qty: "500", file: "01-woven-brand-label", checkSize: true,
     texture: "Soft woven ribbon, damask or satin. Not stiff taffeta - it sits against the neck.",
     inks: [["#1A1A1A", "Black - the wordmark"], ["#9C8445", "Gold - the rule"]],
     colour: "Black and gold, as in the file",
     plain: "Sewn inside the neck. Fold both short ends under and sew at each end. The 45 mm is what must be VISIBLE after folding, so weave it longer than 45 mm. Do NOT fold it in half. Nothing on the back.",
     note: "End fold: both short ends folded under, sewn at each end. 45 mm is the size AFTER folding — add the fold allowance to the woven length. Not folded in half." },
   { n: "3", item: "Care label", size: "25 x 45 mm", mat: "Printed satin",
-    qty: "100", file: "02-care-label", checkSize: true,
+    qty: "500", file: "02-care-label", checkSize: true,
     texture: "Soft printed satin ribbon. Seal the cut edges so they do not fray.",
     inks: [["#1A1A1A", "Black - all the text"], ["#B9B1A2", "Light grey - the two rules"]],
     colour: "Black and light grey, as in the file",
@@ -125,14 +139,14 @@ const SPEC_RAW = [
     plain: "Prints on BOTH sides — two different files. The files are 96 x 56 mm because they include 3 mm extra all round for trimming. Cut to 90 x 50 mm.",
     note: "Both sides print. The files measure 96 x 56 mm because they include 3 mm bleed — trim to 90 x 50 mm." },
   { n: "8", item: "Tissue seal sticker", size: "40 mm circle", mat: "Matt sticker",
-    qty: "100", file: "06-tissue-seal-40mm", checkSize: true, gold: true,
+    qty: "not on this order", file: "06-tissue-seal-40mm", checkSize: true, gold: true,
     texture: "Matt sticker paper. NOT glossy - a shiny sticker looks like a price label.",
     inks: [["#9C8445", "Gold - the background"], ["#F5F0E8", "Cream - the mark"]],
     colour: "Gold background, mark in cream",
     plain: "The ONLY item with gold: gold background, mark in cream. Matt finish, not shiny. It closes the tissue paper.",
     note: "THE ONLY GOLD ITEM: gold background, mark in cream. Matt, not gloss." },
   { n: "9", item: "Tissue wrap", size: "50 x 70 cm sheet", mat: "Unbleached tissue 17 gsm",
-    qty: "100", file: "07-tissue-wrap-repeat-tile", checkSize: false,
+    qty: "not on this order", file: "07-tissue-wrap-repeat-tile", checkSize: false,
     fileNote: "file is one 25 x 25 cm tile - repeat across the sheet",
     texture: "Thin unbleached tissue, natural colour, not white.",
     inks: [["#B3A78E", "Pale gold - everything, printed light"]],

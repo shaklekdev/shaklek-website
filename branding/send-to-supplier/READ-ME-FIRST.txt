@@ -15,7 +15,8 @@ START HERE:  artwork/
   artwork/05b-thank-you-envelope-back.pdf 162 x 114 mm  C6 LANDSCAPE, wallet
   artwork/06-tissue-seal-40mm.pdf           40 mm dia   gold, mark in cream
   artwork/07-tissue-wrap-repeat-tile.pdf  250 x 250 mm  step and repeat
-  artwork/08-linen-bag-print.pdf          500 x 400 mm  LANDSCAPE, print guide
+  artwork/08-linen-bag-print.pdf          350 x 450 mm  PORTRAIT, print guide
+  artwork/11-hand-bag-print.pdf           350 x 300 mm  hand bag FACE, print guide
   artwork/09-mailer-placement.pdf         320 x 400 mm  placement guide, MINIMUM
   artwork/10-business-card-front.pdf        96 x 56 mm   trim to 90x50 (FRONT)
   artwork/10b-business-card-back.pdf        96 x 56 mm   trim to 90x50, QR (BACK)
@@ -56,9 +57,16 @@ NOTES ON THOSE FILES
      near-black, and without that bleed a small drift on the guillotine leaves
      a white line down one side. No crop marks needed.
 
-  5. THE COTTON BAG IS LANDSCAPE: 500 mm WIDE x 400 mm TALL, wider than it is
-     tall. 08-linen-bag-print.pdf is the print area at that size. The wordmark
-     is 110 mm WIDE, one colour, centred, at about a third of the bag height.
+  5. THE COTTON BAG IS PORTRAIT: 350 mm WIDE x 450 mm TALL, with a handle.
+     08-linen-bag-print.pdf is the print area at that size. The wordmark is
+     79 mm WIDE, one colour, centred, at about a third of the bag height.
+     (The file name still says "linen". It is a cotton bag. The name is kept
+     so it matches the file you already hold.)
+
+  5b. THE HAND BAG IS 350 x 300 x 60 mm. 11-hand-bag-print.pdf is the FACE
+     only, 350 wide x 300 tall. The 60 mm gusset is the side panel and carries
+     NO print. Same wordmark, 79 mm WIDE, one colour, centred, at about a
+     third of the face height, so both bags read the same.
 
   6. THE MAILER IS A MINIMUM, NOT A SPECIFICATION: 320 x 400 mm internal, kraft
      paper at 120 gsm or heavier, with a self-seal strip. Your nearest stock
@@ -83,7 +91,7 @@ HOW THE PARCEL GOES TOGETHER
   Five layers, outside in:
 
     1. kraft mailer          320 x 400 mm min, 120 gsm+, self-seal
-    2. linen drawstring bag  50 x 40 cm LANDSCAPE <- the box, and she keeps it
+    2. cotton bag            35 x 45 cm PORTRAIT, with handle <- the box, and she keeps it
     3. tissue wrap           two sheets, 50 x 70 cm, closed with the gold seal
     4. the garment           folded, with its labels and hang tag
     5. thank-you card in its C6 landscape envelope, plus a business card

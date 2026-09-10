@@ -18,6 +18,70 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-10 (evening) — the artwork now matches the order that was actually placed
+
+**Committed, nothing held.** New: `branding/send-to-supplier/artwork/11-hand-bag-print.pdf`.
+Changed: `08-linen-bag-print.pdf`, `READ-ME-FIRST.txt`,
+`READ-ME-FIRST-Shaklek-artwork.pdf`, and the four brand scripts.
+
+⚠️ **THE OTHER TWELVE ARTWORK PDFs WERE DELIBERATELY REVERTED.** Running the
+generator rewrites all of them, but only their timestamps move. Committing that
+tells a supplier mid-production that artwork changed when it did not. The audit
+passes against the reverted files, which is the proof rather than the claim.
+
+**Founder gave Fitoor's eight quoted lines. Six matched our files exactly.
+Two did not:**
+
+1. **The cotton bag was drawn 500 x 400 landscape; the order is 35 x 45
+   portrait with a handle.** She took the smaller bag **deliberately, as a price
+   decision** — do not re-raise it as a supplier error.
+   ⚠️ **The mark had to shrink with it.** The invariant she approved is that the
+   wordmark reads at **~22.5% of the bag width** — that is why it went 90 → 110
+   when the bag got wider on 2026-08-29. Carrying 110 onto a 350 mm bag makes it
+   31%, a third of the width, visibly not the mark she signed off. 0.225 × 350 =
+   **79 mm**.
+2. **The hand bag had NO ARTWORK AT ALL** and the quote prices a print on it
+   ("HAND BAG, 1 color print, 35x30x6cm, 100 @ 9.20"). Eight lines quoted, seven
+   with files. That gap is invisible until a supplier asks — or prints nothing.
+   `11-hand-bag-print` is the **face only**, 350 × 300; the 60 mm gusset is the
+   side panel and carries no print.
+
+**And the quantities were wrong in two separate places.** Every qty in both spec
+files was a pre-quote estimate:
+
+- `generate-supplier-pdf`: **five of eight wrong** — care label 200 vs 500, hang
+  tag 500 vs 100, card and envelope 200 vs 100, business card "200–500" vs 100.
+- `generate-simple-spec` (the one that builds the folder she actually sends):
+  **woven label and care label both said 100 against an ordered 500.**
+- `build-final-folder`'s covering note asserted **"100 pieces of every item"**.
+
+The rule underneath, now written in all three: **labels are per GARMENT (500),
+bags/tags/cards are per PARCEL (100).** A sheet saying 100 where the invoice
+says 500 is 400 labels short, on paper, in the supplier's hand.
+
+**Tissue seal and tissue wrap are NOT on this order** — eight lines, neither
+among them. Artwork kept and correct; the quantity now says so out loud instead
+of implying a run nobody bought.
+
+⚠️ **THE AUDIT'S OWN GUARD HAD GONE STALE, TWICE, IN THE SAME DIRECTION AS THE
+DOCUMENT IT GUARDS.** `generate-supplier-pdf` asserted the README states the bag
+mark width — with the number **hardcoded**. It said 90 after the mark became
+110, and 110 after it became 79. It now **parses `BAG_MARK` out of
+`generate-packaging-artwork.mjs`**, so the two files cannot drift and a rename
+fails loudly. Verified by deliberately setting the artwork to 88 and watching
+the audit reject it.
+
+**The care label's ⚠️ "needs a native reader" note is gone** — she approved the
+Arabic today, and a warning that outlives its reason is one people stop reading.
+
+**Rebuild everything with:**
+
+    cd website
+    node scripts/brand/generate-packaging-artwork.mjs
+    node scripts/brand/generate-supplier-pdf.mjs      # runs the audit
+    node scripts/brand/generate-simple-spec.mjs
+    node scripts/brand/build-final-folder.mjs         # -> /send-to-packagin-supplier-final (gitignored)
+
 ### 2026-09-10 (later still) — the care label's Arabic is read, and the swatch stopped being a blocker
 
 **Committed, nothing held.** `website/src/data/productDisclosure.ts`,

@@ -27,7 +27,12 @@ const DEST = path.resolve(ARTWORK, "../../../send-to-packagin-supplier-final");
 const SUPPLIER_DIR = path.resolve(ARTWORK, "..");
 const ORDER_SHEET = path.join(os.homedir(), "Desktop", "Shaklek-order-sheet.pdf");
 const SHEET_NAME = "00-ORDER-SHEET-read-this-first.pdf";
-const QTY = 100;
+// ⚠️ THERE IS NO SINGLE QUANTITY, AND SAYING THERE IS COST 400 LABELS ON PAPER.
+// This read "100 pieces of every item" while the order it accompanies buys 500
+// woven labels and 500 care labels -- those are per GARMENT, where bags, tags
+// and cards are per PARCEL. The per-item numbers live in generate-simple-spec's
+// SPEC and come from Fitoor's quote; the covering note now points at them
+// instead of asserting a number of its own.
 
 function findPdf(stem) {
   for (const dir of [ARTWORK, SUPPLIER_DIR]) {
@@ -97,8 +102,11 @@ const lines = [
   "     the hand bag. Their file is already one colour, so there is nothing to",
   "     convert. Every other item prints exactly as its file shows.",
   "",
-  `  3. ${QTY} pieces of every item. If ${QTY} is below your minimum for anything, tell us`,
-  "     your minimum and the price at that quantity - do not leave the item out.",
+  "  3. The quantity for each item is on its own page - they are not all the same.",
+  "     The labels are 500 because they go on every garment; the bags, tags and",
+  "     cards are 100 because they go in every parcel. If any of those is below",
+  "     your minimum, tell us your minimum and the price at that quantity - do",
+  "     not leave the item out.",
   "",
   "  4. Send a photo or a sample of each item before the full run.",
   "",

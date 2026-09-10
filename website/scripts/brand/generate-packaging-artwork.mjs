@@ -302,7 +302,7 @@ makePdf("02-care-label", 25, 45, (doc, w, h) => {
   doc.moveTo(4 * MM, 37.5 * MM).lineTo(w - 4 * MM, 37.5 * MM).lineWidth(0.3).strokeColor("#B9B1A2").stroke();
   arabic(doc, w / 2, 41 * MM, "صنع في الإمارات", 2.4 * MM);
   plain(doc, w / 2, 44 * MM, "MADE IN UAE", 5.4, INK, 1.0);
-}, "machine wash 30 gentle. ⚠️ the Arabic needs a native reader before printing");
+}, "machine wash 30 gentle. Arabic read and approved by the founder 2026-09-10");
 
 // 3. HANG TAG 50 x 90 mm ----------------------------------------------------
 //
@@ -554,35 +554,72 @@ makePdf("07-tissue-wrap-repeat-tile", 250, 250, (doc, w, h) => {
   }
 }, "step and repeat across the 50x70cm sheet, keep it faint");
 
-// 8. LINEN BAG PRINT 500 x 400 mm, LANDSCAPE -------------------------------
+// 8. COTTON BAG PRINT 350 x 450 mm, PORTRAIT, WITH A HANDLE ----------------
 //
-// ⚠️ WAS 400 x 500, PORTRAIT. Founder, 2026-08-29: the bag will be landscape,
-// "more long horizontally". Same rectangle turned on its side.
+// ⚠️ MATCHED TO FITOOR'S QUOTED LINE, 2026-09-10: "COTTON BAG, with normal
+// handle, 35x45cm, 100 @ 17.00". The founder took the smaller bag DELIBERATELY,
+// as a price decision, not by supplier error -- do not re-raise it as a
+// mismatch. Nothing here should be read as arguing with that choice.
 //
-// She asked whether that changed anything and the honest answer is: almost
-// nothing, but not nothing. It is the SAME piece of cloth -- same area, same
-// long side, so the fold is the same and the mailer minimum does not move --
-// but this file has to be rebuilt anyway, because the mark is placed as a
-// FRACTION OF THE BAG'S HEIGHT. Turn the bag and "a third of the way down"
-// lands somewhere else in absolute millimetres: 150 mm on a 500 mm bag,
-// 120 mm on a 400 mm one. A placement guide written in proportions is not
-// orientation-free, which is easy to assume and wrong.
+// It WAS 500 x 400 landscape (her 2026-08-29 call, itself a turn of an earlier
+// 400 x 500). This file has to be rebuilt on every one of those changes, and
+// the reason is the same each time and keeps being underestimated:
 //
-// ⚠️ THE MARK IS 110 MM, RAISED FROM 90 ON 2026-08-29. Founder's call, and the
-// reason is proportion rather than size: at 90 mm the mark was 22.5% of a
-// 400 mm bag and only 18% of a 500 mm one. It had not shrunk -- the bag got
-// wider -- but it read smaller than the version she approved. 110 mm on 500
-// restores that 22%. Screen printing is priced by the run and not by the size
-// of the image, so this costs nothing.
-const BAG_W = 500, BAG_H = 400;
+//   THE MARK IS PLACED IN PROPORTIONS, AND PROPORTIONS ARE NOT
+//   ORIENTATION-FREE OR SIZE-FREE. "A third of the way down" is 150 mm on a
+//   500 mm bag, 120 mm on a 400 mm one, 135 mm here. A guide written as
+//   fractions looks portable and is not.
+//
+// ⚠️ AND THE MARK SHRINKS WITH THE BAG, WHICH IS THE EASY THING TO GET WRONG.
+// The invariant she approved is that the mark reads at ~22% OF THE BAG'S
+// WIDTH: 90 mm on a 400 mm bag was 22.5%, and 110 mm on the 500 mm bag was
+// chosen on 2026-08-29 to restore exactly that. Carrying 110 mm onto a 350 mm
+// bag would make it 31% -- a third of the width, visibly not the mark she
+// signed off. 0.225 x 350 = 79 mm, so 79 it is.
+//
+// Screen printing is priced by the run and not by the size of the image, so
+// the smaller mark saves nothing and costs nothing. It is purely proportion.
+//
+// ⚠️ THE HANDLE IS NEW and the print must clear it. The mark sits at a third
+// of the height, well below the handle seam, which is where it already sat --
+// so nothing moves for it. Flagged only so the next person does not raise the
+// handle as an unhandled change.
+const BAG_W = 350, BAG_H = 450;
+const BAG_MARK = 79;
 
+// The filename still says "linen". It is a COTTON bag and has been since the
+// blend was dropped -- but Fitoor already holds this file under this name
+// against a placed order, so the name stays and the artwork tells the truth.
+// Renaming a file a supplier is already working from buys nothing and risks
+// them printing the wrong revision.
 makePdf("08-linen-bag-print", BAG_W, BAG_H, (doc, w, h) => {
   // The print area only. The mark sits at roughly a third of the bag height.
-  lockup(doc, w / 2, h * 0.30, 110 * MM, INK, INK);
+  lockup(doc, w / 2, h * 0.30, BAG_MARK * MM, INK, INK);
   doc.font("Helvetica").fontSize(7).fillColor("#C9C0AE")
-    .text("Print area guide only. Bag is LANDSCAPE, 500 wide x 400 tall. Mark is 110 mm wide, centred, at one third of the bag height. One colour.",
+    .text(`Print area guide only. COTTON bag, PORTRAIT, ${BAG_W} wide x ${BAG_H} tall, with handle. Mark is ${BAG_MARK} mm wide, centred, at one third of the bag height. One colour.`,
       20 * MM, h - 18 * MM, { width: w - 40 * MM, align: "center" });
-}, "LANDSCAPE. one colour, 110mm wide, at a third of the bag height");
+}, `PORTRAIT cotton bag. one colour, ${BAG_MARK}mm wide, at a third of the bag height`);
+
+// 8b. HAND BAG PRINT 350 x 300 mm FACE -------------------------------------
+//
+// ⚠️ THIS FILE DID NOT EXIST UNTIL 2026-09-10, AND THE QUOTE PRICES A PRINT ON
+// IT. Fitoor's line: "HAND BAG, 1 color print, 35x30x6cm, 100 @ 9.20". Eight
+// lines were quoted and only seven had artwork, which is the kind of gap that
+// is invisible until a supplier asks for the file or, worse, prints nothing.
+//
+// 35 x 30 x 6 is width x height x gusset, so the printable FACE is 350 x 300;
+// the 60 mm gusset is the side panel and carries no print. Same proportion
+// rule as the cotton bag above -- 0.225 x 350 = 79 mm, at a third of the
+// height -- so the two bags read as the same mark at the same weight, which
+// they will not do if either is set in absolute millimetres.
+const HANDBAG_W = 350, HANDBAG_H = 300;
+
+makePdf("11-hand-bag-print", HANDBAG_W, HANDBAG_H, (doc, w, h) => {
+  lockup(doc, w / 2, h * 0.30, BAG_MARK * MM, INK, INK);
+  doc.font("Helvetica").fontSize(7).fillColor("#C9C0AE")
+    .text(`Print area guide only. FACE of the hand bag, ${HANDBAG_W} wide x ${HANDBAG_H} tall. The 60 mm gusset is the side panel and carries NO print. Mark is ${BAG_MARK} mm wide, centred, at one third of the face height. One colour.`,
+      20 * MM, h - 18 * MM, { width: w - 40 * MM, align: "center" });
+}, `hand bag FACE 350x300 (6cm gusset unprinted). one colour, ${BAG_MARK}mm wide`);
 
 // 9. MAILER PLACEMENT 320 x 400 mm -----------------------------------------
 //
