@@ -28,7 +28,16 @@ export type Block =
   | { type: "h2"; text: string }
   | { type: "h3"; text: string }
   | { type: "ul"; items: string[] }
-  | { type: "callout"; text: string };
+  | { type: "callout"; text: string }
+  /** A line worth stopping on. Breaks up a long read; use sparingly, once or
+   *  twice per article, never next to a callout. */
+  | { type: "quote"; text: string }
+  /** Real photography. Catalogue shots are 848x1264, marketing 1584x672.
+   *  ⚠️ Every image must EARN its place -- it shows the thing being described,
+   *  not decoration. An article about how linen behaves in heat shows linen. */
+  | { type: "image"; src: string; alt: string; caption?: string; w: number; h: number }
+  /** Two portrait shots side by side, for comparisons. */
+  | { type: "pair"; a: { src: string; alt: string }; b: { src: string; alt: string }; caption?: string };
 
 export type Article = {
   slug: string;
@@ -42,6 +51,8 @@ export type Article = {
   readingMinutes: number;
   /** The standfirst under the H1. Not a duplicate of the description. */
   intro: string;
+  /** Lead image, above the title. Wide crop. */
+  hero: { src: string; alt: string; w: number; h: number };
   blocks: Block[];
 };
 
@@ -55,6 +66,7 @@ export const articles: Article[] = [
     readingMinutes: 6,
     intro:
       "Most clothing sold today is made from plastic. Not loosely, not as a figure of speech: polyester, nylon and acrylic are petroleum products spun into thread. Here is what that actually changes about wearing them.",
+    hero: { src: "/marketing/story-materials-v2.jpg", alt: "Linen cloth, close.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
@@ -91,6 +103,13 @@ export const articles: Article[] = [
         text: "Two garments in the same room, on the same person, at the same air temperature, do not feel the same. Linen has a loose, irregular weave and stiff fibres that hold the cloth slightly off the skin rather than clinging to it, so air moves through and underneath. That moving air is what carries evaporating sweat away. Cotton sits closer but still breathes. A tight synthetic weave traps a still, warm, humid layer against you, and still humid air is the one condition in which sweating stops working.",
       },
 
+      {
+        type: "image",
+        src: "/catalog/oversized-shirt/oversized-shirt-front.jpg",
+        alt: "An oversized linen shirt, cut loose through the body.",
+        caption: "Linen holds itself slightly off the skin. That gap is where the air moves, and moving air is what carries sweat away.",
+        w: 848, h: 1264,
+      },
       { type: "h2", text: "What sits against your skin all day" },
       {
         type: "p",
@@ -119,6 +138,10 @@ export const articles: Article[] = [
         text: "What that does to human health is still being studied and it would be dishonest to claim otherwise. What is not in question is where the fibres end up. Plant fibres shed too, but what they shed is cellulose, which breaks down.",
       },
 
+      {
+        type: "quote",
+        text: "Synthetics win on durability, cost and holding their shape. Plant fibres win on everything to do with wearing the garment in heat.",
+      },
       { type: "h2", text: "Where natural fibres are genuinely worse" },
       {
         type: "p",
@@ -178,6 +201,7 @@ export const articles: Article[] = [
     readingMinutes: 5,
     intro:
       "Everyone arriving in the UAE is told to wear loose and light colours. That advice is not wrong, but it skips the thing that matters most, which is what the fabric is made of.",
+    hero: { src: "/marketing/hero-banner.jpg", alt: "Loose linen, worn in Gulf heat.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
@@ -221,6 +245,12 @@ export const articles: Article[] = [
         text: "Made from processed wood pulp, so more breathable than polyester and often lovely to wear. They lose strength when wet and can hold sweat marks. A reasonable middle option.",
       },
 
+      {
+        type: "pair",
+        a: { src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front-v2.jpg", alt: "Wide-leg trousers in linen." },
+        b: { src: "/catalog/oversized-shirt/oversized-shirt-white-front.jpg", alt: "A loose white linen shirt." },
+        caption: "Room through the leg and across the back is not a style preference in this climate. It is how air gets underneath the cloth.",
+      },
       { type: "h2", text: "Cut matters, and here is the part usually left out" },
       {
         type: "p",
@@ -235,6 +265,10 @@ export const articles: Article[] = [
         text: "Sleeves are worth more thought than they get. A long sleeve in loose linen is frequently cooler than a bare arm in direct sun, because it shades the skin while still letting air through. This is why long, loose clothing is traditional across every hot region of the world.",
       },
 
+      {
+        type: "quote",
+        text: "A black linen shirt will be more comfortable than a white polyester one on almost any August afternoon.",
+      },
       { type: "h2", text: "Colour, which matters less than you have been told" },
       {
         type: "p",
@@ -269,6 +303,7 @@ export const articles: Article[] = [
     readingMinutes: 5,
     intro:
       "A medium is not a body. It is a statistical average of thousands of bodies, and the average of a large group of people resembles almost none of them.",
+    hero: { src: "/marketing/story-tailoring.jpg", alt: "A tailor at work.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
@@ -289,6 +324,10 @@ export const articles: Article[] = [
         text: "Clothing has exactly the same problem. You may be a medium across the shoulders and a large through the hip. Your arms may be longer than the chart expects for your chest. Your waist to hip ratio is yours and not the chart's. Each individual measurement can be close to average while the combination is not, and a garment cut to the combination is what actually fits.",
       },
 
+      {
+        type: "quote",
+        text: "The United States Air Force measured thousands of pilots on ten dimensions and checked how many were average on all ten at once. The answer was none.",
+      },
       { type: "h2", text: "What actually changes" },
       { type: "h3", text: "The shoulder, which is the one that cannot be fixed later" },
       {
@@ -306,6 +345,12 @@ export const articles: Article[] = [
         text: "Trouser length in particular is set for a height the chart assumed. Getting it right is the difference between a trouser that looks intentional and one that looks borrowed.",
       },
 
+      {
+        type: "pair",
+        a: { src: "/catalog/banded-trousers/banded-trousers-navy-front.jpg", alt: "Banded trousers, straight leg." },
+        b: { src: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg", alt: "The same trousers cut wide." },
+        caption: "The same piece, two cuts. You choose which one gets made, and nothing is cut until you do.",
+      },
       { type: "h2", text: "What it does not change, and this matters" },
       {
         type: "p",
