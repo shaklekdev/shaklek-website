@@ -122,7 +122,7 @@ Claude 3.5 Sonnet is superseded. The current family is **Claude Opus 5**
 
 **Superseded 2026-08-12** in favour of the Google Gemini API, and the reason was
 explicitly *not to split AI across two vendors* — see
-`planning/archive/aws-infrastructure-todo.md`. The architecture diagram also records
+`planning/technical/aws-infrastructure-todo.md`. The architecture diagram also records
 that **Amplify is the only AWS service in the system**. Adding Bedrock
 reintroduces an AWS dependency that was removed on purpose.
 
@@ -158,7 +158,7 @@ is the entire brand.** Do not automate it before it is measurably accurate.
 
 ### Where this sits
 
-`planning/archive/ai-integration-todo.md` records that **zero real AI exists in the
+`planning/technical/ai-integration-todo.md` records that **zero real AI exists in the
 product and that is deliberate** — Phase 1 is a human-run concierge model, to
 validate the loop before the hard engineering. This feature is Phase 2/3 and
 belongs behind real Phase 1 data. **Build §2 first, gather the measurements,

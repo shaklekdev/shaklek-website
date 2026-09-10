@@ -34,7 +34,7 @@ live card → webhook fired → order marked `paid` in Neon → visible on
 
 Given verbatim, in her order. Item 7 is explicitly sequenced last.
 
-1. [ ] **Architecture and end-to-end flow very clear** — `planning/aws-architecture-diagram.html`
+1. [ ] **Architecture and end-to-end flow very clear** — `planning/technical/aws-architecture-diagram.html`
        already carries the deployed state and the purchase flow; the gap is a
        single readable end-to-end walk from landing to tailor.
 2. [ ] **Latest brand assets with a clear path** — where the current logo,

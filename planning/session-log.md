@@ -1745,7 +1745,7 @@ kept and switched off rather than deleted, so Friday's restore is one flag.
 - `website/src/app/how-it-works/page.tsx`, `website/src/app/not-found.tsx`,
   `website/src/app/checkout/page.tsx`, `website/src/app/account/page.tsx`,
   `website/src/app/order-confirmed/page.tsx`
-- `planning/aws-architecture-diagram.html`, `CLAUDE.md`, `.gitignore`
+- `planning/technical/aws-architecture-diagram.html`, `CLAUDE.md`, `.gitignore`
 - **Clerk scoping — DONE, verified:** `website/src/app/layout.tsx`,
   `website/src/components/Header.tsx`, `website/src/components/AuthProvider.tsx`
   (new), `website/src/app/account/page.tsx`, and `layout.tsx` under
@@ -1820,7 +1820,7 @@ from being committed:
 - `website/scripts/social/encode` — an 88KB Mach-O binary compiled from
   `encode.swift`. Rebuild it, don't commit it.
 
-**`planning/aws-architecture-diagram.html` rewritten.** It described a plan
+**`planning/technical/aws-architecture-diagram.html` rewritten.** It described a plan
 from before launch and had been wrong for months. It named **Amazon RDS** (the
 database is Neon), showed an **S3 bucket** (none exists), and drew **Gemini in
 the live request path** called during a customer session (it is a build-time
@@ -1836,7 +1836,7 @@ connector labels that only showed up in the render.
 DATABASE_URL isn't set anywhere".** False since 2026-08-22 and actively
 misleading about which database this is. Corrected.
 
-`planning/archive/aws-infrastructure-todo.md` was checked and is accurate — it already
+`planning/technical/aws-infrastructure-todo.md` was checked and is accurate — it already
 says Neon-not-RDS and correctly marks S3 as not done. No change.
 
 #### The reported lag is Clerk, not the images. Measured, not guessed.
@@ -1945,7 +1945,7 @@ whole flow still works after switching to Tailored.
 #### Monitoring — BUILT, verified end to end (was genuinely at zero)
 
 Founder chose **hello@shaklek.com** as the alert address; subscription
-confirmed. Full runbook in `planning/archive/aws-infrastructure-todo.md`. Four alerts:
+confirmed. Full runbook in `planning/technical/aws-infrastructure-todo.md`. Four alerts:
 any 5xx, zero requests for an hour, p90 latency over 3s, and a failed Amplify
 deploy. **~$0.30/month.**
 
