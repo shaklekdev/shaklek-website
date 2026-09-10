@@ -60,7 +60,14 @@ const INPUTS = {
     chinaLinen: {
       label: "China W300235, 100% linen, PRE-WASHED",
       aedPerMetre: 36.08,
-      source: "Shirley Gz, HER OWN QUOTED TOTAL 2026-09-08: 7,941.8 RMB for 120m = AED 4,330",
+      source: "Shirley Gz. INVOICED 2026-09-09 for the real order: 124m at 50.5 RMB = 6,262 goods + 187.86 service (3%) = 6,449.86 RMB = AED 3,516. Every line checked against the metres ordered. Shipping billed SEPARATELY after the goods are weighed at the agent's warehouse -- which is the outcome we wanted, since it means actual weight rather than her 30kg estimate. At ~27kg gross that is 40x27+500 = 1,580 RMB = AED 861, so about AED 4,378 all in, or 36.08/m.",
+      // ⚠️ THE MILL'S SHADE CODES. Record these forever: a REORDER MUST QUOTE
+      // THEM or the colour will not match the catalogue photography. A
+      // different code guarantees a different shade; the same code gets the
+      // same recipe but NOT the same dye lot, which is a separate problem for
+      // anyone ordering a shirt and trousers together in one colour.
+      //   #3 White  ·  #4 Ivory  ·  #440 Navy  ·  #29 Burgundy
+      // Ordered 2026-09-09: White 22m, Ivory 43m, Navy 32m, Burgundy 27m.
       note: "✅ FULLY QUOTED, NOTHING OUTSTANDING ON COST. 138cm / 145gsm confirmed 2026-09-06, and confirmed SUITABLE FOR SHIRTS the same day (her spec sheet had listed only dress/skirts/pants, and four of eight catalogue items are shirts). ✅ SHRINKAGE ANSWERED 2026-09-08: ~1% residual, machine washable at regular temperature -- the cloth is water-washed and softened at the mill, which is the pre-shrink step branding/packaging.md named as the route back to home washing, and the care label changed on the strength of it. ✅ THE INLAND LEG IS NO LONGER EXCLUDED: her 500 RMB line explicitly covers to-door delivery AND warehouse transportation, which is the gap she had excluded in writing on 2026-09-02. 36.08/m is HER OWN TOTAL, not an estimate of it: 120m x 50.5 x 1.03 = 6,241.8 fabric-plus-fee, + 1,700 shipping = 7,941.8 RMB = AED 4,330. ⏳ The only open item is her billing 30kg against ~24kg of actual cloth; ask whether the invoice is on actual weight, worth about AED 87."
     },
     chinaCotton: {
