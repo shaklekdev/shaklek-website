@@ -106,10 +106,27 @@ const INPUTS = {
   // Fitoor Packaging LLC (Ajman), estimate FRP2608-1149, 100-unit pricing.
   // The cotton bag is deliberately NOT bought from Fitoor — at AED 20 it was
   // 39% of their whole quote and worth ~2.5 margin points on every garment.
-  // ✅ VERIFIED 2026-09-02 against the actual quote (FRP2608-1149, 31/08/2026),
-  // not against a summary of it. All ten lines reconstruct the document's own
-  // subtotal of 5,115.00 + 255.75 VAT = 5,370.75 exactly. Rates are EX-VAT on
-  // the quote; VAT is added at the bottom.
+  // ✅ VERIFIED AGAINST THE REVISED QUOTE, FRP2609-1113 (07/09/2026): eight
+  // lines, subtotal 4,350.00 + 217.50 VAT = 4,567.50, which this model
+  // reconstructs exactly. Supersedes FRP2608-1149, and two things changed:
+  // tissue seal and tissue wrap are OUT, and the duplicate care-label design is
+  // gone (they had quoted 500 of EACH of two designs, 1,000 labels, when the
+  // blend is dead and only one fibre exists -- catching that saved 388.50).
+  // Rates are EX-VAT; VAT is added at the bottom.
+  //
+  // ⏳ TWO THINGS STILL WRONG ON IT, both flagged to them 2026-09-10:
+  //   1. The invoice reads "Shakalek". The company is "Shaklek". It is a VAT
+  //      invoice and must match the trade licence.
+  //   2. The cotton bag line still reads "35x45cm, with normal handle". The
+  //      approved spec is 500x400mm LANDSCAPE with a DRAWSTRING, and the print
+  //      artwork (08-linen-bag-print.pdf) places the mark as a fraction of a
+  //      500x400 bag's height. Founder's read is that the description is
+  //      estimate shorthand and their sample step will settle it, which their
+  //      terms do support ("physical samples will be for size and artwork
+  //      confirmation"). ⚠️ BUT THE SAMPLE STEP CONFIRMS THE PRODUCT, NOT THE
+  //      PRICE: 50x40 is 27% more cloth than 35x45, and the 17 was quoted
+  //      against the smaller one. Get the price confirmed at the real size
+  //      BEFORE the 50% advance, not after.
   //
   // TO TEST AN ORDER: flip `keep` and re-run. Every margin below moves with it.
   packaging: {
