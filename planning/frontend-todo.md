@@ -113,6 +113,36 @@ cuts to the other makes every garment wrong and looks like a fit problem).
 - This is the cheapest moment it will ever be. Nobody has ordered, so no stored
   measurement has to be migrated or re-asked.
 
+## ⏳ ARABIC BLOG — planned, not built (founder: "we'll do it later, I will check")
+
+Three English articles are live in `src/data/blog.ts` at `/blog`. **No Arabic
+version exists**: no `/ar` route, no hreflang.
+
+**ADAPT, DO NOT TRANSLATE.** Arabic searchers in the Gulf type تفصيل, خياطة and
+قماش كتان, not translations of English phrases. A literal translation ranks for
+things nobody searches. Google will not penalise it (translated pages are not
+duplicate content with hreflang set), it simply earns little.
+
+- *Natural fabrics and your body* — adapts well, the argument travels.
+- *Nobody is a medium* — adapts well, made-to-measure is a strong Arabic space.
+- *Dubai summer / fabric* — **rewrite around Arabic search terms**, do not
+  translate. It lives or dies on vocabulary.
+- Ideally one written natively for Arabic search, with no English equivalent.
+  That is where the empty space actually is.
+
+**Build:** `/ar/blog` routing plus hreflang. The RTL plumbing already works —
+`ProductDisclosure` handles `dir="rtl"` and `lang="ar"` correctly, including the
+mixed-digit trap. Roughly two hours.
+
+⚠️ **THE FOUNDER MUST READ EVERY ARABIC LINE BEFORE IT PUBLISHES.** This is her
+own standing rule from `productDisclosure.ts`, written after a feminine verb
+survived review. Nobody on this side can check Arabic grammar or typesetting the
+way a measurement can be checked.
+
+⚠️ Not a compliance fix. `ProductDisclosure` already carries the Cabinet
+Resolution 66/2023 Art. 40 disclosure in Arabic on every product page. This is
+growth, not law.
+
 ## Open decisions
 - [ ] **Multi-item cart or one-design-at-a-time checkout?** Currently built single-item — flagged to the founder, not yet decided. This affects checkout, order data shape, and confirmation copy if it changes.
 
