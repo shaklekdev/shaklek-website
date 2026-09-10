@@ -83,11 +83,14 @@ elsewhere. He is Danish, Taylor Moon Shine.
 
 ### Blocking the measurement form
 
-1. **Demonstrate all seventeen measurements**, do not just name them. His list is
-   in `planning/frontend-todo.md`. **Three are ambiguous and must not be guessed
-   into a form:** "Need" (almost certainly Knee), "Hand length"
-   (shoulder-to-wrist, or wrist-to-fingertip?), and trouser "Length" (outseam
-   from the waist, or from where?).
+1. ✅ **RESOLVED 2026-09-10 by his own labelled diagrams**, two hand drawings
+   sent 2026-08-30. **"Need" is Knee**, trouser **"Length" is the OUTSEAM** (the
+   arrow runs down the outside of the leg, not the inside), and **"Hand length"
+   is shoulder to wrist**. A printable sheet in his exact labels and order:
+   `planning/measurement-sheet.html`.
+   ⚠️ It also carries the **band / tie position** field, which was never on the
+   original list: where a band, tie or elastic sits, measured **from the top
+   downwards**. Founder, 2026-09-10 — he asks for this and it was missing.
 2. **Agree the convention for each one, and write it down.** A waist at the
    narrowest point and a waist where trousers sit are 3-5cm apart. If the
    founder measures one while he cuts to the other, every garment is wrong and

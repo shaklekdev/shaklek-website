@@ -50,10 +50,18 @@ on either list.**
 ⚠️ **HEIGHT IS ON NEITHER LIST.** The tailor never asked for it. The site's
 fourth field is one nobody cutting a garment uses.
 
-⏳ **Three items need the tailor to confirm before anyone builds a form:**
-"Need" is almost certainly **Knee** but is not certain; **"Hand length"** could
-be shoulder-to-wrist or wrist-to-fingertip; and trouser **"Length"** could be
-outseam from the waist or something else. **Have him demonstrate each one.**
+✅ **ALL THREE AMBIGUITIES RESOLVED 2026-09-10** by the tailor's own labelled
+diagrams (two hand drawings, one per garment, WhatsApp 2026-08-30):
+
+- **"Need" is KNEE** — drawn as a line across the leg at knee height.
+- **Trouser "Length" is the OUTSEAM** — the arrow runs from the waist down the
+  *outside* of the leg to the hem. Not the inseam.
+- **"Hand length" is SHOULDER TO WRIST** along the arm, not wrist-to-fingertip.
+
+A printable sheet using **his exact labels and his order** is at
+`planning/measurement-sheet.html`, so nothing is translated between what the
+founder writes down and what he cuts to. It also carries the **band/tie position**
+field he asks for, measured **from the top downwards**.
 
 ### Seventeen is too many to ask online -- but not all seventeen are body facts
 
