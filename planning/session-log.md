@@ -160,6 +160,51 @@ This is the only item whose value decays while it waits.
 7. **Check the rules on the UAE flag in advertising** -- it is on the
    pre-launch page.
 
+8. ⚠️ **INVESTIGATE THE www TIMEOUTS PROPERLY. DO NOT ACCEPT "IT IS
+   CLOUDFRONT" WITHOUT PROVING IT.** Founder, 2026-09-12: *"there is no way
+   it's cloudfront, we have a problem we need to investigate"*. She is right to
+   push: blaming the CDN is the convenient answer and nobody has ruled us out.
+
+   **What was actually measured tonight, so tomorrow does not re-measure it:**
+   - `www.shaklek.com` timed out repeatedly, `000`, for ~20s each
+   - TCP connect SUCCEEDED in 0.014s; the **TLS handshake never completed**
+     (`time_appconnect` 0.000000). So it is not DNS and not routing.
+   - Sampling every edge DNS returned: `108.139.60.80` **200**,
+     `.43` **200**, `.8` **200**, `.51` **000**. One node in four.
+   - `http://www` works (301). The **apex works** (301) and resolves to a
+     DIFFERENT set of IPs (15.197.225.128, 3.33.251.168).
+   - `main.dqcptedylrif0.amplifyapp.com` **200** throughout.
+   - Domain association `AVAILABLE`, no statusReason, cert valid and in use on
+     the edges that do answer.
+
+   **What that does NOT rule out**, and is the actual work:
+   - whether `108.139.60.51` fails for OTHER CloudFront-hosted sites too. If it
+     fails only for us, it is us. **This is the single test that settles it**
+     and it was not run.
+   - whether Amplify's managed certificate is mid-rotation, leaving some edges
+     with stale config
+   - whether the www subdomain's association wants re-provisioning
+   - whether moving the domain off Amplify-managed onto our own
+     CloudFront + Route 53 is worth it for the control
+
+   ⚠️ It has been intermittent ALL DAY, not just tonight, including before the
+   gate came off. Whatever it is, it predates today's work.
+
+9. **Generate the abayas.** Sliders and vocabulary are settled
+   (`cropped|full` x `midi|maxi`, sleeve first), the recipe is `CLAUDE.md` §4b,
+   and the base photo (`full:maxi`) is never generated. Three cells per colour.
+   ⏳ Needs her references first, and a decided list of LOOKS before anything is
+   generated. **No dress** -- see 3 above.
+
+10. **Shorten the emails, and stop showing a raw URL.** Founder, 2026-09-12:
+    *"the emails are shown full, we need to shorten them, we can't display this
+    like that"*. A 90-character signed link wraps across four lines on a phone
+    and looks like a phishing attempt. The fix is an HTML email with the link
+    behind a short anchor or a button, and a plain-text alternative for clients
+    that refuse HTML. ⚠️ Keep the visible "Leave the list" line and both
+    List-Unsubscribe headers -- Gmail does not surface the header version on a
+    first, non-bulk send, which is why the visible one exists.
+
 **Then, when there is time rather than urgency:**
 
 - **Rewrite the three journal articles and add photography.** Full reasoning in
