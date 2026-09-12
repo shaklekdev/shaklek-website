@@ -5,27 +5,19 @@ import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/reque
 // Waitlist signups. TWO sources as of 2026-09-12: Shaklek+ early access, and
 // the pre-launch page (source "coming-soon").
 //
-// ⚠️ WHERE AN ADDRESS ACTUALLY GOES, since this is the whole answer to "where
-// do we store it": NOWHERE BUT AN INBOX. Each signup is one email to
-// hello@shaklek.com via Resend, with reply-to set to the address that signed
-// up so a reply goes straight back to her. No table, no export, no list.
+// WHERE AN ADDRESS GOES. Two places, on purpose:
+//   1. a Resend SEGMENT -- the durable list. Stores, deduplicates, and can be
+//      sent a broadcast at launch without anyone reading an inbox.
+//   2. an email to hello@shaklek.com, reply-to the signer, so she sees it live
+//      and so there is still a copy if (1) fails.
 //
-// ⏳ THAT STOPS BEING SOUND THE DAY THE PRE-LAUNCH PAGE GETS TRAFFIC. To tell
-// two hundred people "we are open", somebody has to find two hundred emails in
-// an inbox and retype the addresses. Fix it BEFORE driving traffic, and prefer
-// Resend Audiences to a table: it dedupes, it stores, and it sends the
-// broadcast. It needs an audience id, which means the build spec allowlist AND
-// the console AND a redeploy -- see the RECONCILE_TOKEN warning in CLAUDE.md.
+// ✅ (1) ADDED 2026-09-12. Founder: "I don't want anything manual." Until then
+// the inbox WAS the list, which was fine at a handful and would have meant
+// finding two hundred addresses by hand the day the page got traffic.
 //
-// ⚠️ AND A SIGNUP IS LOST IF RESEND IS DOWN. The caller gets an honest error
-// and can retry, but nothing queues it. Same fix.
-//
-// Deliberately no database table. There is no migrate step in the Amplify
-// build (see src/lib/envGuard.ts and planning/aws-infrastructure-todo.md), so a
-// schema change and the code that needs it cannot ship atomically -- a new
-// table would have to be applied to the live Neon branch by hand first. An
-// email to the founder's inbox is a perfectly good list at this volume, and it
-// can be moved into a table later without changing anything a customer sees.
+// Still no database table, and still for the same reason: there is no migrate
+// step in the Amplify build (see src/lib/envGuard.ts), so a schema change and
+// the code needing it cannot ship together. A hosted list needs no migration.
 //
 // Public and unauthenticated by design, so it carries the same guards as the
 // other public write routes: origin check, body cap, rate limit, and a real
@@ -78,6 +70,61 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // ---------------------------------------------------------------------
+  // 1. THE LIST. This is the part that makes launch day not manual.
+  //
+  // ⚠️ SEGMENTS, NOT AUDIENCES. Resend's own docs say "Audiences are
+  // deprecated in favor of Segments. These endpoints still work, but will be
+  // removed in the future" -- checked 2026-09-12 before writing this, because
+  // every half-remembered example still uses POST /audiences/:id/contacts. The
+  // current call is POST /contacts with a `segments` array.
+  //
+  // ⚠️ THE POLARITY HERE IS THE OPPOSITE OF STORE_OPEN's, deliberately. A
+  // missing RESEND_SEGMENT_ID must NOT stop a signup. Failing closed on the
+  // switch that decides whether money can move is right; failing closed on the
+  // one that decides whether a stranger can leave an email just loses her. So
+  // this degrades to the inbox and shouts in the log.
+  //
+  // ⚠️ RESEND_SEGMENT_ID NEEDS THE BUILD SPEC, NOT JUST THE CONSOLE.
+  //   aws amplify get-app --app-id dqcptedylrif0 --query 'app.buildSpec'
+  // carries an explicit `env | grep -e ... >> .env.production` allowlist. Add
+  // `-e RESEND_SEGMENT_ID`, set it in the console, then REDEPLOY -- the spec is
+  // read at build time. Until all three are done this logs "not set" on every
+  // signup and the list stays empty while the console shows the variable.
+  const segmentId = process.env.RESEND_SEGMENT_ID;
+  let stored = false;
+  if (!segmentId) {
+    console.error("[waitlist] RESEND_SEGMENT_ID not set — signup is inbox-only, no list.");
+  } else {
+    try {
+      const contact = await fetch("https://api.resend.com/contacts", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ email, unsubscribed: false, segments: [segmentId] }),
+      });
+      if (contact.ok) {
+        stored = true;
+      } else {
+        const detail = await contact.text();
+        // A repeat signup is a SUCCESS, not an error: somebody typing the same
+        // address twice must not see a failure, and a list is deduplicated by
+        // definition. Resend's docs do not state the duplicate behaviour, so
+        // this reads the response rather than assuming a status code.
+        if (/exists|duplicate|already/i.test(detail)) {
+          stored = true;
+        } else {
+          // Never the address itself -- CloudWatch outlives the signup.
+          console.error("[waitlist] contact create failed:", contact.status, detail.slice(0, 300));
+        }
+      }
+    } catch (err) {
+      console.error("[waitlist] contact create threw:", err);
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // 2. THE PING. Kept now the list exists: it is how she sees a signup the
+  // moment it happens, and it is the only copy if step 1 failed.
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -99,7 +146,13 @@ export async function POST(req: NextRequest) {
   });
 
   if (!res.ok) {
-    console.error("[waitlist] Resend call failed:", await res.text());
+    console.error("[waitlist] notification email failed:", (await res.text()).slice(0, 300));
+  }
+
+  // Honest only if at least one of the two actually worked. Saying "thank you"
+  // when nothing recorded her address is the exact failure this route exists
+  // to avoid.
+  if (!stored && !res.ok) {
     return NextResponse.json(
       { ok: false, error: "We couldn't record that right now. Please try again later." },
       { status: 502 },
