@@ -18,6 +18,139 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-12 (latest) — the site is PUBLIC, and the shop is shut in code
+
+**Holding nothing.** Everything below is committed. Files touched this session,
+none of them claimed by the other session at the time: `website/src/**`,
+`website/scripts/{csp-check,amplify-allow-env,amplify-restore-staging-env}.mjs`,
+`planning/{margins.mjs,frontend-todo.md,catalog-images-todo.md,unit-economics.md,launch-checklist.md,technical/aws-architecture-diagram.html}`,
+`branding/packaging.md`, `catalog-archive/2026-09-12-pre-launch/`.
+
+#### THE BIG CHANGE: www.shaklek.com is no longer 401
+
+Amplify basic auth on `main` is **off**. The gate moved into the app, where it
+can let the right things through — basic auth could not, which is why Stripe and
+Clerk had been getting 401 since 2026-08-31.
+
+**It is two independent locks and that is deliberate:**
+- `src/proxy.ts` rewrites every page to `/coming-soon`
+- `/api/orders` refuses with 503 on its own
+
+Both read `STORE_OPEN === "true"`, **never `!== "false"`**. `STORE_OPEN` is in
+the build-spec allowlist but has no value set, so it is undefined in production
+and the shop is shut. Written the other way round that same omission would have
+left checkout open on a public site. Verified in production: a real checkout
+attempt returns *"We are not open for orders yet."*
+
+**What is public now:** the pre-launch page, `/blog` and its three articles,
+`/legal/*`, both webhooks (400 again, not 401), `robots.txt`, the sitemap.
+**What is not:** `/our-story` (founder: *"it says everything, we don't want to
+disclose everything before"*), `/faq` (publishes the price ladder), the
+catalogue, product pages, checkout.
+
+#### ⚠️ MONEY BUG FOUND AND FIXED, and it was live
+
+`BASE_PRICE_BY_CATEGORY` sat at **389/419/429/619** while the catalogue moved to
+449/519 on 2026-09-08. That constant priced uploaded designs **server-side** and
+`/faq` published it, so an uploaded shirt sold at 389 and trousers at 429 — 60
+and 90 AED under the same garment from the catalogue.
+
+`/upload` is now **removed entirely** (founder's call) and the slugless pricing
+branch went with it. **Every order line must resolve to a real catalogue slug.**
+That one branch was behind three separate defects in a single day: having a
+price was the same as being on sale (Skirt 449, Dress 599 and a same-day Abaya
+690 were all purchasable with no product and no quoted stitching); its ladder
+went stale; and `in` on that ladder let prototype keys through as categories,
+writing `orders` rows with a NaN total. **One root cause: two sources of truth
+for price.**
+
+#### Margins moved on real quotes
+
+Shirt stitching is **35** (she said 30-35; the model takes the worse end), pants
+**50**, not the estimated 40 and 60. Shirt 449 → **56.8%**, trousers 519 →
+**59.2%**. Run `node planning/margins.mjs`.
+
+**The biggest lever is not a price.** A second garment in the same order runs at
+~71% because packaging (37.74) and shipping (21) are already paid: shirt alone
+255, shirt + trousers 623. Hence the **550 free-fitting threshold** (50 AED,
+once per customer): no single garment reaches it, a dress or abaya does, and any
+pair does. ⚠️ **Set the dress price before the threshold** — if the dress lands
+under 550 the rule breaks silently.
+
+New items priced: gilet **479**, dress **599**, abaya **690**. ⏳ Abaya and gilet
+stitching are still estimates; they are the only two numbers missing.
+
+#### ⚠️ TWO THINGS I GOT WRONG. Read these, they cost real money and a key.
+
+1. **I handed her `aws amplify update-branch --environment-variables STORE_OPEN=true`
+   after flagging it as dangerous.** That flag **REPLACES** the whole variable
+   map. It wiped twelve staging overrides, and a branch with no override
+   **inherits the app-level values — which are PRODUCTION**. Staging was one
+   build away from being a public, open shop on LIVE Stripe keys against the
+   PRODUCTION database. Recovered with
+   `scripts/amplify-restore-staging-env.mjs`, which refuses to write unless the
+   database is the dev host and the Stripe key is `sk_test_`.
+   **Do not hand over a command you have just called dangerous.**
+
+2. **The first version of that script put every secret in argv.** AWS rejected
+   the format and **echoed the whole command line back**, printing the Resend
+   key, the dev database password and the test Stripe and Clerk keys into the
+   terminal and the transcript. ⏳ **THE RESEND KEY STILL NEEDS ROTATING.**
+   Values now go through a 0600 temp file and AWS's stderr is scrubbed.
+   **A command line is not private: it is echoed on error and visible to `ps`.**
+
+#### Built, all deployed
+
+- **The pre-launch page** (`/coming-soon`). Four pillars, four images, about
+  sixty words. Copy rules in the file header are not style notes — no price, no
+  "100% plant based", no lead-time promise, "early October" never a named day.
+  ⚠️ The guilt hook ("if it says polyester, you have been wearing plastic")
+  is a good VIDEO hook and a bad front page; do not put it back.
+- **`/api/waitlist` writes a Resend contact**, so launch is one Broadcast rather
+  than reading an inbox. ✅ Needs **no** id and no config — a bare
+  `POST /contacts` writes to the contact book the dashboard's *Audience* page
+  shows. Verified against the live account (created and deleted, twice).
+  `RESEND_SEGMENT_ID` is optional. Polarity is deliberately the OPPOSITE of
+  STORE_OPEN's: missing must not stop a stranger leaving an email.
+- **Dress and Abaya slider matrices**, before any photography exists, so the
+  vocabulary is settled first. Dress `short|long` × `midi|maxi`; Abaya
+  `cropped|full` × `midi|maxi`; sleeve declared first in both.
+- **`scripts/amplify-allow-env.mjs`** — adds a variable to the build-spec
+  allowlist and reads the live spec back to confirm.
+- **Journal header**: while shut, `/blog` wears its own minimal header. It was
+  rendering the full shop nav, every link of which rewrote to the splash.
+
+#### ⏳ HERS
+
+1. **Rotate the Resend API key.** It was printed in full.
+2. Post. Captions are fixed to 449/519. Nothing is blocked.
+3. Tailor: **abaya and gilet stitching rates**, plus the volume rate.
+4. Submit the sitemap in Google Search Console — the journal is open to earn
+   ranking before October and indexing is the slow part.
+5. Confirm the **UAE rules on commercial use of the national flag**; it is on
+   the pre-launch page.
+
+#### ⚠️ Do not re-derive
+
+- **The wordmark never changed.** `Header.tsx` and
+  `generate-packaging-artwork.mjs` both set "Shaklek" in Italiana at a 4/29
+  tracking ratio and always agreed. The pre-launch page shipped it as "SHAKLEK"
+  at 0.18em for a few hours and it read as a different typeface. **Nothing to
+  decide before Fitoor prints.**
+- **Dye lot is a non-issue.** One roll per colour this season.
+- **Staging is the working copy**: full shop, test keys, dev database,
+  robots-disallowed. Production is the splash. Local `.env.local` carries
+  `STORE_OPEN=true` for the same reason.
+- **Sitemap and the journal header are generated at BUILD time**, so they
+  reflect `STORE_OPEN` during the build, not per request. A local build is a bad
+  thing to reason about production from.
+- **Flash cannot invent a photorealistic landscape.** Three oasis attempts came
+  back unusable at full resolution; nothing was degraded in the pipeline. It is
+  strong at EDITING a photograph. The flag-in-desert image worked because it is
+  closer to a scene it has seen. For landscapes, licensed stock is better and
+  cheaper. ~$0.20 spent; every generation archived in
+  `catalog-archive/2026-09-12-pre-launch/`.
+
 ### 2026-09-12 (later) — personas, and the fibre gag that had expired
 
 **Holding:** `planning/marketing/personas.md` (new), `planning/marketing/todo.md`,

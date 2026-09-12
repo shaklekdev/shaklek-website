@@ -147,6 +147,19 @@ growth, not law.
 - [x] ~~**Multi-item cart or one-design-at-a-time checkout?**~~ ✅ **RESOLVED — IT IS MULTI-ITEM AND ALWAYS HAS BEEN.** Corrected 2026-09-12. `src/app/cart/page.tsx` holds many lines with per-line quantities, and `/api/orders` takes an `items[]` array up to `MAX_ITEMS = 20`, writing one `order_items` row per line. ⚠️ This entry read "currently built single-item" for weeks and was taken at face value in a pricing session, which nearly sank the 850 fitting threshold as "unreachable". Check the code, not this file.
 
 ## To build
+- [ ] ⭐ **Rewrite the three journal articles, and add photography.** Founder, 2026-09-12: *"I feel it's toooo long, and not useful... things that people are still looking for on google rather than chatgpt, also it references products of our page."*
+
+  **The problem is not length, it is that they are essays where they should be answers.** What still goes to Google rather than an assistant is LOCAL and DECISION-shaped: "linen shirt Dubai", "made to measure Dubai", "how to measure yourself for a shirt". General explainers ("why is linen breathable") are exactly what people stopped Googling, and one of the three articles is essentially that.
+
+  The rework:
+  - **Answer in the first two sentences**, detail after. That is what wins a featured snippet.
+  - **Aim at Dubai**, not at fabric in general. Local intent is what a new domain can actually win.
+  - **800-1,200 words**, not 2,200. The old length was written for a Google that rewarded it.
+  - **Drop the in-prose product links.** They read as selling inside something meant to be useful, and while the shop is shut they resolve to `/coming-soon` anyway.
+  - **Photography in every article.** They are currently walls of text; `story-materials-v2`, `story-tailoring` and the new `public/marketing/pre-launch/*` are available, and article-specific images are worth generating.
+
+  ⚠️ Keep what the articles already get right, because it was deliberate: **no prices and no fibre claims** (see the header of `src/data/blog.ts`), so they survive a pricing or fabric decision. And they are INDEXED from 2026-09-12, so a rewrite is an edit to something Google has already seen — sooner is better than later.
+
 - [ ] ⭐ **"Complete the look" on every product page — the highest-value UI change on the money side.** Founder, 2026-09-12. Under each item, show the rest of the outfit so the customer can add it in the same order:
   - **Trousers** → the matching shirt, and an abaya worn open on top
   - **Shirt** → the matching trousers, and an abaya worn open on top

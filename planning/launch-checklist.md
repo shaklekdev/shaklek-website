@@ -1,8 +1,21 @@
-# Launch checklist — how to open the site again
+# Launch checklist — how to open the SHOP
 
-**www.shaklek.com is PRIVATE as of 2026-08-31.** The founder asked for it to be
-closed until the official launch. It returns **401 to everyone**, including the
-apex (which 301s to www and then hits the wall).
+⚠️ **THIS FILE WAS ABOUT REMOVING A PASSWORD. THAT IS DONE.** Amplify basic auth
+on `main` was removed on **2026-09-12** and www.shaklek.com is **public**. What
+is closed now is the SHOP, not the site, and it is closed in code:
+
+- `src/proxy.ts` rewrites every page to `/coming-soon`
+- `/api/orders` refuses with a 503 independently
+
+Both read `STORE_OPEN === "true"`. The variable is in the build-spec allowlist
+with **no value set**, so it is undefined and the shop is shut. Opening it is
+step 0 below. Everything about basic auth further down is **history** — kept
+because the reasoning about what a branch-level gate breaks is still true, and
+staging still uses one.
+
+**Public today:** the pre-launch page, `/blog` and its articles, `/legal/*`,
+both webhooks, `robots.txt`, the sitemap.
+**Still closed:** `/our-story`, `/faq`, the catalogue, product pages, checkout.
 
 Credentials are the founder's. They are **not in this repo** and must not be
 committed. If lost, set new ones in Amplify → main → Access control.

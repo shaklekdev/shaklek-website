@@ -52,6 +52,26 @@ not missing knowledge. Read it before doing anything that costs money.
 
 ## Where the project stands (2026-08-26)
 
+> ⚠️ **UPDATED 2026-09-12. THE SITE IS PUBLIC AND THE SHOP IS SHUT IN CODE.**
+> Amplify basic auth on `main` is **off**; www.shaklek.com serves a pre-launch
+> page to everyone. The SHOP is closed by `STORE_OPEN` — `src/proxy.ts` rewrites
+> every page to `/coming-soon` and `/api/orders` returns 503, independently.
+> Both read `=== "true"`, never `!== "false"`, so a variable that never reaches
+> the app means CLOSED. **Opening the shop is four steps and they are step 0 of
+> `planning/launch-checklist.md`.**
+>
+> Two more things changed the same day and both are money:
+> - **`BASE_PRICE_BY_CATEGORY` was stale at 389/419/429/619** while the
+>   catalogue was 449/519. It priced uploaded designs *server-side*, so uploads
+>   sold 60-90 AED under. **`/upload` is now removed entirely** and with it the
+>   slugless pricing branch: **every order line must match a real catalogue
+>   slug.** Do not reintroduce a category-priced path.
+> - **Stitching is 35 a shirt and 50 a pair**, not the estimated 40 and 60.
+>   Shirt 56.8%, trousers 59.2%. The biggest lever is the SECOND garment in an
+>   order (~71%), which is what the **550 free-fitting threshold** exists for.
+>
+> Read the latest `planning/session-log.md` entry before anything else.
+
 Live at `www.shaklek.com` on AWS Amplify. (The apex `shaklek.com` **301-redirects
 to www** — re-verified 2026-08-26. This file previously said it 404s; that was
 true once and was copied forward for days without anyone re-testing it.) Commerce works end to end: Stripe Checkout → webhook → order persisted in
