@@ -12,7 +12,7 @@ session is holding uncommitted, and update it before you finish.
 
 ## The architecture file is the map. Keep it true.
 
-**`planning/aws-architecture-diagram.html`** — open it in a browser. It is the
+**`planning/technical/aws-architecture-diagram.html`** — open it in a browser. It is the
 single answer to *what is deployed, how it fits together, and what is still
 pending*. It carries the live component table, the request flow, the deploy
 traps, the security posture, the verified deployed state, and the ranked
@@ -94,7 +94,7 @@ human-run concierge model). The image generation described here is a build-time
 tool for producing catalog photos, not a product feature.
 
 **The architecture, as it actually runs, is drawn in
-`planning/aws-architecture-diagram.html`** (rewritten 2026-08-26). Open it in a
+`planning/technical/aws-architecture-diagram.html`** (rewritten 2026-08-26). Open it in a
 browser before designing anything that adds a service. The short version:
 **Amplify is the only AWS service in the system.** The database is **Neon
 Postgres, not RDS**; there is **no S3 bucket** (catalog photography is committed

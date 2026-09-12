@@ -23,9 +23,13 @@ ships**, which is the bar this folder exists to hold:
 | **Our own people** | A named tailor in the UAE, not an anonymous factory. |
 | **Cut for you** | Measurements, not S/M/L. The one thing a mass brand cannot copy. |
 
-⚠️ **Do not add a fibre claim to this list until the fabric is settled.**
-Fourteen customer-facing files already assert "100% linen" and are waiting on
-the fabric decision. See `planning/unit-economics.md`.
+~~⚠️ **Do not add a fibre claim to this list until the fabric is settled.**~~
+✅ **SETTLED 2026-09-12.** 100% linen. 124 metres of W300235 bought and paid
+from Shirley, landing 27 Sept to 1 Oct. The fourteen customer-facing files that
+already assert "100% linen" are correct. **The fibre claim is now the brand's
+strongest argument, not a liability** — it is the whole "skin breathing" pillar,
+and this warning had outlived its reason by a month while that pillar sat
+unused. Personas and the copy built on it: `personas.md`.
 
 ### The competitive reality, checked 2026-09-08
 
@@ -163,3 +167,37 @@ product and that is deliberate** — Phase 1 is a human-run concierge model, to
 validate the loop before the hard engineering. This feature is Phase 2/3 and
 belongs behind real Phase 1 data. **Build §2 first, gather the measurements,
 then revisit this with a dataset instead of an assumption.**
+
+
+---
+
+## 6. The Dubai signature (from shaklek-15, 2026-09-12)
+
+A foot line **"Shaklek, Dubai · Privacy"** went on the pre-launch page to carry
+the legal link. **The founder liked it unprompted** and asked where else it earns
+a place. Agreed with her:
+
+- Site footer, every page, once the shop opens
+- **Order confirmation emails** — a stranger who has just paid a large sum to an
+  unknown brand is looking for exactly that signal
+- Instagram bio
+- ⚠️ **NOT anything printed yet.** Hang tag, card and labels are at Fitoor with
+  the 50% advance paid and samples due ~29 Sept. Changing artwork mid-production
+  for a signature is not worth it. Next print run.
+
+**The value is the word Dubai, not the layout.** A customer buying made-to-order
+from an unknown brand wants to know returns do not cross a border and the fitting
+offer is real. Against Zara, being here is half the argument. Being honest about
+the limit: it reassures people who are already looking, and brings nobody on its
+own.
+
+## 7. The wordmark is one typeface in three treatments
+
+⚠️ **The "font change" seen on several outputs was never a font change.** The site
+header (`Header.tsx:139`) and the print artwork (`generate-packaging-artwork.mjs`)
+are both Italiana and match exactly. What differed was CASE and TRACKING:
+the pre-launch page used all-caps, and the carousels used all-caps at 0.20-0.30em.
+Italiana in caps with wide tracking does not read as the same typeface.
+
+**The rule: mixed case "Shaklek", Italiana, tracking ratio 4/29 (0.138em).**
+Both were fixed 2026-09-12. Nothing at Fitoor is affected.

@@ -84,10 +84,30 @@ export default function TermsPage() {
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Delivery</h2>
+      {/*
+        ⚠️ NO LEAD TIME IN THE TERMS. This paragraph promised "about 10 days".
+        Removed on the founder's instruction 2026-09-12: "remove the legal
+        promise, this is made to order, no contractual here." The number
+        predates any measurement of real throughput -- the tailor's volume rate
+        is not agreed and no garment has been made at volume -- and
+        planning/tailor-capacity.md says throughput is the number that breaks
+        first. A lead time stated in the TERMS is a term of sale, which is worse
+        than one in an advert.
+
+        ⚠️ A RANGE WENT BACK IN, DELIBERATELY, on her follow-up: "we ship our
+        customer apprx in 2 weeks, or just make it less vague". She is right that
+        "we will tell you a date later" is useless to someone deciding whether to
+        buy. But note that TEN WORKING DAYS AND TWO WEEKS ARE THE SAME DURATION,
+        so "two weeks" would have been the cut promise reworded. It says two to
+        three weeks to buy real headroom over a throughput nobody has measured,
+        and it says estimate and not a guarantee in the same sentence. Narrow it
+        only once a month of real orders says you can.
+      */}
       <p>
-        Most orders arrive about 10 days after your stylist confirms the
-        details. That is an estimate rather than a guarantee, and we will
-        contact you directly if anything moves. We deliver within the UAE.
+        Every piece is made after you order it. Most orders are ready in about
+        two to three weeks. That is an estimate and not a guarantee: we confirm
+        your date once your details are final, and we contact you directly if
+        anything moves. We deliver within the UAE.
       </p>
       <p>
         Please check your delivery address carefully. If a parcel is returned to

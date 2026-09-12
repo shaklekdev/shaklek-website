@@ -121,8 +121,16 @@ const tenetGroups = [
     image: "/marketing/story-materials-v2.jpg",
     items: [
       {
-        title: "Materials that respect your skin",
-        body: "Plant-based fibre only, never synthetic. Breathable fabric isn't just more comfortable, it matters for your skin's health. Tight, non-breathable synthetics trap heat and moisture against the body, and some are linked to disrupting hormones over long, close contact. We'd rather you not have to think about that.",
+        // ⚠️ NO HEALTH CLAIM HERE, EVER. This block used to say breathable
+        // fabric "matters for your skin's health" and that synthetics are
+        // "linked to disrupting hormones over long, close contact" -- a medical
+        // claim, unsourced, on a page that takes card payments. Removed on the
+        // founder's instruction 2026-09-12 and replaced with physical fibre
+        // facts only. The rule is in planning/marketing/personas.md: breathable,
+        // absorbent and a plant fibre are defensible; cures, prevents,
+        // hypoallergenic and anything hormone- or health-shaped are not.
+        title: "Materials you can feel the difference in",
+        body: "Plant-based fibre only, never synthetic. Linen is flax. It absorbs moisture and gives it up again, and it lets air through. Polyester is made from petroleum and does neither: it holds the heat in, and it holds on to smell. In a country that spends five months above forty degrees, that is a difference you feel by the afternoon.",
       },
       {
         // "Timeless" folded in here at the founder's direction rather than
@@ -135,6 +143,14 @@ const tenetGroups = [
       },
     ],
   },
+  // ⚠️ THE WORD "SUSTAINABLE" IS OUT OF THIS PAGE, 2026-09-12, on the founder's
+  // go-ahead. It appeared three times and it is listed under Never in the claim
+  // rules at the bottom of planning/marketing/personas.md. The reason is not
+  // legal risk, it is weakness: it is the one word every fast-fashion brand
+  // uses, so it reads as noise to the exact customer it is aimed at. The
+  // specific version is ours and nobody can copy it -- nothing is cut before it
+  // is bought, so there is no stock, nothing left over, and nothing to mark
+  // down. Say the mechanism and let the reader draw the conclusion.
   {
     caption: "A tailor at work on a single piece, price tag visible",
     image: "/marketing/story-tailoring.jpg",
@@ -145,11 +161,11 @@ const tenetGroups = [
         // your body, not a size chart" and "nothing is made until you order
         // it" are both card copy now. Founder: "cut for you and made to order
         // are repeated a lot". The long version says what a card cannot.
-        body: "A solo tailor cuts one piece at a time, so there is no minimum run and no stock waiting for a body that happens to fit it. That is the part most labels cannot copy: the most sustainable thing a clothing brand can do is not make what nobody asked for, and that only works if nothing is made in advance.",
+        body: "A solo tailor cuts one piece at a time, so there is no minimum run and no stock waiting for a body that happens to fit it. That is the part most labels cannot copy: nothing here is made before somebody wants it, so there is nothing left over to discount, and nothing made that nobody asked for.",
       },
       {
         title: "Fixed prices",
-        body: "We committed to making sustainable and trendy fashion accessible to everyone. You customise your pieces, the price stays the same per piece type either way.",
+        body: "You customise your pieces, and the price stays the same per piece type either way. Your measurements cost nothing extra, and neither does changing the sleeve, the length or the colour.",
       },
     ],
   },
@@ -233,8 +249,8 @@ export default function OurStoryPage() {
         <p className="subtitle mt-4 max-w-md text-justify hyphens-auto">
           Every piece here starts as an idea, not a rack of stock waiting for
           someone your size to walk in. A real tailor makes it, one piece at
-          a time, sustainably, for the person who ordered it. That comes down
-          to four things:
+          a time, for the person who ordered it. That comes down to four
+          things:
         </p>
       </div>
 

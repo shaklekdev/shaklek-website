@@ -18,6 +18,216 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-12 (later) — personas, and the fibre gag that had expired
+
+**Holding:** `planning/marketing/personas.md` (new), `planning/marketing/todo.md`,
+`planning/session-log.md`, `CLAUDE.md`, and two app files claimed from
+shaklek-15 (it confirmed it has no edits in either):
+`website/src/app/our-story/page.tsx`, `website/src/app/legal/terms/page.tsx`.
+Uncommitted. Not touching pricing or `catalog.ts`.
+
+⚠️ **A HEALTH CLAIM WAS LIVE AND IS NOW REMOVED** (`our-story:125`). It said
+breathable fabric "matters for your skin's health" and that synthetics are
+"linked to disrupting hormones over long, close contact" — a medical claim, no
+source, on a page that takes cards. Replaced with physical fibre facts only:
+absorbency, airflow, petroleum origin, odour. **The rule is in `personas.md`:**
+breathable, absorbent and a plant fibre are defensible; cures, prevents,
+hypoallergenic and anything health- or hormone-shaped are not. It was found by
+the marketing agent while writing carousel copy, not by anyone reading the page.
+
+⚠️ **THE TEN-DAY PROMISE IS OUT OF `/legal/terms` TOO** (`terms:88`). Founder:
+*"remove the legal promise, this is made to order, no contractual here."* A lead
+time in the TERMS is a term of sale, which is worse than one in an advert. `tsc`
+passes on both edits.
+
+**`CLAUDE.md` fixed:** it pointed at `planning/aws-architecture-diagram.html` in
+two places; the file is at `planning/technical/aws-architecture-diagram.html`.
+
+**Shaklek is onboarded to Bloom** (brand `3b3cfd68-b0e9-4bea-bcbe-070539cea443`,
+workspace `nads's Team`, 13 credits). ⚠️ **The production gate was NOT removed.**
+The founder offered to drop it so Bloom could crawl; it was not needed, because
+`staging.dqcptedylrif0.amplifyapp.com` is already public, serves the same
+storefront on test Stripe keys, and is robots-disallowed. `main` is still
+`enableBasicAuth: true` and still 401. **Do not un-gate production to feed a
+tool an URL.** Bloom read the palette (gold #9C8445, #1A1A1A, white/greys) and
+the fonts (Cormorant Garamond, Roboto) correctly off it. Staging is stale and
+still shows AED 389, which does not matter for visual identity.
+
+**`personas.md` is new and it is the thing this folder was missing.** There were
+campaigns, hooks, a calendar and objection handling, all aimed at a market and
+none at a person. Four personas, one per pillar of the line she already approved
+on the business card: *"Your skin breathing. Your clothes fitting. Made in the
+UAE."* Reem (skin, the founder's own story), Aisha (there is no medium, and the
+"shape of you" line), Noor (chooses her own sleeve), Maryam (made here, immune
+to "sustainable"). Plus twelve posts in order, five of which already exist
+unposted, and a claim-rules table.
+
+⚠️ **`todo.md`'s "do not add a fibre claim until the fabric is settled" was
+stale by a month and had been silently gagging the strongest pillar the brand
+owns.** Fabric is settled: 100% linen, 124m paid, landing 27 Sept. Struck
+through, dated, and pointed at `personas.md`. **This is the second time a
+warning here outlived its reason** (the care label's "needs a native reader" was
+the first, removed 2026-09-10). A ⚠️ with no expiry date becomes furniture.
+
+**Three things written down so they are not re-derived:**
+
+- **"Shape of you" the phrase is usable. The song is not.** A business account
+  is restricted to the commercial music library and the commercial track is not
+  in it. Words yes, audio never.
+- **"Made in the UAE" is the ceiling.** The cloth is milled in Guangzhou, so it
+  is cut and sewn here. The strongest line in the document is volunteering that:
+  *"The linen is milled abroad. Everything else happens here."*
+- **Noor is a decision, not an observation**, and it is the founder's. The
+  sleeve slider solves coverage-on-her-own-terms exactly, and we have never said
+  so. Framing is "choose the sleeve", never "modest wear", never a religious
+  register.
+
+**No prices anywhere in the new assets** — pricing is live in the other session,
+and evergreen creative should survive it regardless.
+
+**Next:** seven new assets from the twelve-post list. Blocked only on her
+confirming Noor.
+
+#### Three carousels, and where they ended up (2026-09-12, later)
+
+All four-to-six slides, 1080x1350, sources in `brand-assets/carousels/`:
+
+| | Live canvas | Owns |
+|---|---|---|
+| **01 Check the Label** | `79f85d0a-2059-43bc-bb3f-94fac75a957c` | skin, polyester, linen |
+| **02 Nobody Is a Medium** | `1484c00a-19d0-4bee-b9dc-2b2ea088f2d6` | the body, size charts |
+| **03 Nothing Here Exists Yet** | `ee8688ce-57fd-4d13-9174-deb6f5c509b5` | made to order, made here |
+
+⚠️ **THE WORDMARK RULE, and why she kept seeing a "font change".** It was never a
+font change. Site header (`Header.tsx:139`) and print artwork
+(`generate-packaging-artwork.mjs`) are both Italiana and match exactly. What
+differed was CASE and TRACKING: the pre-launch page used all-caps, and my
+carousels used all-caps at 0.20-0.30em. **Mixed case "Shaklek", Italiana,
+tracking ratio 4/29 = 0.138em.** Fixed in all six places across the three
+carousels. Nothing at Fitoor is affected. Found by shaklek-15, not by me.
+
+**Craft rules she taught, all now in `01-check-the-label/README.md`:**
+- A material photo only earns its place when something on the slide names it.
+- **A slide must hold the logic of the slide before AND after without repeating
+  either.** This is a different test from "is this a good slide", and it is what
+  killed a draft that scored best in isolation.
+- Do not default to six slides, or to white.
+- The photo must show the body part the line names.
+- One face per carousel, on the slide that has to stop the scroll.
+
+⚠️ **`social-playbook.md` contains an unsourced claim that I built on.** "The
+shirt fits. The sleeves never do." is called "the most relatable line in the set"
+with nothing behind it. The founder had never experienced it. Her collected
+customer feedback is now the only real evidence in `personas.md` and the hook is
+built on it instead.
+
+**Bloom credits: 13 -> 9.** Three flax images plus one tailor's hands, all in
+`brand-assets/flax/` and `brand-assets/generated/`. ⚠️ The hands are GENERATED and
+sit on the slide that argues a real person makes your clothes; a phone photo from
+the actual workshop beats it and costs nothing.
+
+⚠️ **Still open and none of it is mine to close:**
+1. `our-story/page.tsx:125` makes a **health claim** (linen "matters for your
+   skin's health", synthetics "linked to disrupting hormones") on a live
+   card-taking page. `:148` uses "sustainable".
+2. `legal/terms/page.tsx:88` still promises **"about 10 days"** as a term of sale,
+   after she cut that lead time from advertising today.
+3. **shaklek-15's commit `9142b59` is local** — pre-launch page, gate, kill
+   switch, price fix. Its push was blocked in that session and it correctly
+   refused to route it through me.
+4. `/api/waitlist` **stores nothing** — one email per signup to her inbox. Fine at
+   a handful, broken the day the page gets traffic.
+
+#### The carousel, and how it was actually made
+
+**"Check the Label"** — six slides, 1080x1350, published as a design-canvas
+artifact (not in the repo): https://claude.ai/code/artifact/79f85d0a-2059-43bc-bb3f-94fac75a957c
+
+Final order, after four rounds of her feedback:
+1. Check the label on what you are wearing right now (shirt photo, dark scrim)
+2. If it says polyester, you are wearing plastic / 5 months above 40 degrees
+3. LINEN is a plant (Breathable. Gentle. Comfortable.) / POLYESTER is petroleum
+   (Traps the heat. Traps the sweat. Holds the smell.)
+4. **We chose 100% linen. / You choose everything else.** — her line
+5. Your piece. Your cut. — two utility-shirt cuts side by side
+6. SHAKLEK / 100% linen, cut to your shape. Made in the UAE.
+
+**Built from the site's real tokens**, not invented ones: Cormorant Garamond,
+Italiana for the wordmark, #9c8445 gold, #1a1a1a, the ivory greys. That is why
+it reads as Shaklek and the August assets did not.
+
+⚠️ **The August assets were never "forgotten" — she judged them not good
+enough.** The handover above calls them "ready to post" and frames the delay as
+decay. That framing is wrong and it sent a session to open a folder of work she
+had already rejected. Do not re-offer them.
+
+**What she cut, and why it generalises:**
+- *"The linen is milled abroad, everything else happens here."* Cut on sight:
+  *"don't say this, it's marketing."* Confessing a weakness to look honest is
+  still a technique.
+- *"Flax. It flowers blue and it is pulled, not cut."* and *"Spun from oil,
+  into thread."* Both obscure. **If a line needs the reader to already know
+  something, it is for us, not for her.**
+- A music-licensing caveat attached to "every shape of you" — she meant it as
+  an ordinary English phrase, and the caveat read as obstruction.
+- A `FLAX FIBRE, COMBED` label under a photo. Her rule instead: make the
+  picture big and let it be a picture.
+
+**Three of my own errors worth not repeating:**
+- A greedy regex deleting slide 3's text along with an image, published without
+  looking. `--check` only proves the file parses. There is now a text-block
+  count per artboard before every publish.
+- `object-position: 50% 40%` claimed as "the smile line" from arithmetic, when
+  it cut the whole head off. Measured properly by rendering four candidate
+  crops into one strip: 30% is the smile. **Render the crop, do not compute it.**
+- Sending her to `brand-assets/` to review assets I had not checked were new.
+
+#### Flax imagery, and the two image pipelines
+
+**Shaklek is onboarded to Bloom** (brand `3b3cfd68-b0e9-4bea-bcbe-070539cea443`,
+workspace "nads's Team"). Three flax images generated at 1 credit each, **13 ->
+10 remaining**. Saved out of the dying scratchpad to **`brand-assets/flax/`**.
+
+⚠️ **There are now TWO image generators and they bill differently.** Gemini
+(`scripts/catalog/*`, $0.039/image) against the capped Google AI Studio budget
+is the catalogue pipeline. Bloom is credits on her trybloom.ai account. She
+asked twice whether Bloom costs her money and **neither the tools nor I can see
+her plan — only a balance.** Answer: trybloom.ai billing, and say so plainly
+rather than guessing.
+
+Her verdict on the three: the **stalks are the keeper**, the field is fine where
+copy names it, and the **combed fibre reads as hair** — nobody looking at it
+knows it is linen. Kept anyway, big and unlabelled, because she asked for it and
+it was already paid for. ⚠️ **Do not delete a generated image to fix it.**
+
+#### Handed to shaklek-15: the gated site becomes a launch page
+
+Her brief: replace the 401 with a public "launching soon" page that captures
+emails. Full scope in that session; the parts this one established:
+
+- The gate is **branch-level** Amplify basic auth on `main`, not app-level.
+- ⚠️ **Reading `basicAuthCredentials` back was BLOCKED as credential
+  materialization.** So disabling the gate is a **one-way door** — the same
+  password may not be restorable. She must settle this before step 3.
+- **`staging.dqcptedylrif0.amplifyapp.com` is already public**, same storefront,
+  test Stripe keys, robots-disallowed. **Bloom was onboarded from staging rather
+  than un-gating production.** Reach for staging before touching the gate.
+- Email capture **already exists** at `src/app/api/waitlist/route.ts` with the
+  §0 guards, via Resend, no table, no new env var. Do not build a second one.
+- My advice, put to her as advice and not yet answered: **emails only, no
+  pre-orders**, and **"opening early October"**, not a named day.
+
+**shaklek-15 found the day's most expensive bug**: `BASE_PRICE_BY_CATEGORY` was
+still 389/419/429/619 against a 449/519 catalogue, and that constant prices
+**uploaded designs** server-side — uploads were selling 60-90 AED under. It also
+split `SELLABLE_UPLOAD_CATEGORIES` out of the price ladder, which had been
+quietly making Dress, Skirt and Abaya purchasable with no product behind them.
+
+⚠️ **`CLAUDE.md` now points at `planning/aws-architecture-diagram.html` in two
+places. That file does not exist** — the diagram is at
+`planning/technical/aws-architecture-diagram.html`. Not fixed here because the
+file was changed by someone else mid-session.
+
 ### 2026-09-12 — HANDOVER. Read this first; everything below is history.
 
 **Site is GATED (401). Nothing is public.** Prices are **449 shirt / 519
