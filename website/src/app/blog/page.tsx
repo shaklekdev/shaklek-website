@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import Header from "@/components/Header";
+import JournalHeader from "@/components/JournalHeader";
 import { articlesByDate } from "@/data/blog";
 import { pageMetadata } from "@/lib/seo";
 
@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
 export default function BlogIndexPage() {
   return (
     <div className="flex flex-1 flex-col bg-bg">
-      <Header />
+      <JournalHeader />
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-14">
         <h1 className="font-display text-[30px] leading-tight text-text">
           Journal

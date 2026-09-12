@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import Header from "@/components/Header";
+import JournalHeader from "@/components/JournalHeader";
 import { articles, getArticle, type Block } from "@/data/blog";
 import { NOINDEX, SITE_NAME, SITE_URL, absoluteUrl, pageMetadata } from "@/lib/seo";
 
@@ -209,7 +209,7 @@ export default async function ArticlePage({
 
   return (
     <div className="flex flex-1 flex-col bg-bg">
-      <Header />
+      <JournalHeader />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
