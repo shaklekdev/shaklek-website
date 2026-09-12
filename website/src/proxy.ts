@@ -59,6 +59,21 @@ const isAccountRoute = createRouteMatcher(["/account(.*)"]);
 //                     directory under public/, not the /catalog page.
 const OPEN_WHILE_SHUT = [
   "/coming-soon",
+  // ⚠️ /blog IS OPEN WHILE THE SHOP IS SHUT. Founder, 2026-09-12. Search
+  // ranking takes weeks and a one-page site ranks for nothing, so the three
+  // articles start earning authority now rather than in October. They were
+  // written to survive exactly this: no prices and no fibre claims (see the
+  // note at the top of src/data/blog.ts), so nothing in them goes stale when
+  // pricing settles.
+  //
+  // Their "browse the collection" links resolve to /coming-soon, which is the
+  // RIGHT outcome and not a dead end: someone who has just read about linen in
+  // the heat is the warmest person who will ever land on the email capture.
+  //
+  // ⚠️ /our-story STAYS SHUT, deliberately and on her instruction: "it says
+  // everything, we don't want to disclose everything before". /faq stays shut
+  // too, because it publishes the price ladder and pricing is still moving.
+  "/blog",
   "/api/waitlist",
   "/api/webhooks",
   "/legal",

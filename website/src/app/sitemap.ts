@@ -38,11 +38,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // undo. The home page is the splash, and the legal pages are genuinely
   // themselves because the proxy lets them through.
   if (!isStoreOpen()) {
-    return ["/", "/legal/terms", "/legal/privacy"].map((path) => ({
+    // The splash, the legal pages, and the JOURNAL -- the three things
+    // src/proxy.ts actually lets a visitor reach while shut. Anything else
+    // would hand Google URLs that all rewrite to the same page.
+    //
+    // The articles are listed because they are the only content that can rank
+    // before opening, and telling Google to ignore the one thing we just opened
+    // would defeat the point of opening it.
+    return [
+      { path: "/", priority: 1, freq: "weekly" as const, when: lastModified },
+      { path: "/blog", priority: 0.8, freq: "weekly" as const, when: lastModified },
+      ...articles.map((article) => ({
+        path: `/blog/${article.slug}`,
+        priority: 0.7,
+        freq: "monthly" as const,
+        when: new Date(article.updated ?? article.published),
+      })),
+      { path: "/legal/terms", priority: 0.3, freq: "yearly" as const, when: lastModified },
+      { path: "/legal/privacy", priority: 0.3, freq: "yearly" as const, when: lastModified },
+    ].map(({ path, priority, freq, when }) => ({
       url: `${SITE_URL}${path}`,
-      lastModified,
-      changeFrequency: "weekly" as const,
-      priority: path === "/" ? 1 : 0.3,
+      lastModified: when,
+      changeFrequency: freq,
+      priority,
     }));
   }
 
