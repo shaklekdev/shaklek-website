@@ -424,6 +424,86 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     speed. Images are not the slow part; that was measured.
   </p>
 
+  <h2>The pre-launch gate, and the switch that decides whether money can move</h2>
+
+  <p>
+    <strong>Added 2026-09-12, replacing Amplify branch-level basic auth on
+    <code>main</code>.</strong> www.shaklek.com had returned
+    <strong>401 to everyone since 2026-08-31</strong> &mdash; including Stripe
+    and Clerk, which is why the daily reconcile rule
+    <code>shaklek-reconcile-daily</code> is <strong>DISABLED</strong>. Basic
+    auth gates every path on a branch and cannot exclude one, so the gate moved
+    into the application, where it can let exactly the right things through.
+  </p>
+
+  <p><strong>It is two independent locks, not one</strong>, because a proxy
+  matcher is one regex away from exposing live checkout and the failure mode is
+  taking real cards for garments that cannot be cut until the fabric lands:</p>
+  <ul>
+    <li><span class="flow-status built">live</span> <code>src/proxy.ts</code>
+      rewrites every page to <code>/coming-soon</code>. Allowlisted while shut:
+      the page itself, <code>/api/waitlist</code>, <strong>both webhooks</strong>,
+      <code>/legal/*</code>, assets, <code>robots.txt</code> and the sitemap.
+      API routes are never rewritten &mdash; each owns its own guard, and
+      rewriting a POST to a page returns 405 where the caller expects JSON.</li>
+    <li><span class="flow-status built">live</span> <code>/api/orders</code>
+      refuses independently with a <strong>503</strong>, as the first statement
+      in <code>POST</code>, before the rate limit and before the body is parsed.
+      <code>GET /api/orders/:id</code> is deliberately ungated so anyone who
+      already paid can still see her order.</li>
+  </ul>
+
+  <p>
+    &#9888; <strong>BOTH READ <code>STORE_OPEN === "true"</code>, NEVER
+    <code>!== "false"</code>.</strong> <code>STORE_OPEN</code> reaching the app
+    requires the build-spec allowlist as well as the console, so the most likely
+    failure is that it never arrives. Written the other way round, that omission
+    would leave checkout <em>open</em> on a public marketing site. Written this
+    way it fails <strong>closed</strong>, which is visible and harmless.
+    <strong>Verified against a production build, both directions, including
+    that <code>STORE_OPEN=TRUE</code> keeps the shop shut.</strong>
+  </p>
+
+  <p>
+    <strong>Turning the shop on is therefore four steps, not one</strong>, and
+    it is step 0 of <code>planning/launch-checklist.md</code>: add
+    <code>-e STORE_OPEN</code> to the build spec, set the value in the console,
+    <strong>redeploy</strong> (the spec is read at build time), then prove the
+    <em>running app</em> sees it &mdash; <code>POST /api/orders</code> returning
+    <strong>400</strong> rather than 503. Re-enable
+    <code>shaklek-reconcile-daily</code> at the same time.
+  </p>
+
+  <h3>Environment variables added 2026-09-12</h3>
+  <p>
+    Both are <strong>pending</strong>: written into the code and into
+    <code>scripts/amplify-allow-env.mjs</code>, but not yet in the build-spec
+    allowlist and not yet set in the console, so both are currently undefined in
+    production. That is the safe state for one of them and an inert state for the
+    other.
+  </p>
+  <table>
+    <tr><th>Variable</th><th>Read by</th><th>Missing means</th></tr>
+    <tr>
+      <td><code>STORE_OPEN</code></td>
+      <td><code>src/lib/storeOpen.ts</code>, via <code>src/proxy.ts</code>,
+        <code>/api/orders</code> and the root layout</td>
+      <td><strong>Shop shut.</strong> Fail-closed, deliberately.</td>
+    </tr>
+    <tr>
+      <td><code>RESEND_SEGMENT_ID</code></td>
+      <td><code>/api/waitlist</code></td>
+      <td><strong>Signups still work</strong>, but reach only the founder's
+        inbox and build no list. Fail-open, deliberately: failing closed here
+        would just lose the customer.</td>
+    </tr>
+  </table>
+  <p>
+    <code>node website/scripts/amplify-allow-env.mjs &lt;VAR&gt; --apply</code>
+    adds a variable to the allowlist and reads the live spec back to confirm it,
+    rather than trusting an exit code.
+  </p>
+
   <h2>Deploying, and the three traps that have bitten</h2>
   <p class="section-note">
     Both cost a day each in August 2026. Neither is obvious from a green build.
