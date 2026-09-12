@@ -238,4 +238,14 @@ export const waitlist = pgTable("waitlist", {
   // Set when the contact reaches Resend, so a failed push can be retried
   // without guessing who already made it across.
   syncedAt: timestamp("synced_at"),
+  // ⚠️ THE PROMISE MADE IN THE CONFIRM EMAIL. Founder, 2026-09-12: the list is
+  // for new drops too, not only the opening, so "nothing else, ever" came out
+  // and "you can leave the list whenever you like" went in. That sentence is a
+  // permission promise the moment it is written, so leaving has to actually
+  // work -- hence a column, an endpoint and a List-Unsubscribe header on every
+  // send, rather than trusting that drops will always go out as Broadcasts.
+  //
+  // Kept as a timestamp rather than deleting the row: a deleted row can be
+  // re-added by a later signup and silently re-subscribe someone who left.
+  unsubscribedAt: timestamp("unsubscribed_at"),
 });

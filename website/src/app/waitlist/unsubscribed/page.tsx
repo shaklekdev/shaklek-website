@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-// Where /api/waitlist/confirm lands someone after the click.
+// Where /api/waitlist/unsubscribe lands someone who clicked the link.
 //
-// ⚠️ REACHABLE WHILE THE SHOP IS SHUT, via OPEN_WHILE_SHUT in src/proxy.ts.
-// Without that entry it would rewrite to /coming-soon and everyone who
-// confirmed would be told to sign up again, which reads as a broken form.
+// Reachable while the shop is shut through the "/waitlist" entry in
+// OPEN_WHILE_SHUT. Without it this rewrites to /coming-soon, which would
+// answer "please leave me alone" with a sign-up form.
 //
-// noindex: it is the end of a private link, it has no standalone value, and it
-// would compete with the pre-launch page for the same thin content.
+// noindex: the end of a private link, no standalone value.
 export const metadata: Metadata = {
   title: "Shaklek",
   robots: { index: false, follow: false },
@@ -16,30 +15,30 @@ export const metadata: Metadata = {
 
 const COPY = {
   ok: {
-    heading: "That is confirmed.",
-    // Must match the confirm email in substance. If the page and the email
-    // describe different promises, one of them is a lie and the reader has no
-    // way to tell which.
-    body: "We will tell you the day we open, and now and then when something new is made.",
+    heading: "You are off the list.",
+    // No "are you sure", no win-back, no offer. Someone who has just left is
+    // the worst possible audience for either, and an unsubscribe that argues
+    // back is how a complaint gets filed instead.
+    body: "We will not write to you again. If you signed up by mistake and want back on, the form is on our home page.",
   },
   invalid: {
     heading: "That link has expired or was already used.",
-    body: "If you have already confirmed, you are on the list and nothing more is needed. Otherwise, sign up again and we will send a fresh link.",
+    body: "If you have already unsubscribed you are off the list and nothing more is needed. If you are still receiving email from us, write to hello@shaklek.com and we will remove you by hand.",
   },
   error: {
     heading: "Something went wrong at our end.",
-    body: "Your address is safe. Try the link again in a few minutes, and if it still fails, write to hello@shaklek.com and we will add you by hand.",
+    body: "You may still be on the list. Try the link again in a few minutes, and if it still fails, write to hello@shaklek.com and we will remove you by hand.",
   },
 } as const;
 
-export default async function WaitlistConfirmedPage({
+export default async function WaitlistUnsubscribedPage({
   searchParams,
 }: {
   searchParams: Promise<{ state?: string }>;
 }) {
   const { state } = await searchParams;
-  // Anything unrecognised reads as invalid rather than as success. A page that
-  // says "confirmed" on a URL anyone can type is a page that lies.
+  // Anything unrecognised reads as invalid. A page that says "you are off the
+  // list" on a URL anyone can type is a page that lies about a promise.
   const copy = COPY[(state as keyof typeof COPY) in COPY ? (state as keyof typeof COPY) : "invalid"];
 
   return (

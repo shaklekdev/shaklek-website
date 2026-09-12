@@ -33,16 +33,25 @@ function signingKey(): string | null {
   return null;
 }
 
-export function issueWaitlistToken(rowId: string): string {
+// PURPOSE IS PART OF WHAT IS SIGNED. A confirm link must not double as an
+// unsubscribe link, or a forwarded email removes the forwarder from the list.
+// Same reason the key itself is domain-separated from orderAccess's.
+export type WaitlistTokenPurpose = "confirm" | "unsubscribe";
+
+export function issueWaitlistToken(rowId: string, purpose: WaitlistTokenPurpose = "confirm"): string {
   const key = signingKey();
   if (!key) return "";
-  return createHmac("sha256", key).update(rowId).digest("hex").slice(0, 32);
+  return createHmac("sha256", key).update(`${purpose}:${rowId}`).digest("hex").slice(0, 32);
 }
 
-export function verifyWaitlistToken(rowId: string, token: unknown): boolean {
+export function verifyWaitlistToken(
+  rowId: string,
+  token: unknown,
+  purpose: WaitlistTokenPurpose = "confirm",
+): boolean {
   if (typeof token !== "string" || !token) return false;
 
-  const expected = issueWaitlistToken(rowId);
+  const expected = issueWaitlistToken(rowId, purpose);
   if (!expected) return false;
 
   const a = Buffer.from(token);

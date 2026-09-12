@@ -11,7 +11,10 @@ function appUrl(): string {
   return (process.env.NEXT_PUBLIC_APP_URL || "https://www.shaklek.com").replace(/\/$/, "");
 }
 
-async function sendMail(apiKey: string, msg: { to: string; subject: string; text: string }) {
+async function sendMail(
+  apiKey: string,
+  msg: { to: string; subject: string; text: string; headers?: Record<string, string> },
+) {
   try {
     const r = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -140,15 +143,31 @@ export async function POST(req: NextRequest) {
   // 2. THE CONFIRM LINK, unless she has already confirmed, in which case
   // sending another would be noise.
   const alreadyConfirmed = Boolean(row?.confirmedAt);
-  const confirmUrl =
-    row && !alreadyConfirmed
-      ? `${appUrl()}/api/waitlist/confirm?id=${row.id}&t=${issueWaitlistToken(row.id)}`
-      : null;
 
-  if (confirmUrl) {
+  // Branch on `row` itself rather than on a derived string, so the compiler
+  // narrows it for the whole block. The first version built two URLs from
+  // `row.id` inside `if (confirmUrl)`, which TypeScript could not narrow.
+  if (row && !alreadyConfirmed) {
+    const confirmUrl = `${appUrl()}/api/waitlist/confirm?id=${row.id}&t=${issueWaitlistToken(row.id)}`;
+    // ⚠️ EVERY SEND CARRIES List-Unsubscribe, and this one is transactional.
+    // Resend adds an unsubscribe to a BROADCAST; it adds nothing to a
+    // POST /emails send like this one, and a one-off drop announcement sent the
+    // same way would carry nothing either. The copy below promises she can
+    // leave whenever she likes, so the header makes that true however the mail
+    // was sent, rather than depending on anyone remembering to use Broadcasts.
+    //
+    // List-Unsubscribe-Post is RFC 8058 one-click: Gmail and Apple Mail call
+    // the URL themselves from their own unsubscribe button. That is the header
+    // that actually keeps complaints down, because it turns "mark as spam" into
+    // "unsubscribe" inside the client.
+    const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
     const sent = await sendMail(apiKey, {
       to: email,
       subject: "One click, and we will tell you when we open",
+      headers: {
+        "List-Unsubscribe": `<${unsubUrl}>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
       text: [
         "Thank you for asking.",
         "",
@@ -165,8 +184,15 @@ export async function POST(req: NextRequest) {
         "Shaklek is 100% linen, cut to your shape, and sewn here in the UAE after",
         "you order it. Nothing is made before somebody wants it.",
         "",
-        "Confirm this is your address and we will write to you once, on the day",
-        "the shop opens. Nothing else, ever.",
+        // ⚠️ "Nothing else, ever" WAS HERE AND CAME OUT on the founder's
+        // instruction: "we need the newsletter, it's very important for new
+        // drops". The old line was restrictive but TRUE; this one is wider, so
+        // it only stays true because /api/waitlist/unsubscribe exists and every
+        // send carries the headers above. Do not widen it further without
+        // checking what still backs it.
+        "Confirm this is your address and we will tell you the day we open, and",
+        "now and then when there is something new. You can leave the list",
+        "whenever you like.",
         "",
         confirmUrl,
         "",
