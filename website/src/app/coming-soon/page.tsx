@@ -90,8 +90,21 @@ export default function ComingSoonPage() {
     <main className="flex flex-col items-center px-6 py-14 sm:py-20">
       <div className="flex w-full max-w-3xl flex-col gap-12">
         <header className="flex flex-col items-center gap-3 text-center">
-          <p className="font-wordmark text-4xl tracking-[0.18em] text-text sm:text-5xl">
-            SHAKLEK
+          {/* ⚠️ "Shaklek", NOT "SHAKLEK", and the tracking is not free-hand.
+              Header.tsx sets the mark at 27px with 4px of tracking, and
+              generate-packaging-artwork.mjs shapes it from
+              branding/source/fonts/Italiana-Regular.ttf at exactly (size*4)/29.
+              Both are already the same, and the Fitoor artwork is in
+              production against that.
+
+              This page shipped it as SHAKLEK at 0.18em for a few hours and the
+              founder read it as a FONT change. It was not: Italiana in caps
+              with wide tracking simply does not look like Italiana in mixed
+              case. 0.138em is 4/29 expressed relatively, so it holds at any
+              size. Do not retune it here without changing the header and the
+              artwork together. */}
+          <p className="font-wordmark text-4xl tracking-[0.138em] text-text sm:text-5xl">
+            Shaklek
           </p>
           <p className="text-xs uppercase tracking-[0.22em] text-gold">
             Opening early October
