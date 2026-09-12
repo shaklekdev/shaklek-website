@@ -138,6 +138,34 @@ export async function POST(req: NextRequest) {
   // sending another would be noise.
   const alreadyConfirmed = Boolean(row?.confirmedAt);
 
+  // ⚠️ SOMEONE WHO SIGNS UP AND RECEIVES NOTHING BELIEVES THE FORM IS BROKEN.
+  // The first version sent no email at all to an address that was already
+  // confirmed, reasoning that a second confirmation is noise. It is -- but
+  // silence is worse. The founder hit exactly this testing her own form: she
+  // had confirmed already (the click DID reach production; only the redirect
+  // was broken), signed up again, got nothing, and reported the email as not
+  // working. Every signup now gets an answer; an already-confirmed one just
+  // gets a different, shorter answer with no link to click.
+  if (row && alreadyConfirmed) {
+    const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
+    await sendMail(apiKey, {
+      to: email,
+      subject: "You are already on the list",
+      headers: {
+        "List-Unsubscribe": `<${unsubUrl}>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+      text: [
+        "You are already on the list, so there is nothing to confirm.",
+        "",
+        "We will tell you the day we open, and now and then when there is something new.",
+        "",
+        "Shaklek, Dubai",
+        `Leave the list: ${unsubUrl}`,
+      ].join("\n"),
+    });
+  }
+
   // Branch on `row` itself rather than on a derived string, so the compiler
   // narrows it for the whole block. The first version built two URLs from
   // `row.id` inside `if (confirmUrl)`, which TypeScript could not narrow.
