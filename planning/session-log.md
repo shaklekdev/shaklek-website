@@ -18,6 +18,84 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-12 — HANDOVER. Read this first; everything below is history.
+
+**Site is GATED (401). Nothing is public.** Prices are **449 shirt / 519
+trousers, 100% linen only**. Both orders are PAID. Nothing is blocked on code.
+
+#### Where the money is
+
+| | |
+|---|---|
+| Fabric, Shirley | 124m W300235, **AED 3,516** paid. Shipping billed separately after weighing, ~861 |
+| Packaging, Fitoor | **4,567.50** total, 50% advance paid |
+| Committed to date | **~8,900**. Full record in `planning/spend.md` |
+| Margins | Run `node planning/margins.mjs`. Shirt 449 → **55.6%** |
+
+#### Expected
+
+- **Fabric: 27 Sept – 1 Oct.**
+- **Packaging: ~29 Sept.** Samples first, then two weeks from her approval
+  (Hashir direct, not the 14–21 business days on their written terms).
+- **Realistic opening: first week of October.** Packaging decides it, because
+  the care label is the legal fibre disclosure and nothing ships without one.
+
+#### ⏳ HERS, in priority order
+
+1. **Two captions still say AED 389** — `brand-assets/TIKTOK/00-you-are-the-designer.caption.txt`
+   and `brand-assets/INSTA/_READ-ME-FIRST.txt`. **Fix, then post.** TikTok and
+   Instagram accounts now exist; six videos and ~30 statics have been rendered
+   since 2026-08-27 and nothing has gone out. This is the only item whose value
+   decays while it waits, and the plan needs ten organic sales before ad spend.
+2. **The tailor.** Volume rate at 10/20/30 pieces a month (worth ~4.5 margin
+   points), the measurement conventions agreed and written down, metres per
+   garment. List in `planning/tailor-capacity.md`.
+3. **Read the Arabic** on the care label: `غسيل آلي لطيف`. Marked pending, not
+   approved, in `productDisclosure.ts`. Blocking 500 labels.
+4. **Fitoor:** samples were due about now. Check the cotton bag is **500x400
+   landscape, drawstring** — their quote still says 35x45 with a handle, and
+   50x40 is 27% more cloth, so settle the 17 before the balance. Invoice also
+   reads "Shakalek"; the company is **Shaklek For Online Selling**.
+5. **Shirley:** flax origin, the composition certificate naming W300235, and
+   whether the invoice bills actual weight (she charged 30kg against ~24kg).
+
+#### Built since 2026-09-05, all pushed
+
+- **`/blog`** — three articles, Article schema, in the sitemap. Linked from the
+  footer and from the FAQ fabric answer. Deliberately **not** in the header nav.
+  Rebuilt 2026-09-10 after the founder's verdict that it did not invite reading:
+  justified prose at a 68-character measure, photography, pull quotes.
+  ⚠️ **No fibre claim and no price in any article**, so they survive a fabric or
+  price change.
+- **Dubai fitting offer** — under the size toggle and in the FAQ. She pays, then
+  we reach out. Only paying customers get an hour.
+- **Care label → gentle machine wash 30.** Artwork regenerated.
+- **`planning/measurement-sheet.html` + `.pdf`** — A4, one page, in the tailor's
+  exact labels.
+- **Repo cleaned.** `planning/` is 8 live files plus `technical/` and
+  `archive/`; `brand-assets/` keeps TIKTOK, INSTA and tailor-samples with the
+  rest in `_archive/`. `planning/spend.md` is new.
+
+#### ⚠️ Do not re-derive these
+
+- **Hashir is Fitoor's contact, NOT a second supplier.** All lines ex-VAT, so
+  the bag is 17.85 and packaging is 37.74 an order.
+- **Dry-clean-only was right for UNWASHED cloth** and returns with it. The
+  change is valid only because Shirley's mill pre-washes.
+- **Hiring tailors is off** until volume is past ~60–125 pieces a month.
+- **No catalogue photograph shows a sleeve worn DOWN** — every long-sleeve shot
+  is rolled. Do not label anything "long sleeve".
+- **Cotton needs no commitment** — 25 AED/m buys it 2.2m at a time, 20 at 100m.
+  It is added later at 389 as a price DROP, when there is evidence price is the
+  objection.
+
+#### Still open, not urgent
+
+`/upload` loses the customer's photo and is live in the sitemap. The Arabic blog
+(`frontend-todo.md`, adapt not translate). The measurement form collects 4 of
+the tailor's 17. `seo.ts` still says the apex 404s; it 301s.
+
+
 ### 2026-09-10 (evening) — the artwork now matches the order that was actually placed
 
 **Committed, nothing held.** New: `branding/send-to-supplier/artwork/11-hand-bag-print.pdf`.
