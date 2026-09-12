@@ -134,7 +134,18 @@ This is the only item whose value decays while it waits.
 2. **Rotate three secrets**: `RESEND_API_KEY` (printed in full in a terminal),
    plus `RECONCILE_TOKEN` and `CLERK_WEBHOOK_SECRET` (a security agent's env
    dump echoed them). None reached anything external; rotate anyway.
-3. **Price the dress at 649, not 599.** The tailor quoted 80-90 for a dress AND
+3. ⚠️ **NO DRESS FOR LAUNCH. ABAYAS ONLY.** Founder, 2026-09-12 evening, on
+   seeing that the dress fell to 52.2% once the tailor quoted 90: *"let's not do
+   dresses then, only abayas it's fine for the launch."* The Dress category,
+   its sliders and its ladder entry all STAY in the code -- they cost nothing
+   and removing them is churn -- but **no dress is photographed, priced or
+   listed**. Do not spend a generation on one.
+
+   The number that drove it: at 90 to sew, the dress is 52.2% at 599 while the
+   abaya is **57.0% at 690**. They cost the same to sew, so the whole difference
+   between them is 0.2m of cloth, and the abaya is the one nobody else cuts to
+   measure. ~~Price the dress at 649.~~ Moot.
+4. **Price the dress at 649, not 599.** ~~Superseded by 3 above.~~ The tailor quoted 80-90 for a dress AND
    an abaya, modelled at 90. That moved the dress DOWN to 52.2% -- the weakest
    thing in the range -- and the abaya UP to 57.0%, the strongest. They now cost
    the SAME to sew, so the gap between them is 0.2m of cloth and nothing else.
