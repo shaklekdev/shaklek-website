@@ -1,6 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
+import { getDb, schema } from "@/db/client";
+import { issueWaitlistToken } from "@/lib/waitlistToken";
+
+// NEXT_PUBLIC_APP_URL is in the build-spec allowlist already. The fallback is
+// the live site rather than localhost: a confirm link that points at localhost
+// in production is worse than one that is simply right.
+function appUrl(): string {
+  return (process.env.NEXT_PUBLIC_APP_URL || "https://www.shaklek.com").replace(/\/$/, "");
+}
+
+async function sendMail(apiKey: string, msg: { to: string; subject: string; text: string }) {
+  try {
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: "Shaklek <orders@shaklek.com>", ...msg }),
+    });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
 
 // Waitlist signups. TWO sources as of 2026-09-12: Shaklek+ early access, and
 // the pre-launch page (source "coming-soon").
@@ -78,72 +100,78 @@ export async function POST(req: NextRequest) {
   }
 
   // ---------------------------------------------------------------------
-  // 1. THE LIST. This is the part that makes launch day not manual.
+  // 1. OUR DATABASE. This is the list. Everything else is a copy of it.
   //
-  // ⚠️ SEGMENTS, NOT AUDIENCES. Resend's own docs say "Audiences are
-  // deprecated in favor of Segments. These endpoints still work, but will be
-  // removed in the future" -- checked 2026-09-12, because every half-remembered
-  // example still uses POST /audiences/:id/contacts.
+  // Founder, 2026-09-12, and she was right: an address someone chose to give is
+  // the asset, and it must not live only inside a third party we might leave.
+  // Resend is how the launch mail is SENT; this table is where the truth is.
   //
-  // ⚠️ AND `segments` IS OPTIONAL, WHICH IS THE WHOLE POINT. A bare
-  // POST /contacts adds to the account's contact book, which is what the
-  // dashboard's "Audience" page shows and what a Broadcast sends to. So this
-  // needs NO id, NO build-spec change and NO redeploy: it works the moment it
-  // deploys. That was verified against the real account on 2026-09-12 by
-  // creating a contact (201) and deleting it again (200), not assumed from the
-  // docs -- an earlier draft of this route required an id it did not need and
-  // would have sat inert behind three manual steps.
+  // ⚠️ THE ROW IS WRITTEN UNCONFIRMED AND IS NOT MAILABLE YET. Anyone can type
+  // anyone's address into a public form. Only the click in the real inbox sets
+  // confirmed_at, and only confirmed rows are pushed to Resend. Without that, a
+  // few hundred scripted signups turn the launch Broadcast into spam complaints
+  // against shaklek.com -- the domain that also sends every order confirmation.
   //
-  // RESEND_SEGMENT_ID stays supported and stays OPTIONAL, for the day she wants
-  // pre-launch signups kept apart from Shaklek+ ones. Setting it needs the
-  // build-spec allowlist as well as the console
-  // (node scripts/amplify-allow-env.mjs RESEND_SEGMENT_ID --apply) plus a
-  // redeploy. Until then every signup lands in the one contact book, which is
-  // the right default.
-  const segmentId = process.env.RESEND_SEGMENT_ID;
-  let stored = false;
-  try {
-    const contact = await fetch("https://api.resend.com/contacts", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        unsubscribed: false,
-        ...(segmentId ? { segments: [segmentId] } : {}),
-      }),
-    });
-    if (contact.ok) {
-      stored = true;
-    } else {
-      const detail = await contact.text();
-      // A repeat signup is a SUCCESS, not an error: somebody typing the same
-      // address twice must not see a failure, and a list is deduplicated by
-      // definition. Resend's docs do not state the duplicate behaviour, so this
-      // reads the response rather than assuming a status code.
-      if (/exists|duplicate|already/i.test(detail)) {
-        stored = true;
-      } else {
-        // ⚠️ STATUS AND A PARSED CODE ONLY. The raw body was logged here, and
-        // a provider validation error can echo the address it rejected --
-        // which puts a customer's email in CloudWatch, the one thing this
-        // file's own comments forbid.
-        let code = "unknown";
-        try {
-          const parsed = JSON.parse(detail);
-          code = String(parsed?.name ?? parsed?.code ?? "unknown").slice(0, 60);
-        } catch {
-          /* not JSON; the status alone will have to do */
-        }
-        console.error("[waitlist] contact create failed:", contact.status, code);
-      }
+  // A repeat signup UPDATES rather than duplicating (unique on email) and
+  // re-sends the confirm link, because the commonest reason to sign up twice is
+  // that the first email was never found.
+  const db = getDb();
+  let row: { id: string; confirmedAt: Date | null } | null = null;
+  if (db) {
+    try {
+      const [saved] = await db
+        .insert(schema.waitlist)
+        .values({ email, source })
+        .onConflictDoUpdate({
+          target: schema.waitlist.email,
+          set: { source },
+        })
+        .returning({ id: schema.waitlist.id, confirmedAt: schema.waitlist.confirmedAt });
+      row = saved ?? null;
+    } catch (err) {
+      // Never the address -- CloudWatch outlives the signup.
+      console.error("[waitlist] db write failed:", err instanceof Error ? err.message : "unknown");
     }
-  } catch (err) {
-    console.error("[waitlist] contact create threw:", err);
+  } else {
+    console.error("[waitlist] no DATABASE_URL — signup NOT stored.");
   }
 
   // ---------------------------------------------------------------------
-  // 2. THE PING. Kept now the list exists: it is how she sees a signup the
-  // moment it happens, and it is the only copy if step 1 failed.
+  // 2. THE CONFIRM LINK, unless she has already confirmed, in which case
+  // sending another would be noise.
+  const alreadyConfirmed = Boolean(row?.confirmedAt);
+  const confirmUrl =
+    row && !alreadyConfirmed
+      ? `${appUrl()}/api/waitlist/confirm?id=${row.id}&t=${issueWaitlistToken(row.id)}`
+      : null;
+
+  if (confirmUrl) {
+    const sent = await sendMail(apiKey, {
+      to: email,
+      subject: "One click, and we will tell you when we open",
+      text: [
+        "Thank you for asking.",
+        "",
+        "Confirm this is your address and we will write to you once, on the day",
+        "the shop opens. Nothing else, ever.",
+        "",
+        confirmUrl,
+        "",
+        "If you did not ask for this, ignore this email. Without the click above",
+        "we will never write to you again.",
+        "",
+        "Shaklek, Dubai",
+      ].join("\n"),
+    });
+    if (!sent) {
+      console.error("[waitlist] confirm email failed to send");
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // 3. THE PING to the founder, so she sees a signup the moment it happens.
+  // It now says whether the address is confirmed, because an unconfirmed one
+  // is a number and not yet a person who can be emailed.
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -151,16 +179,20 @@ export async function POST(req: NextRequest) {
       from: "Shaklek <orders@shaklek.com>",
       to: "hello@shaklek.com",
       reply_to: email,
-      // The subject carries the SOURCE, because this route now serves two
-      // different things: Shaklek+ early access, and the pre-launch page's
-      // "tell me when you open". They need different replies and will be read
-      // months apart, so an inbox search has to be able to separate them. Every
-      // signup said "Shaklek+ early access request" until 2026-09-12.
       subject:
         source === "coming-soon"
           ? "Pre-launch signup (tell me when you open)"
           : `Waitlist signup (${source})`,
-      text: `${email}\nSource: ${source}\nReceived: ${new Date().toISOString()}`,
+      text: [
+        email,
+        `Source: ${source}`,
+        alreadyConfirmed
+          ? "Already confirmed (signed up again)"
+          : row
+            ? "Stored, confirm email sent. Not on the mailing list until she clicks."
+            : "⚠️ NOT STORED — the database write failed. See CloudWatch.",
+        `Received: ${new Date().toISOString()}`,
+      ].join("\n"),
     }),
   });
 
@@ -168,10 +200,11 @@ export async function POST(req: NextRequest) {
     console.error("[waitlist] notification email failed:", (await res.text()).slice(0, 300));
   }
 
-  // Honest only if at least one of the two actually worked. Saying "thank you"
-  // when nothing recorded her address is the exact failure this route exists
-  // to avoid.
-  if (!stored && !res.ok) {
+  // Honest only if her address was actually recorded. The DB row is what
+  // matters now -- saying "thank you" when nothing stored her address is the
+  // exact failure this route exists to avoid. The founder's notification
+  // failing is an operational problem, not a reason to tell her it went wrong.
+  if (!row && !res.ok) {
     return NextResponse.json(
       { ok: false, error: "We couldn't record that right now. Please try again later." },
       { status: 502 },

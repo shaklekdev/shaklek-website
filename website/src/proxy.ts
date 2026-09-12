@@ -75,6 +75,11 @@ const OPEN_WHILE_SHUT = [
   // too, because it publishes the price ladder and pricing is still moving.
   "/blog",
   "/api/waitlist",
+  // The page the confirm link lands on. Without this it rewrites to
+  // /coming-soon and everyone who confirms is told to sign up again, which
+  // reads as a broken form. The API route needs no entry -- API routes are
+  // never rewritten.
+  "/waitlist",
   "/api/webhooks",
   "/legal",
   "/_next",

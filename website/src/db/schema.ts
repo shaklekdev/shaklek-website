@@ -205,3 +205,37 @@ export const fitFeedback = pgTable("fit_feedback", {
   // scan of the whole table, and the table only grows.
   index("fit_feedback_customer_created_idx").on(t.customerId, t.createdAt),
 ]);
+
+/**
+ * WAITLIST. Everyone who asked to be told when the shop opens.
+ *
+ * ⚠️ THIS TABLE IS THE LIST. Resend is a copy of it, not the other way round.
+ * Until 2026-09-12 a signup existed ONLY as a Resend contact and an email in
+ * the founder's inbox, and her objection was the right one: an email address
+ * someone chose to give is the asset, and it should not live only inside a
+ * third party we might leave. Query this table for the real number; Resend is
+ * how the launch mail gets sent, not where the truth is.
+ *
+ * ⚠️ AND A ROW HERE IS NOT PERMISSION TO EMAIL. Anyone can type anyone's
+ * address into a public form, so a row starts UNCONFIRMED and only a click in
+ * the real inbox sets `confirmedAt`. Only confirmed rows are pushed to Resend,
+ * which is what keeps a launch Broadcast off the addresses of people who never
+ * asked -- and keeps shaklek.com's sending reputation, which also carries every
+ * order confirmation, out of spam folders.
+ */
+export const waitlist = pgTable("waitlist", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  // Lowercased at the boundary, like customers.email, and unique so a repeat
+  // signup updates rather than duplicates. A list with the same person three
+  // times is not a list.
+  email: text("email").notNull().unique(),
+  // "coming-soon", "shaklek-plus", and whatever comes next. Bounded server-side.
+  source: text("source").notNull().default("unknown"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  // Set by the confirm link, never by the signup itself. Null means "asked, but
+  // has not proved the inbox is hers" -- countable, not mailable.
+  confirmedAt: timestamp("confirmed_at"),
+  // Set when the contact reaches Resend, so a failed push can be retried
+  // without guessing who already made it across.
+  syncedAt: timestamp("synced_at"),
+});
