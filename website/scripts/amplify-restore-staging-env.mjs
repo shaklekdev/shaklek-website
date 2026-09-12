@@ -94,6 +94,17 @@ if (!stripe.startsWith("sk_test_")) {
       : "STRIPE_SECRET_KEY is not an sk_test_ key.",
   );
 }
+// Clerk too. The file's own argument is that "checked by eye is how it happened
+// the first time", and the first version checked only the database and Stripe.
+const clerk = vars.CLERK_SECRET_KEY ?? "";
+if (!clerk.startsWith("sk_test_")) {
+  problems.push(
+    clerk.startsWith("sk_live_")
+      ? "CLERK_SECRET_KEY is a LIVE key. Staging is public; it must be sk_test_."
+      : "CLERK_SECRET_KEY is not an sk_test_ key.",
+  );
+}
+
 if (problems.length) {
   console.error("refusing to write:\n" + problems.map((p) => "  - " + p).join("\n"));
   process.exit(1);

@@ -29,6 +29,13 @@ import WaitlistForm from "@/components/WaitlistForm";
 // The headline is the founder's own approved line from the business card,
 // verbatim. Do not rewrite it.
 export const metadata: Metadata = {
+  // ⚠️ ONE CANONICAL, AND IT COVERS EVERY SHUT URL. /faq, /catalog, /cart,
+  // /design/* and the rest are REWRITTEN here, so they all render this page's
+  // metadata and all returned 200 with identical HTML and no canonical.
+  // robots.txt says Allow: /, so Google would have treated them as duplicates,
+  // picked its own canonical (possibly /faq) and held a splash-page snippet
+  // against that URL after opening. Security review, 2026-09-12.
+  alternates: { canonical: "https://www.shaklek.com/" },
   title: "Shaklek",
   description:
     "Made to order clothing in 100% linen, cut to your measurements and sewn in the UAE. Opening early October. Leave your email to hear when.",

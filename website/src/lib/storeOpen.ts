@@ -3,8 +3,10 @@
 //
 // ⚠️ THE POLARITY IS THE WHOLE DESIGN. `=== "true"`, NEVER `!== "false"`.
 //
-// Amplify's build spec carries an explicit allowlist and STORE_OPEN is not in
-// it as of 2026-09-12:
+// Amplify's build spec carries an explicit allowlist. STORE_OPEN WAS ADDED TO
+// IT on 2026-09-12, so opening the shop is now two steps (set the value in the
+// console, redeploy) rather than four. The warning below stands anyway, because
+// it is why the polarity is what it is:
 //   env | grep -e DATABASE_URL -e STRIPE_SECRET_KEY ... >> .env.production
 // A variable set in the Amplify console but missing from that grep is simply
 // undefined in the running app while the console shows it set. That cost an

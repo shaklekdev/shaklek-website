@@ -27,8 +27,13 @@ import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/reque
 const MAX_PER_WINDOW = 5;
 const WINDOW_MS = 10 * 60 * 1000;
 
+// ⚠️ The old shape was /^[^\s@]+@[^\s@]+\.[^\s@]+$/, which accepts
+// `a@b.com,c@d.com` and `"x"<y>@z.io`. Those pass here, reach Resend, and come
+// back as a validation error whose body may echo the address -- into CloudWatch,
+// which this file says must never happen. Security review, 2026-09-12.
+const EMAIL = /^[^\s@,<>()"'\\;:]+@[^\s@,<>()"'\\;:]+\.[^\s@,<>()"'\\;:]{2,}$/;
 function isEmail(value: unknown): value is string {
-  return typeof value === "string" && value.length <= 320 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  return typeof value === "string" && value.length <= 320 && EMAIL.test(value);
 }
 
 export async function POST(req: NextRequest) {
@@ -118,8 +123,18 @@ export async function POST(req: NextRequest) {
       if (/exists|duplicate|already/i.test(detail)) {
         stored = true;
       } else {
-        // Never the address itself -- CloudWatch outlives the signup.
-        console.error("[waitlist] contact create failed:", contact.status, detail.slice(0, 300));
+        // ⚠️ STATUS AND A PARSED CODE ONLY. The raw body was logged here, and
+        // a provider validation error can echo the address it rejected --
+        // which puts a customer's email in CloudWatch, the one thing this
+        // file's own comments forbid.
+        let code = "unknown";
+        try {
+          const parsed = JSON.parse(detail);
+          code = String(parsed?.name ?? parsed?.code ?? "unknown").slice(0, 60);
+        } catch {
+          /* not JSON; the status alone will have to do */
+        }
+        console.error("[waitlist] contact create failed:", contact.status, code);
       }
     }
   } catch (err) {

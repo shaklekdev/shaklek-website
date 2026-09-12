@@ -164,8 +164,9 @@ async function persistOrder(
 // ⚠️ THE POLARITY IS THE WHOLE POINT: `=== "true"`, NEVER `!== "false"`.
 // Amplify's buildspec carries an explicit allowlist --
 //   env | grep -e DATABASE_URL -e STRIPE_SECRET_KEY ... >> .env.production
-// -- and STORE_OPEN is NOT in it as of 2026-09-12. A variable set in the
-// console but missing from that grep is simply undefined in the running app
+// -- and STORE_OPEN was ADDED to it on 2026-09-12. The warning stands for the
+// next variable: one set in the console but missing from that grep is undefined
+// in the running app
 // (this cost an hour on RECONCILE_TOKEN, see CLAUDE.md). Written as
 // `!== "false"` an undefined value would mean OPEN, so the one failure mode we
 // cannot tolerate -- the switch never reaching production -- would leave
@@ -187,12 +188,25 @@ export async function POST(req: NextRequest) {
   // reach Stripe or the database. GET /api/orders/:id is deliberately NOT
   // gated -- a customer who already paid must still be able to see her order.
   if (!storeIsOpen()) {
+    // ⚠️ 403, NOT 503, AND THE REASON IS OPERATIONAL RATHER THAN SEMANTIC.
+    // 503 is the more correct code for "temporarily unavailable" and it is what
+    // this returned for about an hour on 2026-09-12. It also set off the
+    // `shaklek-5xx-errors` CloudWatch alarm, which counts ANY 5xx across the
+    // app, Sum over five minutes, threshold 1. The site is public now, so every
+    // scanner that pokes /api/orders would have kept that alarm red forever.
+    //
+    // A permanently-red alarm is an alarm nobody reads, and this project has
+    // already written down the same lesson about a test that cries wolf. A
+    // deliberate, expected refusal is not a server error, so it should not be
+    // counted as one. 403 says "you may not do this right now", carries the
+    // same message, and leaves the 5xx alarm meaning what it is supposed to
+    // mean: something is actually broken.
     return NextResponse.json(
       {
         ok: false,
         error: "We are not open for orders yet. Leave your email and we will tell you the moment we are.",
       },
-      { status: 503 },
+      { status: 403 },
     );
   }
 
