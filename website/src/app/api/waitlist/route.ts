@@ -6,8 +6,10 @@ import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/reque
 // the pre-launch page (source "coming-soon").
 //
 // WHERE AN ADDRESS GOES. Two places, on purpose:
-//   1. a Resend SEGMENT -- the durable list. Stores, deduplicates, and can be
-//      sent a broadcast at launch without anyone reading an inbox.
+//   1. the Resend CONTACT BOOK -- the durable list. It is what the dashboard's
+//      "Audience" page shows and what a Broadcast sends to, so launch day is
+//      one Broadcast rather than anyone reading an inbox. Needs no id and no
+//      configuration; RESEND_SEGMENT_ID is optional on top of it.
 //   2. an email to hello@shaklek.com, reply-to the signer, so she sees it live
 //      and so there is still a copy if (1) fails.
 //
@@ -75,51 +77,53 @@ export async function POST(req: NextRequest) {
   //
   // ⚠️ SEGMENTS, NOT AUDIENCES. Resend's own docs say "Audiences are
   // deprecated in favor of Segments. These endpoints still work, but will be
-  // removed in the future" -- checked 2026-09-12 before writing this, because
-  // every half-remembered example still uses POST /audiences/:id/contacts. The
-  // current call is POST /contacts with a `segments` array.
+  // removed in the future" -- checked 2026-09-12, because every half-remembered
+  // example still uses POST /audiences/:id/contacts.
   //
-  // ⚠️ THE POLARITY HERE IS THE OPPOSITE OF STORE_OPEN's, deliberately. A
-  // missing RESEND_SEGMENT_ID must NOT stop a signup. Failing closed on the
-  // switch that decides whether money can move is right; failing closed on the
-  // one that decides whether a stranger can leave an email just loses her. So
-  // this degrades to the inbox and shouts in the log.
+  // ⚠️ AND `segments` IS OPTIONAL, WHICH IS THE WHOLE POINT. A bare
+  // POST /contacts adds to the account's contact book, which is what the
+  // dashboard's "Audience" page shows and what a Broadcast sends to. So this
+  // needs NO id, NO build-spec change and NO redeploy: it works the moment it
+  // deploys. That was verified against the real account on 2026-09-12 by
+  // creating a contact (201) and deleting it again (200), not assumed from the
+  // docs -- an earlier draft of this route required an id it did not need and
+  // would have sat inert behind three manual steps.
   //
-  // ⚠️ RESEND_SEGMENT_ID NEEDS THE BUILD SPEC, NOT JUST THE CONSOLE.
-  //   aws amplify get-app --app-id dqcptedylrif0 --query 'app.buildSpec'
-  // carries an explicit `env | grep -e ... >> .env.production` allowlist. Add
-  // `-e RESEND_SEGMENT_ID`, set it in the console, then REDEPLOY -- the spec is
-  // read at build time. Until all three are done this logs "not set" on every
-  // signup and the list stays empty while the console shows the variable.
+  // RESEND_SEGMENT_ID stays supported and stays OPTIONAL, for the day she wants
+  // pre-launch signups kept apart from Shaklek+ ones. Setting it needs the
+  // build-spec allowlist as well as the console
+  // (node scripts/amplify-allow-env.mjs RESEND_SEGMENT_ID --apply) plus a
+  // redeploy. Until then every signup lands in the one contact book, which is
+  // the right default.
   const segmentId = process.env.RESEND_SEGMENT_ID;
   let stored = false;
-  if (!segmentId) {
-    console.error("[waitlist] RESEND_SEGMENT_ID not set — signup is inbox-only, no list.");
-  } else {
-    try {
-      const contact = await fetch("https://api.resend.com/contacts", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ email, unsubscribed: false, segments: [segmentId] }),
-      });
-      if (contact.ok) {
+  try {
+    const contact = await fetch("https://api.resend.com/contacts", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        unsubscribed: false,
+        ...(segmentId ? { segments: [segmentId] } : {}),
+      }),
+    });
+    if (contact.ok) {
+      stored = true;
+    } else {
+      const detail = await contact.text();
+      // A repeat signup is a SUCCESS, not an error: somebody typing the same
+      // address twice must not see a failure, and a list is deduplicated by
+      // definition. Resend's docs do not state the duplicate behaviour, so this
+      // reads the response rather than assuming a status code.
+      if (/exists|duplicate|already/i.test(detail)) {
         stored = true;
       } else {
-        const detail = await contact.text();
-        // A repeat signup is a SUCCESS, not an error: somebody typing the same
-        // address twice must not see a failure, and a list is deduplicated by
-        // definition. Resend's docs do not state the duplicate behaviour, so
-        // this reads the response rather than assuming a status code.
-        if (/exists|duplicate|already/i.test(detail)) {
-          stored = true;
-        } else {
-          // Never the address itself -- CloudWatch outlives the signup.
-          console.error("[waitlist] contact create failed:", contact.status, detail.slice(0, 300));
-        }
+        // Never the address itself -- CloudWatch outlives the signup.
+        console.error("[waitlist] contact create failed:", contact.status, detail.slice(0, 300));
       }
-    } catch (err) {
-      console.error("[waitlist] contact create threw:", err);
     }
+  } catch (err) {
+    console.error("[waitlist] contact create threw:", err);
   }
 
   // ---------------------------------------------------------------------
