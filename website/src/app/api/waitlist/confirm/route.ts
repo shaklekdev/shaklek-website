@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { appUrl } from "@/lib/appUrl";
 import { isUuid } from "@/lib/requestGuards";
 import { verifyWaitlistToken } from "@/lib/waitlistToken";
 
@@ -29,13 +30,13 @@ export async function GET(req: NextRequest) {
   // isUuid before the id reaches a query, per §0. A bad id and a bad token get
   // the SAME answer, so this cannot be used to discover which rows exist.
   if (!isUuid(id) || !verifyWaitlistToken(id, token)) {
-    return NextResponse.redirect(new URL("/waitlist/confirmed?state=invalid", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/waitlist/confirmed?state=invalid", appUrl()));
   }
 
   const db = getDb();
   if (!db) {
     console.error("[waitlist/confirm] no DATABASE_URL");
-    return NextResponse.redirect(new URL("/waitlist/confirmed?state=error", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/waitlist/confirmed?state=error", appUrl()));
   }
 
   let email: string | null = null;
@@ -65,13 +66,13 @@ export async function GET(req: NextRequest) {
         syncedAt: schema.waitlist.syncedAt,
       });
     if (!row) {
-      return NextResponse.redirect(new URL("/waitlist/confirmed?state=invalid", req.nextUrl.origin));
+      return NextResponse.redirect(new URL("/waitlist/confirmed?state=invalid", appUrl()));
     }
     email = row.email;
     alreadySynced = Boolean(row.syncedAt);
   } catch (err) {
     console.error("[waitlist/confirm] db update failed:", err instanceof Error ? err.message : "unknown");
-    return NextResponse.redirect(new URL("/waitlist/confirmed?state=error", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/waitlist/confirmed?state=error", appUrl()));
   }
 
   // Now, and only now, she goes on the mailing list.
@@ -115,5 +116,5 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(new URL("/waitlist/confirmed?state=ok", req.nextUrl.origin));
+  return NextResponse.redirect(new URL("/waitlist/confirmed?state=ok", appUrl()));
 }

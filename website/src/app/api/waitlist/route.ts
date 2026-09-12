@@ -3,13 +3,7 @@ import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
 import { getDb, schema } from "@/db/client";
 import { issueWaitlistToken } from "@/lib/waitlistToken";
-
-// NEXT_PUBLIC_APP_URL is in the build-spec allowlist already. The fallback is
-// the live site rather than localhost: a confirm link that points at localhost
-// in production is worse than one that is simply right.
-function appUrl(): string {
-  return (process.env.NEXT_PUBLIC_APP_URL || "https://www.shaklek.com").replace(/\/$/, "");
-}
+import { appUrl } from "@/lib/appUrl";
 
 async function sendMail(
   apiKey: string,
@@ -168,38 +162,30 @@ export async function POST(req: NextRequest) {
         "List-Unsubscribe": `<${unsubUrl}>`,
         "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
       },
+      // ⚠️ ONE LINE PER PARAGRAPH, NEVER HARD-WRAPPED AT 75 CHARACTERS. The
+      // first version wrapped by hand, which looks tidy in a code editor and
+      // ragged on a phone: the client re-wraps to its own width and the manual
+      // breaks survive, so every paragraph ends in a short orphan line. The
+      // founder's screenshot showed exactly that. Let the mail client wrap.
+      //
+      // ⚠️ AND THE UNSUBSCRIBE IS IN THE BODY, not only in the header. Gmail
+      // shows a header-based unsubscribe only for mail it classifies as bulk,
+      // and a first transactional send is not bulk -- so the promise made two
+      // lines above it was invisible in her inbox. The header stays for the
+      // one-click button; this is what a person can actually see.
       text: [
         "Thank you for asking.",
         "",
-        // One paragraph of brand before the ask. The email was doing two jobs
-        // with the ask winning, and a stranger who signed up an hour ago needs
-        // reminding what she signed up TO. Her three pillars in one sentence,
-        // the same claim as the business card she approved.
-        //
-        // ⚠️ Held to the claim rules in planning/marketing/personas.md: no
-        // price (pricing moved twice on 2026-09-12), no lead time (cut from
-        // advertising AND from the terms of sale the same day), no health
-        // claim, "made in the UAE" and never "100% made in the UAE" because the
-        // cloth is milled abroad, and never the word "sustainable".
-        "Shaklek is 100% linen, cut to your shape, and sewn here in the UAE after",
-        "you order it. Nothing is made before somebody wants it.",
+        "Shaklek is 100% linen, cut to your shape, and sewn here in the UAE after you order it.",
         "",
-        // ⚠️ "Nothing else, ever" WAS HERE AND CAME OUT on the founder's
-        // instruction: "we need the newsletter, it's very important for new
-        // drops". The old line was restrictive but TRUE; this one is wider, so
-        // it only stays true because /api/waitlist/unsubscribe exists and every
-        // send carries the headers above. Do not widen it further without
-        // checking what still backs it.
-        "Confirm this is your address and we will tell you the day we open, and",
-        "now and then when there is something new. You can leave the list",
-        "whenever you like.",
+        "Confirm your address and we will tell you the day we open, and now and then when there is something new.",
         "",
         confirmUrl,
         "",
-        "If you did not ask for this, ignore this email. Without the click above",
-        "we will never write to you again.",
+        "Did not ask for this? Ignore this email and you will never hear from us again.",
         "",
         "Shaklek, Dubai",
+        `Leave the list: ${unsubUrl}`,
       ].join("\n"),
     });
     if (!sent) {

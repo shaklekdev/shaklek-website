@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { appUrl } from "@/lib/appUrl";
 import { isUuid } from "@/lib/requestGuards";
 import { verifyWaitlistToken } from "@/lib/waitlistToken";
 
@@ -81,7 +82,7 @@ export async function GET(req: NextRequest) {
     req.nextUrl.searchParams.get("id") ?? "",
     req.nextUrl.searchParams.get("t"),
   );
-  return NextResponse.redirect(new URL(`/waitlist/unsubscribed?state=${state}`, req.nextUrl.origin));
+  return NextResponse.redirect(new URL(`/waitlist/unsubscribed?state=${state}`, appUrl()));
 }
 
 // RFC 8058 one-click. The mail client sends `List-Unsubscribe=One-Click` as a
