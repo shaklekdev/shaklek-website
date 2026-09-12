@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { isStoreOpen } from "@/lib/storeOpen";
 import {
   DEFAULT_OG_IMAGE,
   SITE_DESCRIPTION,
@@ -105,15 +106,27 @@ export const metadata: Metadata = {
 // and put 356KB of Clerk on every marketing page. It is now mounted per-route
 // by src/components/AuthProvider.tsx -- read that file before moving it back.
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const storeOpen = isStoreOpen();
   return (
     <html
       lang="en"
       className={`h-full antialiased ${cormorant.variable} ${italiana.variable} ${reemKufi.variable}`}
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
+        {/* CartProvider ALWAYS mounts, even with the shop shut. Every
+            storefront page still gets PRERENDERED at build time regardless of
+            what the proxy rewrites at runtime, and useCart throws outside the
+            provider, so making it conditional failed the build on
+            /design/[slug] and /_not-found. The footer is the part that can go:
+            while shut it would be a menu of links that all lead back to the
+            same page.
+
+            The pixel and the consent bar stay mounted: building an audience
+            before opening is the point of the page, and a pixel with no way to
+            refuse it is not consent. */}
         <CartProvider>
           {children}
-          <Footer />
+          {storeOpen ? <Footer /> : null}
         </CartProvider>
         {/* Renders nothing at all without NEXT_PUBLIC_META_PIXEL_ID, so this
             ships inert and is switched on with an environment variable

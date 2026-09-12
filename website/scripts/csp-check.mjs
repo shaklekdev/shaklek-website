@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const BASE = process.argv[2] ?? "https://www.shaklek.com";
-const PATHS = ["/", "/how-it-works", "/our-story", "/cart", "/checkout", "/upload", "/sign-in", "/design/oversized-shirt"];
+const PATHS = ["/", "/how-it-works", "/our-story", "/cart", "/checkout", "/sign-in", "/design/oversized-shirt"];
 const PORT = 9333;
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 

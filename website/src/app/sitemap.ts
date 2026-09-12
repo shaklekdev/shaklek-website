@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { catalog } from "@/data/catalog";
 import { articles } from "@/data/blog";
 import { SITE_URL } from "@/lib/seo";
+import { isStoreOpen } from "@/lib/storeOpen";
 
 // Public, crawlable routes. /dashboard, /account, /sign-in, /sign-up, /cart,
 // /checkout and /order-confirmed are deliberately absent -- they are private
@@ -17,7 +18,6 @@ const STATIC_ROUTES: {
   { path: "/catalog", changeFrequency: "weekly", priority: 0.9 },
   { path: "/how-it-works", changeFrequency: "monthly", priority: 0.8 },
   { path: "/our-story", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/upload", changeFrequency: "monthly", priority: 0.8 },
   // The journal is the only part of the site that can rank for informational
   // searches. Product pages answer "buy a linen shirt Dubai"; nothing here
   // answered "what fabric is best in Dubai heat" until these existed.
@@ -31,6 +31,20 @@ const STATIC_ROUTES: {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
+
+  // WHILE THE SHOP IS SHUT, EVERY ROUTE BELOW REWRITES TO /coming-soon.
+  // Listing them anyway would hand Google a sitemap of URLs that all serve the
+  // same page, which is a duplicate-content problem we would then have to
+  // undo. The home page is the splash, and the legal pages are genuinely
+  // themselves because the proxy lets them through.
+  if (!isStoreOpen()) {
+    return ["/", "/legal/terms", "/legal/privacy"].map((path) => ({
+      url: `${SITE_URL}${path}`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: path === "/" ? 1 : 0.3,
+    }));
+  }
 
   return [
     ...STATIC_ROUTES.map(({ path, changeFrequency, priority }) => ({

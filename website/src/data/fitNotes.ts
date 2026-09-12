@@ -103,7 +103,11 @@ const BY_CATEGORY: Record<string, FitNote[]> = {
  *  uploaded design has no category until a stylist reads it, and guessing a
  *  garment's fit vocabulary is worse than not asking. */
 export function fitNotesForCategory(category: string): FitNote[] {
-  return BY_CATEGORY[category] ?? [];
+  // Object.hasOwn, not a bare index: `BY_CATEGORY["constructor"]` returns a
+  // FUNCTION, and the callers that .filter() the result then throw. Not
+  // reachable from a request today, but /cart reads a localStorage category
+  // straight into here. Security review, 2026-09-12.
+  return Object.hasOwn(BY_CATEGORY, category) ? BY_CATEGORY[category] : [];
 }
 
 export function fitNoteLabel(category: string, id: string): string | undefined {

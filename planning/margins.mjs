@@ -103,10 +103,23 @@ const INPUTS = {
   // 2.2 for shirt/pants at 140cm INCLUDING ~10% cutting waste; wide-leg cuts
   // are 2.7-2.9 and are the item that eats cloth. Worth up to 3 margin points.
   // On the tailor's question list -- have him cut one of each and report.
-  metresPerGarment: { Shirt: 2.2, Skirt: 1.5, Pants: 2.2, Dress: 3.0 },
+  // Abaya/Gilet are ESTIMATES pending a real cut (138cm cloth). An open abaya
+  // is the metre-hungry item in the range: at 3.2m the CLOTH ALONE costs more
+  // than the stitching, which is why its price cannot be set from the tailor's
+  // quote the way a shirt's can.
+  metresPerGarment: { Shirt: 2.2, Skirt: 1.5, Pants: 2.2, Dress: 3.0, Abaya: 3.2, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
-  tailoringAed: { Shirt: 40, Skirt: 60, Pants: 60, Dress: 85 },
+  // ✅ SHIRT 35, NOT 40 — the tailor quotes 30-35, founder 2026-09-12. The
+  // CONSERVATIVE end is modelled on purpose: if a number is a range, the model
+  // takes the worse one, so a surprise moves margin UP and never down. At 30
+  // the shirt gains a further ~1.1 points.
+  // ✅ PANTS 50, NOT 60 — the tailor's real rate, founder 2026-09-12. Worth
+  // ~1.9 margin points on every trouser sold.
+  // ✅ DRESS 80 for a SIMPLE dress — tailor, founder 2026-09-12.
+  // ⏳ ABAYA / GILET NOT QUOTED YET. The numbers below are placeholders so the
+  //    solver has something to print; they are what the PRICE question turns on.
+  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 80, Abaya: 100, Gilet: 55 },
 
   shippingAed: 21, // Founder, 2026-08-22
 
@@ -121,19 +134,18 @@ const INPUTS = {
   // blend is dead and only one fibre exists -- catching that saved 388.50).
   // Rates are EX-VAT; VAT is added at the bottom.
   //
-  // ⏳ TWO THINGS STILL WRONG ON IT, both flagged to them 2026-09-10:
-  //   1. The invoice reads "Shakalek". The company is "Shaklek". It is a VAT
-  //      invoice and must match the trade licence.
-  //   2. The cotton bag line still reads "35x45cm, with normal handle". The
-  //      approved spec is 500x400mm LANDSCAPE with a DRAWSTRING, and the print
-  //      artwork (08-linen-bag-print.pdf) places the mark as a fraction of a
-  //      500x400 bag's height. Founder's read is that the description is
-  //      estimate shorthand and their sample step will settle it, which their
-  //      terms do support ("physical samples will be for size and artwork
-  //      confirmation"). ⚠️ BUT THE SAMPLE STEP CONFIRMS THE PRODUCT, NOT THE
-  //      PRICE: 50x40 is 27% more cloth than 35x45, and the 17 was quoted
-  //      against the smaller one. Get the price confirmed at the real size
-  //      BEFORE the 50% advance, not after.
+  // ⏳ ONE THING STILL WRONG ON IT, flagged to them 2026-09-10:
+  //     The invoice reads "Shakalek". The company is "Shaklek For Online
+  //     Selling". It is a VAT invoice and must match the trade licence.
+  //
+  // ✅ THE BAG SIZE IS SETTLED AND IS NOT AN OPEN ITEM. 35x45cm WITH A HANDLE,
+  //    as quoted. The founder chose it deliberately as a PRICE decision
+  //    (2026-09-10, re-confirmed 2026-09-12) and the print artwork was rebuilt
+  //    to match -- 08-linen-bag-print is 350x450 PORTRAIT.
+  //    ⚠️ DO NOT RE-RAISE 500x400 LANDSCAPE DRAWSTRING WITH FITOOR. This file
+  //    carried it as a pending item for two days after the decision; acting on
+  //    it would reverse her call, orphan the print file, and reopen a settled
+  //    price mid-production. The 17 is quoted against the bag we are buying.
   //
   // TO TEST AN ORDER: flip `keep` and re-run. Every margin below moves with it.
   packaging: {
@@ -143,7 +155,7 @@ const INPUTS = {
       // 500s, everything else in 100s. Per-order cost is the unit rate either
       // way -- one label per garment.
       cottonBag: { aed: 17, qty: 100, keep: true, from: "Fitoor",
-        note: "THE CENTREPIECE, and the reveal. ⚠️ HASHIR IS FITOOR -- he is the contact there, NOT a second supplier. This model treated him as one until 2026-09-08 and therefore treated his 17 as VAT-inclusive; it is ex-VAT like every other line on quote FRP2608-1149, so the bag lands at 17.85. Negotiated down from their own 20 (the founder asked 15, settled at 17). ⚠️ They quoted 35x45 but the approved spec is 500x400 landscape, 27% more cloth -- confirm which the 17 is for. Still to ask: 300/500 unit pricing" },
+        note: "THE CENTREPIECE, and the reveal. ⚠️ HASHIR IS FITOOR -- he is the contact there, NOT a second supplier. This model treated him as one until 2026-09-08 and therefore treated his 17 as VAT-inclusive; it is ex-VAT like every other line on quote FRP2608-1149, so the bag lands at 17.85. Negotiated down from their own 20 (the founder asked 15, settled at 17). ✅ SIZE SETTLED: 35x45 WITH A HANDLE, and the 17 is quoted against exactly that bag -- founder 2026-09-10, re-confirmed 2026-09-12. Do NOT re-raise 500x400 drawstring. Still to ask: 300/500 unit pricing" },
       handBag: { aed: 9.2, qty: 100, keep: true, from: "Fitoor",
         note: "NOT OPTIONAL, AND NOT A SECOND LAYER. Founder, 2026-09-02: in Dubai delivery IS done with a hand bag -- it is the delivery vehicle, not packaging inside a mailer. branding/packaging.md's 'only if there is a physical handover' is misleading here, because local delivery is a handover. The kraft mailer is for orders shipped OUTSIDE Dubai" },
       wovenBrandLabel: { aed: 0.7, qty: 500, keep: true, from: "Fitoor",
@@ -171,6 +183,40 @@ const INPUTS = {
   // Made-to-order's equivalent of returns. Assumption, not a measurement —
   // the four fit-sample sets exist to turn this into a real number.
   remakeRate: 0.05,
+
+  // ✅ THE IN-PERSON FITTING, FREE ABOVE A BASKET THRESHOLD. Founder decision,
+  // 2026-09-12: 50 AED an hour, ONCE PER CUSTOMER, and the threshold is set so
+  // that a single dress or abaya qualifies as well as any two pieces.
+  //
+  // WHY 550. The band is (519, 599]: it must sit ABOVE the dearest single
+  // garment that should NOT qualify (trousers, 519) and AT OR BELOW the
+  // cheapest that SHOULD (the dress, 599). 550 is the round number in it.
+  //   qualifies   dress 599 · abaya 690 · any two pieces (cheapest pair 898)
+  //   does not    shirt 449 · gilet 479 · trousers 519
+  // ⚠️ THE DRESS AND ABAYA PRICES ARE STILL PROPOSALS, NOT IN catalog.ts. If
+  //    the dress lands below 550 the threshold breaks silently and a 449 item
+  //    could start qualifying. Set the dress price FIRST, then this.
+  //
+  // WHY ONCE PER CUSTOMER IS THE PART THAT MAKES IT CHEAP. 50 AED against an
+  // assumed 134 to buy a customer through ads: an hour that makes someone come
+  // back costs a third of buying a new one, and it is never paid twice.
+  // ⚠️ IT NEEDS SOMEWHERE TO RECORD THAT IT WAS USED -- a nullable column on
+  //    `customers`. Read the migration trap in CLAUDE.md first: column on PROD
+  //    before the code ships, via scripts/db-migrate.mjs --target=prod, or
+  //    checkout breaks for everyone.
+  //
+  // WHY A FITTING AND NOT A DISCOUNT. At these baskets they cost about the
+  // same, and the fitting wins on everything else: it is CAPPED AT ONE HOUR
+  // however large the basket (a percentage is not), it cannot be guessed or
+  // shared the way a promo code can (see CLAUDE.md on WELCOME20), it does not
+  // train anyone to wait for a sale, and it cuts the remake rate -- which is
+  // the one number that can actually sink this. See the printed comparison.
+  //
+  // ⚠️ THE HOUR IS THE SCARCE INPUT, NOT THE 100 AED. One qualifying order is
+  // one hour, so this offer does not survive contact with volume: it caps out
+  // around 4-5 a week. Word it as "by appointment" so it can be capped without
+  // breaking a promise.
+  fitting: { aed: 50, thresholdAed: 550, oncePerCustomer: true, dubaiOnly: true },
 
   // Cost to acquire one customer. INDUSTRY ASSUMPTION, NOT MEASURED.
   // 134 = CPM 30, CTR 1.5%, 1.5% purchase rate. This is the number that
@@ -268,10 +314,9 @@ console.log(`  [L] = legally required.  + = ordering.  - = dropped.`);
 console.log(`  ✅ ONE SUPPLIER. Hashir is Fitoor's contact, not a second vendor -- this`);
 console.log(`     model had that wrong until 2026-09-08 and therefore treated the bag's`);
 console.log(`     17 as VAT-inclusive. Every line is ex-VAT, so the bag lands at 17.85.`);
-console.log(`  ⏳ THE BAG LINE STILL READS 35x45 WITH A HANDLE on FRP2609-1113. The`);
-console.log(`     approved spec is 500x400 LANDSCAPE, DRAWSTRING -- 27% more cloth. Their`);
-console.log(`     sample step confirms the product; it does NOT confirm the price. Settle`);
-console.log(`     the 17 at the real size BEFORE the 50% advance.`);
+console.log(`  ✅ BAG SIZE SETTLED: 35x45 WITH A HANDLE, which is what FRP2609-1113 quotes`);
+console.log(`     and what the 17 is priced against. The founder chose it on price and the`);
+console.log(`     artwork was rebuilt to match. Do NOT re-raise 500x400 drawstring.`);
 
 // Baskets worth comparing. Each is a set of overrides on the `keep` flags.
 // The hand bag is NOT a droppable line -- in Dubai it is how the order is
@@ -349,8 +394,118 @@ for (const r of [0.05, 0.15, 0.3]) {
 }
 INPUTS.remakeRate = saved;
 
+// ---------------------------------------------------------------------------
+// NEW ITEMS — what a garment must sell for, and what stitching it can carry.
+//
+// Added 2026-09-12, when the founder asked: "a 100% linen abaya to be sold
+// around 130 euros — how much can the stitching be?"
+//
+// The answer is an INVERSION of the margin formula, not a guess. Solving
+//   GM = 0.971 - (1.05*(fabric+tailoring) + 60.79) / price
+// for either unknown gives both directions: the price a known make-cost needs,
+// and the stitching a known price can afford.
+// ---------------------------------------------------------------------------
+const EUR_AED = 4.26; // open.er-api.com, 2026-09-12. AED is pegged to USD, so
+                      // this moves only with EUR/USD — re-check before pricing.
+
+// Margin benchmarks come from the SHIPPING catalogue, never from a target
+// typed in here: the shirt at 449 is the bar the founder already accepted.
+const BENCH = unitEconomics(REF_PRICE, "Shirt", REF_PER_M).gm;
+
+function priceFor(category, gm, perM = REF_PER_M, tailoring = INPUTS.tailoringAed[category]) {
+  const make = INPUTS.metresPerGarment[category] * perM + tailoring;
+  const fixed = 1.05 * make + (INPUTS.shippingAed * 1.05) + packagingPerOrder() + INPUTS.paymentFee.fixedAed;
+  return fixed / (1 - INPUTS.paymentFee.pct - gm);
+}
+
+function tailoringFor(category, price, gm, perM = REF_PER_M) {
+  const fabric = INPUTS.metresPerGarment[category] * perM;
+  const budget = price * (1 - INPUTS.paymentFee.pct - gm)
+    - (INPUTS.shippingAed * 1.05) - packagingPerOrder() - INPUTS.paymentFee.fixedAed;
+  return budget / 1.05 - fabric;
+}
+
+// ---------------------------------------------------------------------------
+// THE 850 THRESHOLD — a free in-person fitting above a basket value, to push
+// orders past one garment. Added 2026-09-12.
+// ---------------------------------------------------------------------------
+function orderEcon(parts, price, extra = 0, rr = INPUTS.remakeRate) {
+  const make = parts.reduce((t, c) => t + INPUTS.metresPerGarment[c] * REF_PER_M + INPUTS.tailoringAed[c], 0);
+  const cogs = make + INPUTS.shippingAed + packagingPerOrder()
+    + (price * INPUTS.paymentFee.pct + INPUTS.paymentFee.fixedAed)
+    + rr * (make + INPUTS.shippingAed) + extra;
+  return { gross: price - cogs, gm: (price - cogs) / price, remakeCost: make + INPUTS.shippingAed };
+}
+
+const TH = INPUTS.fitting.thresholdAed, FIT = INPUTS.fitting.aed;
+const singles = Object.entries(INPUTS.metresPerGarment);
+console.log(`\nTHE ${TH} THRESHOLD — free in-person fitting, ${FIT} AED, ONCE PER CUSTOMER`);
+console.log(`  Set so a single dress or abaya qualifies, as well as any two pieces.`);
+console.log(`    qualifies      dress 599 · abaya 690 · any pair (cheapest 2 shirts ${(2 * SHIRT_PRICE).toFixed(0)})`);
+console.log(`    does not       shirt ${SHIRT_PRICE} · gilet 479 · trousers 519`);
+console.log(`  The band is (519, 599]. ⚠️ Dress and abaya prices are PROPOSALS -- set the`);
+console.log(`  dress price before this, or a cheaper dress silently breaks the threshold.`);
+
+const BASKETS2 = [
+  ["Shirt + trousers", ["Shirt", "Pants"], 968],
+  ["Shirt + shirt", ["Shirt", "Shirt"], 898],
+  ["Abaya + gilet", ["Abaya", "Gilet"], 1169],
+  ["Abaya + gilet + shirt", ["Abaya", "Gilet", "Shirt"], 1618],
+];
+console.log(`\n  A FITTING AT ${FIT} vs 10% OFF — what each costs you on the same basket`);
+console.log(`  ${"basket".padEnd(24)}${"list".padStart(7)}${"10% off".padStart(9)}${"fitting".padStart(9)}${"fitting wins by".padStart(17)}`);
+for (const [name, parts, price] of BASKETS2) {
+  const disc = orderEcon(parts, Math.round(price * 0.9)).gross;
+  const fit = orderEcon(parts, price, FIT).gross;
+  const d = fit - disc;
+  console.log(`  ${name.padEnd(24)}${price.toFixed(0).padStart(7)}${disc.toFixed(0).padStart(9)}${fit.toFixed(0).padStart(9)}${((d >= 0 ? "+" : "") + d.toFixed(0)).padStart(17)}`);
+}
+console.log(`  At ${FIT} the fitting is cheaper than a discount on EVERY basket, and the gap widens`);
+console.log(`  as baskets grow, because the fitting is FLAT and a percentage is not. It also`);
+console.log(`  cannot be guessed or shared the way a promo code can, and it is paid ONCE per`);
+console.log(`  customer where a discount is paid on every order forever.`);
+
+const oneShirt = orderEcon(["Shirt"], SHIRT_PRICE);
+const pairFit = orderEcon(["Shirt", "Pants"], 968, FIT);
+console.log(`\n  AND IT PAYS FOR ITSELF AS RISK CONTROL. A remake costs the make plus a second`);
+console.log(`  shipment, and it scales with the order the fitting is gating:`);
+console.log(`    remake on one shirt        ${oneShirt.remakeCost.toFixed(0).padStart(5)} AED`);
+console.log(`    remake on shirt + trousers ${pairFit.remakeCost.toFixed(0).padStart(5)} AED   <- ${FIT} of fitting against ${pairFit.remakeCost.toFixed(0)} of risk`);
+console.log(`  Buyers under the threshold are not left bare: they keep the per-garment fit`);
+console.log(`  guarantee that is already built. The fitting is the upgrade, not the floor.`);
+console.log(`\n  ⚠️ ONE QUALIFYING ORDER IS ONE HOUR. At 4 a week that is 4 hours; this offer`);
+console.log(`     does not survive volume. Word it "by appointment" so it can be capped.`);
+console.log(`  ✅ NOTHING BLOCKS IT. The cart already holds many lines with quantities and`);
+console.log(`     /api/orders takes items[] up to MAX_ITEMS=20. planning/frontend-todo.md`);
+console.log(`     claimed "currently built single-item" for weeks; that was stale and was`);
+console.log(`     believed without opening the code. Verify, do not inherit.`);
+
+console.log(`\nNEW ITEMS — the price each one needs  (linen at ${REF_PER_M.toFixed(2)}/m, 1 EUR = ${EUR_AED} AED)`);
+console.log(`  Benchmark is the SHIPPING shirt: ${REF_PRICE} at ${pct(BENCH)}. Stitching marked ⏳ is not quoted.`);
+console.log(`  ${"item".padEnd(10)}${"m".padStart(5)}${"cloth".padStart(8)}${"stitch".padStart(8)}${"make".padStart(8)}${"@bench".padStart(9)}${"@60%".padStart(8)}   EUR @bench`);
+for (const cat of ["Dress", "Abaya", "Gilet"]) {
+  const m = INPUTS.metresPerGarment[cat], t = INPUTS.tailoringAed[cat];
+  const cloth = m * REF_PER_M;
+  const quoted = cat === "Dress" ? " " : "⏳";
+  console.log(`  ${cat.padEnd(10)}${m.toFixed(1).padStart(5)}${cloth.toFixed(0).padStart(8)}${(quoted + t).padStart(8)}${(cloth + t).toFixed(0).padStart(8)}${priceFor(cat, BENCH).toFixed(0).padStart(9)}${priceFor(cat, 0.6).toFixed(0).padStart(8)}   ${(priceFor(cat, BENCH) / EUR_AED).toFixed(0).padStart(5)}`);
+}
+
+console.log(`\nTHE ABAYA QUESTION — what stitching does a ${(130 * EUR_AED).toFixed(0)} AED (130 EUR) abaya afford?`);
+console.log(`  ${"metres".padStart(7)}${"cloth".padStart(8)}${"@bench".padStart(9)}${"@50%".padStart(8)}${"@45%".padStart(8)}`);
+for (const m of [2.8, 3.0, 3.2, 3.5]) {
+  const saveM = INPUTS.metresPerGarment.Abaya;
+  INPUTS.metresPerGarment.Abaya = m;
+  const p = 130 * EUR_AED;
+  console.log(`  ${m.toFixed(1).padStart(7)}${(m * REF_PER_M).toFixed(0).padStart(8)}${tailoringFor("Abaya", p, BENCH).toFixed(0).padStart(9)}${tailoringFor("Abaya", p, 0.5).toFixed(0).padStart(8)}${tailoringFor("Abaya", p, 0.45).toFixed(0).padStart(8)}`);
+  INPUTS.metresPerGarment.Abaya = saveM;
+}
+console.log(`  Read it as a CEILING: the most the tailor can charge and still hit that margin.`);
+console.log(`  A negative number means the price cannot carry the cloth at all.`);
+console.log(`  ⚠️ 130 EUR is a EUROPEAN price and this sells in AED. It is a sanity check,`);
+console.log(`     not a price — check it against what an abaya actually sells for here.`);
+
 console.log(`\nPENDING INPUTS — every one of these moves the numbers above`);
-console.log(`  1. Fitoor: one care-label design not two, and the bag at 500x400 drawstring`);
+console.log(`  1. Fitoor: one care-label design not two, and the invoice name "Shakalek"`);
 console.log(`  2. Cotton bag at 300/500 units    (${bagLine.aed} agreed at 100; each AED = ~0.26 margin pts)`);
 console.log(`  3. Metres per garment             (PLACEHOLDER since 2026-08-28)`);
 console.log(`  4. Stripe UAE's actual fee        (assumed 2.9% + 1)`);

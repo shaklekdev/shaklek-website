@@ -25,7 +25,7 @@ export type NotifyOrderItem = {
   name: string;
   // Units of this line. Server-resolved before it reaches here (see
   // src/lib/pricing.ts) -- shown so a two-garment line doesn't read to the
-  // stylist as one. Optional because the /upload path builds this shape
+  // stylist as one. Optional because the removed /upload path built this shape
   // directly and pre-quantity orders have none.
   quantity?: number;
   fabric: string | null;

@@ -1,8 +1,8 @@
 import type { SilhouetteChange, SilhouetteChangeType } from "@/data/designSpec";
 
 // Fixed, per-garment slider parameters for Step 2 — replaces freeform chat
-// customization for catalog items (upload-your-own still uses CustomizeChat,
-// since there's no fixed base style to define sliders against). Every
+// customization for catalog items. (The upload-your-own page had its own
+// freeform chat; both were removed on 2026-09-12.) Every
 // slider position × every color is meant to be pre-renderable, so the
 // option lists are deliberately small and fixed, not open-ended.
 
@@ -131,9 +131,113 @@ export const PANTS_PARAMS: SliderParam[] = [
   },
 ];
 
+// ---------------------------------------------------------------------------
+// DRESS and ABAYA. Added 2026-09-12, BEFORE any photography exists -- on
+// purpose. `comboKeyForCategory` builds the photo lookup key from the option
+// VALUES below, so settling this vocabulary first is what stops a rename later
+// from orphaning every generated image. That is exactly what the trouser
+// vocabulary change cost on 2026-08-22.
+//
+// Both matrices are deliberately 2x2 (sleeve x length), the same shape the
+// trouser recipe was proven on. Four cells, of which the default is the base
+// photo and is NEVER generated, leaving three per colourway. Anything richer
+// multiplies the generation bill without adding a decision a customer makes.
+//
+// SLEEVE IS DECLARED FIRST IN BOTH, so the key reads `sleeve:length` -- the
+// same order as SHIRT_PARAMS. Keep it that way; the key is positional.
+export const DRESS_PARAMS: SliderParam[] = [
+  {
+    name: "Sleeves",
+    type: "sleeve_length",
+    tier: "render",
+    options: [
+      { value: "short", text: "Short" },
+      { value: "long", text: "Long" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => `${text} sleeves`,
+  },
+  {
+    name: "Length",
+    type: "garment_length",
+    tier: "render",
+    options: [
+      { value: "midi", text: "Midi" },
+      { value: "maxi", text: "Maxi" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => `${text} length`,
+  },
+  {
+    name: "Neckline",
+    type: "neckline",
+    tier: "premium",
+    options: [
+      { value: "round", text: "Round" },
+      { value: "v", text: "V-neck" },
+    ],
+    defaultIndex: 0,
+    labelFor: (text) => `${text} neckline`,
+  },
+  {
+    name: "Pockets",
+    type: "pocket",
+    tier: "premium",
+    options: [
+      { value: "0", text: "No pockets" },
+      { value: "2", text: "Side seam pockets" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => text,
+  },
+];
+
+// The abaya is worn OPEN over another garment, so it has no closure slider and
+// never gets one -- a fastening would change what the piece is. Its sleeve
+// vocabulary is cropped/full rather than the dress's short/long because the
+// sleeve of an open layer is judged against the sleeve underneath it, not
+// against the arm.
+export const ABAYA_PARAMS: SliderParam[] = [
+  {
+    name: "Sleeves",
+    type: "sleeve_length",
+    tier: "render",
+    options: [
+      { value: "cropped", text: "Cropped" },
+      { value: "full", text: "Full" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => `${text} sleeves`,
+  },
+  {
+    name: "Length",
+    type: "garment_length",
+    tier: "render",
+    options: [
+      { value: "midi", text: "Midi" },
+      { value: "maxi", text: "Maxi" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => `${text} length`,
+  },
+  {
+    name: "Pockets",
+    type: "pocket",
+    tier: "premium",
+    options: [
+      { value: "0", text: "No pockets" },
+      { value: "2", text: "Side seam pockets" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => text,
+  },
+];
+
 export function paramsForCategory(category: string): SliderParam[] | null {
   if (category === "Shirt") return SHIRT_PARAMS;
   if (category === "Pants") return PANTS_PARAMS;
+  if (category === "Dress") return DRESS_PARAMS;
+  if (category === "Abaya") return ABAYA_PARAMS;
   return null;
 }
 

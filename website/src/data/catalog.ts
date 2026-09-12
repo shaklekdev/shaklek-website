@@ -3,7 +3,7 @@ export type DressTier = "standard" | "elaborate";
 export type CatalogItem = {
   slug: string;
   name: string;
-  category: "Shirt" | "Skirt" | "Pants" | "Dress";
+  category: "Shirt" | "Skirt" | "Pants" | "Dress" | "Abaya";
   price: number;
   descriptor: string;
   badge?: "TRENDING" | "NEW";
@@ -45,13 +45,25 @@ export type CatalogItem = {
 // offer, and WELCOME20 is deactivated in live Stripe with 0 redemptions.
 // Supersedes the dossier's Section 9 ladder (290/320/350/490 + elaborate 670);
 // the elaborate dress tier is dropped -- simple designs only.
-// Same fixed tiers apply to uploaded designs, by category — no separate
-// stylist quote needed, matching how catalog items are priced.
+// ⚠️ DISPLAY ONLY, AS OF 2026-09-12. Nothing charges off this any more.
+// `/upload` was removed and `src/lib/pricing.ts` now prices EVERY line from a
+// real catalogue slug, so this ladder is read by `/faq` and nowhere else.
+// Keep it true anyway -- it is a published price list.
+// It sat at 389/419/429/619 from 2026-08-26 to 2026-09-12 while the catalogue
+// below moved to 449/519 on 2026-09-08 -- so an uploaded shirt was sold at 389
+// and uploaded trousers at 429, 60 and 90 AED under the same garment bought
+// from the catalogue, and the FAQ published the old ladder as fact.
+// KEEP THESE IN STEP WITH THE ITEMS BELOW. A price lives in exactly two places
+// in this file and they must agree.
 export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
-  Shirt: 389,
-  Skirt: 419,
-  Pants: 429,
-  Dress: 619,
+  Shirt: 449,
+  Skirt: 449, // no skirt ships yet; less cloth than a shirt, more stitching, so it lands on the same number
+  Pants: 519,
+  Dress: 599, // decided 2026-09-12, ~54% margin. No dress ships yet -- see planning/margins.mjs
+  Abaya: 690, // decided 2026-09-12, ~55.5% margin. ⏳ ASSUMES 100 AED stitching, which the
+              // tailor has NOT quoted -- the only estimate left in the ladder. Re-run
+              // planning/margins.mjs when he does. 130 EUR (554) would be 45.3%, ten points
+              // under everything else, which is why it is 690 and not a euro-converted number.
 };
 
 export const catalog: CatalogItem[] = [

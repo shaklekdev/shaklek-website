@@ -30,6 +30,29 @@ removed. So while production is closed:
 
 ## TO LAUNCH — do these together, in this order
 
+0. ⚠️ **TURN THE STORE ON. IT IS OFF IN CODE NOW, AND IT FAILS CLOSED.**
+   Added 2026-09-12 with the "launching soon" page: `/api/orders` refuses every
+   order with a 503 unless `STORE_OPEN === "true"`. The polarity is deliberate —
+   a variable that never reaches the app means CLOSED, so the switch cannot fail
+   open. But that means **four steps, not one**, and the console is only one of
+   them:
+
+   ```bash
+   # 1. the buildspec allowlist -- a console-only variable never reaches the app
+   aws amplify get-app --app-id dqcptedylrif0 --query 'app.buildSpec' --output text | grep -o 'env | grep.*'
+   #    add  -e STORE_OPEN  to that grep, then update-app
+   # 2. set STORE_OPEN=true in Amplify → environment variables
+   # 3. REDEPLOY -- the build spec is read at build time
+   # 4. prove the RUNNING APP sees it, not the console:
+   curl -s -o /dev/null -w "%{http_code}\n" -X POST https://www.shaklek.com/api/orders \
+     -H 'Origin: https://www.shaklek.com' -H 'Content-Type: application/json' -d '{}'
+   #    400 = store is OPEN and rejected an empty body.  503 = still shut.
+   ```
+
+   **The failure mode if this is missed is a live site with a dead Buy button
+   and no error anyone can interpret.** It is step 0 because it is the one that
+   looks done when it is not.
+
 1. **Re-enable the reconcile job.** Do this FIRST so it is not forgotten:
    ```bash
    aws events enable-rule --name shaklek-reconcile-daily
@@ -73,8 +96,19 @@ card-taking site: staging first, and the webhook routes must stay reachable.
 
 ## Still open before launch (see session-log for detail)
 
-- `/upload` is live and indexed and loses the customer's photo — remove it or
-  build storage. **Decide before the gate comes down.**
+- ✅ ~~`/upload` is live and indexed and loses the customer's photo.~~
+  **REMOVED ENTIRELY, founder's decision 2026-09-12.** Gone: `src/app/upload/`,
+  `src/components/CustomizeChat.tsx`, `src/lib/customizeParser.ts`,
+  `src/app/api/customize/` and the sitemap entry.
+- ✅ **EVERY ORDER LINE NOW MUST MATCH A REAL CATALOGUE SLUG.** With `/upload`
+  gone, `pricing.ts` lost its slugless, category-priced branch. That branch was
+  behind three separate defects found in one day: having a PRICE was the same as
+  being ON SALE (Skirt 449, Dress 599 and a same-day Abaya 690 were all
+  purchasable with no product and no quoted stitching); its ladder went stale at
+  389/419/429/619 while the catalogue moved to 449/519, selling uploads 60-90
+  under; and `in` on that ladder let prototype keys through as categories.
+  One root cause — a second source of truth for price. There is now one.
+  ⚠️ **If custom work returns, give it a real catalogue entry with a slug.**
 - The pricing reopen: packaging is 36.15/order, not 2, so margins are 56–61%
   against a 65–72% band.
 - DET advertising permit before ANY discount campaign is advertised.

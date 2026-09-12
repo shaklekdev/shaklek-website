@@ -86,6 +86,7 @@ export const FIT_GARMENTS: Record<CatalogCategory, FitGarment> = {
   Pants: { id: "trousers", label: "Trousers", hasSleeves: false },
   Skirt: { id: "skirt", label: "A skirt", hasSleeves: false },
   Dress: { id: "dress", label: "A dress", hasSleeves: true },
+  Abaya: { id: "abaya", label: "An abaya", hasSleeves: true },
 };
 
 export const FIT_GARMENT_LIST: (FitGarment & { category: CatalogCategory })[] =

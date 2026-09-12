@@ -1,4 +1,4 @@
-import { catalog, BASE_PRICE_BY_CATEGORY, type CatalogItem } from "@/data/catalog";
+import { catalog, type CatalogItem } from "@/data/catalog";
 
 // The server-side pricing authority. NOTHING about money may come from the
 // request body -- /api/orders used to pass items[].price straight into
@@ -49,37 +49,40 @@ export type PricedItem = {
 
 const bySlug = new Map<string, CatalogItem>(catalog.map((item) => [item.slug, item]));
 
-function isPricedCategory(value: unknown): value is keyof typeof BASE_PRICE_BY_CATEGORY {
-  return typeof value === "string" && value in BASE_PRICE_BY_CATEGORY;
-}
-
-// Uploaded designs (src/app/upload/page.tsx) legitimately carry no slug --
-// they are priced off the category ladder instead, the same fixed tiers as
-// catalog items. Everything else must match a real catalog slug.
+// EVERY ORDER LINE MUST MATCH A REAL CATALOGUE ITEM. There is no other way to
+// price anything, and that is the point.
+//
+// Until 2026-09-12 a line could carry NO slug and be priced off a per-category
+// ladder instead, for the /upload "send us your own design" page. That page is
+// gone (founder's decision, 2026-09-12) and the slugless branch went with it.
+// It is worth recording what that branch actually cost, because it looked
+// harmless for weeks:
+//   - having a PRICE in the ladder was the same as being ON SALE, so Skirt
+//     (449), Dress (599) and a same-day Abaya (690) were all purchasable with
+//     no product, no photography and no quoted stitching
+//   - the ladder itself went stale at 389/419/429/619 while the catalogue moved
+//     to 449/519, so uploads sold 60-90 AED under the same garment
+//   - `in` on that ladder let prototype keys through as categories, writing
+//     orders rows with a NaN total
+// All three were the same root cause: a second, parallel source of truth for
+// price. Now there is one, `catalog.ts`, keyed by slug.
+//
+// ⚠️ DO NOT REINTRODUCE A CATEGORY-PRICED PATH. If custom work comes back, give
+// it a real catalogue entry with a slug and a price, like everything else.
 export function resolveItem(item: IncomingItem): PricedItem | null {
-  const slug = typeof item.slug === "string" ? item.slug : "";
   const quantity = resolveQuantity(item.quantity);
   if (quantity === null) return null;
 
-  if (slug) {
-    const catalogItem = bySlug.get(slug);
-    if (!catalogItem) return null;
-    return {
-      slug: catalogItem.slug,
-      quantity,
-      name: catalogItem.name,
-      category: catalogItem.category,
-      price: catalogItem.price,
-    };
-  }
+  const slug = typeof item.slug === "string" ? item.slug : "";
+  const catalogItem = slug ? bySlug.get(slug) : undefined;
+  if (!catalogItem) return null;
 
-  if (!isPricedCategory(item.category)) return null;
   return {
-    slug: "",
+    slug: catalogItem.slug,
     quantity,
-    name: `Custom ${item.category}`,
-    category: item.category,
-    price: BASE_PRICE_BY_CATEGORY[item.category],
+    name: catalogItem.name,
+    category: catalogItem.category,
+    price: catalogItem.price,
   };
 }
 

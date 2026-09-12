@@ -45,7 +45,7 @@ Ordered by whether the launch can happen without it.
 
 | Element | Spec | Qty (first run) | Est. AED/unit | Notes |
 |---|---|---|---|---|
-| **Fabric bag** | Cotton or linen drawstring, garment-sized, **landscape ~50x40cm**. Logo one side. | 100–200 | 6–11 | **The centrepiece.** Reusable, on-brand, doubles as the "box". Cheaper per unit at 200. |
+| **Fabric bag** | Cotton, garment-sized, **portrait 350 x 450 mm, with a handle**. Logo one side. | 100–200 | 17 | **The centrepiece.** Reusable, on-brand, doubles as the "box". Cheaper per unit at 200. |
 | **Paper wrap** | Unbleached tissue, ~50x70cm, logo repeat or a single stamp | 500 | 0.2–0.5 | Only needed because there is no box. Two sheets per garment. |
 | **Brand label** | Woven, sewn into the garment. **No size on it** (founder). | 500 min | 0.8–2.0 | Woven minimums are high; 500 is usually the floor. See the size note below. |
 | **Mailer** | Recycled kraft or reusable poly, AE courier-rated | 200 | 1.5–3 | The bit the customer never keeps. Do not spend here. |
@@ -182,7 +182,7 @@ spec sheet checks itself against those files on every build.
 
 | Item | Size | Material | Note |
 |---|---|---|---|
-| Linen bag | **500 x 400 mm (LANDSCAPE)** | cotton or linen | the centrepiece; replaces a box |
+| Cotton bag | **350 x 450 mm (PORTRAIT), with a handle** | cotton | the centrepiece; replaces a box |
 | Woven brand label | 45 x 18 mm | woven | no size, no care text |
 | Care label | 25 x 45 mm | satin, side seam | dry clean only, Arabic required |
 | Hang tag | 50 x 90 mm | uncoated card 300 gsm | double sided, bulk stock |
@@ -223,7 +223,18 @@ Same C6 sheet and the same price either way, so nothing is saved by getting it
 wrong — a pocket envelope in this parcel simply reads as post rather than as a
 note. **State "C6 wallet, landscape" when ordering; "C6" alone does not say it.**
 
-**The cotton bag is LANDSCAPE, 500 x 400 mm.** Founder, 2026-08-29. It is the
+> ⚠️ **SUPERSEDED 2026-09-10, RE-CONFIRMED 2026-09-12. THE BAG IS 350 x 450 mm
+> PORTRAIT, WITH A HANDLE** — what Fitoor quoted and what the 17 AED is priced
+> against. The founder chose the smaller bag deliberately, **as a price
+> decision**, and `08-linen-bag-print.pdf` was rebuilt to 350x450 portrait to
+> match it.
+>
+> **DO NOT RE-RAISE 500 x 400 LANDSCAPE DRAWSTRING WITH FITOOR.** It would
+> reverse her decision, orphan the print file, and reopen a settled price in
+> the middle of production. The paragraphs below are kept only because the
+> *proportional placement* lesson in them is still true and still bit us once.
+
+**[HISTORIC] The cotton bag is LANDSCAPE, 500 x 400 mm.** Founder, 2026-08-29. It is the
 same rectangle turned on its side — same cloth, same area, same long edge — so
 the fold, the mailer minimum and the cost are all unchanged. The one thing it
 did move is `08-linen-bag-print.pdf`, because the mark is placed as a fraction

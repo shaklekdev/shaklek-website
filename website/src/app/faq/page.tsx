@@ -119,9 +119,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         One fixed price per category, whatever your size or measurements: shirts
-        AED {BASE_PRICE_BY_CATEGORY.Shirt}, skirts {BASE_PRICE_BY_CATEGORY.Skirt}
-        , trousers {BASE_PRICE_BY_CATEGORY.Pants}, dresses{" "}
-        {BASE_PRICE_BY_CATEGORY.Dress}. Fabric, every option on the piece and
+        AED {BASE_PRICE_BY_CATEGORY.Shirt} and trousers{" "}
+        {BASE_PRICE_BY_CATEGORY.Pants}. Fabric, every option on the piece and
         delivery are all included. No quotes, and no surprises at checkout.
       </>
     ),

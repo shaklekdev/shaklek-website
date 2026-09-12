@@ -18,7 +18,7 @@ export type BaseSource =
 // module.
 export type { Fabric };
 
-export type GarmentType = "Shirt" | "Skirt" | "Pants" | "Dress" | "Unspecified";
+export type GarmentType = "Shirt" | "Skirt" | "Pants" | "Dress" | "Abaya" | "Unspecified";
 
 export type SilhouetteChangeType =
   | "sleeve_length"

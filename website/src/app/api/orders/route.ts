@@ -95,7 +95,15 @@ async function persistOrder(
     customer ??
     (await db.select().from(schema.customers).where(eq(schema.customers.email, emailKey)))[0];
 
-  const [orderRow] = await db
+  // ONE TRANSACTION FOR THE ORDER AND ITS LINES. Without it the orders row
+  // committed first, and any failure in the line-item insert left a
+  // `pending_payment` order with a total, no items and no Stripe session id --
+  // a row nothing expires, nothing reconciles, and the dashboard renders as a
+  // real pending sale. Found by the security review, 2026-09-12. The customer
+  // upsert stays outside: it is idempotent and a customer with no order is
+  // harmless, where an order with no lines is not.
+  return await db.transaction(async (tx) => {
+  const [orderRow] = await tx
     .insert(schema.orders)
     .values({
       customerId: customerRow.id,
@@ -104,7 +112,7 @@ async function persistOrder(
     })
     .returning();
 
-  await db.insert(schema.orderItems).values(
+  await tx.insert(schema.orderItems).values(
     items.flatMap((item, index) =>
       Array.from({ length: priced[index].quantity }, () => ({
         orderId: orderRow.id,
@@ -132,6 +140,7 @@ async function persistOrder(
   );
 
   return orderRow.id as string;
+  });
 }
 
 // Receives checkout data from CheckoutForm. Two modes:
@@ -147,7 +156,46 @@ async function persistOrder(
 // SECURITY: the request body is untrusted. `items[].price` and `total` are
 // read only to be compared against the server's own figures -- see
 // src/lib/pricing.ts. They never reach Stripe or the database.
+// THE STORE KILL SWITCH. Added 2026-09-12 for the public "launching soon"
+// page: the site becomes reachable before it is sellable, and a routing rule
+// alone must not be the only thing standing between a visitor and a live card
+// charge for a garment we cannot cut until the fabric lands (27 Sept - 1 Oct).
+//
+// ⚠️ THE POLARITY IS THE WHOLE POINT: `=== "true"`, NEVER `!== "false"`.
+// Amplify's buildspec carries an explicit allowlist --
+//   env | grep -e DATABASE_URL -e STRIPE_SECRET_KEY ... >> .env.production
+// -- and STORE_OPEN is NOT in it as of 2026-09-12. A variable set in the
+// console but missing from that grep is simply undefined in the running app
+// (this cost an hour on RECONCILE_TOKEN, see CLAUDE.md). Written as
+// `!== "false"` an undefined value would mean OPEN, so the one failure mode we
+// cannot tolerate -- the switch never reaching production -- would leave
+// checkout live on a public site. Written this way it fails CLOSED.
+//
+// ⚠️ AND THEREFORE IT BREAKS LAUNCH DAY IF NOBODY DOES BOTH STEPS. To sell:
+//   1. add `-e STORE_OPEN` to the buildspec  (aws amplify update-app)
+//   2. set STORE_OPEN=true in the Amplify console
+//   3. redeploy -- the spec is read at BUILD time
+//   4. prove the running app sees it, not the console
+// This is written into planning/launch-checklist.md as a required step.
+function storeIsOpen(): boolean {
+  return process.env.STORE_OPEN === "true";
+}
+
 export async function POST(req: NextRequest) {
+  // Checked FIRST, before the rate limit and before anything is parsed: a shut
+  // store should cost nothing to refuse, and no code path below this line can
+  // reach Stripe or the database. GET /api/orders/:id is deliberately NOT
+  // gated -- a customer who already paid must still be able to see her order.
+  if (!storeIsOpen()) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "We are not open for orders yet. Leave your email and we will tell you the moment we are.",
+      },
+      { status: 503 },
+    );
+  }
+
   // Each accepted request creates a live Stripe session and can send email.
   // 10 per 10 minutes is far above any real customer's checkout rate.
   const limited = rateLimit(req, "orders", 10, 10 * 60 * 1000);
@@ -223,7 +271,16 @@ export async function POST(req: NextRequest) {
   // catalog disagree (a stale tab after a price change, or tampering), and
   // either way the customer should re-read the price before paying rather
   // than be silently charged a different number than the one on screen.
-  if (typeof total === "number" && Math.abs(total - serverTotal) > 0.01) {
+  // `Number.isFinite`, not `typeof === "number"`: NaN is a number, and
+  // `Math.abs(x - NaN) > 0.01` is false for every x, so a NaN total sailed
+  // through this guard rather than being caught by it. Belt and braces with the
+  // Object.hasOwn fix in pricing.ts -- a serverTotal that is not finite means
+  // the pricing step is broken and nothing should be persisted or charged.
+  if (!Number.isFinite(serverTotal)) {
+    console.error(`[orders] non-finite server total (${serverTotal}) -- refusing the order`);
+    return NextResponse.json({ ok: false, error: "We could not price this order." }, { status: 400 });
+  }
+  if (Number.isFinite(total) && Math.abs((total as number) - serverTotal) > 0.01) {
     console.warn(`[orders] total mismatch: client sent ${total}, catalog says ${serverTotal}`);
     return NextResponse.json(
       { ok: false, error: "Prices have changed since this cart was created. Please refresh." },

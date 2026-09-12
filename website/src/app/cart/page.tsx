@@ -135,10 +135,11 @@ export default function CartPage() {
                 </div>
 
                 <div className="mt-2 flex gap-4">
-                  {/* Uploaded designs carry no catalog slug (see
-                      src/app/upload/page.tsx) -- there is no /design page to
-                      send them back to, so they stay uneditable rather than
-                      getting a link that 404s. */}
+                  {/* Kept after /upload was removed on 2026-09-12. Slugless
+                      lines can no longer be created and readStoredCart drops
+                      any that were stored, so this is now always true -- but a
+                      guard that stops a link 404ing costs nothing and the next
+                      slugless thing would find it already here. */}
                   {item.slug && (
                     <Link
                       href={`/design/${item.slug}?edit=${item.id}`}

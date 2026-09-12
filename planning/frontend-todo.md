@@ -144,9 +144,22 @@ Resolution 66/2023 Art. 40 disclosure in Arabic on every product page. This is
 growth, not law.
 
 ## Open decisions
-- [ ] **Multi-item cart or one-design-at-a-time checkout?** Currently built single-item — flagged to the founder, not yet decided. This affects checkout, order data shape, and confirmation copy if it changes.
+- [x] ~~**Multi-item cart or one-design-at-a-time checkout?**~~ ✅ **RESOLVED — IT IS MULTI-ITEM AND ALWAYS HAS BEEN.** Corrected 2026-09-12. `src/app/cart/page.tsx` holds many lines with per-line quantities, and `/api/orders` takes an `items[]` array up to `MAX_ITEMS = 20`, writing one `order_items` row per line. ⚠️ This entry read "currently built single-item" for weeks and was taken at face value in a pricing session, which nearly sank the 850 fitting threshold as "unreachable". Check the code, not this file.
 
 ## To build
+- [ ] ⭐ **"Complete the look" on every product page — the highest-value UI change on the money side.** Founder, 2026-09-12. Under each item, show the rest of the outfit so the customer can add it in the same order:
+  - **Trousers** → the matching shirt, and an abaya worn open on top
+  - **Shirt** → the matching trousers, and an abaya worn open on top
+  - **Abaya** → a matching dress, or a matching shirt + trousers set
+
+  **Why this and not a generic "you may also like".** A second garment in the same order earns ~71% margin, because packaging (37.74) and shipping (21) are already paid, and it shares one cost of acquisition. It is also what makes the **550 fitting threshold** reachable: a shirt at 449 does not qualify, a shirt plus anything does. Run `node planning/margins.mjs` for the current figures.
+
+  **The picture does the selling, not the widget.** A rail of separate cut-out product photos is a related-products list and reads as one. What sells the set is ONE photograph of the whole look on one model — which is why the photography note below is the real dependency, not the component.
+
+  **Data shape.** Needs a way to say "these go together" in `catalog.ts`. Two options, decide before building: a `pairsWith: string[]` of slugs per item (simple, but every pair has to be listed twice and stays in sync by hand), or a `looks` table — a named set of slugs plus the one photograph of them worn together (a look is authored once and every item in it links back to the same image). **The looks table is the better fit** precisely because the selling unit is the photograph, not the pair.
+
+  ✅ **Dye lot is not a concern and should not be re-raised.** Founder, 2026-09-12: there is ONE lot. The 124m ordered from Shirley is a single roll per colour (White 22m, Ivory 43m, Navy 32m, Burgundy 27m), so every garment cut this season matches by construction and "matching" is safe to use in copy. This only becomes a question on a REORDER, which must quote the mill's shade codes — #3 White, #4 Ivory, #440 Navy, #29 Burgundy.
+
 - [x] **Replace the chat-based Step 2 customizer with slider-based parameters.** Built 2026-08-16: `src/data/parameterSliders.ts` (fixed per-category slider specs), `src/components/CustomizeParameters.tsx` (new component, used by `DesignCustomizer.tsx` for catalog items only). Shirt: sleeves, pockets, closure, length. Pants: leg width, length, waist, closure, pockets. `CustomizeChat.tsx` (freeform, AI-parsed) is kept as-is and still used by `/upload`, since uploaded reference photos don't have a fixed base style to define sliders against. Verified end-to-end: slider selections flow into cart/checkout as readable labels (e.g. "Straight leg, Full length, Normal waist, Button fly, Pockets").
 - [x] **Remove the linen upcharge.** Done 2026-08-16: `LINEN_UPCHARGE` removed from `src/data/colors.ts` and all 4 call sites (`DesignCustomizer.tsx`, `upload/page.tsx` ×2, `FabricColorPicker.tsx`). Fabric picker now reads "Linen" / "Organic cotton" with no price difference; linen is the default (only linen gets pre-rendered).
 - [x] **Customer accounts / order history** — built 2026-08-16: `/account` has order history, saved measurements and name, behind Clerk. Only the richer "my wardrobe" framing below is still open. Original note: — "my wardrobe" page (dossier §10's retention loop depends on this existing) — depends on auth being built (see `payment-auth-todo.md`)

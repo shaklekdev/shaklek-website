@@ -2,7 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
 
-// Shaklek+ early-access signups.
+// Waitlist signups. TWO sources as of 2026-09-12: Shaklek+ early access, and
+// the pre-launch page (source "coming-soon").
+//
+// ⚠️ WHERE AN ADDRESS ACTUALLY GOES, since this is the whole answer to "where
+// do we store it": NOWHERE BUT AN INBOX. Each signup is one email to
+// hello@shaklek.com via Resend, with reply-to set to the address that signed
+// up so a reply goes straight back to her. No table, no export, no list.
+//
+// ⏳ THAT STOPS BEING SOUND THE DAY THE PRE-LAUNCH PAGE GETS TRAFFIC. To tell
+// two hundred people "we are open", somebody has to find two hundred emails in
+// an inbox and retype the addresses. Fix it BEFORE driving traffic, and prefer
+// Resend Audiences to a table: it dedupes, it stores, and it sends the
+// broadcast. It needs an audience id, which means the build spec allowlist AND
+// the console AND a redeploy -- see the RECONCILE_TOKEN warning in CLAUDE.md.
+//
+// ⚠️ AND A SIGNUP IS LOST IF RESEND IS DOWN. The caller gets an honest error
+// and can retry, but nothing queues it. Same fix.
 //
 // Deliberately no database table. There is no migrate step in the Amplify
 // build (see src/lib/envGuard.ts and planning/aws-infrastructure-todo.md), so a
@@ -69,8 +85,16 @@ export async function POST(req: NextRequest) {
       from: "Shaklek <orders@shaklek.com>",
       to: "hello@shaklek.com",
       reply_to: email,
-      subject: "Shaklek+ early access request",
-      text: `${email} asked for early access to Shaklek+.\nFrom: ${source}`,
+      // The subject carries the SOURCE, because this route now serves two
+      // different things: Shaklek+ early access, and the pre-launch page's
+      // "tell me when you open". They need different replies and will be read
+      // months apart, so an inbox search has to be able to separate them. Every
+      // signup said "Shaklek+ early access request" until 2026-09-12.
+      subject:
+        source === "coming-soon"
+          ? "Pre-launch signup (tell me when you open)"
+          : `Waitlist signup (${source})`,
+      text: `${email}\nSource: ${source}\nReceived: ${new Date().toISOString()}`,
     }),
   });
 

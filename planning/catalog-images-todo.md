@@ -70,7 +70,46 @@ dresses**, follow `CLAUDE.md` §4b as written:
 **Budget shape:** a clean item is roughly 30 generations, ~$1.50. Add ~$1.00 if
 the base photos need correcting first.
 
-### 3. Dresses (not started)
+### 3. The SET shots -- one photograph per look (founder, 2026-09-12)
+
+Every item's page has to show the rest of the outfit, so the customer adds the
+second piece to the same order. **The selling unit is one photograph of the
+whole look on one model, not a rail of cut-outs.** See the "Complete the look"
+entry in `frontend-todo.md` for why (a second garment earns ~71% margin and it
+is what makes the 550 fitting threshold reachable).
+
+What is needed, per colourway:
+
+- every **trousers** item worn with its matching shirt, and again with an
+  **open abaya over the top**
+- every **shirt** item worn with matching trousers, and again with an open abaya
+- every **abaya** worn over a matching dress, and over a shirt + trousers set
+
+**The abaya is the cheap half of this, and that is the whole trick.** It is worn
+OPEN over a look that has already been photographed, so it does not need its own
+full matrix per partner -- it is a layer added to an existing approved image.
+Generate the abaya once per colourway, then add it over each approved set shot
+with `edit2.mjs`, passing the approved set photo as the reference. Cross-colour
+references are safe (§4b), so one approved abaya shape carries across.
+
+⚠️ **Apply §4b's ordering rule to layering too:** settle the abaya's own
+silhouette on ONE approved image before putting it over anything, because every
+later layer inherits it. And pin the garment underneath by name in the prompt
+("the ivory shirt and wide-leg trousers already worn, unchanged") or the model
+will quietly redraw what is under the abaya.
+
+⚠️ **Do not over-generate.** The combinatorics explode if every pair is shot in
+every colour: 4 trousers x 4 shirts x 4 colours is 64 looks before an abaya is
+added. Pick a small set of looks that are actually worth selling -- one or two
+per item per colourway -- and let the customizer carry the rest. Agree the list
+with the founder BEFORE generating; a wrong batch costs twice.
+
+**Budget shape:** an abaya layer over an approved set shot is one edit, not a
+full item. Assume ~2 generations per look including a retry. Twenty looks is
+roughly 40 generations, ~$2.00, plus the dress and abaya items themselves at
+~$1.50 each.
+
+### 4. Dresses (not started)
 
 `category: "Dress"` exists in the `CatalogItem` type but no dress items exist
 yet. A dress matrix needs its own render-tier sliders alongside `SHIRT_PARAMS`

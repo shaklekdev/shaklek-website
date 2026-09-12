@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { MAX_QUANTITY_PER_ITEM } from "@/lib/pricing";
+import { catalog } from "@/data/catalog";
 
 export type CartItem = {
   id: string;
@@ -69,6 +70,24 @@ function isValidCartItem(value: unknown): value is CartItem {
   );
 }
 
+// RE-PRICE ON READ. A cart is stored in localStorage with the price that was
+// current when the line was added, and it can outlive a price change by weeks.
+// Before this, a stale cart rendered the old price, the server re-priced
+// correctly and refused the order with "Prices have changed since this cart was
+// created. Please refresh." -- and refreshing re-read the SAME stale price from
+// localStorage, so the customer was stuck in a loop with no way out but
+// clearing the line by hand. Found by the security review, 2026-09-12; it had
+// already happened silently to catalogue carts on 2026-09-08.
+//
+// This is a DISPLAY fix, not a security one: `src/lib/pricing.ts` has always
+// owned the real price and nothing here can influence what is charged. The
+// point is that the number on screen now matches the number the server will
+// charge, so the mismatch guard fires only on genuine tampering.
+function currentPrice(item: CartItem): number {
+  const catalogItem = catalog.find((c) => c.slug === item.slug);
+  return catalogItem ? catalogItem.price : item.price;
+}
+
 function readStoredCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
@@ -78,7 +97,11 @@ function readStoredCart(): CartItem[] {
     if (!Array.isArray(parsed)) return [];
     return parsed
       .filter(isValidCartItem)
-      .map((item) => ({ ...item, quantity: item.quantity ?? 1 }));
+      // Slugless lines came from /upload, removed 2026-09-12. The server can no
+      // longer price them, so a stored one would fail checkout with no way for
+      // the customer to see why -- drop it here instead.
+      .filter((item) => Boolean(item.slug))
+      .map((item) => ({ ...item, quantity: item.quantity ?? 1, price: currentPrice(item) }));
   } catch {
     return [];
   }
