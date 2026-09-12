@@ -152,6 +152,19 @@ export async function POST(req: NextRequest) {
       text: [
         "Thank you for asking.",
         "",
+        // One paragraph of brand before the ask. The email was doing two jobs
+        // with the ask winning, and a stranger who signed up an hour ago needs
+        // reminding what she signed up TO. Her three pillars in one sentence,
+        // the same claim as the business card she approved.
+        //
+        // ⚠️ Held to the claim rules in planning/marketing/personas.md: no
+        // price (pricing moved twice on 2026-09-12), no lead time (cut from
+        // advertising AND from the terms of sale the same day), no health
+        // claim, "made in the UAE" and never "100% made in the UAE" because the
+        // cloth is milled abroad, and never the word "sustainable".
+        "Shaklek is 100% linen, cut to your shape, and sewn here in the UAE after",
+        "you order it. Nothing is made before somebody wants it.",
+        "",
         "Confirm this is your address and we will write to you once, on the day",
         "the shop opens. Nothing else, ever.",
         "",
