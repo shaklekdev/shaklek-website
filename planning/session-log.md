@@ -120,6 +120,51 @@ stitching are still estimates; they are the only two numbers missing.
 - **Journal header**: while shut, `/blog` wears its own minimal header. It was
   rendering the full shop nav, every link of which rewrote to the splash.
 
+#### TOMORROW, in the order it pays
+
+**⚠️ FIRST, AND IT IS ONE ACTION: post.** Six videos and ~30 statics have been
+rendered since 2026-08-27 and nothing has gone out. The site is public, the
+captions are corrected to 449/519, the journal is indexed. Nothing is blocked.
+This is the only item whose value decays while it waits.
+
+1. **Prove the signup chain yourself, once.** Sign up on www.shaklek.com with a
+   real address, click the link, confirm you land on "That is confirmed.", and
+   check the mail client shows an unsubscribe. That is the one test that uses
+   live keys, and nobody has run it.
+2. **Rotate three secrets**: `RESEND_API_KEY` (printed in full in a terminal),
+   plus `RECONCILE_TOKEN` and `CLERK_WEBHOOK_SECRET` (a security agent's env
+   dump echoed them). None reached anything external; rotate anyway.
+3. **Price the dress at 649, not 599.** The tailor quoted 80-90 for a dress AND
+   an abaya, modelled at 90. That moved the dress DOWN to 52.2% -- the weakest
+   thing in the range -- and the abaya UP to 57.0%, the strongest. They now cost
+   the SAME to sew, so the gap between them is 0.2m of cloth and nothing else.
+   649 puts the dress back at 55.7%.
+   ⏳ **Gilet is the only unquoted number left.** Ask for it.
+4. **Submit the sitemap in Google Search Console.** The journal was opened to
+   earn ranking before October and indexing is the slow half.
+5. **Chase Fitoor** on the samples (due ~29 Sept) and the invoice name, which
+   still reads "Shakalek".
+6. **Shirley**: flax origin, the composition certificate for W300235, and
+   whether the invoice is on actual weight (~24kg against 30kg billed).
+7. **Check the rules on the UAE flag in advertising** -- it is on the
+   pre-launch page.
+
+**Then, when there is time rather than urgency:**
+
+- **Rewrite the three journal articles and add photography.** Full reasoning in
+  `planning/frontend-todo.md`. Three replacement angles proposed and awaiting
+  her reaction: "what to wear in Dubai in August", "how to measure yourself for
+  a made-to-measure shirt", and "made to measure in Dubai: what it costs and
+  how long it takes" (the last needs pricing settled first).
+- **Dress and abaya photography.** Sliders exist, vocabulary is settled, the
+  recipe is `CLAUDE.md` §4b. Needs her references, and a decided list of LOOKS
+  before anything is generated -- 4 trousers x 4 shirts x 4 colours is 64
+  before an abaya is layered on.
+- **Meta pixel on.** Built and inert. Every pre-launch week it stays off is an
+  audience not being built.
+- **`/feed/meta.xml` is blocked by the gate.** Correct today, needs opening at
+  launch for catalogue ads.
+
 #### ⏳ HERS
 
 1. **Rotate the Resend API key.** It was printed in full.
