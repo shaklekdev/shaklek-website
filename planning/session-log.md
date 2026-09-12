@@ -50,12 +50,19 @@ trousers, 100% linen only**. Both orders are PAID. Nothing is blocked on code.
 2. **The tailor.** Volume rate at 10/20/30 pieces a month (worth ~4.5 margin
    points), the measurement conventions agreed and written down, metres per
    garment. List in `planning/tailor-capacity.md`.
-3. **Read the Arabic** on the care label: `غسيل آلي لطيف`. Marked pending, not
-   approved, in `productDisclosure.ts`. Blocking 500 labels.
-4. **Fitoor:** samples were due about now. Check the cotton bag is **500x400
-   landscape, drawstring** — their quote still says 35x45 with a handle, and
-   50x40 is 27% more cloth, so settle the 17 before the balance. Invoice also
-   reads "Shakalek"; the company is **Shaklek For Online Selling**.
+3. ~~**Read the Arabic** on the care label.~~ ✅ **DONE 2026-09-10.** She read
+   `غسيل آلي لطيف` ("gentle machine wash": غسيل wash, آلي machine, لطيف gentle)
+   and approved it in her own words. `productDisclosure.ts` now says
+   FOUNDER-READ AND APPROVED, and the artwork's "needs a native reader" warning
+   is gone. **Labels are no longer blocked.**
+4. **Fitoor:** samples were due about now. Invoice reads "Shakalek"; the
+   company is **Shaklek For Online Selling**.
+   ⚠️ **DO NOT RE-RAISE THE BAG SIZE.** An earlier version of this line said to
+   push Fitoor back to 500x400 landscape drawstring. **The founder chose 35x45
+   with a handle deliberately, as a price decision** (her words, 2026-09-10),
+   and **our artwork was rebuilt to match it** — `08-linen-bag-print` is now
+   350x450 portrait. Arguing it back would undo her decision and orphan the
+   print file.
 5. **Shirley:** flax origin, the composition certificate naming W300235, and
    whether the invoice bills actual weight (she charged 30kg against ~24kg).
 
@@ -72,6 +79,27 @@ trousers, 100% linen only**. Both orders are PAID. Nothing is blocked on code.
 - **Care label → gentle machine wash 30.** Artwork regenerated.
 - **`planning/measurement-sheet.html` + `.pdf`** — A4, one page, in the tailor's
   exact labels.
+- **The remake pipeline, end to end** (2026-09-10, migrated and deployed;
+  Amplify job 316). A `delivered` status that stamps `orders.delivered_at`
+  ONCE, a per-garment fit guarantee that can be spent and given back from the
+  dashboard, and a survey that now knows WHICH garment it is about. Prod is at
+  migration **0009**, re-verified against `information_schema` 2026-09-12.
+  ⚠️ Feedback and returns are **two processes, deliberately**: the survey stays
+  pure feedback, returns stay on WhatsApp. Putting a remake request on the
+  survey poisons the only fit dataset there is and advertises the remedy to
+  people who were not going to ask — and remake rate is what a made-to-order
+  brand dies of. Full reasoning in the 2026-09-10 (later) entry.
+- **Hand bag artwork** (`11-hand-bag-print`). Fitoor quotes a one-colour print
+  on it and **no file existed** — eight lines quoted, seven with artwork.
+- **Every artwork quantity now matches the quote.** They were pre-quote
+  estimates and disagreed in seven places. Labels are per GARMENT at 500,
+  bags/tags/cards per PARCEL at 100.
+- **The business card became a prospecting tool**, not a contact card. Her line,
+  Latin only, one gold rule: *"Your skin breathing. Your clothes fitting. Made
+  in the UAE."* Three drafts were cut on truth: "100% plant based" is false of a
+  garment with buttons and a zip fly, "100% tailored" is false while standard
+  sizes sell at the same price, "100% made in the UAE" overreaches when the
+  cloth is milled in Guangzhou.
 - **Repo cleaned.** `planning/` is 8 live files plus `technical/` and
   `archive/`; `brand-assets/` keeps TIKTOK, INSTA and tailor-samples with the
   rest in `_archive/`. `planning/spend.md` is new.
@@ -85,6 +113,18 @@ trousers, 100% linen only**. Both orders are PAID. Nothing is blocked on code.
 - **Hiring tailors is off** until volume is past ~60–125 pieces a month.
 - **No catalogue photograph shows a sleeve worn DOWN** — every long-sleeve shot
   is rolled. Do not label anything "long sleeve".
+- **`send-to-packagin-supplier-final/` DOES NOT UPDATE ITSELF.** Editing a design
+  writes `branding/send-to-supplier/artwork/`; the send folder only changes when
+  `build-final-folder.mjs` runs. It was reported as current while four minutes
+  stale, twice in one evening. Run the whole chain from `website/`, in order:
+  `generate-packaging-artwork` → `generate-supplier-pdf` (the audit; it uses
+  cwd) → `generate-simple-spec` → `build-final-folder`.
+- **Regenerating artwork rewrites all 14 PDFs but usually moves only their
+  timestamps.** Committing that tells a supplier mid-production that artwork
+  changed when it did not. Revert the untouched ones per file, then re-run the
+  audit: if it still passes, they were timestamp-only. And note
+  `generate-supplier-pdf` rewrites `READ-ME-FIRST-Shaklek-artwork.pdf` on every
+  run, which will block a rebase.
 - **Cotton needs no commitment** — 25 AED/m buys it 2.2m at a time, 20 at 100m.
   It is added later at 389 as a price DROP, when there is evidence price is the
   objection.
@@ -94,6 +134,13 @@ trousers, 100% linen only**. Both orders are PAID. Nothing is blocked on code.
 `/upload` loses the customer's photo and is live in the sitemap. The Arabic blog
 (`frontend-todo.md`, adapt not translate). The measurement form collects 4 of
 the tailor's 17. `seo.ts` still says the apex 404s; it 301s.
+
+From the remake work: **nothing prompts her to mark an order delivered**, so
+`delivered_at` is only as good as the habit — a nudge on the dashboard after a
+few days in `shipped` would fix it. `/account` does not yet show which garment a
+feedback entry was about, now that the data exists. And **wash a swatch when the
+roll lands, before any label is SEWN IN** — pre-washed is Shirley's word, not a
+measurement, and above ~2% residual dry-clean-only goes back on.
 
 
 ### 2026-09-10 (evening) — the artwork now matches the order that was actually placed
@@ -195,7 +242,7 @@ GENTLE. The script was contradicting its own artwork **in the text a human reads
 to check that artwork**. Nothing failed; it would simply have told the next
 person the wrong thing.
 
-### 2026-09-10 (later) — the fit guarantee is now enforceable. ⚠️ PROD MIGRATION STILL PENDING.
+### 2026-09-10 (later) — the fit guarantee is now enforceable. ✅ MIGRATED AND DEPLOYED.
 
 **Committed, nothing held.** New: `website/drizzle/0008_delivery_and_fit_remake.sql`,
 `0009_order_items_order_id_idx.sql`, `website/src/components/FitRemakeButton.tsx`,
@@ -205,8 +252,13 @@ the status / spec-sheet / fit-feedback routes, `techPack.ts`, `fitFeedback.ts`,
 `FitFeedbackForm.tsx`, `OrderStatusButtons.tsx`, `dashboard/orders/page.tsx`,
 `scripts/test-techpack.mjs`.
 
-> ⚠️ **DO NOT PUSH UNTIL `node scripts/db-migrate.mjs --target=prod` HAS RUN.**
-> Dev is at 0009; **prod is still at 0007**. `db.select()` expands to an
+> ✅ **DONE, IN THE RIGHT ORDER, 2026-09-10.** Prod migrated first, verified
+> against `information_schema`, then pushed; Amplify job 316 SUCCEED. Prod is at
+> **0009** and carries all three columns — re-verified 2026-09-12. The warning
+> below is kept because the REASONING is what matters next time, not because
+> anything is outstanding.
+>
+> The original warning read: do not push until the migration has run. `db.select()` expands to an
 > explicit column list, so deploying first makes the **Stripe webhook** mark an
 > order `paid` and then 500 on the very next statement — Stripe retries, the
 > `pending_payment -> paid` gate swallows it, and the result is **a paid order
