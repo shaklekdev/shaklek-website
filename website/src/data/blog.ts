@@ -23,10 +23,23 @@
  * customer-facing writing.
  */
 
+/**
+ * ⚠️ `market: true` MARKS A PRICE THAT IS SOMEBODY ELSE'S, NOT OURS.
+ *
+ * The stale-price rules in scripts/social/copy-rules.mjs exist to stop us
+ * advertising a number the catalogue no longer charges, and they fire on any
+ * "from AED 3xx" because on a social post every price is ours. An article
+ * about what the Dubai market charges is the one place that is wrong: quoting
+ * the shop floor at 300 is the point of the piece.
+ *
+ * So this flag suppresses ONLY the stale-price rules, ONLY on the block that
+ * carries it, and lint-blog.mjs PRINTS every skip so a silent exemption cannot
+ * accumulate. Never put it on a block describing a Shaklek price.
+ */
 export type Block =
-  | { type: "p"; text: string }
+  | { type: "p"; text: string; market?: boolean }
   | { type: "h2"; text: string }
-  | { type: "h3"; text: string }
+  | { type: "h3"; text: string; market?: boolean }
   | { type: "ul"; items: string[] }
   | { type: "callout"; text: string }
   /** A line worth stopping on. Breaks up a long read; use sparingly, once or
@@ -306,7 +319,7 @@ export const articles: Article[] = [
         // at 95 in Deira and 420 in Mall of the Emirates, a 340% spread on
         // location alone. So the honest answer is the band somebody actually
         // buys in, with the floor named as what it is and where it is.
-        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear is AED 300 to 600 in Dubai. There is a floor below that, around 80 to 150, but it is basic polyester on a souq rail, and the same piece that is 95 in Deira is 420 in a mall boutique. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350, before the cloth. A full custom piece, where somebody sources the fabric and makes it to your measurements, typically starts at AED 800 and climbs past AED 5,000.",
+        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear starts around AED 300, and there is no ceiling. Dubai's known boutique labels sit at AED 800 to 3,000 and the designer end runs past 5,000. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350, before the cloth. A full custom piece, where somebody sources the fabric and makes it to your measurements, usually starts around AED 800.",
       },
       {
         type: "p",
@@ -314,17 +327,22 @@ export const articles: Article[] = [
       },
 
       { type: "h2", text: "The three prices, and what each one buys" },
-      { type: "h3", text: "Ready-made, AED 300 to 600" },
+      { type: "h3", text: "Ready-made, from AED 300 upward", market: true },
       {
         type: "p",
-        text: "Made in a size run, hanging on a rail. Most of what people actually buy sits between 300 and 600, in nida or crepe, and that is the number to hold in your head. You are paying for cloth and construction and nothing else. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
+        // ⚠️ NO CEILING HERE. An earlier version capped ready-made at 600.
+        // Founder, 2026-09-13: "there are abayas for 1000 aed". She is right:
+        // CAS Abaya lists to 800, Bouguessa and Mauzan sit at 800 to 3,000,
+        // and a capped band is also the one framing that makes our own number
+        // look like the expensive option.
+        text: "Made in a size run, hanging on a rail. High street lands around AED 300 to 800 in nida or crepe. The known Dubai labels, the ones people name when you ask, sit at AED 800 to 3,000, and a designer piece goes past 5,000. You are paying for cloth and construction, and above a certain point for the name. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
       },
       {
         type: "p",
         // Her words, attributed as experience, which is the only way rule 2 of
         // the blog brief allows a claim we cannot source. The prices around it
         // ARE sourced.
-        text: "The 80 to 150 abayas are real and they are not the same product. That is basic polyester, sold off souq and market rails, and our founder's experience of living here is that finding one usually means a drive out to Ajman rather than a shop in Dubai. It will read as cheap because it is, and it will not breathe in July. If a Dubai price under 200 surprises you, ask what the fabric is before anything else.",
+        text: "Under 200, you are looking at a different product. That is basic polyester off a souq or market rail, and our founder’s experience of living here is that finding one usually means a drive out to Ajman rather than a shop in Dubai. It will read as cheap because it is, and it will not breathe in July. If a price under 200 surprises you, ask what the fabric is before anything else.",
       },
       { type: "h3", text: "Tailoring only, about AED 200 to 350" },
       {
@@ -386,7 +404,13 @@ export const articles: Article[] = [
         // catalog.ts BASE_PRICE_BY_CATEGORY.Abaya. Change one, change both.
         // Framed as "will be" because it is not purchasable yet, and a present
         // tense here would be a claim about a product that does not exist.
-        text: "Ours will be AED 690 when we open, cut to your measurements, in 100% linen, made after it is ordered. That is below the usual floor for a full custom piece, and the reason is that we make one design well rather than sourcing something different for every order.",
+        // ⚠️ THIS ARTICLE EXISTS TO SELL. Not by bending a number, by putting
+        // ours next to the right comparison. 690 is expensive beside a souq
+        // rail and cheap beside a made-to-measure boutique piece, and
+        // made-to-measure is what it IS. Founder, 2026-09-13: "our price
+        // doesn't have to show as overpriced or too expensive, remember these
+        // blogs are meant to bring people to buy on our website."
+        text: "Ours will be AED 690 when we open: cut to your measurements, in 100% linen, made after it is ordered. That is boutique-rail money for something nobody else on that rail is selling, because the labels at 800 to 3,000 are still selling you a size, and made-to-measure normally starts where they finish. We hold the price by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging you for the visit.",
       },
       {
         type: "callout",
@@ -394,7 +418,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and against Best Dubai Things\u2019 2026 shop survey, which is where the Deira and Mall of the Emirates figures come from.",
+        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers, Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures, and 2026 brand guides for the boutique bands.",
       },
     ],
   },

@@ -71,6 +71,42 @@ accurate and still talk somebody out of the thing we make. That is not a reason
 to lie; it is a reason to notice the argument is incomplete, because it usually
 is.
 
+## 3b. These articles exist to sell. Frame the comparison, never bend the number
+
+**Founder, 2026-09-13:** *"our price doesn't have to show as overpriced or too
+expensive, remember these blogs are meant to bring people to buy on our
+website."*
+
+Rule 2 says never invent a number and rule 3 says notice what a draft argues
+for. This is the other half: **a true number can still be framed into an
+argument against us, and that is a writing failure, not honesty.**
+
+The cost article did it twice in one day, in opposite directions:
+
+- It opened with ready-made abayas "from around AED 300" **because that
+  flattered our 690**. Wrong, and the worst kind of wrong.
+- Corrected to "from around AED 100", which is what a source said. Also wrong:
+  AED 100 is souq polyester from another emirate, and leading with it made our
+  690 look like five times the market.
+- Then capped ready-made at 600. *"there are abayas for 1000 aed"* — and a
+  ceiling that low is exactly what makes our number the expensive option.
+
+So, in order:
+
+1. **Report the range honestly, with no ceiling you cannot defend.** Dubai
+   abayas run from souq rails past AED 5,000. Say so.
+2. **Put our price beside the right comparison.** 690 is dear next to a market
+   rail and cheap next to made-to-measure, and made-to-measure is what it is.
+   Name the thing the reader is really choosing between.
+3. **Never quote the cheap floor as "the price" of a category** when the floor
+   is a different product. Say what it is, where it is, and what it costs you.
+4. **Every article ends somewhere a reader can act.** Point at the thing we
+   make, in a sentence that follows from what the article just proved.
+
+⚠️ A price that is somebody else's gets `market: true` on its block in
+`blog.ts`, which suppresses the stale-price rules for that block only and
+prints the skip. **Never put it on a Shaklek price.**
+
 ## 4. Be practical and specific, or do not publish
 
 The test: could a reader **do** something differently after reading it?

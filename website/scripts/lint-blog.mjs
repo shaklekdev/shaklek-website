@@ -18,12 +18,26 @@ import { articles } from "../src/data/blog.ts";
 
 let violations = 0;
 
-function check(value, where) {
+// ⚠️ THE ONE EXEMPTION, AND IT IS NARROW. A block flagged `market: true`
+// carries somebody else's price, so the stale-price rules -- which assume
+// every number is a Shaklek offer -- would fire on a true sentence. Nothing
+// else is suppressed, and every skip is printed, because an exemption nobody
+// sees is how a real violation eventually hides behind a flag.
+const STALE_PRICE = /stale price:/;
+let skips = 0;
+
+function check(value, where, market = false) {
   if (typeof value !== "string" || !value) return;
   try {
     lint(value, where);
   } catch (err) {
-    console.error(String(err.message));
+    const msg = String(err.message);
+    if (market && STALE_PRICE.test(msg)) {
+      console.log(`  skipped (market price, not ours): ${where}`);
+      skips++;
+      return;
+    }
+    console.error(msg);
     violations++;
   }
 }
@@ -34,7 +48,7 @@ for (const a of articles) {
   check(a.intro, `${a.slug} intro`);
   a.blocks.forEach((b, i) => {
     const where = `${a.slug} block[${i}] (${b.type})`;
-    check(b.text, where);
+    check(b.text, where, b.market === true);
     check(b.caption, where);
     for (const item of b.items ?? []) check(item, `${where} item`);
     // Palette rows carry prose in `note`, which is exactly where an unsourced
@@ -50,4 +64,4 @@ if (violations) {
   console.error(`\n${violations} claim-rule violation(s) in the journal. Nothing ships with these.`);
   process.exit(1);
 }
-console.log(`journal ok — ${articles.length} articles, no claim-rule violations`);
+console.log(`journal ok — ${articles.length} articles, no claim-rule violations${skips ? `, ${skips} market-price skip(s)` : ""}`);
