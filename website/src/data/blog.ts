@@ -103,7 +103,7 @@ export const articles: Article[] = [
       // typed a question.
       {
         type: "p",
-        text: "The short answer: a plant fibre, cut loose, in a colour that sits quietly against the abaya. Trousers with a shirt, or a simple dress. Whatever you choose is going to spend the day pressed between you and a second layer, so breathability matters more here than it does for anything worn alone.",
+        text: "The short answer: a plant fibre, cut loose, in a colour that sits quietly against the abaya. Trousers with a shirt, or a simple dress. And it only works if the abaya itself breathes, because two layers are only as good as the less breathable of the two.",
       },
 
       { type: "h2", text: "Why the layer underneath matters more than the abaya" },
@@ -117,7 +117,33 @@ export const articles: Article[] = [
       },
       {
         type: "quote",
-        text: "The outer layer is what people see. The inner layer is what you feel.",
+        text: "Two layers only work as well as the less breathable of the two.",
+      },
+
+      { type: "h2", text: "The abaya has to breathe too, or none of it works" },
+      {
+        type: "p",
+        text: "Everything above is about the layer against skin, and it is all true. It is also only half the picture, and the half people skip is the one that decides the afternoon.",
+      },
+      {
+        type: "p",
+        text: "Sweat has to leave. It crosses the inner layer, reaches the abaya, and then has to get out through that. If the abaya is polyester it does not get out. The moisture returns, the inner layer stays wet, and the breathable shirt you chose carefully is doing nothing, because it is sealed inside something that is not.",
+      },
+      {
+        type: "p",
+        text: "There is a second effect that only applies to the outer layer. It is the one in direct sun. A synthetic abaya absorbs that heat and holds it against everything underneath, so you are carrying the sun with you after you step into the shade. A plant fibre sheds it faster.",
+      },
+      {
+        type: "p",
+        text: "This is the part worth knowing before buying either piece. A linen shirt under a polyester abaya is a window in a submarine. If only one of the two is going to be a natural fibre, make it the outer one.",
+      },
+      {
+        type: "image",
+        src: "/marketing/pre-launch/tailor-hands.jpg",
+        alt: "A tailor's hands pinning linen, with shears and chalk on the bench.",
+        caption: "Linen on the bench, before it is cut.",
+        w: 605,
+        h: 760,
       },
 
       { type: "h2", text: "Trousers and a shirt, or a dress" },
@@ -203,7 +229,7 @@ export const articles: Article[] = [
       {
         type: "ul",
         items: [
-          "Choose the inner layer for breathability first. It is under two layers and it is the one you feel.",
+          "Both layers have to breathe. If only one can, make it the abaya: it is the one moisture has to escape through and the one in direct sun.",
           "Trousers and a shirt are more flexible than a dress, and survive the abaya coming off.",
           "Keep both layers loose. Two fitted layers trap air with nowhere to go.",
           "Only a hand-wide strip shows, so spend attention on the collar, the centre line and the hem.",
@@ -212,7 +238,7 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "We cut shirts and trousers in 100% linen in the UAE, made after they are ordered rather than before. If you are in Dubai we come to you and take the measurements ourselves, so the length under an abaya is right the first time.",
+        text: "We cut open abayas, shirts and trousers in 100% linen in the UAE, made after they are ordered rather than before. If you are in Dubai we come to you and take the measurements ourselves, so the length of both layers is right the first time.",
       },
     ],
   },
