@@ -113,6 +113,50 @@ function renderBlock(block: Block, i: number) {
           )}
         </figure>
       );
+    case "palette":
+      // A colour guide you can use at a glance, rather than a paragraph
+      // describing colours. Each row is one outer colour and the shades that
+      // sit under it. Swatches carry a text name too: colour alone is not an
+      // accessible way to convey information, and a screen reader gets nothing
+      // from a coloured square.
+      return (
+        <figure key={i} className="my-12">
+          <div className="flex flex-col divide-y divide-border border-y border-border">
+            {block.rows.map((row, j) => (
+              <div key={j} className="flex flex-col gap-3 py-5 sm:flex-row sm:items-start sm:gap-6">
+                <div className="flex shrink-0 items-center gap-3 sm:w-44">
+                  <span
+                    aria-hidden="true"
+                    className="h-8 w-8 shrink-0 rounded-full border border-border-strong"
+                    style={{ background: row.outer.hex }}
+                  />
+                  <span className={`${TEXT} text-sm font-medium text-text`}>{row.outer.name}</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    {row.under.map((u, k) => (
+                      <span key={k} className="flex items-center gap-2">
+                        <span
+                          aria-hidden="true"
+                          className="h-5 w-5 shrink-0 rounded-full border border-border-strong"
+                          style={{ background: u.hex }}
+                        />
+                        <span className={`${TEXT} text-[13px] text-text-2`}>{u.name}</span>
+                      </span>
+                    ))}
+                  </div>
+                  <p className={`${TEXT} text-[13px] leading-relaxed text-text-3`}>{row.note}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {block.caption && (
+            <figcaption className={`${TEXT} mt-3 text-[13px] leading-relaxed text-text-3`}>
+              {block.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
     case "pair":
       return (
         <figure key={i} className="my-12">

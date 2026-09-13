@@ -46,7 +46,20 @@ export type Block =
    *  a rolled cuff is a claim the picture does not support, which the founder
    *  caught. Label by the trouser cut, which is unambiguous and visible. */
   | { type: "looks"; a: { top: string; bottom: string; label: string };
-      b: { top: string; bottom: string; label: string }; caption?: string };
+      b: { top: string; bottom: string; label: string }; caption?: string }
+  /** A colour pairing guide: an outer colour, and the colours that work beneath
+   *  it. Founder, 2026-09-13, on the first draft of the abaya article: "you can
+   *  give advice, and you can put a palette of colours... this is practical
+   *  advice", against prose that asserted a styling rule with nothing behind it.
+   *
+   *  ⚠️ EVERY ROW HAS TO BE DEFENSIBLE. These are shown as swatches, which reads
+   *  as authority, so a row invented to fill the table is worse than a shorter
+   *  table. Sources for the current rows are cited in the article body. */
+  | {
+      type: "palette";
+      rows: { outer: { name: string; hex: string }; under: { name: string; hex: string }[]; note: string }[];
+      caption?: string;
+    };
 
 export type Article = {
   slug: string;
@@ -84,43 +97,164 @@ export const articles: Article[] = [
     // dubai" and "modest workwear dubai". No demand, and "modest wear" is a
     // banned term in planning/marketing/personas.md anyway.
     slug: "what-to-wear-under-an-open-abaya",
-    // ⚠️ DO NOT REBUILD THIS AS A COMPARISON. The first draft was structured
-    // around "the layer underneath matters more than the abaya", which the
-    // founder read and rejected in the right words: "no one is telling you to
-    // compare." Somebody typing this question wants an answer, and an article
-    // that opens by ranking two garments loses her in the first sentence and
-    // argues nobody needs the more expensive one.
+    // ⚠️ THE BRIEF, after two rejected drafts. Founder, 2026-09-13: "work
+    // backwards from what people really need when they're asking these
+    // questions... you're giving information, but useless information. People
+    // want to know what they might be doing wrong. What is the best solution?
+    // How can I mix colours?"
     //
-    // The order is: answer the question, then say the abaya has to breathe too.
-    // Both are true, neither is a contest.
+    // The intent behind this search is NOT a physics question. Somebody typing
+    // it owns or is buying an abaya and does not want to look wrong. So the
+    // article is prescriptive and visual: formulas, a colour table, and the
+    // specific mistakes. The fabric argument is one short section near the end.
+    //
+    // ⚠️ AND DO NOT ASSERT A STYLING RULE WITHOUT A SOURCE. Draft one said
+    // "close tones read as deliberate", which was invented. She caught it:
+    // "should it really? who says that? why?" Every claim below traces to a
+    // cited source or to something visible in our own catalogue.
     title: "What to wear under an open abaya in summer",
     description:
-      "An open abaya shows a narrow strip of whatever is underneath, all day. A practical guide to choosing it for summer, from a workshop cutting clothes in the UAE.",
+      "The colour rule, the three combinations that work, and the four mistakes people make. A practical guide for Gulf heat, from a workshop cutting linen in the UAE.",
     published: "2026-09-13",
-    readingMinutes: 4,
+    readingMinutes: 6,
     intro:
-      "An open abaya shows a narrow strip of whatever is underneath, and that garment spends the whole day between you and a second layer. Here is what works, and why.",
+      "An open abaya frames a narrow strip of whatever is underneath, from collar to ankle, all day. Getting that strip right is mostly three decisions: the colour, the cut, and the cloth.",
     hero: { src: "/marketing/hero-banner.jpg", alt: "Loose linen, worn in Gulf heat.", w: 1584, h: 672 },
     blocks: [
-      // The answer first, before any context. That wins a featured snippet and
-      // it is better manners for somebody who typed a question.
       {
         type: "p",
-        text: "The short answer: a plant fibre, cut loose. Trousers with a shirt, or a simple dress. Nothing narrow, nothing synthetic, and a colour close to the abaya rather than set against it.",
+        text: "The short version: keep the shirt and the trousers in the same colour as each other, keep the abaya in the same family, and let the abaya be the only loose layer. Then choose a plant fibre, because both layers have to let sweat out.",
       },
 
-      { type: "h2", text: "Start with what the cloth is made of" },
+      { type: "h2", text: "The colour rule, and why it holds" },
       {
         type: "p",
-        text: "This garment sits against skin, under a second layer, in forty degrees. That is the hardest job any piece in a wardrobe does here, and it is decided almost entirely by fibre rather than by cut or colour.",
+        text: "The single change that fixes most outfits is to put the shirt and trousers in one colour. Two colours beneath an open abaya divide the visible strip into three bands and shorten the whole line. One colour reads as a single column.",
       },
       {
         type: "p",
-        text: "Linen first. The fibre takes moisture off skin and releases it quickly, and the cloth is stiff enough to stand slightly away from the body rather than cling. Standing away is the property that matters under a second layer, because it leaves somewhere for air to move.",
+        text: "This is not a personal preference. Tonal dressing, meaning one colour family layered within itself rather than high contrast, is the documented direction of Gulf abaya styling for 2026, and the reason given is consistently the same: it produces a longer, leaner line.",
       },
       {
         type: "p",
-        text: "Cotton is good for most of the year and stays damp longer on a humid August afternoon. Polyester is the one to avoid here specifically: it will not absorb moisture, so sweat sits where it lands, and now there are two layers keeping it there.",
+        text: "The rule is asymmetric, which is the part most guides skip. A neutral abaya can carry a coloured layer underneath. A coloured abaya wants neutrals under it.",
+      },
+
+      {
+        type: "palette",
+        rows: [
+          {
+            outer: { name: "Black abaya", hex: "#14100f" },
+            under: [
+              { name: "Ivory", hex: "#f5f0e8" },
+              { name: "Sand", hex: "#d8c9b0" },
+              { name: "Taupe", hex: "#a89684" },
+              { name: "Charcoal", hex: "#3a3a3c" },
+            ],
+            note: "The most forgiving outer colour. Black takes almost anything, so this is the one time a soft colour underneath is safe.",
+          },
+          {
+            outer: { name: "Beige or sand abaya", hex: "#d8c9b0" },
+            under: [
+              { name: "Ivory", hex: "#f5f0e8" },
+              { name: "Olive", hex: "#6b7255" },
+              { name: "Chocolate", hex: "#5a4436" },
+            ],
+            note: "Stay in the warm family. A cool grey or a bright white underneath makes the abaya look dirty rather than warm.",
+          },
+          {
+            outer: { name: "Navy abaya", hex: "#0a2d4a" },
+            under: [
+              { name: "Ivory", hex: "#f5f0e8" },
+              { name: "White", hex: "#fafafa" },
+              { name: "Navy", hex: "#0a2d4a" },
+            ],
+            note: "Navy on navy is the sharpest version. If that feels too flat, ivory beneath is the safe alternative; avoid black, which reads as an accident rather than a choice.",
+          },
+          {
+            outer: { name: "Burgundy or plum abaya", hex: "#4a1a2d" },
+            under: [
+              { name: "Ivory", hex: "#f5f0e8" },
+              { name: "Sand", hex: "#d8c9b0" },
+              { name: "Burgundy", hex: "#4a1a2d" },
+            ],
+            note: "A jewel tone is doing the work, so the layer underneath should not compete. Neutrals only.",
+          },
+        ],
+        caption:
+          "Navy, burgundy, ivory and white are the four we cut. Navy and burgundy sit in the jewel-tone group named across 2026 Gulf abaya forecasts; ivory and sand sit in the earthy neutral group.",
+      },
+      {
+        type: "p",
+        text: "One more, borrowed from hijab styling and worth stealing: if you want the scarf to coordinate, match it to the second colour in the outfit rather than the dominant one. Matching the dominant colour reads as a uniform.",
+      },
+
+      { type: "h2", text: "Three combinations that work" },
+      { type: "h3", text: "Straight trousers and a shirt, one colour" },
+      {
+        type: "p",
+        text: "The most flexible, because it survives the abaya coming off indoors. Straight or wide trousers sit better under a long outer layer than anything narrow: narrow trousers fight the abaya at every step and pull it out of line.",
+      },
+      {
+        type: "pair",
+        a: {
+          src: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg",
+          alt: "An ivory linen shirt.",
+        },
+        b: {
+          src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-full-front.jpg",
+          alt: "Wide-leg linen trousers in ivory.",
+        },
+        caption: "Shirt and trousers in one colour, so the open front reads as a single column.",
+      },
+      { type: "h3", text: "A simple dress" },
+      {
+        type: "p",
+        text: "One waistband fewer and faster to put on. Watch the length: a dress ending near the abaya hem creates a visible double edge at the ankle, so noticeably shorter or clearly longer both read better than almost the same.",
+      },
+      { type: "h3", text: "Tonal, not matched" },
+      {
+        type: "p",
+        text: "Two shades of the same family, lighter underneath than the abaya. This is the version that looks considered rather than careful, and it is the one the 2026 forecasts keep pointing at.",
+      },
+
+      { type: "h2", text: "The four mistakes" },
+      {
+        type: "ul",
+        items: [
+          "A tight top underneath. It shows an outline through the open front and defeats the point of the outer layer. Fitted is not the same as tight.",
+          "Bulky layers. A heavy knit under a fluid abaya kills the drape that makes it hang well, and drape is most of what you paid for.",
+          "Too many colours at once. Shirt, trousers, abaya and scarf in four different shades leaves nowhere for the eye to rest.",
+          "Trousers that reach the floor. The abaya already covers the ankle, so two hems collect the same dust and the inner one always loses.",
+        ],
+      },
+      {
+        type: "p",
+        text: "The last of those is the commonest and the hardest to fix off a rail, because trouser length on a rail is cut for an average height rather than for yours.",
+      },
+
+      { type: "h2", text: "Fitted or loose, in 45 degrees" },
+      {
+        type: "p",
+        text: "Styling guides say fitted underneath, to keep the abaya's line clean. Anyone who has spent August here says loose, so air can move. Both are right about their own problem, and almost nobody reconciles them.",
+      },
+      {
+        type: "p",
+        text: "The resolution is that fitted should mean skimming rather than tight, and the fibre does the rest. A linen shirt cut close to the body still stands slightly away from skin, because the cloth is stiff enough not to cling. A jersey top the same size will cling. It is the fabric, not the size on the label, that decides whether fitted is bearable in summer.",
+      },
+      {
+        type: "quote",
+        text: "Fitted is a measurement. Clinging is a fabric.",
+      },
+
+      { type: "h2", text: "And the abaya has to breathe too" },
+      {
+        type: "p",
+        text: "Sweat leaves your skin, crosses the inner layer, and then has to get out through the abaya. If the abaya is synthetic it does not, and the breathable shirt underneath is sealed inside something that is not. The outer layer is also the one in direct sun, so a synthetic one holds that heat against everything beneath it.",
+      },
+      {
+        type: "p",
+        text: "This is worth knowing before buying either piece. There is more on how the fibres themselves behave in our guide to dressing for a UAE summer.",
       },
       {
         type: "image",
@@ -131,104 +265,24 @@ export const articles: Article[] = [
         h: 800,
       },
 
-      { type: "h2", text: "Trousers and a shirt, or a dress" },
-      {
-        type: "p",
-        text: "Both work. The choice is about how you want the day to go rather than about rules.",
-      },
-      { type: "h3", text: "Trousers and a shirt" },
-      {
-        type: "p",
-        text: "The more flexible of the two, because it survives the abaya coming off indoors. Straight or wide trousers sit better under a long outer layer than anything narrow: narrow trousers fight the abaya at every step and pull it out of line.",
-      },
-      {
-        type: "p",
-        text: "A shirt with a little room through the body is worth more than it sounds. Two fitted layers trap air between them with nowhere for it to go.",
-      },
-      {
-        type: "pair",
-        a: {
-          src: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg",
-          alt: "A loose ivory linen shirt.",
-        },
-        b: {
-          src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-full-front.jpg",
-          alt: "Wide-leg linen trousers in ivory.",
-        },
-        caption: "Loose through the body, straight through the leg, so neither layer fights the other.",
-      },
-      { type: "h3", text: "A dress" },
-      {
-        type: "p",
-        text: "Simpler to put on and one waistband cooler. The thing to watch is length. A dress ending near the abaya hem creates a visible double edge at the ankle, so noticeably shorter or clearly longer both read better than almost the same.",
-      },
-
-      { type: "h2", text: "What actually shows" },
-      {
-        type: "p",
-        text: "An open abaya frames a vertical strip about a hand wide, from collar to ankle. That is the whole of what anybody sees of the layer beneath, and it changes what is worth paying for.",
-      },
-      {
-        type: "ul",
-        items: [
-          "The collar and the first few centimetres of the shirt, because that sits at eye height.",
-          "The line down the centre. A straight front placket reads as a clean vertical; a busy one breaks it.",
-          "The hem of the trousers, the only other place the inner layer appears.",
-          "The colour relationship. Close tones read as deliberate. Hard contrast turns the opening into a stripe.",
-        ],
-      },
-      {
-        type: "p",
-        text: "Detail across the back or along a sleeve is spent on something nobody sees while the abaya is on, which is worth knowing before paying for it.",
-      },
-
-      { type: "h2", text: "Length is what usually goes wrong" },
-      {
-        type: "p",
-        text: "Trousers under an abaya want to clear the floor by a centimetre or two rather than brush it. The abaya already covers the ankle, so trousers that also reach the ground give you two hems collecting the same dust, and the inner one always loses.",
-      },
-      {
-        type: "p",
-        text: "It is the commonest thing to get wrong and the hardest to fix off a rail, because trouser length off a rail is cut for an average height rather than for yours.",
-      },
-
-      { type: "h2", text: "And the abaya has to breathe too" },
-      {
-        type: "p",
-        text: "One thing to add, because it decides whether any of the above works. Sweat leaves your skin, crosses the inner layer, and then has to get out through the abaya. If the abaya is synthetic it does not get out, and the breathable shirt underneath is sealed inside something that is not.",
-      },
-      {
-        type: "p",
-        text: "The outer layer is also the one in direct sun, and a synthetic one holds that heat against everything underneath, so you carry it with you after stepping into the shade. A linen abaya over linen is the version of this that actually works.",
-      },
-      {
-        type: "quote",
-        text: "Two layers only work as well as the less breathable of the two.",
-      },
-      {
-        type: "image",
-        src: "/marketing/pre-launch/tailor-hands.jpg",
-        alt: "A tailor's hands pinning linen, with shears and chalk on the bench.",
-        caption: "Linen on the bench, before it is cut.",
-        w: 605,
-        h: 760,
-      },
-
       { type: "h2", text: "In short" },
       {
         type: "ul",
         items: [
-          "A plant fibre against skin. Linen if the day is long or humid.",
-          "Trousers and a shirt are more flexible than a dress and survive the abaya coming off.",
-          "Keep both layers loose. Two fitted layers trap air with nowhere to go.",
-          "Only a hand-wide strip shows, so spend attention on the collar, the centre line and the hem.",
-          "Get the trouser length right. It is the detail that most often looks wrong.",
-          "Make sure the abaya breathes as well, or the layer underneath cannot do its job.",
+          "Shirt and trousers in one colour. It is the single change that fixes the most.",
+          "Neutral abaya, colour underneath. Coloured abaya, neutrals underneath.",
+          "Skimming, not tight, and let the abaya be the loose layer.",
+          "Trousers clear the floor by a centimetre or two.",
+          "Both layers need to breathe, or neither does.",
         ],
       },
       {
         type: "callout",
-        text: "We cut open abayas, shirts and trousers in 100% linen in the UAE, made after they are ordered rather than before. If you are in Dubai we come to you and take the measurements ourselves, so the length of both layers is right the first time.",
+        text: "We cut open abayas, shirts and trousers in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. If you are in Dubai we come to you and take the measurements ourselves, so the length of both layers is right the first time.",
+      },
+      {
+        type: "p",
+        text: "Sources for the styling and colour guidance above: 2026 Gulf abaya colour forecasts from AbayaButh, Soleil UAE and Dar Al Mutahajiba; styling and layering guidance from Maison Ayla, Fashion Week Online and NEEIM.",
       },
     ],
   },
