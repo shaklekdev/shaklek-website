@@ -145,22 +145,18 @@ This is the only item whose value decays while it waits.
    abaya is **57.0% at 690**. They cost the same to sew, so the whole difference
    between them is 0.2m of cloth, and the abaya is the one nobody else cuts to
    measure. ~~Price the dress at 649.~~ Moot.
-4. **Price the dress at 649, not 599.** ~~Superseded by 3 above.~~ The tailor quoted 80-90 for a dress AND
-   an abaya, modelled at 90. That moved the dress DOWN to 52.2% -- the weakest
-   thing in the range -- and the abaya UP to 57.0%, the strongest. They now cost
-   the SAME to sew, so the gap between them is 0.2m of cloth and nothing else.
-   649 puts the dress back at 55.7%.
-   ⏳ **Gilet is the only unquoted number left.** Ask for it.
-4. **Submit the sitemap in Google Search Console.** The journal was opened to
+4. ⏳ **Ask the tailor for the GILET rate.** It is the only unquoted number
+   left in the ladder; shirt 35, trousers 50, dress and abaya 90 are all real.
+5. **Submit the sitemap in Google Search Console.** The journal was opened to
    earn ranking before October and indexing is the slow half.
-5. **Chase Fitoor** on the samples (due ~29 Sept) and the invoice name, which
+6. **Chase Fitoor** on the samples (due ~29 Sept) and the invoice name, which
    still reads "Shakalek".
-6. **Shirley**: flax origin, the composition certificate for W300235, and
+7. **Shirley**: flax origin, the composition certificate for W300235, and
    whether the invoice is on actual weight (~24kg against 30kg billed).
-7. **Check the rules on the UAE flag in advertising** -- it is on the
+8. **Check the rules on the UAE flag in advertising** -- it is on the
    pre-launch page.
 
-8. ⚠️ **INVESTIGATE THE www TIMEOUTS PROPERLY. DO NOT ACCEPT "IT IS
+9. ⚠️ **INVESTIGATE THE www TIMEOUTS PROPERLY. DO NOT ACCEPT "IT IS
    CLOUDFRONT" WITHOUT PROVING IT.** Founder, 2026-09-12: *"there is no way
    it's cloudfront, we have a problem we need to investigate"*. She is right to
    push: blaming the CDN is the convenient answer and nobody has ruled us out.
@@ -190,13 +186,13 @@ This is the only item whose value decays while it waits.
    ⚠️ It has been intermittent ALL DAY, not just tonight, including before the
    gate came off. Whatever it is, it predates today's work.
 
-9. **Generate the abayas.** Sliders and vocabulary are settled
+10. **Generate the abayas.** Sliders and vocabulary are settled
    (`cropped|full` x `midi|maxi`, sleeve first), the recipe is `CLAUDE.md` §4b,
    and the base photo (`full:maxi`) is never generated. Three cells per colour.
    ⏳ Needs her references first, and a decided list of LOOKS before anything is
    generated. **No dress** -- see 3 above.
 
-10. **Shorten the emails, and stop showing a raw URL.** Founder, 2026-09-12:
+11. **Shorten the emails, and stop showing a raw URL.** Founder, 2026-09-12:
     *"the emails are shown full, we need to shorten them, we can't display this
     like that"*. A 90-character signed link wraps across four lines on a phone
     and looks like a phishing attempt. The fix is an HTML email with the link
