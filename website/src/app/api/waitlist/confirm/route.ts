@@ -41,6 +41,7 @@ export async function GET(req: NextRequest) {
 
   let email: string | null = null;
   let alreadySynced = false;
+  let hasUnsubscribed = false;
   try {
     // Stamp confirmed_at ONCE. Clicking the link twice must not move the date,
     // and the returning() tells us whether this was the first time -- the same
@@ -64,12 +65,19 @@ export async function GET(req: NextRequest) {
       .returning({
         email: schema.waitlist.email,
         syncedAt: schema.waitlist.syncedAt,
+        // A stale confirm link must not resurrect somebody who has left. Gmail
+        // renders its own unsubscribe from the List-Unsubscribe header even on
+        // this transactional send, so leaving BEFORE confirming is a real
+        // sequence, and without this the confirm click would push her back to
+        // Resend with unsubscribed:false.
+        unsubscribedAt: schema.waitlist.unsubscribedAt,
       });
     if (!row) {
       return NextResponse.redirect(new URL("/waitlist/confirmed?state=invalid", appUrl()));
     }
     email = row.email;
     alreadySynced = Boolean(row.syncedAt);
+    hasUnsubscribed = Boolean(row.unsubscribedAt);
   } catch (err) {
     console.error("[waitlist/confirm] db update failed:", err instanceof Error ? err.message : "unknown");
     return NextResponse.redirect(new URL("/waitlist/confirmed?state=error", appUrl()));
@@ -82,7 +90,7 @@ export async function GET(req: NextRequest) {
   // it can be retried without guessing who already made it across. Telling her
   // "something went wrong" when she is in fact confirmed would be a lie.
   const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey && email && !alreadySynced) {
+  if (apiKey && email && !alreadySynced && !hasUnsubscribed) {
     try {
       const contact = await fetch("https://api.resend.com/contacts", {
         method: "POST",

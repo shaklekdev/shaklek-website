@@ -91,7 +91,10 @@ export async function POST(req: NextRequest) {
     );
   }
   const email = body.email;
-  const source = boundedText(body.source, 40) ?? "unknown";
+  // Stripped of CR/LF before it can reach a Subject header. boundedText trims
+  // and caps length but does not remove newlines, and this value is
+  // interpolated into a subject line.
+  const source = (boundedText(body.source, 40) ?? "unknown").replace(/[\r\n]+/g, " ");
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -120,7 +123,7 @@ export async function POST(req: NextRequest) {
   // re-sends the confirm link, because the commonest reason to sign up twice is
   // that the first email was never found.
   const db = getDb();
-  let row: { id: string; confirmedAt: Date | null } | null = null;
+  let row: { id: string; confirmedAt: Date | null; unsubscribedAt: Date | null } | null = null;
   if (db) {
     try {
       const [saved] = await db
@@ -130,7 +133,17 @@ export async function POST(req: NextRequest) {
           target: schema.waitlist.email,
           set: { source },
         })
-        .returning({ id: schema.waitlist.id, confirmedAt: schema.waitlist.confirmedAt });
+        .returning({
+          id: schema.waitlist.id,
+          confirmedAt: schema.waitlist.confirmedAt,
+          // ⚠️ READ THIS, DO NOT JUST WRITE IT. It was written by the
+          // unsubscribe route and read by nothing, so a person who had opted
+          // out still received the "you are already on the list" marketing mail
+          // the moment anyone re-entered her address on a public form. Security
+          // review, 2026-09-13. That is a PDPL direct-marketing problem and a
+          // spam complaint against the domain that carries order confirmations.
+          unsubscribedAt: schema.waitlist.unsubscribedAt,
+        });
       row = saved ?? null;
     } catch (err) {
       // Never the address -- CloudWatch outlives the signup.
@@ -144,6 +157,11 @@ export async function POST(req: NextRequest) {
   // 2. THE CONFIRM LINK, unless she has already confirmed, in which case
   // sending another would be noise.
   const alreadyConfirmed = Boolean(row?.confirmedAt);
+  // Somebody who has left the list gets NOTHING from this route. Not a
+  // confirmation, not a "you are already on the list". Re-joining has to start
+  // from a deliberate act of hers, not from anyone typing her address into a
+  // public form.
+  const hasUnsubscribed = Boolean(row?.unsubscribedAt);
 
   // ⚠️ SOMEONE WHO SIGNS UP AND RECEIVES NOTHING BELIEVES THE FORM IS BROKEN.
   // The first version sent no email at all to an address that was already
@@ -153,7 +171,7 @@ export async function POST(req: NextRequest) {
   // was broken), signed up again, got nothing, and reported the email as not
   // working. Every signup now gets an answer; an already-confirmed one just
   // gets a different, shorter answer with no link to click.
-  if (row && alreadyConfirmed) {
+  if (row && alreadyConfirmed && !hasUnsubscribed) {
     const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
     // MARKETING, so it carries a visible unsubscribe: she is already on the
     // list, so this is a note to somebody on a list rather than an answer to a
@@ -179,7 +197,7 @@ export async function POST(req: NextRequest) {
   // Branch on `row` itself rather than on a derived string, so the compiler
   // narrows it for the whole block. The first version built two URLs from
   // `row.id` inside `if (confirmUrl)`, which TypeScript could not narrow.
-  if (row && !alreadyConfirmed) {
+  if (row && !alreadyConfirmed && !hasUnsubscribed) {
     const confirmUrl = `${appUrl()}/api/waitlist/confirm?id=${row.id}&t=${issueWaitlistToken(row.id)}`;
     const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
 
@@ -246,7 +264,17 @@ export async function POST(req: NextRequest) {
   });
 
   if (!res.ok) {
-    console.error("[waitlist] notification email failed:", (await res.text()).slice(0, 300));
+    // Status and a parsed code only. This payload carries reply_to: email, so a
+    // validation error that echoes the request would put a customer's address
+    // in CloudWatch. confirm/route.ts already does it this way.
+    let code = "unknown";
+    try {
+      const parsed = JSON.parse(await res.text());
+      code = String(parsed?.name ?? parsed?.code ?? "unknown").slice(0, 60);
+    } catch {
+      /* not JSON */
+    }
+    console.error("[waitlist] notification email failed:", res.status, code);
   }
 
   // Honest only if her address was actually recorded. The DB row is what

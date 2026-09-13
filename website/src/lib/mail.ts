@@ -45,8 +45,14 @@ export function buildEmail(opts: {
   unsubscribeUrl?: string;
 }) {
   const { kind, preheader, lines, button, unsubscribeUrl } = opts;
+  // esc() is for TEXT nodes. It does NOT escape quotes, so it must never be
+  // used inside an attribute -- escAttr exists so the next person cannot get
+  // that wrong. Today both hrefs are built from a Postgres uuid and an HMAC
+  // with no request field anywhere near them, but "safe because of who happens
+  // to call it" is how the prototype-key bug got in.
   const esc = (s: string) =>
     s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const escAttr = (s: string) => esc(s).replace(/"/g, "&quot;");
 
   const showUnsub = kind === "marketing" && unsubscribeUrl;
 
@@ -65,14 +71,14 @@ export function buildEmail(opts: {
 ${
   button
     ? `<tr><td style="padding:12px 32px 8px;">
-  <a href="${button.url}" style="display:inline-block;background:#1c1f26;color:#ffffff;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;padding:14px 28px;">${esc(button.label)}</a>
+  <a href="${escAttr(button.url)}" style="display:inline-block;background:#1c1f26;color:#ffffff;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;padding:14px 28px;">${esc(button.label)}</a>
 </td></tr>`
     : ""
 }
 <tr><td style="padding:24px 32px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#8d8679;border-top:1px solid #eee8dc;">
   ${FOOT}${
     showUnsub
-      ? ` &middot; <a href="${unsubscribeUrl}" style="color:#8d8679;">Unsubscribe</a>`
+      ? ` &middot; <a href="${escAttr(unsubscribeUrl)}" style="color:#8d8679;">Unsubscribe</a>`
       : ""
   }
 </td></tr>

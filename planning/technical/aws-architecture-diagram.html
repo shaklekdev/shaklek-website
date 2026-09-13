@@ -504,6 +504,60 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     rather than trusting an exit code.
   </p>
 
+  <h2>Monitoring, and the gap every alarm shared until 2026-09-13</h2>
+
+  <p>
+    Four CloudWatch alarms existed, and <strong>all four read Amplify's own
+    metrics</strong> &mdash; <code>AWS/AmplifyHosting</code> Requests, Latency
+    and 5xxErrors. That means they only ever saw traffic that <em>arrived</em>.
+    If DNS fails, or a TLS handshake hangs, or an edge drops the connection,
+    nothing reaches Amplify, every alarm stays green, and the site is
+    unreachable with no record that it ever happened.
+  </p>
+  <p>
+    That gap cost an afternoon on 2026-09-13: intermittent 20-second timeouts on
+    <code>www</code>, two wrong explanations from me (a bad CloudFront edge,
+    then IPv6), and no evidence either way. The founder works at AWS and
+    confirmed there was no CloudFront outage, which ruled out the convenient
+    answer and left nothing to replace it with.
+  </p>
+
+  <h3>Route 53 health check &mdash; the outside-in check</h3>
+  <table>
+    <tr><th>Setting</th><th>Value</th><th>Why</th></tr>
+    <tr><td>Type</td><td>HTTPS, port 443, path <code>/</code></td><td>What a visitor actually does</td></tr>
+    <tr><td><strong>EnableSNI</strong></td><td><strong>true</strong></td><td>⚠️ CloudFront serves many domains per IP. Without it the check fails permanently and looks like a real outage</td></tr>
+    <tr><td>RequestInterval</td><td>30s</td><td>10s costs extra; this is reachability, not trading</td></tr>
+    <tr><td>FailureThreshold</td><td>3</td><td>Checkers do not coordinate; one dropped packet must not page anyone</td></tr>
+    <tr><td>Alarm region</td><td><strong>us-east-1</strong></td><td>⚠️ Route 53 publishes health-check metrics <em>only</em> there. Every other alarm here is eu-west-1, and one created in the wrong region never fires while looking healthy</td></tr>
+    <tr><td>treat-missing-data</td><td>notBreaching</td><td>A gap in the metric stream is a Route 53 problem, not a site problem</td></tr>
+    <tr><td>Cost</td><td>~$1.50/month</td><td>AWS endpoint $0.50 + HTTPS $1.00. String matching and latency graphs are $1.00 each and are OFF</td></tr>
+  </table>
+
+  <p>
+    &#9888; <strong>ITS BLIND SPOT, AND IT IS THE ONE THAT MATTERS HERE.</strong>
+    AWS's own documentation: <em>"If you specify the endpoint by domain name,
+    Route 53 uses only IPv4 to send health checks to the endpoint."</em>
+    <code>www.shaklek.com</code> has <strong>eight AAAA records</strong>, and the
+    remaining hypothesis for the intermittent hangs is the IPv6 path. <strong>A
+    green health check is therefore not proof that an IPv6 client could reach
+    the site.</strong> Do not read it as one.
+  </p>
+
+  <p><code>node website/scripts/aws-health-check.mjs --apply</code> creates both
+  and reads them back, refusing to create a second check for a domain that
+  already has one.</p>
+
+  <h3>The alarms, and what each can and cannot see</h3>
+  <table>
+    <tr><th>Alarm</th><th>Sees</th><th>Cannot see</th></tr>
+    <tr><td><code>shaklek-www-unreachable</code><br><em>us-east-1</em></td><td>DNS failure, TLS failure, edge drops, 4xx/5xx, from ~15 global locations</td><td><strong>IPv6.</strong> Anything slower than unreachable</td></tr>
+    <tr><td><code>shaklek-5xx-errors</code></td><td>Any 5xx reaching Amplify</td><td>Anything that never arrives. ⚠️ It fired on 2026-09-13 because <code>/api/orders</code> returned a deliberate 503 while shut; that response is now <strong>403</strong>, so a refusal is not counted as a fault</td></tr>
+    <tr><td><code>shaklek-site-silent</code></td><td>Zero requests in an hour</td><td>A site nobody can reach but bots still hit</td></tr>
+    <tr><td><code>shaklek-slow-responses</code></td><td>Origin latency over 3s</td><td>Slowness before the origin</td></tr>
+    <tr><td><code>shaklek-reconcile-not-running</code></td><td>The daily job</td><td>⚠️ The rule is still DISABLED from the gating period. Re-enable at launch</td></tr>
+  </table>
+
   <h2>Deploying, and the three traps that have bitten</h2>
   <p class="section-note">
     Both cost a day each in August 2026. Neither is obvious from a green build.
