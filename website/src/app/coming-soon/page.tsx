@@ -163,6 +163,33 @@ export default function ComingSoonPage() {
           </p>
         </div>
 
+        {/* ⚠️ THE MEASURING VISIT, AND IT IS THE MOST IMPORTANT BLOCK ON THE
+            PAGE. Founder, 2026-09-13: "the measurements are for everyone...
+            this is how we will get customers. we still don't have a name, we
+            need to build trust so these needs to be A BIG PART of our
+            advertisement."
+            
+            It sits ABOVE the email box on purpose: it is the reason to give an
+            address, so it has to be read before the ask. The competitors
+            launching alongside us cannot say this, which is the whole point of
+            leading with it rather than with fabric.
+
+            ⚠️ NO PRICE AND NO THRESHOLD. The 550 rule was removed the same day
+            (planning/margins.mjs): the visit is for everyone, first order, and
+            gating it would undo the trust it exists to build. Dubai only, and
+            it says so, because somebody in Sharjah reading a promise that does
+            not name a city has been mis-sold. */}
+        <div className="flex flex-col gap-3 border border-gold bg-surface-2 px-6 py-7 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-gold">In Dubai</p>
+          <p className="font-display text-xl leading-snug text-text sm:text-2xl">
+            We come to you, and we measure you.
+          </p>
+          <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-2">
+            Before your first piece is cut. Not a size chart, and nothing to pay
+            for the visit.
+          </p>
+        </div>
+
         {/* THE FORM SITS HERE, MID PAGE, NOT AT THE FOOT. Founder, 2026-09-12.
             An email address is the only thing this page asks for, and at the
             bottom it was behind three cards a reader may never scroll past.

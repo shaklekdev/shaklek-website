@@ -116,10 +116,15 @@ const INPUTS = {
   // the shirt gains a further ~1.1 points.
   // ✅ PANTS 50, NOT 60 — the tailor's real rate, founder 2026-09-12. Worth
   // ~1.9 margin points on every trouser sold.
-  // ✅ DRESS 80 for a SIMPLE dress — tailor, founder 2026-09-12.
-  // ⏳ ABAYA / GILET NOT QUOTED YET. The numbers below are placeholders so the
-  //    solver has something to print; they are what the PRICE question turns on.
-  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 80, Abaya: 100, Gilet: 55 },
+  // ✅ DRESS AND ABAYA BOTH 90 — tailor, founder 2026-09-12, later the same day:
+  //    "abaya and dress price is 80-90 aed for both". Modelled at the TOP of the
+  //    range for the same reason as the shirt: if a number is a range the model
+  //    takes the worse one, so a surprise moves margin UP and never down. At 80
+  //    each gains roughly 1.8 points on a 554 abaya.
+  //    ⚠️ THE ABAYA WAS A 100 PLACEHOLDER AND IS NOW QUOTED. That is a real
+  //    10 AED saving, and it lands on the garment whose price was least certain.
+  // ⏳ GILET AND SKIRT STILL NOT QUOTED. Those two remain placeholders.
+  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 90, Abaya: 90, Gilet: 55 },
 
   shippingAed: 21, // Founder, 2026-08-22
 
@@ -216,7 +221,27 @@ const INPUTS = {
   // one hour, so this offer does not survive contact with volume: it caps out
   // around 4-5 a week. Word it as "by appointment" so it can be capped without
   // breaking a promise.
-  fitting: { aed: 50, thresholdAed: 550, oncePerCustomer: true, dubaiOnly: true },
+  // ⚠️ THE THRESHOLD IS GONE. Founder, 2026-09-13: "the measurements are for
+  // everyone... this is how we will get customers. we still don't have a name,
+  // we need to build trust so these needs to be A BIG PART of our
+  // advertisement."
+  //
+  // She is right, and the 550 rule below is kept only as struck-through
+  // history. The reasoning for gating it was margin; the reasoning for opening
+  // it is that nobody has heard of us and a person coming to your door is the
+  // cheapest trust a new brand can buy.
+  //
+  // ⚠️ READ THIS AS CAC, NOT AS COGS, OR IT LOOKS LIKE A DISASTER. It is 50 AED
+  // ONCE PER CUSTOMER, not per order. On a first shirt it takes 56.8% down to
+  // ~45.7%, which looks alarming in a margin table and is not the right table:
+  // the comparison is the 134 AED this model assumes to buy a customer through
+  // ads. Fifty is cheaper than that and it is spent on somebody who has already
+  // decided to order. Every order after it carries nothing.
+  //
+  // thresholdAed stays in the object at 0 so the printed section still computes,
+  // and so the next person can see it was deliberately set to zero rather than
+  // forgotten.
+  fitting: { aed: 50, thresholdAed: 0, oncePerCustomer: true, dubaiOnly: true, everyone: true },
 
   // Cost to acquire one customer. INDUSTRY ASSUMPTION, NOT MEASURED.
   // 134 = CPM 30, CTR 1.5%, 1.5% purchase rate. This is the number that
@@ -486,7 +511,9 @@ console.log(`  ${"item".padEnd(10)}${"m".padStart(5)}${"cloth".padStart(8)}${"st
 for (const cat of ["Dress", "Abaya", "Gilet"]) {
   const m = INPUTS.metresPerGarment[cat], t = INPUTS.tailoringAed[cat];
   const cloth = m * REF_PER_M;
-  const quoted = cat === "Dress" ? " " : "⏳";
+  // Dress and Abaya were both quoted by the tailor on 2026-09-12 ("80-90 for
+  // both"). Gilet and Skirt are still placeholders, so they keep the marker.
+  const quoted = cat === "Dress" || cat === "Abaya" ? " " : "⏳";
   console.log(`  ${cat.padEnd(10)}${m.toFixed(1).padStart(5)}${cloth.toFixed(0).padStart(8)}${(quoted + t).padStart(8)}${(cloth + t).toFixed(0).padStart(8)}${priceFor(cat, BENCH).toFixed(0).padStart(9)}${priceFor(cat, 0.6).toFixed(0).padStart(8)}   ${(priceFor(cat, BENCH) / EUR_AED).toFixed(0).padStart(5)}`);
 }
 

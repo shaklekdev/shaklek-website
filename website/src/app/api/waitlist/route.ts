@@ -4,10 +4,17 @@ import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/reque
 import { getDb, schema } from "@/db/client";
 import { issueWaitlistToken } from "@/lib/waitlistToken";
 import { appUrl } from "@/lib/appUrl";
+import { buildEmail, unsubscribeHeaders } from "@/lib/mail";
 
 async function sendMail(
   apiKey: string,
-  msg: { to: string; subject: string; text: string; headers?: Record<string, string> },
+  msg: {
+    to: string;
+    subject: string;
+    text: string;
+    html?: string;
+    headers?: Record<string, string>;
+  },
 ) {
   try {
     const r = await fetch("https://api.resend.com/emails", {
@@ -148,21 +155,24 @@ export async function POST(req: NextRequest) {
   // gets a different, shorter answer with no link to click.
   if (row && alreadyConfirmed) {
     const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
+    // MARKETING, so it carries a visible unsubscribe: she is already on the
+    // list, so this is a note to somebody on a list rather than an answer to a
+    // request. The confirmation below is the opposite and carries none.
+    const body = buildEmail({
+      kind: "marketing",
+      preheader: "You are already on the list.",
+      lines: [
+        "You are already on the list, so there is nothing to do.",
+        "We will write when we open, and now and then when there is something new.",
+      ],
+      unsubscribeUrl: unsubUrl,
+    });
     await sendMail(apiKey, {
       to: email,
       subject: "You are already on the list",
-      headers: {
-        "List-Unsubscribe": `<${unsubUrl}>`,
-        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-      },
-      text: [
-        "You are already on the list, so there is nothing to confirm.",
-        "",
-        "We will tell you the day we open, and now and then when there is something new.",
-        "",
-        "Shaklek, Dubai",
-        `Leave the list: ${unsubUrl}`,
-      ].join("\n"),
+      headers: unsubscribeHeaders(unsubUrl),
+      text: body.text,
+      html: body.html,
     });
   }
 
@@ -171,50 +181,36 @@ export async function POST(req: NextRequest) {
   // `row.id` inside `if (confirmUrl)`, which TypeScript could not narrow.
   if (row && !alreadyConfirmed) {
     const confirmUrl = `${appUrl()}/api/waitlist/confirm?id=${row.id}&t=${issueWaitlistToken(row.id)}`;
-    // ⚠️ EVERY SEND CARRIES List-Unsubscribe, and this one is transactional.
-    // Resend adds an unsubscribe to a BROADCAST; it adds nothing to a
-    // POST /emails send like this one, and a one-off drop announcement sent the
-    // same way would carry nothing either. The copy below promises she can
-    // leave whenever she likes, so the header makes that true however the mail
-    // was sent, rather than depending on anyone remembering to use Broadcasts.
-    //
-    // List-Unsubscribe-Post is RFC 8058 one-click: Gmail and Apple Mail call
-    // the URL themselves from their own unsubscribe button. That is the header
-    // that actually keeps complaints down, because it turns "mark as spam" into
-    // "unsubscribe" inside the client.
     const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
+
+    // ⚠️ TRANSACTIONAL: NO VISIBLE UNSUBSCRIBE. Founder, 2026-09-13: "we put
+    // the link for confirmation, and then on any future emails we put the
+    // option to unsubscribe, this is how it works." She is right and the first
+    // version had it backwards -- offering to remove somebody from a list she
+    // has not joined yet, in the same breath as asking her to join it, reads as
+    // a mistake. The HEADER still goes on, so Gmail's own button works and the
+    // send still looks well-behaved to a mailbox provider.
+    //
+    // ⚠️ AND THE LINK IS BEHIND A BUTTON. A 90-character signed URL printed in
+    // full wrapped across four lines on her phone and looked like phishing.
+    // Plain text cannot do that, which is why there is an HTML version now.
+    const body = buildEmail({
+      kind: "transactional",
+      preheader: "One tap and you are on the list.",
+      lines: [
+        "Thank you for asking.",
+        "We are Shaklek. 100% linen, cut to your shape, sewn here in the UAE, and nothing made before somebody wants it.",
+        "Tap below and we will tell you the day we open.",
+        "If you did not ask for this, ignore this and you will never hear from us again.",
+      ],
+      button: { label: "Confirm my email", url: confirmUrl },
+    });
     const sent = await sendMail(apiKey, {
       to: email,
-      subject: "One click, and we will tell you when we open",
-      headers: {
-        "List-Unsubscribe": `<${unsubUrl}>`,
-        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-      },
-      // ⚠️ ONE LINE PER PARAGRAPH, NEVER HARD-WRAPPED AT 75 CHARACTERS. The
-      // first version wrapped by hand, which looks tidy in a code editor and
-      // ragged on a phone: the client re-wraps to its own width and the manual
-      // breaks survive, so every paragraph ends in a short orphan line. The
-      // founder's screenshot showed exactly that. Let the mail client wrap.
-      //
-      // ⚠️ AND THE UNSUBSCRIBE IS IN THE BODY, not only in the header. Gmail
-      // shows a header-based unsubscribe only for mail it classifies as bulk,
-      // and a first transactional send is not bulk -- so the promise made two
-      // lines above it was invisible in her inbox. The header stays for the
-      // one-click button; this is what a person can actually see.
-      text: [
-        "Thank you for asking.",
-        "",
-        "Shaklek is 100% linen, cut to your shape, and sewn here in the UAE after you order it.",
-        "",
-        "Confirm your address and we will tell you the day we open, and now and then when there is something new.",
-        "",
-        confirmUrl,
-        "",
-        "Did not ask for this? Ignore this email and you will never hear from us again.",
-        "",
-        "Shaklek, Dubai",
-        `Leave the list: ${unsubUrl}`,
-      ].join("\n"),
+      subject: "Confirm your email, and we will tell you when we open",
+      headers: unsubscribeHeaders(unsubUrl),
+      text: body.text,
+      html: body.html,
     });
     if (!sent) {
       console.error("[waitlist] confirm email failed to send");
