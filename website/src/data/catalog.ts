@@ -59,11 +59,14 @@ export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
   Shirt: 449,
   Skirt: 449, // no skirt ships yet; less cloth than a shirt, more stitching, so it lands on the same number
   Pants: 519,
-  Dress: 599, // decided 2026-09-12, ~54% margin. No dress ships yet -- see planning/margins.mjs
-  Abaya: 690, // decided 2026-09-12, ~55.5% margin. ⏳ ASSUMES 100 AED stitching, which the
-              // tailor has NOT quoted -- the only estimate left in the ladder. Re-run
-              // planning/margins.mjs when he does. 130 EUR (554) would be 45.3%, ten points
-              // under everything else, which is why it is 690 and not a euro-converted number.
+  Dress: 599, // ⚠️ NO DRESS AT LAUNCH. Founder, 2026-09-12: abayas only. The entry stays
+              // because removing it is churn; nothing is photographed, priced or listed.
+  Abaya: 690, // ✅ QUOTED AND SETTLED. The tailor quoted 80-90 for a dress AND an abaya on
+              // 2026-09-12; modelled at 90, the worse end, which puts 690 at ~57% -- the
+              // strongest margin in the range. The earlier "assumes 100, not quoted" note
+              // was stale by a day. ⏳ THE GILET IS NOW THE ONLY UNQUOTED NUMBER.
+              // ⚠️ This price is PUBLISHED in the journal article
+              // "how-much-does-an-abaya-cost-in-dubai". Change one, change both.
 };
 
 export const catalog: CatalogItem[] = [

@@ -258,7 +258,11 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "We cut open abayas, shirts and trousers in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. If you are in Dubai we come to you and take the measurements ourselves, so the length of both layers is right the first time.",
+        // ⚠️ "We cut open abayas" was a claim about a product with no catalogue
+        // entry and no way to buy it. The abaya is coming; it is not made yet.
+        // Say what ships and say what is coming, separately. Journal review,
+        // 2026-09-13.
+        text: "We cut shirts and trousers in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before, with an open abaya joining them at launch. If you are in Dubai we come to you and take the measurements ourselves, so the length is right the first time.",
       },
       {
         type: "p",
@@ -288,7 +292,13 @@ export const articles: Article[] = [
     blocks: [
       {
         type: "p",
-        text: "The short answer, for 2026: ready-made abayas start around AED 300. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350. A full custom piece, where somebody sources the fabric and makes it to your measurements, typically starts at AED 800 and climbs past AED 5,000.",
+        // ⚠️ AED 100, NOT 300. The first version said ready-made "start around
+        // AED 300", which is contradicted by Luxury And More, the source cited
+        // at the foot of this very article: their budget band starts at 100.
+        // The error tripled the market floor and it happened to flatter our own
+        // 690, which is the direction an error must never run. Caught by the
+        // journal review, 2026-09-13.
+        text: "The short answer, for 2026: ready-made abayas start from around AED 100 and a good one sits in the 300 to 600 range. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350, before the cloth. A full custom piece, where somebody sources the fabric and makes it to your measurements, typically starts at AED 800 and climbs past AED 5,000.",
       },
       {
         type: "p",
@@ -296,15 +306,19 @@ export const articles: Article[] = [
       },
 
       { type: "h2", text: "The three prices, and what each one buys" },
-      { type: "h3", text: "Ready-made, from about AED 300" },
+      { type: "h3", text: "Ready-made, from about AED 100" },
       {
         type: "p",
-        text: "Made in a size run, hanging on a rail. You are paying for cloth and construction and nothing else. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
+        text: "Made in a size run, hanging on a rail. The floor is around AED 100 for a basic polyester piece, and most of what people actually buy sits between 300 and 600. You are paying for cloth and construction and nothing else. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
       },
       { type: "h3", text: "Tailoring only, about AED 200 to 350" },
       {
         type: "p",
-        text: "You buy the fabric yourself, usually from a shop in Satwa or Deira, and pay a tailor to cut and sew it. The number sounds low until the cloth is added: an abaya takes roughly three metres, so at 40 to 80 dirhams a metre the real total lands between 320 and 590 before any embroidery.",
+        // The metre price here is OUR OWN, from real 2026 quotes in
+        // planning/pricing-todo.md: local 100% linen at 65/m, imported at 36/m
+        // landed, local cotton at 20. Said as our own figures rather than as a
+        // market survey, because that is what they are.
+        text: "You buy the fabric yourself, usually from a shop in Satwa or Deira, and pay a tailor to cut and sew it. The number sounds low until the cloth is added. An abaya takes roughly three metres, and from our own 2026 quotes a metre runs about 20 dirhams for cotton and around 65 for good linen bought locally, so the real total lands anywhere from 260 to 550 before any embroidery.",
       },
       {
         type: "p",
@@ -353,7 +367,11 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Ours is AED 690, cut to your measurements, in 100% linen, made after it is ordered. That is below the usual floor for a full custom piece, and the reason is that we make one design well rather than sourcing something different for every order.",
+        // ⚠️ THE ONE PUBLISHED PRICE IN THE JOURNAL. It matches
+        // catalog.ts BASE_PRICE_BY_CATEGORY.Abaya. Change one, change both.
+        // Framed as "will be" because it is not purchasable yet, and a present
+        // tense here would be a claim about a product that does not exist.
+        text: "Ours will be AED 690 when we open, cut to your measurements, in 100% linen, made after it is ordered. That is below the usual floor for a full custom piece, and the reason is that we make one design well rather than sourcing something different for every order.",
       },
       {
         type: "callout",
@@ -365,141 +383,6 @@ export const articles: Article[] = [
       },
     ],
   },
-  {
-    slug: "natural-fabrics-better-for-your-body",
-    title: "Why clothes made from natural fabrics are better for your body",
-    description:
-      "How plant fibres like linen and cotton handle heat, moisture and skin contact differently from polyester, and what that means for what you wear every day.",
-    published: "2026-09-05",
-    readingMinutes: 6,
-    intro:
-      "Most clothing sold today is made from plastic. Not loosely, not as a figure of speech: polyester, nylon and acrylic are petroleum products spun into thread. Here is what that actually changes about wearing them.",
-    hero: { src: "/marketing/story-materials-v2.jpg", alt: "Linen cloth, close.", w: 1584, h: 672 },
-    blocks: [
-      {
-        type: "p",
-        text: "Around two thirds of the world's clothing is now made from synthetic fibre. It is cheap, it is strong, and it holds a printed colour well. Those are real advantages, and they are why it took over. But the properties that make polyester good to manufacture are not the properties that make a garment good to wear against skin for fourteen hours in a hot country.",
-      },
-      {
-        type: "p",
-        text: "Plant fibres behave differently, and the difference is structural rather than a matter of opinion.",
-      },
-
-      { type: "h2", text: "The difference is what the fibre does with water" },
-      {
-        type: "p",
-        text: "This is the whole thing, and almost everything else follows from it. Your body cools itself by evaporating sweat off your skin. A fabric either helps that happen or gets in its way.",
-      },
-      {
-        type: "h3",
-        text: "Plant fibres absorb moisture. Synthetics repel it.",
-      },
-      {
-        type: "p",
-        text: "Linen and cotton are hydrophilic, which means the fibre itself takes water into its structure. Linen can hold a significant share of its own weight in moisture before it even begins to feel damp, then releases it into the air. Sweat moves off your skin, into the cloth, and away.",
-      },
-      {
-        type: "p",
-        text: "Polyester is hydrophobic. The fibre will not absorb water, so moisture has nowhere to go except to sit on your skin or bead on the inside surface of the garment. Performance synthetics work around this with engineered weaves that wick liquid along the surface, and the good ones genuinely work. A cheap polyester blouse does not have that engineering. It just holds the damp against you.",
-      },
-      {
-        type: "h3",
-        text: "Which is why one feels cooler than the other at the same temperature",
-      },
-      {
-        type: "p",
-        text: "Two garments in the same room, on the same person, at the same air temperature, do not feel the same. Linen has a loose, irregular weave and stiff fibres that hold the cloth slightly off the skin rather than clinging to it, so air moves through and underneath. That moving air is what carries evaporating sweat away. Cotton sits closer but still breathes. A tight synthetic weave traps a still, warm, humid layer against you, and still humid air is the one condition in which sweating stops working.",
-      },
-
-      {
-        type: "image",
-        src: "/marketing/story-hero.jpg",
-        alt: "Linen, close.",
-        caption: "Linen holds itself slightly off the skin. That gap is where the air moves.",
-        w: 1584, h: 672,
-      },
-      { type: "h2", text: "What sits against your skin all day" },
-      {
-        type: "p",
-        text: "Skin is not a sealed barrier. It is in contact with fabric for most of your life, and for anyone with eczema, sensitive skin or a tendency to heat rash, what that fabric is made of and what was done to it during manufacture both matter.",
-      },
-      {
-        type: "ul",
-        items: [
-          "Friction and heat. A fabric that holds moisture against skin in a warm climate creates exactly the conditions that irritate it. Heat rash is a blocked sweat duct, and a fabric that stops sweat evaporating makes that more likely, not less.",
-          "Finishing chemicals. Wrinkle-resistant, stain-resistant and permanent-press finishes are applied to fabric after weaving, and some are formaldehyde based. These are applied to natural fibres too, so untreated matters as much as natural does.",
-          "Dyes. Certain azo dyes are restricted in the EU and elsewhere because of what they break down into. This is a question about the dyeing, not about the fibre, and it is worth asking a brand regardless of what its cloth is made of.",
-        ],
-      },
-      {
-        type: "callout",
-        text: "Natural does not automatically mean untreated. A heavily finished cotton shirt can carry more chemistry than a plain synthetic one. The useful question is not only what the fibre is, but what was done to it afterwards.",
-      },
-
-      { type: "h2", text: "The microplastic question, stated honestly" },
-      {
-        type: "p",
-        text: "Synthetic garments shed microscopic plastic fibres when they are washed and, in smaller quantities, when they are simply worn. Those fibres pass through wastewater treatment and into rivers and oceans, and a meaningful share of ocean microplastic is now attributed to textiles.",
-      },
-      {
-        type: "p",
-        text: "What that does to human health is still being studied and it would be dishonest to claim otherwise. What is not in question is where the fibres end up. Plant fibres shed too, but what they shed is cellulose, which breaks down.",
-      },
-
-      {
-        type: "quote",
-        text: "Synthetics win on durability, cost and holding their shape. Plant fibres win on everything to do with wearing the garment in heat.",
-      },
-      { type: "h2", text: "Where natural fibres are genuinely worse" },
-      {
-        type: "p",
-        text: "A page that only listed advantages would not be worth reading. Plant fibres lose on several counts:",
-      },
-      {
-        type: "ul",
-        items: [
-          "Linen creases, and it will crease within an hour of putting it on. This is a property of the fibre, not a fault in the cloth, and no finish removes it without adding chemistry.",
-          "Cotton is thirsty to grow. Conventional cotton uses a great deal of water and pesticide. Linen, made from flax, needs considerably less of both, which is why it tends to be the better environmental answer of the two.",
-          "Natural fibres shrink, particularly on a first wash if the cloth was never pre-shrunk. Synthetics hold their dimensions almost perfectly.",
-          "They wear faster at stress points. Polyester is genuinely stronger.",
-        ],
-      },
-      {
-        type: "p",
-        text: "The honest summary is that synthetics win on durability, cost and dimensional stability, and plant fibres win on everything to do with wearing the garment in heat.",
-      },
-
-      { type: "h2", text: "How to tell what you are actually buying" },
-      {
-        type: "p",
-        text: "The composition label is a legal requirement in most markets, including the UAE, and it is the only part of a garment that has to tell the truth. The front of the shop can say breathable and natural without either word meaning anything specific.",
-      },
-      {
-        type: "ul",
-        items: [
-          "Read the composition label, not the marketing. Percentages are what count.",
-          "Watch for a small synthetic percentage. A cloth described as linen can be mostly something else, and even a modest share of elastane or polyester changes how the garment breathes.",
-          "Blends are not automatically a compromise. Linen and cotton woven together is a long established cloth that keeps the breathability of both and creases less than pure linen. A plant fibre blended with another plant fibre is a different proposition from a plant fibre blended with plastic.",
-          "Ask what the finish is. Wrinkle-free on a natural fabric usually means something was added.",
-        ],
-      },
-
-      { type: "h2", text: "Why this matters more in the Gulf" },
-      {
-        type: "p",
-        text: "In a temperate climate the difference between fabrics is a matter of comfort. In a Dubai August, when it is forty two degrees outside and the humidity is high, it stops being subtle. Air conditioning solves the problem indoors and does nothing for the walk between the car and the door.",
-      },
-      {
-        type: "p",
-        text: "This is the reason linen has been worn in hot countries for thousands of years and is still worn in them now. It is not nostalgia. It is that the fibre does something useful with heat and sweat that a plastic thread cannot do.",
-      },
-      {
-        type: "p",
-        text: "Shaklek makes clothes to order in the UAE, cut by a tailor after you order rather than made in advance, and we make them from plant based fabric for the reasons above. If you want to see how that works, our catalogue lets you change the cut and see the piece before anything is made.",
-      },
-    ],
-  },
-
   {
     slug: "what-to-wear-dubai-summer-fabric",
     title: "What to wear in Dubai summer: how fabric changes how hot you feel",
@@ -570,7 +453,7 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "Sleeves are worth more thought than they get. A long sleeve in loose linen is frequently cooler than a bare arm in direct sun, because it shades the skin while still letting air through. This is why long, loose clothing is traditional across every hot region of the world.",
+        text: "Sleeves are worth more thought than they get. A sleeve worn down, in loose linen, is frequently cooler than a bare arm in direct sun, because it shades the skin while still letting air through. This is why long, loose clothing is traditional across every hot region of the world.",
       },
 
       {
@@ -587,7 +470,7 @@ export const articles: Article[] = [
       {
         type: "ul",
         items: [
-          "Loose plant fibre shirts with room across the back and through the sleeve. Long sleeves are not the compromise they sound like.",
+          "Loose linen shirts with room across the back and through the sleeve. Covering the arm is not the compromise it sounds like.",
           "Wide or straight leg trousers rather than anything close fitting through the thigh.",
           "Something with sleeves kept for indoors. Air conditioning in Dubai offices and malls is genuinely cold, and the temperature swing across a single day is the real challenge of dressing here.",
           "Accept the creasing. Every fabric that performs in this heat creases, and any finish that stops it is doing so chemically.",
@@ -695,7 +578,7 @@ export const articles: Article[] = [
       { type: "h2", text: "What it means for buying less" },
       {
         type: "p",
-        text: "The most sustainable garment is the one that gets worn. A piece that fits badly is worn twice and then avoided, which makes it expensive per wearing however cheap it was to buy. Fit is not a luxury feature. It is the thing that decides whether a garment is used or wasted.",
+        text: "The garment that gets worn is the one that was worth making. A piece that fits badly is worn twice and then avoided, which makes it expensive per wearing however cheap it was to buy. Fit is not a luxury feature. It is the thing that decides whether a garment is used or wasted.",
       },
       {
         type: "p",
