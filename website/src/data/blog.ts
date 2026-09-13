@@ -195,18 +195,6 @@ export const articles: Article[] = [
         type: "p",
         text: "The most flexible, because it survives the abaya coming off indoors. Straight or wide trousers sit better under a long outer layer than anything narrow: narrow trousers fight the abaya at every step and pull it out of line.",
       },
-      {
-        type: "pair",
-        a: {
-          src: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg",
-          alt: "An ivory linen shirt.",
-        },
-        b: {
-          src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-full-front.jpg",
-          alt: "Wide-leg linen trousers in ivory.",
-        },
-        caption: "Shirt and trousers in one colour, so the open front reads as a single column.",
-      },
       { type: "h3", text: "A simple dress" },
       {
         type: "p",
@@ -256,14 +244,6 @@ export const articles: Article[] = [
         type: "p",
         text: "This is worth knowing before buying either piece. There is more on how the fibres themselves behave in our guide to dressing for a UAE summer.",
       },
-      {
-        type: "image",
-        src: "/marketing/pre-launch/flax-stalks.jpg",
-        alt: "A tied bundle of dried flax stalks, the plant linen is spun from.",
-        caption: "Flax, before it becomes linen.",
-        w: 637,
-        h: 800,
-      },
 
       { type: "h2", text: "In short" },
       {
@@ -283,6 +263,105 @@ export const articles: Article[] = [
       {
         type: "p",
         text: "Sources for the styling and colour guidance above: 2026 Gulf abaya colour forecasts from AbayaButh, Soleil UAE and Dar Al Mutahajiba; styling and layering guidance from Maison Ayla, Fashion Week Online and NEEIM.",
+      },
+    ],
+  },
+  {
+    // ⚠️ THE ONLY ARTICLE THAT CARRIES A PRICE, so it is the one to check when
+    // prices move. The file header's blanket "no prices" rule was written while
+    // the fabric was unsettled; the founder settled the abaya at 690 on
+    // 2026-09-13 and confirmed it could be published. An article titled "how
+    // much does it cost" that refuses to say is useless, which is the failure
+    // this journal brief exists to prevent.
+    //
+    // Search intent: she wants a number, and to know whether she is about to be
+    // overcharged. Both in the first paragraph.
+    slug: "how-much-does-an-abaya-cost-in-dubai",
+    title: "How much does an abaya cost in Dubai?",
+    description:
+      "Ready-made, tailoring only, and full custom are three different prices for three different things. What each costs in 2026, and what actually drives the number.",
+    published: "2026-09-13",
+    readingMinutes: 5,
+    intro:
+      "Three different things get called an abaya price in Dubai, and they are not close to each other. Knowing which one you are being quoted is most of the answer.",
+    hero: { src: "/marketing/story-tailoring.jpg", alt: "A tailor at work.", w: 1584, h: 672 },
+    blocks: [
+      {
+        type: "p",
+        text: "The short answer, for 2026: ready-made abayas start around AED 300. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350. A full custom piece, where somebody sources the fabric and makes it to your measurements, typically starts at AED 800 and climbs past AED 5,000.",
+      },
+      {
+        type: "p",
+        text: "Most confusion about abaya pricing comes from those three being quoted as though they were the same thing.",
+      },
+
+      { type: "h2", text: "The three prices, and what each one buys" },
+      { type: "h3", text: "Ready-made, from about AED 300" },
+      {
+        type: "p",
+        text: "Made in a size run, hanging on a rail. You are paying for cloth and construction and nothing else. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
+      },
+      { type: "h3", text: "Tailoring only, about AED 200 to 350" },
+      {
+        type: "p",
+        text: "You buy the fabric yourself, usually from a shop in Satwa or Deira, and pay a tailor to cut and sew it. The number sounds low until the cloth is added: an abaya takes roughly three metres, so at 40 to 80 dirhams a metre the real total lands between 320 and 590 before any embroidery.",
+      },
+      {
+        type: "p",
+        text: "It is the cheapest route if you already know what fabric you want and you do not mind making two trips.",
+      },
+      { type: "h3", text: "Full custom, from about AED 800" },
+      {
+        type: "p",
+        text: "Somebody else sources the cloth, takes your measurements and makes the piece. The floor is around 800 and the ceiling is wherever the embroidery stops. Hand embroidery, beading and lacework are the three things that move this number fastest, and they move it a long way.",
+      },
+
+      { type: "h2", text: "What actually drives the price" },
+      {
+        type: "ul",
+        items: [
+          "The fabric, and it is the biggest single line. Nida and crepe sit at the bottom, linen and silk blends well above.",
+          "Hand work. Embroidery, beading and crystals are priced by the hour, so they scale with how much of the garment they cover.",
+          "Whether it is cut to you. Measurements mean a fitting and a pattern, which is labour before any cloth is touched.",
+          "How many are being made. A piece from a size run costs less than a piece made once, for the same reason anything does.",
+        ],
+      },
+      {
+        type: "p",
+        text: "What does not move it much, despite how it is often sold: the colour, and the number of buttons.",
+      },
+
+      { type: "h2", text: "What to check before you pay" },
+      {
+        type: "ul",
+        items: [
+          "Ask what the fibre is, not what the fabric is called. If the answer is a name rather than a fibre, ask again.",
+          "Ask whether the quote includes the cloth. This is where most of the confusion sits.",
+          "Ask how many fittings are included, and whether alterations after the first cost extra.",
+          "For anything with hand work, ask the price of the plain version first, then the addition. One number hides which half you are paying for.",
+        ],
+      },
+      {
+        type: "quote",
+        text: "Nida is a brand of polyester. Ask for the fibre, not the fabric name.",
+      },
+
+      { type: "h2", text: "Where a linen abaya sits" },
+      {
+        type: "p",
+        text: "Linen is unusual in this market and costs more per metre than the polyester crepes most abayas are cut from. It is also the reason to choose one: it lets sweat out, which matters more for the outer layer than for anything worn underneath. There is more on that in our guide to what to wear under an open abaya.",
+      },
+      {
+        type: "p",
+        text: "Ours is AED 690, cut to your measurements, in 100% linen, made after it is ordered. That is below the usual floor for a full custom piece, and the reason is that we make one design well rather than sourcing something different for every order.",
+      },
+      {
+        type: "callout",
+        text: "We open in early October. If you are in Dubai we come to you and take the measurements ourselves before anything is cut, at no charge. Leave your email on the home page and we will tell you the day.",
+      },
+      {
+        type: "p",
+        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers.",
       },
     ],
   },
