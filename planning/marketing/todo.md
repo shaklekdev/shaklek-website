@@ -201,3 +201,176 @@ Italiana in caps with wide tracking does not read as the same typeface.
 
 **The rule: mixed case "Shaklek", Italiana, tracking ratio 4/29 (0.138em).**
 Both were fixed 2026-09-12. Nothing at Fitoor is affected.
+
+
+---
+
+## 8. ⚠️ The unsubscribe, and the promise it has to keep
+
+**Founder's decision, 2026-09-12:** *"we need the newsletter, it's very important
+for new drops"*. So **"Nothing else, ever" is removed** from the waitlist confirm
+email and the confirmed page, and replaced with what she will actually do: the
+opening day, and now and then when something new is made.
+
+✅ **BUILT AND LIVE THE SAME DAY, so this is no longer a to-do.**
+`/api/waitlist/unsubscribe` (GET for a click, POST for RFC 8058 one-click),
+`List-Unsubscribe` and `List-Unsubscribe-Post` on every send from that route,
+an `unsubscribed_at` column in migration 0011 applied to production, and tokens
+that sign a PURPOSE so a forwarded confirm link cannot unsubscribe the
+forwarder. Verified in the code and the migration list. **The one-click POST is
+the part that matters commercially: it is what Gmail and Apple Mail call from
+their own button, which turns "mark as spam" into "unsubscribe".**
+
+**The reasoning below stands as the WHY, and as the rule for anything new.** The new copy says *"You can leave the list whenever you like."* A
+promise is a promise the moment it is written.
+
+- Resend adds an unsubscribe to **broadcasts**. It does **not** add one to a
+  transactional `POST /emails` send, which is how the confirm email goes out.
+- **So a drop announcement sent as a one-off transactional email would carry no
+  unsubscribe and would break the sentence above.** Send campaigns as broadcasts
+  to the segment, or build the unsubscribe.
+
+**Why this was changed while the list is still tiny, which is the whole point:**
+every person who signs up under "nothing else, ever" and later receives a drop
+email has been told something untrue. The way people express that is a spam
+complaint — against the same sending domain that carries **order
+confirmations**. The risk is not the wording, it is deliverability on the emails
+that have to arrive.
+
+⚠️ **The rule survives the fix: any NEW send has to carry the header too.** It
+is on the waitlist route today. A drop announcement written somewhere else, as a
+one-off transactional send, would not inherit it.
+
+
+---
+
+# TOMORROW — 2026-09-13
+
+Written 2026-09-12 at the end of a long day. Ordered by what costs money or
+credibility if it waits, not by effort.
+
+## Hers, and nobody else can do these
+
+1. **Push whatever is still local.** She is driving pushes; check rather than
+   assume. ✅ The unsubscribe, the waitlist table and her copy change all
+   shipped on 2026-09-12 in build 334, migrations 0010 and 0011 on production.
+2. **POST THE CAROUSELS.** Three are finished and exported-ready in
+   `brand-assets/carousels/`. Accounts exist, nothing has gone out since
+   2026-08-27, and the plan wants ten organic sales before any ad spend. This
+   is the only item whose value decays while it sits.
+3. **Fitoor**: samples were due ~29 Sept and the 50% advance is paid. Chase.
+4. **Shirley**: flax origin, the composition certificate naming W300235, and
+   whether the invoice bills actual weight (30kg charged against ~24kg, worth
+   about AED 87).
+5. **The tailor, remaining questions**: volume rate at 10/20/30 pieces a month,
+   the measurement conventions written down, metres per garment, and a quote
+   for the GILET and the SKIRT — the last two placeholders in the model.
+
+## Decided today, so nobody re-opens them
+
+- **Trousers, not Pants**, customer-facing. No code change needed: "Pants" is
+  an internal category key and never reaches a screen.
+- **Emails, not pre-orders.** No money before fabric and packaging land.
+- **"Opening early October"**, never a named day, until Fitoor confirms.
+- **No lead time in advertising.** In the terms it is "about two to three
+  weeks", said as an estimate. Ten working days and two weeks are the same
+  duration; the third week is real headroom.
+- **No health claims, ever.** The hormone line is off `/our-story`.
+- **"Sustainable" is out** of `/our-story`, all three instances.
+
+## Open, and waiting on her
+
+- **Noor** — the sleeve/coverage persona in `personas.md`. She said she had not
+  followed what personas were for; it is a yes/no on whether to speak to that
+  customer at all. If no, delete her.
+- **A preview path** for the real storefront. The gate is off and the proxy
+  rewrites every storefront page to the launch page for everyone, her
+  included. `staging.dqcptedylrif0.amplifyapp.com` works today; a preview
+  cookie on production would be better.
+- **A real photo of the tailor's hands.** `brand-assets/generated/tailor-hands.jpg`
+  is GENERATED and it sits on the slide that argues a real person makes your
+  clothes. A phone photo beats it and costs nothing.
+
+## ⚠️ The tailor's new quote changes the abaya question
+
+**Founder, 2026-09-12: "abaya and dress price is 80-90 aed for both."**
+`planning/margins.mjs` now models BOTH at **90**, the top of the range, on the
+same rule as the shirt: if a number is a range the model takes the worse one,
+so a surprise moves margin up and never down.
+
+**The abaya was a 100 placeholder and is now quoted.** With cloth at 36.08/m:
+
+| item | metres | cloth | stitch | make | to hit bench 56.8% | at 60% |
+|---|---|---|---|---|---|---|
+| Dress | 3.0 | 108 | 90 | 198 | **668** | 725 |
+| Abaya | 3.2 | 115 | 90 | 205 | **686** | 745 |
+
+⚠️ **So the 130 EUR (554 AED) abaya benchmark does not work.** At 554 the
+garment cannot carry cloth plus stitching at anything like the shirt's margin.
+Either the abaya sells around 690, or it sells at a deliberately lower margin
+and that is a decision taken with open eyes. **Do not set the price from the
+European number** — check what an abaya actually sells for in the UAE first.
+
+### ⚠️ And the dress and abaya can no longer justify their price gap
+
+**They now cost the SAME to sew: 90 each.** The only cost difference left
+between them is **0.2 metres of cloth, which is 7.22 AED** (3.2m vs 3.0m at
+36.08). That is arithmetic, not a model output.
+
+So the proposed **dress 599 / abaya 690** puts a **91 AED gap** on top of a
+**7 AED** cost difference. Either the dress is underpriced or the abaya is
+overpriced; the costs no longer tell them apart, so the answer has to come from
+what each one is worth in this market, not from the spreadsheet.
+
+✅ **DECIDED 2026-09-12: NO DRESS FOR LAUNCH. ABAYAS ONLY.** Her call once the
+tailor quoted 90 for both. The dress earns 52.2% at 599 and the abaya 57.0% at
+690, they cost the same to sew, and **the abaya is the piece nobody else cuts to
+measure** — which is the whole argument for the brand. The Dress category stays
+in the code; nothing gets photographed, priced or listed. Do not reopen the
+dress price: the question is closed, not deferred.
+
+⚠️ Consequence to watch: the free-shipping threshold band is (519, 599] and was
+set so "a single dress or abaya qualifies". With no dress, check the band still
+does what it should against the abaya alone.
+
+
+---
+
+## 9. Emails and the journal — tomorrow's work in this area
+
+**From shaklek-15, and both are copy problems rather than code problems.**
+
+1. **The emails need shortening and an HTML version.** A 90-character signed URL
+   printed in full wraps across four lines on a phone and reads like phishing.
+   Her words: *"we can't display this like that."* A link with visible text
+   instead of a raw URL, and a body that survives a phone screen.
+   ⚠️ **Keep BOTH unsubscribe routes if you touch that file**: the
+   `List-Unsubscribe` headers AND the visible "Leave the list" line. Gmail
+   surfaces a header-based unsubscribe only on mail it classifies as bulk, and a
+   first transactional send is not bulk — so the header alone is invisible
+   exactly when it matters most.
+2. **The journal rewrite.** Reasoning and three proposed angles are in
+   `frontend-todo.md`, awaiting her reaction. Her read: essays where they should
+   be answers, and the searches still worth winning are **local and
+   decision-shaped**, not general explainers.
+
+## 10. ⚠️ The www timeouts — what is actually known
+
+Do not re-measure this from scratch, and **do not blame CloudFront**; she
+rejected that and was right that nothing had ruled us out.
+
+**Measured 2026-09-12, from one sandbox:**
+
+- During the failures, `www.shaklek.com` returned `000` (connection never
+  established, DNS resolving fine) **while `example.com` AND
+  `staging.dqcptedylrif0.amplifyapp.com` both returned 200 in the same minute.**
+  Staging is also CloudFront. **So a dead CloudFront edge does not explain it** —
+  another CloudFront property was reachable at the moment ours was not.
+- Later, 60 consecutive probes across four hosts (ours, staging, an AWS
+  CloudFront asset host, and a non-CloudFront control) returned **60/60 OK**. The
+  fault was not present and could not be reproduced.
+
+**So: intermittent, specific to the www.shaklek.com hostname while it lasts, not
+CloudFront-wide, and not reproducible on demand.** That is the honest state.
+Anything narrower than that is a guess. The next useful measurement is one taken
+**while it is failing**, from the machine that is failing — not afterwards.

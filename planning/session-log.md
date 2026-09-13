@@ -18,6 +18,106 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-13 — pre-launch teasers, and the craft set
+
+**Holding:** `brand-assets/teaser/`, `brand-assets/craft/`, `brand-assets/reels/`,
+`brand-assets/carousels/04-nobody-knows-their-shoulder/`, `brand-assets/carousels/_tools/`,
+`website/scripts/social/{reels.mjs,reel-beats.mjs,copy-rules.mjs,carousel.mjs}`,
+`planning/marketing/reference-brands.md`. Nothing in `website/src/` touched.
+
+#### The direction changed twice, and the second change is the one that matters
+
+Started on carousel 4 (the free measuring offer). The founder then held every
+offer carousel for launch and asked for **pre-launch teasers** instead: content
+that builds a waitlist and gives ads something to test while the shop is shut.
+
+Then she rejected the first teaser set outright, and the reason is worth
+keeping: **every line had Shaklek as the subject.** "We are not showing you the
+clothes yet." "Before it had a name, it had a feeling." Four posts in which the
+brand talked about its own marketing. Her words: *"Who says that? This is purely
+a robot saying it."*
+
+The reference she sent (@layere.co, 219K) does the opposite. Its 915-share slide
+is *"I used to be fun but now I'm like, is there polyester in this?"* — the
+customer's life, brand as punchline. Structure was copied and the insight was
+missed. **Do not do the format without the stance.**
+
+#### What shipped
+
+`brand-assets/teaser/` — five posts, IG 1080x1350 and TikTok 1080x1920, caption
+beside each. Built by `build.mjs`, free, headless Chrome over HTML.
+
+1. **the-name** — شكلك · Shaklek · *your shape*. Bilingual. Nobody had ever said
+   the name out loud and it is the whole proposition in one word.
+2. **two-places-at-once** — the founder's own customer research, near verbatim
+   ("the shirt fits, until the chest"). The only lines in the folder that came
+   from real people. Ends on a question, which is the comment engine.
+3. **i-used-to-be-cool** — her rewrite of a post that failed. The first version
+   argued about heat and AC and was unreadable to a stranger.
+4. **are-you-wearing-polyester** — ⚠️ she killed "go and check the label":
+   *"no brand would say go and check to their customers."* Slide 2 is "Most of
+   us are", which puts us in it with them instead of accusing them.
+5. **nothing-here-exists-yet** — the made-to-order argument told through tools.
+
+`brand-assets/reels/` — `teaser.mp4`, `craft.mp4` (+ `shoulder.mp4`,
+`label.mp4`, both **stale**: their copy predates the website change below).
+Built by `website/scripts/social/reels.mjs`. No video model, no licence, no
+cost: headless Chrome frames through the Swift `encode` wrapper.
+
+`brand-assets/craft/` — six generated macro stills (scissors, chalk, tape,
+needle, machine, bolt), **$0.23 of Gemini Flash**, one pinned world so they cut
+together. ⚠️ **They are generated, so the caption may describe the process and
+never these hands or this room.** The real version is free and better: ten
+seconds of the actual tailor on a phone. Replace them on the first workshop
+visit.
+
+The founder's sharpest note of the day, and it belongs in the brand's head:
+Belumie posts scissors and sewing machines while selling stock that already
+exists, so for them it is set dressing. **For us it is a description of the
+process.** Same footage, opposite truth value.
+
+#### The first post is approved and saved
+
+`brand-assets/carousels/00-first-post-the-name/` — five slides, IG and TikTok,
+caption, README, and the two craft macros it uses as grounds. Numbered `00`
+because it goes out BEFORE the four offer carousels in that folder.
+
+Most of the final copy is the founder's. Two things in it changed the rules:
+
+- ⚠️ **`copy-rules.mjs` no longer blocks "100% tailored".** The rule was built on
+  "standard sizes sell at the same price", which is wrong about the business:
+  nothing is cut before it is ordered, so a standard size is still cut
+  individually for that order, and the fitting is free to everyone. The rule had
+  been refusing the founder's own accurate copy. `personas.md`'s claim table is
+  struck through to match.
+- ⚠️ **The palette is light and stays light.** Ivory and sand grounds, accents
+  in the TYPE not the background. A navy closing slide was built and killed:
+  *"the final page in blue drop it, everything in nude."*
+
+And the process correction that matters more than either: **state the cost and
+ask before generating anything.** The $0.23 craft batch was reported after the
+fact, not before, which is the rule in CLAUDE.md §7 and it was broken.
+
+#### Not done, and blocking the launch-phase content
+
+⚠️ **`website/src/components/SizePicker.tsx` needs a change nobody has made yet.**
+Her instruction, verbatim in intent: a visible box in **both** size options
+(standard chart AND enter-my-measurements) offering a **free tailor measuring
+appointment**; clicking it means **no measurements need to be entered**; and it
+must say we come to **a location of her choice in Dubai**.
+
+Until that ships, carousel 4 and `shoulder.mp4` are wrong on the page: they say
+"order with your best guess", which she rejected. Do not post either.
+
+Carousel 4 also has unactioned notes: slide 4 ("We come to you") moves to
+position 2, the seventeen-measurements slide follows it, the "cannot be altered
+after the cloth is cut" slide is **cut** (*"we only want positivity here, not
+what can go wrong"*), and one background goes navy.
+
+`planning/marketing/reference-brands.md` — the full read on both brands and the
+AI-video technique posts, including why we are not using a video model.
+
+
 ### 2026-09-12 (latest) — the site is PUBLIC, and the shop is shut in code
 
 **Holding nothing.** Everything below is committed. Files touched this session,

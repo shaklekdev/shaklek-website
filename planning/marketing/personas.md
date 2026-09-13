@@ -257,7 +257,7 @@ Applies to every asset built from this document.
 |---|---|
 | 100% plant based | 100% linen (there are buttons and a zip fly) |
 | 100% made in the UAE | Cut and sewn in the UAE |
-| 100% tailored | Your measurements or a standard size, same price |
+| ~~100% tailored~~ **struck 2026-09-13** | **Allowed. Say it.** Nothing is cut before it is ordered, so a standard size is still cut individually by a tailor for that order. There is no stock and therefore no un-tailored path, and the fitting is free to everyone. This row used to ban the phrase and was wrong about the business for weeks. |
 | Long sleeve | Rolled sleeve, or name the setting |
 | Hypoallergenic, cures, prevents | Breathable, absorbent, a plant fibre |
 | Sustainable, eco, green | Made after you order it. No stock, no markdowns. |
