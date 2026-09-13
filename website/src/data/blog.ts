@@ -7,13 +7,13 @@
  * per page, H2 for sections, H3 beneath them. A markdown file lets an author
  * skip a level by accident; this does not.
  *
- * ⚠️ NO FIBRE COMPOSITION IN ANY ARTICLE. Not "100% linen", not a blend ratio,
- * not a percentage. As of 2026-09-05 the entry fabric is still being settled
- * (see planning/unit-economics.md), and fourteen customer-facing files already
- * assert "100% linen" and will need rewriting when it lands. These articles are
- * written to survive that decision: they discuss plant fibres as a category,
- * which is true of linen, of cotton and of any blend of the two. Adding a
- * percentage here buys nothing for search and creates a fifteenth file to fix.
+ * ⚠️ THE FIBRE RULE HAS EXPIRED, AND THE ARTICLES STILL FOLLOW IT ANYWAY.
+ * This said "no fibre composition, the entry fabric is still being settled".
+ * Linen-only was decided on 2026-09-08, so "100% linen" is now safe to write.
+ * The existing three still discuss plant fibres as a CATEGORY, which is a
+ * better article regardless: a piece that argues linen beats polyester in
+ * humidity is useful to a stranger, and a piece that only says "ours is linen"
+ * is an advertisement. Write about the category, mention what we cut once.
  *
  * ⚠️ NO PRICES either. They are one founder decision away from moving, and a
  * stale price in an indexed article outlives the decision that changed it.
@@ -66,6 +66,156 @@ export type Article = {
 };
 
 export const articles: Article[] = [
+  {
+    // ⚠️ THE TOPIC CAME FROM THE FOUNDER, NOT FROM A KEYWORD TOOL, and then the
+    // keyword data agreed with her. 2026-09-13: "the shirt and pants are what
+    // goes beneath the abaya if they wish so... for emaratis they wear abaya
+    // and beneath it, either a dress or some wear pants and shirts."
+    //
+    // UAE autocomplete returns "what to wear under an OPEN abaya" across two
+    // separate phrasings, plus "abaya with pants and shirt", "abaya with pants
+    // dubai", "open abaya with pants" and "what to wear under abaya in summer".
+    // That is our exact product described in somebody else's search box.
+    //
+    // It also sells TWO GARMENTS, which is the 71% margin line: a second piece
+    // in the same order pays no second lot of packaging or shipping.
+    //
+    // Checked and found EMPTY, so do not chase them: "hijabi office outfits
+    // dubai" and "modest workwear dubai". No demand, and "modest wear" is a
+    // banned term in planning/marketing/personas.md anyway.
+    slug: "what-to-wear-under-an-open-abaya",
+    // ⚠️ THE TITLE IS THE SEARCHED PHRASE, not a nicer sentence. UAE
+    // autocomplete returns "what to wear under abaya in summer" and "what to
+    // wear under an open abaya"; it does not return "Gulf heat", which is what
+    // this said first. The climate detail belongs in the body, where it is
+    // useful, not in the title, where it costs the match.
+    title: "What to wear under an open abaya in summer",
+    description:
+      "An open abaya shows a narrow strip of whatever is underneath, all day. A practical guide to choosing it for summer, from a workshop cutting clothes in the UAE.",
+    published: "2026-09-13",
+    readingMinutes: 5,
+    intro:
+      "An abaya is the layer everyone else sees. What is underneath is the layer you feel for fourteen hours, and through a Gulf summer that is the one that decides whether the day is comfortable.",
+    hero: { src: "/marketing/hero-banner.jpg", alt: "Loose linen, worn in Gulf heat.", w: 1584, h: 672 },
+    blocks: [
+      // ⚠️ THE ANSWER GOES FIRST, before any context. That is what wins a
+      // featured snippet, and it is also just better manners for somebody who
+      // typed a question.
+      {
+        type: "p",
+        text: "The short answer: a plant fibre, cut loose, in a colour that sits quietly against the abaya. Trousers with a shirt, or a simple dress. Whatever you choose is going to spend the day pressed between you and a second layer, so breathability matters more here than it does for anything worn alone.",
+      },
+
+      { type: "h2", text: "Why the layer underneath matters more than the abaya" },
+      {
+        type: "p",
+        text: "An abaya moves. It hangs away from the body, catches air at the hem and the sleeve, and is open at the front for most of the day. The garment beneath it does none of that. It sits against skin, under a second layer, in forty degrees.",
+      },
+      {
+        type: "p",
+        text: "That is why the usual advice about abayas, which is almost entirely about the abaya, misses the part that actually governs comfort. If the piece underneath is polyester, no amount of good tailoring on the outer layer will fix the afternoon.",
+      },
+      {
+        type: "quote",
+        text: "The outer layer is what people see. The inner layer is what you feel.",
+      },
+
+      { type: "h2", text: "Trousers and a shirt, or a dress" },
+      {
+        type: "p",
+        text: "Both work, and the choice is mostly about how you want the day to go rather than about rules.",
+      },
+      { type: "h3", text: "Trousers and a shirt" },
+      {
+        type: "p",
+        text: "The more practical of the two, and the more flexible. It survives the abaya coming off indoors, which a dress cut purely as an underlayer often does not. Straight or wide trousers sit better under a long outer layer than anything narrow, because narrow trousers fight the abaya at every step and pull it out of line.",
+      },
+      {
+        type: "p",
+        text: "A shirt with a little room through the body is worth more than it sounds. Two fitted layers trap air between them with nowhere to go.",
+      },
+      {
+        type: "pair",
+        a: {
+          src: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg",
+          alt: "A loose ivory linen shirt.",
+        },
+        b: {
+          src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-normal-full-front.jpg",
+          alt: "Wide-leg linen trousers in ivory.",
+        },
+        caption: "Loose through the body and straight through the leg, so neither layer fights the other.",
+      },
+      { type: "h3", text: "A dress" },
+      {
+        type: "p",
+        text: "Simpler to put on and cooler in the sense that there is one waistband fewer. The thing to watch is length: a dress that ends near the abaya hem creates a visible double edge at the ankle. Either noticeably shorter or clearly longer reads better than almost the same.",
+      },
+
+      { type: "h2", text: "What the open front actually shows" },
+      {
+        type: "p",
+        text: "An open abaya frames a vertical strip roughly a hand wide, from collar to ankle. That narrow window is the whole of what anybody sees of the layer beneath, and it changes what is worth paying attention to.",
+      },
+      {
+        type: "ul",
+        items: [
+          "The collar and the first few centimetres of the shirt, because that is at eye height.",
+          "The line down the centre. A shirt with a straight front placket reads as a clean vertical; a busy one breaks it.",
+          "The hem of the trousers, which is the only other place the inner layer is visible.",
+          "The colour relationship. Close tones read as deliberate. A hard contrast turns the opening into a stripe.",
+        ],
+      },
+      {
+        type: "p",
+        text: "Almost nothing else shows. Detail on a sleeve or across the back is spent on a layer nobody will see while the abaya is on, which is worth knowing before paying for it.",
+      },
+
+      { type: "h2", text: "The fabric question, briefly" },
+      {
+        type: "p",
+        text: "Linen first, for the reason it always wins here: the fibre takes moisture off skin and gives it up to the air quickly, and the cloth is stiff enough to stand slightly away from the body instead of clinging. Under a second layer, standing away is the property that matters.",
+      },
+      {
+        type: "p",
+        text: "Cotton next, and perfectly good for most of the year, though it stays damp longer on a humid August afternoon. Polyester last, and genuinely uncomfortable in this specific situation, because sweat has nowhere to go and now there are two layers holding it there.",
+      },
+      {
+        type: "image",
+        src: "/marketing/pre-launch/flax-stalks.jpg",
+        alt: "A tied bundle of dried flax stalks, the plant linen is spun from.",
+        caption: "Flax, before it becomes linen.",
+        w: 637,
+        h: 800,
+      },
+
+      { type: "h2", text: "Length, and why it is the thing most often wrong" },
+      {
+        type: "p",
+        text: "Trousers under an abaya want to clear the floor by a centimetre or two, not brush it. The abaya is already doing the job of covering the ankle, so trousers that also reach the ground give you two hems collecting the same dust, and the inner one always loses.",
+      },
+      {
+        type: "p",
+        text: "This is the single most common thing people get wrong, and it is also the hardest to fix off a rail, because trouser length off a rail is cut for an average height rather than yours.",
+      },
+
+      { type: "h2", text: "In short" },
+      {
+        type: "ul",
+        items: [
+          "Choose the inner layer for breathability first. It is under two layers and it is the one you feel.",
+          "Trousers and a shirt are more flexible than a dress, and survive the abaya coming off.",
+          "Keep both layers loose. Two fitted layers trap air with nowhere to go.",
+          "Only a hand-wide strip shows, so spend attention on the collar, the centre line and the hem.",
+          "Get the trouser length right. It is the detail that most often looks wrong and is easiest to fix when something is cut for you.",
+        ],
+      },
+      {
+        type: "callout",
+        text: "We cut shirts and trousers in 100% linen in the UAE, made after they are ordered rather than before. If you are in Dubai we come to you and take the measurements ourselves, so the length under an abaya is right the first time.",
+      },
+    ],
+  },
   {
     slug: "natural-fabrics-better-for-your-body",
     title: "Why clothes made from natural fabrics are better for your body",
