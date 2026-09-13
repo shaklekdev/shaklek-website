@@ -47,12 +47,18 @@ Every claim of the form "X reads better than Y", every trend statement, every
 number gets a source. Search for it. `WebSearch` and `WebFetch` are available
 and are not optional. Cite the sources in a closing paragraph.
 
-Two exceptions, both of which must be **visibly** framed as our own view:
+⚠️ **"Our founder says" IS NOT A SOURCE, AND NO LONGER BUYS A CLAIM.** That
+exception existed for one day. Founder, 2026-09-13: *"i don't like the part you
+talk about 'our founder', please check other blogs, news things for general
+claims."* She is right twice over: a reader has no reason to take our word for
+what the market charges, and it reads as a brand talking about itself in an
+article that promised to be useful. **If a claim cannot be sourced to a
+published guide, a news piece, a retailer's own listing or our own catalogue,
+cut the claim.** Do not rescue it by attributing it to her.
 
-- What we can see in our own catalogue or workshop. "Every long-sleeve shot in
-  our catalogue is rolled" is a fact about our photographs.
-- What the founder has said from living here. Attribute it as experience, never
-  dress it as research.
+The one surviving exception is a fact about **us**, stated as such: "every
+long-sleeve shot in our catalogue is rolled" is a fact about our photographs and
+is checkable by looking.
 
 **A swatch, a table or a number reads as authority.** An invented row is worse
 than a shorter table.
@@ -106,6 +112,34 @@ So, in order:
 ⚠️ A price that is somebody else's gets `market: true` on its block in
 `blog.ts`, which suppresses the stale-price rules for that block only and
 prints the skip. **Never put it on a Shaklek price.**
+
+## 3c. It has to read like a guide, not a brand's blog
+
+Founder, 2026-09-13, on a draft that had passed a review: *"i don't know who
+bar-raised this but it doesn't seem good enough to me, details will push people
+to read or drop and it will also affect our brand reputation."*
+
+The bar is not "accurate and inoffensive". It is **something a person would send
+to a friend who asked**. Three specific things came out of that rejection:
+
+**Name places, plural, and say what each is for.** A draft explained where cheap
+abayas come from by naming Ajman, once. Her reply: *"instead of citing ajman,
+you can tell about other cities like sharjah as well, or other locations, this
+has to feel like a real guide."* One place named as the cheap one is a dig and
+it is also useless. Research the real geography and give the reader a reason to
+go to each: Sharjah's Central Souq, Deira and Naif, Karama, Ajman, Al Ain,
+whichever the sources actually support. A guide has a map in it.
+
+**Every number carries its currency.** *"you often give number with no currency
+this is not good."* Write **AED on both ends of every range** — "AED 800 to AED
+3,000", never "800 to 3,000" — and on metre prices, tailoring quotes and
+everything else. A bare number in a price article is a reader stopping to work
+out what you meant.
+
+**Specific beats summarised.** When a source gives a shop name, a fabric name, a
+souq, a figure, use it. A sentence that could sit in any article about any
+product is a sentence to cut. The details are the reason somebody keeps reading
+and they are what the brand is judged on.
 
 ## 4. Be practical and specific, or do not publish
 
