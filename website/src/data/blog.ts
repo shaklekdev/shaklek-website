@@ -292,13 +292,21 @@ export const articles: Article[] = [
     blocks: [
       {
         type: "p",
-        // ⚠️ AED 100, NOT 300. The first version said ready-made "start around
-        // AED 300", which is contradicted by Luxury And More, the source cited
-        // at the foot of this very article: their budget band starts at 100.
-        // The error tripled the market floor and it happened to flatter our own
-        // 690, which is the direction an error must never run. Caught by the
-        // journal review, 2026-09-13.
-        text: "The short answer, for 2026: ready-made abayas start from around AED 100 and a good one sits in the 300 to 600 range. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350, before the cloth. A full custom piece, where somebody sources the fabric and makes it to your measurements, typically starts at AED 800 and climbs past AED 5,000.",
+        // ⚠️ DO NOT LEAD WITH THE 100. Two wrong versions of this sentence, both
+        // on 2026-09-13. The first said ready-made "start around AED 300",
+        // which contradicted our own cited source and flattered our 690. The
+        // correction then led with "from around AED 100", and the founder,
+        // who lives here: "100 aed for abaya is shitty abaya, a good abaya is
+        // never 100 aed, you need to go to ajman and drive 2h to get a cheap
+        // polyester abaya."
+        //
+        // She is right and BOTH errors have the same shape: quoting one number
+        // as the price of "an abaya" when the cheap end is a different product
+        // in a different emirate. Best Dubai Things priced the SAME crepe piece
+        // at 95 in Deira and 420 in Mall of the Emirates, a 340% spread on
+        // location alone. So the honest answer is the band somebody actually
+        // buys in, with the floor named as what it is and where it is.
+        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear is AED 300 to 600 in Dubai. There is a floor below that, around 80 to 150, but it is basic polyester on a souq rail, and the same piece that is 95 in Deira is 420 in a mall boutique. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350, before the cloth. A full custom piece, where somebody sources the fabric and makes it to your measurements, typically starts at AED 800 and climbs past AED 5,000.",
       },
       {
         type: "p",
@@ -306,10 +314,17 @@ export const articles: Article[] = [
       },
 
       { type: "h2", text: "The three prices, and what each one buys" },
-      { type: "h3", text: "Ready-made, from about AED 100" },
+      { type: "h3", text: "Ready-made, AED 300 to 600" },
       {
         type: "p",
-        text: "Made in a size run, hanging on a rail. The floor is around AED 100 for a basic polyester piece, and most of what people actually buy sits between 300 and 600. You are paying for cloth and construction and nothing else. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
+        text: "Made in a size run, hanging on a rail. Most of what people actually buy sits between 300 and 600, in nida or crepe, and that is the number to hold in your head. You are paying for cloth and construction and nothing else. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
+      },
+      {
+        type: "p",
+        // Her words, attributed as experience, which is the only way rule 2 of
+        // the blog brief allows a claim we cannot source. The prices around it
+        // ARE sourced.
+        text: "The 80 to 150 abayas are real and they are not the same product. That is basic polyester, sold off souq and market rails, and our founder's experience of living here is that finding one usually means a drive out to Ajman rather than a shop in Dubai. It will read as cheap because it is, and it will not breathe in July. If a Dubai price under 200 surprises you, ask what the fabric is before anything else.",
       },
       { type: "h3", text: "Tailoring only, about AED 200 to 350" },
       {
@@ -379,7 +394,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers.",
+        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and against Best Dubai Things\u2019 2026 shop survey, which is where the Deira and Mall of the Emirates figures come from.",
       },
     ],
   },
