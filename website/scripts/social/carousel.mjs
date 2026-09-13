@@ -128,14 +128,14 @@ const HASH = "#dubaifashion #madetomeasure #madetoorder #linen #shaklek\n#دبي
 build({
   name: "01-four-ways-to-cut-it",
   caption:
-    "Same trouser, four ways to cut it. Straight or wide, cropped or full length. You pick one and a tailor makes that one. AED 429.",
+    "Same trouser, four ways to cut it. Straight or wide, cropped or full length. You pick one and a tailor makes that one. AED 519.",
   hashtags: HASH,
   slides: [
     { k: "same trouser.", s: "Four ways to cut it. Swipe.", src: shot("wide-leg-trousers", "Ivory", "base"), focus: "legs", tag: "Straight, full length" },
     { k: "straight, cropped", src: shot("wide-leg-trousers", "Ivory", "straight:cropped"), focus: "legs", tag: "Straight, cropped" },
     { k: "wide, full length", src: shot("wide-leg-trousers", "Ivory", "wide:full"), focus: "legs", tag: "Wide, full length" },
     { k: "wide, cropped", src: shot("wide-leg-trousers", "Ivory", "wide:cropped"), focus: "legs", tag: "Wide, cropped" },
-    { k: "you pick one.", s: "Then one tailor makes that one. About ten days.", src: shot("wide-leg-trousers", "Navy", "wide:full"), focus: "full", tag: "AED 429" },
+    { k: "you pick one.", s: "Then one tailor makes that one.", src: shot("wide-leg-trousers", "Navy", "wide:full"), focus: "full", tag: "AED 519" },
     { end: true },
   ],
 });
@@ -143,15 +143,15 @@ build({
 build({
   name: "02-the-sleeves-never-fit",
   caption:
-    "The shirt fits. The sleeves never do. So set the sleeve yourself, then send four measurements and we cut the shirt to those. Or pick XS to XXL. Same price either way. AED 389.",
+    "The shirt fits. The sleeves never do. So set the sleeve yourself, then send four measurements and we cut the shirt to those. Or pick XS to XXL. Same price either way. AED 449.",
   hashtags: HASH,
   slides: [
     { k: "the shirt fits.", s: "The sleeves never do.", src: shot("oversized-shirt", "Ivory", "base"), focus: "full" },
     { k: "short sleeve", src: shot("oversized-shirt", "Ivory", "short:normal"), focus: "full", tag: "Short, normal length" },
-    { k: "long sleeve", src: shot("oversized-shirt", "Ivory", "base"), focus: "full", tag: "Long, normal length" },
+    { k: "sleeve down", s: "Rolled in the image. The setting is what changes.", src: shot("oversized-shirt", "Ivory", "base"), focus: "full", tag: "Sleeve: long" },
     { k: "longer body", src: shot("oversized-shirt", "Ivory", "long:longer"), focus: "full", tag: "Long, longer" },
     { k: "both, changed", src: shot("oversized-shirt", "Ivory", "short:longer"), focus: "full", tag: "Short, longer" },
-    { k: "then cut to you.", s: "Four measurements, or XS to XXL. Same price.", src: shot("oversized-shirt", "Burgundy", "long:longer"), focus: "full", tag: "AED 389" },
+    { k: "then cut to you.", s: "Four measurements, or XS to XXL. Same price.", src: shot("oversized-shirt", "Burgundy", "long:longer"), focus: "full", tag: "AED 449" },
     { end: true },
   ],
 });
@@ -164,14 +164,14 @@ build({
 build({
   name: "03-the-trousers-four-colours",
   caption:
-    "The same trousers, four colours. You see the cut and the colour together rather than a swatch on a screen. 100% linen, AED 429, made after you order it and not before. The top is styling and not included.",
+    "The same trousers, four colours. You see the cut and the colour together rather than a swatch on a screen. 100% linen, AED 519, made after you order it and not before. The top is styling and not included.",
   hashtags: HASH,
   slides: [
     { k: "same trousers.", s: "Four colours. Swipe.", src: shot("banded-trousers", "Ivory", "wide:full"), focus: "full", tag: "Ivory" },
     { k: "white", src: shot("banded-trousers", "White", "wide:full"), focus: "full", tag: "White" },
     { k: "navy", src: shot("banded-trousers", "Navy", "wide:full"), focus: "full", tag: "Navy" },
     { k: "burgundy", src: shot("banded-trousers", "Burgundy", "wide:full"), focus: "full", tag: "Burgundy" },
-    { k: "the trousers, AED 429.", s: "The top is styling, not included.", src: shot("banded-trousers", "Navy", "wide:cropped"), focus: "legs", tag: "Banded Trousers" },
+    { k: "the trousers, AED 519.", s: "The top is styling, not included.", src: shot("banded-trousers", "Navy", "wide:cropped"), focus: "legs", tag: "Banded Trousers" },
     { end: true },
   ],
 });
@@ -186,7 +186,7 @@ build({
     { k: "you are not.", s: "Bust. Waist. Hip. Height.", src: shot("structured-blouse", "Ivory", "long:longer"), focus: "full" },
     { k: "so send four numbers", s: "And it is cut to those instead.", src: shot("pleated-trousers", "Ivory", "wide:full"), focus: "full" },
     { k: "or pick a size.", s: "XS to XXL. Trousers 32 to 44.", src: shot("wrap-top", "Ivory", "long:longer"), focus: "full" },
-    { k: "same price either way.", s: "Tailoring costs nothing extra here.", src: shot("cargo-trousers", "Ivory", "wide:full"), focus: "full", tag: "From AED 389" },
+    { k: "same price either way.", s: "Tailoring costs nothing extra here.", src: shot("cargo-trousers", "Ivory", "wide:full"), focus: "full", tag: "From AED 449" },
     { end: true },
   ],
 });
@@ -194,29 +194,84 @@ build({
 build({
   name: "05-how-it-actually-works",
   caption:
-    "How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to the cut you chose, then either choose a size or send four measurements. One tailor makes it. About ten days, because nothing is made before you order it.",
+    "How it works. Pick a piece, change the sleeve or the leg or the length and watch the picture change to the cut you chose, then either choose a size or send four measurements. One tailor makes it, after you order it and not before.",
   hashtags: HASH,
   slides: [
     { k: "how it actually works", s: "Four steps. Swipe.", src: shot("oversized-shirt", "Ivory", "base"), focus: "full" },
     { k: "1. pick a piece", s: "Eight timeless essentials. 100% linen.", src: shot("utility-shirt", "Navy", "long:longer"), focus: "full" },
     { k: "2. change it", s: "Sleeve, leg, length, colour. The picture changes to the cut you chose.", src: shot("wide-leg-trousers", "Ivory", "wide:cropped"), focus: "legs", tag: "Wide, cropped" },
     { k: "3. your size", s: "XS to XXL, trousers 32 to 44, or send four measurements. Same price.", src: shot("structured-blouse", "Ivory", "long:longer"), focus: "full" },
-    { k: "4. one tailor makes it", s: "About ten days. Nothing is made before you order it.", src: shot("banded-trousers", "Burgundy", "wide:full"), focus: "full", tag: "From AED 389" },
+    { k: "4. one tailor makes it", s: "Nothing is made before you order it.", src: shot("banded-trousers", "Burgundy", "wide:full"), focus: "full", tag: "From AED 449" },
     { end: true },
   ],
 });
 
 build({
-  name: "06-why-ten-days",
+  name: "06-nothing-made-in-advance",
   caption:
-    "Ten days is not slow. It is how long it takes when the piece does not exist until you order it. No warehouse, no leftover stock, no size run guessed months ago. One tailor, one piece, cut to the numbers you sent.",
+    "Nothing here exists until you order it. No warehouse, no leftover stock, no size run guessed months ago. One tailor, one piece, cut to the numbers you sent.",
   hashtags: HASH,
   slides: [
-    { k: "ten days.", s: "Here is what that buys.", src: shot("pleated-trousers", "Ivory", "wide:full"), focus: "full" },
+    { k: "nothing is made in advance.", s: "Here is what that buys.", src: shot("pleated-trousers", "Ivory", "wide:full"), focus: "full" },
     { k: "no warehouse.", s: "Nothing is sitting in a box waiting for someone your size.", src: shot("cargo-trousers", "Navy", "wide:full"), focus: "full" },
     { k: "no leftover stock.", s: "Nothing is made that nobody ordered.", src: shot("wrap-top", "Burgundy", "long:longer"), focus: "full" },
     { k: "one tailor. one piece.", s: "Cut to the numbers you sent, or to the size you picked.", src: shot("utility-shirt", "White", "long:longer"), focus: "full" },
-    { k: "that is the ten days.", s: "It is the reason, not the cost.", src: shot("wide-leg-trousers", "Ivory", "wide:full"), focus: "full", tag: "AED 429" },
+    { k: "that is the whole idea.", s: "It is the reason, not the cost.", src: shot("wide-leg-trousers", "Ivory", "wide:full"), focus: "full", tag: "AED 519" },
+    { end: true },
+  ],
+});
+
+// ---------------------------------------------------------------------------
+// 07 — THE WEDGE. Written 2026-09-13 after the founder saw what the brands
+// launching alongside us are doing.
+//
+// Layere owns "no plastic" and has 219k followers and 915 shares on one
+// carousel. Belumie owns soft pre-launch mood. Neither can say the thing we can
+// say, and the founder named it herself: "we come to you to take your
+// measurements for your first order... we still don't have a name, we need to
+// build trust so these needs to be A BIG PART of our advertisement."
+//
+// She is right, and it is the correct first post for an account with no
+// followers. A mood post at zero followers reaches nobody. An offer that sounds
+// like a person coming to your door is the one somebody forwards.
+//
+// ⚠️ NO PRICE ON THIS ONE, deliberately. Neither reference brand leads with
+// price pre-launch, and the ask here is an email address, not a sale.
+// ⚠️ AND NO LEAD TIME. Cut from advertising 2026-09-12; the linter enforces it.
+build({
+  name: "07-we-come-to-you",
+  caption:
+    "Nobody knows our name yet, so here is how we would like to start. In Dubai, we come to you and measure you before your first piece is cut. Not a size chart. Not four numbers you guessed with a tape in the mirror. 100% linen, cut and sewn here. We open early October, and you can leave your email at shaklek.com to hear the day.",
+  hashtags: HASH,
+  slides: [
+    { k: "you have never been a standard size.", s: "Neither has anyone else.", src: shot("structured-blouse", "Ivory", "long:longer"), focus: "full" },
+    { k: "so we come to you.", s: "In Dubai, before your first piece is cut.", src: shot("oversized-shirt", "Ivory", "base"), focus: "full" },
+    { k: "and we measure you.", s: "Shoulder, waist, length. The ones nobody can take on themselves in a mirror.", src: shot("utility-shirt", "Navy", "long:longer"), focus: "arms" },
+    { k: "then one tailor cuts it.", s: "100% linen. Nothing is made before somebody wants it.", src: shot("wide-leg-trousers", "Burgundy", "wide:full"), focus: "legs" },
+    { k: "we open early October.", s: "Leave your email and we will tell you the day.", src: shot("banded-trousers", "Ivory", "wide:full"), focus: "full", tag: "shaklek.com" },
+    { end: true },
+  ],
+});
+
+// 08 — the fabric pillar, aimed at the MATERIAL rather than at the reader.
+//
+// ⚠️ The guilt version of this ("if it says polyester, you have been wearing
+// plastic") was written and REJECTED for the pre-launch page on 2026-09-12: it
+// opens by telling a stranger she got dressed wrong, which sells to people
+// already convinced and repels everyone else. It survives here because a
+// carousel is chosen, not landed on, and because every line below is a fact
+// about a fibre rather than a verdict on a person.
+build({
+  name: "08-what-sits-against-your-skin",
+  caption:
+    "Linen is a plant. It moves air and takes water off the skin, which is not a small thing in a Gulf summer. Polyester is made from oil and does neither. That is the whole reason we only cut linen.",
+  hashtags: HASH,
+  slides: [
+    { k: "check the label in what you have on.", s: "No judgement. Most of it says the same thing.", src: shot("wrap-top", "Ivory", "long:longer"), focus: "full" },
+    { k: "polyester is made from oil.", s: "It traps air and holds water against you.", src: shot("cargo-trousers", "Navy", "wide:full"), focus: "full" },
+    { k: "linen is a plant.", s: "Grown, retted, spun. It moves air and takes water off the skin.", src: shot("pleated-trousers", "Ivory", "wide:full"), focus: "full" },
+    { k: "in 40 degrees that is the whole difference.", s: "Not a preference. A different afternoon.", src: shot("structured-blouse", "White", "long:longer"), focus: "full" },
+    { k: "so we only cut linen.", s: "100% of it, cut and sewn in the UAE.", src: shot("utility-shirt", "Burgundy", "long:longer"), focus: "full", tag: "shaklek.com" },
     { end: true },
   ],
 });

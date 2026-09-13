@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { isStoreOpen } from "@/lib/storeOpen";
 import Image from "next/image";
 import type { Metadata } from "next";
 import JournalHeader from "@/components/JournalHeader";
@@ -53,6 +54,28 @@ const TEXT = "mx-auto w-full max-w-[34rem]";
 // justifying at this measure without hyphenation opens rivers of white space.
 // Same treatment LegalPage already uses.
 const PROSE = `${TEXT} text-justify hyphens-auto`;
+
+/**
+ * ⚠️ GARMENT FIGURES ARE CAPPED WELL BELOW THE TEXT COLUMN.
+ *
+ * Founder, 2026-09-13, on the four-photo `looks` block: "i don't like the 4
+ * pictures you put, it's way toooooo big". She was right and it was arithmetic,
+ * not taste. Two 2:3 portraits side by side across the full 34rem measure are
+ * 34rem tall on their own; stacked two deep, a `looks` block was about 68rem,
+ * which is more than three phone screens of photograph before a word is read.
+ *
+ * 19rem caps a `looks` column at roughly 9.1rem wide and 13.7rem tall, so the
+ * whole four-photo block lands near 27.5rem: under half what it was, and under
+ * one screen. `pair` is one row, so it lands near 13.7rem.
+ *
+ * ⚠️ AND THE `sizes` HINT HAS TO COME DOWN WITH IT. It said 22rem per column
+ * against a box that is now about 9rem, so the browser fetched an asset more
+ * than twice the width it would ever paint. `sizes` is what the optimizer picks
+ * the source width from; leaving it stale makes the page heavier while looking
+ * smaller, which is the worst of both.
+ */
+const FIGURE = "mx-auto w-full max-w-[19rem]";
+const FIGURE_SIZES = "(min-width: 768px) 9rem, 42vw";
 
 function renderBlock(block: Block, i: number) {
   switch (block.type) {
@@ -114,13 +137,18 @@ function renderBlock(block: Block, i: number) {
         </figure>
       );
     case "palette":
+      // ⚠️ THIS FIGURE MUST BE WIDTH-CONSTRAINED LIKE THE TEXT. It had no width
+      // class at all, so the full-bleed border-y ran wider than every paragraph
+      // around it and the table looked like a different page. Founder,
+      // 2026-09-13: "the color palettes are not aligned to the width of the
+      // full blog, it's too wide."
       // A colour guide you can use at a glance, rather than a paragraph
       // describing colours. Each row is one outer colour and the shades that
       // sit under it. Swatches carry a text name too: colour alone is not an
       // accessible way to convey information, and a screen reader gets nothing
       // from a coloured square.
       return (
-        <figure key={i} className="my-12">
+        <figure key={i} className={`${TEXT} my-12`}>
           <div className="flex flex-col divide-y divide-border border-y border-border">
             {block.rows.map((row, j) => (
               <div key={j} className="flex flex-col gap-3 py-5 sm:flex-row sm:items-start sm:gap-6">
@@ -130,7 +158,9 @@ function renderBlock(block: Block, i: number) {
                     className="h-8 w-8 shrink-0 rounded-full border border-border-strong"
                     style={{ background: row.outer.hex }}
                   />
-                  <span className={`${TEXT} text-sm font-medium text-text`}>{row.outer.name}</span>
+                  {/* NOT ${TEXT}: that is a centred 34rem column, meaningless
+                      on a label and it was fighting the row layout. */}
+                  <span className="text-sm font-medium text-text">{row.outer.name}</span>
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -160,7 +190,8 @@ function renderBlock(block: Block, i: number) {
     case "pair":
       return (
         <figure key={i} className="my-12">
-          <div className="grid grid-cols-2 gap-2">
+          {/* Same size problem as `looks` below, same fix. See that comment. */}
+          <div className={`${FIGURE} grid grid-cols-2 gap-2`}>
             {[block.a, block.b].map((img, j) => (
               <Image
                 key={j}
@@ -168,7 +199,7 @@ function renderBlock(block: Block, i: number) {
                 alt={img.alt}
                 width={848}
                 height={1264}
-                sizes="(min-width: 768px) 22rem, 50vw"
+                sizes={FIGURE_SIZES}
                 className="w-full bg-surface-2 object-cover"
               />
             ))}
@@ -185,23 +216,26 @@ function renderBlock(block: Block, i: number) {
       // DOWN a column as one look rather than across as four separate garments.
       return (
         <figure key={i} className="my-12">
-          <div className="grid grid-cols-2 gap-3">
+          <div className={`${FIGURE} grid grid-cols-2 gap-3`}>
             {[block.a, block.b].map((look, j) => (
               <div key={j}>
                 <div className="space-y-1.5">
-                  {[look.top, look.bottom].map((src, k) => (
+                  {/* ⚠️ filter, do not map over a possibly-undefined top. The
+                      founder dropped the shirts on 2026-09-13 because two
+                      photographs per column filled a phone screen. */}
+                  {[look.top, look.bottom].filter((src): src is string => Boolean(src)).map((src, k) => (
                     <Image
                       key={k}
                       src={src}
                       alt={look.label}
                       width={848}
                       height={1264}
-                      sizes="(min-width: 768px) 22rem, 50vw"
+                      sizes={FIGURE_SIZES}
                       className="w-full bg-surface-2 object-cover"
                     />
                   ))}
                 </div>
-                <p className="mt-2.5 text-[12px] uppercase tracking-[0.08em] text-text-3">
+                <p className="mt-2.5 text-[11px] uppercase tracking-[0.08em] text-text-3">
                   {look.label}
                 </p>
               </div>
@@ -214,6 +248,28 @@ function renderBlock(block: Block, i: number) {
           )}
         </figure>
       );
+    case "link": {
+      // ⚠️ THE TITLE IS READ FROM THE TARGET, NEVER STORED ON THE LINK. A
+      // retitled article updates every link pointing at it, and a link can
+      // never advertise a headline the page no longer carries.
+      //
+      // The null branch is unreachable in a green build: lint-blog.mjs runs in
+      // `npm run build` and fails on a dead slug. It is here so a bad slug
+      // renders nothing rather than throwing the whole page.
+      const target = getArticle(block.slug);
+      if (!target) return null;
+      return (
+        <div key={i} className={`${TEXT} mt-6 border-l-2 border-border-strong pl-5`}>
+          <Link
+            href={`/blog/${target.slug}`}
+            className="font-display text-[20px] leading-[1.25] text-text transition-colors hover:text-gold"
+          >
+            {target.title}
+          </Link>
+          <p className="mt-2 text-[14px] leading-relaxed text-text-3">{block.reason}</p>
+        </div>
+      );
+    }
     default:
       return (
         <p key={i} className={`${PROSE} mt-5`}>
@@ -298,26 +354,86 @@ export default async function ArticlePage({
 
           {article.blocks.map(renderBlock)}
 
+          {/* ⚠️ THIS CTA USED TO SEND EVERY READER TO TWO GATED PAGES.
+              /catalog and /how-it-works both rewrite to /coming-soon while the
+              shop is shut, so the two buttons at the end of every article were
+              a dead end, and /how-it-works is ALSO out of date: it was written
+              before the free measuring visit and still describes the old flow
+              (launch-checklist.md). Founder, 2026-09-13: "it should never be
+              visible to customers before launch".
+
+              So while shut there is ONE honest destination, the pre-launch page,
+              and the reason to go there is the measuring visit rather than a
+              catalogue nobody can open. It reverts to the real buttons the
+              moment STORE_OPEN is true, which is why this is a branch and not a
+              deletion. */}
           <div className={`${TEXT} mt-20 border-t border-border pt-10`}>
             <p className="text-[17px] text-text-2">
               Shaklek makes clothes to order in the UAE. You choose the cut, the
               length and the colour, and a tailor makes that one piece.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/catalog"
-                className="border border-accent px-6 py-3 text-sm text-accent transition-colors hover:bg-accent hover:text-bg"
-              >
-                See the catalogue
-              </Link>
-              <Link
-                href="/how-it-works"
-                className="border border-border-strong px-6 py-3 text-sm text-text-2 transition-colors hover:border-gold hover:text-gold"
-              >
-                How it works
-              </Link>
-            </div>
+            {isStoreOpen() ? (
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/catalog"
+                  className="border border-accent px-6 py-3 text-sm text-accent transition-colors hover:bg-accent hover:text-bg"
+                >
+                  See the catalogue
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="border border-border-strong px-6 py-3 text-sm text-text-2 transition-colors hover:border-gold hover:text-gold"
+                >
+                  How it works
+                </Link>
+              </div>
+            ) : (
+              <>
+                <p className="mt-3 text-[17px] text-text-2">
+                  We are not open yet. If you are in Dubai we come to you and
+                  take your measurements ourselves, once, at no charge.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link
+                    href="/coming-soon"
+                    className="border border-accent px-6 py-3 text-sm text-accent transition-colors hover:bg-accent hover:text-bg"
+                  >
+                    Tell me when you open
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
+
+          {/* Articles you might like. Founder, 2026-09-13. The inline `link`
+              blocks are for a reader mid-article; this is for one who has
+              finished and would otherwise leave. Every other article, newest
+              first, so nothing is orphaned as the journal grows. */}
+          {(() => {
+            const others = articles.filter((o) => o.slug !== article.slug);
+            if (!others.length) return null;
+            return (
+              <aside className={`${TEXT} mt-16 border-t border-border pt-10`}>
+                <h2 className="text-[12px] uppercase tracking-[0.1em] text-text-3">
+                  Articles you might like
+                </h2>
+                <ul className="mt-6 flex flex-col divide-y divide-border border-y border-border">
+                  {others.map((o) => (
+                    <li key={o.slug}>
+                      <Link href={`/blog/${o.slug}`} className="group block py-5">
+                        <span className="font-display text-[21px] leading-snug text-text transition-colors group-hover:text-gold">
+                          {o.title}
+                        </span>
+                        <span className="mt-1.5 block text-[14px] leading-relaxed text-text-3">
+                          {o.description}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            );
+          })()}
         </div>
       </article>
     </div>

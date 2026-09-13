@@ -15,8 +15,32 @@
  * humidity is useful to a stranger, and a piece that only says "ours is linen"
  * is an advertisement. Write about the category, mention what we cut once.
  *
- * ⚠️ NO PRICES either. They are one founder decision away from moving, and a
- * stale price in an indexed article outlives the decision that changed it.
+ * ⚠️ PRICES: THE BLANKET BAN IS OVER, THE DISCIPLINE IS NOT. This used to read
+ * "NO PRICES either", written while the fabric was unsettled. It then sat here
+ * contradicting the file it governs, because the cost article publishes 690 on
+ * the founder's own decision. The rule now, from her, 2026-09-13:
+ *
+ *   - A PRICE IS ALLOWED where the article's job is the price ("how much does
+ *     an abaya cost in Dubai") or in a closing sell. Nowhere else. An article
+ *     that scatters prices through its body is an advertisement.
+ *   - IT MUST MATCH catalog.ts, read at the time of writing, never memory.
+ *     Today: Shirt 449, Pants 519, Abaya 690. Change one, change both, and the
+ *     comment on BASE_PRICE_BY_CATEGORY names this file for that reason.
+ *   - SOMEBODY ELSE'S PRICE CARRIES `market: true` on its block. Ours never
+ *     does. See the note directly below.
+ *   - EVERY NUMBER CARRIES ITS CURRENCY, including the second number in a
+ *     range and a price per metre. "AED 800 to AED 3,000", not "800 to 3,000";
+ *     "AED 65 a metre", not "65 a metre". Founder, 2026-09-13: "you often give
+ *     number with no currency this is not good."
+ *   - AND NEVER A LEAD TIME, which is a different rule and still absolute. It
+ *     was cut from advertising and from the terms of sale on 2026-09-12.
+ *
+ * ⚠️ NO ATTRIBUTION TO A PERSON AT THIS COMPANY. Founder, 2026-09-13: "i don't
+ * like the part you talk about 'our founder', please check other blogs, news
+ * things for general claims". A claim that cannot be sourced to a published
+ * guide, a news piece, a retailer listing or our own catalogue gets CUT, not
+ * attributed to her experience. Our own workshop and supplier figures are still
+ * usable, said as ours.
  *
  * ⚠️ NO EM DASHES. Founder's standing correction, enforced in
  * scripts/social/kinda-chic.mjs for social copy and applied to all
@@ -58,8 +82,14 @@ export type Block =
    *  and wrap top are all short-sleeved. A label reading "long sleeve" against
    *  a rolled cuff is a claim the picture does not support, which the founder
    *  caught. Label by the trouser cut, which is unambiguous and visible. */
-  | { type: "looks"; a: { top: string; bottom: string; label: string };
-      b: { top: string; bottom: string; label: string }; caption?: string }
+  /** ⚠️ `top` IS OPTIONAL AND USUALLY SHOULD BE OMITTED. It was two photographs
+   *  per column, a shirt above its trousers, and on a phone the figure ate 72%
+   *  of the screen. Founder, 2026-09-13: "remove the shirts, keep the pants."
+   *  She is right beyond the height: the caption compares TROUSERS, so the
+   *  shirts were a second variable the text never mentioned. Show only what the
+   *  caption is actually about. */
+  | { type: "looks"; a: { top?: string; bottom: string; label: string };
+      b: { top?: string; bottom: string; label: string }; caption?: string }
   /** A colour pairing guide: an outer colour, and the colours that work beneath
    *  it. Founder, 2026-09-13, on the first draft of the abaya article: "you can
    *  give advice, and you can put a palette of colours... this is practical
@@ -72,7 +102,25 @@ export type Block =
       type: "palette";
       rows: { outer: { name: string; hex: string }; under: { name: string; hex: string }[]; note: string }[];
       caption?: string;
-    };
+    }
+  /** A pointer to another article.
+   *
+   *  ⚠️ `reason` IS NOT OPTIONAL AND IS THE ENTIRE VALUE OF THE BLOCK. Rule 5
+   *  of the journal brief is "a sentence that gives a reason to follow it", and
+   *  a bare "Related articles" list is precisely what that rule exists to
+   *  prevent. Founder, 2026-09-13: "they all need link for each other's
+   *  articles." The test for a reason: if it would read just as well at the
+   *  foot of any of the other articles, it has failed. It has to say why THIS
+   *  reader, having just finished THIS piece, wants that one.
+   *
+   *  The title is NOT stored here. It is read from the target article at render
+   *  time, so retitling an article updates every link to it and a link can
+   *  never advertise a headline the page no longer carries.
+   *
+   *  lint-blog.mjs resolves `slug` against `articles` and fails the build on a
+   *  dead slug, a self-referential link, or an empty reason. It also fails on an
+   *  ORPHAN: an article nothing links to, or one that links nowhere. */
+  | { type: "link"; slug: string; reason: string };
 
 export type Article = {
   slug: string;
@@ -146,11 +194,14 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "This is not a personal preference. Tonal dressing, meaning one colour family layered within itself rather than high contrast, is the documented direction of Gulf abaya styling for 2026, and the reason given is consistently the same: it produces a longer, leaner line.",
+        text: "This is not a personal preference. Stylists call it column dressing, and the mechanism they give is always the same: a change of colour at the waist or the hip is a horizontal break, and the eye stops at it. One colour from shoulder to ankle gives the eye nothing to stop on. Tonal dressing, meaning one colour family layered within itself rather than high contrast, is also the documented direction of Gulf abaya styling for 2026 in every forecast we could find.",
       },
       {
         type: "p",
-        text: "The rule is asymmetric, which is the part most guides skip. A neutral abaya can carry a coloured layer underneath. A coloured abaya wants neutrals under it.",
+        // Reframed 2026-09-13 from a bare assertion onto what the 2026 guides
+        // actually say: the colour is in the abaya, the layer underneath is the
+        // quiet one. Jewel tones for evening, earthy neutrals for day.
+        text: "The rule is asymmetric, which is the part most guides skip. Those forecasts put the colour in the abaya itself, jewel tones for evening and sandalwood, taupe and khaki for daytime, and treat whatever is underneath as the quiet half. So a neutral abaya can carry a coloured layer underneath. A coloured abaya wants neutrals under it.",
       },
 
       {
@@ -173,7 +224,7 @@ export const articles: Article[] = [
               { name: "Olive", hex: "#6b7255" },
               { name: "Chocolate", hex: "#5a4436" },
             ],
-            note: "Stay in the warm family. A cool grey or a bright white underneath makes the abaya look dirty rather than warm.",
+            note: "Stay in the warm family. Colour guides give the same instruction for neutrals as for paint: pick the dominant neutral first, then echo its temperature. A blue-based white or a cool grey next to a warm beige is the pairing that makes the beige look muddy.",
           },
           {
             outer: { name: "Navy abaya", hex: "#0a2d4a" },
@@ -182,7 +233,13 @@ export const articles: Article[] = [
               { name: "White", hex: "#fafafa" },
               { name: "Navy", hex: "#0a2d4a" },
             ],
-            note: "Navy on navy is the sharpest version. If that feels too flat, ivory beneath is the safe alternative; avoid black, which reads as an accident rather than a choice.",
+            // ⚠️ THIS NOTE USED TO SAY "avoid black, which reads as an accident
+            // rather than a choice". Invented, and worse, contradicted by what
+            // styling guides currently say: the navy-with-black ban came out of
+            // early 20th century menswear and has been retired, with tonal
+            // dressing treating the two as a gradient. A swatch table reads as
+            // authority, so a row cannot carry a verdict nobody published.
+            note: "Navy on navy is the sharpest version and the clearest example of column dressing. Ivory beneath is the easier one. Navy with black is safe too: that old ban came out of menswear and current guides treat the pair as a tonal gradient rather than a clash.",
           },
           {
             outer: { name: "Burgundy or plum abaya", hex: "#4a1a2d" },
@@ -199,14 +256,14 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "One more, borrowed from hijab styling and worth stealing: if you want the scarf to coordinate, match it to the second colour in the outfit rather than the dominant one. Matching the dominant colour reads as a uniform.",
+        text: "One more, taken from hijab colour guides: pick the scarf up from a less dominant colour in the outfit rather than the most obvious one. What they are after is a single colour linking the scarf to the rest, not every piece matching.",
       },
 
       { type: "h2", text: "Three combinations that work" },
       { type: "h3", text: "Straight trousers and a shirt, one colour" },
       {
         type: "p",
-        text: "The most flexible, because it survives the abaya coming off indoors. Straight or wide trousers sit better under a long outer layer than anything narrow: narrow trousers fight the abaya at every step and pull it out of line.",
+        text: "The most flexible, because it survives the abaya coming off indoors. Straight or wide trousers hold the same uninterrupted vertical line the abaya makes. A tapered leg puts a break at the calf, which is exactly the horizontal interruption column dressing exists to avoid.",
       },
       { type: "h3", text: "A simple dress" },
       {
@@ -216,7 +273,7 @@ export const articles: Article[] = [
       { type: "h3", text: "Tonal, not matched" },
       {
         type: "p",
-        text: "Two shades of the same family, lighter underneath than the abaya. This is the version that looks considered rather than careful, and it is the one the 2026 forecasts keep pointing at.",
+        text: "Two shades of the same family, lighter underneath than the abaya. Sand under camel, ivory under taupe, navy under a deeper navy. This is the one the 2026 forecasts keep pointing at, and the luxury end of the Gulf market has gone the same way: variation within a single palette rather than contrast across two.",
       },
 
       { type: "h2", text: "The four mistakes" },
@@ -251,11 +308,17 @@ export const articles: Article[] = [
       { type: "h2", text: "And the abaya has to breathe too" },
       {
         type: "p",
-        text: "Sweat leaves your skin, crosses the inner layer, and then has to get out through the abaya. If the abaya is synthetic it does not, and the breathable shirt underneath is sealed inside something that is not. The outer layer is also the one in direct sun, so a synthetic one holds that heat against everything beneath it.",
+        text: "Sweat leaves your skin, crosses the inner layer, and then has to get out through the abaya. There is a number for this. Textile moisture regain, the share of its own weight a fibre will hold as water, is about 12% for linen and 8.5% for cotton, against 0.2 to 0.4% for polyester. Nida and most abaya crepes are polyester. So a breathable shirt underneath a polyester abaya is sealed inside something that is not, and the outer layer is the one in direct sun.",
       },
       {
         type: "p",
-        text: "This is worth knowing before buying either piece. There is more on how the fibres themselves behave in our guide to dressing for a UAE summer.",
+        text: "This is worth knowing before buying either piece, and it decides more than the colour does.",
+      },
+      {
+        type: "link",
+        slug: "what-to-wear-dubai-summer-fabric",
+        reason:
+          "This article says both layers have to breathe. That one goes fibre by fibre and gives the number behind it, including the desert experiment that explains why a loose black abaya is not the mistake it is assumed to be.",
       },
 
       { type: "h2", text: "In short" },
@@ -275,11 +338,28 @@ export const articles: Article[] = [
         // entry and no way to buy it. The abaya is coming; it is not made yet.
         // Say what ships and say what is coming, separately. Journal review,
         // 2026-09-13.
-        text: "We cut shirts and trousers in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before, with an open abaya joining them at launch. If you are in Dubai we come to you and take the measurements ourselves, so the length is right the first time.",
+        // ⚠️ PRICES ADDED 2026-09-13 ON THE FOUNDER'S APPROVAL, and checked
+        // against catalog.ts, not against memory: every Shirt is 449, every
+        // Pants is 519, Abaya is 690. Change one, change both. This article
+        // sells TWO garments, which is the ~71% margin line, and it carried no
+        // number and no way to act until now.
+        text: "We cut shirts and trousers in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and trousers AED 519, with an open abaya at AED 690 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, which is how the trousers end up clearing the floor rather than dragging on it.",
+      },
+      {
+        type: "link",
+        slug: "how-much-does-an-abaya-cost-in-dubai",
+        reason:
+          "You have settled what goes underneath. If the abaya itself is still to buy, this is what the three price bands actually cost in 2026, and which souq or district each one is bought in.",
+      },
+      {
+        type: "link",
+        slug: "nobody-is-a-medium",
+        reason:
+          "The fourth mistake above, trousers that reach the floor, is a length problem, and no size chart has your height in it. This is why the rail cannot fix it and what does.",
       },
       {
         type: "p",
-        text: "Sources for the styling and colour guidance above: 2026 Gulf abaya colour forecasts from AbayaButh, Soleil UAE and Dar Al Mutahajiba; styling and layering guidance from Maison Ayla, Fashion Week Online and NEEIM.",
+        text: "Sources for the styling and colour guidance above: 2026 Gulf abaya colour forecasts from AbayaButh, Soleil UAE, Dar Al Mutahajiba, Lusso Moda and Rutba Fashion; column dressing and the horizontal-break explanation from Hayley Eleanor, Who What Wear and Gaâla; neutral undertone pairing from Palette Hunt and Cedar and Lily; the navy and black question from Coveteur and Edits Styling; scarf colour matching from Vela and Emma; moisture regain figures from Testex and TextilePulse.",
       },
     ],
   },
@@ -298,7 +378,7 @@ export const articles: Article[] = [
     description:
       "Ready-made, tailoring only, and full custom are three different prices for three different things. What each costs in 2026, and what actually drives the number.",
     published: "2026-09-13",
-    readingMinutes: 5,
+    readingMinutes: 6,
     intro:
       "Three different things get called an abaya price in Dubai, and they are not close to each other. Knowing which one you are being quoted is most of the answer.",
     hero: { src: "/marketing/story-tailoring.jpg", alt: "A tailor at work.", w: 1584, h: 672 },
@@ -319,7 +399,8 @@ export const articles: Article[] = [
         // at 95 in Deira and 420 in Mall of the Emirates, a 340% spread on
         // location alone. So the honest answer is the band somebody actually
         // buys in, with the floor named as what it is and where it is.
-        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear starts around AED 300, and there is no ceiling. Dubai's known boutique labels sit at AED 800 to 3,000 and the designer end runs past 5,000. Paying a tailor to make one when you bring your own cloth runs roughly AED 200 to 350, before the cloth. A full custom piece, where somebody sources the fabric and makes it to your measurements, usually starts around AED 800.",
+        market: true,
+        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear starts at about AED 300, and there is no ceiling. Dubai's known boutique labels sit between AED 800 and AED 3,000, and the designer end runs past AED 5,000. Paying a tailor to cut and sew one when you bring your own cloth is about AED 200 to AED 350 for the labour, before the fabric. A full custom piece, where somebody sources the cloth and makes it to your measurements, usually starts at about AED 800.",
       },
       {
         type: "p",
@@ -335,32 +416,60 @@ export const articles: Article[] = [
         // CAS Abaya lists to 800, Bouguessa and Mauzan sit at 800 to 3,000,
         // and a capped band is also the one framing that makes our own number
         // look like the expensive option.
-        text: "Made in a size run, hanging on a rail. High street lands around AED 300 to 800 in nida or crepe. The known Dubai labels, the ones people name when you ask, sit at AED 800 to 3,000, and a designer piece goes past 5,000. You are paying for cloth and construction, and above a certain point for the name. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
+        market: true,
+        text: "Made in a size run, hanging on a rail. The high street lands at about AED 300 to AED 800 in nida or crepe, and AED 300 to AED 600 is where most decent nida sits. The known Dubai labels, the ones people name when you ask, sit between AED 800 and AED 3,000, and a designer piece goes past AED 5,000. You are paying for cloth and construction, and above a certain point for the name. The fit is whatever the pattern was cut to, which for an abaya matters less than for most garments but still decides how it hangs from the shoulder and where the sleeve ends.",
       },
       {
         type: "p",
-        // Her words, attributed as experience, which is the only way rule 2 of
-        // the blog brief allows a claim we cannot source. The prices around it
-        // ARE sourced.
-        text: "Under 200, you are looking at a different product. That is basic polyester off a souq or market rail, and our founder’s experience of living here is that finding one usually means a drive out to Ajman rather than a shop in Dubai. It will read as cheap because it is, and it will not breathe in July. If a price under 200 surprises you, ask what the fabric is before anything else.",
-      },
-      { type: "h3", text: "Tailoring only, about AED 200 to 350" },
-      {
-        type: "p",
-        // The metre price here is OUR OWN, from real 2026 quotes in
-        // planning/pricing-todo.md: local 100% linen at 65/m, imported at 36/m
-        // landed, local cotton at 20. Said as our own figures rather than as a
-        // market survey, because that is what they are.
-        text: "You buy the fabric yourself, usually from a shop in Satwa or Deira, and pay a tailor to cut and sew it. The number sounds low until the cloth is added. An abaya takes roughly three metres, and from our own 2026 quotes a metre runs about 20 dirhams for cotton and around 65 for good linen bought locally, so the real total lands anywhere from 260 to 550 before any embroidery.",
+        // ⚠️ THE "OUR FOUNDER" ATTRIBUTION AND THE SINGLE MENTION OF AJMAN WERE
+        // BOTH CUT ON 2026-09-13. Founder: "i don't like the part you talk
+        // about 'our founder', please check other blogs, news things for
+        // general claims", and "instead of citing ajman, you can tell about
+        // other cities like sharjah as well, or other locations, this has to
+        // feel like a real guide". One emirate named as the cheap one reads as
+        // a dig and is less useful than a list of real places with a reason to
+        // go to each. Everything below is sourced; nothing is attributed to a
+        // person at this company.
+        market: true,
+        text: "Below about AED 200 you are usually looking at a different product: basic polyester off a market rail, priced to be bought fast and bargained over. It will read as cheap because it is, and it will not breathe in July. That end of the market is worth knowing about anyway, because the same piece changes price enormously with the address. A 2026 Dubai shop survey priced one crepe abaya at AED 95 in Deira and AED 420 in Mall of the Emirates, a spread of more than four times on location alone.",
       },
       {
+        type: "ul",
+        // A guide names places and gives a reason to go to each. Every entry
+        // and every number here comes from a published 2026 shopping guide or
+        // a retailer listing, cited at the foot of the article.
+        items: [
+          "Naif Souk, Deira. The cheapest rails in Dubai and the ones shoppers name for it. Reviewers report paying around AED 100 for pieces listed nearer AED 250 elsewhere, and bargaining is expected rather than rude.",
+          "Sharjah Central Souq, the Blue Souq, by the Jubail bus station. Listings start around AED 50, and a good ready-to-wear piece in Sharjah generally runs AED 200 to AED 500. Go for the choice of abayas and shawls in one building.",
+          "Meena Bazaar, Bur Dubai. Rails and tailors in the same few streets, which is the actual reason to go: you can buy cloth and have it cut on one trip.",
+          "Karama, the Centre and the old market. Plain everyday abayas rather than occasion pieces, at everyday prices.",
+          "Ajman market. Named across UAE shopping guides as a bargain destination on the same footing as Sharjah, worth the drive only if you are already out that way.",
+          "Abaya Mall in Mirdif. Three floors of nothing but abayas, for comparing fifty in an afternoon instead of five.",
+        ],
+      },
+      {
         type: "p",
-        text: "It is the cheapest route if you already know what fabric you want and you do not mind making two trips.",
+        text: "If a quote surprises you in either direction, ask what the fibre is before anything else. That one question separates the AED 150 rail from the AED 600 one more reliably than anything you can see from across a shop.",
+      },
+      { type: "h3", text: "Tailoring only, about AED 200 to AED 350" },
+      {
+        type: "p",
+        // The metre prices here are OUR OWN, from real 2026 quotes in
+        // planning/pricing-todo.md: local 100% linen at AED 65/m, imported at
+        // AED 36/m landed, local cotton at AED 20. Said as our own workshop
+        // figures rather than as a market survey, because that is what they
+        // are. That exception survives the 2026-09-13 feedback; the one that
+        // did not is attributing a claim to a person at this company.
+        text: "You buy the cloth yourself and pay a tailor to cut and sew it. The fabric shops and the tailors sit in the same districts, which is why people go there: Satwa for tailoring, Meena Bazaar in Bur Dubai for cloth and stitching in the same few streets, and the fabric shops off Naif Road in Deira. Published 2026 guides put plain nida stitching at AED 200 to AED 350, and Satwa tailoring listings start near AED 180 for cutting and sewing.",
+      },
+      {
+        type: "p",
+        text: "The number sounds low until the cloth is added. An abaya takes roughly three metres, and our own 2026 supplier quotes put a metre at about AED 20 for local cotton, AED 36 for imported linen landed here, and about AED 65 for good linen bought locally. So the honest total for this route is AED 260 to AED 550 before any embroidery, and it is only the cheapest one if you already know what fabric you want and do not mind two trips.",
       },
       { type: "h3", text: "Full custom, from about AED 800" },
       {
         type: "p",
-        text: "Somebody else sources the cloth, takes your measurements and makes the piece. The floor is around 800 and the ceiling is wherever the embroidery stops. Hand embroidery, beading and lacework are the three things that move this number fastest, and they move it a long way.",
+        text: "Somebody else sources the cloth, takes your measurements and makes the piece. The floor is around AED 800 and the ceiling is wherever the embroidery stops. Hand embroidery, beading and lacework are the three things that move this number fastest, and they move it a long way.",
       },
 
       { type: "h2", text: "What actually drives the price" },
@@ -390,13 +499,24 @@ export const articles: Article[] = [
       },
       {
         type: "quote",
-        text: "Nida is a brand of polyester. Ask for the fibre, not the fabric name.",
+        // ⚠️ CORRECTED 2026-09-13. This read "Nida is a brand of polyester",
+        // which is wrong: nida is a fabric name, usually 100% polyester and
+        // sometimes a polyester and nylon mix, and "Korean nida" is a quality
+        // grade rather than a brand. A quote block is the highest-authority
+        // position on the page, so a loose fact there is the worst place for one.
+        text: "Nida is a fabric name, not a fibre. It is almost always polyester. Ask for the fibre.",
       },
 
       { type: "h2", text: "Where a linen abaya sits" },
       {
         type: "p",
-        text: "Linen is unusual in this market and costs more per metre than the polyester crepes most abayas are cut from. It is also the reason to choose one: it lets sweat out, which matters more for the outer layer than for anything worn underneath. There is more on that in our guide to what to wear under an open abaya.",
+        text: "Linen is unusual in this market and costs more per metre than the polyester crepes most abayas are cut from. It is also the reason to choose one: it lets sweat out, which matters more for the outer layer than for anything worn underneath.",
+      },
+      {
+        type: "link",
+        slug: "what-to-wear-under-an-open-abaya",
+        reason:
+          "You know the price now. The next question is what goes under it, which turns out to be a colour decision more than a fabric one, and there is a table of pairings for it.",
       },
       {
         type: "p",
@@ -410,32 +530,61 @@ export const articles: Article[] = [
         // made-to-measure is what it IS. Founder, 2026-09-13: "our price
         // doesn't have to show as overpriced or too expensive, remember these
         // blogs are meant to bring people to buy on our website."
-        text: "Ours will be AED 690 when we open: cut to your measurements, in 100% linen, made after it is ordered. That is boutique-rail money for something nobody else on that rail is selling, because the labels at 800 to 3,000 are still selling you a size, and made-to-measure normally starts where they finish. We hold the price by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging you for the visit.",
+        // ⚠️ AND THE FRAME WAS WRONG UNTIL 2026-09-13. It read "that is
+        // boutique-rail money ... made-to-measure normally starts where they
+        // finish", which contradicted this article's own sourced floor of AED
+        // 800 for full custom and put our number ABOVE a band it actually sits
+        // below. Rule 3b is about framing a true number, not inventing a
+        // flattering one, and an unsupportable flourish fails it just as badly.
+        text: "Ours will be AED 690 when we open: cut to your measurements, in 100% linen, made after it is ordered. The comparison that matters is not the AED 300 rail, because that is a size run and this is not. It is the AED 800 that full custom starts at, and the AED 800 to AED 3,000 the Dubai boutique labels charge for a piece that was still cut to a chart rather than to you. AED 690 sits below both, and that is the whole claim. We hold the number by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging for the visit.",
       },
       {
         type: "callout",
         text: "We open in early October. If you are in Dubai we come to you and take the measurements ourselves before anything is cut, at no charge. Leave your email on the home page and we will tell you the day.",
       },
       {
+        type: "link",
+        slug: "nobody-is-a-medium",
+        reason:
+          "The gap between a rail price and a made to measure price is almost entirely the fitting. This is what being measured changes, and what it honestly does not.",
+      },
+      {
+        type: "link",
+        slug: "what-to-wear-dubai-summer-fabric",
+        reason:
+          "The linen argument above rests on a single number, moisture regain. This puts that number against every other fabric on a Dubai rail, including the polyester most abayas are cut from.",
+      },
+      {
         type: "p",
-        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers, Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures, and 2026 brand guides for the boutique bands.",
+        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures. The places and their prices come from 2026 abaya shopping guides by Noor Zara, Lamis, UAE Service Guide and Dubai-On, Tripadvisor reviews of Naif Souk, Sharjah retailer listings for the Central Souq figures, and Satwa tailoring listings for the stitching prices. Fabric costs per metre are our own 2026 supplier quotes. Fibre composition of nida is from abaya fabric suppliers including Fabric UK and The Hijab Company.",
       },
     ],
   },
   {
     slug: "what-to-wear-dubai-summer-fabric",
-    title: "What to wear in Dubai summer: how fabric changes how hot you feel",
+    // ⚠️ THE TITLE IS THE SEARCHED PHRASE PLUS WHAT THE PAGE IS. UAE
+    // autocomplete returns "what to wear in dubai summer" verbatim, and the
+    // variants under it are "what to wear in dubai as a woman in summer" and
+    // "how to dress in dubai". The old tail, "how fabric changes how hot you
+    // feel", was a nicer sentence that promised nothing; "a fabric-by-fabric
+    // guide" says what the reader is about to get, which is what gets clicked.
+    title: "What to wear in Dubai summer: a fabric-by-fabric guide",
     description:
-      "Colour and cut matter less than what the cloth is made of. A practical guide to staying comfortable through a UAE summer, from someone making clothes here.",
+      "Linen first, cotton second, nothing made of polyester. What each fabric does in 40 degree heat and 70 percent humidity, and why colour matters far less than you were told.",
     published: "2026-09-05",
-    readingMinutes: 5,
+    readingMinutes: 6,
     intro:
       "Everyone arriving in the UAE is told to wear loose and light colours. That advice is not wrong, but it skips the thing that matters most, which is what the fabric is made of.",
     hero: { src: "/marketing/hero-banner.jpg", alt: "Loose linen, worn in Gulf heat.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
-        text: "A Dubai summer runs from roughly May to September, sits above forty degrees for weeks at a time, and carries humidity along the coast that makes it feel considerably worse than the number suggests. Most wardrobe advice for it is about colour and looseness. Both help. Neither helps as much as the fibre.",
+        // ⚠️ THE ANSWER GOES FIRST. This article buried it past two H2s for
+        // eight days, which loses the featured snippet and is bad manners to
+        // somebody who typed a question. The old opening paragraph, the one
+        // that set up the climate before answering anything, is folded into
+        // this one rather than left sitting underneath it.
+        text: "The short answer: linen first, cotton second, and nothing made of polyester. Cover more skin rather than less, keep it loose enough that air moves underneath it, and stop worrying about whether it is black or white. The National Center of Meteorology puts average August highs in Dubai between 40.9 and 43.2 degrees, with overnight lows near 30 and relative humidity peaking between 63 and 80 percent, and in that combination what your clothes are made of does more for how hot you feel than the colour or the cut. Here is each fabric and what to expect from it.",
       },
 
       { type: "h2", text: "Humidity is the actual problem, not heat" },
@@ -452,7 +601,7 @@ export const articles: Article[] = [
       { type: "h3", text: "Linen" },
       {
         type: "p",
-        text: "The best answer for Gulf heat, and it is not close. The fibre absorbs moisture readily and gives it up to the air quickly. The weave is open. The fibre is stiff enough that the cloth stands slightly away from skin instead of clinging, so air moves underneath it. It creases immediately and permanently, and in this part of the world that has long been read as a sign of the real thing rather than a flaw.",
+        text: "The best answer for Gulf heat, and it is not close. Linen holds about 12% of its own weight in water before it feels wet, against 8.5% for cotton, and it gives that water up to the air faster. The weave is open. The fibre is stiff enough that the cloth stands slightly away from skin instead of clinging, so air moves underneath it. It creases immediately and it will not stop, and that is the trade for the other three.",
       },
       { type: "h3", text: "Cotton" },
       {
@@ -462,12 +611,18 @@ export const articles: Article[] = [
       { type: "h3", text: "Linen and cotton woven together" },
       {
         type: "p",
-        text: "A long established cloth that gets most of linen's breathability with noticeably less creasing and a softer hand. For daily wear in this climate it is often the more practical of the three, which is why it has been made for centuries rather than invented as a compromise.",
+        // ⚠️ THIS PARAGRAPH USED TO CALL THE BLEND "often the more practical of
+        // the three". It was unsourced, and it talked the reader out of the only
+        // cloth we sell, in the article whose job is to explain why that cloth
+        // is the right one. Rule 3b: notice what a draft argues for. The fix is
+        // not to rubbish the blend, it is to say what the trade actually is and
+        // what we chose.
+        text: "A long established cloth that trades some of linen's breathability for less creasing and a softer hand. How much of each depends entirely on the ratio, so read the composition on the label rather than the word blend. We cut 100% linen instead, because the reason to wear this cloth in August is that 12% figure, and cotton sits at 8.5% and polyester at under half a percent. Every point of either in a blend moves the number the wrong way.",
       },
       { type: "h3", text: "Polyester, nylon, acrylic" },
       {
         type: "p",
-        text: "Avoid in summer unless the garment was specifically engineered for sport. The fibre will not absorb moisture, so sweat sits on your skin. A polyester dress in August humidity is genuinely uncomfortable in a way that has nothing to do with how it looks.",
+        text: "Avoid in summer unless the garment was specifically engineered for sport. Polyester holds 0.2 to 0.4% of its weight in water, roughly thirty times less than linen, so sweat sits on your skin instead of moving into the cloth. A polyester dress in August humidity is uncomfortable in a way that has nothing to do with how it looks. This is also the fibre most abayas are cut from, since nida and most abaya crepes are polyester.",
       },
       { type: "h3", text: "Rayon and viscose" },
       {
@@ -476,10 +631,22 @@ export const articles: Article[] = [
       },
 
       {
+        // ⚠️ BOTH HALVES OF A PAIR MUST BE THE SAME COLOURWAY unless the caption
+        // says otherwise. This block ran with IVORY trousers beside a WHITE
+        // shirt for eight days, against a caption that talks only about cut, so
+        // the two read as one outfit and the mismatch read as carelessness. The
+        // founder caught it on 2026-09-13.
+        //
+        // ⚠️ AND HERE IS THE TRAP THAT CAUSED IT: the IVORY base photos are the
+        // only ones in the catalogue with NO COLOUR WORD in the filename.
+        // Ivory is `oversized-shirt-front.jpg`; white, navy and burgundy all
+        // carry their name. So the file that LOOKS unlabelled is ivory, and
+        // `-white-` is a different garment. Check colorImages in catalog.ts
+        // before pasting any path in here, never the filename.
         type: "pair",
-        a: { src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front-v2.jpg", alt: "Wide-leg trousers in linen." },
-        b: { src: "/catalog/oversized-shirt/oversized-shirt-white-front.jpg", alt: "A loose white linen shirt." },
-        caption: "Room through the leg and across the back is not a style preference in this climate. It is how air gets underneath the cloth.",
+        a: { src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front-v2.jpg", alt: "Wide-leg linen trousers in ivory." },
+        b: { src: "/catalog/oversized-shirt/oversized-shirt-front.jpg", alt: "A loose linen shirt in ivory." },
+        caption: "Both in ivory linen. Room through the leg and across the back is not a style preference in this climate. It is how air gets underneath the cloth.",
       },
       { type: "h2", text: "Cut matters, and here is the part usually left out" },
       {
@@ -492,17 +659,32 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "Sleeves are worth more thought than they get. A sleeve worn down, in loose linen, is frequently cooler than a bare arm in direct sun, because it shades the skin while still letting air through. This is why long, loose clothing is traditional across every hot region of the world.",
+        text: "Sleeves are worth more thought than they get. A covered arm in loose linen is frequently cooler than a bare one in direct sun, because the cloth shades the skin while air still moves underneath it. That is the same effect measured in the Negev robe study below, and it is why loose covering clothing is traditional across every hot region of the world rather than in spite of the heat.",
       },
 
       {
         type: "quote",
-        text: "A black linen shirt will be more comfortable than a white polyester one on almost any August afternoon.",
+        // Was a restatement of the sentence three blocks below it. Replaced
+        // with the finding that sentence rests on, which is the line actually
+        // worth stopping on.
+        text: "In the Negev, the man in the black robe was no hotter than the man in the white one. The robes were loose.",
       },
       { type: "h2", text: "Colour, which matters less than you have been told" },
       {
         type: "p",
-        text: "White reflects more radiant heat than black, so in direct sun a white garment absorbs less. That much is true. But once you are in shade or indoors the effect is small, and it is entirely outweighed by whether the fabric breathes. A black linen shirt will be more comfortable than a white polyester one on almost any August afternoon.",
+        text: "White reflects more radiant heat than black, so in direct sun a white garment absorbs less. That much is true. The part nobody mentions is that it has been measured in a desert, and the answer was not what the advice implies.",
+      },
+      {
+        type: "p",
+        // The single best citation available for this article, and it was
+        // missing. Shkolnik, Taylor, Finch and Borut, "Why do Bedouins wear
+        // black robes in hot deserts?", Nature 283, 373-375 (1980). It supports
+        // BOTH the colour section and the sleeve callout above it.
+        text: "In 1980 four researchers published the experiment in Nature. A volunteer stood in the Negev at 35 to 46 degrees in a black Bedouin robe, a white Bedouin robe, a tan army uniform and shorts. The black robe absorbed two and a half times the solar radiation of the white one, and the man wearing black was no hotter. The robes are loose, so air moving between cloth and skin carried the extra heat away before it arrived. Cut and fibre did the work. Colour did almost none of it.",
+      },
+      {
+        type: "p",
+        text: "So a black linen shirt will be more comfortable than a white polyester one on almost any August afternoon, and a loose black abaya is not the mistake it is often assumed to be. What matters is whether it is loose and what it is made of.",
       },
 
       { type: "h2", text: "A practical summer wardrobe for the UAE" },
@@ -519,22 +701,67 @@ export const articles: Article[] = [
       { type: "h2", text: "Why we make clothes this way" },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. Nothing is cut before it is ordered, which means the cut can be chosen rather than accepted: the leg width, the length, the sleeve. For a climate where airflow through a garment is the difference between comfortable and not, being able to choose how much room a piece has is worth more than it would be anywhere else.",
+        text: "Shaklek is made to order in the UAE. Nothing is cut before it is ordered, which means the cut can be chosen rather than accepted: the leg width, the length, the sleeve. For a climate where airflow through a garment is the difference between comfortable and not, being able to choose how much room a piece has is worth more than it would be anywhere else. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, and they are kept for anything you order afterwards.",
+      },
+      {
+        type: "link",
+        slug: "what-to-wear-under-an-open-abaya",
+        reason:
+          "If your outer layer is an abaya, this argument matters more rather than less, because that is the layer standing in the sun. Colour pairings for it, and the four mistakes people make underneath one.",
+      },
+      {
+        type: "link",
+        slug: "how-much-does-an-abaya-cost-in-dubai",
+        reason:
+          "Nida and most abaya crepes are the polyester this article tells you to avoid. If you want a linen one instead, here is what the market charges and where each price band is actually bought.",
+      },
+      {
+        type: "link",
+        slug: "nobody-is-a-medium",
+        reason:
+          "Airflow needs room in specific places, across the back, through the sleeve, down the leg, while the shoulder still fits. That is a fit problem, and a standard size chart is worst at exactly that one.",
+      },
+      {
+        type: "p",
+        text: "Sources: the black and white robe experiment is Shkolnik, Taylor, Finch and Borut, “Why do Bedouins wear black robes in hot deserts?”, Nature volume 283, 1980. August temperature and humidity figures are from the UAE National Center of Meteorology as reported by Gulf News. Moisture regain figures for linen, cotton and polyester are from Testex and TextilePulse fibre property data.",
       },
     ],
   },
 
   {
     slug: "nobody-is-a-medium",
+    // ⚠️ THIS TITLE IS THE FOUNDER'S OWN DECISION, 2026-09-13. DO NOT "FIX" IT.
+    // A journal review proposed replacing it with "Why are clothing sizes so
+    // inconsistent?", which is a real UAE autocomplete phrase where "nobody is
+    // a medium" returns nothing. She read the argument and kept her title.
+    //
+    // So the search half has to be carried by the DESCRIPTION and the FIRST
+    // PARAGRAPH instead, and both below are written to do exactly that: they
+    // carry "made to measure", "size chart" and the brand-to-brand
+    // inconsistency phrasing, which is what the query actually contains.
+    // Google matches the body, not only the H1. Change either of those two and
+    // this article stops being findable by the people it is for.
+    //
+    // ⚠️ THE SLUG STAYS `nobody-is-a-medium` and needs no redirect. It was only
+    // ever going to move if the title moved.
     title: "Nobody is a medium: what made-to-measure actually changes",
     description:
-      "Standard sizes are an average of bodies that do not exist. What changes when a garment is cut to your measurements instead, and what it honestly does not.",
+      "Why clothing sizes are so inconsistent between brands, and what made to measure actually changes when a garment is cut to you instead. Plus what it does not.",
     published: "2026-09-05",
     readingMinutes: 5,
     intro:
       "A medium is not a body. It is a statistical average of thousands of bodies, and the average of a large group of people resembles almost none of them.",
     hero: { src: "/marketing/story-tailoring.jpg", alt: "A tailor at work.", w: 1584, h: 672 },
     blocks: [
+      {
+        type: "p",
+        // ⚠️ THE ANSWER, AND THE SEARCHED PHRASING, IN PARAGRAPH ONE. The title
+        // is the founder's and it is not a query anybody types, so this
+        // paragraph carries the query instead: inconsistent sizes between
+        // brands, the size chart, and made to measure, all in the first six
+        // sentences. Do not move it down the page.
+        text: "If you are a medium in one shop and a large in the next, that is not you. Nobody has to follow a size chart. The United States published a voluntary sizing standard in 1958, Commercial Standard 215-58, and withdrew even that in 1983, and there has been no mandatory clothing size standard since. Every brand now drafts its own chart on its own fit model, which is why a 10 in one shop is a 16 in another and neither of them is wrong. The deeper problem is that no chart could work anyway, because a size is an average of several measurements at once and almost nobody is average on several measurements at once. Made to measure is the alternative, and this is what it actually changes.",
+      },
       {
         type: "p",
         text: "Ready to wear clothing is built on a size chart, and a size chart is a compromise made before anyone knew who would wear the garment. It has to be. A factory cutting five thousand shirts cannot know whose shoulders they will sit on.",
@@ -547,7 +774,11 @@ export const articles: Article[] = [
       { type: "h2", text: "Why the average fits almost nobody" },
       {
         type: "p",
-        text: "There is a well known finding from aviation. In the 1950s the United States Air Force measured thousands of pilots on ten dimensions and checked how many fell within the middle range on all ten at once. The answer was none. Not a small number. Zero.",
+        // ⚠️ NAME THE STUDY. This said "thousands of pilots" and "the 1950s",
+        // which is a summary of a citation rather than a citation. Lt Gilbert S.
+        // Daniels, "The 'Average Man'?", USAF Wright Air Development Center
+        // technical note, 1952. The number is 4,063 and it is the whole point.
+        text: "There is a well known finding from aviation. In 1952 a US Air Force researcher called Gilbert Daniels measured 4,063 pilots on ten dimensions and checked how many fell within the middle range on all ten at once. The answer was none. Not a small number. Zero. The Air Force's response was to ban the average outright and require adjustable cockpits instead.",
       },
       {
         type: "p",
@@ -556,7 +787,7 @@ export const articles: Article[] = [
 
       {
         type: "quote",
-        text: "The United States Air Force measured thousands of pilots on ten dimensions and checked how many were average on all ten at once. The answer was none.",
+        text: "Four thousand and sixty-three pilots, measured on ten dimensions. The number who were average on all ten at once was zero.",
       },
       { type: "h2", text: "What actually changes" },
       { type: "h3", text: "The shoulder, which is the one that cannot be fixed later" },
@@ -567,7 +798,7 @@ export const articles: Article[] = [
       { type: "h3", text: "Sleeve length, separately from everything else" },
       {
         type: "p",
-        text: "On a size chart, sleeve length is tied to chest size. On a person it is not. This is the single most common complaint about ready to wear and the easiest thing to solve when a garment is cut individually.",
+        text: "On a size chart, sleeve length is tied to chest size. On a person it is not. Tailors list sleeve length and taking in the back as the two alterations most often asked for on a shirt, and hemming as the most requested alteration of any kind. Neither is an alteration when the garment is cut individually in the first place. It is just the pattern.",
       },
       { type: "h3", text: "Length, for your actual height" },
       {
@@ -576,18 +807,50 @@ export const articles: Article[] = [
       },
 
       {
+        // ⚠️ ONLY ONE THING MAY CHANGE BETWEEN THE TWO COLUMNS, because the
+        // caption claims only one thing changed. This block previously paired
+        // the base ivory shirt on the left with the SHORT-SLEEVE ivory shirt on
+        // the right, so the sleeve moved as well as the trouser while the
+        // caption said "the same trouser, two cuts". Same defect the founder
+        // caught in the pair block of the summer article on 2026-09-13.
+        // Same shirt both sides now; the trouser is the only variable.
+        //
+        // ⚠️ IVORY BASE PHOTOS CARRY NO COLOUR WORD: ivory is
+        // `oversized-shirt-front.jpg`, white is `-white-front.jpg`. Read
+        // colorImages in catalog.ts, not the filename.
         type: "looks",
         a: {
-          top: "/catalog/oversized-shirt/oversized-shirt-front.jpg",
           bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg",
           label: "Wide leg, full length",
         },
         b: {
-          top: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-front.jpg",
           bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.jpg",
           label: "Straight leg, cropped",
         },
-        caption: "The same trouser, two cuts. You choose which one gets made, and nothing is cut until you do.",
+        caption: "The same navy trouser, two cuts of it. You choose which one gets made, and nothing is cut until you do.",
+      },
+      {
+        type: "p",
+        // ⚠️ SOURCED, and it has to be. This is a "X flatters Y" claim, which is
+        // exactly the kind rule 2 refuses without a citation, and it sits under
+        // two photographs, which reads as proof. Rise, hem placement at the calf
+        // versus the ankle, and the unbroken colour line are all documented in
+        // the styling guides listed at the foot of this article. The founder
+        // asked for this paragraph on 2026-09-13; she did not ask for invented
+        // rules to fill it.
+        text: "Same measurements, same cloth, two cuts. They do not look the same on a body, and two things decide that.",
+      },
+      {
+        type: "p",
+        text: "The first is where the waistband sits. The higher it sits, the more of your leg is below it, and the longer your legs look. That is the single biggest change you can make to a trouser.",
+      },
+      {
+        type: "p",
+        text: "The second is where it stops. Your calf is the widest part of your lower leg and your ankle is the narrowest. A hem that ends at the calf cuts you off at the widest point and your legs look shorter. A hem just above the ankle does not.",
+      },
+      {
+        type: "p",
+        text: "That is the difference between the two above. The full-length one runs in one line from the waist to the floor, so nothing interrupts it. The cropped one stops on purpose and puts the attention on your ankle. Neither is better. They are two different garments, and off a rail you get whichever one the size run happened to be cut to.",
       },
       { type: "h2", text: "What it does not change, and this matters" },
       {
@@ -621,7 +884,29 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit.",
+        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, and they are kept, so the second piece needs no appointment at all.",
+      },
+      {
+        type: "link",
+        slug: "what-to-wear-dubai-summer-fabric",
+        reason:
+          "In this climate, fit and fabric are the same question: room in the right places only helps if the cloth will let sweat out. Which fibres do, with the numbers.",
+      },
+      {
+        type: "link",
+        slug: "what-to-wear-under-an-open-abaya",
+        reason:
+          "The place a standard size fails most visibly is trouser length, and under an open abaya a trouser that reaches the floor is the commonest mistake there is.",
+      },
+      {
+        type: "link",
+        slug: "how-much-does-an-abaya-cost-in-dubai",
+        reason:
+          "What you pay for is largely whether the garment was cut to you. This puts real numbers on that gap in one market, abayas in Dubai, from the souq rail up to made to measure.",
+      },
+      {
+        type: "p",
+        text: "Sources: the pilot measurements are Lt Gilbert S. Daniels, “The ‘Average Man’?”, US Air Force Wright Air Development Center, 1952. The sizing standard history, Commercial Standard 215-58 and its withdrawal in 1983, is from Seamwork and The Good Trade. The most requested alterations are from published alteration guides including Oscar Jacobson and Next Level Wardrobe. Trouser rise, hem placement at the calf versus the ankle, and the unbroken colour line are from 2026 styling guides by Who What Wear, An Indigo Day, Soya Concept and Luna Fashion House.",
       },
     ],
   },

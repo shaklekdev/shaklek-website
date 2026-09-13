@@ -122,6 +122,20 @@ card-taking site: staging first, and the webhook routes must stay reachable.
   under; and `in` on that ladder let prototype keys through as categories.
   One root cause — a second source of truth for price. There is now one.
   ⚠️ **If custom work returns, give it a real catalogue entry with a slug.**
+- ⚠️ **`/how-it-works` IS OUT OF DATE AND MUST BE REWRITTEN BEFORE THE SHOP
+  OPENS.** It was written before the free measuring visit existed and still
+  describes the old flow, so the moment the gate comes off it is the page
+  explaining our process incorrectly. Founder, 2026-09-13. It is gated today
+  (verified: production serves the pre-launch page for it), so nobody can read
+  it yet, which is the only reason this is not urgent. **The gate is what is
+  hiding it, so DO NOT open the shop before this is rewritten.**
+- ⚠️ **THE FREE MEASURING VISIT IS MISSING FROM EVERY CATALOGUE AND PRODUCT
+  PAGE.** Founder's decision 2026-09-13: free for everyone in Dubai, once per
+  customer, 50 AED of cost against a customer we keep. It is the strongest
+  reason to buy from an unknown brand and it is currently only on
+  `/coming-soon` and in one journal article. It needs to be on the catalogue,
+  on every product page and in the customizer, wherever a person is deciding.
+  Blocked on nothing.
 - The pricing reopen: packaging is 36.15/order, not 2, so margins are 56–61%
   against a 65–72% band.
 - DET advertising permit before ANY discount campaign is advertised.

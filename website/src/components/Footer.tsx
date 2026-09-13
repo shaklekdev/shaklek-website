@@ -1,15 +1,32 @@
 import Link from "next/link";
 import CookieChoicesLink from "@/components/CookieChoicesLink";
+import { isStoreOpen } from "@/lib/storeOpen";
 
 export default function Footer() {
   return (
     <footer className="border-t border-border px-6 py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-xs text-text-3 sm:flex-row">
         <p>© 2026 Shaklek</p>
+        {/* ⚠️ HALF OF THIS FOOTER DEAD-ENDED WHILE THE SHOP WAS SHUT.
+            Questions, Size guide, Delivery and Returns all rewrite to
+            /coming-soon in src/proxy.ts, so on the journal pages, the only
+            pages a stranger can reach today, four of the nine links took the
+            reader to a page that answered none of them. Founder, 2026-09-13:
+            "the footer needs to be updated as well to render to the welcome
+            page".
+
+            They are HIDDEN rather than repointed: a link labelled "Size guide"
+            that lands on a signup page is worse than no link, because the
+            reader spends the click finding out. Legal, email and WhatsApp stay
+            because they work and because a site collecting email addresses has
+            to reach its own privacy policy. Everything comes back when
+            STORE_OPEN is true. */}
         <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 sm:justify-end">
-          <Link href="/faq" className="hover:text-text-2">
-            Questions
-          </Link>
+          {isStoreOpen() && (
+            <Link href="/faq" className="hover:text-text-2">
+              Questions
+            </Link>
+          )}
           {/* The journal is NOT in the header nav, deliberately. Three articles
               do not earn a slot beside Catalog, and the traffic path for them is
               Google -> article -> catalogue, not homepage -> blog. But the
@@ -21,15 +38,19 @@ export default function Footer() {
           <Link href="/blog" className="hover:text-text-2">
             Journal
           </Link>
-          <Link href="/size-guide" className="hover:text-text-2">
-            Size guide
-          </Link>
-          <Link href="/shipping" className="hover:text-text-2">
-            Delivery
-          </Link>
-          <Link href="/legal/terms#returns" className="hover:text-text-2">
-            Returns &amp; Alterations
-          </Link>
+          {isStoreOpen() && (
+            <>
+              <Link href="/size-guide" className="hover:text-text-2">
+                Size guide
+              </Link>
+              <Link href="/shipping" className="hover:text-text-2">
+                Delivery
+              </Link>
+              <Link href="/legal/terms#returns" className="hover:text-text-2">
+                Returns &amp; Alterations
+              </Link>
+            </>
+          )}
           <Link href="/legal/terms" className="hover:text-text-2">
             Terms
           </Link>

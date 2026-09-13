@@ -21,6 +21,38 @@ export const BANNED = [
   // which appears legitimately when describing TikTok's Commercial Music Library.
   [/\btrack(ing|ers?|ed)\b|\btrack (your|my|an?) \w+/i, 'founder rule 2026-08-25: no form of "track" in customer-facing copy'],
   [/\b\d{1,2}% off\b/i, 'no active promotion code exists; do not imply a discount'],
+
+  // ⚠️ ADDED 2026-09-13. Every one of these was sitting in a RENDERED carousel
+  // waiting to be posted, and the linter could not see them. A false price on a
+  // post outlives the correction, because a screenshot does not update.
+  [/\bAED\s?(389|419|429|619)\b/, 'stale price: the ladder is 449 shirt / 519 trousers since 2026-09-08'],
+  [/\bfrom AED\s?3\d\d\b/i, 'stale price: nothing starts below 449'],
+  // The founder cut the lead time from advertising AND from the terms of sale
+  // on 2026-09-12: ten working days and two weeks are the same duration, and
+  // nobody has measured real throughput. A promise in a caption is still a
+  // promise.
+  [/\b(about |in |within )?ten days\b/i, 'lead-time promise: cut from advertising 2026-09-12, nothing is measured yet'],
+  [/\b\d{1,2}[ -]day (delivery|turnaround)\b/i, 'lead-time promise: see above'],
+  // planning/marketing/personas.md claim rules, which until now lived only in a
+  // markdown table that no builder read.
+  [/\bsustainab|\beco[- ]friendly\b|\bgreen\b(?! tea)/i, 'claim rule: say the mechanism, not the label. "Made after you order it."'],
+  [/100% plant[- ]based/i, 'claim rule: there are buttons and a zip fly. Say 100% linen.'],
+  [/100% made in the UAE/i, 'claim rule: the cloth is milled abroad. Say cut and sewn in the UAE.'],
+  // ⚠️ REMOVED 2026-09-13, and the removal is the correction. This rule blocked
+  // "100% tailored" on the reasoning that "standard sizes sell at the same
+  // price". That reasoning was simply wrong about the business: NOTHING is cut
+  // before it is ordered, so a customer who picks M off the size chart still
+  // gets a garment cut individually by a tailor for her order. There is no
+  // stock, so there is no un-tailored path. On top of that the in-person
+  // measuring appointment is free to every customer.
+  // The rule spent weeks refusing the founder's own accurate copy. Founder,
+  // 2026-09-13: "we tailor everything... even if the damn customer put a
+  // standard chart we still tailor this."
+  // What stays banned is "100% made in the UAE" (the cloth is milled abroad),
+  // which is a different claim and still true of nothing we can prove.
+  [/\blong sleeves?\b/i, 'claim rule: no catalogue image shows a sleeve worn down. Name the setting.'],
+  [/\bhypoallergenic|\bcures?\b|\bprevents?\b/i, 'claim rule: no health claims. Breathable, absorbent, a plant fibre.'],
+  [/\bmodest ?wear\b/i, 'claim rule: say "choose the sleeve"'],
 ];
 
 /** Throws on the first violation. `where` is only used in the message. */
