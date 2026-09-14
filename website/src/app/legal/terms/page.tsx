@@ -104,10 +104,10 @@ export default function TermsPage() {
         only once a month of real orders says you can.
       */}
       <p>
-        Every piece is made after you order it. Most orders are ready in about
-        two to three weeks. That is an estimate and not a guarantee: we confirm
-        your date once your details are final, and we contact you directly if
-        anything moves. We deliver within the UAE.
+        Every piece is made after you order it. We strive to have most orders
+        ready in approximately 10 working days. That is an estimate and not a
+        guarantee: we confirm your date once your details are final, and we
+        contact you directly if anything moves. We deliver in Dubai.
       </p>
       <p>
         Please check your delivery address carefully. If a parcel is returned to
@@ -168,12 +168,17 @@ export default function TermsPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Care</h2>
       <p>
+        {/* ⚠️ THIS SAID "Dry clean only, the fabric is not pre-shrunk". Both
+            halves were wrong by 2026-09-14: productDisclosure.ts says "Gentle
+            machine wash", approved by the founder on 2026-09-10 after the mill
+            confirmed W300235 is water-washed and softened with about 1%
+            residual shrinkage. The terms of sale, the product page and the
+            printed care label were giving three different instructions, and
+            the terms were the one a customer could hold us to. */}
         Linen behaves like the natural fibre it is: it creases, and it softens
-        with wear. ⚠️ Dry clean only -- the fabric is not pre-shrunk, so washing
-        it will change the fit of a garment cut to your measurements. Follow the
-        care label. Damage from washing against
-        the label, alteration by another tailor, or ordinary wear is not covered
-        by the fit guarantee.
+        with wear. Follow the care label. Damage from washing against the label,
+        alteration by another tailor, or ordinary wear is not covered by the fit
+        guarantee.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Accounts</h2>

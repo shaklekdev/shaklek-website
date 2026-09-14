@@ -364,7 +364,8 @@ export default function CheckoutForm({ total }: { total: number }) {
           <p>
             <strong className="font-medium text-text-2">Delivery.</strong> Your
             address is collected on the secure payment screen. Delivery is
-            included, anywhere in the UAE.
+            included, in Dubai. More locations coming soon, and if you are
+            outside Dubai get in touch before you order.
           </p>
           <p>
             <strong className="font-medium text-text-2">When.</strong>{" "}

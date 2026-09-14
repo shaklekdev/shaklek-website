@@ -48,8 +48,8 @@ export async function GET() {
       const description =
         `${item.descriptor}. Made to order in 100% linen, cut to your ` +
         `measurements or a standard size for the same price. Choose the cut, the ` +
-        `length and the colour, and a tailor makes it for you in about 10 days. ` +
-        `Delivered across the UAE.`;
+        `length and the colour, and a tailor makes it for you in approximately ` +
+        `10 working days. Delivered in Dubai.`;
 
       entries.push(
         [

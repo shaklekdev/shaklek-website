@@ -194,7 +194,7 @@ function OrderConfirmedContent() {
           ? "Your stylist has been notified and will reach out shortly."
           : order.status
             ? "Payment received — confirming with your stylist now."
-            : "Order received — stylist notification is queued (email delivery isn't fully connected yet)."}
+            : "Order received. A stylist will be in touch."}
       </p>
 
       <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">

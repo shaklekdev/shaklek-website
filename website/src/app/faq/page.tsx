@@ -32,18 +32,22 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       <>
         We strive to have it ready in approximately 10 working days from the moment a
         stylist confirms your details, which
-        usually happens within a day of ordering. We deliver across the UAE and
-        delivery is included in the price.
+        usually happens within a day of ordering. We deliver in Dubai and
+        delivery is included in the price. More locations coming soon.
       </>
     ),
   },
   {
-    q: "Do I have to send my measurements?",
+    // ⚠️ THE QUESTION CHANGED, not just the answer. "Do I have to SEND my
+    // measurements" described a form that no longer exists, and the old answer
+    // called sending them "the more accurate option", which is now backwards:
+    // a tailor with a tape beats four numbers a customer guessed.
+    q: "Do I have to know my measurements?",
     a: (
       <>
-        No. You can pick a standard size from XS to XXL and we will cut to that.
-        Sending your own measurements is the more accurate option and costs the
-        same. See the{" "}
+        No. Choose Tailored and we come to you and take them, free, in Dubai.
+        Or pick a standard size from XS to XXL. The price is the same either
+        way. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide
         </Link>{" "}
@@ -124,7 +128,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         100% linen, and nothing else. It is a natural fibre that breathes in
         Gulf heat and softens with wear. Linen creases. That is the fibre
         behaving normally, not a fault. We wrote about{" "}
-        <Link href="/blog/natural-fabrics-better-for-your-body" className="underline">
+        <Link href="/blog/what-to-wear-dubai-summer-fabric" className="underline">
           why natural fabrics suit a body better
         </Link>{" "}
         if you want the longer answer.
@@ -178,8 +182,15 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Do you deliver outside the UAE?",
-    a: <>Not yet. We deliver within the UAE only.</>,
+    q: "Do you deliver outside Dubai?",
+    a: (
+      <>
+        Not yet. For now we cover Dubai only, for both the measuring
+        appointment and delivery, and more locations are coming soon. If you
+        are outside Dubai and want a piece, get in touch and we will see what
+        we can do.
+      </>
+    ),
   },
 ];
 

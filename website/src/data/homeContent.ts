@@ -104,7 +104,7 @@ export const STEPS = [
     // She orders first and we get in touch, so never "book a fitting": there
     // is no booking system and nothing may imply one.
     title: "We take your measurements",
-    body: "We come to you and take them ourselves, free on your first order.* Prefer to send your own numbers, or pick XS to XXL? That works too.",
+    body: "We come to you and take them ourselves, free on your first order, in Dubai. Or pick a standard size, XS to XXL. Same price.",
     more: "A tailor cuts to far more measurements than a form can sensibly ask for, and the shoulder is both the hardest to take on yourself and the one that cannot be altered once the cloth is cut. Twenty minutes with a tape is the difference between a piece that fits and one that nearly does.",
     // The one the whole proposition rests on, so it is allowed to look
     // different from its neighbours rather than being one of three equals.
@@ -140,11 +140,20 @@ export const STEPS = [
  *
  *  ⚠️ So do not put a price here until one is decided. "We will advise you" is
  *  a promise to answer, which we can keep. A number is a promise to hold it. */
-export const STEPS_NOTE = "* Free in Dubai. Elsewhere in the UAE, ask us and we will advise you.";
+// ⚠️ NO ASTERISK, AND NO "ELSEWHERE IN THE UAE". Founder, 2026-09-14, twice:
+// "for now we cover only dubai measurement appointment and delivery, new
+// locations coming soon" and "no need to put that asterix, you can just add in
+// Dubai or something, to make it clear".
+//
+// This supersedes the note above it, which was hers from EARLIER the same day
+// ("free in Dubai, not Dubai only"). Delivery is Dubai-only now as well as the
+// visit, so an offer to "advise" someone in Sharjah about a visit we would not
+// be delivering to was the wrong promise.
+export const STEPS_NOTE = "Free, in Dubai. More locations coming soon.";
 
 /** The same note, in full, for /how-it-works. */
 export const STEPS_NOTE_FULL =
-  "* Free in Dubai, and we get in touch after you order to find a time that suits you. Elsewhere in the UAE, reach out on WhatsApp or email and we will advise you.";
+  "Free, in Dubai, and we get in touch after you order to find a time that suits you. More locations coming soon, and if you are outside Dubai reach out on WhatsApp or email.";
 
 // Where she stops and we start. ⚠️ Hedged on purpose: "strive to" and
 // "approximately", matching the terms of sale, which call it an estimate and
@@ -193,8 +202,10 @@ export const BENEFITS = [
   // planning/pricing-todo.md gating anything on the site. It still matters for
   // capacity and lead time; it no longer matters for copy.
   {
-    k: "Made in the UAE",
-    v: "Cut and sewn here, never shipped in from a factory abroad.",
+    // ⚠️ SEWN, NOT MADE. "100% made in the UAE" is banned because the cloth is
+    // milled abroad; "sewn" is the half that is exactly true.
+    k: "Sewn in the UAE",
+    v: "Cut and sewn here by one tailor, never shipped in from a factory abroad.",
     icon: "pin",
   },
 ];

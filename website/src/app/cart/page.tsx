@@ -18,7 +18,7 @@ export default function CartPage() {
         <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
           <h1 className="text-[26px] text-text">Your cart is empty</h1>
           <p className="subtitle mt-2">
-            Browse the catalog or upload your own design to get started.
+            Browse the catalog to get started.
           </p>
           <Link
             href="/catalog"

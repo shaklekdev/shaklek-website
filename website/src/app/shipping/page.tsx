@@ -19,7 +19,7 @@ export default function ShippingPage() {
   return (
     <LegalPage
       title="Delivery"
-      intro="Made to order, delivered across the UAE, included in the price."
+      intro="Made to order, delivered in Dubai, included in the price."
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>

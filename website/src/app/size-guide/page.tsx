@@ -87,7 +87,7 @@ export default function SizeGuidePage() {
           table covers both, so without a line saying so a customer who has
           just picked a 38 on a pant page cannot find her row here. */}
       <p className="text-sm text-text-2">
-        Tops are sold as XS to XXL. Pants and skirts are sold by the EU
+        Tops are sold as XS to XXL. Pants are sold by the EU
         number in the third column, so a top in M and pants in 38 are cut to
         the same body.
       </p>
@@ -110,10 +110,10 @@ export default function SizeGuidePage() {
       </h2>
       <p>
         Then a standard size is the wrong tool. Choose <strong>Tailored</strong>{" "}
-        when you order and send your own numbers instead. It costs exactly the
-        same, and it is the reason made-to-order exists. Most people are between
-        sizes somewhere; a size chart is an average of thousands of bodies and
-        exact for almost none of them.
+        when you order and we come and measure you, free, in Dubai. It costs
+        exactly the same, and it is the reason made-to-order exists. Most people
+        are between sizes somewhere; a size chart is an average of thousands of
+        bodies and exact for almost none of them.
       </p>
       <p>
         Either way you get one free alteration or remake within 14 days of

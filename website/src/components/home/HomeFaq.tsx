@@ -29,12 +29,11 @@ const QUESTIONS = [
     ),
   },
   {
-    q: "Do I have to send my measurements?",
+    q: "Do I have to know my measurements?",
     a: (
       <>
-        No. Pick a standard size from XS to XXL and we will cut to that. Sending
-        your own measurements is the more accurate option and costs exactly the
-        same. See the{" "}
+        No. Choose Tailored and we come to you and take them, free, in Dubai.
+        Or pick a standard size from XS to XXL, for the same price. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide
         </Link>
@@ -56,7 +55,7 @@ const QUESTIONS = [
     a: (
       <>
         You get one free alteration or remake within 14 days of delivery,
-        whether you chose a standard size or sent your own measurements. Message
+        whether you chose a standard size or we measured you. Message
         us with a photo and a stylist arranges it.
       </>
     ),

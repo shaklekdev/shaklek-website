@@ -70,7 +70,7 @@ export default function ShaklekPlusSignup({
       <p className="mt-1 text-xs leading-relaxed text-text-3">
         {compact
           ? "More options on every piece, more colours, saved measurements and order tracking. Leave your email and we'll invite you when it opens."
-          : "Coming: more ways to change each piece, more colours, saved measurements and order tracking. Leave your email and we'll invite you when it opens."}
+          : "More ways to change each piece, and more colours. Leave your email and we'll invite you when it opens."}
       </p>
 
       <div className="mt-3 flex gap-2">
