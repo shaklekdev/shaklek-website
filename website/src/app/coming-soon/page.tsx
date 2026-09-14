@@ -59,8 +59,22 @@ const PILLARS = [
   {
     src: "/marketing/pre-launch/flax-stalks.jpg",
     alt: "A tied bundle of dried flax stalks, the plant linen is spun from.",
-    title: "100% linen. It breathes.",
-    body: "A plant fibre that moves air and takes water off your skin. Nothing from a barrel of oil.",
+    title: "100% linen, it breathes.",
+    // ⚠️ THIS CARD EXISTS TO ANSWER "WHY LINEN", for a reader who has never
+    // once thought about what a garment is made of. Founder, 2026-09-14:
+    // "many people still don't understand why linen".
+    //
+    // It gives the substance of a non-toxic claim WITHOUT the word. "Non
+    // toxic", "low tox" and "clean" all assert that something was tested for
+    // or excluded, and we hold no OEKO-TEX or GOTS certificate and the cloth
+    // is milled abroad. Heat, sweat and smell are three things a reader can
+    // check against her own last August, which is worth more than a claim she
+    // has to take on trust.
+    //
+    // ⚠️ KEEP IT TO ONE SENTENCE AND ONE CONTRAST. A four-sentence version
+    // spelling out petroleum and air flow was cut for length: "toooo long".
+    // "Flax" was cut too, because nobody knows the word.
+    body: "Linen is a plant. Unlike polyester, which is plastic, it does not hold the heat, the sweat or the smell.",
   },
   {
     // Already the right photograph: shears, tailor's chalk and linen on the
@@ -68,8 +82,14 @@ const PILLARS = [
     // the making.
     src: "/marketing/pre-launch/tailor-hands.jpg",
     alt: "A tailor's hands pinning linen, with shears and chalk on the bench.",
-    title: "Cut to you.",
-    body: "Your measurements, and the shape you choose, down to the sleeve.",
+    title: "100% tailored, it fits.",
+    // ⚠️ THE MEASURING VISIT IS NOT ON THIS PAGE AT ALL ANY MORE. It was a
+    // gold-bordered block, then one clause here, and on 2026-09-14 the founder
+    // cut it to nothing: "only this: Your true measurements, and the fit you
+    // choose." Her reasoning has been consistent across both cuts, that the
+    // offer says too much before there is anything to buy. The offer itself is
+    // unchanged and still lives in SizePicker on the storefront.
+    body: "Your true measurements, and the fit you choose.",
   },
   {
     // Generated, and APPROVED by the founder on sight, 2026-09-12. Kept
@@ -87,8 +107,11 @@ const PILLARS = [
     // goes public.
     src: "/marketing/pre-launch/uae-desert.jpg",
     alt: "A United Arab Emirates flag among date palms in the desert at low sun.",
-    title: "Made in the UAE.",
-    body: "By a tailor we know by name, for the weather we actually live in.",
+    // ⚠️ "100% SEWN in the UAE", never "100% made in the UAE". The cloth is
+    // milled abroad, so "made" is the claim we cannot defend and "sewn" is
+    // the one that is exactly true. copy-rules.mjs blocks the former.
+    title: "100% sewn in the UAE.",
+    body: "By one tailor, who works to every detail you choose.",
   },
 ];
 
@@ -132,63 +155,60 @@ export default function ComingSoonPage() {
           />
         </div>
 
+        {/* ⚠️ ONE LINE, AND IT IS DOING FOUR JOBS. Founder's, 2026-09-14.
+
+            "should not be an occasion" is the load-bearing phrase and the
+            reason this line exists. It makes the democratising argument
+            WITHOUT the two things that sank every earlier attempt: it never
+            says "for everyone", which the prices do not support and which she
+            rejected outright ("our prices are not really for everyone"), and
+            it never flattens the feeling the customer is actually paying for
+            ("some people who want to feel special will not identify in this").
+            It says the piece is precious AND that it should be ordinary
+            anyway. Nothing shorter has managed both.
+
+            It also carries both pillars in one clause, "fit you perfectly" and
+            "respect your skin", which is why there is no second paragraph and
+            no tagline above it.
+
+            ⚠️ THE BUSINESS-CARD LINE IS DELIBERATELY NOT HERE. This block used
+            to open "Your skin breathing. Your clothes fitting." with a
+            paragraph underneath restating both halves, and the three cards
+            below say the SAME two things a third time as "100% linen, it
+            breathes" and "100% tailored, it fits". Founder: "isn't it
+            repetitive". It was, three times over. The tagline still lives on
+            the business card, the packaging and the footer, which is where a
+            tagline belongs.
+
+            DO NOT PUT THE GUILT HOOK BACK. This block once read "Check the
+            label on whatever you have on right now. If it says polyester, you
+            have been wearing plastic through a Gulf summer." It is a good
+            VIDEO hook and it is in the content plan as one, where being
+            provocative earns a stop-scroll. On the brand's own front page it
+            opens by telling a stranger she got dressed wrong, which sells to
+            people already convinced and repels everyone else. */}
         <div className="flex flex-col gap-5 text-center">
-          {/* The founder's business-card line, TRIMMED. "Made in the UAE" came
-              off the end on 2026-09-12 because it is said again on the third
-              card and the line was too long to land. The first two clauses are
-              hers, verbatim. */}
-          <p className="font-display text-2xl leading-snug text-text sm:text-3xl">
-            Your skin breathing. Your clothes fitting.
-          </p>
-          {/* ⚠️ DO NOT PUT THE GUILT HOOK BACK. This read "Check the label on
-              whatever you have on right now. If it says polyester, you have
-              been wearing plastic through a Gulf summer." It is a good VIDEO
-              hook and it is in the content plan as one, where being provocative
-              earns a stop-scroll. On the brand's own front page it opens by
-              telling a stranger she got dressed wrong, which sells to people
-              already convinced and repels everyone else.
-
-              The same fact still appears, aimed at the material instead of the
-              reader: "plastic traps both", on the second card.
-
-              TWO SMALL THINGS, BOTH THE FOUNDER'S CALL, 2026-09-12: the
-              temperature is a NUMERAL because spelled out it slows the line
-              down, and it is 40 rather than 45 because 45 is a number she has
-              not personally lived through here. A claim a reader can check
-              against her own memory of last August is worth more than a
-              bigger one. */}
-          <p className="mx-auto max-w-lg text-sm leading-relaxed text-text-2">
-            Linen in 40 degrees feels like almost nothing. We cut it to your
-            measurements.
+          <p className="mx-auto max-w-xl font-display text-2xl leading-snug text-text sm:text-3xl">
+            Clothes that fit you perfectly and respect your skin should not be
+            an occasion.
           </p>
         </div>
 
-        {/* ⚠️ THE MEASURING VISIT, AND IT IS THE MOST IMPORTANT BLOCK ON THE
-            PAGE. Founder, 2026-09-13: "the measurements are for everyone...
-            this is how we will get customers. we still don't have a name, we
-            need to build trust so these needs to be A BIG PART of our
-            advertisement."
-            
-            It sits ABOVE the email box on purpose: it is the reason to give an
-            address, so it has to be read before the ask. The competitors
-            launching alongside us cannot say this, which is the whole point of
-            leading with it rather than with fabric.
+        {/* ⚠️ THE MEASURING VISIT USED TO BE A GOLD-BORDERED BLOCK HERE, and
+            it was removed on 2026-09-14 at the founder's instruction: "this is
+            saying way too much before the launch, it should be integrated in
+            our page."
 
-            ⚠️ NO PRICE AND NO THRESHOLD. The 550 rule was removed the same day
-            (planning/margins.mjs): the visit is for everyone, first order, and
-            gating it would undo the trust it exists to build. Dubai only, and
-            it says so, because somebody in Sharjah reading a promise that does
-            not name a city has been mis-sold. */}
-        <div className="flex flex-col gap-3 border border-gold bg-surface-2 px-6 py-7 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-gold">In Dubai</p>
-          <p className="font-display text-xl leading-snug text-text sm:text-2xl">
-            We come to you, and we measure you.
-          </p>
-          <p className="mx-auto max-w-sm text-sm leading-relaxed text-text-2">
-            Before your first piece is cut. Not a size chart, and nothing to pay
-            for the visit.
-          </p>
-        </div>
+            IT IS NOT GONE. It now sits inside the "100% tailored" card below,
+            in one clause. That is a deliberate downgrade in volume, not a
+            change of mind about the offer: the code comment that used to live
+            here called it the most important block on the page, quoting her
+            own instruction from 2026-09-13, and she superseded that a day
+            later. If it ever comes back up the page, keep it one line.
+
+            The constraints on the promise itself have NOT changed: Dubai only
+            and it says so, no price, no threshold, and the sequence is that
+            she orders first and we reach out. */}
 
         {/* THE FORM SITS HERE, MID PAGE, NOT AT THE FOOT. Founder, 2026-09-12.
             An email address is the only thing this page asks for, and at the
@@ -203,10 +223,26 @@ export default function ComingSoonPage() {
           </div>
         </div>
 
-        <ul className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
+        {/* ⚠️ TWO DIFFERENT LAYOUTS, AND THE PHONE ONE IS THE POINT.
+            Founder, 2026-09-14: "we need a specific layout for the three
+            pictures on phone because it shows too long, too big."
+
+            She was right about the number. Three 4:5 images stacked in one
+            column is roughly 1400px of scroll on a 375px phone, for three
+            cards, below the email box. Most readers never saw the third one.
+
+            PHONE: 16:9 banners, title laid ON the image over a scrim, body
+            hidden. About 630px for all three.
+            DESKTOP (sm and up): the original 3-up grid of 4:5 portraits, title
+            and body beneath, unchanged.
+
+            The title sits on the image on BOTH, because that is what she asked
+            for. On desktop it is the only thing on the image and the body
+            still reads underneath it. */}
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
           {PILLARS.map((pillar) => (
             <li key={pillar.title} className="flex flex-col gap-3">
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-surface-2">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface-2 sm:aspect-[4/5]">
                 {pillar.src ? (
                   <Image
                     src={pillar.src}
@@ -216,9 +252,26 @@ export default function ComingSoonPage() {
                     className="object-cover"
                   />
                 ) : null}
+                {/* The scrim is bottom-weighted and stops short of the top, so
+                    the photograph still reads as a photograph. Without it the
+                    title is unreadable over the flax stalks, which are pale. */}
+                {/* The scrim carries the title, so it is heavier than a
+                    tasteful gradient would be. The pale flax photograph is the
+                    constraint: white Cormorant at this size disappears into it
+                    without both a dark foot AND a shadow on the glyphs. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"
+                />
+                <p className="absolute inset-x-0 bottom-0 px-4 pb-4 font-display text-lg leading-snug text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] sm:px-3 sm:pb-3 sm:text-base">
+                  {pillar.title}
+                </p>
               </div>
-              <p className="text-sm text-text">{pillar.title}</p>
-              <p className="text-sm leading-relaxed text-text-2">{pillar.body}</p>
+              {/* Hidden on a phone: the title on the image is doing this job,
+                  and restoring the body is what made the section too long. */}
+              <p className="hidden text-sm leading-relaxed text-text-2 sm:block">
+                {pillar.body}
+              </p>
             </li>
           ))}
         </ul>
