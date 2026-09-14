@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import { STEPS, STEPS_NOTE, OUTCOME } from "@/data/homeContent";
+import { STEPS, STEPS_NOTE_FULL, OUTCOME } from "@/data/homeContent";
 
 export const metadata: Metadata = pageMetadata({
   title: "How it works",
@@ -51,12 +51,17 @@ export default function HowItWorksPage() {
               <div>
                 <h2 className="text-[15px] font-medium text-text">{s.title}</h2>
                 <p className="mt-1 text-sm text-text-2">{s.body}</p>
+                {/* The longer page earns its existence by saying more than the
+                    homepage does, not by repeating it. */}
+                {"more" in s && s.more ? (
+                  <p className="mt-2 text-sm leading-relaxed text-text-3">{s.more}</p>
+                ) : null}
               </div>
             </div>
           ))}
         </div>
 
-        <p className="mt-6 text-[12px] leading-relaxed text-text-3">{STEPS_NOTE}</p>
+        <p className="mt-6 text-[12px] leading-relaxed text-text-3">{STEPS_NOTE_FULL}</p>
 
         {/* Where she stops and we start, worded exactly as the homepage words
             it. The steps above are things she does; this is everything else. */}

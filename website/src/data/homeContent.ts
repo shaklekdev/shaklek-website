@@ -68,11 +68,18 @@ export const HERO = {
 // render it. They had drifted into three steps here and five there, saying
 // different things, which she caught: "it needs to stay consistent with the
 // home page." Do not add a local copy to either page.
+//
+// ⚠️ `more` IS RENDERED ONLY ON /how-it-works. The homepage keeps the short
+// version. Founder, 2026-09-14: "we can add more details later on how it works,
+// the version on the home page should be a smaller one." Two lengths, still one
+// list, so they cannot contradict each other the way they did when each page
+// owned its own copy.
 export const STEPS = [
   {
     n: "01",
     title: "Choose your piece",
     body: "Change the sleeve, the leg, the length and the colour, and watch it change with you.",
+    more: "Every combination has its own image, front and back, so you can see what you are choosing instead of imagining it. Shirts and pants in 100% linen, in ivory, white, navy and burgundy.",
   },
   {
     n: "02",
@@ -98,6 +105,7 @@ export const STEPS = [
     // is no booking system and nothing may imply one.
     title: "We take your measurements",
     body: "We come to you and take them ourselves, free on your first order.* Prefer to send your own numbers, or pick XS to XXL? That works too.",
+    more: "A tailor cuts to far more measurements than a form can sensibly ask for, and the shoulder is both the hardest to take on yourself and the one that cannot be altered once the cloth is cut. Twenty minutes with a tape is the difference between a piece that fits and one that nearly does.",
     // The one the whole proposition rests on, so it is allowed to look
     // different from its neighbours rather than being one of three equals.
     emphasis: true,
@@ -106,6 +114,7 @@ export const STEPS = [
     n: "03",
     title: "Add a detail",
     body: "A wider collar, a shorter sleeve. Tell us and a stylist confirms it before anything is cut.",
+    more: "In your own words, in the box on the piece you are ordering. A stylist reads every order and tells you what is possible before the cloth is cut, so nothing is a surprise.",
   },
 ];
 
@@ -131,7 +140,10 @@ export const STEPS = [
  *
  *  ⚠️ So do not put a price here until one is decided. "We will advise you" is
  *  a promise to answer, which we can keep. A number is a promise to hold it. */
-export const STEPS_NOTE =
+export const STEPS_NOTE = "* Free in Dubai. Elsewhere in the UAE, ask us and we will advise you.";
+
+/** The same note, in full, for /how-it-works. */
+export const STEPS_NOTE_FULL =
   "* Free in Dubai, and we get in touch after you order to find a time that suits you. Elsewhere in the UAE, reach out on WhatsApp or email and we will advise you.";
 
 // Where she stops and we start. ⚠️ Hedged on purpose: "strive to" and
