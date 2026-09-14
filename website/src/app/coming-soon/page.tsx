@@ -269,9 +269,15 @@ export default function ComingSoonPage() {
                   {pillar.title}
                 </p>
               </div>
-              {/* Hidden on a phone: the title on the image is doing this job,
-                  and restoring the body is what made the section too long. */}
-              <p className="hidden text-sm leading-relaxed text-text-2 sm:block">
+              {/* ⚠️ SHOWN ON PHONE, deliberately, 2026-09-14. These were hidden
+                  when the bodies were long paragraphs; they are one short line
+                  each now, and the whole section still fits in about 630px.
+                  The founder thought this was already done, which is a fair
+                  read: the LAYOUT changed this morning, the bodies did not.
+                  Hiding them meant a phone reader got "100% linen" as a claim
+                  and never the reason, which is the one thing she has said
+                  repeatedly that people do not understand. */}
+              <p className="text-sm leading-relaxed text-text-2">
                 {pillar.body}
               </p>
             </li>

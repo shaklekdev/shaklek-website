@@ -49,7 +49,28 @@ export type ConstraintCheck = {
   flagNotes: string[]; // human-readable reasons for any false flag above
 };
 
-export type SizeMode = "standard" | "tailored";
+// ⚠️ "fitting" IS THE FREE MEASURING APPOINTMENT and it is a real third mode,
+// not a flag on the other two. Founder, 2026-09-14: the box must be visible in
+// BOTH the size-chart option and the enter-my-measurements option, and "if they
+// click on it then no need to enter measurements". A mode is the only shape
+// that gives all three of those: it is mutually exclusive with the other two,
+// it renders under both, and it can switch the measurement fields off.
+//
+// It reaches the order as the free-text `size` field, which /api/orders caps at
+// 40 characters and never prices from, so a new value here cannot affect what
+// anyone is charged.
+export type SizeMode = "standard" | "tailored" | "fitting";
+
+// ⚠️ THE VALUE THAT TRAVELS WITH THE ORDER. It was a bare literal in two files
+// and a security review flagged it: edit one and tsc stays green while the
+// round trip silently maps the line back to "standard", so the customer gets a
+// size she never chose. Import it, never retype it.
+//
+// The cap is not decoration. /api/orders stores `size` as text(item.size, 40),
+// so a longer value is TRUNCATED IN THE DATABASE and the round trip then fails
+// with no error anywhere.
+export const FITTING_SIZE = "Fitting in Dubai";
+if (FITTING_SIZE.length > 40) throw new Error("FITTING_SIZE must fit /api/orders' 40-char cap");
 
 export type DesignSpec = {
   base: BaseSource;

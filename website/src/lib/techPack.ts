@@ -12,6 +12,7 @@ import {
   changesFromLabels,
   renderParamsForCategory,
 } from "@/data/parameterSliders";
+import { FITTING_SIZE } from "@/data/designSpec";
 import { catalog } from "@/data/catalog";
 import { colors } from "@/data/colors";
 import { nearestSize, rowForSize, sizeLabel } from "@/data/sizeChart";
@@ -311,7 +312,21 @@ export function buildPdf(
       const line = [
         item.color,
         item.fabric,
-        item.measurements ? "Tailored to measure" : item.size ? `Standard ${item.size}` : null,
+        // ⚠️ "Standard" IS ONLY PRINTED FOR AN ACTUAL SIZE. This read
+        // `item.measurements ? ... : item.size ? \`Standard ${item.size}\` : null`,
+        // which rendered "Standard Tailored" for a tailored line whose
+        // measurements had not come through, and would have rendered "Standard
+        // Fitting in Dubai" for a fitting. Both are contradictions in terms and
+        // the tailor reads this line first.
+        item.measurements
+          ? "Tailored to measure"
+          : item.size === FITTING_SIZE
+            ? "Measurements at fitting, Dubai"
+            : item.size === "Tailored"
+              ? "Tailored, measurements missing"
+              : item.size
+                ? `Standard ${item.size}`
+                : null,
         ...(item.changes ?? []),
       ]
         .filter(Boolean)
@@ -518,6 +533,18 @@ export function buildPdf(
           doc.font("Helvetica-Bold").fontSize(12).fillColor(INK).text(v, left + 118, y - 1);
           doc.y = y + 17;
         }
+      } else if (item.size === FITTING_SIZE) {
+        // ⚠️ A FITTING IS NOT A MISSING SIZE, and before this branch existed the
+        // two were byte-identical on the page. A tailor read "Standard Fitting
+        // in Dubai" on the cover, turned over, and found "no size recorded" --
+        // indistinguishable from a corrupt row. Nothing was ever cut wrong,
+        // because the fallback happens to say do not cut, but nobody could tell
+        // which situation they were looking at.
+        doc.font("Helvetica-Bold").fontSize(11).fillColor("#a33")
+          .text("FITTING IN DUBAI — measurements to be taken in person.");
+        doc.font("Helvetica").fontSize(10.5).fillColor("#a33")
+          .text("She has not sent numbers and is not expected to. Do not cut until the seventeen measurements have been taken and added to this pack.");
+        doc.fillColor(INK);
       } else {
         doc.font("Helvetica").fontSize(10.5).fillColor("#a33").text("No size or measurements recorded on this order — do not cut until this has been confirmed with whoever sent it.");
         doc.fillColor(INK);

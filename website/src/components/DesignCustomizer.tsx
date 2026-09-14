@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
-import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
+import { createSpecFromCatalog, type DesignSpec, FITTING_SIZE } from "@/data/designSpec";
 import {
   changesFromLabels,
   comboKeyForCategory,
@@ -124,8 +124,18 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         ...prev,
         fabric: line.fabric,
         color: isKnownColor(item, line.color) ? line.color : prev.color,
-        sizeMode: line.size === "Tailored" ? "tailored" : "standard",
-        size: line.size === "Tailored" ? prev.size : line.size,
+        sizeMode:
+          line.size === "Tailored"
+            ? "tailored"
+            : line.size === FITTING_SIZE
+              ? "fitting"
+              : "standard",
+        // ⚠️ A FITTING IS NOT A SIZE, so it must not be carried into `size`.
+        // Found in review: re-open a fitting line, untick the box, and the mode
+        // flips to standard while `size` still held "Fitting in Dubai". No grid
+        // button lights up, nothing validates `size` against the category, and
+        // add-to-cart stays enabled, so she ships a line she never chose.
+        size: line.size === "Tailored" || line.size === FITTING_SIZE ? prev.size : line.size,
         measurements: line.measurements,
         fitNotes: resolveFitNotes(item.category, line.fitNotes),
         changes: changesFromLabels(item.category, line.changes, item.defaultChanges),
@@ -254,7 +264,17 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       price,
       fabric: spec.fabric,
       color: spec.color,
-      size: spec.sizeMode === "tailored" ? "Tailored" : spec.size,
+      // ⚠️ THE TAILOR READS THIS STRING. "Fitting in Dubai" tells whoever picks
+      // the order up that no measurements are coming with it and that somebody
+      // has to go and take them before anything is cut. /api/orders caps `size`
+      // at 40 characters and never prices from it, so a third value here is
+      // free of any payment consequence.
+      size:
+        spec.sizeMode === "tailored"
+          ? "Tailored"
+          : spec.sizeMode === "fitting"
+            ? FITTING_SIZE
+            : spec.size,
       measurements: spec.sizeMode === "tailored" ? spec.measurements : "",
       // Standard only. On a tailored order the garment is cut to the
       // customer's own numbers, so "my usual M is tight" describes a garment
