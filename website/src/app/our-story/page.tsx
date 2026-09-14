@@ -9,7 +9,7 @@ import { colors, sizes } from "@/data/colors";
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
   description:
-    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in 100% linen, sewn in the UAE.",
+    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in 100% linen, made in the UAE.",
   path: "/our-story",
   images: [
     {
@@ -110,10 +110,16 @@ const VIGNETTES = [
   // planning/pricing-todo.md gating anything on the site. It still matters for
   // capacity and lead time; it no longer matters for copy.
   {
-    // ⚠️ SEWN, NOT MADE. "Made in the UAE" is the banned form: the cloth is
-    // milled abroad, so "sewn" is the half that is exactly true and the half
-    // nobody can attack. See the claim table in planning/marketing/personas.md.
-    k: "Sewn in the UAE",
+    // ⚠️ "MADE IN THE UAE" IS CORRECT AND APPROVED. Do not "fix" this to
+    // "sewn". It was changed to "Sewn in the UAE" on 2026-09-14 and reverted
+    // the same day when the founder asked why: only "100% MADE in the UAE" is
+    // banned, because the 100% implies the fibre came from here and the cloth
+    // is milled abroad. personas.md:36 says it outright, "Made in the UAE is
+    // the approved phrasing", copy-rules.mjs only matches the 100% form, and
+    // country of origin in trade is where the substantial transformation
+    // happens, which is where a garment is cut and sewn. productDisclosure.ts
+    // already carries it as the legal origin field.
+    k: "Made in the UAE",
     v: "Cut and sewn here by one tailor, never shipped in from a factory abroad.",
   },
 ];
