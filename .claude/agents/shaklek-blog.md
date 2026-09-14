@@ -180,12 +180,23 @@ yourself. The ones that catch articles:
 | any price that is not current | 449 shirt, 519 trousers. Check `catalog.ts`, never memory |
 | a lead time | cut from advertising AND the terms of sale on 2026-09-12 |
 | 100% plant based | 100% linen. There are buttons and a zip fly |
-| 100% made in the UAE | cut and sewn in the UAE. The cloth is milled abroad |
+| **100%** made in the UAE | cut and sewn in the UAE. The cloth is milled abroad |
 | "long sleeve" | no catalogue image shows a sleeve worn down |
 | sustainable, eco, green | made after you order it. No stock, no markdowns |
 | hypoallergenic, cures, prevents | breathable, absorbent, a plant fibre |
 | modest wear | choose the sleeve |
 | em dashes | a comma, a full stop, or a rewrite |
+
+⚠️ **"MADE IN THE UAE" IS APPROVED. ONLY THE "100%" FORM IS BANNED,** and the
+row above is about that form alone. This exact table misread cost a correction
+on 2026-09-14: the plain phrase was changed to "sewn in the UAE" across two
+pages, and the founder asked why, because it was never banned.
+`personas.md:36` says it outright, `copy-rules.mjs` only ever matched the 100%
+form, and `productDisclosure.ts` already carries "Made in the United Arab
+Emirates" as the legal origin field, so the site was contradicting its own
+product page. Country of origin is where the last substantial transformation
+happens, which for a garment is where it is cut and sewn. **Do not "fix" it
+back.**
 
 ⚠️ A health claim was found live on `/our-story` on 2026-09-12 and removed.
 Nothing in an article may say a fabric affects health.
