@@ -17,14 +17,14 @@
  *
  * ⚠️ PRICES: THE BLANKET BAN IS OVER, THE DISCIPLINE IS NOT. This used to read
  * "NO PRICES either", written while the fabric was unsettled. It then sat here
- * contradicting the file it governs, because the cost article publishes 690 on
+ * contradicting the file it governs, because the cost article publishes 699 on
  * the founder's own decision. The rule now, from her, 2026-09-13:
  *
  *   - A PRICE IS ALLOWED where the article's job is the price ("how much does
  *     an abaya cost in Dubai") or in a closing sell. Nowhere else. An article
  *     that scatters prices through its body is an advertisement.
  *   - IT MUST MATCH catalog.ts, read at the time of writing, never memory.
- *     Today: Shirt 449, Pants 519, Abaya 690. Change one, change both, and the
+ *     Today: Shirt 449, Pants 519, Abaya 699. Change one, change both, and the
  *     comment on BASE_PRICE_BY_CATEGORY names this file for that reason.
  *   - SOMEBODY ELSE'S PRICE CARRIES `market: true` on its block. Ours never
  *     does. See the note directly below.
@@ -343,7 +343,7 @@ export const articles: Article[] = [
         // Pants is 519, Abaya is 690. Change one, change both. This article
         // sells TWO garments, which is the ~71% margin line, and it carried no
         // number and no way to act until now.
-        text: "We cut shirts and pants in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 690 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, which is how the pants end up clearing the floor rather than dragging on it.",
+        text: "We cut shirts and pants in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 699 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -536,7 +536,7 @@ export const articles: Article[] = [
         // 800 for full custom and put our number ABOVE a band it actually sits
         // below. Rule 3b is about framing a true number, not inventing a
         // flattering one, and an unsupportable flourish fails it just as badly.
-        text: "Ours will be AED 690 when we open: cut to your measurements, in 100% linen, made after it is ordered. The comparison that matters is not the AED 300 rail, because that is a size run and this is not. It is the AED 800 that full custom starts at, and the AED 800 to AED 3,000 the Dubai boutique labels charge for a piece that was still cut to a chart rather than to you. AED 690 sits below both, and that is the whole claim. We hold the number by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging for the visit.",
+        text: "Ours will be AED 699 when we open: cut to your measurements, in 100% linen, made after it is ordered. The comparison that matters is not the AED 300 rail, because that is a size run and this is not. It is the AED 800 that full custom starts at, and the AED 800 to AED 3,000 the Dubai boutique labels charge for a piece that was still cut to a chart rather than to you. AED 699 sits below both, and that is the whole claim. We hold the number by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging for the visit.",
       },
       {
         type: "callout",
@@ -701,7 +701,7 @@ export const articles: Article[] = [
       { type: "h2", text: "Why we make clothes this way" },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. Nothing is cut before it is ordered, which means the cut can be chosen rather than accepted: the leg width, the length, the sleeve. For a climate where airflow through a garment is the difference between comfortable and not, being able to choose how much room a piece has is worth more than it would be anywhere else. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, and they are kept for anything you order afterwards.",
+        text: "Shaklek is made to order in the UAE. Nothing is cut before it is ordered, which means the cut can be chosen rather than accepted: the leg width, the length, the sleeve. For a climate where airflow through a garment is the difference between comfortable and not, being able to choose how much room a piece has is worth more than it would be anywhere else. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge.",
       },
       {
         type: "link",
@@ -870,7 +870,7 @@ export const articles: Article[] = [
       { type: "h2", text: "Why it is possible now when it was not before" },
       {
         type: "p",
-        text: "Made to order used to mean a shop, an appointment and several fittings, and it was priced accordingly. Two things changed. Measurements can now be taken once and kept, so the second piece needs no appointment at all. And a garment can be shown accurately on a screen before it exists, so choosing a cut no longer requires imagining it.",
+        text: "Made to order used to mean a shop, an appointment and several fittings, and it was priced accordingly. Two things changed. Measurements can now be taken once, in person, at no charge. And a garment can be shown accurately on a screen before it exists, so choosing a cut no longer requires imagining it.",
       },
       {
         type: "p",
@@ -884,7 +884,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, and they are kept, so the second piece needs no appointment at all.",
+        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge.",
       },
       {
         type: "link",

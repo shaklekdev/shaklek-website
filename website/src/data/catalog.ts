@@ -61,8 +61,15 @@ export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
   Pants: 519,
   Dress: 599, // ⚠️ NO DRESS AT LAUNCH. Founder, 2026-09-12: abayas only. The entry stays
               // because removing it is churn; nothing is photographed, priced or listed.
-  Abaya: 690, // ✅ QUOTED AND SETTLED. The tailor quoted 80-90 for a dress AND an abaya on
-              // 2026-09-12; modelled at 90, the worse end, which puts 690 at ~57% -- the
+  Abaya: 699, // ✅ QUOTED AND SETTLED, and the founder set the shelf price at 699 on
+              // 2026-09-14: "we need to keep the price below 700 I feel, maybe we will
+              // not make the same margins as the other items but it's okay". At 3.5m of
+              // cloth that is ~56%, against ~58% on the shirt, and at 3.0m it is ~58.7%,
+              // so the give is at most two points for sitting under a round number.
+              // ⏳ METRES ARE STILL AN ESTIMATE. 3.5m is a reasoned guess at 138cm
+              // width; the tailor's sample settles it, and every 0.5m is ~50 AED.
+              // The tailor quoted 80-90 for a dress AND an abaya on
+              // 2026-09-12; modelled at 90, the worse end, which puts 699 at ~57% -- the
               // strongest margin in the range. The earlier "assumes 100, not quoted" note
               // was stale by a day. ⏳ THE GILET IS NOW THE ONLY UNQUOTED NUMBER.
               // ⚠️ This price is PUBLISHED in the journal article
