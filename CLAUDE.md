@@ -6,6 +6,26 @@ on push to `main`. Planning docs in `planning/`.
 **Read this file only. Do not go read the whole catalog or planning folder to
 "get oriented" — everything load-bearing is here.**
 
+## Start here: `node planning/status.mjs`
+
+**Run it before you do anything.** It prints what is actually outstanding, and
+it is the only list. `planning/OPEN.md` holds the items, one file, and the
+script derives everything else fresh from the repo and the live site.
+
+> ⚠️ **NEVER WRITE DOWN A FACT THE SCRIPT CAN DERIVE.** Whether an abaya exists,
+> what the prices are, whether a page still advertises a lead time: all of that
+> is computed on every run and cannot go stale. Writing a derivable fact into a
+> markdown file is what put six todo files out of sync and had the founder
+> answering the same settled questions four times: *"why is this always stale???
+> you're driving me crazy."* Fabric was quoted and invoiced on 2026-09-09 while
+> `pricing-todo.md` still said PLACEHOLDER; Fitoor and the cotton bag were paid
+> while `margins.mjs` still listed them pending.
+
+Only things a machine cannot know belong in `OPEN.md`, and each line carries who
+confirmed it and when. Anything unconfirmed for 14 days is flagged rather than
+believed. When she settles something, put it in the code that computes it, not
+in a doc: her Stripe fee went into `margins.mjs`, not into a list.
+
 **One exception: `planning/session-log.md`.** More than one Claude session works
 on this repo at once. Read it before you start so you do not edit a file another
 session is holding uncommitted, and update it before you finish.

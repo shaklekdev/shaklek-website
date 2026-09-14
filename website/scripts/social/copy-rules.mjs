@@ -35,7 +35,14 @@ export const BANNED = [
   // /how-it-works said "about 10 days from order to your door" in its body AND
   // in its meta description. The rule ran clean over it for two days. A banned
   // promise that only one spelling catches is not a rule, it is a coincidence.
-  [/\b(about |in |within )?(ten|\d{1,2}) (working )?days\b/i, 'lead-time promise: cut from advertising 2026-09-12, nothing is measured yet'],
+  // ⚠️ THE LOOKAHEAD IS LOAD-BEARING. Widened 2026-09-14 to catch digits as well
+  // as the word "ten", which was right: /how-it-works said "10 days" and ran
+  // clean for two days. But as first written it also caught "one free
+  // alteration or remake within 14 days of delivery", which is a RETURNS
+  // WINDOW and not a promise about how fast we make anything. A rule that
+  // fires on correct copy gets switched off, so it excludes windows measured
+  // FROM an event that has already happened.
+  [/\b(about|in|within) (ten|\d{1,2}) (working )?days\b (?=from|to )|\b(about|in) (ten|\d{1,2}) (working )?days\b/i, 'lead-time promise: cut from advertising 2026-09-12, nothing is measured yet'],
   [/\b\d{1,2}[ -]day (delivery|turnaround)\b/i, 'lead-time promise: see above'],
   // planning/marketing/personas.md claim rules, which until now lived only in a
   // markdown table that no builder read.

@@ -107,7 +107,13 @@ const INPUTS = {
   // is the metre-hungry item in the range: at 3.2m the CLOTH ALONE costs more
   // than the stitching, which is why its price cannot be set from the tailor's
   // quote the way a shirt's can.
-  metresPerGarment: { Shirt: 2.2, Skirt: 1.5, Pants: 2.2, Dress: 3.0, Abaya: 3.2, Gilet: 2.0 },
+  // ✅ ANSWERED 2026-09-14, founder: "2 meters per garment, 4 meters for a set."
+  // A set is a shirt and a pair of pants, so 2.0 each, and the two agree.
+  // This had been a PLACEHOLDER at 2.2 since 2026-08-28, which overstated
+  // cloth on the two shipping categories by 10%.
+  // ⏳ Her answer covers SHIRT and PANTS. Dress, Abaya, Skirt and Gilet are
+  // still modelled, not quoted, and the abaya is the metre-hungry one.
+  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 3.0, Abaya: 3.2, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
   // ✅ SHIRT 35, NOT 40 — the tailor quotes 30-35, founder 2026-09-12. The
@@ -183,7 +189,18 @@ const INPUTS = {
   },
 
   // ⚠️ Still unverified against Stripe UAE's actual published rate.
-  paymentFee: { pct: 0.029, fixedAed: 1 },
+  // MEASURED 2026-09-14 from the founder's own Stripe balance history, not
+  // assumed. Two real charges solve it exactly:
+  //     390.00 AED -> 12.93 fee      3.89 AED -> 1.17 fee
+  //     => 3.046% + 1.052 AED, reproducing both to the fils.
+  // The old 2.9% + 1 understated the fee on a 390 order by 0.62 AED.
+  //
+  // RADAR IS FOLDED INTO THE FIXED PART and was missing entirely before today.
+  // Stripe bills it separately at 0.20 + 0.01 VAT = 0.21 per charge. Folded in
+  // rather than given its own field because every call site adds fixedAed
+  // exactly once per order, which is how Radar bills; a new field would have
+  // sat unread and changed no number.  1.052 + 0.21 = 1.262
+  paymentFee: { pct: 0.03046, fixedAed: 1.262 },
 
   // Made-to-order's equivalent of returns. Assumption, not a measurement —
   // the four fit-sample sets exist to turn this into a real number.
@@ -532,9 +549,10 @@ console.log(`  ⚠️ 130 EUR is a EUROPEAN price and this sells in AED. It is a
 console.log(`     not a price — check it against what an abaya actually sells for here.`);
 
 console.log(`\nPENDING INPUTS — every one of these moves the numbers above`);
-console.log(`  1. Fitoor: one care-label design not two, and the invoice name "Shakalek"`);
-console.log(`  2. Cotton bag at 300/500 units    (${bagLine.aed} agreed at 100; each AED = ~0.26 margin pts)`);
-console.log(`  3. Metres per garment             (PLACEHOLDER since 2026-08-28)`);
-console.log(`  4. Stripe UAE's actual fee        (assumed 2.9% + 1)`);
-console.log(`  5. Real CAC                       (134 is an assumption, never measured)`);
+console.log(`  1. Real CAC (134 is an assumption). NOT measurable until ads run.`);
+console.log(`     Founder 2026-09-14: nothing to do now, and she is right.`);
+console.log(`\n  SETTLED 2026-09-14. DO NOT RE-RAISE THESE:`);
+console.log(`     Fitoor and the cotton bag are PAID and closed. She had already said so.`);
+console.log(`     Stripe fee MEASURED from her Stripe balance history, not assumed.`);
+console.log(`     Metres per garment: 2.0 a shirt, 2.0 a pair of pants, 4.0 a set.`);
 console.log("");
