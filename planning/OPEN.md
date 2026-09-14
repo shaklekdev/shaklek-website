@@ -31,7 +31,7 @@ Tick the box and leave it; `status.mjs` hides closed items after 30 days.
 - [ ] sitemap-gsc | founder | confirmed:2026-09-14 | Submit sitemap.xml in Search Console. She is signed out; property sits under a personal Gmail, not the Outlook shaklek.com address
 - [ ] www-timeouts | founder | confirmed:2026-09-13 | One datapoint needed: load the site on mobile data with wifi off. Every other angle is exhausted and the Route 53 check is IPv4 only
 - [ ] det-permit | founder | confirmed:2026-09-12 | DET advertising permit, required before any discount campaign is advertised
-- [ ] how-it-works-timing | founder | confirmed:2026-09-14 | What should the page say about lead time? She cut the promise on 2026-09-12 and the reverted page still carries it. Options: say nothing, give a range, or confirm per order as the terms page does
+- [x] how-it-works-timing | founder | confirmed:2026-09-14 | ANSWERED: "approximately 10 working days", hedged with "we strive to". Reverses the 2026-09-12 cut. /faq and /order-confirmed done; /how-it-works is the other session's file
 - [ ] abaya-metres | founder | confirmed:2026-09-14 | Abaya modelled at 3.2m and dress at 3.0m, never quoted. She confirmed 2.0 for a shirt and for pants; these two are still assumptions and the abaya is the metre-hungry item she is launching
 - [ ] abaya-product | session | confirmed:2026-09-14 | Abaya needs a catalogue entry with a slug, a price and parameters before any photography can start
 - [ ] abaya-photography | session | confirmed:2026-09-14 | ~40 generations, about $2. Method is written in catalog-images-todo.md: one abaya per colourway, layered over approved set shots

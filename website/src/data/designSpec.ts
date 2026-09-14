@@ -49,28 +49,16 @@ export type ConstraintCheck = {
   flagNotes: string[]; // human-readable reasons for any false flag above
 };
 
-// ⚠️ "fitting" IS THE FREE MEASURING APPOINTMENT and it is a real third mode,
-// not a flag on the other two. Founder, 2026-09-14: the box must be visible in
-// BOTH the size-chart option and the enter-my-measurements option, and "if they
-// click on it then no need to enter measurements". A mode is the only shape
-// that gives all three of those: it is mutually exclusive with the other two,
-// it renders under both, and it can switch the measurement fields off.
+// ⚠️ TWO MODES, AND "tailored" NOW MEANS THE FREE MEASURING VISIT rather than
+// a form the customer fills in herself. A third "fitting" mode existed for
+// about an hour on 2026-09-14 before the founder collapsed it: if the visit is
+// free and better, nobody types four guessed numbers, so the fields were
+// removed and Tailored became the offer.
 //
-// It reaches the order as the free-text `size` field, which /api/orders caps at
-// 40 characters and never prices from, so a new value here cannot affect what
-// anyone is charged.
-export type SizeMode = "standard" | "tailored" | "fitting";
-
-// ⚠️ THE VALUE THAT TRAVELS WITH THE ORDER. It was a bare literal in two files
-// and a security review flagged it: edit one and tsc stays green while the
-// round trip silently maps the line back to "standard", so the customer gets a
-// size she never chose. Import it, never retype it.
-//
-// The cap is not decoration. /api/orders stores `size` as text(item.size, 40),
-// so a longer value is TRUNCATED IN THE DATABASE and the round trip then fails
-// with no error anywhere.
-export const FITTING_SIZE = "Fitting in Dubai";
-if (FITTING_SIZE.length > 40) throw new Error("FITTING_SIZE must fit /api/orders' 40-char cap");
+// THE CONSEQUENCE IS IN techPack.ts: a tailored line now legitimately arrives
+// with measurements: "". That is no longer an error, it is the normal case,
+// and the tech pack says so.
+export type SizeMode = "standard" | "tailored";
 
 export type DesignSpec = {
   base: BaseSource;
@@ -107,20 +95,22 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     // labellings, see sizeChart.ts. The stored value is the label the customer
     // saw, so everything downstream reads back what she picked.
     size: defaultSizeFor(item.category),
-    // STANDARD by default, changed 2026-08-26 (founder). This reverses an
-    // earlier decision and the reason is worth keeping, because the earlier
-    // reasoning was not wrong so much as incomplete: made-to-order only
-    // justifies its price if the garment is cut to the customer, so tailored
-    // was the default.
+    // ⚠️ TAILORED by default, 2026-09-14 (founder), and the reason the default
+    // moved AWAY from tailored on 2026-08-26 has now been removed rather than
+    // overruled. That comment said: `Add to cart` is disabled until four body
+    // measurements validate, so a tailored default asked every visitor for a
+    // tape measure before it would let her buy anything, which on a phone away
+    // from home is a closed door rather than a higher-intent path. That was
+    // correct at the time.
     //
-    // What that missed is that `Add to cart` is DISABLED until four body
-    // measurements validate (see measurementsValid in DesignCustomizer). So
-    // the default asked every visitor for a tape measure before it would let
-    // them buy anything at all -- on a phone, away from home, that is not a
-    // higher-intent path, it is a closed door. Standard sizing already worked
-    // and was one tap away; now it is zero taps away and tailored is the
-    // upgrade, labelled free so it still sells itself.
-    sizeMode: "standard",
+    // THERE ARE NO MEASUREMENT FIELDS ANY MORE. Tailored means we come and
+    // measure her in Dubai, so it now costs the customer zero taps and zero
+    // knowledge, and the closed door is gone. It is the better product, it is
+    // free, and it is why this brand charges what it charges, so it leads.
+    //
+    // If measurement fields ever come back, this decision comes back with
+    // them: do not leave a default that disables the buy button.
+    sizeMode: "tailored",
     measurements: "",
     fitNotes: [],
     changes: defaultChangesForCategory(item.category, item.defaultChanges),
@@ -138,20 +128,22 @@ export function createSpecFromUpload(fileName: string, imageDataUrl: string): De
     // An upload has no category until a stylist reads it, so it falls back to
     // the letter ladder.
     size: defaultSizeFor("Unspecified"),
-    // STANDARD by default, changed 2026-08-26 (founder). This reverses an
-    // earlier decision and the reason is worth keeping, because the earlier
-    // reasoning was not wrong so much as incomplete: made-to-order only
-    // justifies its price if the garment is cut to the customer, so tailored
-    // was the default.
+    // ⚠️ TAILORED by default, 2026-09-14 (founder), and the reason the default
+    // moved AWAY from tailored on 2026-08-26 has now been removed rather than
+    // overruled. That comment said: `Add to cart` is disabled until four body
+    // measurements validate, so a tailored default asked every visitor for a
+    // tape measure before it would let her buy anything, which on a phone away
+    // from home is a closed door rather than a higher-intent path. That was
+    // correct at the time.
     //
-    // What that missed is that `Add to cart` is DISABLED until four body
-    // measurements validate (see measurementsValid in DesignCustomizer). So
-    // the default asked every visitor for a tape measure before it would let
-    // them buy anything at all -- on a phone, away from home, that is not a
-    // higher-intent path, it is a closed door. Standard sizing already worked
-    // and was one tap away; now it is zero taps away and tailored is the
-    // upgrade, labelled free so it still sells itself.
-    sizeMode: "standard",
+    // THERE ARE NO MEASUREMENT FIELDS ANY MORE. Tailored means we come and
+    // measure her in Dubai, so it now costs the customer zero taps and zero
+    // knowledge, and the closed door is gone. It is the better product, it is
+    // free, and it is why this brand charges what it charges, so it leads.
+    //
+    // If measurement fields ever come back, this decision comes back with
+    // them: do not leave a default that disables the buy button.
+    sizeMode: "tailored",
     measurements: "",
     fitNotes: [],
     changes: [],

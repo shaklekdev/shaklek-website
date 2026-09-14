@@ -81,10 +81,11 @@ export default function SizePicker({
     Object.entries(errors).filter(([key]) => touched[key]),
   );
 
-  // Standard sizing needs no measurements, and neither does a fitting: the
-  // whole point of booking the visit is that she does not have to measure
-  // herself. Validity only depends on the fields while Tailored is selected.
-  const measurementsValid = sizeMode !== "tailored" || Object.keys(errors).length === 0;
+  // ⚠️ ALWAYS VALID NOW. There are no measurement fields to be wrong: Tailored
+  // means we come and take them. This gated add-to-cart on four inputs that no
+  // longer exist, and leaving it would have blocked checkout on errors from a
+  // panel nobody can see.
+  const measurementsValid = true;
   // Empty for an uploaded design, whose garment type nobody has read yet --
   // the question then renders not at all rather than guessing a vocabulary.
   const options = fitNotesForCategory(category);
@@ -143,9 +144,14 @@ export default function SizePicker({
           every customer actually has about made-to-measure, which is what it
           costs extra. Nothing, and the button now says so. */}
       <div className="mt-1.5 grid grid-cols-2 gap-1.5 lg:max-w-xs">
+        {/* ⚠️ TAILORED IS FIRST AND IT IS THE DEFAULT. Founder, 2026-09-14.
+            It is the better product, it costs the customer nothing, and it is
+            the reason this brand charges what it charges. Standard is the
+            fallback for someone who does not want us in her house, not the
+            starting point. */}
         {([
-          ["standard", "Standard"],
           ["tailored", "Tailored (free)"],
+          ["standard", "Standard"],
         ] as const).map(([mode, label]) => (
           <button
             key={mode}
@@ -161,71 +167,47 @@ export default function SizePicker({
           </button>
         ))}
       </div>
-      {/* THE DUBAI FITTING OFFER, AND IT IS SELECTABLE NOW. Founder, 2026-09-08
-          for the offer, 2026-09-14 for making it a choice rather than a notice:
-          "a box visible in BOTH options (the size chart one and the enter my
-          measurements), if they click on it then no need to enter measurements".
+      {/* ⚠️ "TAILORED" IS THE MEASURING VISIT. THERE ARE NO MEASUREMENT FIELDS.
+          Founder, 2026-09-14: "if the customer chooses Tailored, there is no
+          need to leave those boxes for Bust, Chest and everything... it's free,
+          it's better, and I don't think that people actually know their waist
+          or chest."
 
-          It sits under the two buttons and outside them on purpose. The
-          customer who most needs it is the one about to pick Standard BECAUSE
-          she does not know her measurements, and she would never open the
-          Tailored panel to discover this exists.
+          She is right and the old form proved it: it asked for FOUR of the
+          seventeen measurements the tailor works from, and two of the missing
+          ones cannot be self-measured at all. A free visit beats four numbers a
+          customer guessed, every time, so nobody would have chosen to type.
 
-          WHY IT IS WORTH AN APPOINTMENT: the tailor's own list is SEVENTEEN
-          measurements (planning/frontend-todo.md), of which this form collects
-          four. Shoulder and crotch cannot be self-measured reliably at all, and
-          shoulder is the one that cannot be altered once the garment is cut. So
-          it is not a nicety, it is how the garment gets cut to a person rather
-          than to four numbers and thirteen assumptions.
+          This replaced a third size mode built earlier the same day. Two
+          options is the whole design now: a size off the chart, or we come and
+          measure you.
 
-          ⚠️ THE SEQUENCE IS: SHE ORDERS, THEN WE REACH OUT. Founder's decision,
-          and it is what keeps this affordable: only paying customers get an
-          hour of her time. There is no booking system. Do not reword this into
-          something that implies she is picking a slot now.
+          ⚠️ DUBAI ONLY, DELIBERATELY, AND IT SAYS SO ON THE BUTTON. Founder:
+          "for now I can only afford to go to customers in Dubai, and same for
+          delivery otherwise it will be too expensive, since the delivery is
+          also included in the price." Somebody in Sharjah reading a promise
+          that does not name a city has been mis-sold.
 
-          ⚠️ DUBAI ONLY, AND IT SAYS SO. Somebody in Sharjah reading a promise
-          that does not name a city has been mis-sold. */}
-      <button
-        type="button"
-        onClick={() => onSizeModeChange(sizeMode === "fitting" ? "standard" : "fitting")}
-        aria-pressed={sizeMode === "fitting"}
-        className={`mt-2 flex w-full cursor-pointer items-start gap-2.5 border px-3 py-2.5 text-left transition-colors ${
-          sizeMode === "fitting"
-            ? "border-gold bg-gold/10"
-            : "border-border bg-surface-2 hover:border-gold"
-        }`}
-      >
-        <span
-          aria-hidden="true"
-          className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
-            sizeMode === "fitting" ? "border-gold bg-gold" : "border-border-strong bg-white"
-          }`}
-        >
-          {sizeMode === "fitting" ? (
-            <span className="h-1.5 w-1.5 rounded-full bg-white" />
-          ) : null}
-        </span>
-        <span className="text-[11px] leading-relaxed text-text-2">
-          <span className="font-medium text-text">
-            Free tailor measuring appointment, in Dubai.
-          </span>{" "}
-          We come to you, at a place and a time that suit you, before your piece
-          is cut. Choose this and you do not need to enter any measurements now:
-          order first, and we get in touch to arrange it.
-        </span>
-      </button>
+          ⚠️ THE SEQUENCE IS: SHE ORDERS, THEN WE REACH OUT. There is no booking
+          system. Nothing here may imply she is picking a slot now. */}
+      <p className="mt-2.5 text-[11px] leading-relaxed text-text-2">
+        {sizeMode === "tailored" ? (
+          <>
+            <span className="font-medium text-text">We come to you and measure you. Free, in Dubai.</span>{" "}
+            Order first and we get in touch to arrange it, before anything is cut.
+          </>
+        ) : (
+          <>Or choose Tailored and we come and measure you, free, in Dubai.</>
+        )}
+      </p>
       {/* No helper line under this toggle. It said "Cut to your measurements,
           at no extra cost" and "Pick XS to XXL, or switch to Tailored..." --
           both of which the two buttons already say, one of them with the word
           "(free)" printed on it. Founder, 2026-08-26: too much. The size
           section is now the two buttons and the sizes. */}
 
-      {/* ⚠️ THREE MODES, NOT TWO. A fitting renders NEITHER the size grid nor
-          the measurement fields: choosing it is the customer saying she does
-          not want to do this part, and leaving either panel up would undo the
-          thing she just chose. This was `sizeMode === "standard" ? grid :
-          fields`, which would have dropped a fitting into the fields branch. */}
-      {sizeMode === "fitting" ? null : sizeMode === "standard" ? (
+      {/* Tailored shows nothing here: the line above is the whole offer. */}
+      {sizeMode === "tailored" ? null : sizeMode === "standard" ? (
         <>
           {/* 4-then-3 on a phone, one row from 640px. Trousers gained a 32,
               so seven buttons across a 342px screen would be ~42px each --
@@ -389,7 +371,12 @@ export default function SizePicker({
         </div>
       )}
 
-        {options.length > 0 && (
+        {/* ⚠️ NOT ON A TAILORED ORDER. Founder, 2026-09-14: "Make it your way
+            also disappears in the tailored one because for this one we're going
+            to collect the feedback with the customer." The fit preferences are
+            a worse version of a conversation that is now happening in person,
+            and asking twice is how the two answers end up disagreeing. */}
+        {sizeMode !== "tailored" && options.length > 0 && (
           /* COLLAPSED BY DEFAULT, like the size chart above it.
              Founder, 2026-08-27: "make it your way, peut être retractable".
              Her reasoning is the good part -- a customer who does not want to

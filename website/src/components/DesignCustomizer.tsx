@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
-import { createSpecFromCatalog, type DesignSpec, FITTING_SIZE } from "@/data/designSpec";
+import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import {
   changesFromLabels,
   comboKeyForCategory,
@@ -18,7 +18,6 @@ import { resolveFitNotes } from "@/data/fitNotes";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
 import ProductDisclosure from "@/components/ProductDisclosure";
-import SaveMeasurements from "@/components/SaveMeasurements";
 import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
@@ -124,18 +123,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         ...prev,
         fabric: line.fabric,
         color: isKnownColor(item, line.color) ? line.color : prev.color,
-        sizeMode:
-          line.size === "Tailored"
-            ? "tailored"
-            : line.size === FITTING_SIZE
-              ? "fitting"
-              : "standard",
-        // ⚠️ A FITTING IS NOT A SIZE, so it must not be carried into `size`.
-        // Found in review: re-open a fitting line, untick the box, and the mode
-        // flips to standard while `size` still held "Fitting in Dubai". No grid
-        // button lights up, nothing validates `size` against the category, and
-        // add-to-cart stays enabled, so she ships a line she never chose.
-        size: line.size === "Tailored" || line.size === FITTING_SIZE ? prev.size : line.size,
+        sizeMode: line.size === "Tailored" ? "tailored" : "standard",
+        size: line.size === "Tailored" ? prev.size : line.size,
         measurements: line.measurements,
         fitNotes: resolveFitNotes(item.category, line.fitNotes),
         changes: changesFromLabels(item.category, line.changes, item.defaultChanges),
@@ -264,17 +253,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       price,
       fabric: spec.fabric,
       color: spec.color,
-      // ⚠️ THE TAILOR READS THIS STRING. "Fitting in Dubai" tells whoever picks
-      // the order up that no measurements are coming with it and that somebody
-      // has to go and take them before anything is cut. /api/orders caps `size`
-      // at 40 characters and never prices from it, so a third value here is
-      // free of any payment consequence.
-      size:
-        spec.sizeMode === "tailored"
-          ? "Tailored"
-          : spec.sizeMode === "fitting"
-            ? FITTING_SIZE
-            : spec.size,
+      size: spec.sizeMode === "tailored" ? "Tailored" : spec.size,
       measurements: spec.sizeMode === "tailored" ? spec.measurements : "",
       // Standard only. On a tailored order the garment is cut to the
       // customer's own numbers, so "my usual M is tight" describes a garment
@@ -373,16 +352,17 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               }
             />
 
-            {/* The highest-intent moment there is: they have just typed their
-                numbers and are about to buy. Renders only when the measurements
-                are valid, and cannot block anything below it. */}
-            {spec.sizeMode === "tailored" && (
-              <SaveMeasurements
-                measurements={spec.measurements}
-                valid={measurementsValid}
-                className="mt-4"
-              />
-            )}
+            {/* ⚠️ SAVE-MEASUREMENTS IS GONE, and it had to be. It offered to
+                store the numbers she had just typed, at the highest-intent
+                moment there is. Since 2026-09-14 there are no numbers: Tailored
+                means we come and measure her, so the only thing this could have
+                saved is an empty string. Founder: "same thing for saved
+                measurements, it doesn't have to be there anymore."
+
+                The ACCOUNT page still reads and writes measurements, and
+                /api/account/measurements is untouched, so a returning customer
+                whose numbers we took at a fitting still has them. What has gone
+                is asking her to type them at checkout. */}
 
             <div
               ref={buyRef}

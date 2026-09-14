@@ -113,7 +113,7 @@ const INPUTS = {
   // cloth on the two shipping categories by 10%.
   // ⏳ Her answer covers SHIRT and PANTS. Dress, Abaya, Skirt and Gilet are
   // still modelled, not quoted, and the abaya is the metre-hungry one.
-  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 3.0, Abaya: 3.2, Gilet: 2.0 },
+  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 3.0, Abaya: 3.5, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
   // ✅ SHIRT 35, NOT 40 — the tailor quotes 30-35, founder 2026-09-12. The

@@ -20,7 +20,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         Nothing is cut until you order it. There is no warehouse and no stock.
-        Your piece is made for you, which is why it takes about ten days rather
+        Your piece is made for you, which is why it takes approximately 10 working days rather
         than arriving the next morning, and why it can be cut to your
         measurements rather than an average.
       </>
@@ -30,7 +30,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "How long does it take?",
     a: (
       <>
-        About ten days from the moment a stylist confirms your details, which
+        We strive to have it ready in approximately 10 working days from the moment a
+        stylist confirms your details, which
         usually happens within a day of ordering. We deliver across the UAE and
         delivery is included in the price.
       </>
@@ -69,8 +70,24 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         to take accurately on yourself.
         <br />
         <br />
-        Outside Dubai we cannot do this yet. Send your measurements with the
-        order and tell us anything we should know in the notes.
+        {/* ⚠️ WHATSAPP, NOT A FORM. Founder, 2026-09-14: "she can do by
+            whatsapp to send the measurement, because I'm NOT MAKING A CUSTOMER
+            PUT 17 measurements there." Both alternatives were worse: a
+            seventeen-field form nobody completes, or turning away every
+            customer outside Dubai. A person on the other end can also tell her
+            HOW to take the awkward ones, which a form cannot. */}
+        Outside Dubai we cannot come to you yet, so send us your measurements
+        on{" "}
+        <a
+          href="https://wa.me/971504766769"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          WhatsApp
+        </a>{" "}
+        and we will take you through them. Or choose a standard size and tell
+        us anything we should know in the notes on your order.
       </>
     ),
   },

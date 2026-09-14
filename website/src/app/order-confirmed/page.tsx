@@ -201,7 +201,8 @@ function OrderConfirmedContent() {
         <strong className="text-text">What happens next:</strong> a
         Shaklek stylist reviews your order and reaches out — by WhatsApp
         or email — within 24 hours to confirm the details before it goes
-        to your tailor. Expect delivery in about 10 days from confirmation.
+        to your tailor. We strive to have it ready in approximately 10 working days from
+        confirmation.
       </div>
 
       {!isSignedIn && (

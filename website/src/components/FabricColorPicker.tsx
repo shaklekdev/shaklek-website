@@ -70,11 +70,12 @@ export default function FabricColorPicker({
         </div>
       )}
       </div>
-      {single && upcoming.length > 0 && (
-        <p className="mt-1.5 text-right text-[10px] text-text-3">
-          {upcoming.map((f) => f.label).join(", ")} coming soon
-        </p>
-      )}
+      {/* ⚠️ NO "COMING SOON" LINE. Founder, 2026-09-14: "we need to remove the
+          coming soon thing from everywhere, I still see it." This rendered
+          "Organic cotton coming soon" off the switched-off entry in fabrics.ts,
+          which advertised a fabric with no date, no quote and no commitment to
+          buy it. The fabric entry STAYS switched off rather than deleted, per
+          CLAUDE.md; what has gone is telling customers it is on its way. */}
     </div>
   );
 }

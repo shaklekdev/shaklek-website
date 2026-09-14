@@ -44,9 +44,13 @@ export default function CatalogPage() {
           Every piece we make
         </h1>
         <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-text-2">
-          {catalog.length} essentials in 100% linen. Choose a piece, change the
-          sleeve, the length or the leg, and send your measurements or pick a
-          standard size. The price is the same either way.
+          {/* ⚠️ NO COUNT. This read "{catalog.length} essentials", which
+              rendered as "8 essentials" and did the range no favours: a number
+              that small reads as a limitation to a stranger, and it shrinks
+              every time something sells out. Founder, 2026-09-14. */}
+          Essentials in 100% linen. Choose a piece, change the sleeve, the
+          length or the leg, and we come and measure you, free, in Dubai. Or
+          pick a standard size. The price is the same either way.
         </p>
 
         <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4 lg:gap-x-6">

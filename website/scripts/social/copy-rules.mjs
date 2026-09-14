@@ -35,14 +35,18 @@ export const BANNED = [
   // /how-it-works said "about 10 days from order to your door" in its body AND
   // in its meta description. The rule ran clean over it for two days. A banned
   // promise that only one spelling catches is not a rule, it is a coincidence.
-  // ⚠️ THE LOOKAHEAD IS LOAD-BEARING. Widened 2026-09-14 to catch digits as well
-  // as the word "ten", which was right: /how-it-works said "10 days" and ran
-  // clean for two days. But as first written it also caught "one free
-  // alteration or remake within 14 days of delivery", which is a RETURNS
-  // WINDOW and not a promise about how fast we make anything. A rule that
-  // fires on correct copy gets switched off, so it excludes windows measured
-  // FROM an event that has already happened.
-  [/\b(about|in|within) (ten|\d{1,2}) (working )?days\b (?=from|to )|\b(about|in) (ten|\d{1,2}) (working )?days\b/i, 'lead-time promise: cut from advertising 2026-09-12, nothing is measured yet'],
+  // ⚠️ THE LEAD TIME IS BACK, HEDGED. Founder, 2026-09-14: "the 10 working days
+  // is a valid promise, we can mention that our pieces are crafted carefully for
+  // every customer and we strive to make them ready in approx 10 working days."
+  // That reverses the 2026-09-12 cut, and her framing is what makes it safe:
+  // "strive to" and "approximately" is an aspiration, which is exactly what the
+  // terms page already says ("an estimate and not a guarantee").
+  //
+  // So what is banned now is a GUARANTEE, not a timing statement. Note also
+  // that the pages said "10 days" and she said "10 WORKING days", which is two
+  // calendar weeks rather than one and a half; every surface now says working.
+  [/\b(guarantee[ds]?|promise[ds]?)\b[^.]{0,40}\b\d{1,2} (working )?days\b/i, 'lead time is an estimate, never a guarantee: the terms page says so and the founder cut the contractual version on 2026-09-12'],
+  [/\b\d{1,2}[ -]day (guarantee|promise)\b/i, 'lead time is an estimate, never a guarantee'],
   [/\b\d{1,2}[ -]day (delivery|turnaround)\b/i, 'lead-time promise: see above'],
   // planning/marketing/personas.md claim rules, which until now lived only in a
   // markdown table that no builder read.

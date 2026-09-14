@@ -1,5 +1,4 @@
 import LegalPage from "@/components/LegalPage";
-import SizeGuideMeasurements from "@/components/SizeGuideMeasurements";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
@@ -28,7 +27,23 @@ export default function SizeGuidePage() {
           reference underneath it, not the other way round. Someone who knows
           their numbers should never scroll past a table of averages to enter
           them. */}
-      <SizeGuideMeasurements />
+      {/* ⚠️ THE MEASUREMENT FORM IS GONE FROM THIS PAGE, 2026-09-14. Founder:
+          "the save your measurement is not needed anymore in the size custom."
+
+          It asked for the same four numbers the customizer used to, and it was
+          removed for the same reason: Tailored now means we come and measure
+          her in Dubai, so a customer typing four guessed numbers into a page is
+          doing worse work than the tailor will redo in person. Leaving it here
+          after removing it from the buying flow would have been the site asking
+          for something it had just stopped needing.
+
+          The page keeps the size CHART, which standard sizing still runs on,
+          and the how-to-measure section, which is still the honest answer for
+          someone deciding between an M and an L.
+
+          The component and /api/account/measurements are untouched: the account
+          page still reads and writes, so numbers taken at a fitting have
+          somewhere to live. What has gone is asking her to supply them. */}
 
       <h2 className="pt-2 text-base font-medium text-text">Standard sizes</h2>
       <p>
@@ -123,7 +138,7 @@ export default function SizeGuidePage() {
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
         These are consolidated from published UAE-market body-measurement charts
         and are a guide, not a promise about a specific garment. If you want
-        certainty, send your measurements.
+        certainty, choose Tailored and we come and measure you, free, in Dubai.
       </p>
     </LegalPage>
   );
