@@ -227,6 +227,33 @@ handling didn't.
   Stripe sessions and order rows in the live Neon DB doing exactly that. Test
   pure functions with `npx tsx --eval`, or probe a local production build.
 
+### Two things that look like controls and are not
+
+Both were found on 2026-09-15 and both had been trusted for weeks.
+
+⚠️ **A LAYOUT DOES NOT GATE THE PAGE BENEATH IT.** `dashboard/layout.tsx`
+returned a refusal screen without `{children}` and that read as a gate. Next's
+own shipped docs say otherwise: *"a layout that hides or swaps them does not
+stop them from running or from appearing in the RSC Payload."* Reproduced
+against this build: the browser paints "not authorized" and **view-source
+contains the rows**. Clerk sign-up is open because `/account` needs it, so
+anyone could register, verify an email and read every customer email out of
+`/dashboard/orders`. **The check belongs in the DATA PATH** —
+`src/lib/requireStaff.ts`, first line of every loader, `notFound()` rather than
+a friendly refusal, denying on an empty `STAFF_EMAILS`.
+
+And note how it was missed: one security pass probed `/dashboard`
+unauthenticated, got the refusal screen, and marked it clean. **Probing a page
+and reading its flight payload are not the same test.**
+
+⚠️ **`rateLimit()` DOES NOTHING IN PRODUCTION.** It is an in-memory `Map` and
+Amplify runs many containers, so every route whose comment says "rate limited"
+is not. Measured, not assumed: 100 sequential requests to
+`/api/promo/validate` returned **100 × 400 and zero 429**, identical with a
+spoofed `X-Forwarded-For` and with none. Until it is backed by a shared store or
+a WAF rule, the public waitlist is an unthrottled mail cannon on the production
+Resend key, and an open shop allows unlimited live Checkout sessions.
+
 ### Before shipping anything in that blast radius
 
 Run the security agent: `.claude/agents/shaklek-security.md`. There are also
@@ -726,6 +753,12 @@ misleading.
 ⚠️ **The repo root contains untracked personal documents** — passport, Emirates
 ID, visa, bank letters. **Never `git add -A` or `git add .`** from the repo
 root. Stage explicit paths only:
+
+⚠️ **AND `git add <directory>` IS THE SAME MISTAKE.** On 2026-09-15 a
+`git add website/src` swept another session's half-finished admin feature into
+an unrelated security commit. Nothing was lost, but more than one session works
+in this tree at once, so a directory add stages whatever a colleague happens to
+have open. Name the files.
 
 ```bash
 git add website/public/catalog/ website/src/data/catalog.ts
