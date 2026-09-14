@@ -96,6 +96,35 @@ const buildConfig = (isDev: boolean): NextConfig => ({
   // Framework disclosure. Off by default here rather than left on.
   poweredByHeader: false,
 
+  // ⚠️ A DELETED ARTICLE STILL HAS INBOUND LINKS AND AN INDEX ENTRY.
+  //
+  // /blog/natural-fabrics-better-for-your-body was removed on 2026-09-13, not
+  // rewritten: its title, its slug and its whole spine were a health claim we
+  // are not allowed to make (eczema, heat rash, formaldehyde finishes, azo
+  // dyes, microplastics). See the journal review in that day's commit.
+  //
+  // It had been indexed for eight days, so deleting the file alone leaves a 404
+  // for anyone arriving from a search result. A 301 hands that traffic, and the
+  // small amount of ranking the URL earned, to the article that covers the same
+  // ground WITHOUT the health claim: fabric choice in the heat.
+  //
+  // 301 rather than 410 deliberately. 410 tells Google the content is gone for
+  // good, which is true of the claim but wasteful of the link. The destination
+  // genuinely answers what somebody clicking that title wanted.
+  //
+  // ⚠️ NEVER REDIRECT A DELETED ARTICLE TO A PAGE THAT DOES NOT ANSWER IT. A
+  // catch-all to /blog or to the homepage is treated as a soft 404 by Google
+  // and is a worse experience than the 404 it replaces.
+  async redirects() {
+    return [
+      {
+        source: "/blog/natural-fabrics-better-for-your-body",
+        destination: "/blog/what-to-wear-dubai-summer-fabric",
+        permanent: true,
+      },
+    ];
+  },
+
   // The site shipped with none of these. It takes card payments, so HSTS and
   // a Referrer-Policy are not optional -- order ids travel in the query
   // string of /order-confirmed, and the browser default would leak them in
