@@ -28,7 +28,7 @@ Tick the box and leave it; `status.mjs` hides closed items after 30 days.
 ## Items
 
 - [ ] rotate-keys | founder | confirmed:2026-09-12 | RESEND_API_KEY, RECONCILE_TOKEN and CLERK_WEBHOOK_SECRET were exposed in a terminal and are still valid
-- [ ] sitemap-gsc | founder | confirmed:2026-09-14 | Submit sitemap.xml in Search Console. She is signed out; property sits under a personal Gmail, not the Outlook shaklek.com address
+- [x] sitemap-gsc | founder | confirmed:2026-09-14 | DONE: URL-prefix property https://www.shaklek.com verified by META TAG, sitemap submitted and accepted, 8 URLs live. ⚠️ The tag lives in layout.tsx as Next metadata `verification:` and MUST NOT be removed; Google re-checks and ownership lapses silently. The FILE method fails here because proxy.ts rewrites every path to /coming-soon while the shop is shut, so a google-xxxx.html at the root is rewritten and verification fails with no useful error. Same trap for Bing, Pinterest, anything asking you to drop a file at the site root
 - [ ] www-timeouts | founder | confirmed:2026-09-13 | One datapoint needed: load the site on mobile data with wifi off. Every other angle is exhausted and the Route 53 check is IPv4 only
 - [ ] det-permit | founder | confirmed:2026-09-12 | DET advertising permit, required before any discount campaign is advertised
 - [x] how-it-works-timing | founder | confirmed:2026-09-14 | ANSWERED: "approximately 10 working days", hedged with "we strive to". Reverses the 2026-09-12 cut. /faq and /order-confirmed done; /how-it-works is the other session's file
@@ -40,7 +40,7 @@ Tick the box and leave it; `status.mjs` hides closed items after 30 days.
 - [ ] post-1-publish | founder | confirmed:2026-09-14 | Post 1 is finished and saved and has not been posted
 - [ ] teasers-2-to-5 | session | confirmed:2026-09-14 | Rebuild on the light palette and the hook rule she set on 2026-09-13
 - [ ] videos | session | confirmed:2026-09-14 | craft.mp4 exists. The rest need building, and the two phone shoots need her
-- [ ] card-bodies-phone | founder | confirmed:2026-09-14 | Show the three card bodies on phone or keep them hidden. Costs about 130px
+- [x] card-bodies-phone | founder | confirmed:2026-09-14 | DONE in 8ca9a8f. The bodies show on phone, so a phone reader gets the reason and not just the claim. It was left on the list after it shipped, which is the exact staleness this file exists to stop
 - [ ] brand-assets-backup | session | confirmed:2026-09-14 | brand-assets/ is gitignored, so only the first post is in git. Reels, craft stills and four carousels exist on one machine
 - [ ] fifth-article | session | confirmed:2026-09-14 | Optional. Growth work, not a fix. Nothing in the journal is wrong
 - [ ] shaklek-plus-review | founder | confirmed:2026-09-14 | Review the Shaklek+ offer. Not urgent. It renders on every product page and under the Pay button, and it was advertising saved measurements the day after they were removed

@@ -84,6 +84,26 @@ derived.push(unpushed && unpushed !== "0" ? hm(`${unpushed} commit(s) not pushed
 const dirty = sh("git status --porcelain").split("\n").filter(Boolean).length;
 derived.push(dirty ? hm(`${dirty} file(s) uncommitted`) : ok("working tree clean"));
 
+// ⚠️ WHERE THE DNS ACTUALLY LIVES. Derived, because getting this wrong has a
+// cost: on 2026-09-14 a session offered to add a Search Console verification
+// TXT record "via Route 53, since I have AWS access". There are ZERO hosted
+// zones in the account and shaklek.com answers from GoDaddy, so the offer
+// could not have been honoured. That zone also carries the Microsoft 365 and
+// SPF records, so a careless edit there breaks EMAIL, not just a verification.
+// Any DNS work on this domain is a GoDaddy login the founder has to do.
+const ns = sh("dig +short NS shaklek.com").split("\n").filter(Boolean);
+const registrar = ns.some((n) => /domaincontrol\.com/.test(n)) ? "GoDaddy"
+  : ns.some((n) => /awsdns/.test(n)) ? "Route 53" : ns[0] || "unknown";
+derived.push(ns.length
+  ? hm(`DNS is ${registrar} (${ns.length} nameservers). NOT AWS: DNS changes need her GoDaddy login`)
+  : hm("DNS: could not resolve nameservers"));
+
+// Search Console ownership lapses silently if this tag goes.
+const verified = /google-site-verification/.test(sh("curl -s -m 8 https://www.shaklek.com/") || "");
+derived.push(verified
+  ? ok("Search Console verification tag is live")
+  : no("SEARCH CONSOLE TAG MISSING from the live page. Ownership lapses silently"));
+
 const pixel = /NEXT_PUBLIC_META_PIXEL_ID/.test(read("website/src/app/layout.tsx") + read("website/src/components/MetaPixel.tsx"));
 derived.push(pixel ? ok("Meta pixel is wired (still needs the env var to fire)") : hm("Meta pixel: not found in the layout"));
 
