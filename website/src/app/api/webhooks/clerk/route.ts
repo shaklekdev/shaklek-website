@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, schema } from "@/db/client";
-import { readBoundedText, rejectOversizedBody } from "@/lib/requestGuards";
+import { boundedText, readBoundedText, rejectOversizedBody } from "@/lib/requestGuards";
 import { verifySvixSignature } from "@/lib/svixVerify";
 
 // Clerk calls this when a customer creates an account.
@@ -122,7 +122,15 @@ export async function POST(req: NextRequest) {
     addresses.find((e) => e.id && e.id === data.primary_email_address_id) ?? addresses[0];
   const email = primary?.email_address ?? "(no email on account)";
   const verified = primary?.verification?.status === "verified";
-  const name = [data.first_name, data.last_name].filter(Boolean).join(" ").trim();
+  // ⚠️ CAPPED. This reaches customers.name, which renders as the <h1> on
+  // /account and in the dashboard, and CLERK_WEBHOOK_SECRET is one of the three
+  // keys exposed on 2026-09-12 and not yet rotated, so a forged user.created
+  // could have written an unbounded string there. /api/account/profile already
+  // caps at 120; this is the same cap. Security review, 2026-09-15.
+  const name = boundedText(
+    [data.first_name, data.last_name].filter(Boolean).join(" ").trim(),
+    120,
+  ) ?? "";
 
   // Record the signup, so an account is visible somewhere we can query.
   //
@@ -214,7 +222,18 @@ export async function POST(req: NextRequest) {
   });
 
   if (!res.ok) {
-    console.error("[webhooks/clerk] Resend API call failed:", await res.text());
+    // ⚠️ STATUS AND A PARSED CODE ONLY, NEVER res.text(). A Resend validation
+    // error echoes the rejected address back, so logging the body puts a
+    // customer's email in CloudWatch. Same pattern as
+    // api/waitlist/route.ts. Security review, 2026-09-15.
+    let code = "unknown";
+    try {
+      const parsed = JSON.parse(await res.text());
+      code = String(parsed?.name ?? parsed?.code ?? "unknown").slice(0, 60);
+    } catch {
+      /* non-JSON body: the status alone is what we keep */
+    }
+    console.error(`[webhooks/clerk] Resend rejected the send: ${res.status} ${code}`);
     // 200 on purpose: the signature was valid and we accepted the event.
     // A non-2xx makes Clerk retry, which would resend a mail that failed for
     // our own reasons, not Clerk's.

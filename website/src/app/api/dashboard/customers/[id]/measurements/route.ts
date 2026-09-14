@@ -109,8 +109,14 @@ export async function PATCH(
   // Stamped on any save that writes at least one BODY measurement, which is
   // what the list uses to tell "measured" from "not measured yet". A save that
   // only touches the fitting notes does not count as having measured someone.
-  const touchedABodyField = Object.keys(patch).some((k) => k !== "measurementFittingNotes");
-  if (touchedABodyField) patch.measuredAt = new Date();
+  // ⚠️ CLEARING A FIELD IS NOT MEASURING SOMEBODY. This counted any touched
+  // key, so PATCH {"measurementWaist": ""} on an unmeasured customer stamped
+  // measured_at and the list then showed her as done, hiding her from the only
+  // question that list answers. Only a field that ends up with a VALUE counts.
+  const wroteABodyValue = Object.entries(patch).some(
+    ([k, v]) => k !== "measurementFittingNotes" && typeof v === "string" && v.length > 0,
+  );
+  if (wroteABodyValue) patch.measuredAt = new Date();
 
   const db = getDb();
   if (!db) {

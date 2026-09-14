@@ -120,7 +120,18 @@ export async function sendOrderNotificationEmail(
   });
 
   if (!res.ok) {
-    console.error("[orders] Resend API call failed:", await res.text());
+    // ⚠️ STATUS AND A PARSED CODE ONLY, NEVER res.text(). A Resend validation
+    // error echoes the rejected address back, so logging the body puts a
+    // customer's email in CloudWatch. Same pattern as
+    // api/waitlist/route.ts. Security review, 2026-09-15.
+    let code = "unknown";
+    try {
+      const parsed = JSON.parse(await res.text());
+      code = String(parsed?.name ?? parsed?.code ?? "unknown").slice(0, 60);
+    } catch {
+      /* non-JSON body: the status alone is what we keep */
+    }
+    console.error(`[orders] Resend rejected the send: ${res.status} ${code}`);
     return { emailed: false };
   }
 
@@ -238,7 +249,18 @@ export async function sendCustomerConfirmationEmail(
   });
 
   if (!res.ok) {
-    console.error("[orders] Customer confirmation email failed:", await res.text());
+    // ⚠️ STATUS AND A PARSED CODE ONLY, NEVER res.text(). A Resend validation
+    // error echoes the rejected address back, so logging the body puts a
+    // customer's email in CloudWatch. Same pattern as
+    // api/waitlist/route.ts. Security review, 2026-09-15.
+    let code = "unknown";
+    try {
+      const parsed = JSON.parse(await res.text());
+      code = String(parsed?.name ?? parsed?.code ?? "unknown").slice(0, 60);
+    } catch {
+      /* non-JSON body: the status alone is what we keep */
+    }
+    console.error(`[orders] Resend rejected the send: ${res.status} ${code}`);
     return { emailed: false };
   }
 

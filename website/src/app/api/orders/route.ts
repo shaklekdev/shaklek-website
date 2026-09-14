@@ -34,8 +34,18 @@ function text(value: unknown, max = MAX_TEXT): string {
   return typeof value === "string" ? value.slice(0, max) : "";
 }
 
+// ⚠️ THE STRICTER PATTERN, MATCHING api/waitlist/route.ts:60. The loose one
+// here accepted `"x"<y@z.io>`, which Resend rejects and echoes back in the
+// error body, and that body used to be logged. It also puts the comma and the
+// angle brackets of a header injection through a field that reaches a Subject
+// and a reply_to. One address syntax for the whole app, and it is the strict
+// one. Security review, 2026-09-15.
 function isEmail(value: unknown): value is string {
-  return typeof value === "string" && value.length <= 320 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  return (
+    typeof value === "string" &&
+    value.length <= 320 &&
+    /^[^\s@,<>()"'\\;:]+@[^\s@,<>()"'\\;:]+\.[^\s@,<>()"'\\;:]{2,}$/.test(value)
+  );
 }
 
 // Persists the order to Postgres and returns the new order id. No RDS/Neon
@@ -379,7 +389,16 @@ export async function POST(req: NextRequest) {
     // the canonical site.
     const origin = canonicalOrigin(req.headers.get("origin"));
     const accessToken = issueOrderAccessToken(orderId);
-    const session = await stripe.checkout.sessions.create({
+    // ⚠️ WRAPPED, BECAUSE THE ORDER ROW IS ALREADY WRITTEN BY THIS POINT.
+    // persistOrder ran above, so a throw here used to surface as an uncaught
+    // 500 and leave a `pending_payment` row with a NULL stripe_session_id. The
+    // nightly reconcile filters on `isNotNull(stripeSessionId)`, so nothing
+    // ever looked at it again and the dashboard showed it as a real pending
+    // sale forever. Marking it payment_failed is what makes the row honest.
+    // Security review, 2026-09-15.
+    let session;
+    try {
+    session = await stripe.checkout.sessions.create({
       mode: "payment",
       integration_identifier: "shaklek-checkout-rqkazmjg",
       customer_email: email,
@@ -442,6 +461,34 @@ export async function POST(req: NextRequest) {
       success_url: `${origin}/order-confirmed?order_id=${orderId}&t=${accessToken}`,
       cancel_url: `${origin}/checkout`,
     });
+    } catch (err) {
+      // Never the address or the cart: CloudWatch outlives the order.
+      console.error(
+        "[orders] Stripe session creation failed:",
+        err instanceof Error ? err.message : "unknown",
+      );
+      const db = getDb();
+      if (db) {
+        try {
+          await db
+            .update(schema.orders)
+            .set({ status: "payment_failed" })
+            .where(eq(schema.orders.id, orderId));
+        } catch (mark) {
+          console.error(
+            "[orders] could not mark the order payment_failed:",
+            mark instanceof Error ? mark.message : "unknown",
+          );
+        }
+      }
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "We could not start your order. You have not been charged. Please try again.",
+        },
+        { status: 500 },
+      );
+    }
 
     const db = getDb();
     if (db) {

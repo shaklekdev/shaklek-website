@@ -90,7 +90,22 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  const email = body.email;
+  // ⚠️ LOWERCASED HERE, AND THE WHOLE UNSUBSCRIBE GUARANTEE DEPENDS ON IT.
+  // This stored the address exactly as typed while schema.ts:231 is a plain
+  // case-sensitive unique(), so "victim@x.com" and "Victim@X.com" were two
+  // rows. Somebody who had opted out was mailed again the moment anyone
+  // re-entered her address with a capital letter, which is precisely the PDPL
+  // direct-marketing problem the `hasUnsubscribed` check below exists to
+  // prevent. The schema comment three lines above that column claimed the
+  // address was "lowercased at the boundary". It was not, by anybody.
+  // Security review, 2026-09-15.
+  //
+  // ⚠️ CODE ONLY, AND THAT IS HALF A FIX. Rows written before tonight may
+  // already hold mixed-case duplicates, so the real guarantee needs a
+  // `uniqueIndex on lower(email)` and a dedupe first. That is a migration
+  // against PRODUCTION (ep-blue-cell) and it is on the launch checklist, not
+  // done here: a migration nobody is awake to verify is how checkout breaks.
+  const email = body.email.toLowerCase();
   // Stripped of CR/LF before it can reach a Subject header. boundedText trims
   // and caps length but does not remove newlines, and this value is
   // interpolated into a subject line.

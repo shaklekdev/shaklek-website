@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
+import { readBoundedText } from "@/lib/requestGuards";
 import { sendOrderNotificationEmail, sendCustomerConfirmationEmail } from "@/lib/orderEmail";
 
 // Stripe calls this once it has actually confirmed a payment -- this is the
@@ -21,7 +22,16 @@ export async function POST(req: NextRequest) {
   }
 
   const signature = req.headers.get("stripe-signature");
-  const rawBody = await req.text();
+  // ⚠️ BOUNDED, AND READ BEFORE THE SIGNATURE IS CHECKED. Anyone who knows this
+  // URL can post to it, and req.text() buffered whatever they sent before we
+  // knew whether it was Stripe at all. The Clerk webhook already guards this
+  // way; this one did not. 64KB is generous: a checkout.session event is a few
+  // KB, and the raw bytes must be preserved exactly or constructEvent fails.
+  // Security review, 2026-09-15.
+  const rawBody = await readBoundedText(req, 64 * 1024);
+  if (rawBody === null) {
+    return NextResponse.json({ ok: false, error: "Body too large" }, { status: 413 });
+  }
 
   let event;
   try {

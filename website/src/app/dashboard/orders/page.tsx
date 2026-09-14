@@ -2,6 +2,7 @@ import Link from "next/link";
 import { orderRef } from "@/lib/orderRef";
 import { desc, eq } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { requireStaff } from "@/lib/requireStaff";
 import OrderStatusButtons from "@/components/OrderStatusButtons";
 import FitRemakeButton from "@/components/FitRemakeButton";
 
@@ -36,6 +37,16 @@ function tailorMessage(order: { id: string; items: { name: string; fabric: strin
 }
 
 async function getOrders() {
+  // ⚠️ THIS HOLE PREDATES THE CUSTOMER VIEW. Every order here is joined to its
+  // customer, so the RSC payload carried every customer email to anyone with a
+  // Clerk account who opened the page and read the source. Found 2026-09-15
+  // while reviewing the new admin view, which would have added body
+  // measurements to the same leak.
+  // ⚠️ THE STAFF CHECK LIVES HERE, NOT IN THE LAYOUT. A layout does not stop
+  // this function from running, and its result is embedded in the RSC payload
+  // inside the HTML the refusal screen ships in. See src/lib/requireStaff.ts.
+  await requireStaff();
+
   const db = getDb();
   if (!db) return null;
 

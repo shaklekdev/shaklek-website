@@ -5,6 +5,7 @@ import { getDb, schema } from "@/db/client";
 import { orderRef } from "@/lib/orderRef";
 import { isUuid } from "@/lib/requestGuards";
 import MeasurementSheet from "@/components/MeasurementSheet";
+import { requireStaff } from "@/lib/requireStaff";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,11 @@ export const dynamic = "force-dynamic";
  * the other is what we remember her saying.
  */
 async function getCustomer(id: string) {
+  // ⚠️ THE STAFF CHECK LIVES HERE, NOT IN THE LAYOUT. A layout does not stop
+  // this function from running, and its result is embedded in the RSC payload
+  // inside the HTML the refusal screen ships in. See src/lib/requireStaff.ts.
+  await requireStaff();
+
   const db = getDb();
   if (!db) return null;
 

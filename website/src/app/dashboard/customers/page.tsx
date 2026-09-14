@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { desc, eq, sql } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
+import { requireStaff } from "@/lib/requireStaff";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,11 @@ export const dynamic = "force-dynamic";
  * on a laptop in a cafe.
  */
 async function getCustomers() {
+  // ⚠️ THE STAFF CHECK LIVES HERE, NOT IN THE LAYOUT. A layout does not stop
+  // this function from running, and its result is embedded in the RSC payload
+  // inside the HTML the refusal screen ships in. See src/lib/requireStaff.ts.
+  await requireStaff();
+
   const db = getDb();
   if (!db) return null;
 
