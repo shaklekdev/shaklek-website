@@ -52,7 +52,16 @@ export const BANNED = [
   // markdown table that no builder read.
   [/\bsustainab|\beco[- ]friendly\b|\bgreen\b(?! tea)/i, 'claim rule: say the mechanism, not the label. "Made after you order it."'],
   [/100% plant[- ]based/i, 'claim rule: there are buttons and a zip fly. Say 100% linen.'],
-  [/100% made in the UAE/i, 'claim rule: the cloth is milled abroad. Say cut and sewn in the UAE.'],
+  // ⚠️ STILL BANNED, and it was briefly lifted on 2026-09-14 before she
+  // settled it the other way: "on the cards just put Made in the UAE, NO NEED
+  // FOR 100%". The cloth is milled in Guangzhou, so the 100% claims the fabric
+  // as well and she cut this exact phrase from the business card herself.
+  //
+  // PLAIN "Made in the UAE" IS APPROVED AND IS NOT MATCHED HERE. Only the 100%
+  // form is. A previous session read the claim table's single row as covering
+  // both and changed the approved phrase to "sewn" across two pages, which
+  // weakened the claim for no reason; personas.md now spells out the split.
+  [/100% made in the UAE/i, 'claim rule: the cloth is milled abroad, so the 100% claims the fabric too. Plain "Made in the UAE" is approved.'],
   // ⚠️ REMOVED 2026-09-13, and the removal is the correction. This rule blocked
   // "100% tailored" on the reasoning that "standard sizes sell at the same
   // price". That reasoning was simply wrong about the business: NOTHING is cut

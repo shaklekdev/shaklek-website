@@ -9,7 +9,8 @@ import WaitlistForm from "@/components/WaitlistForm";
 // These are claims that would be false:
 //   - NO PRICE, anywhere. Pricing is still being reworked.
 //   - "100% linen", never "100% plant based". There are buttons and a zip fly.
-//   - "Cut and sewn in the UAE", never "100% made in the UAE". The cloth is
+//   - "Made in the UAE" is APPROVED and is what this page says. Only "100%
+//     made in the UAE" is banned, because the 100% claims the fabric. The cloth is
 //     milled abroad and we do not volunteer where (founder, 2026-09-12).
 //   - The words "sustainable", "eco" and "green" appear NOWHERE. The mechanism
 //     is the credible version: "made after you order it" is a fact a visitor
@@ -38,11 +39,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.shaklek.com/" },
   title: "Shaklek",
   description:
-    "Made to order clothing in 100% linen, cut to your measurements and sewn in the UAE. Opening early October. Leave your email to hear when.",
+    "Clothing in 100% linen, cut to your measurements and made in the UAE, after you order it. Opening early October. Leave your email to hear when.",
   openGraph: {
     title: "Shaklek",
     description:
-      "Made to order clothing in 100% linen, cut to your measurements and sewn in the UAE. Opening early October.",
+      "Clothing in 100% linen, cut to your measurements and made in the UAE, after you order it. Opening early October.",
   },
 };
 
@@ -109,11 +110,20 @@ const PILLARS = [
     // does not consider it an issue. Do not raise it with her again.
     src: "/marketing/pre-launch/uae-desert.jpg",
     alt: "A United Arab Emirates flag among date palms in the desert at low sun.",
-    // ⚠️ "100% SEWN in the UAE", never "100% made in the UAE". The cloth is
-    // milled abroad, so "made" is the claim we cannot defend and "sewn" is
-    // the one that is exactly true. copy-rules.mjs blocks the former.
-    title: "100% sewn in the UAE.",
-    body: "By your tailor, who works to every detail you choose.",
+    // ⚠️ "MADE IN THE UAE", AND THE MISSING "100%" IS THE POINT. Founder,
+    // 2026-09-14: "on the cards just put Made in the UAE, NO NEED FOR 100%".
+    //
+    // The other two cards lead with 100% and this one deliberately does not,
+    // which will look like an oversight to the next editor. It is not. "100%
+    // made in the UAE" claims the fabric too, and the cloth is milled in
+    // Guangzhou; she cut that exact phrase from the business card for the same
+    // reason. Plain "Made in the UAE" is the approved origin claim and is
+    // simply true, since origin follows where a garment is cut and sewn.
+    title: "Made in the UAE.",
+    // "LOCAL" is the founder's, 2026-09-14, and it is the word carrying the
+    // card: the title says where, this says who, and local is what makes the
+    // two one claim rather than a fact and a nicety.
+    body: "By your local tailor, who works to every detail you choose.",
   },
 ];
 
