@@ -156,15 +156,45 @@ export default function ComingSoonPage() {
         {/* priority: this is the only image above the fold on a phone and the
             page has nothing else to paint, so lazy-loading it just leaves a
             grey box in the first frame. */}
-        <div className="relative aspect-[1584/672] w-full overflow-hidden">
+        {/* ⚠️ TWO SHAPES. On a phone this is a TALL 4:5 frame carrying the
+            headline; from sm up it is the original wide 1584/672 banner with
+            the headline below it.
+
+            Why: the banner is 2.36:1, so at phone width it is about 210px
+            tall, and three lines of display type over it collided with the
+            hanging cloth and became unreadable. Tried and rejected on
+            2026-09-14. A taller crop gives the words quiet sand to sit on.
+
+            THE TRADE IS REAL: the hero is much taller on a phone, so the email
+            box sits further down. Worth it because the headline is doing the
+            selling now rather than decorating a page you scroll past. If that
+            ever stops being true, this is the thing to undo.
+
+            object-position 60% keeps the cloth in frame when the crop narrows;
+            at 50% the tall crop cut the right-hand sheet in half. */}
+        <div className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[1584/672]">
           <Image
             src="/marketing/hero-banner.jpg"
             alt="Linen clothing, worn."
             fill
             priority
             sizes="(max-width: 768px) 100vw, 768px"
-            className="object-cover"
+            className="object-cover object-[60%_50%] sm:object-center"
           />
+          {/* Phone only: the scrim exists to carry the words, so it dies with
+              them at sm. It stops short of the top so the sky is untouched. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent sm:hidden"
+          />
+          {/* The shadow is not decoration. The last line sits over the
+              brightest sand in the frame and was the softest of the three
+              without it; a heavier scrim alone would have dulled the cloth. */}
+          <p className="absolute inset-x-0 bottom-0 px-6 pb-8 font-display text-2xl leading-tight text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.5)] sm:hidden">
+            <span className="block">Clothes that fit you perfectly,</span>
+            <span className="block">and respect your skin,</span>
+            <span className="block">should not be an occasion.</span>
+          </p>
         </div>
 
         {/* ⚠️ ONE LINE, AND IT IS DOING FOUR JOBS. Founder's, 2026-09-14.
@@ -199,10 +229,23 @@ export default function ComingSoonPage() {
             provocative earns a stop-scroll. On the brand's own front page it
             opens by telling a stranger she got dressed wrong, which sells to
             people already convinced and repels everyone else. */}
-        <div className="flex flex-col gap-5 text-center">
+        <div className="hidden flex-col gap-5 text-center sm:flex">
           <p className="mx-auto max-w-xl font-display text-2xl leading-snug text-text sm:text-3xl">
-            Clothes that fit you perfectly and respect your skin should not be
-            an occasion.
+            {/* ⚠️ THE LINE BREAK IS DELIBERATE, do not let it reflow. Founder,
+                2026-09-14: "I find this sentence too long, it's very hard to
+                read." The cause is nine words of subject before the verb
+                arrives, so the reader carries the whole clause before the
+                sentence resolves. Breaking before "should" puts the subject on
+                one line and the payoff on the next, and changes no words.
+
+                THREE PHRASES, NOT TWO. Breaking only before "should" left an
+                eight-word first clause that still wrapped, orphaning "skin" on
+                a line of its own, which read worse than no break at all. Each
+                span is now a phrase that fits, and the commas mean it still
+                reads correctly if a narrow screen reflows one of them. */}
+            <span className="block">Clothes that fit you perfectly,</span>
+            <span className="block">and respect your skin,</span>
+            <span className="block">should not be an occasion.</span>
           </p>
         </div>
 
