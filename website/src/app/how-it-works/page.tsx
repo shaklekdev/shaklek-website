@@ -6,7 +6,12 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "How it works",
   description:
-    "Pick a piece, change the cut and colour and watch the photo change, then a tailor makes that exact piece to your size. From AED 449, made in about 10 days across the UAE.",
+    // ⚠️ "10 WORKING DAYS", NEVER "10 DAYS". Every page said the latter, which
+    // is a week and a half; she said WORKING, which is two calendar weeks. And
+    // it is hedged on purpose: "strive to" and "approximately" is an aspiration,
+    // matching what the terms page already says, "an estimate and not a
+    // guarantee". A flat promise is what copy-rules.mjs still blocks.
+    "Pick a piece, change the cut and colour and watch the photo change, then a tailor makes that exact piece to your size. We strive to have it ready in approximately 10 working days.",
   path: "/how-it-works",
 });
 
@@ -44,12 +49,12 @@ const steps = [
   {
     n: "04",
     title: "Your size, or your measurements",
-    body: "Pick XS–XXL, or give us your own numbers and it is cut to those. Same price either way. Tailoring is never an upgrade here.",
+    body: "Pick XS to XXL, or give us your own numbers and it is cut to those. Same price either way. Tailoring is never an upgrade here.",
   },
   {
     n: "05",
     title: "A tailor makes it",
-    body: "One person, one piece, nothing made before you order it. About 10 days from order to your door.",
+    body: "One person, one piece, nothing made before you order it. Every piece is made carefully for the person who ordered it, and we strive to have it ready in approximately 10 working days.",
   },
 ];
 
