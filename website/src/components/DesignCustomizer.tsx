@@ -371,17 +371,30 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <div>
                 <p className="text-xs text-text-3">Total</p>
                 <p className="font-display text-2xl text-text">AED {price}</p>
+                {/* ⚠️ THE VISIT, WHERE THE DECISION HAPPENS. It was only in the
+                    size section further up, which is the one place somebody
+                    who has already decided on a size never reads. Not
+                    conditional on the mode: it is an offer either way, and a
+                    customer on Standard is exactly who it is for. Wording
+                    matches SizePicker and the catalogue, deliberately. */}
+                <p className="mt-1 text-[11px] text-text-3">
+                  We come to you and measure you. Free, in Dubai.
+                </p>
               </div>
               <button
                 onClick={handleSave}
-                disabled={!spec.constraints.passed || !measurementsValid}
+                disabled={!spec.constraints.passed}
                 className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
+                // ⚠️ THE MEASUREMENTS GATE IS GONE, and so is its tooltip.
+                // SizePicker.tsx:88 now sets measurementsValid to a literal
+                // true, because Tailored means WE take the measurements and
+                // there are no fields left to be wrong. The message told the
+                // customer to "add your measurements above" in a panel that no
+                // longer exists, and the disabled state could never fire.
                 title={
                   !spec.constraints.passed
                     ? "Resolve the flagged request above before continuing"
-                    : !measurementsValid
-                      ? "Add your measurements above before continuing"
-                      : undefined
+                    : undefined
                 }
               >
                 {editingId ? "Save changes" : "Add to cart"}
@@ -413,14 +426,12 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             </div>
             <button
               onClick={handleSave}
-              disabled={!spec.constraints.passed || !measurementsValid}
+              disabled={!spec.constraints.passed}
               className="shrink-0 rounded-full bg-accent px-7 py-3 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
               title={
                 !spec.constraints.passed
                   ? "Resolve the flagged request above before continuing"
-                  : !measurementsValid
-                    ? "Add your measurements above before continuing"
-                    : undefined
+                  : undefined
               }
             >
               {editingId ? "Save changes" : "Add to cart"}
