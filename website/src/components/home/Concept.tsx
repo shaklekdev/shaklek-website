@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { STEPS, OUTCOME } from "@/data/homeContent";
+import { STEPS, STEPS_NOTE, OUTCOME } from "@/data/homeContent";
 
 /**
  * The concept: three steps, then what happens once the customer is done.
@@ -45,6 +45,13 @@ export default function Concept() {
           </li>
         ))}
       </ol>
+
+      {/* The asterisk on step 02. Small, quiet, and NOT optional: the visit is
+          Dubai only and a promise that names no city mis-sells everybody
+          outside it. */}
+      <p className="mt-4 max-w-2xl text-[12px] leading-relaxed text-text-3">
+        {STEPS_NOTE}
+      </p>
 
       {/* The handover. Text one side, the tailor the other. */}
       <div className="mt-8 grid items-stretch gap-0 border border-border sm:grid-cols-2">

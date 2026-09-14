@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { STEPS, STEPS_NOTE, OUTCOME } from "@/data/homeContent";
 
 export const metadata: Metadata = pageMetadata({
   title: "How it works",
@@ -15,48 +16,16 @@ export const metadata: Metadata = pageMetadata({
   path: "/how-it-works",
 });
 
-// Kept strictly to what actually ships. The previous version advertised
-// customising pockets and closure -- both real sliders, but both locked
-// behind Shaklek+, so the page was promising things a customer could not do.
-const steps = [
-  {
-    n: "01",
-    title: "Pick a piece",
-    body: "Timeless essentials in 100% linen. Shirts and pants, cut to last past a season.",
-  },
-  {
-    n: "02",
-    title: "Change it, and watch it change",
-    // This said "a real photograph, front and back. Not a swatch, not an
-    // illustration: the actual piece you will receive" and shipped to
-    // production in that state. The catalog images are generated, not
-    // photographed, so it was a false claim about the product -- and
-    // "the actual piece you will receive" is the version a customer would
-    // reasonably rely on when deciding to buy. Removed 2026-08-25 on the
-    // founder's instruction. The honest version still makes the same point:
-    // every combination has its own image, so the choice is visible rather
-    // than imagined. What is NOT claimed is how those images were made.
-    body: "Sleeve or leg, short or long, cropped or full, in ivory, white, navy or burgundy. Every combination has its own image, front and back, so you can see what you are choosing instead of imagining it.",
-  },
-  {
-    n: "03",
-    title: "Add a detail",
-    // "Ask for anything else" invited requests a solo tailor cannot take, and
-    // every one of those costs a stylist round-trip to decline. Framed as a
-    // detail to focus on, the answer is usually yes.
-    body: "Anything you would like us to focus on while your piece is made: a wider collar, a shorter sleeve. Tell us in your own words and a stylist confirms what is possible before anything is cut.",
-  },
-  {
-    n: "04",
-    title: "Your size, or your measurements",
-    body: "Pick XS to XXL, or give us your own numbers and it is cut to those. Same price either way. Tailoring is never an upgrade here.",
-  },
-  {
-    n: "05",
-    title: "A tailor makes it",
-    body: "One person, one piece, nothing made before you order it. Every piece is made carefully for the person who ordered it, and we strive to have it ready in approximately 10 working days.",
-  },
-];
+// ⚠️ THE STEPS ARE NOT DEFINED HERE, AND MUST NOT BE. They are the homepage's,
+// in src/data/homeContent.ts, rendered in both places.
+//
+// This page kept its own copy and the two drifted: three steps on the homepage,
+// five here, saying different things, and the five contradicted the measuring
+// visit by asking the customer for a size in step 04. Founder, 2026-09-14: "it
+// needs to stay consistent with the home page", and on the five-step version,
+// "this doesn't make sense anymore".
+//
+// Edit homeContent.ts and both pages move together.
 
 const promises = [
   { k: "From AED 449", v: "One price per piece type. Fabric and every option included." },
@@ -76,7 +45,7 @@ export default function HowItWorksPage() {
         </p>
 
         <div className="mt-10 space-y-8">
-          {steps.map((s) => (
+          {STEPS.map((s) => (
             <div key={s.n} className="flex gap-5">
               <span className="font-display text-lg text-gold">{s.n}</span>
               <div>
@@ -85,6 +54,15 @@ export default function HowItWorksPage() {
               </div>
             </div>
           ))}
+        </div>
+
+        <p className="mt-6 text-[12px] leading-relaxed text-text-3">{STEPS_NOTE}</p>
+
+        {/* Where she stops and we start, worded exactly as the homepage words
+            it. The steps above are things she does; this is everything else. */}
+        <div className="mt-10 border-t border-border pt-8">
+          <h2 className="font-display text-[18px] leading-snug text-text">{OUTCOME.title}</h2>
+          <p className="mt-2 text-sm text-text-2">{OUTCOME.body}</p>
         </div>
 
         <div className="mt-12 border-t border-border pt-10">

@@ -54,16 +54,50 @@ export const HERO = {
 // What the tailor does afterwards is real but is NOT a step, because the
 // customer has nothing left to do by then. Three reads as quick and
 // deliberate; five reads as work.
+// ⚠️ THREE STEPS, AND ALL THREE ARE THINGS SHE DOES. Founder, 2026-09-14:
+// "the goal is just to show the customer that it's a fast process... you pick
+// a piece, we come take your measurements, do it for you, add your details,
+// and ship it."
+//
+// That is the whole idea and it survived four rejected drafts of
+// /how-it-works: the customer's list is SHORT, and everything after it is
+// ours. So each step is one line, none of them describes our work, and the
+// handover below is where our work starts and stays.
+//
+// ⚠️ AND THIS FILE IS THE ONLY COPY. The homepage and /how-it-works both
+// render it. They had drifted into three steps here and five there, saying
+// different things, which she caught: "it needs to stay consistent with the
+// home page." Do not add a local copy to either page.
 export const STEPS = [
   {
     n: "01",
-    title: "Pick your piece",
-    body: "Timeless essentials in 100% linen. Change the sleeve, leg or length and watch the piece change with it.",
+    title: "Choose your piece",
+    body: "Change the sleeve, the leg, the length and the colour, and watch it change with you.",
   },
   {
     n: "02",
-    title: "Your size, or your measurements",
-    body: "Send your measurements and it is cut to them, or pick XS to XXL. Same price either way.",
+    // ⚠️ THE VISIT COMES FIRST IN THIS STEP, AND THE ALTERNATIVES COME AFTER.
+    // The first draft read "Your measurements, or ours" and opened with "send
+    // your own". Founder, 2026-09-14: "the first thing that needs to show is,
+    // we come to you and take your measurements. You can also send your own if
+    // you prefer... our MAIN VALUE is that we come in and we take your
+    // measurements."
+    //
+    // So the order of the sentence is the argument. Leading with "send your
+    // own" makes the visit sound like a fallback for people who cannot use a
+    // tape; leading with the visit makes it the offer, and the other two the
+    // fallbacks. Same three options either way.
+    //
+    // ⚠️ DUBAI SITS IN THE FOOTNOTE, NOT THE SENTENCE. Her instruction: "you
+    // can put an asterisk, say, explaining that this is a Dubai-based offer."
+    // It still has to be SAID, because somebody in Sharjah reading a promise
+    // that names no city has been mis-sold, but in the line it was the caveat
+    // interrupting the offer. See STEPS_NOTE.
+    //
+    // She orders first and we get in touch, so never "book a fitting": there
+    // is no booking system and nothing may imply one.
+    title: "We take your measurements",
+    body: "We come to you and take them ourselves, free on your first order.* Prefer to send your own numbers, or pick XS to XXL? That works too.",
     // The one the whole proposition rests on, so it is allowed to look
     // different from its neighbours rather than being one of three equals.
     emphasis: true,
@@ -75,9 +109,38 @@ export const STEPS = [
   },
 ];
 
+/** The asterisk on step 02. Kept next to the steps because a footnote that
+ *  lives somewhere else is a footnote that goes missing in the next redesign,
+ *  and this one is the difference between an offer and a mis-sold promise.
+ *
+ *  ⚠️ "FREE IN DUBAI", NOT "DUBAI ONLY". Founder, 2026-09-14: we will travel
+ *  further, it just is not free. She asked for the cost to be confirmed per
+ *  case rather than published, and the research says she is right, because
+ *  "outside Dubai" is not one thing:
+ *
+ *    Sharjah or Ajman   ~50 km round trip, ~AED 12 of fuel, ~1.5 hours.
+ *                       No worse than a far corner of Dubai.
+ *    Abu Dhabi          ~280 km round trip, ~3 hours driving. Half a working
+ *                       day, AED 250-400 all in, five to eight times the AED
+ *                       50 the Dubai visit is modelled at in margins.mjs.
+ *
+ *  One published number cannot serve both: 150 loses money on Abu Dhabi, 300
+ *  scares off a Sharjah customer we would have driven to for nothing. For
+ *  scale, Prive Atelier charges AED 150 + VAT for a home visit INSIDE Dubai,
+ *  which is roughly what we are giving away.
+ *
+ *  ⚠️ So do not put a price here until one is decided. "We will advise you" is
+ *  a promise to answer, which we can keep. A number is a promise to hold it. */
+export const STEPS_NOTE =
+  "* Free in Dubai, and we get in touch after you order to find a time that suits you. Elsewhere in the UAE, reach out on WhatsApp or email and we will advise you.";
+
+// Where she stops and we start. ⚠️ Hedged on purpose: "strive to" and
+// "approximately", matching the terms of sale, which call it an estimate and
+// not a guarantee. And WORKING days, her correction on 2026-09-14: every page
+// said "10 days", which is a week and a half, not two calendar weeks.
 export const OUTCOME = {
   title: "We take care of the rest",
-  body: "One tailor, one piece, nothing made before you order it.",
+  body: "One tailor makes your piece, nothing before you order it. We strive to have it ready in approximately 10 working days, and it arrives at your door.",
 };
 
 // The three reasons to buy here rather than anywhere else, as tiles under the
