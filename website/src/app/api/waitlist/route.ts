@@ -180,8 +180,11 @@ export async function POST(req: NextRequest) {
       kind: "marketing",
       preheader: "You are already on the list.",
       lines: [
-        "You are already on the list, so there is nothing to do.",
-        "We will write when we open, and now and then when there is something new.",
+        // ⚠️ DO NOT RESTATE THE SUBJECT LINE HERE. This read "You are already
+        // on the list, so there is nothing to do." under a subject reading
+        // "You are already on the list", so the first sentence of the email
+        // carried no information at all.
+        "Nothing to do, then. We will write the day we open, and now and then when there is something new.",
       ],
       unsubscribeUrl: unsubUrl,
     });
@@ -217,9 +220,18 @@ export async function POST(req: NextRequest) {
       preheader: "One tap and you are on the list.",
       lines: [
         "Thank you for asking.",
-        "We are Shaklek. 100% linen, cut to your shape, sewn here in the UAE, and nothing made before somebody wants it.",
+        // ⚠️ "MADE IN THE UAE", NEVER "SEWN IN THE UAE". Only the "100% made in
+        // the UAE" form is banned; the plain phrase is the approved one
+        // (personas.md:36) and productDisclosure.ts already carries "Made in
+        // the United Arab Emirates" as the legal origin field. This line said
+        // "sewn here" and predates that being settled on 2026-09-14.
+        //
+        // "made here... nothing made before" then repeated the same word twice
+        // in one sentence, so the second is "cut", which is also the more
+        // accurate verb: cutting is the step that cannot be undone.
+        "We are Shaklek. 100% linen, cut to your shape, made here in the UAE, and nothing cut before somebody wants it.",
         "Tap below and we will tell you the day we open.",
-        "If you did not ask for this, ignore this and you will never hear from us again.",
+        "If you did not ask for this, ignore it and you will never hear from us again.",
       ],
       button: { label: "Confirm my email", url: confirmUrl },
     });
