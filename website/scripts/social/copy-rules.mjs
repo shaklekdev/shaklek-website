@@ -31,7 +31,11 @@ export const BANNED = [
   // on 2026-09-12: ten working days and two weeks are the same duration, and
   // nobody has measured real throughput. A promise in a caption is still a
   // promise.
-  [/\b(about |in |within )?ten days\b/i, 'lead-time promise: cut from advertising 2026-09-12, nothing is measured yet'],
+  // ⚠️ MATCH THE DIGITS TOO. This rule was written as the WORD "ten" and
+  // /how-it-works said "about 10 days from order to your door" in its body AND
+  // in its meta description. The rule ran clean over it for two days. A banned
+  // promise that only one spelling catches is not a rule, it is a coincidence.
+  [/\b(about |in |within )?(ten|\d{1,2}) (working )?days\b/i, 'lead-time promise: cut from advertising 2026-09-12, nothing is measured yet'],
   [/\b\d{1,2}[ -]day (delivery|turnaround)\b/i, 'lead-time promise: see above'],
   // planning/marketing/personas.md claim rules, which until now lived only in a
   // markdown table that no builder read.
