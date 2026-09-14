@@ -102,16 +102,18 @@ const PILLARS = [
     // it: red vertical band at the pole, then green, white, black. If this
     // image is ever re-cropped or regenerated, check that again by eye.
     //
-    // ⏳ ONE THING OUTSTANDING: the UAE regulates commercial use of the
-    // national flag. Confirm a brand page is within those rules before this
-    // goes public.
+    // The flag question is CLOSED. A previous session left a ⏳ note here
+    // saying UAE rules on commercial use of the national flag needed
+    // confirming. The founder settled it on 2026-09-14: the image is
+    // generated, it shows the flag the way any UAE business shows it, and she
+    // does not consider it an issue. Do not raise it with her again.
     src: "/marketing/pre-launch/uae-desert.jpg",
     alt: "A United Arab Emirates flag among date palms in the desert at low sun.",
     // ⚠️ "100% SEWN in the UAE", never "100% made in the UAE". The cloth is
     // milled abroad, so "made" is the claim we cannot defend and "sewn" is
     // the one that is exactly true. copy-rules.mjs blocks the former.
     title: "100% sewn in the UAE.",
-    body: "By one tailor, who works to every detail you choose.",
+    body: "By your tailor, who works to every detail you choose.",
   },
 ];
 
