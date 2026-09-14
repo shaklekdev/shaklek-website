@@ -85,21 +85,43 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [DEFAULT_OG_IMAGE.url],
   },
-  // Meta requires the advertising domain to be verified before it will let an
-  // ad account own conversion events for it, and before Aggregated Event
-  // Measurement can be configured. The token comes from Business Manager and
-  // is environment-driven, so the tag simply does not render until the founder
-  // has one -- nothing to remove or forget later.
-  ...(process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION
-    ? {
-        verification: {
+  verification: {
+    // ⚠️ GOOGLE SEARCH CONSOLE, AND IT HAS TO BE A META TAG RATHER THAN THE
+    // FILE GOOGLE RECOMMENDS. The shop is shut, so src/proxy.ts rewrites every
+    // page to /coming-soon; a google-xxxx.html dropped in public/ would be
+    // rewritten too and verification would fail with nothing to show why. This
+    // sits in the ROOT layout, so it renders on the pre-launch page as well and
+    // survives the gate.
+    //
+    // ⚠️ AND IT IS HARDCODED ON PURPOSE. A token in an env var needs adding to
+    // the Amplify build-spec grep allowlist as well as the console, and a
+    // variable missing from that grep is simply undefined in the running app
+    // while the console shows it set (CLAUDE.md, the RECONCILE_TOKEN hour).
+    // This value is public by design, it ships in the page source, so the env
+    // var would buy nothing and cost a trap.
+    //
+    // Property is the URL prefix https://www.shaklek.com, created 2026-09-14.
+    // NOT a domain property: DNS for shaklek.com is at GoDaddy, not Route 53
+    // (zero hosted zones in this account, NS is ns65/ns66.domaincontrol.com),
+    // and that zone carries the Microsoft 365 and SPF records for email. A
+    // careless TXT edit there breaks mail, to gain only the apex, which 301s
+    // to www and has nothing of its own to index.
+    //
+    // ⚠️ DO NOT REMOVE THIS AFTER VERIFICATION. Google re-checks, and ownership
+    // lapses silently if the tag disappears.
+    google: "ls7uS54J6zJnpKwVuGDFSGbnF5X3Rey8tPBejdtkA90",
+    // Meta requires the advertising domain to be verified before an ad account
+    // can own conversion events for it. Environment-driven, so the tag does not
+    // render until the founder has a token.
+    ...(process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION
+      ? {
           other: {
             "facebook-domain-verification":
               process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION,
           },
-        },
-      }
-    : {}),
+        }
+      : {}),
+  },
 };
 
 // NOTE: no ClerkProvider here, deliberately. It used to wrap this whole tree
