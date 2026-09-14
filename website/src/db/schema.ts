@@ -25,6 +25,43 @@ export const customers = pgTable("customers", {
   measurementHip: text("measurement_hip"),
   measurementHeight: text("measurement_height"),
   measurementNotes: text("measurement_notes"),
+
+  // ⚠️ THE TAILOR'S SET, ADDED 2026-09-15. The four above were what a customer
+  // could type into a form; these are what the person with the tape actually
+  // works from. The founder, on why this table matters: "this is our MOST
+  // IMPORTANT DATA", and she fills it in herself at the appointment.
+  //
+  // ELEVEN BODY MEASUREMENTS, her instruction: "take the eleven body
+  // measurement shared by taylor already". Source is the tailor's own sheet,
+  // recorded at planning/frontend-todo.md:68-72. Three of the eleven are
+  // already above under their customer-facing names: chest is measurementBust,
+  // waist is measurementWaist, hips is measurementHip. The eight below are the
+  // rest. measurementHeight is NOT on the tailor's list and is kept because a
+  // customer can give it and it helps sanity-check the others.
+  //
+  // ⚠️ TEXT, NOT NUMERIC, deliberately and consistently with the four above.
+  // She writes what the tape says, and that includes "92 (over the bust)" or a
+  // range. A numeric column would reject the note and lose the nuance, and
+  // nothing computes on these: they are read by a human and cut to.
+  measurementStomach: text("measurement_stomach"),
+  measurementShoulder: text("measurement_shoulder"),
+  measurementNeck: text("measurement_neck"),
+  measurementThigh: text("measurement_thigh"),
+  measurementCrotch: text("measurement_crotch"),
+  measurementShirtLength: text("measurement_shirt_length"),
+  measurementSleeveLength: text("measurement_sleeve_length"),
+  measurementTrouserLength: text("measurement_trouser_length"),
+
+  // Her words: "add a mention for anything specific depending on the design."
+  // Distinct from measurementNotes above, which is whatever the CUSTOMER typed;
+  // this is what SHE observed in the room and it is the part a form can never
+  // capture. One shoulder lower than the other, a preference for more ease
+  // through the hip, a posture the block has to allow for.
+  measurementFittingNotes: text("measurement_fitting_notes"),
+  // When the tape was last in the room. Distinguishes "no measurements yet"
+  // from "measured, and these are the numbers", which the page must show
+  // differently or she cannot tell who still needs an appointment.
+  measuredAt: timestamp("measured_at", { withTimezone: true }),
 }, (t) => [
   // ⚠️ THE CUSTOMER KEY IS CASE-INSENSITIVE, AND THE DATABASE ENFORCES IT HERE.
   //
