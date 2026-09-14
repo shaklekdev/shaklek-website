@@ -95,11 +95,16 @@ export const STEPS = [
     // tape; leading with the visit makes it the offer, and the other two the
     // fallbacks. Same three options either way.
     //
-    // ⚠️ DUBAI SITS IN THE FOOTNOTE, NOT THE SENTENCE. Her instruction: "you
-    // can put an asterisk, say, explaining that this is a Dubai-based offer."
-    // It still has to be SAID, because somebody in Sharjah reading a promise
-    // that names no city has been mis-sold, but in the line it was the caveat
-    // interrupting the offer. See STEPS_NOTE.
+    // ⚠️ DUBAI IS SAID PLAINLY IN THE NOTE, AND THERE IS NO ASTERISK. She asked
+    // for one on 2026-09-14 and removed it hours later: "no need to put that
+    // asterix, you can just add in Dubai or something, to make it clear." The
+    // marker is gone from the body too, because a footnote marker with no
+    // footnote is worse than neither. See STEPS_NOTE.
+    //
+    // It still has to be SAID: somebody in Sharjah reading a promise that names
+    // no city has been mis-sold. What changed the same day is the SCOPE, not
+    // the honesty. The visit AND delivery are Dubai only for now, so this no
+    // longer offers to advise somebody we would not then deliver to.
     //
     // She orders first and we get in touch, so never "book a fitting": there
     // is no booking system and nothing may imply one.
