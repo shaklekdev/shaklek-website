@@ -184,13 +184,13 @@ export const articles: Article[] = [
     blocks: [
       {
         type: "p",
-        text: "The short version: keep the shirt and the trousers in the same colour as each other, keep the abaya in the same family, and let the abaya be the only loose layer. Then choose a plant fibre, because both layers have to let sweat out.",
+        text: "The short version: keep the shirt and the pants in the same colour as each other, keep the abaya in the same family, and let the abaya be the only loose layer. Then choose a plant fibre, because both layers have to let sweat out.",
       },
 
       { type: "h2", text: "The colour rule, and why it holds" },
       {
         type: "p",
-        text: "The single change that fixes most outfits is to put the shirt and trousers in one colour. Two colours beneath an open abaya divide the visible strip into three bands and shorten the whole line. One colour reads as a single column.",
+        text: "The single change that fixes most outfits is to put the shirt and pants in one colour. Two colours beneath an open abaya divide the visible strip into three bands and shorten the whole line. One colour reads as a single column.",
       },
       {
         type: "p",
@@ -260,10 +260,10 @@ export const articles: Article[] = [
       },
 
       { type: "h2", text: "Three combinations that work" },
-      { type: "h3", text: "Straight trousers and a shirt, one colour" },
+      { type: "h3", text: "Straight pants and a shirt, one colour" },
       {
         type: "p",
-        text: "The most flexible, because it survives the abaya coming off indoors. Straight or wide trousers hold the same uninterrupted vertical line the abaya makes. A tapered leg puts a break at the calf, which is exactly the horizontal interruption column dressing exists to avoid.",
+        text: "The most flexible, because it survives the abaya coming off indoors. Straight or wide pants hold the same uninterrupted vertical line the abaya makes. A tapered leg puts a break at the calf, which is exactly the horizontal interruption column dressing exists to avoid.",
       },
       { type: "h3", text: "A simple dress" },
       {
@@ -282,13 +282,13 @@ export const articles: Article[] = [
         items: [
           "A tight top underneath. It shows an outline through the open front and defeats the point of the outer layer. Fitted is not the same as tight.",
           "Bulky layers. A heavy knit under a fluid abaya kills the drape that makes it hang well, and drape is most of what you paid for.",
-          "Too many colours at once. Shirt, trousers, abaya and scarf in four different shades leaves nowhere for the eye to rest.",
-          "Trousers that reach the floor. The abaya already covers the ankle, so two hems collect the same dust and the inner one always loses.",
+          "Too many colours at once. Shirt, pants, abaya and scarf in four different shades leaves nowhere for the eye to rest.",
+          "Pants that reach the floor. The abaya already covers the ankle, so two hems collect the same dust and the inner one always loses.",
         ],
       },
       {
         type: "p",
-        text: "The last of those is the commonest and the hardest to fix off a rail, because trouser length on a rail is cut for an average height rather than for yours.",
+        text: "The last of those is the commonest and the hardest to fix off a rail, because pant length on a rail is cut for an average height rather than for yours.",
       },
 
       { type: "h2", text: "Fitted or loose, in 45 degrees" },
@@ -325,10 +325,10 @@ export const articles: Article[] = [
       {
         type: "ul",
         items: [
-          "Shirt and trousers in one colour. It is the single change that fixes the most.",
+          "Shirt and pants in one colour. It is the single change that fixes the most.",
           "Neutral abaya, colour underneath. Coloured abaya, neutrals underneath.",
           "Skimming, not tight, and let the abaya be the loose layer.",
-          "Trousers clear the floor by a centimetre or two.",
+          "Pants clear the floor by a centimetre or two.",
           "Both layers need to breathe, or neither does.",
         ],
       },
@@ -343,7 +343,7 @@ export const articles: Article[] = [
         // Pants is 519, Abaya is 690. Change one, change both. This article
         // sells TWO garments, which is the ~71% margin line, and it carried no
         // number and no way to act until now.
-        text: "We cut shirts and trousers in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and trousers AED 519, with an open abaya at AED 690 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, which is how the trousers end up clearing the floor rather than dragging on it.",
+        text: "We cut shirts and pants in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 690 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -355,7 +355,7 @@ export const articles: Article[] = [
         type: "link",
         slug: "nobody-is-a-medium",
         reason:
-          "The fourth mistake above, trousers that reach the floor, is a length problem, and no size chart has your height in it. This is why the rail cannot fix it and what does.",
+          "The fourth mistake above, pants that reach the floor, is a length problem, and no size chart has your height in it. This is why the rail cannot fix it and what does.",
       },
       {
         type: "p",
@@ -644,7 +644,7 @@ export const articles: Article[] = [
         // `-white-` is a different garment. Check colorImages in catalog.ts
         // before pasting any path in here, never the filename.
         type: "pair",
-        a: { src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front-v2.jpg", alt: "Wide-leg linen trousers in ivory." },
+        a: { src: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front-v2.jpg", alt: "Wide-leg linen pants in ivory." },
         b: { src: "/catalog/oversized-shirt/oversized-shirt-front.jpg", alt: "A loose linen shirt in ivory." },
         caption: "Both in ivory linen. Room through the leg and across the back is not a style preference in this climate. It is how air gets underneath the cloth.",
       },
@@ -692,7 +692,7 @@ export const articles: Article[] = [
         type: "ul",
         items: [
           "Loose linen shirts with room across the back and through the sleeve. Covering the arm is not the compromise it sounds like.",
-          "Wide or straight leg trousers rather than anything close fitting through the thigh.",
+          "Wide or straight leg pants rather than anything close fitting through the thigh.",
           "Something with sleeves kept for indoors. Air conditioning in Dubai offices and malls is genuinely cold, and the temperature swing across a single day is the real challenge of dressing here.",
           "Accept the creasing. Every fabric that performs in this heat creases, and any finish that stops it is doing so chemically.",
         ],
@@ -803,7 +803,7 @@ export const articles: Article[] = [
       { type: "h3", text: "Length, for your actual height" },
       {
         type: "p",
-        text: "Trouser length in particular is set for a height the chart assumed. Getting it right is the difference between a trouser that looks intentional and one that looks borrowed.",
+        text: "Pant length in particular is set for a height the chart assumed. Getting it right is the difference between a pant that looks intentional and one that looks borrowed.",
       },
 
       {
@@ -827,7 +827,7 @@ export const articles: Article[] = [
           bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.jpg",
           label: "Straight leg, cropped",
         },
-        caption: "The same navy trouser, two cuts of it. You choose which one gets made, and nothing is cut until you do.",
+        caption: "The same navy pant, two cuts of it. You choose which one gets made, and nothing is cut until you do.",
       },
       {
         type: "p",
@@ -842,7 +842,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "The first is where the waistband sits. The higher it sits, the more of your leg is below it, and the longer your legs look. That is the single biggest change you can make to a trouser.",
+        text: "The first is where the waistband sits. The higher it sits, the more of your leg is below it, and the longer your legs look. That is the single biggest change you can make to a pant.",
       },
       {
         type: "p",
@@ -896,7 +896,7 @@ export const articles: Article[] = [
         type: "link",
         slug: "what-to-wear-under-an-open-abaya",
         reason:
-          "The place a standard size fails most visibly is trouser length, and under an open abaya a trouser that reaches the floor is the commonest mistake there is.",
+          "The place a standard size fails most visibly is pant length, and under an open abaya a pant that reaches the floor is the commonest mistake there is.",
       },
       {
         type: "link",
@@ -906,7 +906,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Sources: the pilot measurements are Lt Gilbert S. Daniels, “The ‘Average Man’?”, US Air Force Wright Air Development Center, 1952. The sizing standard history, Commercial Standard 215-58 and its withdrawal in 1983, is from Seamwork and The Good Trade. The most requested alterations are from published alteration guides including Oscar Jacobson and Next Level Wardrobe. Trouser rise, hem placement at the calf versus the ankle, and the unbroken colour line are from 2026 styling guides by Who What Wear, An Indigo Day, Soya Concept and Luna Fashion House.",
+        text: "Sources: the pilot measurements are Lt Gilbert S. Daniels, “The ‘Average Man’?”, US Air Force Wright Air Development Center, 1952. The sizing standard history, Commercial Standard 215-58 and its withdrawal in 1983, is from Seamwork and The Good Trade. The most requested alterations are from published alteration guides including Oscar Jacobson and Next Level Wardrobe. Pant rise, hem placement at the calf versus the ankle, and the unbroken colour line are from 2026 styling guides by Who What Wear, An Indigo Day, Soya Concept and Luna Fashion House.",
       },
     ],
   },

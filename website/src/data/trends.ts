@@ -26,7 +26,7 @@ export const trendCandidates: TrendCandidate[] = [
   },
   {
     id: "tc-002",
-    title: "Wide-leg cropped trouser",
+    title: "Wide-leg cropped pant",
     garmentType: "Pants",
     signal: "Cropped, wide-leg silhouette trending across regional fashion editorials",
     sourceCount: 9,

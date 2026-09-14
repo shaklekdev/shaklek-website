@@ -70,10 +70,10 @@ export default function SizeGuidePage() {
 
       {/* Added when trousers moved to the EU ladder (sizeChart.ts). This one
           table covers both, so without a line saying so a customer who has
-          just picked a 38 on a trouser page cannot find her row here. */}
+          just picked a 38 on a pant page cannot find her row here. */}
       <p className="text-sm text-text-2">
-        Tops are sold as XS to XXL. Trousers and skirts are sold by the EU
-        number in the third column, so a top in M and trousers in 38 are cut to
+        Tops are sold as XS to XXL. Pants and skirts are sold by the EU
+        number in the third column, so a top in M and pants in 38 are cut to
         the same body.
       </p>
 

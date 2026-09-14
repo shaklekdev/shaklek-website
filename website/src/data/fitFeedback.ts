@@ -83,7 +83,7 @@ export type FitGarment = {
 
 export const FIT_GARMENTS: Record<CatalogCategory, FitGarment> = {
   Shirt: { id: "shirt", label: "A shirt or top", hasSleeves: true },
-  Pants: { id: "trousers", label: "Trousers", hasSleeves: false },
+  Pants: { id: "trousers", label: "Pants", hasSleeves: false },
   Skirt: { id: "skirt", label: "A skirt", hasSleeves: false },
   Dress: { id: "dress", label: "A dress", hasSleeves: true },
   Abaya: { id: "abaya", label: "An abaya", hasSleeves: true },

@@ -170,7 +170,7 @@ export default async function OrdersDashboardPage() {
                           {item.color ? ` · ${item.color}` : ""}
                           {item.size ? ` · Size ${item.size}` : ""}
                           {/* Per garment, because the promise is per garment.
-                              A shirt and trousers in one parcel each carry
+                              A shirt and pants in one parcel each carry
                               their own remake. */}
                           <FitRemakeButton
                             orderId={order.id}

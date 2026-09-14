@@ -114,7 +114,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "wide-leg-trousers",
-    name: "Wide-leg Trousers",
+    name: "Wide-leg Pants",
     category: "Pants",
     price: 519,
     descriptor: "High waist",
@@ -197,7 +197,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "banded-trousers",
-    name: "Banded Trousers",
+    name: "Banded Pants",
     category: "Pants",
     price: 519,
     descriptor: "Tailored, cuffed hem",
@@ -278,7 +278,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "pleated-trousers",
-    name: "Pleated Trousers",
+    name: "Pleated Pants",
     category: "Pants",
     price: 519,
     descriptor: "Relaxed leg, pleated",
@@ -318,7 +318,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "cargo-trousers",
-    name: "Cargo Trousers",
+    name: "Cargo Pants",
     category: "Pants",
     price: 519,
     descriptor: "Wide leg, side pockets",

@@ -30,7 +30,7 @@ import { absoluteUrl } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Catalog",
   description:
-    "Every Shaklek piece, made to order in 100% linen and cut to your measurements. Shirts and trousers from AED 449.",
+    "Every Shaklek piece, made to order in 100% linen and cut to your measurements. Shirts and pants from AED 449.",
   alternates: { canonical: absoluteUrl("/catalog") },
 };
 

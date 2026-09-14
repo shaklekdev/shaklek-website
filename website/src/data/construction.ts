@@ -70,7 +70,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     ],
   },
   "wide-leg-trousers": {
-    silhouette: "High-waisted trouser falling straight from the hip with no taper",
+    silhouette: "High-waisted pant falling straight from the hip with no taper",
     details: [
       { text: "High waistband sitting at the natural waist" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
@@ -79,7 +79,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     ],
   },
   "banded-trousers": {
-    silhouette: "Tailored trouser with a flat turned-up cuff at the hem",
+    silhouette: "Tailored pant with a flat turned-up cuff at the hem",
     details: [
       { text: "Flat turned-up cuff — never gathered, elasticated or tapered" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
@@ -87,7 +87,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     ],
   },
   "pleated-trousers": {
-    silhouette: "Relaxed trouser with front pleats falling from the waistband",
+    silhouette: "Relaxed pant with front pleats falling from the waistband",
     details: [
       { text: "Front pleats released from the waistband, pressed at the top only", view: "front" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
@@ -95,7 +95,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     ],
   },
   "cargo-trousers": {
-    silhouette: "Wide-leg cargo trouser with patch pockets on the outside of each leg",
+    silhouette: "Wide-leg cargo pant with patch pockets on the outside of each leg",
     details: [
       { text: "Cargo side pockets on the outer thigh, both legs" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
