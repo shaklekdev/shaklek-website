@@ -137,15 +137,19 @@ Opening soon. Put your name down at shaklek.com and you will hear from us first.
       listBeat(168),
       text({ eyebrow: "THE SHOULDER", words: "Cannot be altered after the cloth is cut.", frames: 96, build: 2,
         sub: "A waist can be taken in. A hem can come up. A shoulder is decided once." }),
+      // ⚠️ NO "BEST GUESS". That wording died on 2026-09-14 when Tailored became
+      // the measuring visit itself: there are no measurement fields left on the
+      // site to guess into. Founder: "I'm NOT MAKING A CUSTOMER PUT 17
+      // measurements there." The offer is now simply that we take them.
       photo({ img: I.hands, words: "So we come to you.", frames: 108, pos: "50% 46%",
-        sub: "Order your first piece with your best guess. We come to you and take all seventeen, free, in Dubai, before anything is cut." }),
+        sub: "Order your piece, and we come and take all seventeen ourselves before anything is cut. Free, in Dubai." }),
       close("Measured in person on your first order.<br>Cut and sewn in the UAE."),
     ],
     caption: `Nobody knows their own shoulder measurement. It is not a failing, it is just not a number anyone has a reason to know.
 
 Our tailor works from seventeen. A website can ask you for four, and two of the seventeen cannot be taken on yourself at all.
 
-So we come to you. Order your first piece with your best guess, and we will come to you and take all seventeen properly before anything is cut. Free, in Dubai.
+So we come to you. Order your piece, and we come and take all seventeen ourselves before anything is cut. Nothing to measure, nothing to work out. Free, in Dubai.
 
 shaklek.com
 
@@ -155,8 +159,13 @@ shaklek.com
 
   label: (I) => ({
     beats: [
-      photo({ img: I.shirt, words: "Check the label on what you are wearing right now.", frames: 84, pos: "50% 24%" }),
-      text({ words: "If it says polyester, you are wearing plastic in forty four degrees.", frames: 84, size: 100 }),
+      // ⚠️ DO NOT INSTRUCT A STRANGER. This opened "Check the label on what you
+      // are wearing right now", which the founder rejected outright: "no brand
+      // would say go and check to their customers." It also opens on a fault in
+      // the viewer, which fails her hook rule. Same facts, arriving as the
+      // reason her favourite shirt works rather than as a verdict on the rest.
+      photo({ img: I.shirt, words: "There is one shirt you reach for every hot day.", frames: 84, pos: "50% 24%" }),
+      text({ words: "There is usually a reason it is that one.", frames: 84, size: 100 }),
       text({ eyebrow: "LINEN", words: "Is a plant.", frames: 72, dark: false, build: 2, size: 132,
         sub: "Breathable. Gentle. Comfortable." }),
       text({ eyebrow: "POLYESTER", words: "Is petroleum.", frames: 72, build: 2, size: 132,
@@ -165,13 +174,13 @@ shaklek.com
         sub: "One fibre, from a plant that flowers blue." }),
       close("100% linen, cut to your shape.<br>Made in the UAE."),
     ],
-    caption: `Check the label on what you are wearing right now.
+    caption: `There is one shirt you reach for every hot day. There is usually a reason it is that one.
 
-If it says polyester, that is plastic, and you are wearing it in forty four degrees. It traps the heat, it traps the sweat, and it holds on to the smell.
+Polyester is plastic, and in forty four degrees it traps the heat, it traps the sweat, and it holds on to the smell.
 
 Linen is a plant. It takes up moisture and gives it up again, and it lets air through. That is the entire argument.
 
-Ours is 100% linen, cut to your shape, sewn in the UAE after you order it.
+Ours is 100% linen, cut to your shape, made in the UAE after you order it.
 
 shaklek.com
 

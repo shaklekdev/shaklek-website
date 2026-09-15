@@ -327,6 +327,50 @@ shaklek.com
      is literally the process. ⚠️ The images are generated (brand-assets/craft/
      gen.mjs) so the copy talks about WHAT HAPPENS, never about these hands or
      this room. Replace with real footage from the tailor when she visits. */
+  /* ⚠️ NEW, 2026-09-15, AND IT IS THE POST WE DID NOT HAVE. The free measuring
+     visit is the single strongest reason to buy from a brand nobody has heard
+     of, the founder has said so repeatedly ("we still don't have a name, we
+     need to build trust, so these needs to be A BIG PART of our
+     advertisement"), and until tonight not one post was about it. 04 is about
+     the SHOULDER, which is the argument for measuring; this is the offer.
+
+     THE HOOK OPENS ON SOMETHING GOOD SHE OWNS, per the rule: the best-fitting
+     thing in her wardrobe, and why it fits. Nothing here tells her to check,
+     measure or work anything out.
+
+     ⚠️ THE THREE FACTS THAT MUST SURVIVE ANY EDIT: free, DUBAI and said out
+     loud, and SHE ORDERS FIRST AND WE GET IN TOUCH. There is no booking
+     system and nothing may imply she is picking a slot. Outside Dubai we
+     still come, it is simply not free, so the wording is "free in Dubai",
+     never "Dubai only". */
+  {
+    name: "06-we-come-to-you",
+    caption: `Think of the best-fitting thing you own.
+
+Somebody almost certainly took it in, let it out, or put it up. That is usually the whole difference between a garment you wear and one you keep meaning to.
+
+So we do that part ourselves. You order your piece, we get in touch, and we come to you and take the measurements properly before anything is cut.
+
+Free, in Dubai, on your first order. Nothing to measure, nothing to work out, and no appointment to arrange now.
+
+Opening soon. shaklek.com
+
+#madetomeasure #dubaifashion #linen #madeintheuae #shaklek
+#دبي #تفصيل #كتان #شكلك`,
+    slides: [
+      field({ bg: CREAM, words: "Think of the best-fitting thing you own.", size: 118 }),
+      field({ bg: SAND, words: "Somebody took it in, let it out, or put it up.", size: 116,
+        sub: "That is usually the whole difference." }),
+      detail({ src: "craft/tape", words: "So we do that part ourselves.", pos: "50% 46%", lift: 300,
+        sub: "We come to you and take the measurements.",
+        veil: "linear-gradient(to bottom,rgba(30,26,20,.04) 0%,rgba(30,26,20,.26) 26%,rgba(26,22,17,.74) 56%,rgba(26,22,17,.60) 74%,rgba(26,22,17,.34) 100%)" }),
+      field({ bg: CREAM, words: "Free, in Dubai, on your first order.", size: 122,
+        sub: "You order, we get in touch, and we come to you before anything is cut." }),
+      field({ bg: DEEP_SAND, colour: BURGUNDY, centre: true, size: 112,
+        words: "Nothing to measure.<br>Nothing to work out.",
+        sub: "Join the waitlist at shaklek.com" }),
+    ],
+  },
   {
     name: "05-nothing-here-exists-yet",
     caption: `Nothing in this shop exists yet.
