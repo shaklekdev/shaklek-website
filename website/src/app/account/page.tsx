@@ -3,7 +3,6 @@ import { desc, eq, sql } from "drizzle-orm";
 import Header from "@/components/Header";
 import { SignOutButton } from "@clerk/nextjs";
 import AccountNameForm from "@/components/AccountNameForm";
-import MeasurementsForm from "@/components/MeasurementsForm";
 import AccountFitFeedback from "@/components/AccountFitFeedback";
 import { fitFeedbackLines } from "@/data/fitFeedback";
 import { orderRef } from "@/lib/orderRef";
@@ -139,9 +138,32 @@ export default async function AccountPage() {
 
         {!name && <AccountNameForm />}
 
+        {/* ⚠️ COMMENTED OUT, NOT DELETED, 2026-09-15. Founder: "we need to
+            remove the same measurements on the customer account for now, just
+            comment it, we can add it later, or only for shaklek+ customers."
+
+            WHY IT HAD TO GO: it asked the customer to type four numbers, and on
+            2026-09-14 that ask was removed from everywhere else, the customizer
+            and /size-guide included, because Tailored now means we come and
+            measure her. Leaving it here was the site asking for something it
+            had just stopped needing, and the four she typed would sit next to
+            the seventeen we took without anyone knowing which to cut to.
+
+            WHAT IS DELIBERATELY STILL ALIVE, so re-enabling is one line:
+              - MeasurementsForm.tsx, untouched
+              - /api/account/measurements, untouched
+              - the customer columns on `customers`, untouched
+            Her own measurement_notes still displays elsewhere, and the numbers
+            we take at a fitting live in the staff view at
+            /dashboard/customers/[id].
+
+            ⚠️ IF THIS COMES BACK FOR SHAKLEK+, the copy has to change with it.
+            The old framing was "save these so you do not re-enter them", which
+            is now false: nothing re-enters them anywhere.
         <div className="mt-4">
           <MeasurementsForm />
         </div>
+        */}
 
         {fitFeedback.length > 0 && <AccountFitFeedback entries={fitFeedback} />}
 
