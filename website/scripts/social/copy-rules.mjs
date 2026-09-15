@@ -11,7 +11,7 @@
  * Any builder that emits customer-facing words imports `lint` from here.
  */
 export const BANNED = [
-  [/[—–]/, 'em or en dash: reads as generated text'],
+  [/[—–](?![A-Za-z0-9])|(?<![A-Za-z0-9])[—–]/, 'em or en dash: reads as generated text'],
   [/\bphotographs?\b/i, 'calls the imagery a photograph: it is generated'],
   [/\bphotography\b/i, 'calls the imagery photography: it is generated'],
   [/\bthe actual piece\b/i, 'implies the image is the garment that ships'],

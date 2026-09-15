@@ -70,7 +70,15 @@ try {
       .replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
       .replace(/\/\*[\s\S]*?\*\//g, "")
       .replace(/^\s*\/\/.*$/gm, "");
-    const strings = [...src.matchAll(/"([^"\\]{25,})"/g)].map((m) => m[1]);
+    // ⚠️ SKIP className STRINGS. They are long, quoted, and full of words that
+    // trip the rules: Tailwind's letter-spacing utility is "tracking-", which
+    // fired the founder's no-"track" rule five times on two pages, every one a
+    // false positive. A check that cries wolf gets switched off.
+    const looksLikeClasses = (t) =>
+      /(^|\s)(text|bg|mt|mb|ml|mr|px|py|pt|pb|flex|grid|border|rounded|tracking|leading|font|w|h|max|min|gap|absolute|relative|inset|hover|focus|group|sm|md|lg|xl|space|divide|ring|shadow|object|aspect|overflow|justify|items|whitespace|underline|uppercase|col|row|z|opacity|transition|disabled|cursor)[-:]/.test(t);
+    const strings = [...src.matchAll(/"([^"\\]{25,})"/g)]
+      .map((m) => m[1])
+      .filter((t) => !looksLikeClasses(t));
     swept++;
     for (const s of strings) for (const [re, why] of BANNED) if (re.test(s)) bad.push(`${f.replace("website/src/app","")}  ${why}`);
   }

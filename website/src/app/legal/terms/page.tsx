@@ -57,12 +57,12 @@ export default function TermsPage() {
         You choose a piece, its fabric, colour and cut, and either a standard
         size or your own measurements. Nothing is cut until you have paid and a
         stylist has confirmed the details with you. Because each piece is made
-        for one person, the specification is fixed at that point — this is the
+        for one person, the specification is fixed at that point, this is the
         one thing worth knowing before you order, and it is why we confirm with
         you first rather than after.
       </p>
       <p>
-        We may decline or cancel an order before production begins — for
+        We may decline or cancel an order before production begins, for
         example if a piece cannot be produced as specified, if a price was
         listed in error, or if we suspect fraudulent use of a payment method.
         If we do, you are refunded in full.
@@ -77,7 +77,7 @@ export default function TermsPage() {
         after you press Pay.
       </p>
       <p>
-        Prices may change over time, but never after you have paid — the price
+        Prices may change over time, but never after you have paid, the price
         you were shown at checkout is the price of your order. If a price is
         displayed incorrectly through a technical error, we will tell you before
         anything is made and you may cancel for a full refund.
@@ -183,15 +183,20 @@ export default function TermsPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Accounts</h2>
       <p>
-        An account is optional. It saves your measurements and order history.
-        Keep your login secure and your details accurate — you are responsible
-        for activity under your account. We may suspend an account being used
-        unlawfully or to abuse the alteration guarantee.
+        {/* ⚠️ THIS SAID "It saves your measurements and order history". As of
+            2026-09-15 an account saves ORDER HISTORY ONLY: the measurements
+            form was taken off /account when Tailored became the in-person
+            visit, so the terms were promising a feature the site no longer
+            has. If it returns for Shaklek+, this sentence returns with it. */}
+        An account is optional. It saves your order history. Keep your login
+        secure and your details accurate, and you are responsible for activity
+        under your account. We may suspend an account being used unlawfully or
+        to abuse the alteration guarantee.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Our content</h2>
       <p>
-        The Shaklek name, logo, photography, site design and written content
+        The Shaklek name, logo, imagery, site design and written content
         belong to us and may not be copied or reused commercially without our
         permission.
       </p>
@@ -201,15 +206,15 @@ export default function TermsPage() {
       </h2>
       <p>
         We take responsibility for the pieces we make. We are not liable for
-        indirect or consequential loss — for example a garment not arriving in
-        time for a particular event — and our total liability for any order is
+        indirect or consequential loss, for example a garment not arriving in
+        time for a particular event, and our total liability for any order is
         limited to what you paid for it. Nothing in these terms limits liability
         that cannot lawfully be limited.
       </p>
       <p>
         Delivery estimates assume normal conditions. Events outside our
-        reasonable control — courier disruption, fabric supply failure, illness,
-        or anything similar — may delay an order. We will always tell you.
+        reasonable control, courier disruption, fabric supply failure, illness,
+        or anything similar, may delay an order. We will always tell you.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Changes</h2>
@@ -224,7 +229,7 @@ export default function TermsPage() {
       <p>
         These terms are governed by the laws of the United Arab Emirates, and
         the courts of Dubai have jurisdiction over any dispute. We would much
-        rather sort anything out directly first — write to{" "}
+        rather sort anything out directly first, write to{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>{" "}

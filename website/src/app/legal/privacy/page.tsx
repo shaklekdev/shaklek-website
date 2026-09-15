@@ -85,8 +85,8 @@ export default function PrivacyPage() {
         only to make your order.
       </p>
       <p>
-        <strong>Automatically:</strong> standard server logs — IP address,
-        browser and the pages requested — kept for security and troubleshooting.
+        <strong>Automatically:</strong> standard server logs, IP address,
+        browser and the pages requested, kept for security and troubleshooting.
         We do not build a profile from them.
       </p>
 
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
         (order emails), <strong>AWS Amplify and CloudFront</strong> (hosting,
         Ireland), and <strong>Google Fonts</strong>, which receives your IP
         address in order to serve the typeface. The tailor assigned to your order
-        receives a spec sheet with what to make — no name, no email, no address.
+        receives a spec sheet with what to make, no name, no email, no address.
       </p>
       <p>
         Because our hosting and database sit in the EU, your data is transferred
@@ -145,7 +145,7 @@ export default function PrivacyPage() {
       <h2 className="pt-2 text-base font-medium text-text">Cookies</h2>
       <p>
         This site sets very few. <strong>Sign-in cookies</strong> set by Clerk
-        keep you logged in between pages — without them accounts cannot work.
+        keep you logged in between pages, without them accounts cannot work.
         Your <strong>cart</strong> is kept in your browser&apos;s local storage,
         not sent anywhere until you check out. <strong>Stripe</strong> sets its
         own cookies on its payment page for fraud prevention.

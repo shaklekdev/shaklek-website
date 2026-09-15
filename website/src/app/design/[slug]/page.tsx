@@ -28,13 +28,13 @@ export async function generateMetadata({
         url: item.image,
         width: 848,
         height: 1264,
-        alt: `${item.name} — ${item.descriptor}, made to order by Shaklek.`,
+        alt: `${item.name}. ${item.descriptor}, made to order by Shaklek.`,
       }
     : DEFAULT_OG_IMAGE;
 
   return pageMetadata({
     title: item.name,
-    description: `${item.name} — ${item.descriptor}. Made to order in your measurements, from AED ${item.price}. Choose the colour, cut and length, and a tailor makes it for you.`,
+    description: `${item.name}. ${item.descriptor}. Made to order in your measurements, from AED ${item.price}. Choose the colour, cut and length, and a tailor makes it for you.`,
     path: `/design/${item.slug}`,
     images: [image],
   });

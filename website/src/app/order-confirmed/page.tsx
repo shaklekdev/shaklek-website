@@ -115,7 +115,7 @@ function OrderConfirmedContent() {
       <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
         <h1 className="text-[26px] text-text">No recent order found</h1>
         <p className="subtitle mt-2">
-          If you just placed an order, check your email — otherwise head back to the catalog.
+          If you just placed an order, check your email, otherwise head back to the catalog.
         </p>
         <Link
           href="/catalog"
@@ -154,7 +154,7 @@ function OrderConfirmedContent() {
         </p>
       )}
       <p className="subtitle mx-auto mt-2 max-w-sm">
-        Thank you — your {order.items.length === 1 ? "piece is" : "pieces are"} on{" "}
+        Thank you, your {order.items.length === 1 ? "piece is" : "pieces are"} on{" "}
         {order.items.length === 1 ? "its" : "their"} way to being made, just for you.
       </p>
 
@@ -193,14 +193,14 @@ function OrderConfirmedContent() {
         {order.status === "paid" || order.emailed
           ? "Your stylist has been notified and will reach out shortly."
           : order.status
-            ? "Payment received — confirming with your stylist now."
+            ? "Payment received, confirming with your stylist now."
             : "Order received. A stylist will be in touch."}
       </p>
 
       <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">
         <strong className="text-text">What happens next:</strong> a
-        Shaklek stylist reviews your order and reaches out — by WhatsApp
-        or email — within 24 hours to confirm the details before it goes
+        Shaklek stylist reviews your order and reaches out, by WhatsApp
+        or email, within 24 hours to confirm the details before it goes
         to your tailor. We strive to have it ready in approximately 10 working days from
         confirmation.
       </div>

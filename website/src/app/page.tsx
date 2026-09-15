@@ -15,11 +15,11 @@ import {
 
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    title: `${SITE_NAME} · ${SITE_TAGLINE}`,
     description: SITE_DESCRIPTION,
     path: "/",
   }),
-  title: { absolute: `${SITE_NAME} — ${SITE_TAGLINE}` },
+  title: { absolute: `${SITE_NAME} · ${SITE_TAGLINE}` },
 };
 
 /**
