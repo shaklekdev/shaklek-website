@@ -23,21 +23,9 @@ export default function Footer() {
             STORE_OPEN is true. */}
         <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 sm:justify-end">
           {isStoreOpen() && (
-            <>
-              {/* ⚠️ THIS PAGE HAD NOTHING LINKING TO IT AT ALL. It was pulled
-                  from the header on 2026-08-25 as "a click that led somewhere
-                  nobody can order from", the only other link lived in
-                  ValueBand.tsx which no page renders, and it sat in the sitemap
-                  at priority 0.8 the whole time. Google was being pointed at an
-                  orphan, which is the worst of both: indexed and unreachable.
-                  Founder, 2026-09-14: "yes link it if it's adding us views". */}
-              <Link href="/how-it-works" className="hover:text-text-2">
-                How it works
-              </Link>
-              <Link href="/faq" className="hover:text-text-2">
-                Questions
-              </Link>
-            </>
+            <Link href="/faq" className="hover:text-text-2">
+              Questions
+            </Link>
           )}
           {/* The journal is NOT in the header nav, deliberately. Three articles
               do not earn a slot beside Catalog, and the traffic path for them is

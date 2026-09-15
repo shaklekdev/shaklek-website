@@ -380,12 +380,12 @@ export default async function ArticlePage({
                 >
                   See the catalogue
                 </Link>
-                <Link
-                  href="/how-it-works"
-                  className="border border-border-strong px-6 py-3 text-sm text-text-2 transition-colors hover:border-gold hover:text-gold"
-                >
-                  How it works
-                </Link>
+                {/* ⚠️ THE SECOND BUTTON WENT WITH /how-it-works, DELETED
+                    2026-09-15. This branch only renders when the shop is OPEN,
+                    so leaving it would have ended every article on a 404 the
+                    day we launch, which is the same failure 512fb20 fixed for
+                    the shut state. One button is also the honest number here:
+                    a reader who has finished an article wants the clothes. */}
               </div>
             ) : (
               <>

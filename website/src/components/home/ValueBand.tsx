@@ -30,11 +30,16 @@ export default function ValueBand() {
         </dl>
 
         <p className="mt-12 text-center">
+          {/* ⚠️ WAS /how-it-works, DELETED 2026-09-15: "we need to remove the
+              how it works, it's too long repetitive, not good." The three
+              steps live on the homepage and nowhere else now. This component
+              is not rendered by any page today, but a dead link inside dead
+              code is what gets revived by accident. */}
           <Link
-            href="/how-it-works"
+            href="/catalog"
             className="text-[13px] text-text-2 underline underline-offset-4 hover:text-text"
           >
-            See how it works
+            See the collection
           </Link>
         </p>
       </div>

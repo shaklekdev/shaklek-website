@@ -69,17 +69,18 @@ export const HERO = {
 // different things, which she caught: "it needs to stay consistent with the
 // home page." Do not add a local copy to either page.
 //
-// ⚠️ `more` IS RENDERED ONLY ON /how-it-works. The homepage keeps the short
-// version. Founder, 2026-09-14: "we can add more details later on how it works,
-// the version on the home page should be a smaller one." Two lengths, still one
-// list, so they cannot contradict each other the way they did when each page
-// owned its own copy.
+// ⚠️ ONE LENGTH AGAIN. Each step briefly carried a `more` field that only
+// /how-it-works rendered, so the homepage could stay short while a longer page
+// said more. That page was deleted on 2026-09-15 ("too long repetitive, not
+// good"), and the honest reading is that the one-list refactor is what exposed
+// it: once both pages rendered the same steps, the long one was the homepage
+// again with a few extra sentences. The fields are gone rather than left
+// unread, and so is STEPS_NOTE_FULL.
 export const STEPS = [
   {
     n: "01",
     title: "Choose your piece",
     body: "Change the sleeve, the leg, the length and the colour, and watch it change with you.",
-    more: "Every combination has its own image, front and back, so you can see what you are choosing instead of imagining it. Shirts and pants in 100% linen, in ivory, white, navy and burgundy.",
   },
   {
     n: "02",
@@ -110,7 +111,6 @@ export const STEPS = [
     // is no booking system and nothing may imply one.
     title: "We take your measurements",
     body: "We come to you and take them ourselves, free on your first order, in Dubai. Or pick a standard size, XS to XXL. Same price.",
-    more: "A tailor cuts to far more measurements than a form can sensibly ask for, and the shoulder is both the hardest to take on yourself and the one that cannot be altered once the cloth is cut. Twenty minutes with a tape is the difference between a piece that fits and one that nearly does.",
     // The one the whole proposition rests on, so it is allowed to look
     // different from its neighbours rather than being one of three equals.
     emphasis: true,
@@ -119,7 +119,6 @@ export const STEPS = [
     n: "03",
     title: "Add a detail",
     body: "A wider collar, a shorter sleeve. Tell us and a stylist confirms it before anything is cut.",
-    more: "In your own words, in the box on the piece you are ordering. A stylist reads every order and tells you what is possible before the cloth is cut, so nothing is a surprise.",
   },
 ];
 
@@ -156,9 +155,6 @@ export const STEPS = [
 // be delivering to was the wrong promise.
 export const STEPS_NOTE = "Free, in Dubai. More locations coming soon.";
 
-/** The same note, in full, for /how-it-works. */
-export const STEPS_NOTE_FULL =
-  "Free, in Dubai, and we get in touch after you order to find a time that suits you. More locations coming soon, and if you are outside Dubai reach out on WhatsApp or email.";
 
 // Where she stops and we start. ⚠️ Hedged on purpose: "strive to" and
 // "approximately", matching the terms of sale, which call it an estimate and
