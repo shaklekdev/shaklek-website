@@ -391,7 +391,7 @@ export default async function ArticlePage({
               <>
                 <p className="mt-3 text-[17px] text-text-2">
                   We are not open yet. If you are in Dubai we come to you and
-                  take your measurements ourselves, once, at no charge.
+                  take your measurements ourselves, free on your first order.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link

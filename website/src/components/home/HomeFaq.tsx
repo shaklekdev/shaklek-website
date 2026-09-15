@@ -32,7 +32,8 @@ const QUESTIONS = [
     q: "Do I have to know my measurements?",
     a: (
       <>
-        No. Choose Tailored and we come to you and take them, free, in Dubai.
+        No. Choose Tailored and we come to you and take them, free on your first
+        order, in Dubai.
         Or pick a standard size from XS to XXL, for the same price. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide

@@ -110,7 +110,8 @@ export default function SizeGuidePage() {
       </h2>
       <p>
         Then a standard size is the wrong tool. Choose <strong>Tailored</strong>{" "}
-        when you order and we come and measure you, free, in Dubai. It costs
+        when you order and we come and measure you, free on your first order, in
+        Dubai. It costs
         exactly the same, and it is the reason made-to-order exists. Most people
         are between sizes somewhere; a size chart is an average of thousands of
         bodies and exact for almost none of them.
@@ -138,7 +139,8 @@ export default function SizeGuidePage() {
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
         These are consolidated from published UAE-market body-measurement charts
         and are a guide, not a promise about a specific garment. If you want
-        certainty, choose Tailored and we come and measure you, free, in Dubai.
+        certainty, choose Tailored and we come and measure you, free on your first
+        order, in Dubai.
       </p>
     </LegalPage>
   );

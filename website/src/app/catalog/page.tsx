@@ -49,7 +49,8 @@ export default function CatalogPage() {
               that small reads as a limitation to a stranger, and it shrinks
               every time something sells out. Founder, 2026-09-14. */}
           Essentials in 100% linen. Choose a piece, change the sleeve, the
-          length or the leg, and we come and measure you, free, in Dubai. Or
+          length or the leg, and we come and measure you, free on your first order,
+          in Dubai. Or
           pick a standard size. The price is the same either way.
         </p>
 

@@ -343,7 +343,7 @@ export const articles: Article[] = [
         // Pants is 519, Abaya is 690. Change one, change both. This article
         // sells TWO garments, which is the ~71% margin line, and it carried no
         // number and no way to act until now.
-        text: "We cut shirts and pants in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 699 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge, which is how the pants end up clearing the floor rather than dragging on it.",
+        text: "We cut shirts and pants in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 699 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -540,7 +540,7 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "We open in early October. If you are in Dubai we come to you and take the measurements ourselves before anything is cut, at no charge. Leave your email on the home page and we will tell you the day.",
+        text: "We open in early October. If you are in Dubai we come to you and take the measurements ourselves before anything is cut, free on your first order. Leave your email on the home page and we will tell you the day.",
       },
       {
         type: "link",
@@ -701,7 +701,7 @@ export const articles: Article[] = [
       { type: "h2", text: "Why we make clothes this way" },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. Nothing is cut before it is ordered, which means the cut can be chosen rather than accepted: the leg width, the length, the sleeve. For a climate where airflow through a garment is the difference between comfortable and not, being able to choose how much room a piece has is worth more than it would be anywhere else. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge.",
+        text: "Shaklek is made to order in the UAE. Nothing is cut before it is ordered, which means the cut can be chosen rather than accepted: the leg width, the length, the sleeve. For a climate where airflow through a garment is the difference between comfortable and not, being able to choose how much room a piece has is worth more than it would be anywhere else. If you are in Dubai we come to you and take the measurements ourselves, free on your first order.",
       },
       {
         type: "link",
@@ -870,7 +870,7 @@ export const articles: Article[] = [
       { type: "h2", text: "Why it is possible now when it was not before" },
       {
         type: "p",
-        text: "Made to order used to mean a shop, an appointment and several fittings, and it was priced accordingly. Two things changed. Measurements can now be taken once, in person, at no charge. And a garment can be shown accurately on a screen before it exists, so choosing a cut no longer requires imagining it.",
+        text: "Made to order used to mean a shop, an appointment and several fittings, and it was priced accordingly. Two things changed. Measurements can now be taken in person, free on a first order. And a garment can be shown accurately on a screen before it exists, so choosing a cut no longer requires imagining it.",
       },
       {
         type: "p",
@@ -884,7 +884,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit. If you are in Dubai we come to you and take the measurements ourselves, once, at no charge.",
+        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit. If you are in Dubai we come to you and take the measurements ourselves, free on your first order.",
       },
       {
         type: "link",

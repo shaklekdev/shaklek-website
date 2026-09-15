@@ -193,11 +193,11 @@ export default function SizePicker({
       <p className="mt-2.5 text-[11px] leading-relaxed text-text-2">
         {sizeMode === "tailored" ? (
           <>
-            <span className="font-medium text-text">We come to you and measure you. Free, in Dubai.</span>{" "}
+            <span className="font-medium text-text">We come to you and measure you. Free on your first order, in Dubai.</span>{" "}
             Order first and we get in touch to arrange it, before anything is cut.
           </>
         ) : (
-          <>Or choose Tailored and we come and measure you, free, in Dubai.</>
+          <>Or choose Tailored and we come and measure you, free on your first order, in Dubai.</>
         )}
       </p>
       {/* No helper line under this toggle. It said "Cut to your measurements,

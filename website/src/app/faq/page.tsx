@@ -45,7 +45,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Do I have to know my measurements?",
     a: (
       <>
-        No. Choose Tailored and we come to you and take them, free, in Dubai.
+        No. Choose Tailored and we come to you and take them, free on your first
+        order, in Dubai.
         Or pick a standard size from XS to XXL. The price is the same either
         way. See the{" "}
         <Link href="/size-guide" className="underline">
