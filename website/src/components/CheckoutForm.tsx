@@ -199,8 +199,8 @@ export default function CheckoutForm({ total }: { total: number }) {
               <span className="font-medium">{promo.code}</span>{" "}
               <span className="text-text-2">
                 {promo.percentOff != null
-                  ? `— ${promo.percentOff}% off`
-                  : `— AED ${promo.amountOffAed} off`}
+                  ? `${promo.percentOff}% off`
+                  : `AED ${promo.amountOffAed} off`}
               </span>
             </p>
             <button
@@ -373,8 +373,8 @@ export default function CheckoutForm({ total }: { total: number }) {
           </p>
           <p>
             <strong className="font-medium text-text-2">If the fit is off.</strong>{" "}
-            One free alteration or remake within 14 days, whether you sent
-            measurements or picked a standard size.
+            One free alteration or remake within 14 days, whether we measured
+            you or you picked a standard size.
           </p>
           <p>
             <strong className="font-medium text-text-2">Refunds.</strong> Each

@@ -65,11 +65,11 @@ export default function ShaklekPlusSignup({
   return (
     <div className="border border-gold/40 bg-surface-2 p-4">
       <p className="text-sm text-text">
-        <span className="font-medium">Shaklek+</span> — in preview
+        <span className="font-medium">Shaklek+</span>
       </p>
       <p className="mt-1 text-xs leading-relaxed text-text-3">
         {compact
-          ? "More options on every piece, more colours, saved measurements and order tracking. Leave your email and we'll invite you when it opens."
+          ? "More ways to change each piece, and more colours. Leave your email and we'll invite you when it opens."
           : "More ways to change each piece, and more colours. Leave your email and we'll invite you when it opens."}
       </p>
 

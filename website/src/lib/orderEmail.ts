@@ -61,7 +61,7 @@ export async function sendOrderNotificationEmail(
   const itemLines = items
     .map((item, i) => {
       const qty = item.quantity && item.quantity > 1 ? ` x${item.quantity}` : "";
-      const parts = [`${i + 1}. ${item.name}${qty} — ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
+      const parts = [`${i + 1}. ${item.name}${qty} · ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
       if (item.measurements) parts.push(`   Measurements: ${item.measurements}`);
       if (item.changes && item.changes.length) parts.push(`   Changes: ${item.changes.join(", ")}`);
       if (item.freeformNotes) parts.push(`   Note: "${item.freeformNotes}"`);
@@ -98,7 +98,7 @@ export async function sendOrderNotificationEmail(
     // body measurements and free-text notes, and these lines land in
     // CloudWatch where they long outlive the order.
     console.error(
-      `[orders] RESEND_API_KEY not set — order of ${items.length} item(s) NOT emailed. Details withheld (PII).`,
+      `[orders] RESEND_API_KEY not set, order of ${items.length} item(s) NOT emailed. Details withheld (PII).`,
     );
     return { emailed: false };
   }
@@ -113,7 +113,7 @@ export async function sendOrderNotificationEmail(
       from: "Shaklek Orders <orders@shaklek.com>",
       to: "orders@shaklek.com",
       reply_to: email,
-      subject: `New order — ${items.length} ${items.length === 1 ? "item" : "items"}`,
+      subject: `New order, ${items.length} ${items.length === 1 ? "item" : "items"}`,
       text: summary,
       ...(attachments.length ? { attachments } : {}),
     }),
@@ -191,7 +191,7 @@ export async function sendCustomerConfirmationEmail(
           : ""
       }
       <p style="font-size:14px;color:#6b6b6b;margin-top:0;">
-        Thank you — your ${items.length === 1 ? "piece is" : "pieces are"} on ${items.length === 1 ? "its" : "their"} way to being made.
+        Thank you, your ${items.length === 1 ? "piece is" : "pieces are"} on ${items.length === 1 ? "its" : "their"} way to being made.
       </p>
       <table style="width:100%;border-collapse:collapse;margin-top:16px;">${itemRows}</table>
       ${
@@ -219,7 +219,7 @@ export async function sendCustomerConfirmationEmail(
       </div>
     </div>`;
 
-  const text = `Order confirmed — thank you!${ref ? ` Order reference ${ref}.` : ""}${
+  const text = `Order confirmed, thank you!${ref ? ` Order reference ${ref}.` : ""}${
     discount > 0 ? ` Discount -AED ${discount.toFixed(2)}.` : ""
   } Total AED ${total}. A stylist will reach out within 24 hours. Track this and future orders by creating a free account with this same email at ${appUrl}/sign-up`;
 
@@ -229,7 +229,7 @@ export async function sendCustomerConfirmationEmail(
     // lines land in CloudWatch, which outlives the order. Flagged by the
     // security review 2026-08-30 as the one place the codebase broke its own
     // no-PII-in-logs rule.
-    console.log("[orders] RESEND_API_KEY not set — customer confirmation not emailed. Address withheld (PII).");
+    console.log("[orders] RESEND_API_KEY not set, customer confirmation not emailed. Address withheld (PII).");
     return { emailed: false };
   }
 

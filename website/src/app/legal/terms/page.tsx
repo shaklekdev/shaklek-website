@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 // rule) are exactly the kind that consumer law can override.
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms, Returns & Alterations" updated="24 August 2026">
+    <LegalPage title="Terms, Returns & Alterations" updated="15 September 2026">
       <p>
         Shaklek is a made-to-order clothing studio in the United Arab Emirates.
         These terms cover how orders, production, delivery, alterations and
@@ -55,7 +55,8 @@ export default function TermsPage() {
       <h2 className="pt-2 text-base font-medium text-text">How an order works</h2>
       <p>
         You choose a piece, its fabric, colour and cut, and either a standard
-        size or your own measurements. Nothing is cut until you have paid and a
+        size or Tailored, where we take your measurements ourselves. Nothing is cut
+        until you have paid and a
         stylist has confirmed the details with you. Because each piece is made
         for one person, the specification is fixed at that point, this is the
         one thing worth knowing before you order, and it is why we confirm with
@@ -147,25 +148,14 @@ export default function TermsPage() {
         does not use it up.
       </p>
 
-      <h2 className="pt-2 text-base font-medium text-text">
-        Designs you upload
-      </h2>
-      <p>
-        If you upload a reference image or your own design, you confirm that you
-        own it or are allowed to use it, and that it does not infringe anyone
-        else&apos;s rights. You keep ownership of what you upload, and grant us
-        permission to use it only to produce and deliver your order. We may
-        decline anything unlawful, offensive, or that appears to copy another
-        brand&apos;s protected design.
-      </p>
-      <p>
-        Uploaded designs are the one case where a piece may turn out not to be
-        producible as drawn. If that happens we will come back to you and work
-        out a version that is, at no extra cost. If we genuinely cannot, nothing
-        is made and you are refunded in full. Everything in the catalogue can be
-        made as shown, so this does not apply there.
-      </p>
-
+      {/* ⚠️ "DESIGNS YOU UPLOAD" IS GONE, deleted 2026-09-15. /upload was
+          removed on 2026-09-12 along with the whole slugless pricing branch,
+          and nothing in the order flow accepts an image any more. Terms of sale
+          governing a feature that does not exist are not harmless: they tell a
+          customer she can do something, and they made the contract longer for
+          no reason. The matching privacy clause went with it. If custom work
+          ever returns, it needs a real catalogue entry with a slug, per
+          planning/launch-checklist.md, and these clauses come back with it. */}
       <h2 className="pt-2 text-base font-medium text-text">Care</h2>
       <p>
         {/* ⚠️ THIS SAID "Dry clean only, the fabric is not pre-shrunk". Both

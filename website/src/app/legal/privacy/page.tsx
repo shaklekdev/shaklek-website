@@ -41,7 +41,7 @@ const adsEnabled = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy & Cookies" updated="24 August 2026">
+    <LegalPage title="Privacy & Cookies" updated="15 September 2026">
       <p>
         This explains what Shaklek collects, why, and who else touches it. We
         collect what we need to make and deliver your order, and little else. We
@@ -72,18 +72,20 @@ export default function PrivacyPage() {
       <p>
         <strong>When you order:</strong> your email address, your delivery name,
         address and phone number, the details of the piece you configured, your
-        size or the measurements you gave us, any note you wrote for the tailor,
+        size, or the measurements we take at your fitting, any note you wrote
+        for the tailor,
         and confirmation from Stripe that payment succeeded. We never see or
         store your card number.
       </p>
+      {/* ⚠️ AN ACCOUNT NO LONGER SAVES MEASUREMENTS. The form came off /account
+          on 2026-09-15 when Tailored became the in-person visit, so a policy
+          promising to store what she saves was describing a feature the site
+          had stopped having. */}
       <p>
-        <strong>If you create an account:</strong> your name and the measurements
-        you choose to save, so you do not have to enter them again.
+        <strong>If you create an account:</strong> your name and your order
+        history.
       </p>
-      <p>
-        <strong>If you upload a reference image:</strong> the image itself, used
-        only to make your order.
-      </p>
+
       <p>
         <strong>Automatically:</strong> standard server logs, IP address,
         browser and the pages requested, kept for security and troubleshooting.
@@ -92,10 +94,11 @@ export default function PrivacyPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Measurements</h2>
       <p>
-        Measurements are body data, so we treat them as sensitive. You give them
-        only if you choose Tailored; choosing a standard size XS–XXL instead
-        needs none. They go to the tailor making your piece and nowhere else,
-        and you can delete saved measurements from your account at any time.
+        Measurements are body data, so we treat them as sensitive. We take them
+        at your fitting, and only if you choose Tailored; a standard size
+        XS–XXL needs none. They go to the tailor making your piece and nowhere
+        else, and you can ask us to delete them at any time at
+        hello@shaklek.com.
       </p>
       <p>
         If you scan the card in your parcel and tell us how a piece fitted, we
@@ -137,8 +140,8 @@ export default function PrivacyPage() {
       <h2 className="pt-2 text-base font-medium text-text">How long we keep it</h2>
       <p>
         Order records are kept for five years, which is what UAE commercial
-        record-keeping requires. Account details and saved measurements are kept
-        until you delete them or ask us to close your account. Server logs are
+        record-keeping requires. Account details and the measurements we take
+        are kept until you ask us to delete them or to close your account. Server logs are
         kept for a short period and then discarded.
       </p>
 

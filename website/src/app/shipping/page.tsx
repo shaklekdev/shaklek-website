@@ -42,8 +42,9 @@ export default function ShippingPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Where we deliver</h2>
       <p>
-        Across the <strong>United Arab Emirates</strong>, all seven emirates.
-        We do not ship internationally yet.
+        In <strong>Dubai</strong>, for now. More locations coming soon. If you
+        are outside Dubai, message us on WhatsApp before you order and we will
+        tell you what we can do.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Your address</h2>

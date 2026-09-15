@@ -296,7 +296,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10 lg:max-w-5xl">
       {editingId && (
         <p className="mb-4 rounded-shaklek-xs border border-border-strong bg-surface-2 px-4 py-3 text-xs text-text-2">
-          Editing a piece already in your cart. Your changes replace it — you won&apos;t
+          Editing a piece already in your cart. Your changes replace it, you won&apos;t
           end up with two.
         </p>
       )}
