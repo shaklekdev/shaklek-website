@@ -35,9 +35,23 @@ const INK = "#1a1a1a", NAVY = "#0a2d4a", CREAM = "#faf8f4", GOLD = "#9c8445", PA
 // used as a TYPE colour only. The ground never goes dark.
 const SAND = "#f4ece1", DEEP_SAND = "#ece1d3", BURGUNDY = "#4a1a2d";
 
-const img = (n) => `data:image/jpeg;base64,${fs.readFileSync(
-  n.includes("/") ? `${HERE}/../${n.split("/")[0]}/src/${n.split("/")[1]}.jpg` : `${HERE}/src/${n}.jpg`,
-).toString("base64")}`;
+// ⚠️ THREE KINDS OF PATH, and the third is the one that opened this up.
+//   "placket-ivory"        -> teaser/src/, the macro crops
+//   "craft/tape"           -> brand-assets/craft/src/, the generated stills
+//   "cat:oversized-shirt/oversized-shirt-front"
+//                          -> website/public/catalog/, 399 photographs we
+//                             already own and had never used in a post. The
+//                             founder, 2026-09-15: "sometimes many pictures,
+//                             sometimes squares of different colors". Grids and
+//                             blocks need material, and it was sitting there.
+const img = (n) => {
+  const file = n.startsWith("cat:")
+    ? `${HERE}/../../website/public/catalog/${n.slice(4)}.jpg`
+    : n.includes("/")
+      ? `${HERE}/../${n.split("/")[0]}/src/${n.split("/")[1]}.jpg`
+      : `${HERE}/src/${n}.jpg`;
+  return `data:image/jpeg;base64,${fs.readFileSync(file).toString("base64")}`;
+};
 
 const SIZES = {
   ig: { W: 1080, H: 1350, out: "ig", scale: 1 },
@@ -65,6 +79,96 @@ img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .handle{position:absolute;right:${Math.round(72 * k)}px;bottom:${Math.round(66 * k)}px;
   font-family:-apple-system,sans-serif;font-weight:300;font-size:${Math.round(26 * k)}px;letter-spacing:.16em}
 `;
+
+/**
+ * ⚠️ THE LAYOUT VOCABULARY, ADDED 2026-09-15 BECAUSE THE OLD ONE WAS TWO SHAPES.
+ *
+ * Every teaser slide was either a photograph under a veil or a sentence on a
+ * flat ground, five times a post. Founder: "the designs are yet to be improved,
+ * it's too simplistic... sometimes many pictures, sometimes squares of
+ * different colors and background and the text changing size, color etc. the
+ * artistic way needs A LOT of work."
+ *
+ * What is added, and all of it stays inside the light palette and the two
+ * typefaces, because those are settled and are not the problem:
+ *
+ *   tiles    a grid of photographs, 2x2 or 3x2, type beneath
+ *   blocks   rectangles of different sizes and colours, type inside one of them
+ *   duo      one photograph beside one colour field, split off-centre
+ *   scale    one sentence where the words change size and colour mid-line
+ *
+ * ⚠️ ACCENT LIVES IN THE TYPE, NEVER IN A FULL GROUND. That is the rule that
+ * came out of her killing a navy closing slide: "the final page in blue drop
+ * it, everything in nude." A burgundy BLOCK is allowed; a burgundy SLIDE is not.
+ */
+
+/** A grid of photographs with one line beneath. `cols` x however many fit.
+ *
+ * ⚠️ THE GRID GETS WHAT IS LEFT, NOT WHAT IT WANTS. The first version sized the
+ * tiles by aspect-ratio and let the type take the overflow, so on the 1350 the
+ * last line ran off the bottom edge and the sub never appeared at all. The type
+ * block is laid out FIRST and the photographs take the remaining height, which
+ * is the only order that cannot clip a sentence. `min-height:0` is load-bearing:
+ * without it a flex child refuses to shrink below its content and the grid wins
+ * the argument again.
+ */
+const tiles = ({ imgs, cols = 2, words, sub, size = 100, bg = CREAM, gap = 10 }) => (k) => `
+  <div class="f" style="background:${bg}"></div>
+  <div class="mark markd" style="color:${INK}">Shaklek</div>
+  <div class="pad" style="justify-content:center;gap:${Math.round(40 * k)}px;padding-bottom:${Math.round(150 * k)}px">
+    <div style="flex:1;min-height:0;display:grid;grid-template-columns:repeat(${cols},1fr);gap:${Math.round(gap * k)}px">
+      ${imgs.map((n) => `<div style="overflow:hidden;background:${DEEP_SAND};min-height:0">
+        <img src="${img(n)}" style="width:100%;height:100%;object-fit:cover;object-position:50% 34%"></div>`).join("")}
+    </div>
+    <div style="flex:none">
+      <div class="d" style="color:${INK};font-size:${Math.round(size * k)}px;line-height:1.05">${words}</div>
+      ${sub ? `<div class="ui" style="color:#6f6a60;font-size:${Math.round(34 * k)}px;line-height:1.5;margin-top:${Math.round(16 * k)}px">${sub}</div>` : ""}
+    </div>
+  </div>
+  <div class="handle" style="color:#8d8679">SHAKLEK.COM</div>`;
+
+/** Rectangles of different sizes and colours; the line sits inside one. */
+const blocks = ({ words, sub, accent = BURGUNDY, bg = CREAM, size = 104, photo }) => (k) => `
+  <div class="f" style="background:${bg}"></div>
+  <div class="mark markd" style="color:${INK}">Shaklek</div>
+  <div style="position:absolute;left:0;top:${Math.round(210 * k)}px;width:${Math.round(300 * k)}px;height:${Math.round(300 * k)}px;background:${SAND}"></div>
+  ${photo ? `<div style="position:absolute;right:0;top:${Math.round(150 * k)}px;width:${Math.round(360 * k)}px;height:${Math.round(470 * k)}px;overflow:hidden">
+      <img src="${img(photo)}" style="width:100%;height:100%;object-fit:cover;object-position:50% 40%"></div>` : ""}
+  <div style="position:absolute;left:${Math.round(80 * k)}px;right:${Math.round(150 * k)}px;
+    top:${Math.round(640 * k)}px;background:${accent};padding:${Math.round(52 * k)}px ${Math.round(48 * k)}px">
+    <div class="d" style="color:${CREAM};font-size:${Math.round(size * k)}px;line-height:1.04">${words}</div>
+    ${sub ? `<div class="ui" style="color:#e3d8cf;font-size:${Math.round(34 * k)}px;line-height:1.5;margin-top:${Math.round(20 * k)}px">${sub}</div>` : ""}
+  </div>
+  <div class="handle" style="color:#8d8679">SHAKLEK.COM</div>`;
+
+/** One photograph beside one colour field, split off-centre, type across the foot. */
+const duo = ({ photo, words, sub, bg = SAND, size = 96, split = 0.56 }) => (k) => `
+  <div class="f" style="background:${bg}"></div>
+  <div style="position:absolute;inset:0 ${Math.round((1 - split) * 100)}% 0 0;overflow:hidden">
+    <img src="${img(photo)}" style="width:100%;height:100%;object-fit:cover;object-position:50% 36%">
+  </div>
+  <div class="mark" style="color:${CREAM}">Shaklek</div>
+  <div class="pad" style="justify-content:flex-end;gap:${Math.round(22 * k)}px">
+    <div class="rule"></div>
+    <div class="d" style="color:${INK};font-size:${Math.round(size * k)}px;line-height:1.05;
+      margin-left:${Math.round(split * 1080 * k)}px;max-width:${Math.round((1 - split) * 1080 * k - 60 * k)}px">${words}</div>
+    ${sub ? `<div class="ui" style="color:#6f6a60;font-size:${Math.round(32 * k)}px;line-height:1.5;
+      margin-left:${Math.round(split * 1080 * k)}px;max-width:${Math.round((1 - split) * 1080 * k - 60 * k)}px">${sub}</div>` : ""}
+  </div>
+  <div class="handle" style="color:#8d8679">SHAKLEK.COM</div>`;
+
+/** One sentence, the words changing size and colour mid-line. `parts` is
+ *  [text, {size, colour}] pairs, so emphasis is typographic, not a new slide. */
+const scale = ({ parts, sub, bg = CREAM, centre = false }) => (k) => `
+  <div class="f" style="background:${bg}"></div>
+  <div class="mark markd" style="color:${INK}">Shaklek</div>
+  <div class="pad" style="justify-content:center;${centre ? "align-items:center;text-align:center;" : ""}gap:${Math.round(26 * k)}px">
+    <div class="d" style="color:${INK};line-height:1.02">
+      ${parts.map(([t, o = {}]) => `<span style="font-size:${Math.round((o.size ?? 104) * k)}px;color:${o.colour ?? INK};${o.face === "w" ? 'font-family:"Italiana",Georgia,serif;letter-spacing:.1em;' : ""}">${t}</span>`).join(" ")}
+    </div>
+    ${sub ? `<div class="ui" style="color:#6f6a60;font-size:${Math.round(34 * k)}px;line-height:1.5">${sub}</div>` : ""}
+  </div>
+  <div class="handle" style="color:#8d8679">SHAKLEK.COM</div>`;
 
 /** A detail crop under a veil, one line at the foot. */
 const detail = ({ src, words, sub, pos = "50% 50%", lift = 0, veil, size = 106, light = false }) => (k) => `
@@ -358,17 +462,49 @@ Opening soon. shaklek.com
 #madetomeasure #dubaifashion #linen #madeintheuae #shaklek
 #دبي #تفصيل #كتان #شكلك`,
     slides: [
-      field({ bg: CREAM, words: "Think of the best-fitting thing you own.", size: 118 }),
-      field({ bg: SAND, words: "Somebody took it in, let it out, or put it up.", size: 116,
-        sub: "That is usually the whole difference." }),
+      // Type that changes scale and colour mid-sentence, instead of one size on
+      // a flat field. The emphasis IS the design here.
+      scale({
+        parts: [
+          ["Think of the", { size: 74, colour: "#6f6a60" }],
+          ["best-fitting", { size: 128, colour: BURGUNDY }],
+          ["thing you own.", { size: 92 }],
+        ],
+        sub: "Now think about why it fits.",
+      }),
+      // Four garments, not one sentence. The grid is the argument: every one of
+      // these was cut to somebody.
+      tiles({
+        cols: 2,
+        imgs: [
+          "cat:oversized-shirt/oversized-shirt-burgundy-front",
+          "cat:wide-leg-trousers/wide-leg-trousers-ivory-front-v2",
+          "cat:structured-blouse/structured-blouse-navy-front",
+          "cat:banded-trousers/banded-trousers-navy-front",
+        ],
+        words: "Somebody took it in, let it out, or put it up.",
+        sub: "That is usually the whole difference.",
+        size: 82,
+      }),
       detail({ src: "craft/tape", words: "So we do that part ourselves.", pos: "50% 46%", lift: 300,
         sub: "We come to you and take the measurements.",
         veil: "linear-gradient(to bottom,rgba(30,26,20,.04) 0%,rgba(30,26,20,.26) 26%,rgba(26,22,17,.74) 56%,rgba(26,22,17,.60) 74%,rgba(26,22,17,.34) 100%)" }),
-      field({ bg: CREAM, words: "Free, in Dubai, on your first order.", size: 122,
-        sub: "You order, we get in touch, and we come to you before anything is cut." }),
-      field({ bg: DEEP_SAND, colour: BURGUNDY, centre: true, size: 112,
-        words: "Nothing to measure.<br>Nothing to work out.",
-        sub: "Join the waitlist at shaklek.com" }),
+      // A burgundy BLOCK, never a burgundy slide. The ground stays nude.
+      blocks({
+        words: "Free, in Dubai,<br>on your first order.",
+        sub: "You order, we get in touch, and we come to you before anything is cut.",
+        photo: "cat:oversized-shirt/oversized-shirt-front",
+        size: 88,
+      }),
+      scale({
+        centre: true,
+        parts: [
+          ["Nothing to measure.", { size: 96 }],
+          ["Nothing to work out.", { size: 96, colour: BURGUNDY }],
+        ],
+        sub: "Join the waitlist at shaklek.com",
+        bg: DEEP_SAND,
+      }),
     ],
   },
   {
