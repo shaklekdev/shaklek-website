@@ -7,7 +7,24 @@ export const SITE_URL = "https://www.shaklek.com";
 
 export const SITE_NAME = "Shaklek";
 
-export const SITE_TAGLINE = "Your look, your way";
+// ⚠️ THE MASTER LINE, AND THE ONLY ONE. Founder, 2026-09-16, after counting
+// EIGHT different slogans across the site, the pre-launch page, the tab title
+// and the business card: "it's too much we need to align."
+//
+// This is the one she cannot edit -- it is printed on the business cards and
+// the packaging -- so it is the fixed point everything else aligns to, and it
+// is the line her own brand brief describes (personas.md: "our brand is about
+// skin breathing, quality materials, tailored fit, and made in the uae").
+//
+// It replaced "Your look, your way", which was her line too and had been
+// restored twice, but /our-story already explains that Shaklek MEANS "your way"
+// in Arabic -- so the tab was the third echo of one idea, and the cards were
+// saying something else entirely.
+//
+// ⚠️ IT IS ALSO IN THE FOOTER, on every page, which is where a tagline belongs
+// and where a comment in coming-soon/page.tsx already claimed it lived. It did
+// not; the footer said "© 2026 Shaklek" and nothing else. Checked, not assumed.
+export const SITE_TAGLINE = "Your skin breathing. Your clothes fitting.";
 
 export const SITE_DESCRIPTION =
   "Design your own unique piece with Shaklek, cut by a real tailor in 100% linen.";

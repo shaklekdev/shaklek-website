@@ -8,6 +8,19 @@ import TryItDemo, { type DemoPhoto } from "./TryItDemo";
 const DEMO_SLUG = "oversized-shirt";
 
 /**
+ * ⚠️ NOT RENDERED BY ANY PAGE, AND THAT IS A DECISION, NOT AN OVERSIGHT.
+ *
+ * It was put on the home page under the two steps on 2026-09-16 and the
+ * founder removed it the same day, on sight: "no no remove it" -- then, asked
+ * nothing further, "for now". So this is PARKED, not rejected: the idea is
+ * alive, the placement was wrong or the moment was. Do not wire it back in
+ * without asking her -- it has been switched on and off once already, and the
+ * next session to find working code rendered by nothing will be tempted to do
+ * exactly what this one did.
+ *
+ * The code stays because it works: real catalogue images, colour and sleeve,
+ * and the choice travels into /design via the query string. It is shirt-only.
+ *
  * Server half of the home-page demo: resolves the real photographs so the
  * client island receives eight small records instead of the whole CatalogItem
  * (which carries every comboImages path for every colourway).

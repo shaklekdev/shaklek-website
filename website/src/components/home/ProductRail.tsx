@@ -9,6 +9,21 @@ export default function ProductRail({
   // founder cut it: a row of colour dots on a photograph is already an
   // invitation, and explaining an interaction in words is text everyone reads
   // to learn something they would have found in one tap.
+  // ⚠️ THE VISIT IS NOT IN THIS SUBTITLE, AND IT WAS FOR ABOUT AN HOUR ON
+  // 2026-09-16. Open item "measuring-visit-pages" asks for it on the catalogue
+  // grid and this looked like the place. It is not, because of WHERE this
+  // component sits: directly under Concept, whose step 02 is "We come to you
+  // and take your measurements" with the free-on-your-first-order footnote
+  // under it. Adding it here put the same promise twice within one scroll, and
+  // the home FAQ further down makes three.
+  //
+  // Founder, the same day, reading the product page where the identical thing
+  // had happened: "i feel a repetition". Saying an offer twice in adjacent
+  // sections does not reinforce it, it makes the page read as generated.
+  //
+  // ⚠️ THE /catalog PAGE IS DIFFERENT and keeps it in its own intro paragraph:
+  // there is no Concept section above it, so that page would otherwise never
+  // say it at all. Same promise, different neighbours.
   subtitle = "Make it yours in the next step.",
 }: {
   title?: string;

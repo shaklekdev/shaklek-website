@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { renderParamsForCategory } from "@/data/parameterSliders";
 import { colors, sizes } from "@/data/colors";
+import { BENEFITS, POSITIONING } from "@/data/homeContent";
 
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
@@ -60,69 +61,49 @@ function ImagePlaceholder({
   );
 }
 
-// THE FOUR VIGNETTES, from the founder's mockup 2026-08-27.
+// ⚠️ THIS PAGE NO LONGER KEEPS ITS OWN "WHY" LIST. It renders BENEFITS from
+// homeContent.ts -- the same four the home page shows under the catalogue as
+// "Why choose us".
 //
-// WHY THEY EXIST: measured on a real 390px phone, /our-story ran 3,423px --
-// 4.1 screens -- and the four tenets alone spanned 1,659px of it, almost two
-// full screens, with 1,290px of that being three full-bleed photographs. Half
-// the page was one section, and most of that section was decoration. "People
-// get annoyed and leave."
+// Founder, 2026-09-16: "we need to update why shaklek, it's not aligned with
+// this in catalogue page." They had drifted into two different answers to the
+// same question, four cards each, in the same shape:
 //
-// These carry the same four ideas in four to six words each. The long-form
-// versions still follow underneath, where they do their real job, which is
-// SEO and the reader who has decided to care.
-// ⚠️ NO "YOUR" IN THESE TITLES, ON PURPOSE. They read Your body / Your style
-// before, four lines above a line that already says "your shape, your skin,
-// your style". The founder's note: too many yours, repeated again after the
-// cards. The one list on this page is hers, in the intro; these carry the same
-// four ideas without competing with it.
-const VIGNETTES = [
-  // ⚠️ "Cut to fit" and "Made to order" USED TO BE TWO CARDS. Founder,
-  // 2026-08-28: they are the same idea. She is right -- cutting to your
-  // measurements and cutting only after you order are two halves of one
-  // proposition, and splitting them spent a card saying the same thing twice
-  // on a page already criticised for repeating itself. Combined, that freed
-  // the fourth slot for something genuinely different.
-  {
-    k: "Made to order, cut to fit",
-    v: "Your measurements or a standard size, same price. Nothing is cut until you order it.",
-  },
-  { k: "Details you choose", v: "Change the sleeve, the length, the leg, the fit. More coming." },
-  {
-    k: "100% natural fabrics",
-    v: "Plant-based only. Breathable against the skin, never synthetic.",
-  },
-  // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
-  //
-  // Founder, 2026-08-28: "the customer doesn't have to know how many tailors
-  // we have." This copy went through "local tailors" (mine, inferred from a
-  // capacity note) and "a local tailor" (a correction to it) before either of
-  // us noticed we were arguing about which NUMBER to imply. The customer needs
-  // none. A count is a claim that has to stay true as the bench changes, and
-  // the bench will change.
-  //
-  // What carries the value is the CONTRAST -- made here, not imported -- which
-  // is true at any headcount. "The UAE" and not "Dubai" for the same reason it
-  // always was: the licence is Dubai, where the tailor works is recorded
-  // nowhere.
-  //
-  // This also stops the open "how many tailors?" question in
-  // planning/pricing-todo.md gating anything on the site. It still matters for
-  // capacity and lead time; it no longer matters for copy.
-  {
-    // ⚠️ "MADE IN THE UAE" IS CORRECT AND APPROVED. Do not "fix" this to
-    // "sewn". It was changed to "Sewn in the UAE" on 2026-09-14 and reverted
-    // the same day when the founder asked why: only "100% MADE in the UAE" is
-    // banned, because the 100% implies the fibre came from here and the cloth
-    // is milled abroad. personas.md:36 says it outright, "Made in the UAE is
-    // the approved phrasing", copy-rules.mjs only matches the 100% form, and
-    // country of origin in trade is where the substantial transformation
-    // happens, which is where a garment is cut and sewn. productDisclosure.ts
-    // already carries it as the legal origin field.
-    k: "Made in the UAE",
-    v: "Cut and sewn here by one tailor, never shipped in from a factory abroad.",
-  },
-];
+//   here                            home page
+//   Made to order, cut to fit       100% custom-made
+//   Details you choose              One price, from AED 449
+//   100% natural fabrics            100% natural
+//   Made in the UAE                 Made in the UAE
+//
+// Only the fourth matched. "Plant-based only" was also vaguer than the home
+// page's "Linen only" and outlived the decision that linen is the only
+// sellable fabric, and "Your measurements or a standard size, same price" led
+// on standard sizing, which stopped being the story on 2026-09-14.
+//
+// ⚠️ SO EDIT THEM IN homeContent.ts, NOT HERE -- this is the same lesson STEPS
+// learned the hard way when the home page said three things and /how-it-works
+// said five. Two copies of one claim do not stay equal; they just stop
+// disagreeing visibly.
+//
+// ⚠️ WHAT THIS PAGE LOST: "Details you choose -- change the sleeve, the
+// length, the leg, the fit." Nothing in BENEFITS says the customer picks the
+// options, only that the piece is made for her. Flagged to the founder on
+// 2026-09-16 rather than fixed here, because the fix is a fifth entry in
+// BENEFITS and that lands on the home page too. If it comes back, it comes
+// back THERE.
+//
+// WHY THE CARDS EXIST AT ALL: measured on a real 390px phone, /our-story ran
+// 3,423px -- 4.1 screens -- and the four tenets alone spanned 1,659px of it,
+// almost two full screens, with 1,290px of that being three full-bleed
+// photographs. Half the page was one section, and most of that section was
+// decoration. "People get annoyed and leave." These carry the same ideas in a
+// few words each; the long-form versions still follow underneath, where they
+// do their real job, which is SEO and the reader who has decided to care.
+//
+// ⚠️ NO "YOUR" IN THE TITLES, ON PURPOSE -- still true of BENEFITS, and worth
+// checking if you add one. They read Your body / Your style before, four lines
+// above a line that already says "your shape, your skin, your style". The
+// founder's note: too many yours, repeated again after the cards.
 
 const tenetGroups = [
   {
@@ -166,7 +147,7 @@ const tenetGroups = [
     items: [
       {
         title: "Tailoring for your shape",
-        // ⚠️ THIS REPEATED TWO VIGNETTES ALMOST WORD FOR WORD -- "cut for
+        // ⚠️ THIS REPEATED TWO OF THE CARDS ALMOST WORD FOR WORD -- "cut for
         // your body, not a size chart" and "nothing is made until you order
         // it" are both card copy now. Founder: "cut for you and made to order
         // are repeated a lot". The long version says what a card cannot.
@@ -271,10 +252,17 @@ export default function OurStoryPage() {
           Why Shaklek?
         </p>
         <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-5">
-          {VIGNETTES.map((v) => (
+          {/* Same odd-count rule as the home page's Benefits: with five cards
+              in two columns the last one would sit alone in a half-width cell,
+              which reads as a bug. It spans the row instead. */}
+          {BENEFITS.map((v, i) => (
             <li
               key={v.k}
-              className="border border-border-strong p-4 sm:p-6"
+              className={`border border-border-strong p-4 sm:p-6${
+                BENEFITS.length % 2 === 1 && i === BENEFITS.length - 1
+                  ? " col-span-2"
+                  : ""
+              }`}
             >
               <p className="font-display text-[15px] text-text sm:text-[18px]">
                 {v.k}
@@ -285,6 +273,18 @@ export default function OurStoryPage() {
             </li>
           ))}
         </ul>
+
+        {/* ⚠️ NO VISIT LINE HERE. One was added on 2026-09-16 because a crawl
+            showed this page mentioned neither the visit nor Dubai anywhere --
+            true at the time. It stopped being true within the hour: the third
+            BENEFITS tile became "Free measurement, everything included", so the
+            page said it twice, two lines apart, the second time opening with
+            "And". Founder, seeing it rendered: "why are you adding this ??"
+
+            The lesson is not "do not repeat". It is that a fix aimed at a gap
+            has to be re-checked after the thing above it changes, and this one
+            was written and verified before the tile was rewritten. The crawl
+            that found the gap was never re-run against the fix. */}
       </div>
 
 
@@ -509,10 +509,24 @@ export default function OurStoryPage() {
           className="absolute inset-0 bg-black/55"
         />
         <div className="relative mx-auto flex min-h-[340px] w-full max-w-2xl flex-col items-center justify-center px-6 py-16 text-center sm:min-h-[380px]">
+          {/* ⚠️ THIS BAND USED TO READ "Your body isn't standard. Why should
+              your clothes be?" and it was cut on 2026-09-16, in the slogan
+              alignment the founder called for after counting eight of them.
+
+              It is replaced rather than deleted because the band itself works:
+              it is the last thing on the page and it should land. What changed
+              is WHICH line lands. The old one asked a rhetorical question and
+              named the problem; this one names the problem AND the answer in
+              the same breath, and it is the only place on the site that makes
+              the comparison with ready-to-wear out loud.
+
+              ⚠️ IT CAME OFF THE HOME PAGE TO GET HERE. It is not duplicated --
+              components/home/Benefits.tsx carried it for about an hour and now
+              carries no slogan at all. One line per surface is the whole point
+              of the exercise; putting it back on the home page undoes it. */}
           <p className="font-display text-[24px] leading-snug text-white sm:text-[32px]">
-            Your body isn&apos;t standard.
-            <br />
-            Why should your clothes be?
+            {POSITIONING.line}{" "}
+            <span className="text-gold-light">{POSITIONING.emphasis}</span>
           </p>
           <p className="mt-8">
             {/* /#catalog, not "/". A button that drops someone at the top of
