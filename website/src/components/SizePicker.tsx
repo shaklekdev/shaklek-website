@@ -234,7 +234,7 @@ export default function SizePicker({
           <details className="mt-3 border border-border-strong">
             <summary className="cursor-pointer list-none px-4 py-3 text-sm text-text marker:hidden">
               <span className="underline decoration-gold underline-offset-4">Size chart</span>
-              <span className="ml-2 text-xs text-text-3">— body measurements in cm</span>
+              <span className="ml-2 text-xs text-text-3">Body measurements in cm</span>
             </summary>
             <div className="overflow-x-auto border-t border-border px-4 py-3">
               <table className="w-full min-w-[420px] text-left text-xs">
@@ -274,8 +274,8 @@ export default function SizePicker({
               <p className="mt-3 text-xs text-text-3">
                 Measure your body, not a garment: bust at the fullest point, waist at
                 the narrowest, hip at the fullest. Between two sizes, or not close to
-                any of them? Choose Tailored and we measure you instead —
-                or read the{" "}
+                any of them? Choose Tailored and we measure you instead, or
+                read the{" "}
                 <a href="/size-guide" className="underline" target="_blank" rel="noopener noreferrer">
                   full size guide
                 </a>
@@ -357,17 +357,20 @@ export default function SizePicker({
             ))}
           </div>
 
-            {/* The free-text box that sat here is gone. "Add a detail" asks
-                the same question once, lower down the same page. Two boxes
-                inviting the same note meant a customer could write making
-                instructions into whichever they happened to see, and only one
-                of them is labelled as the place a stylist reads. */}
+            {/* The free-text box that sat here is gone. DetailField
+                ("Something else? Tell us here") asks the same question once,
+                lower down the same page. Two boxes inviting the same note
+                meant a customer could write making instructions into whichever
+                they happened to see, and only one of them is labelled as the
+                place a stylist reads. (These comments used to call it "Add a
+                detail" after the homepage step of that name; the step went on
+                2026-09-16, the field did not.) */}
 
             {/* "Cut to these measurements by your tailor. A stylist will
                 confirm anything unclear before it's made." removed: the same
-                stylist promise is made under "Add a detail" a few lines below,
-                and the size hint above already says it is cut to these
-                numbers. Saying it three times did not make it truer. */}
+                stylist promise is made under DetailField a few lines below and
+                on /faq, and the size hint above already says it is cut to
+                these numbers. Saying it three times did not make it truer. */}
         </div>
       )}
 

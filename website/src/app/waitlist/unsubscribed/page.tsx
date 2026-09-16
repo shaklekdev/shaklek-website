@@ -8,8 +8,14 @@ import Link from "next/link";
 // answer "please leave me alone" with a sign-up form.
 //
 // noindex: the end of a private link, no standalone value.
+// ⚠️ NO BRAND NAME HERE. app/layout.tsx sets `template: "%s · Shaklek"`,
+// so a title of "Shaklek" rendered as "Shaklek · Shaklek" in the tab. Found
+// on 2026-09-16 by crawling every route and reading the titles back.
+// True of both outcomes this page renders, the same way the confirmed page
+// titles itself "Waitlist" rather than promising an outcome it may not be
+// showing.
 export const metadata: Metadata = {
-  title: "Shaklek",
+  title: "Unsubscribed",
   robots: { index: false, follow: false },
 };
 

@@ -97,6 +97,52 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     ),
   },
   {
+    // Founder, 2026-09-16, and it is the mirror of the question above it. That
+    // one answers "can you take them for me"; this one answers the customer who
+    // would simply rather we did not come. Until now the only place the site
+    // offered to RECEIVE measurements was the "outside Dubai" half of the
+    // previous answer, so a Dubai customer reading it was being told this was
+    // a fallback for people we cannot reach. It is not. It is a choice.
+    //
+    // ⚠️ AND IT IS THE SAME PRICE AND THE SAME TAILORED MODE -- do not let this
+    // drift into sounding like a downgrade. She chooses Tailored exactly as
+    // everyone does; only who holds the tape changes.
+    //
+    // ⚠️ WHATSAPP OR THE ORDER NOTES, NEVER A FORM. Founder, 2026-09-14: "I'm
+    // NOT MAKING A CUSTOMER PUT 17 MEASUREMENTS THERE." Both mechanics named
+    // here are real today: DetailField is the notes box on the design page and
+    // a stylist reads every order, and the WhatsApp number is the same one the
+    // answer above uses.
+    //
+    // ⚠️ THIS ANSWER IS ALSO WHY /size-guide SURVIVES THE NAV. "Size custom"
+    // left the header the same day; this is the link that now takes somebody
+    // there for a reason, so if this answer is ever cut, check the page is
+    // still reachable before cutting it.
+    q: "Can I send you my own measurements instead?",
+    a: (
+      <>
+        Yes, and it changes nothing else about your order. Choose Tailored as
+        usual and tell us in the notes, or on{" "}
+        <a
+          href="https://wa.me/971504766769"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          WhatsApp
+        </a>
+        , that you would rather send your own measurements than have us come to
+        you. The{" "}
+        <Link href="/size-guide" className="underline">
+          size guide
+        </Link>{" "}
+        shows you how to take each one. A stylist goes through them with you
+        before anything is cut, so nothing is made from a number that looks
+        wrong.
+      </>
+    ),
+  },
+  {
     q: "What if it doesn't fit?",
     a: (
       <>

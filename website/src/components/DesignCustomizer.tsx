@@ -371,14 +371,50 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <div>
                 <p className="text-xs text-text-3">Total</p>
                 <p className="font-display text-2xl text-text">AED {price}</p>
-                {/* ⚠️ THE VISIT, WHERE THE DECISION HAPPENS. It was only in the
-                    size section further up, which is the one place somebody
-                    who has already decided on a size never reads. Not
-                    conditional on the mode: it is an offer either way, and a
-                    customer on Standard is exactly who it is for. Wording
-                    matches SizePicker and the catalogue, deliberately. */}
-                <p className="mt-1 text-[11px] text-text-3">
-                  We come to you and measure you. Free, in Dubai.
+                {/* ⚠️ NO VISIT LINE HERE, AND DO NOT PUT ONE BACK. One lived
+                    here from 2026-09-14 -- "We come to you and measure you.
+                    Free, in Dubai." -- on the reasoning that the size section
+                    above is the one place somebody who has already chosen a
+                    size never reads. Founder, 2026-09-16, reading the page:
+                    "i feel a repetition".
+
+                    She is right, and the reasoning had gone stale under it:
+                    SizePicker now says it in BOTH modes, not just Tailored.
+                    Tailored gets the full offer, Standard gets "Or choose
+                    Tailored and we come and measure you, free on your first
+                    order, in Dubai" -- so there is no longer a state in which
+                    a customer reaches this price block without having just
+                    passed the offer a few centimetres above it.
+
+                    Two near-identical sentences that close together do not
+                    reinforce the offer, they make the page read as generated.
+                    The lead time below stays because it is the only line here
+                    that says something new. */}
+                {/* ⚠️ THE LEAD TIME, AND THIS IS THE ONLY PLACE IT APPEARS
+                    ABOVE CHECKOUT. Founder, 2026-09-16, after asking where
+                    delivery time was said: "we can put it in the question or
+                    under each item for delivery information."
+
+                    It was in seven places -- both FAQs, /shipping, the terms,
+                    the checkout form, /order-confirmed and the order email --
+                    and NOT on a single product page, so a customer chose
+                    options, added to cart and first learned the wait at
+                    checkout. That is the one moment it is least welcome.
+
+                    ⚠️ "MADE AFTER YOU ORDER" COMES FIRST ON PURPOSE. The wait
+                    is a consequence of made-to-order, not a shipping delay,
+                    and the two read completely differently. Stating the reason
+                    before the number is the difference between "they are slow"
+                    and "of course it takes that long".
+
+                    ⚠️ QUIET, NOT A BADGE. The home page still says it nowhere
+                    above its FAQ, and that stays true: speed is the wrong
+                    headline for a made-to-order garment, it reads as carelessly
+                    made. Here it is a fact somebody needs before paying, so it
+                    sits at 11px under the price with the visit line, not in a
+                    pill next to the button. */}
+                <p className="mt-0.5 text-[11px] text-text-3">
+                  Made after you order, ready in about 10 working days.
                 </p>
               </div>
               <button

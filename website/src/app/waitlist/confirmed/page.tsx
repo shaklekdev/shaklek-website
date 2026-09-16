@@ -9,8 +9,13 @@ import Link from "next/link";
 //
 // noindex: it is the end of a private link, it has no standalone value, and it
 // would compete with the pre-launch page for the same thin content.
+// ⚠️ NO BRAND NAME HERE. app/layout.tsx sets `template: "%s · Shaklek"`,
+// so a title of "Shaklek" rendered as "Shaklek · Shaklek" in the tab. Found
+// on 2026-09-16 by crawling every route and reading the titles back.
+// Both outcomes this page renders -- confirmed, and expired-link -- are true of
+// "Waitlist", which is why it is not "You are on the list".
 export const metadata: Metadata = {
-  title: "Shaklek",
+  title: "Waitlist",
   robots: { index: false, follow: false },
 };
 

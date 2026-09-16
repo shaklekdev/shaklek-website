@@ -9,9 +9,22 @@ import { useCart } from "@/lib/CartContext";
 // somewhere a customer cannot order from, and the concept needs to land on the
 // page they arrive on rather than behind a tab most people never open.
 //
-// "Size custom" replaces it. That page is where a customer can save their
-// measurements, which is the thing this business actually runs on -- so it
-// earns a menu slot in a way an explainer never did.
+// ⚠️ "SIZE CUSTOM" IS GONE TOO, 2026-09-16, AND FOR THE SAME REASON THE SLOT
+// WAS GIVEN TO IT. Founder: "I don't think the size custom has to be in the
+// bar, it used to be important before the free measurement, now doesn't make
+// sense." The comment that used to sit here justified the slot because
+// /size-guide "is where a customer can save their measurements, which is the
+// thing this business actually runs on" -- and that stopped being true on
+// 2026-09-14, when Tailored became the default and typing your own numbers
+// left the design page entirely. A menu slot outlived its own reason by two
+// days; this is what that looks like.
+//
+// ⚠️ /size-guide IS NOT ORPHANED BY THIS -- checked, not assumed, because an
+// orphaned URL in the sitemap is a live item in planning/OPEN.md. It keeps
+// three inbound links: the footer, the home-page FAQ, and SizePicker on every
+// product page. The new "Can I send you my own measurements?" answer on /faq
+// makes a fourth, and it is the one that now carries a customer there on
+// purpose rather than by browsing.
 const NAV_LINKS = [
   // A REAL PAGE, not "/#catalog". The anchor worked for a visitor but was
   // never a URL: everything after "#" is not sent to a server, so Google only
@@ -19,7 +32,6 @@ const NAV_LINKS = [
   // click. It also left /catalog orphaned, which is what makes a route rank
   // badly. The home page keeps its products either way.
   { href: "/catalog", label: "Catalog" },
-  { href: "/size-guide", label: "Size custom" },
   { href: "/our-story", label: "Our story" },
 ];
 
