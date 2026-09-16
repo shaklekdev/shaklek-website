@@ -22,6 +22,12 @@ export type GarmentType = "Shirt" | "Skirt" | "Pants" | "Dress" | "Abaya" | "Uns
 
 export type SilhouetteChangeType =
   | "sleeve_length"
+  // ⚠️ WIDTH, NOT LENGTH, and they are not interchangeable. Added 2026-09-15
+  // for the abaya, whose sleeves are ALWAYS long: the choice is how roomy they
+  // are, because a wide sleeve dips into food and catches on things while a
+  // narrow one loses the drama. Sleeve LENGTH on an abaya is a measurement the
+  // tailor takes, never a slider.
+  | "sleeve_width"
   | "hem_slit"
   | "pocket"
   | "cuff_detail"

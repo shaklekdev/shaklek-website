@@ -192,33 +192,63 @@ export const DRESS_PARAMS: SliderParam[] = [
   },
 ];
 
-// The abaya is worn OPEN over another garment, so it has no closure slider and
-// never gets one -- a fastening would change what the piece is. Its sleeve
-// vocabulary is cropped/full rather than the dress's short/long because the
-// sleeve of an open layer is judged against the sleeve underneath it, not
-// against the arm.
+// ⚠️ THE ABAYA'S OPTIONS, SETTLED 2026-09-15 AGAINST WHAT PEOPLE ACTUALLY
+// COMPLAIN ABOUT, not against what is easy to render.
+//
+// The three commonest abaya fit complaints are SLEEVE LENGTH (sleeves that
+// engulf the hand instead of reaching the wrist), OVERALL LENGTH (hems that
+// sweep the floor and collect dust) and SHOULDER WIDTH (seams sitting out on
+// the arm, because sizing is picked on bust alone).
+//
+// ⚠️ TWO OF THOSE THREE ARE NOT SLIDERS AND MUST NEVER BECOME ONE. Sleeve
+// length and shoulder are two of the eleven measurements the tailor takes at
+// the fitting. They are the ARGUMENT for the visit, and putting them on a
+// menu would turn the thing nobody else can do into a thing anybody can fake.
+//
+// So the sliders carry TASTE and the tape carries FIT:
+//   Length      shorter or longer. Even cut to her height, ankle-skimming
+//               versus floor-length is a real preference.
+//   Sleeve width narrow or wide. The one genuine unmet want: wide sleeves dip
+//               into food and catch on things, narrow ones lose the drama.
+//               A preference, not a measurement, which is what a slider is for.
+//   Pockets     kept because demand is real and rising, chiefly for carrying a
+//               phone and keys without a handbag during prayer and travel.
+//               ⚠️ BUT NOT A DIFFERENTIATOR: plenty of brands sell pocket
+//               abayas. Do not build a campaign on it.
+//
+// SLEEVES ARE ALWAYS LONG and are not a choice. A previous comment here said
+// the abaya "has no closure slider and never gets one"; that was an assumption,
+// and the founder considered open-versus-closed then ruled it OUT as a slider
+// on 2026-09-15: a closed abaya needs a fastening, a different pattern and more
+// cloth, so it is a SEPARATE PRODUCT, not a customisation of this one.
+//
+// ⚠️ Safe to change only because no abaya photography exists yet.
+// comboKeyForCategory builds keys from render-tier slider VALUES in declared
+// order, so changing them renames every combo cell and would orphan every
+// photograph. That is what happened to pants on 2026-08-22. Order is length
+// then sleeve width, so keys read "maxi:wide", "midi:narrow".
 export const ABAYA_PARAMS: SliderParam[] = [
-  {
-    name: "Sleeves",
-    type: "sleeve_length",
-    tier: "render",
-    options: [
-      { value: "cropped", text: "Cropped" },
-      { value: "full", text: "Full" },
-    ],
-    defaultIndex: 1,
-    labelFor: (text) => `${text} sleeves`,
-  },
   {
     name: "Length",
     type: "garment_length",
     tier: "render",
     options: [
-      { value: "midi", text: "Midi" },
-      { value: "maxi", text: "Maxi" },
+      { value: "midi", text: "Shorter" },
+      { value: "maxi", text: "Longer" },
     ],
     defaultIndex: 1,
     labelFor: (text) => `${text} length`,
+  },
+  {
+    name: "Sleeves",
+    type: "sleeve_width",
+    tier: "render",
+    options: [
+      { value: "narrow", text: "Narrow" },
+      { value: "wide", text: "Wide" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => `${text} sleeves`,
   },
   {
     name: "Pockets",
