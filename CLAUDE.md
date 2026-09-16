@@ -654,6 +654,59 @@ rm -rf .next/dev/cache/images   # then restart dev server
 
 The user still needs a hard refresh (Cmd+Shift+R) — that cache is theirs.
 
+### Staging goes first for anything on a critical path
+
+> ⚠️ **YOU HAVE A STAGING ENVIRONMENT. USE IT.** Founder's instruction,
+> 2026-09-16: *"for critical paths, we do everything in staging before
+> production."*
+
+```
+branch  staging   →  staging.dqcptedylrif0.amplifyapp.com
+keys    Stripe sk_test_ / pk_test_, Clerk pk_test_, STORE_OPEN=true
+db      DATABASE_URL = the DEV Neon branch (ep-jolly-cloud…)
+```
+
+It is a real Amplify deploy of the real build — not `npm run dev`. That is the
+whole point: it exercises the deployed artefact, the build spec's env allowlist,
+middleware, Clerk and the database together, which local dev does not.
+
+**Critical path = payments, checkout, auth/staff gating, the Stripe webhook, any
+route handler reading a request body, a schema change, or anything that alters
+what the shop charges.** A copy tweak or a catalog image does not need this; go
+straight to `main`.
+
+```bash
+git push origin main:staging            # fast-forward; same commits main will get
+aws amplify list-jobs --app-id dqcptedylrif0 --branch-name staging --max-results 1 \
+  --query 'jobSummaries[].{id:jobId,status:status,commit:commitId}' --output table
+# exercise the actual path on staging.dqcptedylrif0.amplifyapp.com, THEN
+git push origin main
+```
+
+**Why this rule exists.** It was never absent for lack of a tool — the branch
+has existed for months. It was absent from this file, so no session reached for
+it, and `staging` sat 16 days and ~127 commits behind `main` while a schema
+change and a staff-gating security fix queued up for production. On 2026-09-16 a
+session told the founder outright *"there is no staging on this project"* — it
+was in the manual's §7 as a thing that *should* exist, and nobody had checked
+the Amplify console. **A capability nobody writes down is a capability nobody
+has.**
+
+⚠️ **Staging runs the DEV database, so migrate dev first or staging proves
+nothing.** The order for a schema change is: `--target=dev` → push to `staging`
+→ exercise it → `--target=prod` → push to `main`. Verify each against
+`information_schema`, never an exit code.
+
+⚠️ **Staging drifts, and a stale staging is worse than none** — it "passes"
+against code nobody is shipping. Fast-forward it from `main` at the start of the
+check, never merge into it, and never let a fix land on `staging` alone.
+
+⚠️ **Staging env vars are separate and were wiped once.** A branch with no
+override inherits the app-level values, **which are PRODUCTION** — that is live
+Stripe keys on a public test URL. If staging behaves like production, check the
+branch overrides before anything else:
+`scripts/amplify-restore-staging-env.mjs`.
+
 ### Deploying — two traps, both hit on 2026-08-21
 
 Push to `main`; Amplify builds automatically. Always `npm run build` first.
