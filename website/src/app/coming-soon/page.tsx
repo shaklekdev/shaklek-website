@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 import Image from "next/image";
 import WaitlistForm from "@/components/WaitlistForm";
 
@@ -37,11 +38,25 @@ export const metadata: Metadata = {
   // picked its own canonical (possibly /faq) and held a splash-page snippet
   // against that URL after opening. Security review, 2026-09-12.
   alternates: { canonical: "https://www.shaklek.com/" },
-  title: "Shaklek",
+  // ⚠️ ABSOLUTE, BECAUSE THE ROOT LAYOUT APPENDS THE BRAND. layout.tsx sets
+  // `template: "%s · Shaklek"`, so a plain title of "Shaklek" rendered as
+  // "Shaklek · Shaklek" -- and while the shop is shut proxy.ts rewrites every
+  // URL here, so that was the tab title on THE ONLY PAGE THE PUBLIC CAN SEE.
+  // Found on 2026-09-16 by reading the live title back off www.shaklek.com
+  // after a deploy, not off localhost, which is the only way to catch it: the
+  // rewrite does not happen locally with STORE_OPEN=true.
+  //
+  // Same bug was fixed the same day on both /waitlist pages, which set
+  // title: "Shaklek" for the same reason. If you add another page that wants
+  // the bare brand name, it needs `absolute` too.
+  //
+  // It carries SITE_TAGLINE so the shut site and the open one agree: this page
+  // IS the home page today, and /'s title is `${SITE_NAME} · ${SITE_TAGLINE}`.
+  title: { absolute: `${SITE_NAME} · ${SITE_TAGLINE}` },
   description:
     "Clothing in 100% linen, cut to your measurements and made in the UAE, after you order it. Opening early October. Leave your email to hear when.",
   openGraph: {
-    title: "Shaklek",
+    title: `${SITE_NAME} · ${SITE_TAGLINE}`,
     description:
       "Clothing in 100% linen, cut to your measurements and made in the UAE, after you order it. Opening early October.",
   },
