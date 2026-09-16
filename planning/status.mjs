@@ -58,8 +58,25 @@ try {
   // and /account is the customer's own signed-in area; the em-dash and "AI"
   // rules are about how the brand SELLS, and applying them there produced
   // noise that buried three real lead-time promises on the first run.
-  const pages = sh(`find website/src/app -name 'page.tsx'`).split("\n")
-    .filter(Boolean).filter((f) => !/\/(dashboard|account)\//.test(f));
+  //
+  // ⚠️ AND components + data, NOT JUST page.tsx. This swept pages only until
+  // 2026-09-16, when the founder found an em dash in a home-page tile and said
+  // "remove the dashes we said from everywhere !! this is too genai" -- the
+  // rule had existed in copy-rules.mjs the whole time. It could not fire: the
+  // tile lives in src/data/homeContent.ts and the size chart in
+  // src/components/SizePicker.tsx, and a customer reads both. A sweep that
+  // covers the files a rule happens to live in is not a control, it is a
+  // coincidence.
+  //
+  // Excluded, and each for a reason: construction.ts is the TAILOR's tech pack
+  // (via lib/techPack.ts) where "no flaps, no buttons" after a dash is an
+  // instruction, trends.ts is the staff dashboard, and blog.ts is long-form
+  // editorial whose own voice rules live in .claude/agents/shaklek-blog.md.
+  const pages = sh(`find website/src/app website/src/components website/src/data -name '*.tsx' -o -name '*.ts' | grep -v node_modules`).split("\n")
+    .filter(Boolean)
+    .filter((f) => !/\/(dashboard|account)\//.test(f))
+    .filter((f) => !/src\/data\/(construction|trends|blog)\.ts$/.test(f))
+    .filter((f) => !/src\/app\/api\//.test(f));
   for (const f of pages) {
     // ⚠️ STRIP COMMENTS FIRST. The first version of this swept raw source and
     // reported 54 violations, every one of them a false positive: these files
@@ -69,14 +86,24 @@ try {
     const src = read(f)
       .replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
       .replace(/\/\*[\s\S]*?\*\//g, "")
-      .replace(/^\s*\/\/.*$/gm, "");
+      // Trailing // comments too, not just whole-line ones. designSpec.ts
+      // carries "no AI needed" and an em dash in comments at the end of code
+      // lines, and both were reported as customer-facing copy. The [^:] guard
+      // keeps "https://" out of it.
+      .replace(/^\s*\/\/.*$/gm, "")
+      .replace(/(^|[^:])\/\/[^\n]*$/gm, "$1");
     // ⚠️ SKIP className STRINGS. They are long, quoted, and full of words that
     // trip the rules: Tailwind's letter-spacing utility is "tracking-", which
     // fired the founder's no-"track" rule five times on two pages, every one a
     // false positive. A check that cries wolf gets switched off.
     const looksLikeClasses = (t) =>
       /(^|\s)(text|bg|mt|mb|ml|mr|px|py|pt|pb|flex|grid|border|rounded|tracking|leading|font|w|h|max|min|gap|absolute|relative|inset|hover|focus|group|sm|md|lg|xl|space|divide|ring|shadow|object|aspect|overflow|justify|items|whitespace|underline|uppercase|col|row|z|opacity|transition|disabled|cursor)[-:]/.test(t);
-    const strings = [...src.matchAll(/"([^"\\]{25,})"/g)]
+    // ⚠️ NO NEWLINES INSIDE A "STRING". Without \n in that character class the
+    // matcher runs from one quote to the next ACROSS LINES and hands the rules
+    // whole blocks of source: a type declaration in designSpec.ts and a
+    // template literal in SizePicker.tsx were both reported as brand copy on
+    // the first run of the widened sweep. Neither is a string at all.
+    const strings = [...src.matchAll(/"([^"\\\n]{25,})"/g)]
       .map((m) => m[1])
       .filter((t) => !looksLikeClasses(t));
     swept++;
