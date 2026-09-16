@@ -11,6 +11,7 @@
 // the customer and as a pricing error to the stylist. Derived, not stored:
 // nothing new has to be persisted to say it truthfully.
 import { orderRef } from "@/lib/orderRef";
+import { buildEmail, type MailRow } from "@/lib/mail";
 
 export function discountLine(items: { price: number; quantity?: number }[], total: number): number {
   const subtotal = items.reduce((sum, i) => sum + i.price * (i.quantity ?? 1), 0);
@@ -143,6 +144,90 @@ export async function sendOrderNotificationEmail(
 // gets instead of any account/login: their order details plus an offer to
 // sign up (same email = their past orders show up automatically once they
 // do, since customers are matched by email, not a stored Clerk user id).
+
+/**
+ * The customer confirmation, as HTML and text. PURE: it sends nothing and
+ * reads no environment.
+ *
+ * ⚠️ SPLIT OUT FROM THE SENDER ON PURPOSE, 2026-09-16. The production Resend
+ * key is the only one this project has, and CLAUDE.md forbids test orders
+ * against production, so the only honest way to look at this email is to
+ * render it to a file and open it. That is impossible while the markup lives
+ * inside a function whose next statement is a POST to Resend.
+ *
+ * scripts/preview-emails.mjs renders exactly this, so what is reviewed is what
+ * ships rather than a copy that drifts.
+ */
+export function buildCustomerConfirmation(opts: {
+  items: NotifyOrderItem[];
+  total: number;
+  email: string;
+  appUrl: string;
+  ref: string | null;
+}): { html: string; text: string } {
+  const { items, total, email, appUrl, ref } = opts;
+  // ⚠️ THROUGH buildEmail, NOT HAND-BUILT HTML. Until 2026-09-16 this function
+  // carried its own <div> shell with its own font stack, its own greys and a
+  // 480px width, while every waitlist email came out of lib/mail.ts looking
+  // different. A customer who buys receives both, days apart, and they read as
+  // two companies. Founder: "let's make the email confirmations and orders
+  // look nice as well."
+  //
+  // ⚠️ PASS RAW STRINGS. buildEmail escapes every value itself. The local esc()
+  // above is still used by sendOrderNotificationEmail, which is staff-facing
+  // and still hand-built on purpose -- do not "tidy" that one into here, and do
+  // not double-escape by wrapping these in esc() as the old code did.
+  const rows: MailRow[] = items.map((item) => {
+    const spec = [item.fabric, item.color, item.size ? `Size ${item.size}` : null]
+      .filter(Boolean)
+      .join(" \u00b7 ");
+    const changes = item.changes?.length ? item.changes.join(", ") : "";
+    return {
+      name: `${item.name}${item.quantity && item.quantity > 1 ? ` \u00d7${item.quantity}` : ""}`,
+      spec: [spec, changes].filter(Boolean).join(" \u2014 ") || undefined,
+      amount: `AED ${item.price}`,
+    };
+  });
+
+  const discount = discountLine(items, total);
+
+  const totals: { label: string; amount: string; strong?: boolean }[] = [];
+  if (discount > 0) totals.push({ label: "Discount", amount: `\u2212AED ${discount.toFixed(2)}` });
+  totals.push({ label: "Total", amount: `AED ${total}`, strong: true });
+
+  const one = items.length === 1;
+
+  const built = buildEmail({
+    // ⚠️ TRANSACTIONAL, so no visible unsubscribe line. This is the receipt for
+    // something she paid for thirty seconds ago; offering to unsubscribe her
+    // from it makes no sense. The List-Unsubscribe header is for lists.
+    kind: "transactional",
+    // Without this the inbox preview is whatever text comes first, which here
+    // is the order reference -- a row of characters that tells her nothing.
+    preheader: `A stylist will be in touch within 24 hours.`,
+    heading: "Order confirmed",
+    eyebrow: ref ? `Order reference ${ref}` : undefined,
+    lines: [
+      `Thank you. Your ${one ? "piece is" : "pieces are"} on ${one ? "its" : "their"} way to being made.`,
+    ],
+    rows,
+    totals,
+    // ⚠️ THE LEAD TIME AND THE CITY, BOTH HEDGED THE SAME WAY THEY ARE ON THE
+    // SITE. "strive to" and "approximately" match the terms of sale, which call
+    // this an estimate and not a guarantee, and "we deliver in Dubai" is the
+    // scope limit that stops this reading as a nationwide promise.
+    button: undefined,
+    note: {
+      lines: [
+        "A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor. We strive to have it ready in approximately 10 working days from confirmation, and we deliver in Dubai.",
+        `Want this order and any future ones in one place? Sign up with this same address (${email}) and it will already be there.`,
+      ],
+      button: { label: "Create a free account", url: `${appUrl}/sign-up` },
+    },
+  });
+  return { html: built.html, text: built.text };
+}
+
 export async function sendCustomerConfirmationEmail(
   items: NotifyOrderItem[],
   total: number,
@@ -161,67 +246,7 @@ export async function sendCustomerConfirmationEmail(
   const apiKey = process.env.RESEND_API_KEY;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.shaklek.com";
 
-  const itemRows = items
-    .map(
-      (item) => `
-        <tr>
-          <td style="padding:10px 0;border-bottom:1px solid #eee;">
-            <div style="font-size:14px;color:#1a1a1a;">${esc(item.name)}${
-              item.quantity && item.quantity > 1 ? ` &times;${esc(item.quantity)}` : ""
-            }</div>
-            <div style="font-size:12px;color:#6b6b6b;margin-top:2px;">
-              ${esc(item.fabric ?? "")} · ${esc(item.color ?? "")} · Size ${esc(item.size ?? "")}
-              ${item.changes && item.changes.length ? `<br/>${esc(item.changes.join(", "))}` : ""}
-            </div>
-          </td>
-          <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-size:14px;color:#1a1a1a;white-space:nowrap;">
-            AED ${esc(item.price)}
-          </td>
-        </tr>`,
-    )
-    .join("");
-
-  const discount = discountLine(items, total);
-
-  const html = `
-    <div style="font-family:-apple-system,'Segoe UI',Roboto,sans-serif;max-width:480px;margin:0 auto;color:#1a1a1a;">
-      <h1 style="font-family:Georgia,'Times New Roman',serif;font-weight:300;font-size:24px;margin-bottom:4px;">Order confirmed</h1>${
-        ref
-          ? `<p style="font-size:13px;color:#1a1a1a;margin:0 0 12px;letter-spacing:0.06em;">Order reference ${esc(ref)}</p>`
-          : ""
-      }
-      <p style="font-size:14px;color:#6b6b6b;margin-top:0;">
-        Thank you, your ${items.length === 1 ? "piece is" : "pieces are"} on ${items.length === 1 ? "its" : "their"} way to being made.
-      </p>
-      <table style="width:100%;border-collapse:collapse;margin-top:16px;">${itemRows}</table>
-      ${
-        discount > 0
-          ? `<p style="text-align:right;font-size:13px;color:#6b6b6b;margin:12px 0 0;">Discount &minus;AED ${esc(
-              discount.toFixed(2),
-            )}</p>`
-          : ""
-      }
-      <p style="text-align:right;font-size:16px;font-weight:600;margin-top:${discount > 0 ? "4" : "12"}px;">Total AED ${esc(total)}</p>
-      <p style="font-size:13px;color:#6b6b6b;line-height:1.6;">
-        A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor.
-        We strive to have it ready in approximately 10 working days from confirmation, and we deliver in Dubai.
-      </p>
-      <div style="margin-top:24px;padding:16px;background:#faf7f2;border-radius:12px;">
-        <p style="font-size:13px;margin:0 0 10px;color:#1a1a1a;">
-          Want to track this order and any future ones in one place?
-        </p>
-        <a href="${esc(appUrl)}/sign-up" style="display:inline-block;background:#1a1a1a;color:#fff;text-decoration:none;padding:10px 20px;border-radius:999px;font-size:13px;">
-          Create a free account
-        </a>
-        <p style="font-size:11px;color:#a0a0a0;margin:10px 0 0;">
-          Sign up with this same email address (${esc(email)}) and this order will already be there.
-        </p>
-      </div>
-    </div>`;
-
-  const text = `Order confirmed, thank you!${ref ? ` Order reference ${ref}.` : ""}${
-    discount > 0 ? ` Discount -AED ${discount.toFixed(2)}.` : ""
-  } Total AED ${total}. A stylist will reach out within 24 hours. Track this and future orders by creating a free account with this same email at ${appUrl}/sign-up`;
+  const { html, text } = buildCustomerConfirmation({ items, total, email, appUrl, ref });
 
   if (!apiKey) {
     // The address is deliberately NOT interpolated here. Its sibling

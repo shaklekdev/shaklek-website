@@ -13,10 +13,54 @@ import { appUrl } from "@/lib/appUrl";
 // columns. A first email from an unknown sender that arrives looking like a
 // newsletter template is the one people report. This is a short letter with one
 // button, which is what a person expects after typing their address into a box.
+//
+// ⚠️ THAT RULE SURVIVED THE 2026-09-16 REDESIGN, and it is the reason the
+// redesign is as small as it is. Founder: "let's make the email confirmations
+// and orders look nice as well". What changed is a gold hairline under the
+// wordmark, a serif heading, real spacing rhythm, and an item table for orders.
+// What deliberately did NOT change: still no logo image, still one column,
+// still no coloured band. "Nice" here means a well-set letter, not a campaign.
+//
+// ⚠️ AND THE ORDER CONFIRMATION NOW COMES THROUGH HERE TOO. Until that day it
+// was hand-built HTML inside lib/orderEmail.ts with its own fonts, its own
+// greys and its own width, so the two emails a customer actually receives --
+// "confirm your email" and "your order is confirmed" -- looked like they came
+// from different companies. Anything customer-facing goes through buildEmail.
+// The three STAFF emails (new order, reconcile alert, new account) do not:
+// they are read by one person who needs the facts, and dressing them up only
+// makes a 3am alert slower to scan.
+//
+// ⚠️ EMAIL HTML IS NOT WEB HTML. Tables, not flexbox or grid. Inline styles,
+// because Gmail strips <style> blocks in several contexts. No external CSS, no
+// web fonts -- Cormorant is not installed on anyone's phone, so the serif
+// stack falls back to Georgia, which is the right shape anyway.
 
 type Button = { label: string; url: string };
 
+/** One line item on an order. `spec` is the fabric/colour/size line under it. */
+export type MailRow = { name: string; spec?: string; amount: string };
+
 const FOOT = "Shaklek, Dubai";
+
+// The site's own tokens, from globals.css, so an email and the page it links to
+// are recognisably the same brand: text #1a1a1a, muted #6b6b6b, faint #a0a0a0,
+// gold #9c8445. The two backgrounds are warmer than the site's white because an
+// email is read inside someone else's chrome and a pure-white card on a
+// pure-white client disappears.
+const INK = "#1a1a1a";
+const MUTED = "#6b6b6b";
+const FAINT = "#a0a0a0";
+const GOLD = "#9c8445";
+const PAPER = "#fffdf8";
+const OUTER = "#f4f1ea";
+const RULE = "#e8e1d3";
+
+const SANS =
+  "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+// Cormorant Garamond is the site's display face and is not installed anywhere,
+// so this is the fallback chain it would land on regardless. Named first anyway
+// for the handful of desktop clients that do use installed fonts.
+const SERIF = "'Cormorant Garamond',Georgia,'Times New Roman',serif";
 
 /**
  * ⚠️ UNSUBSCRIBE IS NOT ON EVERY EMAIL, AND THAT IS DELIBERATE.
@@ -39,12 +83,28 @@ export type MailKind = "transactional" | "marketing";
 
 export function buildEmail(opts: {
   kind: MailKind;
+  /** Inbox preview text. Never left empty: the client falls back to the first
+   *  words of the body, which for an order is a reference number. */
   preheader: string;
+  /** Serif headline under the wordmark. Optional -- a two-line note does not
+   *  need one, and a heading on a one-sentence email reads as shouting. */
+  heading?: string;
+  /** Small caps line under the heading, e.g. an order reference. */
+  eyebrow?: string;
   lines: string[];
+  /** Order lines. Rendered as a table with hairline separators. */
+  rows?: MailRow[];
+  /** Right-aligned figures under the table. `strong` is the final total. */
+  totals?: { label: string; amount: string; strong?: boolean }[];
   button?: Button;
+  /** A quiet panel after the button, for a secondary offer. */
+  note?: { lines: string[]; button?: Button };
   unsubscribeUrl?: string;
 }) {
-  const { kind, preheader, lines, button, unsubscribeUrl } = opts;
+  const {
+    kind, preheader, heading, eyebrow, lines,
+    rows, totals, button, note, unsubscribeUrl,
+  } = opts;
   // esc() is for TEXT nodes. It does NOT escape quotes, so it must never be
   // used inside an attribute -- escAttr exists so the next person cannot get
   // that wrong. Today both hrefs are built from a Postgres uuid and an HMAC
@@ -56,31 +116,96 @@ export function buildEmail(opts: {
 
   const showUnsub = kind === "marketing" && unsubscribeUrl;
 
-  const html = `<!doctype html>
-<html><body style="margin:0;padding:0;background:#f4f1ea;">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ea;padding:32px 16px;">
-<tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#fffdf8;border:1px solid #ddd6c7;">
-<tr><td style="padding:36px 32px 8px;">
-  <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:3px;color:#1c1f26;">Shaklek</div>
-</td></tr>
-<tr><td style="padding:8px 32px 4px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#3a3730;">
-  ${lines.map((l) => `<p style="margin:0 0 16px;">${esc(l)}</p>`).join("\n  ")}
-</td></tr>
-${
-  button
-    ? `<tr><td style="padding:12px 32px 8px;">
-  <a href="${escAttr(button.url)}" style="display:inline-block;background:#1c1f26;color:#ffffff;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;padding:14px 28px;">${esc(button.label)}</a>
+  // One button, rendered the same wherever it appears. `padding` on the anchor
+  // rather than a nested table: it loses Outlook's exact box but keeps every
+  // other client simple, and Outlook still renders a tappable dark rectangle.
+  const btn = (b: Button, bg: string) =>
+    `<a href="${escAttr(b.url)}" style="display:inline-block;background:${bg};color:#ffffff;text-decoration:none;font-family:${SANS};font-size:15px;line-height:1;padding:15px 30px;">${esc(b.label)}</a>`;
+
+  const rowsHtml = rows?.length
+    ? `<tr><td style="padding:4px 32px 0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+  ${rows
+    .map(
+      (r) => `<tr>
+    <td style="padding:14px 0;border-bottom:1px solid ${RULE};font-family:${SANS};vertical-align:top;">
+      <div style="font-size:15px;color:${INK};">${esc(r.name)}</div>${
+        r.spec
+          ? `\n      <div style="font-size:12px;line-height:1.5;color:${MUTED};margin-top:3px;">${esc(r.spec)}</div>`
+          : ""
+      }
+    </td>
+    <td style="padding:14px 0;border-bottom:1px solid ${RULE};font-family:${SANS};font-size:15px;color:${INK};text-align:right;white-space:nowrap;vertical-align:top;">${esc(r.amount)}</td>
+  </tr>`,
+    )
+    .join("\n  ")}
+  </table>
 </td></tr>`
-    : ""
-}
-<tr><td style="padding:24px 32px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#8d8679;border-top:1px solid #eee8dc;">
-  ${FOOT}${
-    showUnsub
-      ? ` &middot; <a href="${escAttr(unsubscribeUrl)}" style="color:#8d8679;">Unsubscribe</a>`
+    : "";
+
+  const totalsHtml = totals?.length
+    ? `<tr><td style="padding:14px 32px 0;font-family:${SANS};text-align:right;">
+  ${totals
+    .map(
+      (t) =>
+        `<div style="font-size:${t.strong ? "17" : "13"}px;color:${t.strong ? INK : MUTED};margin-top:${t.strong ? "6" : "0"}px;">${esc(t.label)} ${esc(t.amount)}</div>`,
+    )
+    .join("\n  ")}
+</td></tr>`
+    : "";
+
+  const noteHtml = note
+    ? `<tr><td style="padding:28px 32px 0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${OUTER};">
+  <tr><td style="padding:22px 24px;font-family:${SANS};font-size:14px;line-height:1.6;color:${INK};">
+    ${note.lines.map((l) => `<p style="margin:0 0 14px;">${esc(l)}</p>`).join("\n    ")}${
+      note.button ? `\n    ${btn(note.button, INK)}` : ""
+    }
+  </td></tr>
+  </table>
+</td></tr>`
+    : "";
+
+  const html = `<!doctype html>
+<html><body style="margin:0;padding:0;background:${OUTER};">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${OUTER};padding:32px 16px;">
+<tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:${PAPER};border:1px solid ${RULE};">
+<tr><td style="padding:36px 32px 0;">
+  <div style="font-family:${SERIF};font-size:26px;letter-spacing:3px;color:${INK};">Shaklek</div>
+  <div style="height:1px;background:${GOLD};width:34px;margin-top:14px;font-size:0;line-height:0;">&nbsp;</div>
+</td></tr>${
+    heading
+      ? `
+<tr><td style="padding:26px 32px 0;">
+  <div style="font-family:${SERIF};font-size:27px;line-height:1.2;color:${INK};">${esc(heading)}</div>${
+    eyebrow
+      ? `\n  <div style="font-family:${SANS};font-size:12px;letter-spacing:1.4px;color:${MUTED};margin-top:8px;text-transform:uppercase;">${esc(eyebrow)}</div>`
       : ""
   }
+</td></tr>`
+      : ""
+  }
+<tr><td style="padding:${heading ? "18" : "26"}px 32px 0;font-family:${SANS};font-size:15px;line-height:1.65;color:${MUTED};">
+  ${lines.map((l) => `<p style="margin:0 0 16px;">${esc(l)}</p>`).join("\n  ")}
+</td></tr>
+${rowsHtml}${totalsHtml}${
+    button
+      ? `
+<tr><td style="padding:16px 32px 0;">
+  ${btn(button, INK)}
+</td></tr>`
+      : ""
+  }${noteHtml}
+<tr><td style="padding:32px 32px 32px;">
+  <div style="border-top:1px solid ${RULE};padding-top:18px;font-family:${SANS};font-size:12px;line-height:1.6;color:${FAINT};">
+    ${FOOT}${
+      showUnsub
+        ? ` &middot; <a href="${escAttr(unsubscribeUrl)}" style="color:${FAINT};">Unsubscribe</a>`
+        : ""
+    }
+  </div>
 </td></tr>
 </table>
 </td></tr>
@@ -90,8 +215,14 @@ ${
   // The plain-text alternative DOES print the URL, because there is nowhere
   // else for it to go. It is the fallback, not the thing most people see.
   const text = [
+    ...(heading ? [heading, ...(eyebrow ? [eyebrow] : []), ""] : []),
     ...lines,
+    ...(rows?.length
+      ? ["", ...rows.map((r) => `${r.name}${r.spec ? ` (${r.spec})` : ""} — ${r.amount}`)]
+      : []),
+    ...(totals?.length ? ["", ...totals.map((t) => `${t.label} ${t.amount}`)] : []),
     ...(button ? ["", `${button.label}: ${button.url}`] : []),
+    ...(note ? ["", ...note.lines, ...(note.button ? [`${note.button.label}: ${note.button.url}`] : [])] : []),
     "",
     FOOT,
     ...(showUnsub ? [`Unsubscribe: ${unsubscribeUrl}`] : []),

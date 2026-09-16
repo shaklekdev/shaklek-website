@@ -50,3 +50,6 @@ next-env.d.ts
 .env
 .env.*
 !.env.example
+
+# Rendered by scripts/preview-emails.mjs for eyeballing. Never committed.
+.email-preview/
