@@ -4439,3 +4439,96 @@ to be this extra"). She was right: I bundled the fabric-width question and a
 swatch-archiving routine into what read as a compliance checklist, when the
 actual ask was "is this document enough". **Answer the question asked, then
 offer the rest separately.**
+
+## 2026-09-16 — copy alignment, the emails, and a sweep that could not see
+
+**Nothing held. Working tree clean, 5 commits pushed through staging to main.**
+`2777a91` `1ce4014` `170a56d` `c2e908e` `16c3094`. Staging job 12 SUCCEED,
+verified with 17 assertions against the deployed HTML before main was pushed.
+
+### What the founder changed, in her words
+
+- **Three steps became two.** "You decide the piece" / "We do the rest". "Add a
+  detail" was an optional notes box billed as a stage of the process.
+- **The lead time came off the home page.** *"this is not something we want to
+  highlight... it's something that may churn customers so this doesn't have to
+  be the first thing they see."* Checked it was still said in the seven places
+  that owe it BEFORE cutting it, not after.
+- **Eight slogans became four.** *"it's too much we need to align."* Master is
+  the business-card line, "Your skin breathing. Your clothes fitting.", now in
+  the footer and the tab title. A comment in `coming-soon/page.tsx` had claimed
+  for weeks that it already lived in the footer. It did not.
+- **"100% natural" became "100% linen."** *"we agreed not to use natural right?
+  not sure we have the right to."* She was half-remembering something real:
+  `tailor-capacity.md` open question 6 — polyester thread would make a bare
+  "100% natural" false while the hang tag's "PLANT BASED FABRIC" survives.
+
+### Three times I shipped a repetition and she caught it by reading the page
+
+This is the pattern worth keeping. Every one passed typecheck, build and the
+claim sweep, and every one was obvious on sight.
+
+1. The visit line under the product-page price, duplicating SizePicker's.
+2. The visit in the home rail subtitle, one section under step 02 — **mine,
+   added an hour earlier.**
+3. A visit line on `/our-story` directly under a tile that had *become* "Free
+   measurement appointment" after I wrote it. *"why are you adding this ??"*
+
+**The third is the instructive one.** The fix was correct when written and
+verified when written. What changed was the thing above it. ⚠️ **Re-run the
+check that found a gap against your own fix, after everything else in that
+session has settled.** A crawl is cheap; I never re-ran it.
+
+### ⚠️ A sweep that covers some of the files is not a control
+
+`copy-rules.mjs` has banned em dashes as "reads as generated text" all along.
+The founder still found one in a home-page tile: *"remove the dashes we said
+from everywhere !! this is too genai"*. The rule could not fire — `status.mjs`
+swept `src/app/**/page.tsx` only, and the tile is in `src/data/homeContent.ts`.
+Now 86 files. Two latent bugs surfaced on the first widened run, both false
+positives: the string matcher had no `\n` in its class so it ran from one quote
+to the next **across lines**, handing whole blocks of source to the rules; and
+only whole-line `//` comments were stripped, so a trailing "no AI needed"
+tripped the AI rule. Proved it works by planting a dash and removing it.
+
+### ⚠️ I overwrote two layout files I had not read
+
+Adding titles to `/cart` and `/checkout`, I wrote `layout.tsx` for both. They
+already existed. **`checkout/layout.tsx` mounts Clerk**, and my version returned
+bare `children` — sign-in at checkout would have broken. Caught only while
+listing changed files for the founder (`git status` showed ` M`, not `??`).
+Restored and patched minimally. Never committed. **Look at the target before
+writing a file, including when you are sure it is new.**
+
+### Cross-session, with shaklek-22
+
+- It reported `email-design` closed against a commit. The settling check:
+  `git show HEAD:website/src/lib/orderEmail.ts | grep -c buildEmail` = **0**,
+  working tree 4. It had read my uncommitted tree. It verified and agreed.
+  ⚠️ **`git show HEAD:<path>` before reporting an item done in a shared tree.**
+- ⚠️ **Its `4085ce3` contains a file it did not intend** — my staged
+  `ValueBand.tsx` deletion. It committed without pathspecs, so it took whatever
+  was in the index. **`git commit` with no paths is the same hazard as
+  `git add <dir>`.** Left as-is: the deletion is right and approved, and
+  rewriting a commit the peer may hold is the riskier move.
+- Its `/design/[slug]` Dubai block is deliberately only what SizePicker does not
+  say. ⚠️ **Move or cut that SizePicker copy and the product page loses the
+  visit sentence entirely.**
+
+### Also
+
+`ValueBand` deleted — a dormant second "why choose us" no page rendered, still
+claiming your own measurements cost the same as a standard size, which stopped
+being true on 2026-09-14. **A list nobody renders is a list nobody corrects.**
+
+`TryItDemoSection` is **parked, not dead**. Switched on under the steps, and she
+removed it on sight — *"no no remove it"*, then *"for now"*. Comment in the file
+says so. Do not wire it back in without asking.
+
+`scripts/preview-emails.mjs` renders every customer email to `.email-preview/`.
+It exists because the only Resend key here is production, so "let us see the
+email" has no send-based answer. It calls the same builders the senders do.
+
+**Not done, flagged to her:** shaklek-22 found `/dashboard` has two disagreeing
+staff controls — the data is absent either way, but the layout's refusal fires
+instead of `requireStaff`'s 404, so one of the two is not doing what it claims.
