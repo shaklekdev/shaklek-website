@@ -62,6 +62,53 @@ export default async function DesignPage({
           at that moment is an invitation to leave. The header still carries
           Catalog for anyone who genuinely wants it. */}
       <DesignCustomizer item={item} />
+      {/* ⚠️ THE ONE PLACE THIS WAS MISSING. The visit and the delivery are both
+          Dubai-only and both say so on /catalog, /size-guide, /shipping, the
+          FAQ and the checkout summary -- everywhere EXCEPT the page where
+          someone picks a fabric and adds to cart. So a customer in Sharjah
+          designed a garment and first met "Dubai" at checkout, after the work
+          of choosing was already done. Nothing blocks that order and the
+          founder does not want it blocked; she wants to be asked first, so she
+          can quote the travel or decline it.
+
+          ⚠️ MOST OF HER WORDING IS DELIBERATELY NOT HERE. SizePicker already
+          renders "We come to you and measure you. Free on your first order, in
+          Dubai. Order first and we get in touch to arrange it, before anything
+          is cut." higher up this same page, so repeating it a few hundred
+          pixels below read as a stutter. The first draft did exactly that and
+          it was caught by COUNTING THE PHRASE IN THE RENDERED HTML (2x), not by
+          reading the diff -- the duplicate lived in a different component and
+          no diff would have shown it.
+
+          What is left here is only what that sentence does not say: DELIVERY,
+          and the outside-Dubai route. If SizePicker's copy ever moves off this
+          page, the visit sentence has to come back here.
+
+          Wording is the founder's own, 2026-09-16. Two things it is careful
+          about: "order first and we get in touch" (the visit is arranged after
+          the order, not booked on this page), and "before anything is cut"
+          (made-to-order, so there is a real window in which to fix a
+          measurement). WhatsApp, never a form -- founder, 2026-09-14: "I'm NOT
+          MAKING A CUSTOMER FILL A FORM".
+
+          It sits BELOW the customizer on purpose. Above it, it competes with
+          the fabric and the sliders; below, it is the last thing read before
+          the Pay bar. */}
+      <div className="mx-auto w-full max-w-xl px-4 pb-10 sm:px-6 lg:max-w-5xl">
+        <p className="border-t border-border pt-6 text-sm leading-relaxed text-text-2">
+          The visit and delivery are both included, in Dubai.{" "}
+          <span className="font-medium text-text">Outside Dubai?</span>{" "}
+          <a
+            href="https://wa.me/971504766769"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            WhatsApp us
+          </a>{" "}
+          to confirm based on your location.
+        </p>
+      </div>
     </div>
   );
 }
