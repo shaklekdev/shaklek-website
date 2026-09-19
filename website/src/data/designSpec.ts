@@ -91,12 +91,41 @@ export const PASSING_CONSTRAINTS: ConstraintCheck = {
   flagNotes: [],
 };
 
+/**
+ * The colourway the customizer opens on: Ivory when the item is shot in it,
+ * otherwise whatever it IS shot in. Keyed off `colorImages`, which is the same
+ * thing `isKnownColor` gates the swatches with, so the opening colour is always
+ * one the customer could have picked herself.
+ */
+function defaultColorFor(item: CatalogItem): string {
+  const colours = Object.keys(item.colorImages ?? {});
+  if (colours.length === 0) return "Ivory";
+  return colours.includes("Ivory") ? "Ivory" : colours[0];
+}
+
 export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
   return {
     base: { kind: "catalog", slug: item.slug },
     garmentType: item.category,
     fabric: DEFAULT_FABRIC,
-    color: "Ivory",
+    // ⚠️ A COLOUR THE ITEM ACTUALLY HAS, NOT A HARDCODED "Ivory".
+    //
+    // This said `color: "Ivory"` and it silently broke the customizer for the
+    // Open Abaya, which ships in Burgundy only. Every photograph is looked up
+    // as comboImages[spec.color][comboKey], so an item with no Ivory missed on
+    // BOTH legs and previewImage fell all the way through to item.image --
+    // meaning the picture never changed, whatever the customer did with the
+    // sliders. Founder, 2026-09-19: "doesn't render for short, long etc there
+    // is only one single picture unlike the buttoned one."
+    //
+    // It did not show up for eight months because every other item is shot in
+    // all four colours, so the hardcoded default was always present. The abaya
+    // is the first item to ship in one colourway, and it will not be the last:
+    // the other three come from Photoshop later (abaya-colourways-photoshop).
+    //
+    // Ivory is still PREFERRED when the item has it, so nothing else changes
+    // and the grid convention holds. Otherwise take the first declared colour.
+    color: defaultColorFor(item),
     // Trousers and skirts are sized 34-44, tops XS-XXL -- one chart, two
     // labellings, see sizeChart.ts. The stored value is the label the customer
     // saw, so everything downstream reads back what she picked.
