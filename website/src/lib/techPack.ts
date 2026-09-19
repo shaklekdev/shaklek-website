@@ -11,6 +11,7 @@ import {
   comboKeyFromLabels,
   changesFromLabels,
   renderParamsForCategory,
+  paramKeyFor,
 } from "@/data/parameterSliders";
 import { catalog } from "@/data/catalog";
 import { colors } from "@/data/colors";
@@ -663,7 +664,12 @@ export function buildPdf(
       const typed = catalogItem
         ? changesFromLabels(category, item.changes, catalogItem.defaultChanges)
         : [];
-      const renderTypes = new Set(renderParamsForCategory(category).map((p) => p.type));
+      // paramKeyFor when we have the catalogue item: which sliders are
+      // "render" tier decides which of her choices print as CUT notes, and two
+      // products in one category can have different sets.
+      const renderTypes = new Set(
+        renderParamsForCategory(catalogItem ? paramKeyFor(catalogItem) : category).map((p) => p.type),
+      );
       const cutNotes = typed
         .filter((c) => renderTypes.has(c.type))
         .map((c) => noteForOption(category, c.type, c.value))

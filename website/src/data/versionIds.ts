@@ -1,5 +1,5 @@
 import { catalog } from "@/data/catalog";
-import { renderParamsForCategory } from "@/data/parameterSliders";
+import { renderParamsForCategory, paramKeyFor } from "@/data/parameterSliders";
 
 /**
  * A stable code for every version Shaklek can actually make.
@@ -50,7 +50,7 @@ export function versionsForItem(slug: string): Version[] {
   const code = ITEM_CODES[slug];
   if (!code) throw new Error(`No item code for ${slug} -- add one to versionIds.ts`);
 
-  const params = renderParamsForCategory(item.category);
+  const params = renderParamsForCategory(paramKeyFor(item));
   // Cartesian product of the render sliders, in declared order.
   let rows: { key: string[]; label: string[] }[] = [{ key: [], label: [] }];
   for (const p of params) {

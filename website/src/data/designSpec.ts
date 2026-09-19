@@ -1,5 +1,5 @@
 import type { CatalogItem } from "@/data/catalog";
-import { defaultChangesForCategory } from "@/data/parameterSliders";
+import { defaultChangesForCategory, paramKeyFor } from "@/data/parameterSliders";
 import { defaultSizeFor } from "@/data/sizeChart";
 import { DEFAULT_FABRIC, type Fabric } from "@/data/fabrics";
 
@@ -119,7 +119,7 @@ export function createSpecFromCatalog(item: CatalogItem): DesignSpec {
     sizeMode: "tailored",
     measurements: "",
     fitNotes: [],
-    changes: defaultChangesForCategory(item.category, item.defaultChanges),
+    changes: defaultChangesForCategory(paramKeyFor(item), item.defaultChanges),
     freeformNotes: "",
     constraints: { ...PASSING_CONSTRAINTS },
   };

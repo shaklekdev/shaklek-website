@@ -263,12 +263,95 @@ export const ABAYA_PARAMS: SliderParam[] = [
   },
 ];
 
-export function paramsForCategory(category: string): SliderParam[] | null {
-  if (category === "Shirt") return SHIRT_PARAMS;
-  if (category === "Pants") return PANTS_PARAMS;
-  if (category === "Dress") return DRESS_PARAMS;
-  if (category === "Abaya") return ABAYA_PARAMS;
+// ---------------------------------------------------------------------------
+// THE JACKET ABAYA. A SECOND abaya product, not a variant of the first.
+// Founder, 2026-09-19: "Both are going to the website... sleeve and length for
+// our open abaya, and for them, it's the length and closure."
+//
+// ⚠️ SLEEVES ARE FIXED ON THIS ONE and must not become a slider. Her words to
+// the session that designed it: "the sleeves will stay the same." That is why
+// this set has no sleeve axis while ABAYA_PARAMS above does.
+//
+// ⚠️ CLOSURE COUNT IS NOT DECORATION. Her reasoning: the five-closure version
+// "is meant for people who want to cover more so we need to show that it closes
+// properly and covers more". So the two options are photographed differently --
+// four is shot WORN OPEN, five is shot WORN CLOSED. They are different
+// photographs, not one shot with an extra bar added.
+//
+// ⚠️ AND THE BACK IS SHARED BETWEEN THEM. The back is one unbroken panel, so it
+// is identical for four and five closures. Closure count multiplies FRONTS
+// only; length multiplies both. That is 4 fronts + 2 backs = 6 photographs per
+// colourway, not 8.
+//
+// ⚠️ LENGTH IS DECLARED FIRST, so the key reads `length:closure`. The key is
+// positional -- reordering these renames every photo file.
+export const ABAYA_JACKET_PARAMS: SliderParam[] = [
+  {
+    name: "Length",
+    type: "garment_length",
+    tier: "render",
+    options: [
+      { value: "midi", text: "Midi" },
+      { value: "maxi", text: "Maxi" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => `${text} length`,
+  },
+  {
+    name: "Closures",
+    type: "closure",
+    tier: "render",
+    options: [
+      { value: "4", text: "Four, worn open" },
+      { value: "5", text: "Five, worn closed" },
+    ],
+    defaultIndex: 0,
+    labelFor: (text) => text,
+  },
+  {
+    name: "Pockets",
+    type: "pocket",
+    tier: "premium",
+    options: [
+      { value: "0", text: "No pockets" },
+      { value: "2", text: "Side seam pockets" },
+    ],
+    defaultIndex: 1,
+    labelFor: (text) => text,
+  },
+];
+
+// ⚠️ THE ARGUMENT IS A PARAM-SET KEY, NOT ALWAYS A CATEGORY. It is normally
+// the item's category, but an item may override it with `paramSet` so that two
+// products in the SAME category can offer different sliders.
+//
+// Why that exists, 2026-09-19: the founder is shipping TWO abayas. The Open
+// Abaya customises garment_length x sleeve_width; the Jacket Abaya customises
+// garment_length x closure, with its sleeves fixed. Both are category "Abaya",
+// and a category-keyed lookup forces them to share axes -- and worse, makes
+// comboKeyForCategory build the SAME photo keys for two different photo sets.
+//
+// ⚠️ THE OVERRIDE IS A SEPARATE KEY, NOT A NEW CATEGORY, and that is
+// deliberate. `category` is threaded through twelve files including
+// /api/orders, pricing.ts, techPack.ts and fitFeedback.ts. Inventing an
+// "AbayaJacket" category would need every one of those to learn it, and the
+// failure mode is silent: a garment missing from the fit-feedback map or the
+// tech pack simply produces nothing. Both abayas stay category "Abaya"
+// everywhere; only their sliders differ.
+export function paramsForCategory(key: string): SliderParam[] | null {
+  if (key === "Shirt") return SHIRT_PARAMS;
+  if (key === "Pants") return PANTS_PARAMS;
+  if (key === "Dress") return DRESS_PARAMS;
+  if (key === "Abaya") return ABAYA_PARAMS;
+  if (key === "AbayaJacket") return ABAYA_JACKET_PARAMS;
   return null;
+}
+
+/** The lookup key for an item: its own paramSet if it declares one, else its
+ *  category. Every caller that has the item should use this rather than
+ *  reaching for `item.category` directly. */
+export function paramKeyFor(item: { category: string; paramSet?: string }): string {
+  return item.paramSet ?? item.category;
 }
 
 export function renderParamsForCategory(category: string): SliderParam[] {

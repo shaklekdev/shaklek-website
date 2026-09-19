@@ -1,10 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { customerChosenLabels } from "@/data/parameterSliders";
+import { customerChosenLabels, paramKeyFor } from "@/data/parameterSliders";
+import { catalog } from "@/data/catalog";
 import Header from "@/components/Header";
 import CheckoutForm from "@/components/CheckoutForm";
 import { useCart } from "@/lib/CartContext";
+
+/** The slider set a cart line's product uses. The line stores a slug, so the
+ *  catalogue item is recoverable; without this the labels are filtered against
+ *  the CATEGORY's sliders and a product with its own set (the Jacket Abaya)
+ *  would have its choices silently dropped from the order summary. Falls back
+ *  to the stored category if the slug is not in the catalogue any more. */
+function paramKeyForLine(line: { slug: string; category: string }): string {
+  const found = catalog.find((c) => c.slug === line.slug);
+  return found ? paramKeyFor(found) : line.category;
+}
 
 export default function CheckoutPage() {
   const { items, total } = useCart();
@@ -63,9 +74,9 @@ export default function CheckoutPage() {
                     {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size{" "}
                     {item.size}
                   </p>
-                  {customerChosenLabels(item.category, item.changes).length > 0 && (
+                  {customerChosenLabels(paramKeyForLine(item), item.changes).length > 0 && (
                     <p className="mt-1 text-xs text-text-2">
-                      {customerChosenLabels(item.category, item.changes).join(", ")}
+                      {customerChosenLabels(paramKeyForLine(item), item.changes).join(", ")}
                     </p>
                   )}
                 </div>

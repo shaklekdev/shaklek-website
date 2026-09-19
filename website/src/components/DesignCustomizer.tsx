@@ -8,6 +8,7 @@ import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import {
   changesFromLabels,
   comboKeyForCategory,
+  paramKeyFor,
   defaultChangesForCategory,
   renderParamsForCategory,
 } from "@/data/parameterSliders";
@@ -149,7 +150,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     // Premium sliders are excluded: they are not customer-editable yet, and a
     // URL must not be a way around that.
     const sliderOverrides: Record<string, string> = {};
-    for (const param of renderParamsForCategory(item.category)) {
+    for (const param of renderParamsForCategory(paramKeyFor(item))) {
       const raw = params.get(param.type);
       if (raw && param.options.some((o) => o.value === raw)) {
         sliderOverrides[param.type] = raw;
@@ -162,7 +163,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         ...prev,
         color: color && isKnownColor(item, color) ? color : prev.color,
         changes: hasSliderOverride
-          ? defaultChangesForCategory(item.category, {
+          ? defaultChangesForCategory(paramKeyFor(item), {
               ...item.defaultChanges,
               ...sliderOverrides,
             })
@@ -187,7 +188,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
 
   const price = item.price;
   const colorVariant = item.colorImages?.[spec.color];
-  const comboKey = comboKeyForCategory(item.category, spec.changes);
+  // paramKeyFor, not item.category: an item may declare its own slider set,
+  // and the combo key must be built from THAT set or two products in one
+  // category would look up each other's photographs.
+  const comboKey = comboKeyForCategory(paramKeyFor(item), spec.changes);
   const comboVariant = comboKey ? item.comboImages?.[spec.color]?.[comboKey] : undefined;
   const previewImage = comboVariant?.front ?? colorVariant?.front ?? item.image;
   const previewBackImage = comboVariant?.back ?? colorVariant?.back ?? item.backImage;
@@ -313,7 +317,11 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             onSpecChange={setSpec}
             itemName={item.name}
             price={price}
-            category={item.category}
+            /* paramKeyFor, not item.category: this prop selects which SLIDERS
+               to render, and an item may declare its own set. DetailField
+               below still takes the real category, because its note examples
+               are per garment type. */
+            category={paramKeyFor(item)}
             previewImage={previewImage}
             previewBackImage={previewBackImage}
             previewGradient={item.gradient}

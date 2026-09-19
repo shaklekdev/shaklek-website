@@ -4,6 +4,13 @@ export type CatalogItem = {
   slug: string;
   name: string;
   category: "Shirt" | "Skirt" | "Pants" | "Dress" | "Abaya";
+  // ⚠️ OVERRIDES WHICH SLIDERS THIS ITEM OFFERS, without changing its category.
+  // Two products can share a category and still customise differently: the Open
+  // Abaya is length x sleeve width, the Jacket Abaya is length x closure. Left
+  // unset, the item uses its category's sliders, which is what all eight
+  // original products do. See paramsForCategory() in parameterSliders.ts for
+  // why this is a separate key rather than a new category.
+  paramSet?: string;
   price: number;
   descriptor: string;
   badge?: "TRENDING" | "NEW";

@@ -104,6 +104,9 @@ export default function CustomizeParameters({
   }
 
   const colorHex = colors.find((c) => c.name === spec.color)?.hex ?? previewGradient[0];
+  // ⚠️ `category` here is a PARAM-SET KEY, not necessarily a category. Callers
+  // pass paramKeyFor(item) so two products in one category can offer different
+  // sliders -- the Open Abaya and the Jacket Abaya both sit in "Abaya".
   const params = renderParamsForCategory(category);
   const premiumParams = premiumParamsForCategory(category);
 
