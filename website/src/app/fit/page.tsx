@@ -52,10 +52,13 @@ export default function FitPage() {
         <p className="mt-3 text-[17px] leading-snug text-text">
           Your next piece starts from this one.
         </p>
-        <p className="mt-4 text-[14px] leading-relaxed text-text-2">
-          Tell us how it sits, what you love as much as what you would change.
-          Your tailor keeps every detail and cuts to it next time.
-        </p>
+        {/* ⚠️ NO EXPLANATORY PARAGRAPH HERE. Founder removed it 2026-09-19.
+            It read "Tell us how it sits, what you love as much as what you
+            would change. Your tailor keeps every detail and cuts to it next
+            time." Two sentences telling somebody what a form is for, above a
+            form whose first question is "Which piece is this about?" -- the
+            line above it already says "Your next piece starts from this one",
+            which is the same promise in seven words. */}
         <FitFeedbackForm />
         <p className="mt-10 border-t border-[#E7E0D2] pt-5 text-[12.5px] leading-relaxed text-text-3">
           Something actually wrong? You get one free alteration or remake within

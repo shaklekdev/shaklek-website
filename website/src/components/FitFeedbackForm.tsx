@@ -166,8 +166,15 @@ export default function FitFeedbackForm() {
       ))}
 
       <div>
+        {/* ⚠️ "SHARE", NOT "CHANGE". Founder, 2026-09-19. Every question above
+            this one already asks what was wrong -- close, loose, short, long --
+            so ending on "what would you change?" asks for a complaint from
+            somebody who may simply be happy, and gets an empty box from her.
+            "Share" takes praise, a detail about an occasion, or a change, and
+            the tailor keeps all three. The placeholder already says who reads
+            it. */}
         <label htmlFor="fit-note" className="block text-[15px] text-text">
-          Anything else you would change?
+          Anything else you would like to share?
         </label>
         <textarea
           id="fit-note"
