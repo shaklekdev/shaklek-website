@@ -4628,3 +4628,32 @@ serves the pre-launch page to every route. Both abayas were exercised on
 **staging**, which is the only place either is visible: `/design/buttoned-abaya`
 200 with both sliders and all four cells, `/catalog` showing both, all six
 jacket frames 200.
+
+### And then the Open Abaya's sliders did nothing
+
+Founder, minutes after it went live: *"doesn't render for short, long etc there
+is only one single picture unlike the buttoned one."*
+
+⚠️ **`createSpecFromCatalog` HARDCODED `color: "Ivory"`.** Every photograph is
+looked up as `comboImages[spec.color][comboKey]`, so an item with no Ivory
+missed there **and** on `colorImages[spec.color]`, and `previewImage` fell all
+the way through to `item.image` — one static picture whatever the sliders did.
+The Open Abaya ships in Burgundy only. Fixed in `896bdd1`; production job
+**362 SUCCEED**.
+
+Measured rather than reasoned about, resolving all four cells the way
+`DesignCustomizer` does: **1/4 distinct pictures on Ivory, 4/4 on Burgundy.**
+All ten items now return 4/4 and the eight four-colour items still open on
+Ivory, so nothing else moved.
+
+> **It hid for eight months because every item was shot in all four colours, so
+> the hardcoded default was always present.** The abaya is the first
+> single-colourway item and will not be the last — the Buttoned Abaya is
+> ivory-only for the same reason, and both stay that way until Photoshop
+> produces the rest. **Any new assumption that "every item has colour X" is now
+> false.**
+
+And note what the green build was worth here: `verify-catalog.mjs` passes on
+this, correctly — every path exists and the hero resolves. The defect was the
+*opening colour*, which no check looks at. **Two builds and a staging pass went
+by; her eye caught it in under a minute.**
