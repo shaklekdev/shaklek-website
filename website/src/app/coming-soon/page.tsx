@@ -54,11 +54,11 @@ export const metadata: Metadata = {
   // IS the home page today, and /'s title is `${SITE_NAME} · ${SITE_TAGLINE}`.
   title: { absolute: `${SITE_NAME} · ${SITE_TAGLINE}` },
   description:
-    "Clothing in 100% linen, cut to your measurements and made in the UAE, after you order it. Opening early October. Leave your email to hear when.",
+    "Clothing in 100% natural linen, cut to your measurements and made in the UAE, after you order it. Opening early October. Leave your email to hear when.",
   openGraph: {
     title: `${SITE_NAME} · ${SITE_TAGLINE}`,
     description:
-      "Clothing in 100% linen, cut to your measurements and made in the UAE, after you order it. Opening early October.",
+      "Clothing in 100% natural linen, cut to your measurements and made in the UAE, after you order it. Opening early October.",
   },
 };
 
@@ -75,7 +75,7 @@ const PILLARS = [
   {
     src: "/marketing/pre-launch/flax-stalks.jpg",
     alt: "A tied bundle of dried flax stalks, the plant linen is spun from.",
-    title: "100% linen, it breathes.",
+    title: "100% natural linen, it breathes.",
     // ⚠️ THIS CARD EXISTS TO ANSWER "WHY LINEN", for a reader who has never
     // once thought about what a garment is made of. Founder, 2026-09-14:
     // "many people still don't understand why linen".

@@ -10,7 +10,7 @@ import { BENEFITS, POSITIONING } from "@/data/homeContent";
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
   description:
-    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in 100% linen, made in the UAE.",
+    "Why Shaklek makes clothes to order: fewer pieces, cut properly, in 100% natural linen, made in the UAE.",
   path: "/our-story",
   images: [
     {

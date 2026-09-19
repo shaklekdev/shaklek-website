@@ -83,7 +83,7 @@ export const STEPS = [
     // sleeve. The DEMONSTRATION is on the product page, where the photo
     // actually changes. Here one line is enough to promise it.
     title: "You decide the piece",
-    body: "Customise your 100% linen piece and watch it change.",
+    body: "Customise your 100% natural linen piece and watch it change.",
   },
   {
     n: "02",
@@ -255,7 +255,7 @@ export const BENEFITS = [
   // provenance are the answers to questions she has not asked yet at that
   // point on the page.
   {
-    k: "100% linen",
+    k: "100% natural linen",
     v: "Breathable plant fibre against your skin, never synthetic. It creases, and it softens with wear.",
     icon: "flax",
   },
@@ -307,7 +307,12 @@ export const BENEFITS = [
     // a free measuring SERVICE or a discount; the word appointment makes it the
     // thing it is, somebody coming to your home at a time you agree. It is also
     // the only word in the tile that implies a person.
-    k: "Free measurement appointment, everything included",
+    // ⚠️ ", EVERYTHING INCLUDED" IS GONE, hers 2026-09-19. The body already
+    // says what is included, item by item, in the next breath -- the title was
+    // summarising the sentence directly underneath it. No trailing full stop:
+    // the other three titles have none, and a period on one of four reads as a
+    // typo rather than a choice.
+    k: "Free measurement appointment",
     v: `One price per piece type, from AED ${Math.min(...catalog.map((i) => i.price))}. The fabric and every option you choose are in it, and your measuring visit in Dubai is free on your first order.`,
     icon: "tag",
   },

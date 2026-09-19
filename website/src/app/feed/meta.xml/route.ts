@@ -46,7 +46,7 @@ export async function GET() {
       const back = item.colorImages?.[c.name]?.back;
 
       const description =
-        `${item.descriptor}. Made to order in 100% linen, cut to your ` +
+        `${item.descriptor}. Made to order in 100% natural linen, cut to your ` +
         `measurements or a standard size for the same price. Choose the cut, the ` +
         `length and the colour, and a tailor makes it for you in approximately ` +
         `10 working days. Delivered in Dubai.`;

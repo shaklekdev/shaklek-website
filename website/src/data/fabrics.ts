@@ -59,7 +59,7 @@ export type FabricOption = {
 export const FABRIC_OPTIONS: FabricOption[] = [
   {
     id: "linen",
-    label: "100% linen",
+    label: "100% natural linen",
     available: true,
     // Stays 0. Today's catalog prices ARE the linen prices. Friday's "+49"
     // is a change to catalog.ts, not a number that belongs here -- see the

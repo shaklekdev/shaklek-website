@@ -88,7 +88,17 @@ function BenefitIcon({ name }: { name: string }) {
 
 export default function Benefits() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 pb-16">
+    /* ⚠️ THE id IS AN ANCHOR TARGET, not decoration. /catalog links to
+       "#why-choose-us" from its intro so a browser can understand the value
+       without leaving the grid. Renaming or removing it breaks that link
+       silently -- a bad hash scrolls nowhere and reports nothing.
+
+       scroll-mt-24 because Header is `sticky top-0 z-50`: without it the
+       browser scrolls the heading to y=0 and the header sits on top of it. */
+    <section
+      id="why-choose-us"
+      className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pb-16"
+    >
       {/* Named, because an unlabelled row of three claims under the catalogue
           reads as decoration. As a section with a question for a title it is
           answering something the customer is actually asking by that point. */}

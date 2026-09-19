@@ -343,7 +343,7 @@ export const articles: Article[] = [
         // Pants is 519, Abaya is 690. Change one, change both. This article
         // sells TWO garments, which is the ~71% margin line, and it carried no
         // number and no way to act until now.
-        text: "We cut shirts and pants in 100% linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 699 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
+        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 699 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -536,7 +536,7 @@ export const articles: Article[] = [
         // 800 for full custom and put our number ABOVE a band it actually sits
         // below. Rule 3b is about framing a true number, not inventing a
         // flattering one, and an unsupportable flourish fails it just as badly.
-        text: "Ours will be AED 699 when we open: cut to your measurements, in 100% linen, made after it is ordered. The comparison that matters is not the AED 300 rail, because that is a size run and this is not. It is the AED 800 that full custom starts at, and the AED 800 to AED 3,000 the Dubai boutique labels charge for a piece that was still cut to a chart rather than to you. AED 699 sits below both, and that is the whole claim. We hold the number by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging for the visit.",
+        text: "Ours will be AED 699 when we open: cut to your measurements, in 100% natural linen, made after it is ordered. The comparison that matters is not the AED 300 rail, because that is a size run and this is not. It is the AED 800 that full custom starts at, and the AED 800 to AED 3,000 the Dubai boutique labels charge for a piece that was still cut to a chart rather than to you. AED 699 sits below both, and that is the whole claim. We hold the number by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging for the visit.",
       },
       {
         type: "callout",

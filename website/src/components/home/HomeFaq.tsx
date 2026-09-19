@@ -65,8 +65,8 @@ const QUESTIONS = [
     q: "What fabrics do you use?",
     a: (
       <>
-        100% linen, and nothing else. It is a natural fibre that breathes in
-        Gulf heat and softens with wear. Linen creases. That is the fibre
+        100% natural linen, and nothing else. It is a plant fibre that
+        breathes in Gulf heat and softens with wear. Linen creases. That is the fibre
         behaving normally, not a fault.
       </>
     ),
