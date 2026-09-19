@@ -406,4 +406,50 @@ export const catalog: CatalogItem[] = [
     },
     defaultChanges: { sleeve_length: "short", garment_length: "longer" },
   },
+  // ⚠️ THE ABAYA, ADDED 2026-09-19. FIRST ITEM THAT IS NOT A SHIRT OR A PAIR OF
+  // TROUSERS, and the first that ships with ONE colourway.
+  //
+  // ⚠️ BURGUNDY ONLY, AND THAT IS DELIBERATE, NOT UNFINISHED. colorImages is a
+  // Partial record and DesignCustomizer gates the colour picker on
+  // Object.hasOwn(item.colorImages, name), so the customizer simply offers the
+  // one colour that exists. Navy, Ivory and White get added when their
+  // photography exists; nothing else has to change when they do.
+  //
+  // ⚠️ 699 IS NOT A NEW NUMBER. The cost article already publishes it and the
+  // header of this file records it: "Today: Shirt 449, Pants 519, Abaya 699.
+  // Change one, change both." It is still modelled on 3.2m of cloth that has
+  // never been quoted -- see abaya-metres in planning/OPEN.md -- so if the
+  // quote lands differently this price moves BEFORE the shop opens.
+  //
+  // ⚠️ THE DEFAULT COMBO IS maxi:narrow AND IS NOT IN comboImages. It falls
+  // back to colorImages, same as every other item. The other three cells are
+  // generated; see catalog-archive/2026-09-19-abaya for all 45 attempts and
+  // planning/OPEN.md for what the garment actually is.
+  {
+    slug: "open-abaya",
+    name: "Open Abaya",
+    category: "Abaya",
+    price: 699,
+    descriptor: "Folded edge, open front",
+    badge: "NEW",
+    gradient: ["#f2ede4", "#e6e0d6"],
+    image: "/catalog/abaya/abaya-burgundy-front.jpg",
+    backImage: "/catalog/abaya/abaya-burgundy-back.jpg",
+    colorImages: {
+      Burgundy: { front: "/catalog/abaya/abaya-burgundy-front.jpg", back: "/catalog/abaya/abaya-burgundy-back.jpg" },
+    },
+    comboImages: {
+      Burgundy: {
+        "maxi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-front.jpg", back: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-back.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-front.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-back.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-midi-wide-front.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-wide-back.jpg" },
+      },
+    },
+    // ⚠️ THE BASE PHOTO IS maxi:narrow, NOT THE CATEGORY DEFAULT. Left off,
+    // defaultChangesForCategory("Abaya") resolves to maxi:WIDE -- the first
+    // option of each render slider -- and verify-catalog.mjs correctly failed
+    // the build because the grid hero then pointed at the wrong cell. The
+    // photographed base is the NARROW sleeve, so it is declared here.
+    defaultChanges: { garment_length: "maxi", sleeve_width: "narrow" },
+  },
 ];
