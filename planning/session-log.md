@@ -4532,3 +4532,47 @@ email" has no send-based answer. It calls the same builders the senders do.
 **Not done, flagged to her:** shaklek-22 found `/dashboard` has two disagreeing
 staff controls — the data is absent either way, but the layout's refusal fires
 instead of `requireStaff`'s 404, so one of the two is not doing what it claims.
+
+## 2026-09-19 (late) — the two abayas ship, staging first
+
+Pushed `2a158ed..9263699` to **staging** (job 17, SUCCEED) and then to **main**.
+Five commits: both abaya photo sets, the Open Abaya catalogue entry at 699, and
+the per-item slider mechanism.
+
+**Two products in one category, different sliders.** `catalog.ts` items now take
+an optional `paramSet`, and `paramKeyFor(item)` returns `item.paramSet ??
+item.category`. The Open Abaya keeps `Abaya` (length × sleeves, always open);
+the Jacket Abaya gets `AbayaJacket` (length × closure). Her split, in her words:
+*"sleeve and length for our open abaya, and for them, it's the length and
+closure"*.
+
+⚠️ **THE CART AND CHECKOUT HAD TO LEARN THIS TOO, AND THAT IS THE BIT THAT WAS
+NEARLY MISSED.** Both pages called `customerChosenLabels(item.category, …)`, so
+a Jacket Abaya customer's closure choice would have been silently dropped from
+her own order summary while the design page showed it. Both now resolve the key
+through the catalogue by slug. **Anything that reads `line.category` to decide
+which sliders existed is now wrong.**
+
+**Staging exercised before main**, not just built: `/`, `/catalog` and
+`/design/open-abaya` all 200, the burgundy front image 200, the slider labels
+(`Length`, `Sleeves`, `Shorter`/`Longer`, `Narrow`/`Wide`) all present, and no
+`Size custom` in the nav. The only lead-time string left on the homepage is
+inside the collapsed FAQ answer, which is where she wanted it.
+
+**Closed in `OPEN.md`:** `abaya-product` (derived now — status.mjs prints
+"abaya exists as a catalogue item"), `email-design` (committed in `170a56d`;
+`git show HEAD:…/orderEmail.ts | grep -c buildEmail` = 4, was 0),
+`product-page-leadtime` (done, and the lesson lives in the commit).
+
+**Opened:** `jacket-abaya-product`. Its photographs and its sliders are both
+live; it has no `catalog.ts` entry, so none of it reaches the site. ⚠️ It needs
+`defaultChanges` declared or `verify-catalog.mjs` fails the build — the category
+default resolves to `maxi:5` and the base photo will not be that cell. That is
+exactly how the Open Abaya broke the build earlier today.
+
+**Noticed, not fixed:** `premiumParamsForCategory` is computed in
+`CustomizeParameters.tsx:111` and never rendered — has been since `30763bd`
+(2026-08-25), when the one-page rework dropped the premium block. So the abaya's
+`pocket` slider exists in data and has no UI. Already tracked as
+`abaya-pockets-ui`; left alone because she has not asked for it and it needs a
+third tier, not a config flip.
