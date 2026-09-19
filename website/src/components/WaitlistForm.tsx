@@ -86,8 +86,15 @@ export default function WaitlistForm() {
               This component is used ONLY on /coming-soon (checked), so the
               wording can be this specific. If it is ever reused somewhere the
               opening is not the point, make the label a prop rather than
-              softening it back to "Notify me". */}
-          {state.status === "sending" ? "Sending" : "Notify me when we open"}
+              softening it back to "Notify me".
+
+              ⚠️ "WHEN YOU OPEN", NOT "WHEN WE OPEN". Shipped as "we" for
+              twenty minutes and the founder caught it immediately. A button is
+              the CUSTOMER speaking -- she is asking us to notify her -- so the
+              brand is "you" here, even though every other line on the page is
+              "we". Same reason the label it replaced said "Know the day we
+              open": that was a heading, and a heading is us. */}
+          {state.status === "sending" ? "Sending" : "Notify me when you open"}
         </button>
       </div>
       {/* Nothing under the input but an error, when there is one. The privacy
