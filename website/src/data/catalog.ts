@@ -459,4 +459,58 @@ export const catalog: CatalogItem[] = [
     // photographed base is the NARROW sleeve, so it is declared here.
     defaultChanges: { garment_length: "maxi", sleeve_width: "narrow" },
   },
+  // ⚠️ THE SECOND ABAYA, AND IT IS A DIFFERENT PRODUCT, NOT A VARIANT.
+  // category stays "Abaya" for pricing and fabric, but `paramSet` sends it to
+  // ABAYA_JACKET_PARAMS: this one customises LENGTH x CLOSURE, while the Open
+  // Abaya customises LENGTH x SLEEVE WIDTH. Before paramKeyFor() existed the
+  // sliders were keyed by category alone and these two could not coexist.
+  //
+  // ⚠️ CLOSURE COUNT IS NOT DECORATION, AND THE PHOTOGRAPHY DEPENDS ON IT.
+  // Founder, 2026-09-19: the five-closure option "is meant for people who want
+  // to cover more so we need to show that it closes properly and covers more".
+  // So FOUR is photographed WORN OPEN and FIVE is photographed WORN CLOSED.
+  // They are different photographs, not the same frame with an extra bar.
+  //
+  // ⚠️ THE BACKS ARE SHARED ACROSS CLOSURE COUNTS -- her observation, and it
+  // halves the shoot. The back is one unbroken panel with no closures on it, so
+  // maxi:4 and maxi:5 use the SAME back file, and so do midi:4 and midi:5.
+  // Four fronts plus two backs is six photographs per colourway, not eight.
+  //
+  // ⚠️ IVORY ONLY, AND THE OTHER THREE COLOURWAYS ARE PHOTOSHOP. Her decision
+  // the same day: navy, burgundy and white are recolours of these exact frames,
+  // never new generations, so hem, pose and framing match by construction.
+  {
+    slug: "buttoned-abaya",
+    name: "Buttoned Abaya",
+    category: "Abaya",
+    paramSet: "AbayaJacket",
+    // ⚠️ PRICE IS AN ASSUMPTION, NOT A CONFIRMED NUMBER. She approved the name
+    // on 2026-09-19 and did not answer on price. 699 matches the Open Abaya:
+    // same cloth, the same 3.5m in margins.mjs, the same 90 AED tailoring, and
+    // the closures are cord and buttons. It also follows her own positioning --
+    // "one price per piece type, fabric and every option included". If she sets
+    // a different number this is the line to change, and margins.mjs with it.
+    price: 699,
+    descriptor: "Frog closures, worn open or closed",
+    badge: "NEW",
+    gradient: ["#f2ede4", "#e6e0d6"],
+    image: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1.jpg",
+    backImage: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1.jpg",
+    colorImages: {
+      Ivory: { front: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1.jpg" },
+    },
+    comboImages: {
+      Ivory: {
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-back-v1.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-back-v1.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1.jpg" },
+      },
+    },
+    // ⚠️ THE BASE PHOTO IS maxi:4, NOT THE CATEGORY DEFAULT. verify-catalog.mjs
+    // resolves the default from the first option of each render slider, which
+    // is midi:4 here, and fails the build if the hero points at a cell that was
+    // never photographed. That is exactly how the Open Abaya broke the build
+    // earlier today. The photographed base is the LONG one worn OPEN.
+    defaultChanges: { garment_length: "maxi", closure: "4" },
+  },
 ];
