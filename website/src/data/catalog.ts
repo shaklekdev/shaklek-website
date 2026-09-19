@@ -491,12 +491,18 @@ export const catalog: CatalogItem[] = [
     name: "Buttoned Abaya",
     category: "Abaya",
     paramSet: "AbayaJacket",
-    // ⚠️ PRICE IS AN ASSUMPTION, NOT A CONFIRMED NUMBER. She approved the name
-    // on 2026-09-19 and did not answer on price. 699 matches the Open Abaya:
-    // same cloth, the same 3.5m in margins.mjs, the same 90 AED tailoring, and
-    // the closures are cord and buttons. It also follows her own positioning --
-    // "one price per piece type, fabric and every option included". If she sets
-    // a different number this is the line to change, and margins.mjs with it.
+    // 699, confirmed by the founder on 2026-09-19: "keep the same price for
+    // now". Deliberately the same as the Open Abaya -- same cloth, the same
+    // 3.5m in margins.mjs, the same 90 AED tailoring, and cord-and-button
+    // closures that do not move the cost. It also follows her own positioning,
+    // "one price per piece type, fabric and every option included": two abayas
+    // at two prices invites a question the page cannot answer.
+    //
+    // ⚠️ "FOR NOW" IS PART OF THE ANSWER. The metres behind both abayas are
+    // still modelled, never quoted -- see abaya-metres on the board -- so this
+    // is a confirmed price on an unconfirmed cost, not a settled margin. When
+    // the fabric is quoted, re-check both abayas together, and change this line
+    // and margins.mjs in the same commit.
     price: 699,
     descriptor: "Frog closures, worn open or closed",
     badge: "NEW",
