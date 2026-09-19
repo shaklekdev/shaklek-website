@@ -144,8 +144,8 @@ const PILLARS = [
 
 export default function ComingSoonPage() {
   return (
-    <main className="flex flex-col items-center px-6 py-14 sm:py-20">
-      <div className="flex w-full max-w-3xl flex-col gap-12">
+    <main className="flex flex-col items-center px-6 py-8 sm:py-20">
+      <div className="flex w-full max-w-3xl flex-col gap-8 sm:gap-12">
         <header className="flex flex-col items-center gap-3 text-center">
           {/* ⚠️ "Shaklek", NOT "SHAKLEK", and the tracking is not free-hand.
               Header.tsx sets the mark at 27px with 4px of tracking, and
@@ -180,14 +180,34 @@ export default function ComingSoonPage() {
             hanging cloth and became unreadable. Tried and rejected on
             2026-09-14. A taller crop gives the words quiet sand to sit on.
 
-            THE TRADE IS REAL: the hero is much taller on a phone, so the email
-            box sits further down. Worth it because the headline is doing the
-            selling now rather than decorating a page you scroll past. If that
-            ever stops being true, this is the thing to undo.
+            ⚠️ IT WAS 4:5 AND IT COST US THE SIGNUP. The note here used to say
+            the taller crop pushed the email box down and was worth it. It was
+            not. Founder, 2026-09-19, from her own phone: "when a customer comes
+            on the page they don't understand there is the subscribe to the
+            waitlist, it doesn't appear at all, all we see is the picture and
+            the slogan." On a 390px phone the 4:5 frame is 427px tall and put
+            the input at roughly 723px, below the fold on every iPhone once
+            Safari's chrome is taken off. A waitlist page whose waitlist is
+            invisible has no purpose.
+
+            SQUARE, NOT THE BANNER. Do not "fix" this by going back to
+            sm:aspect-[1584/672] on the phone: that is 2.36:1, about 210px at
+            this width, and three lines of display type over it collided with
+            the hanging cloth and became unreadable. Tried and rejected
+            2026-09-14. Square is 342px here, which still leaves the headline
+            (3 lines at text-2xl, about 116px with its pb-8) quiet sand to sit
+            on, and hands back ~85px.
+
+            That 85px is only half of it. py-14 -> py-8, gap-12 -> gap-8 and the
+            waitlist block's py-10 -> py-6 are all phone-only for the same
+            reason, and all four restore their old values at sm. Together they
+            move the input up by roughly 157px. The image still comes first and
+            the headline still does the selling -- it just no longer eats the
+            ask.
 
             object-position 60% keeps the cloth in frame when the crop narrows;
             at 50% the tall crop cut the right-hand sheet in half. */}
-        <div className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[1584/672]">
+        <div className="relative aspect-square w-full overflow-hidden sm:aspect-[1584/672]">
           <Image
             src="/marketing/hero-banner.jpg"
             alt="Linen clothing, worn."
@@ -286,7 +306,7 @@ export default function ComingSoonPage() {
             Above it there is now a reason to care; below it there is support
             for the claim. Both orders are defensible; this one does not depend
             on the scroll. */}
-        <div className="flex flex-col items-center gap-4 border-y border-border py-10 text-center">
+        <div className="flex flex-col items-center gap-4 border-y border-border py-6 text-center sm:py-10">
           <p className="text-sm text-text">Know the day we open.</p>
           <div className="flex w-full justify-center">
             <WaitlistForm />
