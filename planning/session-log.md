@@ -4564,8 +4564,12 @@ inside the collapsed FAQ answer, which is where she wanted it.
 `git show HEAD:…/orderEmail.ts | grep -c buildEmail` = 4, was 0),
 `product-page-leadtime` (done, and the lesson lives in the commit).
 
-**Opened:** `jacket-abaya-product`. Its photographs and its sliders are both
-live; it has no `catalog.ts` entry, so none of it reaches the site. ⚠️ It needs
+**Opened:** `jacket-abaya-product`. Its sliders are live and its **six** approved
+frames are in `catalog-archive/2026-09-19-abaya-jacket-concept/APPROVED/` -- the
+archive, NOT `website/public/catalog/`. It has no `catalog.ts` entry, so none of
+it reaches the site. I wrote "eight photographs" here first and that was wrong:
+six is correct and is the whole point of the closure axis -- 4 fronts + 2 backs,
+because the back panel is unbroken and does not change with closure count. ⚠️ It needs
 `defaultChanges` declared or `verify-catalog.mjs` fails the build — the category
 default resolves to `maxi:5` and the base photo will not be that cell. That is
 exactly how the Open Abaya broke the build earlier today.
