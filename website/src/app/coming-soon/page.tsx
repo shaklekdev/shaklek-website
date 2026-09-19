@@ -54,11 +54,11 @@ export const metadata: Metadata = {
   // IS the home page today, and /'s title is `${SITE_NAME} · ${SITE_TAGLINE}`.
   title: { absolute: `${SITE_NAME} · ${SITE_TAGLINE}` },
   description:
-    "Clothing in 100% natural linen, cut to your measurements and made in the UAE, after you order it. Opening early October. Leave your email to hear when.",
+    "Clothing in 100% natural linen, cut to your measurements and made in the UAE, after you order it. Opening soon. Leave your email to hear when.",
   openGraph: {
     title: `${SITE_NAME} · ${SITE_TAGLINE}`,
     description:
-      "Clothing in 100% natural linen, cut to your measurements and made in the UAE, after you order it. Opening early October.",
+      "Clothing in 100% natural linen, cut to your measurements and made in the UAE, after you order it. Opening soon.",
   },
 };
 
@@ -163,8 +163,14 @@ export default function ComingSoonPage() {
           <p className="font-wordmark text-4xl tracking-[0.138em] text-text sm:text-5xl">
             Shaklek
           </p>
+          {/* ⚠️ NO DATE. Founder, 2026-09-19: "remove early october, just say
+              opening soon." A month on the page is a promise with a deadline
+              attached, and it ages badly the moment it slips. NOTE: "early
+              October" is still written into three blog answers in
+              src/data/blog.ts -- left alone because she named this page, but
+              they are the next thing to look at if the date moves. */}
           <p className="text-xs uppercase tracking-[0.22em] text-gold">
-            Opening early October
+            Opening soon
           </p>
         </header>
 
@@ -322,14 +328,15 @@ export default function ComingSoonPage() {
             cards, below the email box. Most readers never saw the third one.
 
             PHONE: 16:9 banners, title laid ON the image over a scrim, body
-            hidden. About 630px for all three.
+            hidden, and NO GAP between them -- 2026-09-19, so the three read as
+            one panel of three pictures rather than three separate cards.
             DESKTOP (sm and up): the original 3-up grid of 4:5 portraits, title
             and body beneath, unchanged.
 
             The title sits on the image on BOTH, because that is what she asked
             for. On desktop it is the only thing on the image and the body
             still reads underneath it. */}
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
+        <ul className="grid grid-cols-1 gap-0 sm:grid-cols-3 sm:gap-6">
           {PILLARS.map((pillar) => (
             <li key={pillar.title} className="flex flex-col gap-3">
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface-2 sm:aspect-[4/5]">
@@ -357,15 +364,26 @@ export default function ComingSoonPage() {
                   {pillar.title}
                 </p>
               </div>
-              {/* ⚠️ SHOWN ON PHONE, deliberately, 2026-09-14. These were hidden
-                  when the bodies were long paragraphs; they are one short line
-                  each now, and the whole section still fits in about 630px.
-                  The founder thought this was already done, which is a fair
-                  read: the LAYOUT changed this morning, the bodies did not.
-                  Hiding them meant a phone reader got "100% linen" as a claim
-                  and never the reason, which is the one thing she has said
-                  repeatedly that people do not understand. */}
-              <p className="text-sm leading-relaxed text-text-2">
+              {/* ⚠️ HIDDEN ON PHONE AGAIN, 2026-09-19, AND THIS REVERSES A
+                  DELIBERATE DECISION -- read both before changing it back.
+
+                  2026-09-14, for showing them: hiding the bodies meant a phone
+                  reader got "100% linen" as a claim and never the reason,
+                  which is the thing she has said repeatedly that people do not
+                  understand.
+
+                  2026-09-19, for hiding them: "on the phone version no need to
+                  add the text under the 3 cards. I also feel the 3 cards can
+                  be merged in one layout with 3 pictures and text on them."
+                  She was looking at her own phone at the time. The titles
+                  still carry the claim ON the image, the gap between the three
+                  is gone so they read as one panel rather than three cards,
+                  and the reasons are one tap away on the site proper.
+
+                  The tension is real and is hers to settle: this page is now
+                  three claims without their reasons on a phone. If bounce goes
+                  up, this is a candidate. */}
+              <p className="hidden text-sm leading-relaxed text-text-2 sm:block">
                 {pillar.body}
               </p>
             </li>
