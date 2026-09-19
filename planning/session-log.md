@@ -4580,3 +4580,51 @@ exactly how the Open Abaya broke the build earlier today.
 `pocket` slider exists in data and has no UI. Already tracked as
 `abaya-pockets-ui`; left alone because she has not asked for it and it needs a
 third tier, not a config flip.
+
+### Both abayas are in, and the guard that should have proved it was broken
+
+`shaklek-22` entered the **Buttoned Abaya** (`9473892`): slug `buttoned-abaya`,
+category `Abaya`, `paramSet: "AbayaJacket"`, 699, ivory only, six frames under
+`public/catalog/abaya-jacket/`. Production job **360 SUCCEED** on `98bb2d7`.
+
+⚠️ **`verify-catalog.mjs` WAS KEYED OFF `item.category` AND HAD STOPPED
+GUARDING.** Adding `paramSet` taught the design page, the cart and the checkout
+to resolve through `paramKeyFor(item)`; the one file whose entire job is
+catching a bad entry was missed. For a `category: "Abaya"` / `paramSet:
+"AbayaJacket"` item it asked `ABAYA_PARAMS` about a garment with no sleeve axis,
+got `heroKey` = `maxi:wide`, found no such cell, and **fell through to
+`colorImages` — which equals `item.image`** — so check 2 passed by accident and
+checks 2 and 3 never looked at the real hero cell.
+
+**The peer's `npm run build` passing was therefore not evidence its
+`defaultChanges` was right.** It happened to be right. Fixed in `ebab9ee` and
+proven with a negative test, not asserted: flip that entry's `defaultChanges`
+from `maxi` to `midi` and the guard exits 1; before the fix the same break
+printed `catalog ok`.
+
+> **A guard that passes for the wrong reason is worse than no guard.** Every
+> session read "catalog ok" as proof. When a mechanism learns a new key, grep
+> for every reader of the old one — `item.category` had four.
+
+⚠️ **AND THE DEFAULT COMES FROM `defaultIndex`, NOT THE FIRST OPTION.** I wrote
+"the first option of each render slider" in the Open Abaya's comment, where the
+resolved value happened to be right anyway, and the peer copied the wrong reason
+into the Buttoned Abaya's. Both comments corrected. Every abaya slider carries
+`defaultIndex: 1`, so the default is the SECOND option of each, and
+`buttoned-abaya`'s `defaultChanges` is a **no-op today** — kept deliberately, so
+that reordering an option list cannot silently move the default onto a cell
+nobody photographed.
+
+**Her two decisions, both now on the board.** Price: *"keep the same price for
+now"* — 699 confirmed, and the hedge kept, because both abaya prices sit on
+fabric metres that are modelled and have never been quoted (`abaya-metres`).
+Colourways: Photoshop over the existing frames, not new generations, and **the
+hero picture moves to ivory once ivory exists** — that is the Open Abaya's
+`image`/`backImage` coming off Burgundy. ⚠️ A colour swap needs a NEW FILENAME;
+CloudFront serves the old picture for four hours behind a green build.
+
+**Still invisible to her on www.** The shop is shut in code, so production
+serves the pre-launch page to every route. Both abayas were exercised on
+**staging**, which is the only place either is visible: `/design/buttoned-abaya`
+200 with both sliders and all four cells, `/catalog` showing both, all six
+jacket frames 200.
