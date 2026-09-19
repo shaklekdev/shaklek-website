@@ -74,7 +74,20 @@ export default function WaitlistForm() {
           disabled={state.status === "sending"}
           className="min-h-[48px] rounded-none bg-text px-6 py-3 text-sm tracking-wide text-white transition-opacity hover:opacity-90 disabled:opacity-60"
         >
-          {state.status === "sending" ? "Sending" : "Notify me"}
+          {/* ⚠️ THE BUTTON CARRIES THE WHOLE SENTENCE. Founder, 2026-09-19:
+              "we can remove the know the day we open and put it on the notify
+              me, like a mix of both." There used to be a "Know the day we
+              open." label above the field saying what the form was for; on a
+              phone that line plus its gap cost about 36px above the fold to
+              repeat what the button can say itself. The button is also the
+              thing a reader's eye lands on, so the promise is now where the
+              decision is made rather than three elements above it.
+
+              This component is used ONLY on /coming-soon (checked), so the
+              wording can be this specific. If it is ever reused somewhere the
+              opening is not the point, make the label a prop rather than
+              softening it back to "Notify me". */}
+          {state.status === "sending" ? "Sending" : "Notify me when we open"}
         </button>
       </div>
       {/* Nothing under the input but an error, when there is one. The privacy

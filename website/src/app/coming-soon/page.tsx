@@ -196,12 +196,27 @@ export default function ComingSoonPage() {
             Safari's chrome is taken off. A waitlist page whose waitlist is
             invisible has no purpose.
 
-            6:5 AS OF 2026-09-19 ("make stuff go upper"), WAS SQUARE FOR AN
-            HOUR, WAS 4:5 BEFORE THAT. At 390px wide that is 285px tall, and
-            three lines of text-2xl with its pb-8 need about 116px of it, so
-            there is still roughly 170px of photograph above the words. That is
-            the floor -- go shorter and the headline is sitting on the cloth
-            again, which is the thing rejected on 2026-09-14.
+            13:12 AS OF 2026-09-19, AND THE RATIO IS NOW LOAD-BEARING IN BOTH
+            DIRECTIONS. It went 4:5 -> square -> 6:5 -> 13:12 in one afternoon,
+            which looks like fiddling and is not: each step traded hero height
+            against what else has to fit on the first screen. Removing the
+            "Know the day we open." label handed back about 36px and the founder
+            asked for the picture to take some of it.
+
+            ⚠️ THE CEILING IS NOT TASTE, IT IS THE THIRD THING THAT MUST BE
+            VISIBLE. Founder, 2026-09-19: "make the first of the next 3 cards
+            still visible so that people know they need to scroll to see more."
+            So the first screen has to carry the wordmark, the hero, the email
+            button AND a slice of card one. Grow this ratio and the slice is the
+            first thing to disappear -- check it on a real phone, not in
+            headless, which will not lay out below about 500px wide here.
+
+            THE FLOOR, FOR THE SAME AFTERNOON'S OTHER REASON: at 390px wide
+            13:12 is about 316px tall, and the three lines of text-2xl with
+            their pb-8 need roughly 116px of it, leaving about 200px of
+            photograph above the words. 6:5 (285px) was the tightest that still
+            read; below that the headline sits back down on the cloth, which is
+            the thing rejected on 2026-09-14.
 
             NOT THE BANNER EITHER. Do not "fix" this by going back to
             sm:aspect-[1584/672] on the phone: that is 2.36:1, about 210px at
@@ -220,7 +235,7 @@ export default function ComingSoonPage() {
 
             object-position 60% keeps the cloth in frame when the crop narrows;
             at 50% the tall crop cut the right-hand sheet in half. */}
-        <div className="relative aspect-[6/5] w-full overflow-hidden sm:aspect-[1584/672]">
+        <div className="relative aspect-[13/12] w-full overflow-hidden sm:aspect-[1584/672]">
           <Image
             src="/marketing/hero-banner.jpg"
             alt="Linen clothing, worn."
@@ -328,7 +343,6 @@ export default function ComingSoonPage() {
             bottom rule stays: it is what still separates the ask from the three
             pictures below. */}
         <div className="flex flex-col items-center gap-4 border-b border-border py-6 text-center sm:py-10">
-          <p className="text-sm text-text">Know the day we open.</p>
           <div className="flex w-full justify-center">
             <WaitlistForm />
           </div>
