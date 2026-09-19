@@ -359,19 +359,32 @@ makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
   // object in the parcel whose only job is to feel like the brand. The claim
   // itself is good and stays on the website, where a shopper is deciding; it
   // does not belong on a garment she has already bought.
-  // ⚠️ NO FIBRE NAME. This said "100% natural linen" until 2026-09-02, which
-  // would have needed a reprint for every fabric the brand ever sells -- and
-  // the entry cloth is becoming a linen/cotton blend. A fabric-agnostic line
-  // is printed once and stays true.
+  // ⚠️ THE FIBRE IS NAMED AGAIN, AND THIS REVERSES THE 2026-09-02 DECISION.
+  // Founder, 2026-09-19, asked directly and told the risk twice: "ok so make
+  // it 100% natural linen... it sells better."
   //
-  // ⚠️ AND IT SAYS FABRIC, NOT MATERIALS. "Materials" claims the whole garment,
-  // thread and buttons included, and sewing thread is normally polyester
-  // because cotton thread is weaker. That would turn a green claim into a
-  // false one for the sake of one word. The legal fibre disclosure is the
-  // CARE LABEL (02), which carries the real percentages; this tag is brand.
+  // It is TRUE today. Linen is flax, fabrics.ts has linen as the only sellable
+  // fabric, and the word sits against "linen" so it describes the cloth rather
+  // than the thread and buttons.
+  //
+  // ⚠️ WHAT IT COSTS IF THE FABRIC MOVES, which is the whole reason it was
+  // removed the first time: the entry cloth may become a linen/cotton blend,
+  // and the care label is already a SPLIT RUN -- ~250 reading 100% LINEN and
+  // ~250 carrying a blend ratio still pending a percentage. The day a blend
+  // ships, this line is false and all 100 tags are wrong: ~230 AED plus the
+  // reprint wait, on the item that goes in every parcel. The fabric-agnostic
+  // line existed to make this tag printable once and never again. She knows;
+  // it is her call and it is recorded here so nobody "fixes" it back.
+  //
+  // ⚠️ NEVER "100% NATURAL MATERIALS". That claims the whole garment, thread
+  // and buttons included, and sewing thread is normally polyester because
+  // cotton thread is weaker -- see tailor-capacity.md open question 6. One
+  // word turns a true claim into a false one. The legal fibre disclosure is
+  // the CARE LABEL (02), which carries the real percentages; this tag is
+  // brand, and productDisclosure.ts keeps "100% linen" for the same reason.
   const items = [
     "100% custom-made",
-    "100% plant based fabric",
+    "100% natural linen",
     "Made in the UAE",
   ];
   // Three, not four, so the spacing opens up rather than leaving a gap where
@@ -415,28 +428,87 @@ const FIT_URL = "https://www.shaklek.com/fit";
 makePdf("04-thank-you-card-front", CARD_LONG, CARD_SHORT, (doc, w, h) => {
   lockup(doc, w / 2, 11 * MM, w * 0.28);
   line(doc, w / 2, 36 * MM, "Thank you", 6 * MM, INK, 1.2);
+  // ⚠️ ONE PRINTED SENTENCE. IT WAS THREE THIS MORNING AND THAT WAS TOO MANY.
+  //
+  // Founder, 2026-09-19, after seeing it rendered: "I feel there is too much
+  // text here, we need to cut something or change the layout." She is right,
+  // and the count is the tell -- the card carried a wordmark, "Thank you",
+  // three printed lines AND three ruled lines. It was full before she wrote a
+  // word on it, which is the one thing this card exists for.
+  //
+  // WHY THIS SENTENCE SURVIVED and the other two did not:
+  //   "One tailor cut it to your measurements and sewed it here in the UAE."
+  //     Already in the parcel twice over -- the hang tag says 100% CUSTOM-MADE
+  //     and MADE IN THE UAE, and the care label says MADE IN UAE. A parcel
+  //     that makes the same claim three times is not emphasising it.
+  //   "Made to be worn for years, not for a season."
+  //     True, and brand copy rather than anything about HER piece. It belongs
+  //     where somebody is deciding to buy, not where she already has.
+  //   "This piece did not exist until you asked for it."
+  //     The only line that is about her order, and the only one a shop with
+  //     stock cannot print. It stays.
+  //
+  // ⚠️ DO NOT ADD A SECOND LINE BACK without moving the ruled guides down
+  // first. The handwriting space is the card; the print is the frame.
   doc.font("Helvetica").fontSize(8.6).fillColor(MUTED)
-    .text("This piece did not exist until you asked for it. It was cut to your measurements and sewn here in the UAE, to be worn for years rather than a season.",
+    .text("This piece did not exist until you asked for it.",
       22 * MM, 43 * MM, { width: w - 44 * MM, align: "center", lineGap: 3.4 });
   // Ruled guides for the handwritten line, in the palest cream on the sheet.
   // They print, faintly, and they are the difference between a straight line
-  // and a note that slopes down the card. THREE LINES, kept: the width gained
-  // by turning the card means each one now holds noticeably more handwriting.
+  // and a note that slopes down the card.
+  //
+  // ⚠️ THREE LINES, NOW WITH ROOM. Cutting two printed sentences gave back
+  // ~12 mm, and it goes to the handwriting rather than to white space: the
+  // guides sit 12 mm apart instead of 11. A ruled line too tight for a normal
+  // hand is worse than no rule, because she writes between them either way and
+  // then the note slopes.
+  //
+  // ⚠️ THE BLOCK IS PLACED BY ITS TWO MARGINS, not by the gap above it. At
+  // 58 mm the guides left 11 mm under the print and 23 mm under the last rule,
+  // so the card looked bottom-heavy and unfinished. At 62 it is 15 above and
+  // 19 below -- and the 19 is not waste, it is where a signature goes.
   doc.lineWidth(0.25).strokeColor("#EDE7DA");
   for (let i = 0; i < 3; i++) {
-    const y = (64 + i * 11) * MM;
+    const y = (62 + i * 12) * MM;
     doc.moveTo(24 * MM, y).lineTo(w - 24 * MM, y).stroke();
   }
 }, "LANDSCAPE front. Founder handwrites the name and a line on the ruled guides");
 
 makePdf("05-thank-you-card-back", CARD_LONG, CARD_SHORT, (doc, w, h) => {
-  line(doc, w / 2, 16 * MM, "Now tell us how it fits", 4.8 * MM, INK, 0.9);
+  line(doc, w / 2, 24 * MM, "Now tell us how it fits", 4.8 * MM, INK, 0.9);
   // "Two minutes" is load bearing. The biggest reason not to scan is not
   // knowing what it costs, and five tap-questions plus an email honestly is
   // two minutes. Say it at the moment of decision.
+  // ⚠️ ONE TEXT BLOCK, NOT TWO. The surprise had its own line lower down, under
+  // the gold rule; founder merged it into this sentence, 2026-09-19: "Straight
+  // to your tailor, your next piece starts from it and a surprise will be
+  // waiting for you." Same instinct as the card front -- two separate
+  // paragraphs on a small card read as a leaflet.
+  //
+  // ⚠️ "SCAN BELOW" IS GONE, 2026-09-19: "this is tooo much". It was telling
+  // somebody to scan a QR code printed two centimetres underneath it, which is
+  // a whole clause spent on the one instruction the object gives by itself.
+  //
+  // ⚠️ "TWO MINUTES" STAYS AND IS THE LOAD-BEARING WORD. The biggest reason
+  // not to scan is not knowing what it costs; five tap-questions plus an email
+  // honestly is two minutes. If this line is ever shortened again, cut
+  // anything before you cut the time.
+  //
+  // Three beats, twelve words: what it costs, why bother, what she gets.
+  //
+  // ⚠️ THE SURPRISE IS ATTACHED TO THE NEXT PIECE, NOT TO THIS PARCEL, and the
+  // grammar is what does it. Founder caught the earlier draft, 2026-09-19: "is
+  // waiting seems like it's now". She is right -- a card that says a surprise
+  // is waiting, inside a parcel with no surprise in it, is a broken promise in
+  // the first ten seconds of the unboxing. Worse than not offering one.
+  //
+  // "comes with a surprise" hangs off "your next piece", so the timing is
+  // unambiguous without spending the words on "on your next order" -- which
+  // would also put "next" in the sentence twice. If this is ever reworded,
+  // read it once as somebody holding the parcel and ask when she expects it.
   doc.font("Helvetica").fontSize(8.4).fillColor(MUTED)
-    .text("Scan below. Two minutes, straight to your tailor, and your next piece starts from it.",
-      24 * MM, 21 * MM, { width: w - 48 * MM, align: "center", lineGap: 3 });
+    .text("Two minutes. Your next piece starts from it, and comes with a surprise.",
+      24 * MM, 29 * MM, { width: w - 48 * MM, align: "center", lineGap: 3 });
 
   // 28 mm block, down from 30 on the portrait card. This one is scanned
   // one-handed by someone holding a garment, often at arm's length in bad
@@ -445,35 +517,66 @@ makePdf("05-thank-you-card-back", CARD_LONG, CARD_SHORT, (doc, w, h) => {
   // whether a phone reads it. 28 mm keeps it near 0.75 mm, well clear of the
   // 0.4 mm floor. Do not shrink it further to win layout space.
   const qrSize = 28;
-  qr(doc, FIT_URL, w / 2 - (qrSize * MM) / 2, 31 * MM, qrSize);
+  qr(doc, FIT_URL, w / 2 - (qrSize * MM) / 2, 39 * MM, qrSize);
 
   // The URL under the code, for the same reason as on the business card: a QR
   // is the one thing here that can fail silently, and short enough to type.
-  plain(doc, w / 2, 65 * MM, "SHAKLEK.COM/FIT", 7.6, INK, 1.5);
+  plain(doc, w / 2, 73 * MM, "SHAKLEK.COM/FIT", 7.6, INK, 1.5);
 
-  doc.rect(w / 2 - 6 * MM, 69 * MM, 12 * MM, 0.3).fill(GOLD);
+  doc.rect(w / 2 - 6 * MM, 77 * MM, 12 * MM, 0.3).fill(GOLD);
 
-  // ⚠️ THIS SENTENCE IS THE FAQ'S, WORD FOR WORD, AND TWICE IT HAS NOT BEEN.
+  // ⚠️ THE SURPRISE IS IN THE SENTENCE AT THE TOP, NOT DOWN HERE. It had its
+  // own line under this rule for about an hour on 2026-09-19 and the founder
+  // folded it into the opening paragraph instead. Do not re-add a second line
+  // here; the card carries one block of type and a QR, and that is the point.
   //
-  // /faq, /legal/terms, /shipping and /size-guide all say "one free alteration
-  // or remake within 14 days OF DELIVERY", and "Message us with a photo and a
-  // stylist arranges it". Two drifts have been caught here:
+  // ⚠️ AND IT NAMES NOTHING SPECIFIC, WHICH IS WHAT KEEPS IT PRINTABLE.
+  // Her original thought was "a surprise on your next order (or free
+  // embroidery or something like that)". Embroidery is deliberately NOT named:
+  // there is no embroidery offering, no price and no recorded tailor
+  // capability, and our own journal tells readers it is hand work "priced by
+  // the hour". Promising an open-ended hourly service in ink, on a card that
+  // cannot be recalled, is the same shape as the two promises already caught
+  // on this card -- an early draft offered UNLIMITED alterations, a later one
+  // offered to COLLECT the piece.
   //
-  //  - an early draft dropped the "one", which promises UNLIMITED alterations
-  //    in print, on a card that cannot be recalled, against a policy that says
-  //    otherwise;
-  //  - this comment then claimed word-for-word accuracy while the card said
-  //    "we will collect the piece" and dropped "of delivery". NOTHING on the
-  //    shipped site promises collection. That was a courier pickup for every
-  //    alteration, promised in ink, forever, by a card rather than by a policy.
+  // ⚠️ IT NAMES NO DISCOUNT AND NO CODE EITHER. Two live blockers if it ever
+  // did: the DET advertising permit is required before a discount campaign is
+  // advertised and is still open in planning/OPEN.md; and an active promo code
+  // is reachable by anyone who guesses the word, because /api/promo/validate
+  // has no working rate limit in production -- measured at 100 requests, zero
+  // blocks. So it is honoured BY HAND over WhatsApp, where a stylist already
+  // reaches every customer. If the volume ever makes that a chore, the answer
+  // is to stop printing the line, not to quietly stop honouring it.
+
+  // ⚠️ NO RETURNS SENTENCE ON THIS CARD, AND DO NOT PUT IT BACK.
   //
-  // An unanchored "14 days" is also the vaguer promise: 14 days from what?
+  // It read: "If something is not right, you get one free alteration or remake
+  // within 14 days of delivery. Message us on WhatsApp, +971 50 476 6769, and
+  // a stylist arranges it." Founder removed it 2026-09-19: "the customer just
+  // had his piece we don't want him to start thinking about returning it !!!"
   //
-  // The number prints because a card has no links. Verify it against
-  // TAILOR_WHATSAPP_NUMBER before any print run.
-  doc.font("Helvetica").fontSize(8).fillColor(MUTED)
-    .text("If something is not right, you get one free alteration or remake within 14 days of delivery. Message us on WhatsApp, +971 50 476 6769, and a stylist arranges it.",
-      22 * MM, 74 * MM, { width: w - 44 * MM, align: "center", lineGap: 3 });
+  // She is right about the moment. This is the first thing read on opening the
+  // parcel, and the card's job is the fit form -- a forward-looking ask that
+  // makes the NEXT piece better. A returns clause in the same breath answers a
+  // question nobody has asked yet and plants the idea of sending it back.
+  //
+  // ⚠️ NOBODY IS STRANDED BY THIS, which is the only reason it is safe to cut.
+  // Checked on the running site, not assumed: /fit carries "Need help? Message
+  // us +971 50 476 6769" at the top of the page, so the QR on this card leads
+  // straight to the contact route. The policy itself is unchanged and is
+  // stated on /faq, /legal/terms, /shipping and /size-guide.
+  //
+  // ⚠️ IF THE QR OR /fit EVER STOPS CARRYING A CONTACT NUMBER, this decision
+  // needs revisiting -- the parcel would then contain no way to reach us at
+  // all. That is the condition, not the wording.
+  //
+  // History worth keeping, because the sentence was dangerous twice: an early
+  // draft dropped the "one" and promised UNLIMITED alterations in print, on a
+  // card that cannot be recalled; a later one promised "we will collect the
+  // piece", which nothing on the site offers. If any version ever returns, it
+  // is the FAQ's wording word for word, and the number is verified against
+  // TAILOR_WHATSAPP_NUMBER before the run.
 
   monogram(doc, w / 2, 99 * MM, 6 * MM, "#C9C0AE");
 }, "LANDSCAPE back. QR to the fit form, wording matches /faq");
@@ -536,10 +639,31 @@ makePdf("05b-thank-you-envelope-back", ENV_W, ENV_H, (doc, w, h) => {
   const inkH = 9 * MM;
   monogram(doc, w / 2, flapY + (h - flapY) * 0.42 + inkH / 2, inkH, INK);
 
-  doc.font("Helvetica").fontSize(5.5).fillColor("#B9B1A2")
-    .text("C6 LANDSCAPE, 162 x 114 mm — WALLET flap, hinged on the long edge. THE TINTED TRIANGLE IS THE FLAP AND DOES NOT PRINT. " +
-      "The only ink on this envelope is the monogram, 9 mm, below the flap point. FRONT PRINTS NOTHING.",
-      14 * MM, h - 8 * MM, { width: w - 28 * MM, align: "center" });
+  // ⚠️ NO INSTRUCTION TEXT ON THIS ARTBOARD, AND NONE ON ANY OTHER.
+  //
+  // A 5.5pt grey paragraph used to sit here reading "C6 LANDSCAPE, 162 x 114
+  // mm — WALLET flap... THE TINTED TRIANGLE IS THE FLAP AND DOES NOT PRINT...
+  // FRONT PRINTS NOTHING." Founder spotted it in the file that had already
+  // gone to Fitoor, 2026-09-19: "here you added some text that got printed !!"
+  //
+  // She is right, and the reason it is dangerous is RULE 1 of the covering
+  // note this same script ships: "Print the files exactly as they are. Please
+  // do not redraw them, retype them, or set them again in your own fonts." A
+  // printer following that instruction to the letter prints the instruction.
+  // Type on an artboard is artwork; there is no layer here that means "for
+  // your eyes only", and pale grey at 5.5pt still puts ink on an envelope.
+  //
+  // ⚠️ NOTHING IS LOST BY REMOVING IT -- checked before cutting, not assumed.
+  // generate-simple-spec.mjs already carries the same instruction as the
+  // envelope's `plain` line, and that is what prints on
+  // 00-ORDER-SHEET-read-this-first.pdf, the file the covering note tells him
+  // to start with. Spec belongs on the sheet; the artboard carries ink only.
+  //
+  // ⚠️ THE TINTED FLAP TRIANGLE IS STILL HERE and is the same class of risk,
+  // flagged to the founder rather than changed on my own: it is a solid fill
+  // that a literal reading of Rule 1 would also print. It is deliberate (a
+  // dashed outline alone did not read as a flap) and the order sheet explains
+  // it, so changing it is a design call, not a correction.
 }, "C6 LANDSCAPE, wallet flap. Back only — the front is blank");
 
 // 6. TISSUE SEAL STICKER 40 mm circle ---------------------------------------
@@ -814,9 +938,23 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   // Two short sentences on two lines: they are a pair, and breaking them
   // anywhere else makes the reader work at the one moment she has not decided
   // to. The widths are measured and asserted below rather than eyeballed.
+  // ⚠️ THE CLAIM MOVED UP 2.5 MM, 2026-09-19, and the point is GROUPING, not
+  // position. Founder: "improve this, it's not looking nice."
+  //
+  // Rendered and looked at rather than reasoned about: the mark sat at the top,
+  // the claim in the middle and the origin line near the bottom with roughly
+  // equal air between all three, so the card read as three unrelated things
+  // floating on black. The gap between the gold rule and the claim was ~15 mm
+  // on a 50 mm card -- nearly a third of the height doing nothing.
+  //
+  // Pulling the claim up binds it to the mark as one block, and pushing the
+  // origin line down (below) turns the remaining space into a real footer
+  // margin instead of a fourth equal gap. Same elements, same sizes, same
+  // fonts -- only the rhythm changes, so none of the founder's earlier calls
+  // on this card are undone.
   const claimW = Math.max(
-    line(doc, w / 2, B + 28.5 * MM, CARD_LINE_1, 3.5 * MM, CREAM, 0.5),
-    line(doc, w / 2, B + 34.4 * MM, CARD_LINE_2, 3.5 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 26 * MM, CARD_LINE_1, 3.5 * MM, CREAM, 0.5),
+    line(doc, w / 2, B + 31.9 * MM, CARD_LINE_2, 3.5 * MM, CREAM, 0.5),
   );
   // ⚠️ A CARD IS TRIMMED, SO TYPE NEAR THE EDGE IS TYPE THAT GETS CUT. The
   // guillotine drifts; 6 mm of quiet margin each side is the floor. This has to
@@ -839,7 +977,13 @@ makePdf("10-business-card-front", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
 
   // Smaller and warm grey so it reads as a footnote to the claim rather than
   // a third sentence competing with it.
-  plain(doc, w / 2, B + 43.2 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 0.5);
+  // ⚠️ AT THE BOTTOM MARGIN, AND LETTERSPACED, so it reads as a footer rather
+  // than a third sentence that ran out of room. 5 mm clear of the trim, which
+  // is inside the 6 mm quiet margin the claim is checked against above -- it
+  // is small, centred type, and the guillotine risk is on the SIDES, where it
+  // has the full width of the card. Tracking up from 0.5 to 1.4 is what makes
+  // a six-word line at 6.4pt look set rather than shrunk.
+  plain(doc, w / 2, B + 45 * MM, CARD_LINE_3, 6.4, "#B5AC9B", 1.4);
 }, "trim 90x50, 3mm bleed. Ink ground, mark reversed, the founder's line beneath");
 
 makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, w, h) => {
@@ -851,9 +995,23 @@ makePdf("10b-business-card-back", CARD_W + BLEED * 2, CARD_H + BLEED * 2, (doc, 
   // The URL is printed UNDER the code on purpose. A QR is the only thing on a
   // card that can fail silently -- a scuff, a bad light, an old camera -- and
   // when it does the person is left holding a card with no way to reach us.
+  // ⚠️ NO PHONE NUMBER ON THIS CARD. Founder, 2026-09-19: "here remove my
+  // whatsapp number". It is her personal WhatsApp, and this is the one item in
+  // the set that leaves her hand deliberately -- margins.mjs has it as a
+  // wallet card for markets, suppliers and press, not a parcel insert. An
+  // email and a URL reach the business; a mobile number on a card handed to a
+  // stranger reaches HER, forever, with no way to take it back.
+  //
+  // ⚠️ THE OTHER TWO STAY, and the reason is the comment above: the QR can
+  // fail silently, so something typeable has to survive it. HELLO@SHAKLEK.COM
+  // is now that fallback on its own, so it is set at the same size and weight
+  // as the URL rather than as a trailing footnote.
+  //
+  // ⚠️ THE NUMBER IS STILL ON THE THANK-YOU PATH, which is where a paying
+  // customer needs it -- /fit carries "Need help? Message us" at the top. This
+  // removes it from a card given to people who have bought nothing.
   plain(doc, w / 2, B + 34 * MM, "SHAKLEK.COM", 7.4, INK, 1.5);
-  plain(doc, w / 2, B + 39.5 * MM, "+971 50 476 6769", 7.4, MUTED, 0.9);
-  plain(doc, w / 2, B + 44.5 * MM, "HELLO@SHAKLEK.COM", 6.6, MUTED, 0.9);
+  plain(doc, w / 2, B + 40 * MM, "HELLO@SHAKLEK.COM", 7.4, MUTED, 1.1);
 }, "trim 90x50, 3mm bleed. QR to the home page");
 
 console.log("\nConfirmed by the founder, no longer open questions:");
