@@ -92,3 +92,83 @@ what arrives mis-sells the garment. Same argument as the swatch card before the
 ## Cost
 
 Eight generations, **$0.50**. Six Flash at $0.039, two Pro at $0.134.
+
+---
+
+# APPROVED SET — 2026-09-19, later the same day
+
+`APPROVED/` holds the six she signed off, plus `0-ALL.png` as a contact sheet.
+Everything else in this folder is working material and rejects, kept on purpose.
+
+    1-LONG-open-4closures-FRONT     4-MIDI-open-4closures-FRONT
+    2-LONG-BACK                     5-MIDI-BACK
+    3-LONG-closed-5closures-FRONT   6-MIDI-closed-5closures-FRONT
+
+## ⚠️ OTHER COLOURWAYS ARE PHOTOSHOP, NOT GENERATION
+
+Founder's decision, 2026-09-19: **"for the other colors we will use
+photoshop."** Navy, burgundy and white are recolours of these exact six frames,
+not new generations. That is the two-master rule of CLAUDE.md §3 taken one step
+further — same pixels recoloured, so hem length, pose and framing match by
+construction. Do not regenerate a colourway. `scripts/catalog/normalize-colour.mjs`
+is the deterministic tool for this and it is free.
+
+## The customisation model, as she settled it
+
+- **Closure count** — 4 or 5. NOT decoration. Her words: the 5 version *"is
+  meant for people who want to cover more so we need to show that it closes
+  properly and covers more."* So 4 = worn OPEN, 5 = worn CLOSED, and the two
+  options need genuinely different photographs.
+- **Length** — midi or maxi, matching the `garment_length` slider that already
+  exists in `parameterSliders.ts` ("Shorter" / "Longer").
+- **Sleeves are FIXED.** Her words: *"the sleeves will stay the same."*
+
+⚠️ **THE BACK IS SHARED ACROSS CLOSURE COUNTS, AND SHE SPOTTED IT.** The back is
+one unbroken panel, so it is identical whether there are four closures or five.
+Closure count multiplies FRONTS ONLY; length multiplies both. Per colourway that
+is **4 fronts + 2 backs = 6 photographs, not 8** — 24 across four colours rather
+than 32.
+
+## ⚠️ What she caught that no metric did — every one of these was hers
+
+The founder found all of these by eye, in sequence, on frames that had already
+passed my own checks:
+
+1. **Fabric read as wool, not linen.** Fixed only by naming 145 gsm with its
+   observable consequences and escalating to Pro.
+2. **Then it read as unironed.** Creasing had been pushed too hard to prove the
+   weight.
+3. **The whole image fading.** Chaining edits costs ~1.5 contrast points per
+   render. She read it as pale lips; the fault was global.
+4. **Ivory buttons.** A regeneration silently swapped the black buttons for
+   cream ones.
+5. **Trousers silently re-cut shorter** in a frame where only the abaya length
+   had been asked for.
+6. **Front-facing shoes on a back view.** Caused by passing a FRONT image as a
+   framing reference — it dragged the feet across with it.
+7. **Trouser hems tucked inside the shoes** instead of falling over them.
+8. **Midi front and back not the same length**, then the midi-5 shorter than
+   the other two midis.
+
+⚠️ **SO: PIN EVERY ELEMENT, NOT JUST THE ONE BEING CHANGED.** Her instruction,
+verbatim: *"keep always everything similar, this is a guardrail and guideline."*
+Anything left unnamed in the prompt is treated as fair game and will drift.
+
+⚠️ **AND FENCE A REFERENCE IMAGE TO ONE PROPERTY.** "References beat
+descriptions" (§4b) is true and incomplete: a front view referenced for framing
+put front-facing shoes on a back view, twice. Either say explicitly *"take ONLY
+the hem height from IMAGE 2, take nothing else, especially not the feet"*, or
+drop the reference and describe the geometry concretely — which is what finally
+worked for the legs and shoes.
+
+## The exposure fix, corrected
+
+The one-shot linear match recorded above was not enough: it matched contrast
+while leaving saturation at 0.047 against a target of 0.058, because a frame
+with more dark area skews the statistics. **Iterate instead** — apply, re-measure,
+repeat up to four passes until both contrast and saturation are within tolerance.
+That lands every frame within 0.001 of the master, free.
+
+## Cost
+
+Twenty-six generations, **$2.82**. Seven Flash at $0.039, nineteen Pro at $0.134.
