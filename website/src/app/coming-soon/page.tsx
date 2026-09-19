@@ -144,8 +144,8 @@ const PILLARS = [
 
 export default function ComingSoonPage() {
   return (
-    <main className="flex flex-col items-center px-6 py-8 sm:py-20">
-      <div className="flex w-full max-w-3xl flex-col gap-8 sm:gap-12">
+    <main className="flex flex-col items-center px-6 py-5 sm:py-20">
+      <div className="flex w-full max-w-3xl flex-col gap-5 sm:gap-12">
         <header className="flex flex-col items-center gap-3 text-center">
           {/* ⚠️ "Shaklek", NOT "SHAKLEK", and the tracking is not free-hand.
               Header.tsx sets the mark at 27px with 4px of tracking, and
@@ -160,7 +160,7 @@ export default function ComingSoonPage() {
               case. 0.138em is 4/29 expressed relatively, so it holds at any
               size. Do not retune it here without changing the header and the
               artwork together. */}
-          <p className="font-wordmark text-4xl tracking-[0.138em] text-text sm:text-5xl">
+          <p className="font-wordmark text-3xl tracking-[0.138em] text-text sm:text-5xl">
             Shaklek
           </p>
           {/* ⚠️ NO DATE. Founder, 2026-09-19: "remove early october, just say
@@ -196,7 +196,14 @@ export default function ComingSoonPage() {
             Safari's chrome is taken off. A waitlist page whose waitlist is
             invisible has no purpose.
 
-            SQUARE, NOT THE BANNER. Do not "fix" this by going back to
+            6:5 AS OF 2026-09-19 ("make stuff go upper"), WAS SQUARE FOR AN
+            HOUR, WAS 4:5 BEFORE THAT. At 390px wide that is 285px tall, and
+            three lines of text-2xl with its pb-8 need about 116px of it, so
+            there is still roughly 170px of photograph above the words. That is
+            the floor -- go shorter and the headline is sitting on the cloth
+            again, which is the thing rejected on 2026-09-14.
+
+            NOT THE BANNER EITHER. Do not "fix" this by going back to
             sm:aspect-[1584/672] on the phone: that is 2.36:1, about 210px at
             this width, and three lines of display type over it collided with
             the hanging cloth and became unreadable. Tried and rejected
@@ -213,7 +220,7 @@ export default function ComingSoonPage() {
 
             object-position 60% keeps the cloth in frame when the crop narrows;
             at 50% the tall crop cut the right-hand sheet in half. */}
-        <div className="relative aspect-square w-full overflow-hidden sm:aspect-[1584/672]">
+        <div className="relative aspect-[6/5] w-full overflow-hidden sm:aspect-[1584/672]">
           <Image
             src="/marketing/hero-banner.jpg"
             alt="Linen clothing, worn."
@@ -312,7 +319,15 @@ export default function ComingSoonPage() {
             Above it there is now a reason to care; below it there is support
             for the claim. Both orders are defensible; this one does not depend
             on the scroll. */}
-        <div className="flex flex-col items-center gap-4 border-y border-border py-6 text-center sm:py-10">
+        {/* ⚠️ BORDER-B ONLY, NOT BORDER-Y. Founder, 2026-09-19: "drop the ruler
+            between the picture and the know when we open." The top rule was
+            there to fence the form off as its own band, which is right on
+            desktop where the banner sits well above it. On a phone the square
+            hero ends in a hard edge a few pixels earlier, so the rule read as a
+            stray line between two things that were already separated. The
+            bottom rule stays: it is what still separates the ask from the three
+            pictures below. */}
+        <div className="flex flex-col items-center gap-4 border-b border-border py-6 text-center sm:py-10">
           <p className="text-sm text-text">Know the day we open.</p>
           <div className="flex w-full justify-center">
             <WaitlistForm />
@@ -358,9 +373,28 @@ export default function ComingSoonPage() {
                     without both a dark foot AND a shadow on the glyphs. */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent"
+                  className="absolute inset-0 bg-black/40 sm:bg-gradient-to-t sm:from-black/85 sm:via-black/35 sm:to-transparent"
                 />
-                <p className="absolute inset-x-0 bottom-0 px-4 pb-4 font-display text-lg leading-snug text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] sm:px-3 sm:pb-3 sm:text-base">
+                {/* ⚠️ CENTRED ON PHONE, BOTTOM-LEFT ON DESKTOP. Founder,
+                    2026-09-19: "for the 3 cards, i think text should be
+                    centered. like all 3 cards become one same collage picture,
+                    make it artistic."
+
+                    The collage is what the centring is FOR. Three bottom-left
+                    captions under three bottom-weighted gradients read as three
+                    cards stacked; one centred line over one even scrim, with no
+                    gap between the panels, reads as a triptych. So the scrim
+                    changed with the type: flat black/40 across the whole frame
+                    on phone (even tone, three panels that match), and the
+                    original bottom gradient from sm up, where the captions are
+                    still bottom-left under a 3-up grid.
+
+                    inset-0 + flex centres it; sm:top-auto releases the top edge
+                    so it falls back to the bottom, and sm:block drops the flex.
+                    Do not swap sm:top-auto for sm:inset-auto -- that resets the
+                    horizontal edges too and the caption collapses to its text
+                    width. */}
+                <p className="absolute inset-0 flex items-center justify-center px-6 text-center font-display text-xl leading-snug text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] sm:top-auto sm:block sm:px-3 sm:pb-3 sm:text-left sm:text-base">
                   {pillar.title}
                 </p>
               </div>
