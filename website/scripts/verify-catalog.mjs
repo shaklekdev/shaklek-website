@@ -32,10 +32,10 @@ const CATALOG_TS = path.join(ROOT, "src", "data", "catalog.ts");
 const failures = [];
 const fail = (check, item, detail) => failures.push({ check, item, detail });
 
-let catalog, comboKeyForCategory, defaultChangesForCategory;
+let catalog, comboKeyForCategory, defaultChangesForCategory, paramKeyFor;
 try {
   ({ catalog } = await import(path.join(ROOT, "src/data/catalog.ts")));
-  ({ comboKeyForCategory, defaultChangesForCategory } =
+  ({ comboKeyForCategory, defaultChangesForCategory, paramKeyFor } =
     await import(path.join(ROOT, "src/data/parameterSliders.ts")));
 } catch (err) {
   console.error("verify-catalog: could not load the catalog modules.");
@@ -57,10 +57,22 @@ for (const rel of [...referenced].sort()) {
 
 // ---------------------------------------------------------------- checks 2+3
 for (const item of catalog) {
+  // ⚠️ KEY OFF paramKeyFor(item), NEVER item.category. Two products in one
+  // category can offer different sliders -- the Open Abaya is Abaya (length x
+  // sleeves) and the Buttoned Abaya is AbayaJacket (length x closure), both
+  // with category "Abaya". Resolving by category here asked ABAYA_PARAMS about
+  // a garment that has no sleeve axis, got back "maxi:wide", found no such cell
+  // in comboImages and FELL THROUGH to colorImages -- which happens to equal
+  // item.image, so check 2 passed by accident and checks 2 and 3 never looked
+  // at the real hero cell. A guard that passes for the wrong reason is worse
+  // than no guard: it would not have caught a wrong defaultChanges, which is
+  // the single thing it is here to catch.
+  const paramKey = paramKeyFor(item);
+
   // The combo the customizer lands on with no user input.
   const heroKey = comboKeyForCategory(
-    item.category,
-    defaultChangesForCategory(item.category, item.defaultChanges),
+    paramKey,
+    defaultChangesForCategory(paramKey, item.defaultChanges),
   );
 
   // Mirror DesignCustomizer's own precedence exactly (see its previewImage:

@@ -453,10 +453,17 @@ export const catalog: CatalogItem[] = [
       },
     },
     // ⚠️ THE BASE PHOTO IS maxi:narrow, NOT THE CATEGORY DEFAULT. Left off,
-    // defaultChangesForCategory("Abaya") resolves to maxi:WIDE -- the first
-    // option of each render slider -- and verify-catalog.mjs correctly failed
-    // the build because the grid hero then pointed at the wrong cell. The
-    // photographed base is the NARROW sleeve, so it is declared here.
+    // defaultChangesForCategory("Abaya") resolves to maxi:WIDE and
+    // verify-catalog.mjs correctly failed the build, because the grid hero
+    // then pointed at a cell that is not this photograph. The photographed
+    // base is the NARROW sleeve, so it is declared here.
+    //
+    // ⚠️ IT RESOLVES BY `defaultIndex`, NOT by the first option -- this comment
+    // claimed "the first option of each render slider" and that is wrong. Both
+    // ABAYA_PARAMS sliders carry defaultIndex 1, so the default is the SECOND
+    // option of each: maxi, wide. The number was right for the wrong reason,
+    // and the wrong reason was copied into the Buttoned Abaya's comment before
+    // anyone checked defaultChangesForCategory.
     defaultChanges: { garment_length: "maxi", sleeve_width: "narrow" },
   },
   // ⚠️ THE SECOND ABAYA, AND IT IS A DIFFERENT PRODUCT, NOT A VARIANT.
@@ -506,11 +513,17 @@ export const catalog: CatalogItem[] = [
         "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1.jpg" },
       },
     },
-    // ⚠️ THE BASE PHOTO IS maxi:4, NOT THE CATEGORY DEFAULT. verify-catalog.mjs
-    // resolves the default from the first option of each render slider, which
-    // is midi:4 here, and fails the build if the hero points at a cell that was
-    // never photographed. That is exactly how the Open Abaya broke the build
-    // earlier today. The photographed base is the LONG one worn OPEN.
+    // The photographed base is the LONG one worn OPEN, which is maxi:4, and
+    // that is ALSO what the sliders resolve to on their own -- both
+    // ABAYA_JACKET_PARAMS declare defaultIndex 1. So this line is a no-op
+    // today and it is kept deliberately: reorder an option list or move a
+    // defaultIndex and the resolved default silently becomes a cell nobody
+    // photographed, which is how the Open Abaya broke the build on 2026-09-19.
+    // Declaring the base out loud costs nothing and survives that edit.
+    //
+    // ⚠️ THE DEFAULT IS `defaultIndex`, NOT the first option. This comment
+    // said "first option" and so did the Open Abaya's above; both were wrong
+    // and the right answer only happened to agree. See defaultChangesForCategory.
     defaultChanges: { garment_length: "maxi", closure: "4" },
   },
 ];
