@@ -121,7 +121,7 @@ function maskDarkGarment(data, w, h, { hue, window = 45, maxL = 0.62, minS = 0.1
  * inverts it. Re-measure before trusting it on a new shoot; the numbers above
  * are the instrument, and printing them is what made the rule obvious.
  */
-function maskPaleGarment(data, w, h, { minWarmth = 5, minL = 0.65 } = {}) {
+function maskPaleGarment(data, w, h, { minWarmth = 3, minL = 0.60 } = {}) {
   const out = Buffer.alloc(w * h);
   const faceCut = Math.round(h * FACE_FRACTION);
   for (let y = faceCut; y < h; y++) {
@@ -132,6 +132,108 @@ function maskPaleGarment(data, w, h, { minWarmth = 5, minL = 0.65 } = {}) {
       if ((mx + mn) / 2 / 255 < minL) continue;
       if (R - B < minWarmth) continue;
       out[y * w + x] = 255;
+    }
+  }
+  return out;
+}
+
+/**
+ * Keep every substantial connected blob, and drop the rest.
+ *
+ * ⚠️ THIS IS WHAT REMOVES THE THINGS A THRESHOLD CANNOT. The shadow puddle at
+ * her feet, her hair, the sandals and every stray speck all pass the colour
+ * test on their own merits and all of them are SEPARATE from the garment. No
+ * amount of threshold tuning distinguishes "warm and light" hair from "warm and
+ * light" linen; being a different object does. One flood fill does what an
+ * hour of hand-erasing would.
+ *
+ * ⚠️ EVERY SUBSTANTIAL BLOB, NOT THE LARGEST ONE. Keeping only the largest
+ * threw away half of abaya-burgundy-combo-midi-wide-front: BOTH abayas are worn
+ * OPEN, so the left and right front panels are two separate objects with a slip
+ * dress between them, and "the garment" is routinely two blobs rather than one.
+ * That run kept 52% of the masked pixels and the coverage fell to 10.8% against
+ * 20-26% everywhere else -- the number said so plainly, which is the only
+ * reason it was caught.
+ *
+ * `minShare` is relative to the LARGEST blob, so it scales with the garment
+ * instead of with the frame. Hair, sandals and speckle are one to two orders of
+ * magnitude smaller than a panel and fall well below it.
+ */
+function keepBlobs(mask, w, h, minShare = 0.12) {
+  const label = new Int32Array(w * h).fill(-1);
+  const stack = new Int32Array(w * h);
+  const sizes = [];
+  let current = 0, total = 0;
+  for (let start = 0; start < mask.length; start++) {
+    if (!mask[start] || label[start] !== -1) continue;
+    let sp = 0, size = 0;
+    stack[sp++] = start;
+    label[start] = current;
+    while (sp) {
+      const i = stack[--sp];
+      size++;
+      const x = i % w, y = (i / w) | 0;
+      // 4-connectivity: 8 would bridge the garment to a sandal touching it at
+      // a single diagonal pixel, which is exactly the join we want to break.
+      if (x > 0 && mask[i - 1] && label[i - 1] === -1) { label[i - 1] = current; stack[sp++] = i - 1; }
+      if (x < w - 1 && mask[i + 1] && label[i + 1] === -1) { label[i + 1] = current; stack[sp++] = i + 1; }
+      if (y > 0 && mask[i - w] && label[i - w] === -1) { label[i - w] = current; stack[sp++] = i - w; }
+      if (y < h - 1 && mask[i + w] && label[i + w] === -1) { label[i + w] = current; stack[sp++] = i + w; }
+    }
+    total += size;
+    sizes.push(size);
+    current++;
+  }
+  const biggest = sizes.length ? Math.max(...sizes) : 0;
+  const keep = sizes.map((n) => n >= biggest * minShare);
+  const out = Buffer.alloc(w * h);
+  let kept = 0;
+  for (let i = 0; i < mask.length; i++) {
+    if (mask[i] && keep[label[i]]) { out[i] = 255; kept++; }
+  }
+  return { mask: out, share: total ? kept / total : 0, blobs: current, keptBlobs: keep.filter(Boolean).length };
+}
+
+/**
+ * Close pinholes without swallowing what the garment is worn OVER.
+ *
+ * ⚠️ A FULL HOLE-FILL IS WRONG ON BOTH OF THESE GARMENTS. Both abayas are worn
+ * open over a slip dress, so the dress shows through the middle as a genuine
+ * hole in the garment -- fill it and the recolour turns her dress navy too.
+ * This closes gaps up to `r` pixels and leaves anything larger alone, which
+ * fixes the weave speckle and keeps the dress.
+ */
+function closeGaps(mask, w, h, r = 3) {
+  const dil = Buffer.alloc(w * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (!mask[y * w + x]) continue;
+      for (let dy = -r; dy <= r; dy++) {
+        const yy = y + dy;
+        if (yy < 0 || yy >= h) continue;
+        for (let dx = -r; dx <= r; dx++) {
+          const xx = x + dx;
+          if (xx < 0 || xx >= w) continue;
+          dil[yy * w + xx] = 255;
+        }
+      }
+    }
+  }
+  const out = Buffer.alloc(w * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (!dil[y * w + x]) continue;
+      let all = true;
+      for (let dy = -r; dy <= r && all; dy++) {
+        const yy = y + dy;
+        if (yy < 0 || yy >= h) { continue; }
+        for (let dx = -r; dx <= r; dx++) {
+          const xx = x + dx;
+          if (xx < 0 || xx >= w) continue;
+          if (!dil[yy * w + xx]) { all = false; break; }
+        }
+      }
+      if (all) out[y * w + x] = 255;
     }
   }
   return out;
@@ -196,6 +298,9 @@ for (const item of plan) {
       ? maskDarkGarment(data, w, h, { hue: srcHue })
       : maskPaleGarment(data, w, h, {});
     mask = await despeckle(mask, w, h);
+    mask = closeGaps(mask, w, h, 3);
+    const blob = keepBlobs(mask, w, h);
+    mask = blob.mask;
 
     await copyFile(abs, path.join(WORK, `${stem}.jpg`));
     await sharp(mask, { raw: { width: w, height: h, channels: 1 } })
@@ -228,7 +333,10 @@ for (const item of plan) {
       height: h,
       candidateCoverage: Number(pct(mask)),
     });
-    console.log(`${stem.padEnd(46)} ${dark ? "hue" : "warmth"}  candidate covers ${pct(mask)}% of frame`);
+    console.log(
+      `${stem.padEnd(46)} ${dark ? "hue" : "warmth"}  ${pct(mask)}% of frame  ` +
+        `(kept ${(blob.share * 100).toFixed(0)}% of pixels, ${blob.keptBlobs}/${blob.blobs} blobs)`,
+    );
   }
 }
 
