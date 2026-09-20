@@ -543,4 +543,88 @@ export const catalog: CatalogItem[] = [
     // and the right answer only happened to agree. See defaultChangesForCategory.
     defaultChanges: { garment_length: "maxi", closure: "4" },
   },
+
+  {
+    slug: "slip-dress",
+    name: "Slip Dress",
+    category: "Dress",
+    // ⚠️ PRICE 649, AND IT IS THE SAME ON BOTH DRESSES ON PURPOSE. Founder,
+    // 2026-09-20, after the first proposal priced them 599 and 699: "why are
+    // both dresses 100 aed difference???" She was right -- the real cost gap
+    // is about 30 AED of tailoring on identical cloth, and the 100 came from
+    // rounding each to a clean number. Both inputs are QUOTED, not estimated:
+    // 2.5-3m of cloth (founder and tailor independently) and 90 to make (the
+    // tailor's "abaya and dress" rate, which covers both of ours). Change one,
+    // change the other, and change margins.mjs with them.
+    price: 649,
+    descriptor: "Sleeveless, cut to fall",
+    badge: "NEW",
+    gradient: ["#f5f0e8", "#e8e4dc"],
+    // ⚠️ SLEEVELESS, ALWAYS, AND THERE IS NO SLEEVE SLIDER FOR A DRESS. Both
+    // dresses are sleeveless on every neckline and every length.
+    // ⚠️ NO POCKETS ON THIS ONE, deliberately: it is fitted straight through
+    // the hip and a pocket bag in linen bulges there. The buttoned dress has
+    // them because its skirt flares away from the body.
+    // ⚠️ AND THE ZIP IS IN THE LEFT SIDE SEAM, invisible in every photograph,
+    // so it exists only if the tailor sheet says so. Linen does not stretch.
+    image: "/catalog/slip-dress/slip-dress-ivory-front-v1.jpg",
+    backImage: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg",
+    colorImages: {
+      Ivory: { front: "/catalog/slip-dress/slip-dress-ivory-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg" },
+    },
+    comboImages: {
+      Ivory: {
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-back-v1.jpg" },
+        "round:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-back-v1.jpg" },
+      },
+    },
+    // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
+    // back file is referenced twice. The back is the same plain curve whichever
+    // neck the front has, so the neckline axis multiplies FRONTS ONLY: 2 fronts
+    // + 1 back per length = 6 frames per colourway, not 8.
+    defaultChanges: { neckline: "round", garment_length: "maxi" },
+  },
+
+  {
+    slug: "buttoned-dress",
+    name: "Buttoned Dress",
+    category: "Dress",
+    // ⚠️ PRICE 649, AND IT IS THE SAME ON BOTH DRESSES ON PURPOSE. Founder,
+    // 2026-09-20, after the first proposal priced them 599 and 699: "why are
+    // both dresses 100 aed difference???" She was right -- the real cost gap
+    // is about 30 AED of tailoring on identical cloth, and the 100 came from
+    // rounding each to a clean number. Both inputs are QUOTED, not estimated:
+    // 2.5-3m of cloth (founder and tailor independently) and 90 to make (the
+    // tailor's "abaya and dress" rate, which covers both of ours). Change one,
+    // change the other, and change margins.mjs with them.
+    price: 649,
+    descriptor: "Sleeveless, buttons to the hem, with pockets",
+    badge: "NEW",
+    gradient: ["#f5f0e8", "#e8e4dc"],
+    // ⚠️ SLEEVELESS, ALWAYS. The neckline choice is ROUND (buttons running
+    // right up to the neckline) or V (a pointed shirt collar with the buttons
+    // starting below the V).
+    // ⚠️ POCKETS ARE STANDARD HERE, NEVER AN OPTION -- as a slider they would
+    // double the shoot. The model has her hands in them in every frame,
+    // because a side-seam pocket is invisible in a straight-on photograph and
+    // an unseen feature is one nobody pays for.
+    image: "/catalog/buttoned-dress/buttoned-dress-ivory-front-v1.jpg",
+    backImage: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg",
+    colorImages: {
+      Ivory: { front: "/catalog/buttoned-dress/buttoned-dress-ivory-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg" },
+    },
+    comboImages: {
+      Ivory: {
+        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-back-v1.jpg" },
+        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-back-v1.jpg" },
+      },
+    },
+    // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
+    // back file is referenced twice. The back is the same plain curve whichever
+    // neck the front has, so the neckline axis multiplies FRONTS ONLY: 2 fronts
+    // + 1 back per length = 6 frames per colourway, not 8.
+    defaultChanges: { neckline: "round", garment_length: "maxi" },
+  },
 ];

@@ -138,24 +138,40 @@ export const PANTS_PARAMS: SliderParam[] = [
 // from orphaning every generated image. That is exactly what the trouser
 // vocabulary change cost on 2026-08-22.
 //
-// Both matrices are deliberately 2x2 (sleeve x length), the same shape the
-// trouser recipe was proven on. Four cells, of which the default is the base
-// photo and is NEVER generated, leaving three per colourway. Anything richer
-// multiplies the generation bill without adding a decision a customer makes.
+// ⚠️ THE DRESS AXES CHANGED ON 2026-09-20, FROM SLEEVE x LENGTH TO
+// NECKLINE x LENGTH, once the garments actually existed.
 //
-// SLEEVE IS DECLARED FIRST IN BOTH, so the key reads `sleeve:length` -- the
-// same order as SHIRT_PARAMS. Keep it that way; the key is positional.
+// The sleeve slider is GONE. Both dresses she designed are SLEEVELESS, always,
+// on every neckline and every length -- it is not a choice, so it cannot be a
+// slider. Leaving it in would have offered a customer a sleeve nobody can make
+// and pointed the customiser at photographs that do not exist.
+//
+// NECKLINE IS DECLARED FIRST, so the key reads `neckline:length` -- e.g.
+// "round:maxi", "v:midi". The key is positional; changing this order renames
+// every cell and orphans every photograph, which is what the trouser
+// vocabulary change cost on 2026-08-22.
+//
+// It was safe to change only because DRESS_PARAMS had never been used: no
+// dress existed in catalog.ts until today, so no photograph was keyed to the
+// old vocabulary.
+//
+// Still a 2x2. Four cells per colourway, of which the default is the base
+// photo and is never generated.
+//
+// ⚠️ AND THE BACK IS SHARED ACROSS NECKLINES, her call: the back is the same
+// whichever neck the front has, so the neckline axis multiplies FRONTS ONLY.
+// That is 2 fronts + 1 back per length = 6 frames per colourway, not 8.
 export const DRESS_PARAMS: SliderParam[] = [
   {
-    name: "Sleeves",
-    type: "sleeve_length",
+    name: "Neckline",
+    type: "neckline",
     tier: "render",
     options: [
-      { value: "short", text: "Short" },
-      { value: "long", text: "Long" },
+      { value: "round", text: "Round" },
+      { value: "v", text: "V" },
     ],
-    defaultIndex: 1,
-    labelFor: (text) => `${text} sleeves`,
+    defaultIndex: 0,
+    labelFor: (text) => `${text} neckline`,
   },
   {
     name: "Length",
@@ -168,28 +184,12 @@ export const DRESS_PARAMS: SliderParam[] = [
     defaultIndex: 1,
     labelFor: (text) => `${text} length`,
   },
-  {
-    name: "Neckline",
-    type: "neckline",
-    tier: "premium",
-    options: [
-      { value: "round", text: "Round" },
-      { value: "v", text: "V-neck" },
-    ],
-    defaultIndex: 0,
-    labelFor: (text) => `${text} neckline`,
-  },
-  {
-    name: "Pockets",
-    type: "pocket",
-    tier: "premium",
-    options: [
-      { value: "0", text: "No pockets" },
-      { value: "2", text: "Side seam pockets" },
-    ],
-    defaultIndex: 1,
-    labelFor: (text) => text,
-  },
+  // ⚠️ NO POCKET SLIDER ON A DRESS, DELIBERATELY. Pockets are STANDARD on the
+  // buttoned dress and ABSENT on the slip dress, and neither is a choice. Her
+  // reasoning, 2026-09-20: the buttoned skirt flares so a side-seam pocket
+  // sits inside the flare, while the slip is fitted through the hip and a
+  // pocket bag in linen bulges there. Offering it as an option would also
+  // double the shoot, the same trap as closures on the abaya.
 ];
 
 // ⚠️ THE ABAYA'S OPTIONS, SETTLED 2026-09-15 AGAINST WHAT PEOPLE ACTUALLY
