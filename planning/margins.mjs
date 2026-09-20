@@ -113,7 +113,15 @@ const INPUTS = {
   // cloth on the two shipping categories by 10%.
   // ⏳ Her answer covers SHIRT and PANTS. Dress, Abaya, Skirt and Gilet are
   // still modelled, not quoted, and the abaya is the metre-hungry one.
-  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 3.0, Abaya: 3.5, Gilet: 2.0 },
+  // ✅ DRESS 2.75 AND ABAYA 3.0-3.5, FOUNDER 2026-09-20: "abaya is between 3 and
+  //    3.5 depending on the size, for me it's 3m... since the dress is
+  //    sleeveless i think it's less, around 2.5-3m". Both dresses are
+  //    SLEEVELESS by design, which is where the saving comes from.
+  //    Dress modelled at 2.75, the middle of her range, because both ends are
+  //    hers rather than one being a worst case. Abaya STAYS AT 3.5, the worse
+  //    end, per the rule above: her own 3m is a size-S data point, not the
+  //    range. At 3.0 the abaya reads 60.0% instead of 57.4%.
+  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 2.75, Abaya: 3.5, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
   // ✅ SHIRT 35, NOT 40 — the tailor quotes 30-35, founder 2026-09-12. The
@@ -130,7 +138,16 @@ const INPUTS = {
   //    ⚠️ THE ABAYA WAS A 100 PLACEHOLDER AND IS NOW QUOTED. That is a real
   //    10 AED saving, and it lands on the garment whose price was least certain.
   // ⏳ GILET AND SKIRT STILL NOT QUOTED. Those two remain placeholders.
-  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 90, Abaya: 90, Gilet: 55 },
+  // ⏳ DRESS RAISED 90 -> 110 ON 2026-09-20, AND THIS ONE IS A GUESS, NOT A
+  //    QUOTE. His 80-90 was for "abaya and dress" meaning a PLAIN dress, and
+  //    that still fits the slip dress. The BUTTONED dress is a different
+  //    garment to make: a waist seam, a shirt collar, side pockets and
+  //    EIGHTEEN buttonholes. 110 is the conservative figure for the pair, per
+  //    the range rule above.
+  //    ⚠️ ASK HIM FOR A PRICE ON EACH DRESS SEPARATELY. Both are sold at 649,
+  //    so the buttoned one sets the floor: at 110 it earns 55.5%, at 140 it
+  //    falls to about 54% and 649 is too low.
+  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 110, Abaya: 90, Gilet: 55 },
 
   shippingAed: 21, // Founder, 2026-08-22
 
@@ -209,6 +226,15 @@ const INPUTS = {
   // ✅ THE IN-PERSON FITTING, FREE ABOVE A BASKET THRESHOLD. Founder decision,
   // 2026-09-12: 50 AED an hour, ONCE PER CUSTOMER, and the threshold is set so
   // that a single dress or abaya qualifies as well as any two pieces.
+  //
+  // ⚠️ THE DRESS IS 649 AS OF 2026-09-20, NOT 599, AND THE BAND STILL HOLDS.
+  // Both dresses are priced at 649 (see the pricing note below), which is
+  // comfortably above 550, so a dress still qualifies on its own. The band is
+  // set by the dearest thing that must NOT qualify -- the 519 trousers -- and
+  // by the cheapest that must, which is now the 649 dress rather than a 599
+  // one. Raising the dress WIDENED the band to (519, 649]; 550 sits in it
+  // either way. If a dress ever drops below 550 this threshold breaks
+  // silently, which is the failure this note exists to prevent.
   //
   // WHY 550. The band is (519, 599]: it must sit ABOVE the dearest single
   // garment that should NOT qualify (trousers, 519) and AT OR BELOW the
@@ -483,10 +509,10 @@ const TH = INPUTS.fitting.thresholdAed, FIT = INPUTS.fitting.aed;
 const singles = Object.entries(INPUTS.metresPerGarment);
 console.log(`\nTHE ${TH} THRESHOLD — free in-person fitting, ${FIT} AED, ONCE PER CUSTOMER`);
 console.log(`  Set so a single dress or abaya qualifies, as well as any two pieces.`);
-console.log(`    qualifies      dress 599 · abaya 690 · any pair (cheapest 2 shirts ${(2 * SHIRT_PRICE).toFixed(0)})`);
+console.log(`    qualifies      dress 649 · abaya 699 · any pair (cheapest 2 shirts ${(2 * SHIRT_PRICE).toFixed(0)})`);
 console.log(`    does not       shirt ${SHIRT_PRICE} · gilet 479 · trousers 519`);
-console.log(`  The band is (519, 599]. ⚠️ Dress and abaya prices are PROPOSALS -- set the`);
-console.log(`  dress price before this, or a cheaper dress silently breaks the threshold.`);
+console.log(`  The band is (519, 649]. ⚠️ The DRESS tailoring is a guess, not a quote -- see`);
+console.log(`  tailoringAed. Both dresses sell at 649; the buttoned one sets the floor.`);
 
 const BASKETS2 = [
   ["Shirt + trousers", ["Shirt", "Pants"], 968],
