@@ -74,8 +74,63 @@ const FACE_FRACTION = 0.15;
  */
 const isSkinish = (h, s, l) => h >= 6 && h <= 60 && s >= 0.15 && l >= 0.30 && l <= 0.70;
 
-/** A dark garment on a pale backdrop: find it by hue. */
-function maskDarkGarment(data, w, h, { hue, window = 45, maxL = 0.62, minS = 0.10 }) {
+/**
+ * A dark garment on a pale backdrop: find it by hue.
+ *
+ * ⚠️ THE WINDOW IS 14 DEGREES, NOT 45, AND THE NUMBER IS MEASURED. At 45 the
+ * recoloured Open Abaya came back with navy on her NECK and on her TOES -- the
+ * small version of the failure that killed the automated attempt on 2026-09-19.
+ * Shadowed skin is reddish and dark enough to pass a lightness ceiling, and
+ * saturation does not separate it either: her neck reads s=0.45 against the
+ * garment's 0.48.
+ *
+ * Hue does, cleanly:
+ *
+ *   garment body   h=348   4 degrees from burgundy
+ *   garment collar h=356   3
+ *   garment hem    h=349   4
+ *   neck shadow    h=13   20
+ *   sandal strap   h=19   26
+ *
+ * And the fabric's own spread is tight: inside the mask the median distance is
+ * 4-5 degrees and p90 is 9 on both the front and a back. The 20-26 tail WAS the
+ * contamination. 14 keeps every real thread and drops skin and leather.
+ *
+ * ⚠️ AND THE CENTRE IS MEASURED FROM THE PHOTOGRAPH, NOT TAKEN FROM THE SWATCH.
+ * The first attempt at a narrow window centred it on #4a1a2d, the burgundy in
+ * colors.ts, which is h=337 -- while the photographed fabric sits at h=353.
+ * Sixteen degrees of disagreement between a colour and its own swatch, and a
+ * 45-degree window had been papering over it. Coverage fell from 25% to 9% and
+ * the garment came out in tatters. A narrow window is only safe if it is
+ * centred on the thing itself. CLAUDE.md §4b says the same in different words:
+ * reference the BASE PHOTO of that colour, never a hex target.
+ *
+ * ⚠️ MEASURE BEFORE WIDENING THIS. A window is the one knob that looks harmless
+ * and puts colour on a person.
+ */
+function measureGarmentHue(data, w, h) {
+  // Dark, saturated, below the face: that is fabric and almost nothing else.
+  // The median is taken as a VECTOR so a hue straddling 0 does not average to
+  // its own opposite -- 358 and 2 arithmetically mean 180, which is cyan.
+  const faceCut = Math.round(h * FACE_FRACTION);
+  let x = 0, y = 0, n = 0;
+  for (let py = faceCut; py < h; py++) {
+    for (let px = 0; px < w; px++) {
+      const i = (py * w + px) * 3;
+      const [hu, s, l] = rgb2hsl(data[i], data[i + 1], data[i + 2]);
+      if (l > 0.40 || s < 0.25) continue;
+      x += Math.cos((hu * Math.PI) / 180);
+      y += Math.sin((hu * Math.PI) / 180);
+      n++;
+    }
+  }
+  if (!n) return null;
+  let hue = (Math.atan2(y / n, x / n) * 180) / Math.PI;
+  if (hue < 0) hue += 360;
+  return hue;
+}
+
+function maskDarkGarment(data, w, h, { hue, window = 16, maxL = 0.62, minS = 0.10 }) {
   const out = Buffer.alloc(w * h);
   const faceCut = Math.round(h * FACE_FRACTION);
   for (let y = 0; y < h; y++) {
@@ -294,8 +349,12 @@ for (const item of plan) {
     const { width: w, height: h } = await img.metadata();
     const { data } = await img.removeAlpha().raw().toBuffer({ resolveWithObject: true });
 
+    // The fabric's own hue, not the swatch's. See measureGarmentHue.
+    const measured = dark ? measureGarmentHue(data, w, h) : null;
+    if (dark && measured === null) throw new Error(`${stem}: found no dark saturated pixels to measure`);
+
     let mask = dark
-      ? maskDarkGarment(data, w, h, { hue: srcHue })
+      ? maskDarkGarment(data, w, h, { hue: measured })
       : maskPaleGarment(data, w, h, {});
     mask = await despeckle(mask, w, h);
     mask = closeGaps(mask, w, h, 3);
@@ -334,7 +393,7 @@ for (const item of plan) {
       candidateCoverage: Number(pct(mask)),
     });
     console.log(
-      `${stem.padEnd(46)} ${dark ? "hue" : "warmth"}  ${pct(mask)}% of frame  ` +
+      `${stem.padEnd(46)} ${dark ? `hue ${measured.toFixed(0)}` : "warmth"}  ${pct(mask)}% of frame  ` +
         `(kept ${(blob.share * 100).toFixed(0)}% of pixels, ${blob.keptBlobs}/${blob.blobs} blobs)`,
     );
   }
