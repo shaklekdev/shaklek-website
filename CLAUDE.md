@@ -896,6 +896,51 @@ not anyone is paying attention beats it every time — which is the argument for
 printing a host for a human to read, and the argument for a staging
 environment over another rule in this file.
 
+### And a number that AGREES with you is not proof either
+
+The rule above catches a measurement that contradicts you. This one is the
+other half, it is harder to notice, and on 2026-09-20 it cost two sessions more
+than anything else: **a check that reports "fine" has only proved that the check
+agreed with you.** It is not a second opinion. It is not verification.
+
+The founder said an abaya looked faded. A lip-colour metric was written, it
+reported no difference, and she was told it was fine. **The crop sat above the
+mouth** — it was measuring cheeks. The number was meaningless and looked
+perfectly reasonable. She was right, by eye, about an image that had just
+"passed".
+
+Four more the same day, every one an instrument that agreed with its author:
+
+- a closure counter that read "2" on drawings with four closures plainly on them
+- a mask whose SELECTED pixels averaged rgb(192,176,176) and whose REJECTED
+  pixels averaged rgb(187,171,170) — identical, so it tracked nothing, and its
+  coverage figure looked sensible
+- a hue window centred on the swatch in `colors.ts` (h=337) when the
+  photographed fabric is h=353
+- a width measured "at 55% of garment length", which lands on the hip of a
+  floor-length abaya and the thigh of a mid-calf one: two cells were called
+  wrong, the founder said she saw nothing wrong, and she was right
+
+⚠️ **SO: BEFORE BELIEVING A CHECK THAT PASSES, TEST THE CHECK.** Feed it a case
+you know is broken and confirm it fails. Cut out exactly what a mask selected
+and look at what comes out. Crop the region the metric measured and look at
+where it actually landed. Three lines, every time, and it would have caught all
+five of these immediately.
+
+⚠️ **AND FOR ANYTHING VISUAL, COMPOSITE THE TWO IMAGES SIDE BY SIDE AT THE SAME
+HEIGHT AND LOOK.** On 2026-09-20 seven technical drawings for the tailor were
+wrong — a neckline, its direction, a seam that does not exist, bar widths, an
+open front drawn closed, a band that stops when it does not, a straight column
+that sweeps. Not one was found by reasoning, by re-reading the prompt, or by
+zooming the photograph alone. Every one was found by putting the photograph
+beside the drawing. **Four of them had already survived a "verified" claim.**
+
+⚠️ **AND WHEN THE PROMPT AND THE PHOTOGRAPH DISAGREE, THE PHOTOGRAPH WINS.**
+Most of those seven came from drawing what the generation prompt *asked for*, or
+what a garment usually has, rather than what the approved image actually shows.
+The prompt is an intention. The photograph is the product. Her framing, and it
+is the right one: **"every detail you miss is a return item."**
+
 ### Stay inside the ask
 
 The single most damaging action was a catalog-wide burgundy normalisation
