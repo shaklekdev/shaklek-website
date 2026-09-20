@@ -480,6 +480,16 @@ export const catalog: CatalogItem[] = [
       // the burgundy cell it copies, so a midi cell cannot be told to reach the
       // floor -- which is exactly the mistake that cost $0.27 in bad backs.
       Navy: { front: "/catalog/abaya/abaya-navy-front.jpg", back: "/catalog/abaya/abaya-navy-back.jpg" },
+      // ⚠️ IVORY IS STYLED DIFFERENTLY FROM THE OTHER COLOURWAYS AND THAT IS
+      // DELIBERATE. Burgundy and Navy are shot over a plain slip; Ivory is shot
+      // on a hijabi model over real catalogue pieces -- the buttoned dress under
+      // the two MAXI cells, a navy shirt and wide-leg trousers under the two
+      // MIDI ones. Founder, 2026-09-20: an ivory abaya over an ivory slip is
+      // invisible, "otherwise it's useless", and the pairing doubles as the
+      // cross-sell shot. The under-layer therefore CHANGES with the Length
+      // slider, which she confirmed on purpose: "we could not have put a short
+      // abaya on a long dress either way".
+      Ivory: { front: "/catalog/abaya/abaya-ivory-front.jpg", back: "/catalog/abaya/abaya-ivory-back.jpg" },
     },
     comboImages: {
       Burgundy: {
@@ -491,6 +501,11 @@ export const catalog: CatalogItem[] = [
         "maxi:wide": { front: "/catalog/abaya/abaya-navy-combo-maxi-wide-front.jpg", back: "/catalog/abaya/abaya-navy-combo-maxi-wide-back.jpg" },
         "midi:narrow": { front: "/catalog/abaya/abaya-navy-combo-midi-narrow-front.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-narrow-back.jpg" },
         "midi:wide": { front: "/catalog/abaya/abaya-navy-combo-midi-wide-front.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-wide-back.jpg" },
+      },
+      Ivory: {
+        "maxi:wide": { front: "/catalog/abaya/abaya-ivory-combo-maxi-wide-front.jpg", back: "/catalog/abaya/abaya-ivory-combo-maxi-wide-back.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-ivory-combo-midi-narrow-front.jpg", back: "/catalog/abaya/abaya-ivory-combo-midi-narrow-back.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-ivory-combo-midi-wide-front.jpg", back: "/catalog/abaya/abaya-ivory-combo-midi-wide-back.jpg" },
       },
     },
     // ⚠️ THE BASE PHOTO IS maxi:narrow, NOT THE CATEGORY DEFAULT. Left off,
