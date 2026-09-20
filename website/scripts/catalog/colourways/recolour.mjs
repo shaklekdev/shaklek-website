@@ -27,7 +27,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import sharp from "sharp";
-import { COLORS } from "./_shared.mjs";
+import { measureReference } from "./_shared.mjs";
 
 const WORK = process.env.SHAKLEK_MASK_DIR ?? path.join(os.homedir(), "Shaklek-colourways");
 const OUT = path.join(WORK, "out");
@@ -57,12 +57,14 @@ function hsl2rgb(h, s, l) {
   return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
 }
 
-const CONTRAST_KEEP = 1.35;
-
+/**
+ * ⚠️ THE TARGET IS MEASURED FROM A REAL PHOTOGRAPH, NOT FROM THE SWATCH.
+ * See measureReference in _shared.mjs. The first version coloured to the hex in
+ * colors.ts and put s=0.75 across the whole garment where real photographed
+ * navy in this catalogue is s=0.45. It read as a paint fill, and it was.
+ */
 export async function recolourOne(jpegPath, maskPath, target, outPath) {
-  const hex = COLORS[target];
-  const [tr, tg, tb] = [1, 3, 5].map((k) => parseInt(hex.slice(k, k + 2), 16));
-  const [th, ts, tl] = rgb2hsl(tr, tg, tb);
+  const ref = await measureReference(target);
 
   const { data, info } = await sharp(jpegPath).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width: w, height: h } = info;
@@ -73,30 +75,41 @@ export async function recolourOne(jpegPath, maskPath, target, outPath) {
   const soft = await sharp(maskPath).resize(w, h).greyscale().blur(1.4).raw().toBuffer();
   if (soft.length !== w * h) throw new Error(`mask came back ${soft.length / (w * h)} channels`);
 
-  // Measure the garment's own lightness inside the mask before changing it.
-  let sum = 0, sum2 = 0, n = 0;
+  // Measure the garment as it is, before changing it.
+  let lSum = 0, l2 = 0, sSum = 0, n = 0;
   for (let i = 0; i < soft.length; i++) {
     if (soft[i] < 200) continue;
-    const l = rgb2hsl(data[i * 3], data[i * 3 + 1], data[i * 3 + 2])[2];
-    sum += l; sum2 += l * l; n++;
+    const [, s, l] = rgb2hsl(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
+    lSum += l; l2 += l * l; sSum += s; n++;
   }
   if (!n) throw new Error(`${path.basename(maskPath)}: mask is empty`);
-  const mean = sum / n;
-  const sd = Math.sqrt(Math.max(1e-6, sum2 / n - mean * mean));
+  const lMean = lSum / n;
+  const lSd = Math.sqrt(Math.max(1e-6, l2 / n - lMean * lMean));
+  const sMean = Math.max(0.02, sSum / n);
 
-  // Target spread: keep the garment's own, but never stretch it more than
-  // CONTRAST_KEEP, and never past what the target lightness leaves room for.
-  const headroom = Math.min(tl, 1 - tl);
-  const scale = Math.min(CONTRAST_KEEP, Math.max(0.6, Math.min(headroom / (2.2 * sd), CONTRAST_KEEP)));
+  // ⚠️ BOTH SPREADS ARE MATCHED, NOT JUST THE MEANS. Setting every masked
+  // pixel to the reference's lightness gives a flat silhouette; keeping the
+  // source's own spread gives burgundy's contrast wearing navy's colour, which
+  // is why the first attempt looked synthetic even where the mask was perfect.
+  // Scaling by lsd/lSd lands the garment on the same tonal range a real
+  // photograph of that colour occupies. Capped, because a low-contrast source
+  // stretched hard just amplifies its own noise.
+  const lScale = Math.min(2.2, Math.max(0.5, ref.lsd / lSd));
 
   const out = Buffer.from(data);
   for (let i = 0; i < soft.length; i++) {
     const a = soft[i] / 255;
     if (a < 0.004) continue;
     const p = i * 3;
-    const [, , l] = rgb2hsl(data[p], data[p + 1], data[p + 2]);
-    const nl = Math.min(0.995, Math.max(0.005, tl + (l - mean) * scale));
-    const [nr, ng, nb] = hsl2rgb(th, ts, nl);
+    const [, s, l] = rgb2hsl(data[p], data[p + 1], data[p + 2]);
+    const nl = Math.min(0.995, Math.max(0.005, ref.l + (l - lMean) * lScale));
+    // ⚠️ SATURATION KEEPS ITS OWN TEXTURE TOO. A constant saturation is what
+    // "Colorize" does and it is why a colourised photo looks printed: real
+    // cloth desaturates in its highlights and deepens in its folds. Each pixel
+    // keeps its RATIO to the garment's mean and the mean lands on the
+    // reference's.
+    const ns = Math.min(1, Math.max(0, ref.s * (s / sMean)));
+    const [nr, ng, nb] = hsl2rgb(ref.h, ns, nl);
     out[p] = Math.round(data[p] * (1 - a) + nr * a);
     out[p + 1] = Math.round(data[p + 1] * (1 - a) + ng * a);
     out[p + 2] = Math.round(data[p + 2] * (1 - a) + nb * a);
@@ -105,7 +118,7 @@ export async function recolourOne(jpegPath, maskPath, target, outPath) {
   await sharp(out, { raw: { width: w, height: h, channels: 3 } })
     .jpeg({ quality: 92, mozjpeg: true })
     .toFile(outPath);
-  return { mean, sd, scale };
+  return { lMean, lSd, lScale, ref };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -123,7 +136,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         `-${target.toLowerCase()}-`,
       );
       const r = await recolourOne(jpeg, mask, target, path.join(OUT, `${name}.jpg`));
-      console.log(`${name}.jpg   garment l ${r.mean.toFixed(2)} sd ${r.sd.toFixed(3)} -> scale ${r.scale.toFixed(2)}`);
+      console.log(
+        `${name}.jpg   source l ${r.lMean.toFixed(2)}±${r.lSd.toFixed(3)} -> ` +
+          `${target} h=${r.ref.h.toFixed(0)} s=${r.ref.s.toFixed(2)} l=${r.ref.l.toFixed(2)}±${r.ref.lsd.toFixed(3)} (scale ${r.lScale.toFixed(2)})`,
+      );
       n++;
     }
   }
