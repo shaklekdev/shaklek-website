@@ -64,9 +64,12 @@ export default function CatalogCard({
 
       <Link href={href} tabIndex={-1} className="mt-4 block text-center">
         <p className="font-display text-[15px] text-text">{item.name}</p>
-        <p className="mt-1 text-[11px] tracking-wide text-text-3 uppercase">
-          {item.descriptor}
-        </p>
+        {/* ⚠️ NO DESCRIPTOR LINE ON THE CARD. Founder, 2026-09-20: "let's drop
+            the description we put on every piece." The field still EXISTS in
+            catalog.ts and is still used in three places a visitor never sees --
+            the product page's meta description, the image alt text, and the
+            Meta product feed -- so do not delete it from the type. It is only
+            the visible line under the name that is gone. */}
         <p className="mt-1.5 text-xs text-text-2">AED {item.price}</p>
       </Link>
 
