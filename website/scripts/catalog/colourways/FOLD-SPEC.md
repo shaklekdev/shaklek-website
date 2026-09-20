@@ -77,3 +77,23 @@ is really a maxi — that is what the measured ratios in this file are for.
 **What to write in the prompt:** name the change. "She stands with her weight on
 one hip, one hand resting at her side and the other lifted slightly" beats "vary
 the pose", which the model ignores.
+
+## ⚠️ AND THE FACE, NOT JUST THE STANCE
+
+Founder, 2026-09-20: *"next time change also the model face expression or
+something, it's too genAI claude please..."*
+
+Every frame in a set carrying the identical neutral expression is the single
+clearest tell that a picture was generated. Real catalogue shoots vary: one
+frame the chin lifts, one the gaze goes off-camera, one there is the beginning
+of a smile. Nothing about the garment changes.
+
+⚠️ NAME IT, THE SAME WAY. "Her expression is softer here, the mouth just
+relaxing towards a smile, her eyes to camera" works; "vary the expression" does
+nothing. Safe variations that do not disturb the garment: chin slightly lifted
+or lowered, gaze to camera or a few degrees off it, lips closed-neutral or
+barely parted, head turned a little so the jawline reads.
+
+⚠️ IT IS STILL THE SAME WOMAN. Vary the expression, never the face. A different
+face between two cells of one product is a defect, not variety — which is why
+the model reference is passed in every prompt.
