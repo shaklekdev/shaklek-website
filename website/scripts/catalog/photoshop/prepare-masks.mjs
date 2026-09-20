@@ -125,12 +125,37 @@ function maskPaleGarment(data, w, h, { tol = 16 }) {
   return out;
 }
 
-/** Drop specks and fill pinholes, so she is not erasing confetti by hand. */
+/**
+ * Drop specks and fill pinholes, so she is not erasing confetti by hand.
+ *
+ * ⚠️ `.greyscale()` BEFORE `.raw()`, AND THE ASSERT IS NOT DECORATION. sharp
+ * hands back a THREE-channel buffer here even though the input was declared
+ * one-channel, so `blurred[i]` walked the interleaved bytes and every index
+ * landed on the wrong pixel. The mask that came out was a horizontally
+ * squeezed silhouette sitting over nothing in particular -- 11.7% of the frame,
+ * and the pixels it selected averaged rgb(192,176,176), the pale floor, while
+ * the pixels it rejected averaged rgb(187,171,170). Identical. The mask had no
+ * relationship to the photograph at all.
+ *
+ * It looked plausible enough to ship: the coverage number was in range, the
+ * mask rendered as a garment-ish shape, and the founder had to say "magenta is
+ * everywhere" before anyone checked. The correct mask is 25.4% and its pixels
+ * average rgb(66,25,30), which is the burgundy. **A length assertion would have
+ * caught this at the first run, and now does.**
+ */
 async function despeckle(mask, w, h) {
   const blurred = await sharp(mask, { raw: { width: w, height: h, channels: 1 } })
     .blur(2.5)
+    .greyscale()
     .raw()
     .toBuffer();
+  if (blurred.length !== w * h) {
+    throw new Error(
+      `despeckle: expected ${w * h} bytes back, got ${blurred.length}. ` +
+        `sharp returned ${blurred.length / (w * h)} channels; indexing it as one ` +
+        `silently misaligns every pixel.`,
+    );
+  }
   const out = Buffer.alloc(w * h);
   for (let i = 0; i < out.length; i++) out[i] = blurred[i] > 128 ? 255 : 0;
   return out;
@@ -164,6 +189,22 @@ for (const item of plan) {
     await sharp(mask, { raw: { width: w, height: h, channels: 1 } })
       .png({ compressionLevel: 9 })
       .toFile(path.join(WORK, `${stem}-mask.png`));
+
+    // ⚠️ SANITY CHECK, because a misaligned mask is invisible in a coverage
+    // number. If the pixels the mask selects do not differ from the pixels it
+    // rejects, it is not selecting a garment -- it is selecting noise.
+    let inR = 0, outR = 0, inN = 0, outN = 0;
+    for (let i = 0; i < mask.length; i++) {
+      const lum = (data[i * 3] + data[i * 3 + 1] + data[i * 3 + 2]) / 3;
+      if (mask[i]) { inR += lum; inN++; } else { outR += lum; outN++; }
+    }
+    const gap = Math.abs(inR / (inN || 1) - outR / (outN || 1));
+    if (gap < 20) {
+      throw new Error(
+        `${stem}: masked and unmasked pixels differ by only ${gap.toFixed(1)} in mean ` +
+          `luminance. The mask is not tracking the garment.`,
+      );
+    }
 
     manifest.push({
       stem,
