@@ -83,6 +83,36 @@ export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
               // "how-much-does-an-abaya-cost-in-dubai". Change one, change both.
 };
 
+// ⚠️ NAMES ARE PLAIN AND DESCRIPTIVE ON PURPOSE, AND THAT WAS CHECKED RATHER
+// THAN ASSUMED. Renamed 2026-09-20 after the founder asked whether the naming
+// could be "more fancy".
+//
+// Invented per-garment names were proposed (Layla Abaya, Noor Shirt) and she
+// rejected them on sight: "it feels random". She was right -- they were, and
+// the brands this range is compared to do the opposite. Toteme sells "Linen
+// Dress" and "Linen Tent Dress", The Row "cashmere wool tank dress", COS the
+// same. Invented names belong to a different tier and are earned over decades
+// (the Birkin, the 2.55); applied at launch they read as trying.
+//
+// Putting the MATERIAL in every name was proposed next, which is what those
+// brands actually do, and she killed that too: "ours is all linen so doesn't
+// make sense to add linen to every one". Also right -- Toteme names the
+// material because it sells wool and silk as well. Everything here is linen,
+// so the word carries no information.
+//
+// WHAT CHANGED, and every one is the garment's OWN descriptor rather than a
+// style reference:
+//   Pants -> Trousers on all four. UAE follows British English, and "pants"
+//     reads as underwear to a large share of the market.
+//   Banded -> Cuffed Trousers        (its descriptor already said "cuffed hem")
+//   Utility -> Tie-Waist Shirt       ("chest pockets, tie waist")
+//   Structured -> Peplum Blouse      it IS a peplum -- checked against the
+//     photograph, not the old name. "Structured" also fought the product: the
+//     cloth is soft 145gsm linen and nothing about it is structured.
+//
+// ⚠️ SLUGS DID NOT CHANGE, deliberately. /design/banded-trousers still resolves
+// and keeps its search history; renaming a URL throws that away for nothing.
+// So slug and name now disagree on three items, and that is intended.
 export const catalog: CatalogItem[] = [
   {
     slug: "oversized-shirt",
@@ -128,7 +158,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "wide-leg-trousers",
-    name: "Wide-leg Pants",
+    name: "Wide-leg Trousers",
     category: "Pants",
     price: 519,
     descriptor: "High waist",
@@ -170,7 +200,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "structured-blouse",
-    name: "Structured Blouse",
+    name: "Peplum Blouse",
     category: "Shirt",
     price: 449,
     descriptor: "Minimal dart",
@@ -211,7 +241,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "banded-trousers",
-    name: "Banded Pants",
+    name: "Cuffed Trousers",
     category: "Pants",
     price: 519,
     descriptor: "Tailored, cuffed hem",
@@ -292,7 +322,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "pleated-trousers",
-    name: "Pleated Pants",
+    name: "Pleated Trousers",
     category: "Pants",
     price: 519,
     descriptor: "Relaxed leg, pleated",
@@ -332,7 +362,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "cargo-trousers",
-    name: "Cargo Pants",
+    name: "Cargo Trousers",
     category: "Pants",
     price: 519,
     descriptor: "Wide leg, side pockets",
@@ -372,7 +402,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "utility-shirt",
-    name: "Utility Shirt",
+    name: "Tie-Waist Shirt",
     category: "Shirt",
     price: 449,
     descriptor: "Chest pockets, tie waist",
