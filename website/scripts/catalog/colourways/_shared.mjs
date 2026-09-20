@@ -37,7 +37,7 @@ export async function loadCatalog() {
  * open, convert and write that file twice, and the second write would race the
  * first. Keyed by source path so each photograph is handled exactly once.
  */
-export async function planFiles() {
+export async function planFiles(preferredSource) {
   const { catalog, paramKeyFor, comboKeyForCategory, renderParamsForCategory } =
     await loadCatalog();
 
@@ -46,14 +46,19 @@ export async function planFiles() {
     const key = paramKeyFor(item);
     const params = renderParamsForCategory(key);
     const shotIn = Object.keys(item.colorImages ?? {});
-    if (shotIn.length !== 1) {
+    // ⚠️ ONCE A SECOND COLOURWAY EXISTS, THE SOURCE MUST BE NAMED. The Open
+    // Abaya had exactly one (Burgundy) until Navy shipped, and then every
+    // caller here became ambiguous: generating Ivory FROM Navy would inherit
+    // navy's own generation artefacts instead of the photographed original.
+    // Always derive from the PHOTOGRAPH, never from a generation.
+    if (shotIn.length === 0) throw new Error(`${item.slug}: no colourway has photographs`);
+    const source = preferredSource && shotIn.includes(preferredSource) ? preferredSource : shotIn[0];
+    if (shotIn.length > 1 && !preferredSource) {
       throw new Error(
-        `${item.slug}: expected exactly one shot colourway, found ${shotIn.length || "none"}. ` +
-          `This pipeline recolours FROM a single master set; with two already ` +
-          `shot you must say which one is the source.`,
+        `${item.slug}: ${shotIn.length} colourways exist (${shotIn.join(", ")}). ` +
+          `Name the source explicitly -- pass it to planFiles(), or --from on the CLI.`,
       );
     }
-    const source = shotIn[0];
 
     const cells = [];
     const walk = (i, acc) => {

@@ -37,10 +37,32 @@ const cell = arg("cell");
 const view = arg("view", "front");
 const colour = arg("colour", "Navy");
 const out = arg("out");
+// What she is wearing UNDER the abaya. A pale abaya over a pale slip is
+// invisible, which is the whole reason this option exists -- founder,
+// 2026-09-20: "both white and ivory has to show over other shirts and pants
+// beneath because otherwise it's useless". It doubles as the cross-sell shot.
+const UNDER = {
+  slip: "a plain IVORY slip dress underneath which stays ivory",
+  "navy-set":
+    "underneath, a NAVY linen shirt and matching NAVY wide-leg linen trousers, " +
+    "both in the same deep muted ink navy. The shirt is relaxed with a collar and " +
+    "a placket; the trousers fall straight and wide to the shoe. They are a " +
+    "separate outfit worn UNDER the open abaya and clearly visible down the front " +
+    "opening, at the chest, the waist and between the hems",
+  "burgundy-set":
+    "underneath, a BURGUNDY linen blouse and matching BURGUNDY pleated linen " +
+    "trousers, both in the same deep muted wine. The blouse is neat and close to " +
+    "the body; the trousers are pleated at the waist and fall straight. They are a " +
+    "separate outfit worn UNDER the open abaya and clearly visible down the front " +
+    "opening, at the chest, the waist and between the hems",
+};
+const under = arg("under", "slip");
+if (!UNDER[under]) throw new Error(`--under must be one of ${Object.keys(UNDER).join(", ")}`);
 if (!cell) throw new Error("--cell is required, e.g. --cell midi:narrow");
 
 // ---------------------------------------------------------------- the source
-const plan = await planFiles();
+const from = arg("from", "Burgundy");
+const plan = await planFiles(from);
 const entry = plan.find((p) => p.slug === item);
 if (!entry) throw new Error(`no abaya called ${item}`);
 const source = entry.files.find((f) => f.cells.includes(cell) && f.view === view);
@@ -113,7 +135,7 @@ IT IS LINEN. The weave stays visible - slubs, grain, soft creases, deep shadow i
 
 HER FACE MUST BE SHARP AND IN FOCUS, with correct natural anatomy: both eyes the same size and shape, level, symmetrical. No blur, no distortion. The whole figure is in focus from head to shoe. Her hair is worn the same way as in IMAGE 1.
 
-She wears nude leather HIGH-HEELED sandals, never flat shoes, and a plain IVORY slip dress underneath which stays ivory.
+She wears nude leather HIGH-HEELED sandals. NEVER flat shoes, never sandals without a heel, never trainers: the heel is visible in every photograph in this catalogue. Underneath the abaya she wears ${UNDER[under]}.
 
 The pose and the model may differ from IMAGE 1. The garment, its fit, the background and the floor may not.`;
 
@@ -133,6 +155,15 @@ if (view === "back" && /slip dress visible/.test(prompt) === false && !/NO front
   problems.push(`back view does not forbid the front opening`);
 }
 if (!prompt.includes(colour.toUpperCase())) problems.push(`the colour word is missing`);
+// ⚠️ HEELS, EVERY TIME. Founder, 2026-09-20: "always wearing heals." CLAUDE.md
+// §4b has said to pin the shoes by name since the trouser shoot, and it is
+// still the thing a prompt quietly loses when it gets rewritten.
+if (!/HIGH-HEELED/.test(prompt)) problems.push(`the heels are not pinned -- every catalogue photograph has a visible heel`);
+if (/flat shoes(?!,| )/.test(prompt) && !/NEVER flat shoes/.test(prompt)) problems.push(`flat shoes mentioned without forbidding them`);
+// ⚠️ A PALE ABAYA OVER A PALE SLIP IS INVISIBLE.
+if ((colour === "White" || colour === "Ivory") && under === "slip") {
+  problems.push(`${colour} over the ivory slip has no contrast -- pass --under navy-set or --under burgundy-set`);
+}
 // The measurement must have come from a real garment, not from a failed mask.
 if (measured.sleeve < 1.0 || measured.sleeve > 2.2) problems.push(`source sleeve ratio ${measured.sleeve.toFixed(2)} is implausible -- the source mask is wrong, fix it before spending`);
 if (measured.lenRatio < 2.0 || measured.lenRatio > 5.0) problems.push(`source length ratio ${measured.lenRatio.toFixed(2)} is implausible`);

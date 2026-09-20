@@ -20,6 +20,13 @@ const body = {
       ],
     },
   ],
+  // ⚠️ PIN THE ASPECT RATIO OR THE MODEL MAY RETURN A GRID. Three generations
+  // came back as 2- and 3-panel contact sheets -- 1408x768, landscape -- and an
+  // explicit "ONE SINGLE PHOTOGRAPH, no panels, no grid" line at the top of the
+  // prompt did not stop it. Constraining the output to 2:3 portrait makes a
+  // side-by-side layout impossible to draw. CLAUDE.md already documents this
+  // config for the abaya shoot; it was simply never carried into these scripts.
+  generationConfig: { imageConfig: { aspectRatio: "2:3" } },
 };
 
 const res = await fetch(
