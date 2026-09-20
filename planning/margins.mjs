@@ -113,14 +113,19 @@ const INPUTS = {
   // cloth on the two shipping categories by 10%.
   // ⏳ Her answer covers SHIRT and PANTS. Dress, Abaya, Skirt and Gilet are
   // still modelled, not quoted, and the abaya is the metre-hungry one.
-  // ✅ DRESS 2.75 AND ABAYA 3.0-3.5, FOUNDER 2026-09-20: "abaya is between 3 and
-  //    3.5 depending on the size, for me it's 3m... since the dress is
-  //    sleeveless i think it's less, around 2.5-3m". Both dresses are
-  //    SLEEVELESS by design, which is where the saving comes from.
-  //    Dress modelled at 2.75, the middle of her range, because both ends are
-  //    hers rather than one being a worst case. Abaya STAYS AT 3.5, the worse
-  //    end, per the rule above: her own 3m is a size-S data point, not the
-  //    range. At 3.0 the abaya reads 60.0% instead of 57.4%.
+  // ✅ DRESS 2.75, CONFIRMED BY THE TAILOR 2026-09-20. The founder estimated
+  //    "around 2.5-3m" for a sleeveless dress and the tailor independently came
+  //    back with the same 2.5-3. Two sources, one range, so 2.75 is the middle
+  //    of a CONFIRMED range rather than the middle of a guess. Both dresses are
+  //    sleeveless by design, which is where the saving against an abaya comes
+  //    from.
+  //    ⚠️ THIS IS METRES ONLY. His price for MAKING each dress is still open
+  //    and is the bigger unknown -- see tailoringAed below.
+  // ✅ ABAYA 3.0-3.5, founder 2026-09-20: "between 3 and 3.5 depending on the
+  //    size, for me it's 3m". STAYS MODELLED AT 3.5, the worse end, per the
+  //    range rule above: her own 3m is a size-S data point, not the range. At
+  //    3.0 the abaya reads 60.0% instead of 57.4%, so the price is safer than
+  //    this model claims, never riskier.
   metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 2.75, Abaya: 3.5, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
