@@ -440,16 +440,16 @@ export const catalog: CatalogItem[] = [
     descriptor: "Folded edge, open front",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
-    image: "/catalog/abaya/abaya-burgundy-front.jpg",
-    backImage: "/catalog/abaya/abaya-burgundy-back.jpg",
+    image: "/catalog/abaya/abaya-burgundy-front-wb.jpg",
+    backImage: "/catalog/abaya/abaya-burgundy-back-wb.jpg",
     colorImages: {
-      Burgundy: { front: "/catalog/abaya/abaya-burgundy-front.jpg", back: "/catalog/abaya/abaya-burgundy-back.jpg" },
+      Burgundy: { front: "/catalog/abaya/abaya-burgundy-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-back-wb.jpg" },
     },
     comboImages: {
       Burgundy: {
-        "maxi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-front.jpg", back: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-back.jpg" },
-        "midi:narrow": { front: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-front.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-back.jpg" },
-        "midi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-midi-wide-front.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-wide-back.jpg" },
+        "maxi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-back-wb.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-back-wb.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-midi-wide-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-wide-back-wb.jpg" },
       },
     },
     // ⚠️ THE BASE PHOTO IS maxi:narrow, NOT THE CATEGORY DEFAULT. Left off,
@@ -507,16 +507,16 @@ export const catalog: CatalogItem[] = [
     descriptor: "Frog closures, worn open or closed",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
-    image: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1.jpg",
-    backImage: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1.jpg",
+    image: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg",
+    backImage: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg",
     colorImages: {
-      Ivory: { front: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1.jpg" },
+      Ivory: { front: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg" },
     },
     comboImages: {
       Ivory: {
-        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-back-v1.jpg" },
-        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-back-v1.jpg" },
-        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1.jpg" },
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-back-v1-wb.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-back-v1-wb.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1-wb.jpg" },
       },
     },
     // The photographed base is the LONG one worn OPEN, which is maxi:4, and
