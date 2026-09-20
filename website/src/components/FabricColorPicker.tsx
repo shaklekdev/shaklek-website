@@ -83,10 +83,15 @@ export default function FabricColorPicker({
           every GARMENT photograph in the catalogue is still rendered, so the
           dress in the picture and the chip beside it can disagree until those
           are renormalised -- see fabric-swatch-per-colour in OPEN.md. Until
-          then this line is what makes the chip the reference, not the photo. */}
+          then this line is what makes the chip the reference, not the photo.
+          Founder, 2026-09-20, on a draft that said "colours shift from one
+          screen to another": "we don't say colors shifts, we say color may
+          vary". Keep the retail phrasing; do not describe what a screen does,
+          and do not call the chips "true shades" (an exact match is not
+          something we can promise). */}
       <p className="mt-3 text-[11px] leading-relaxed text-text-3">
-        The circles above are photographs of the actual linen. Colours shift
-        from one screen to another — these are the true shades.
+        The colour circles are photographs of the actual linen. Colours may
+        vary slightly on screen.
       </p>
       {/* ⚠️ NO "COMING SOON" LINE. Founder, 2026-09-14: "we need to remove the
           coming soon thing from everywhere, I still see it." This rendered
