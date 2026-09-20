@@ -444,12 +444,23 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/abaya/abaya-burgundy-back-wb.jpg",
     colorImages: {
       Burgundy: { front: "/catalog/abaya/abaya-burgundy-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-back-wb.jpg" },
+      // ⚠️ NAVY IS GENERATED, NOT PHOTOGRAPHED, and it is held to the burgundy
+      // set's own measurements rather than to a description. See
+      // scripts/catalog/colourways/generate-cell.mjs: each prompt is BUILT from
+      // the burgundy cell it copies, so a midi cell cannot be told to reach the
+      // floor -- which is exactly the mistake that cost $0.27 in bad backs.
+      Navy: { front: "/catalog/abaya/abaya-navy-front.jpg", back: "/catalog/abaya/abaya-navy-back.jpg" },
     },
     comboImages: {
       Burgundy: {
         "maxi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-back-wb.jpg" },
         "midi:narrow": { front: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-back-wb.jpg" },
         "midi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-midi-wide-front-wb.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-wide-back-wb.jpg" },
+      },
+      Navy: {
+        "maxi:wide": { front: "/catalog/abaya/abaya-navy-combo-maxi-wide-front.jpg", back: "/catalog/abaya/abaya-navy-combo-maxi-wide-back.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-navy-combo-midi-narrow-front.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-narrow-back.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-navy-combo-midi-wide-front.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-wide-back.jpg" },
       },
     },
     // ⚠️ THE BASE PHOTO IS maxi:narrow, NOT THE CATEGORY DEFAULT. Left off,
