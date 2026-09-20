@@ -70,7 +70,7 @@ try {
     const [pantsItem] = await tx`insert into order_items (order_id,name,category,price_aed)
       values (${older.id},'Cargo Trousers','Pants','429') returning id`;
     await tx`insert into order_items (order_id,name,category,price_aed)
-      values (${newer.id},'Structured Blouse','Shirt','389')`;
+      values (${newer.id},'Peplum Blouse','Shirt','389')`;
 
     let [r] = await insert(tx, email, "Pants");
     check(r && r.order_id === older.id, "picks the DELIVERED parcel, not the newer unshipped order");
@@ -117,7 +117,7 @@ try {
     const [pants] = await tx`insert into order_items (order_id,name,category,price_aed)
       values (${ordA.id},'Cargo Trousers','Pants','429') returning id`;
     const [other] = await tx`insert into order_items (order_id,name,category,price_aed)
-      values (${ordB.id},'Structured Blouse','Shirt','449') returning id`;
+      values (${ordB.id},'Peplum Blouse','Shirt','449') returning id`;
 
     const mark = (itemId, orderId, used) => used
       ? tx`update order_items set fit_remake_used_at = coalesce(fit_remake_used_at, now())

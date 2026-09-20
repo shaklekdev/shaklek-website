@@ -444,7 +444,7 @@ export function changesFromLabels(
 // A cart line stores every slider's label, premium ones included. Premium
 // sliders are not customer-editable -- they are committed at their defaults
 // and never rendered in the customizer -- so echoing them into the cart
-// describes decisions the customer never made. A Utility Shirt came back as
+// describes decisions the customer never made. A Tie-Waist Shirt came back as
 // "... 1 pocket, Button closure" on a page that had offered neither, which
 // reads either as a mistake or as the site putting words in their mouth.
 //

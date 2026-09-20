@@ -33,7 +33,7 @@ const emails = [
       items: [
         { name: "Oversized Shirt", fabric: "Linen", color: "Ivory", size: "Tailored",
           price: 449, quantity: 1, changes: ["Long sleeve", "Longer length"] },
-        { name: "Wide-leg Pants", fabric: "Linen", color: "Navy", size: "M",
+        { name: "Wide-leg Trousers", fabric: "Linen", color: "Navy", size: "M",
           price: 519, quantity: 2, changes: ["Cropped"] },
       ],
       total: 1487,

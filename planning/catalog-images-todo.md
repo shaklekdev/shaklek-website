@@ -14,9 +14,9 @@ All eight catalog items now have complete customizer photography.
 | Item | Category | Matrix | Colours | State |
 |---|---|---|---|---|
 | Oversized Shirt | Shirt | `sleeve:length`, 3 combos | 4/4 | complete |
-| Structured Blouse | Shirt | `sleeve:length`, 3 combos | 4/4 | complete |
+| Peplum Blouse | Shirt | `sleeve:length`, 3 combos | 4/4 | complete |
 | Wrap Top | Shirt | `sleeve:length`, 3 combos | 4/4 | complete |
-| Utility Shirt | Shirt | `sleeve:length`, 3 combos | 4/4 | complete |
+| Tie-Waist Shirt | Shirt | `sleeve:length`, 3 combos | 4/4 | complete |
 | Cargo Trousers | Pants | `straight/wide` x `full/cropped` | 4/4 | complete 2026-08-22 |
 | Banded Trousers | Pants | same | 4/4 | complete 2026-08-22 |
 | Pleated Trousers | Pants | same, **wide = barrel leg** | 4/4 | complete 2026-08-22 |
@@ -184,7 +184,7 @@ and `PANTS_PARAMS` -- likely `sleeve` x `length`, mirroring the shirts.
       tones and tints hands and feet (tried and reverted 2026-08-22).
       Regenerate the offending cell instead.
 - [ ] **Wrap Top backs have no tie.** Deliberate, signed off by the founder.
-- [ ] **Utility Shirt has no shared master across colours** -- each colour was
+- [ ] **Tie-Waist Shirt has no shared master across colours** -- each colour was
       shot at a different canvas size.
 
 ---

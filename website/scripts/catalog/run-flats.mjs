@@ -60,7 +60,7 @@ function buildPrompt({ item, comboKey, view }) {
   // Whether this garment has ANY pocket on its back, read from the construction
   // data rather than assumed. Trousers do (welt back pockets); the shirts do
   // not. Saying "no front pockets" was not enough: the model put a patch pocket
-  // on two Utility Shirt backs and a second one on another, none of which exist
+  // on two Tie-Waist Shirt backs and a second one on another, none of which exist
   // in the source image or in the spec. A tailor reading that flat would make
   // it, so the prohibition has to be explicit and it has to be derived.
   const hasBackPocket = c.details.some(

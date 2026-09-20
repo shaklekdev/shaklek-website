@@ -61,7 +61,7 @@ const SETS = [
     size: measurements ? null : "S",
     measurements,
     items: [
-      ["Utility Shirt", "Shirt", ["Short sleeves", "Normal length", "2 pockets", "Button closure"]],
+      ["Tie-Waist Shirt", "Shirt", ["Short sleeves", "Normal length", "2 pockets", "Button closure"]],
       ["Cargo Trousers", "Pants", ["Wide leg", "Cropped length", "Normal waist", "Button fly", "Pockets"]],
     ],
     notes:
@@ -98,7 +98,7 @@ const SETS = [
     size: measurements ? null : "S",
     measurements,
     items: [
-      ["Structured Blouse", "Shirt", ["Long sleeves", "Normal length", "1 pocket", "Button closure"]],
+      ["Peplum Blouse", "Shirt", ["Long sleeves", "Normal length", "1 pocket", "Button closure"]],
       ["Banded Trousers", "Pants", ["Straight leg", "Cropped length", "High waist", "Zip fly", "Pockets"]],
     ],
     notes:

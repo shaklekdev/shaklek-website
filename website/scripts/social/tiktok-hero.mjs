@@ -20,7 +20,7 @@
  *     choice. This runs fourteen changes across five garments and accelerates,
  *     so the FEELING is abundance rather than a list.
  *
- * ⚠️ The shirt is the Utility Shirt. catalog.ts labels its base photo
+ * ⚠️ The shirt is the Tie-Waist Shirt. catalog.ts labels its base photo
  * short:longer; the photograph is short:normal. Metadata lies, pixels do not,
  * and I sent the founder a false bug report about her live site before checking.
  */

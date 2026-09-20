@@ -31,7 +31,7 @@ export type CatalogItem = {
   comboImages?: Partial<Record<string, Partial<Record<string, { front: string; back: string }>>>>;
   // Overrides parameterSliders.ts's defaultIndex per slider type, for items
   // whose base photo doesn't match the category-wide default -- e.g.
-  // Structured Blouse's photo is a half sleeve, not SHIRT_PARAMS' "long"
+  // Peplum Blouse's photo is a half sleeve, not SHIRT_PARAMS' "long"
   // default, so its initial slider position/preview would otherwise be
   // wrong on first load.
   defaultChanges?: Partial<Record<string, string>>;
