@@ -49,3 +49,31 @@ What changes down the length is not the WIDTH, it is the CRISPNESS:
 ⚠️ And pass `/tmp/fold-ref.jpg` — a crop of the real edge — as a reference.
 CLAUDE.md §4b: references beat descriptions. Three attempts at describing this
 failed; the crop plus the corrected wording is what finally held it.
+
+---
+
+# Vary the pose between the narrow and wide cells
+
+Founder, 2026-09-20: *"the tip for this is change the pause of the model, if you
+change the pause nobody can tell if it's not the exact length between the midi
+narrow sleeve and midi wide sleeve, same for maxi wide or maxi narrow"*.
+
+⚠️ **THIS IS A PHOTOGRAPHY INSTRUCTION, NOT A CHEAT.** The two cells of a sleeve
+pair differ only in sleeve volume, so an identical pose invites the eye to
+compare every other edge — and a hem two centimetres out reads as a fault.
+Change the stance, the hands, the weight, the angle of the shoulders, and the
+customer sees two photographs of the same garment instead of a spot-the-
+difference.
+
+It also matches how the rest of this catalogue was shot: no two shirts share a
+pose either.
+
+**What must still match exactly**, pose or no pose: the garment's length as a
+proportion of the figure, the sleeve width difference between narrow and wide,
+the fold, the colour, the backdrop and the framing. The pose hides small
+imprecision in hem height between SIBLING cells. It does not license a midi that
+is really a maxi — that is what the measured ratios in this file are for.
+
+**What to write in the prompt:** name the change. "She stands with her weight on
+one hip, one hand resting at her side and the other lifted slightly" beats "vary
+the pose", which the model ignores.
