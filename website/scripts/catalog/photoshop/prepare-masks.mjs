@@ -93,32 +93,44 @@ function maskDarkGarment(data, w, h, { hue, window = 45, maxL = 0.62, minS = 0.1
 }
 
 /**
- * A pale garment on a pale backdrop: hue cannot see it, so subtract the
- * background instead. Each ROW estimates its own backdrop from its outer 6% of
- * columns -- the one width measure in CLAUDE.md §4b that works on both dark and
- * pale garments -- and anything differing by more than `tol` is subject.
- * Subject minus skin is, roughly, garment plus hair plus shoes.
+ * A pale garment on a pale backdrop, found by WARMTH rather than by brightness.
+ *
+ * ⚠️ BACKGROUND SUBTRACTION FAILED HERE AND IT FAILED PLAUSIBLY. Estimating
+ * each row's backdrop from its outer columns and marking everything that
+ * differs is the technique CLAUDE.md §4b endorses for MEASURING a garment's
+ * width, and it is the wrong tool for cutting one out: ivory linen on a white
+ * cyclorama differs from its background by almost nothing across large lit
+ * areas, so the mask came out moth-eaten, caught the hair and the shadow puddle
+ * at her feet, and missed the middle of the garment. Founder: "still not good".
+ *
+ * Measured on the Buttoned Abaya, and the separation is not subtle:
+ *
+ *   garment chest  rgb(231,232,221)   R-B = +10   l = 0.89
+ *   garment hem    rgb(220,212,194)   R-B = +26   l = 0.81
+ *   backdrop       rgb(232,233,238)   R-B =  -6   l = 0.92
+ *   floor          rgb(246,250,253)   R-B =  -7   l = 0.98
+ *   hair           rgb(163,120,97)    R-B = +66   l = 0.51
+ *   dress under it rgb(154,126,101)   R-B = +53   l = 0.50
+ *
+ * The linen is WARM and the studio is COOL: backdrop and floor are lit
+ * daylight-balanced and read blue, the undyed linen reads yellow. Two
+ * thresholds separate all six -- warm enough to be fabric, light enough not to
+ * be hair, skin, or the slip dress underneath.
+ *
+ * ⚠️ THIS IS A PROPERTY OF THESE PHOTOGRAPHS, NOT OF IVORY. A warm-lit set
+ * inverts it. Re-measure before trusting it on a new shoot; the numbers above
+ * are the instrument, and printing them is what made the rule obvious.
  */
-function maskPaleGarment(data, w, h, { tol = 16 }) {
+function maskPaleGarment(data, w, h, { minWarmth = 5, minL = 0.65 } = {}) {
   const out = Buffer.alloc(w * h);
   const faceCut = Math.round(h * FACE_FRACTION);
-  const edge = Math.max(2, Math.round(w * 0.06));
-  for (let y = 0; y < h; y++) {
-    let br = 0, bg = 0, bb = 0, n = 0;
-    for (let x = 0; x < edge; x++) {
-      for (const xx of [x, w - 1 - x]) {
-        const i = (y * w + xx) * 3;
-        br += data[i]; bg += data[i + 1]; bb += data[i + 2]; n++;
-      }
-    }
-    br /= n; bg /= n; bb /= n;
-    if (y < faceCut) continue;
+  for (let y = faceCut; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const i = (y * w + x) * 3;
-      const diff = Math.abs(data[i] - br) + Math.abs(data[i + 1] - bg) + Math.abs(data[i + 2] - bb);
-      if (diff < tol * 3) continue;
-      const [hu, s, l] = rgb2hsl(data[i], data[i + 1], data[i + 2]);
-      if (isSkinish(hu, s, l)) continue;
+      const R = data[i], G = data[i + 1], B = data[i + 2];
+      const mx = Math.max(R, G, B), mn = Math.min(R, G, B);
+      if ((mx + mn) / 2 / 255 < minL) continue;
+      if (R - B < minWarmth) continue;
       out[y * w + x] = 255;
     }
   }
@@ -216,7 +228,7 @@ for (const item of plan) {
       height: h,
       candidateCoverage: Number(pct(mask)),
     });
-    console.log(`${stem.padEnd(46)} ${dark ? "hue" : "bg-subtract"}  candidate covers ${pct(mask)}% of frame`);
+    console.log(`${stem.padEnd(46)} ${dark ? "hue" : "warmth"}  candidate covers ${pct(mask)}% of frame`);
   }
 }
 
