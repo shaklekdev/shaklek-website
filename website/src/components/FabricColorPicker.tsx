@@ -38,10 +38,15 @@ export default function FabricColorPicker({
             aria-label={c.name}
             aria-pressed={c.name === color}
             onClick={() => onColorChange(c.name)}
-            className={`h-6 w-6 rounded-full border-2 transition-all ${
+            /* ⚠️ THE CHIP IS A PHOTOGRAPH OF THE CLOTH, not a flat colour.
+               The hex stays as the background underneath it so the chip is
+               never blank while the image loads, and so it still reads on a
+               surface that cannot fetch one. Bigger than the old 24px dot,
+               because a weave has to be visible to be worth showing. */
+            className={`h-9 w-9 rounded-full border-2 bg-cover bg-center transition-all ${
               c.name === color ? "border-accent scale-110" : "border-transparent"
             }`}
-            style={{ background: c.hex }}
+            style={{ backgroundColor: c.hex, backgroundImage: `url(${c.swatch})` }}
           />
         ))}
       </div>
@@ -70,6 +75,19 @@ export default function FabricColorPicker({
         </div>
       )}
       </div>
+      {/* ⚠️ THE SHADE DISCLAIMER, AND IT IS NOT BOILERPLATE. Founder,
+          2026-09-20: refer people "to the actual fabric pictures for exact
+          shades". The chips above ARE photographs of her cloth, so this line
+          tells a customer that what they are looking at is the real thing and
+          that a screen is the variable, not the linen. It matters because
+          every GARMENT photograph in the catalogue is still rendered, so the
+          dress in the picture and the chip beside it can disagree until those
+          are renormalised -- see fabric-swatch-per-colour in OPEN.md. Until
+          then this line is what makes the chip the reference, not the photo. */}
+      <p className="mt-3 text-[11px] leading-relaxed text-text-3">
+        The circles above are photographs of the actual linen. Colours shift
+        from one screen to another — these are the true shades.
+      </p>
       {/* ⚠️ NO "COMING SOON" LINE. Founder, 2026-09-14: "we need to remove the
           coming soon thing from everywhere, I still see it." This rendered
           "Organic cotton coming soon" off the switched-off entry in fabrics.ts,
