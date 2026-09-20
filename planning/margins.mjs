@@ -143,16 +143,17 @@ const INPUTS = {
   //    ⚠️ THE ABAYA WAS A 100 PLACEHOLDER AND IS NOW QUOTED. That is a real
   //    10 AED saving, and it lands on the garment whose price was least certain.
   // ⏳ GILET AND SKIRT STILL NOT QUOTED. Those two remain placeholders.
-  // ⏳ DRESS RAISED 90 -> 110 ON 2026-09-20, AND THIS ONE IS A GUESS, NOT A
-  //    QUOTE. His 80-90 was for "abaya and dress" meaning a PLAIN dress, and
-  //    that still fits the slip dress. The BUTTONED dress is a different
-  //    garment to make: a waist seam, a shirt collar, side pockets and
-  //    EIGHTEEN buttonholes. 110 is the conservative figure for the pair, per
-  //    the range rule above.
-  //    ⚠️ ASK HIM FOR A PRICE ON EACH DRESS SEPARATELY. Both are sold at 649,
-  //    so the buttoned one sets the floor: at 110 it earns 55.5%, at 140 it
-  //    falls to about 54% and 649 is too low.
-  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 110, Abaya: 90, Gilet: 55 },
+  // ✅ DRESS 90, THE SAME AS THE ABAYA, CONFIRMED BY THE FOUNDER 2026-09-20:
+  //    "we already have the tailoring price for the dress is the same as the
+  //    abaya". That is his original 80-90 for "abaya and dress", and it covers
+  //    BOTH of ours -- the plain slip and the buttoned one.
+  //    This session had raised it to a GUESSED 110 on the reasoning that a
+  //    waist seam, a shirt collar, side pockets and eighteen buttonholes must
+  //    cost more to make. That was modelling an opinion over a quote she
+  //    already had. Reverted to 90.
+  //    Worth 3.1 margin points on every dress: 649 reads 58.6% rather than
+  //    55.5%, which puts it between the abaya's 57.4% and the shirt's 59.7%.
+  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 90, Abaya: 90, Gilet: 55 },
 
   shippingAed: 21, // Founder, 2026-08-22
 
@@ -516,8 +517,8 @@ console.log(`\nTHE ${TH} THRESHOLD — free in-person fitting, ${FIT} AED, ONCE 
 console.log(`  Set so a single dress or abaya qualifies, as well as any two pieces.`);
 console.log(`    qualifies      dress 649 · abaya 699 · any pair (cheapest 2 shirts ${(2 * SHIRT_PRICE).toFixed(0)})`);
 console.log(`    does not       shirt ${SHIRT_PRICE} · gilet 479 · trousers 519`);
-console.log(`  The band is (519, 649]. ⚠️ The DRESS tailoring is a guess, not a quote -- see`);
-console.log(`  tailoringAed. Both dresses sell at 649; the buttoned one sets the floor.`);
+console.log(`  The band is (519, 649]. Dress and abaya are both quoted now: 2.5-3m and`);
+console.log(`  90 to make, the same rate for both. Both dresses sell at 649.`);
 
 const BASKETS2 = [
   ["Shirt + trousers", ["Shirt", "Pants"], 968],
