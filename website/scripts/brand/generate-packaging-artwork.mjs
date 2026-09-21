@@ -382,10 +382,31 @@ makePdf("03b-hang-tag-back", 50, 90, (doc, w, h) => {
   // word turns a true claim into a false one. The legal fibre disclosure is
   // the CARE LABEL (02), which carries the real percentages; this tag is
   // brand, and productDisclosure.ts keeps "100% linen" for the same reason.
+  // ⚠️ "MADE IN UAE", NOT "MADE IN THE UAE", AND THE TWO MUST MATCH.
+  // This tag said "Made in the UAE" while the care label said "MADE IN UAE",
+  // on the same garment, in the same parcel. The founder spotted it 2026-09-21
+  // when somebody told her the claim was false.
+  //
+  // THE CLAIM IS NOT FALSE. Origin follows the last SUBSTANTIAL
+  // TRANSFORMATION, and cutting imported cloth to a pattern and sewing it into
+  // a garment is exactly that. The UAE bar is roughly 40% of the product's
+  // value produced locally plus a change in classification: the imported input
+  // is about 72 AED of cloth against a 449 shirt, and everything else -- the
+  // cutting, the sewing, the packaging from Ajman -- is local. Comfortably
+  // clear. Whoever said otherwise was applying "the materials must be local",
+  // which is not how origin works and which almost no garment label would
+  // survive.
+  //
+  // ⚠️ WHAT IS MISSING IS THE CERTIFICATE OF ORIGIN, not the entitlement. That
+  // is issued through the Chamber of Commerce and is what makes the claim
+  // PROVABLE rather than merely defensible. On her adviser's hour.
+  //
+  // The wording is aligned on the CARE LABEL's form, not this one, because
+  // "Made in UAE" is the form the UAE's own programme uses.
   const items = [
     "100% custom-made",
     "100% natural linen",
-    "Made in the UAE",
+    "Made in UAE",
   ];
   // Three, not four, so the spacing opens up rather than leaving a gap where
   // the fourth was.
@@ -439,7 +460,7 @@ makePdf("04-thank-you-card-front", CARD_LONG, CARD_SHORT, (doc, w, h) => {
   // WHY THIS SENTENCE SURVIVED and the other two did not:
   //   "One tailor cut it to your measurements and sewed it here in the UAE."
   //     Already in the parcel twice over -- the hang tag says 100% CUSTOM-MADE
-  //     and MADE IN THE UAE, and the care label says MADE IN UAE. A parcel
+  //     and MADE IN UAE, and the care label says the same. A parcel
   //     that makes the same claim three times is not emphasising it.
   //   "Made to be worn for years, not for a season."
   //     True, and brand copy rather than anything about HER piece. It belongs
