@@ -17,8 +17,10 @@
  *
  * ⚠️ PRICES: THE BLANKET BAN IS OVER, THE DISCIPLINE IS NOT. This used to read
  * "NO PRICES either", written while the fabric was unsettled. It then sat here
- * contradicting the file it governs, because the cost article publishes 699 on
- * the founder's own decision. The rule now, from her, 2026-09-13:
+ * contradicting the file it governs, because the cost article publishes the
+ * abaya price on the founder's own decision. ⚠️ DO NOT WRITE THE NUMBER INTO
+ * THIS COMMENT: it was "699" here until 2026-09-27 and went stale the hour she
+ * moved it to 949. The rule now, from her, 2026-09-13:
  *
  *   - A PRICE IS ALLOWED where the article's job is the price ("how much does
  *     an abaya cost in Dubai") or in a closing sell. Nowhere else. An article
@@ -339,12 +341,17 @@ export const articles: Article[] = [
         // entry and no way to buy it. The abaya is coming; it is not made yet.
         // Say what ships and say what is coming, separately. Journal review,
         // 2026-09-13.
-        // ⚠️ PRICES ADDED 2026-09-13 ON THE FOUNDER'S APPROVAL, and checked
-        // against catalog.ts, not against memory: every Shirt is 449, every
-        // Pants is 519, Abaya is 690. Change one, change both. This article
-        // sells TWO garments, which is the ~71% margin line, and it carried no
-        // number and no way to act until now.
-        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519. Linen dresses at AED 699 and an open abaya at AED 949 with a matching shayla join them when we open, in one colourway each to begin with. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
+        // ⚠️ PRICES ADDED 2026-09-13 ON THE FOUNDER'S APPROVAL, and every one
+        // of them is read out of catalog.ts before it is typed here, never out of
+        // memory. Change one, change both. ⚠️ AND DO NOT RESTATE THE LADDER IN
+        // THIS COMMENT: it said "Abaya is 690" for a fortnight, a number this shop
+        // never charged, sitting directly above the text that had 699 in it. This
+        // article sells TWO garments, which is the ~71% margin line.
+        // ⚠️ THE COLOURWAY CLAIM IS LOAD-BEARING AND ITEM-SPECIFIC. The dresses
+        // are ivory only; the OPEN ABAYA has three (Burgundy, Navy, Ivory). A blanket
+        // "one colourway each" was published here on 2026-09-27 and was false for the
+        // abaya within the hour. Check colorImages, do not generalise.
+        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519. Linen dresses at AED 699 and an open abaya at AED 949 with a matching shayla join them when we open, the dresses in ivory to begin with. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -526,9 +533,7 @@ export const articles: Article[] = [
         // Framed as "will be" because it is not purchasable yet, and a present
         // tense here would be a claim about a product that does not exist.
         // ⚠️ THIS ARTICLE EXISTS TO SELL. Not by bending a number, by putting
-        // ours next to the right comparison. 690 is expensive beside a souq
-        // rail and cheap beside a made-to-measure boutique piece, and
-        // made-to-measure is what it IS. Founder, 2026-09-13: "our price
+        // ours next to the right comparison. Founder, 2026-09-13: "our price
         // doesn't have to show as overpriced or too expensive, remember these
         // blogs are meant to bring people to buy on our website."
         // ⚠️ AND THE FRAME WAS WRONG UNTIL 2026-09-13. It read "that is
@@ -537,7 +542,19 @@ export const articles: Article[] = [
         // 800 for full custom and put our number ABOVE a band it actually sits
         // below. Rule 3b is about framing a true number, not inventing a
         // flattering one, and an unsupportable flourish fails it just as badly.
-        text: "Ours will be AED 949 when we open, with a matching shayla in the same cloth: cut to your measurements, in 100% natural linen, made after it is ordered. That is not the AED 300 rail and it does not pretend to be. It sits just above the AED 800 where full custom starts, at the bottom of the AED 800 to AED 3,000 the Dubai boutique labels charge. What differs inside that band is what you get for it. Most of it is nida or crepe, which is polyester, cut to a size chart. Ours is linen, cut to you, and in Dubai the measuring is free on a first order rather than a line on the bill.",
+        //
+        // ⚠️ AT 949 THE OLD ARGUMENT INVERTED, and the first rewrite on
+        // 2026-09-27 failed the same rule twice. It claimed "most of that band is
+        // nida or crepe, which is polyester" -- an unsourced fibre claim about
+        // other people's products, and one this article's own price-driver list
+        // contradicts ("nida and crepe sit at the bottom, linen and silk blends
+        // well above"). And it argued "cut to you" against FULL CUSTOM, which is
+        // cut to you by this article's own definition. The two comparisons are
+        // separate: against full custom what differs is a fixed price, linen and
+        // the shayla; against the labels it is that the piece is cut to you.
+        // ⚠️ "JUST above AED 800" also went: 949 is 149 above it, 19%, and
+        // "just" was doing work the number does not support.
+        text: "Ours will be AED 949 when we open, and the number buys two pieces: the abaya and a matching shayla in the same cloth, both in 100% natural linen, both cut to your measurements, made after they are ordered. That sits above the AED 800 where full custom starts, and at the foot of the AED 800 to AED 3,000 the Dubai labels charge for a piece cut to a pattern rather than to you. Against full custom, what differs is that the price is fixed, the cloth is linen and the shayla is in it. In Dubai we come to you to take the measurements, free on a first order.",
       },
       {
         type: "callout",

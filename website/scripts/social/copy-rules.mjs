@@ -10,6 +10,40 @@
  *
  * Any builder that emits customer-facing words imports `lint` from here.
  */
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+// ⚠️ THE STALE-PRICE RULE IS DERIVED NOW, because as a typed list it could not
+// keep up. It read `(389|419|429|619)` from 2026-09-13 until 2026-09-27, so a
+// carousel saying "AED 649" for a dress or "AED 699" for an abaya passed clean
+// on the day both of those became wrong. A false price in a rendered post
+// outlives the correction: a screenshot does not update.
+//
+// HOW IT WORKS: every number this shop has EVER charged or proposed is listed
+// below, and the rule bans each one that is not a price in catalog.ts today.
+// So moving a price un-bans the new number and bans the old one in the same
+// edit, with nothing to remember. The list of former numbers cannot be derived
+// from anything -- it is history, and git is the only other record of it -- so
+// it is the one thing kept by hand. ADD TO IT WHENEVER A PRICE MOVES.
+const EVER_OURS = [389, 419, 429, 449, 519, 599, 619, 649, 690, 699, 749, 799, 949];
+
+function currentPrices() {
+  // Same block-splitting parse as planning/margins.mjs, and for the same reason:
+  // a single regex with narrow windows silently missed three items there for
+  // days because a price comment sat between `category:` and `price:`.
+  const here = dirname(fileURLToPath(import.meta.url));
+  const src = readFileSync(join(here, "..", "..", "src", "data", "catalog.ts"), "utf8");
+  const found = new Set();
+  for (const m of src.matchAll(/^\s*price: (\d+),/gm)) found.add(Number(m[1]));
+  for (const m of src.matchAll(/^  (?:Shirt|Skirt|Pants|Dress|Abaya|Gilet): (\d+),/gm)) found.add(Number(m[1]));
+  if (found.size === 0) throw new Error("copy-rules: parsed no prices out of catalog.ts; refusing to lint against nothing");
+  return found;
+}
+
+const CURRENT = currentPrices();
+const STALE = EVER_OURS.filter((n) => !CURRENT.has(n));
+
 export const BANNED = [
   [/[—–](?![A-Za-z0-9])|(?<![A-Za-z0-9])[—–]/, 'em or en dash: reads as generated text'],
   [/\bphotographs?\b/i, 'calls the imagery a photograph: it is generated'],
@@ -25,8 +59,11 @@ export const BANNED = [
   // ⚠️ ADDED 2026-09-13. Every one of these was sitting in a RENDERED carousel
   // waiting to be posted, and the linter could not see them. A false price on a
   // post outlives the correction, because a screenshot does not update.
-  [/\bAED\s?(389|419|429|619)\b/, 'stale price: the ladder is 449 shirt / 519 trousers since 2026-09-08'],
-  [/\bfrom AED\s?3\d\d\b/i, 'stale price: nothing starts below 449'],
+  [/\bfrom AED\s?3\d\d\b/i, 'stale price: nothing starts below the cheapest catalogue item'],
+  [
+    new RegExp(`\\bAED\\s?(${STALE.join("|")})\\b`),
+    `stale price: these are prices we no longer charge (current: ${[...CURRENT].sort((a, b) => a - b).join(", ")})`,
+  ],
   // The founder cut the lead time from advertising AND from the terms of sale
   // on 2026-09-12: ten working days and two weeks are the same duration, and
   // nobody has measured real throughput. A promise in a caption is still a

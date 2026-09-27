@@ -187,9 +187,12 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         One fixed price per category, whatever your size or measurements: shirts
-        AED {BASE_PRICE_BY_CATEGORY.Shirt} and pants{" "}
-        {BASE_PRICE_BY_CATEGORY.Pants}. Fabric, every option on the piece and
-        delivery are all included. No quotes, and no surprises at checkout.
+        AED {BASE_PRICE_BY_CATEGORY.Shirt}, pants AED{" "}
+        {BASE_PRICE_BY_CATEGORY.Pants}, dresses AED{" "}
+        {BASE_PRICE_BY_CATEGORY.Dress}, and abayas AED{" "}
+        {BASE_PRICE_BY_CATEGORY.Abaya}, which includes a matching shayla in the
+        same linen. Fabric, every option on the piece and delivery are all
+        included. No quotes, and no surprises at checkout.
       </>
     ),
   },
