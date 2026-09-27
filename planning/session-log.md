@@ -29,6 +29,7 @@ API key. Ads waiting on Meta pixel ID + open-shop decision.
 **Holding (waitlist throttle):** `website/src/app/api/waitlist/route.ts`,
 `website/src/db/schema.ts` (waitlist table only), `website/drizzle/0013_waitlist_last_mailed.sql`.
 Founder chose: ads first, shop stays shut.
+**Released.** Shipped 3fe40c1: 0013 applied dev then prod (information_schema checked on both), staging job 43 exercised (mail once, repeat not mailed, over-cap not mailed), prod job 374 SUCCEED. No test signup on prod, by rule. Follow-up: `waitlist-cap-followup` in OPEN.md.
 
 ### 2026-09-13 — pre-launch teasers, and the craft set
 
