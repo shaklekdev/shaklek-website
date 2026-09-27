@@ -285,4 +285,9 @@ export const waitlist = pgTable("waitlist", {
   // Kept as a timestamp rather than deleting the row: a deleted row can be
   // re-added by a later signup and silently re-subscribe someone who left.
   unsubscribedAt: timestamp("unsubscribed_at"),
-});
+  // ⚠️ THE WAITLIST'S ONLY WORKING THROTTLE. Set when this route mails the
+  // address. rateLimit() is per-container memory and blocked nothing in
+  // production, so the per-address cooldown and the global hourly mail cap in
+  // /api/waitlist both read this column instead. Migration 0013.
+  lastMailedAt: timestamp("last_mailed_at"),
+}, (t) => [index("waitlist_last_mailed_at_idx").on(t.lastMailedAt)]);

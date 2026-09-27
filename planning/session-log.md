@@ -18,6 +18,18 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-09-27 — todo review (OPEN.md only, uncommitted)
+
+Edited `planning/OPEN.md` only: closed `google-business-profile` (founder's
+word, unverified; still need her review link) and `simple-dress-product`
+(stale -- both dresses already in catalog.ts); added `dress-colourways`.
+Higgsfield video integration requested; nothing exists yet, waiting on her
+API key. Ads waiting on Meta pixel ID + open-shop decision.
+
+**Holding (waitlist throttle):** `website/src/app/api/waitlist/route.ts`,
+`website/src/db/schema.ts` (waitlist table only), `website/drizzle/0013_waitlist_last_mailed.sql`.
+Founder chose: ads first, shop stays shut.
+
 ### 2026-09-13 — pre-launch teasers, and the craft set
 
 **Holding:** `brand-assets/teaser/`, `brand-assets/craft/`, `brand-assets/reels/`,

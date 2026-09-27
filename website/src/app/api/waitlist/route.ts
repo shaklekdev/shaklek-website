@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { and, eq, gt, isNull, lt, or, sql } from "drizzle-orm";
 import { rateLimit } from "@/lib/rateLimit";
 import { boundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
 import { getDb, schema } from "@/db/client";
@@ -52,6 +53,62 @@ async function sendMail(
 // email format check.
 const MAX_PER_WINDOW = 5;
 const WINDOW_MS = 10 * 60 * 1000;
+
+// ⚠️ THE rateLimit() CALL BELOW DOES NOT PROTECT THIS ROUTE IN PRODUCTION. It is
+// a per-container Map and Amplify runs many containers: measured 2026-09-15,
+// 100 requests and zero 429s. Before ads sent traffic here, that made this form
+// an unthrottled way to send mail from shaklek.com -- the domain that carries
+// every order confirmation -- to any address, and to flood hello@.
+//
+// The real limits live in the DATABASE, which every container shares
+// (waitlist.last_mailed_at, migration 0013):
+//   - one address is mailed at most once per ADDRESS_COOLDOWN, however often it
+//     is typed in, so nobody can be bombed through us;
+//   - the whole route sends at most GLOBAL_MAILS_PER_HOUR confirmation mails,
+//     so a flood of distinct fake addresses stops costing mail after that.
+// Over either limit the address is still STORED and the visitor still sees
+// "thank you" -- a throttle that announces itself tells a script when to stop
+// and restart. Founder decision 2026-09-27: ads before the shop opens, so this
+// form is the ads' landing page.
+const ADDRESS_COOLDOWN = "15 minutes";
+const GLOBAL_MAILS_PER_HOUR = 100;
+
+type Db = NonNullable<ReturnType<typeof getDb>>;
+
+// True only if this request won the right to mail this row. The UPDATE is the
+// claim, so two containers racing on one address cannot both send. The global
+// count is read first and can overshoot by the number of in-flight requests,
+// which is fine: it bounds a flood, it is not a billing meter.
+// Fails CLOSED -- a database error means no mail, never unlimited mail.
+async function claimMailSlot(db: Db, id: string): Promise<boolean> {
+  try {
+    const [{ n }] = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(schema.waitlist)
+      .where(gt(schema.waitlist.lastMailedAt, sql`now() - interval '1 hour'`));
+    if (n >= GLOBAL_MAILS_PER_HOUR) {
+      console.warn(`[waitlist] global mail cap reached (${n} in the last hour); signup stored, not mailed`);
+      return false;
+    }
+    const claimed = await db
+      .update(schema.waitlist)
+      .set({ lastMailedAt: sql`now()` })
+      .where(
+        and(
+          eq(schema.waitlist.id, id),
+          or(
+            isNull(schema.waitlist.lastMailedAt),
+            lt(schema.waitlist.lastMailedAt, sql`now() - interval '${sql.raw(ADDRESS_COOLDOWN)}'`),
+          ),
+        ),
+      )
+      .returning({ id: schema.waitlist.id });
+    return claimed.length > 0;
+  } catch (err) {
+    console.error("[waitlist] mail claim failed:", err instanceof Error ? err.message : "unknown");
+    return false;
+  }
+}
 
 // ⚠️ The old shape was /^[^\s@]+@[^\s@]+\.[^\s@]+$/, which accepts
 // `a@b.com,c@d.com` and `"x"<y>@z.io`. Those pass here, reach Resend, and come
@@ -178,6 +235,10 @@ export async function POST(req: NextRequest) {
   // public form.
   const hasUnsubscribed = Boolean(row?.unsubscribedAt);
 
+  // One gate for every mail below, the founder's ping included -- see
+  // claimMailSlot. Unsubscribed addresses never even try.
+  const mayMail = Boolean(db && row && !hasUnsubscribed && (await claimMailSlot(db, row.id)));
+
   // ⚠️ SOMEONE WHO SIGNS UP AND RECEIVES NOTHING BELIEVES THE FORM IS BROKEN.
   // The first version sent no email at all to an address that was already
   // confirmed, reasoning that a second confirmation is noise. It is -- but
@@ -186,7 +247,7 @@ export async function POST(req: NextRequest) {
   // was broken), signed up again, got nothing, and reported the email as not
   // working. Every signup now gets an answer; an already-confirmed one just
   // gets a different, shorter answer with no link to click.
-  if (row && alreadyConfirmed && !hasUnsubscribed) {
+  if (row && mayMail && alreadyConfirmed) {
     const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
     // MARKETING, so it carries a visible unsubscribe: she is already on the
     // list, so this is a note to somebody on a list rather than an answer to a
@@ -215,7 +276,7 @@ export async function POST(req: NextRequest) {
   // Branch on `row` itself rather than on a derived string, so the compiler
   // narrows it for the whole block. The first version built two URLs from
   // `row.id` inside `if (confirmUrl)`, which TypeScript could not narrow.
-  if (row && !alreadyConfirmed && !hasUnsubscribed) {
+  if (row && mayMail && !alreadyConfirmed) {
     const confirmUrl = `${appUrl()}/api/waitlist/confirm?id=${row.id}&t=${issueWaitlistToken(row.id)}`;
     const unsubUrl = `${appUrl()}/api/waitlist/unsubscribe?id=${row.id}&t=${issueWaitlistToken(row.id, "unsubscribe")}`;
 
@@ -266,6 +327,20 @@ export async function POST(req: NextRequest) {
   // 3. THE PING to the founder, so she sees a signup the moment it happens.
   // It now says whether the address is confirmed, because an unconfirmed one
   // is a number and not yet a person who can be emailed.
+  //
+  // ⚠️ ONLY WHEN THE ADDRESS WAS STORED AND WON A MAIL SLOT. This used to fire
+  // on every request, including when the database write failed, which made it
+  // the one mail no limit could reach: a flood while Neon was down would have
+  // gone straight to her inbox. The row is the list now, so a failed write
+  // gets an honest error instead of a backup email.
+  if (!row) {
+    return NextResponse.json(
+      { ok: false, error: "We couldn't record that right now. Please try again later." },
+      { status: 503 },
+    );
+  }
+  if (!mayMail) return NextResponse.json({ ok: true });
+
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -282,9 +357,7 @@ export async function POST(req: NextRequest) {
         `Source: ${source}`,
         alreadyConfirmed
           ? "Already confirmed (signed up again)"
-          : row
-            ? "Stored, confirm email sent. Not on the mailing list until she clicks."
-            : "⚠️ NOT STORED — the database write failed. See CloudWatch.",
+          : "Stored, confirm email sent. Not on the mailing list until she clicks.",
         `Received: ${new Date().toISOString()}`,
       ].join("\n"),
     }),
@@ -304,16 +377,7 @@ export async function POST(req: NextRequest) {
     console.error("[waitlist] notification email failed:", res.status, code);
   }
 
-  // Honest only if her address was actually recorded. The DB row is what
-  // matters now -- saying "thank you" when nothing stored her address is the
-  // exact failure this route exists to avoid. The founder's notification
-  // failing is an operational problem, not a reason to tell her it went wrong.
-  if (!row && !res.ok) {
-    return NextResponse.json(
-      { ok: false, error: "We couldn't record that right now. Please try again later." },
-      { status: 502 },
-    );
-  }
-
+  // The row was stored (checked above). The founder's notification failing is
+  // an operational problem, not a reason to tell her it went wrong.
   return NextResponse.json({ ok: true });
 }

@@ -761,7 +761,12 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
     <li><span class="flow-status tbd">approved if cheap</span>
       <strong>Rate limiting that survives more than one container.</strong>
       Today's counters live in Lambda container memory and reset on a cold
-      start. <strong>Upstash Redis free tier</strong> (10k commands/day) covers
+      start. <strong>Done for <code>/api/waitlist</code> only (2026-09-27)</strong>, with
+      no new service: <code>waitlist.last_mailed_at</code> in Neon (migration
+      0013) caps mail at one per address per 15 minutes and 100 per hour in
+      total; the founder's signup ping sits behind the same gate. Every other
+      route (<code>/api/orders</code>, <code>/api/promo/validate</code>,
+      <code>/api/fit-feedback</code>) is still unthrottled in production. <strong>Upstash Redis free tier</strong> (10k commands/day) covers
       this at no cost; AWS WAF would be ~$8/month and is overkill. No abuse has
       appeared, so this is insurance, not a fire.
     </li>
