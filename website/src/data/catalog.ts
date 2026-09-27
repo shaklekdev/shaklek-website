@@ -66,19 +66,31 @@ export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
   Shirt: 449,
   Skirt: 449, // no skirt ships yet; less cloth than a shirt, more stitching, so it lands on the same number
   Pants: 519,
-  Dress: 599, // ⚠️ NO DRESS AT LAUNCH. Founder, 2026-09-12: abayas only. The entry stays
-              // because removing it is churn; nothing is photographed, priced or listed.
-  Abaya: 699, // ✅ QUOTED AND SETTLED, and the founder set the shelf price at 699 on
-              // 2026-09-14: "we need to keep the price below 700 I feel, maybe we will
-              // not make the same margins as the other items but it's okay". At 3.5m of
-              // cloth that is ~56%, against ~58% on the shirt, and at 3.0m it is ~58.7%,
-              // so the give is at most two points for sitting under a round number.
-              // ⏳ METRES ARE STILL AN ESTIMATE. 3.5m is a reasoned guess at 138cm
-              // width; the tailor's sample settles it, and every 0.5m is ~50 AED.
-              // The tailor quoted 80-90 for a dress AND an abaya on
-              // 2026-09-12; modelled at 90, the worse end, which puts 699 at ~57% -- the
-              // strongest margin in the range. The earlier "assumes 100, not quoted" note
-              // was stale by a day. ⏳ THE GILET IS NOW THE ONLY UNQUOTED NUMBER.
+  Dress: 699, // ✅ TWO DRESSES SHIP, AND THIS IS 699. Founder, 2026-09-27, up from 649.
+              // The comment here used to read "NO DRESS AT LAUNCH ... nothing is
+              // photographed, priced or listed" -- stale since 2026-09-20, when slip-dress
+              // and buttoned-dress both landed in this file with twelve frames each.
+              // ⚠️ 799 WAS PROPOSED AND PUT BACK DOWN, deliberately. At 2.75m and 90
+              // to make, 799 earns 64.4% -- the only price in the range above the band --
+              // and it asked the most money for the simplest garment: sleeveless, 2.75m,
+              // chosen for being easy to make, sitting 150 AED under a 5.2m abaya with a
+              // shayla. 699 is 59.8%, alongside pants at 60.5%, and it keeps the ladder
+              // 449 / 519 / 699 / 949. Her call, 2026-09-27.
+  Abaya: 949, // ✅ 949, AND IT INCLUDES A SHAYLA. Founder, 2026-09-27, walking the
+              // number up herself: 749, then 799-with-scarf, then 999, then "949 with
+              // scarf is good". The shayla is not a gift -- ~0.7m of cloth plus a hem,
+              // about 50 AED landed -- which is exactly why 799-with-scarf was rejected
+              // at 50.9%.
+              // ⚠️ THE METRES WENT UP, WHICH IS WHY THE PRICE DID. Founder,
+              // 2026-09-27: the lay is 4-4.5m, not the 3-3.5 this file modelled. Modelled
+              // at 4.5, the worse end, the way tailoring is modelled at 90. Cloth alone is
+              // then 162 AED and the old 699 would have earned 50.3%. At 949 with the
+              // shayla -- 5.2m and 105 to make -- it is 58.1%, the shirt's own margin.
+              // ⚠️ AND THE 124m ALREADY BOUGHT IS NOW 23 ABAYAS, not 35.
+              // ⏳ THE SHAYLA HEM IS NOT QUOTED. 15 AED is a guess; the tailor's 80-90
+              // covered "abaya and dress" only. It cannot break this price -- even a
+              // generous 1m shayla holds 58.4% -- but it is a guess, not a quote.
+              // ⏳ THE GILET IS THE OTHER UNQUOTED NUMBER.
               // ⚠️ This price is PUBLISHED in the journal article
               // "how-much-does-an-abaya-cost-in-dubai". Change one, change both.
 };
@@ -452,11 +464,14 @@ export const catalog: CatalogItem[] = [
   // one colour that exists. Navy, Ivory and White get added when their
   // photography exists; nothing else has to change when they do.
   //
-  // ⚠️ 699 IS NOT A NEW NUMBER. The cost article already publishes it and the
-  // header of this file records it: "Today: Shirt 449, Pants 519, Abaya 699.
-  // Change one, change both." It is still modelled on 3.2m of cloth that has
-  // never been quoted -- see abaya-metres in planning/OPEN.md -- so if the
-  // quote lands differently this price moves BEFORE the shop opens.
+  // ⚠️ 949 INCLUDES A SHAYLA, and it replaced 699 on 2026-09-27 because the
+  // lay is 4-4.5m rather than 3-3.5. The cost article publishes this number and
+  // BASE_PRICE_BY_CATEGORY above records it: change one, change both.
+  // ⚠️ AND THE JOURNAL'S ARGUMENT CHANGED WITH IT, not just its number. The
+  // cost article's whole pitch was "AED 699 sits below the AED 800 full-custom
+  // floor and below the AED 800-3,000 boutiques". At 949 we are inside that band,
+  // so that paragraph was rewritten rather than renumbered. A price rise in this
+  // file is a copy job in blog.ts.
   //
   // ⚠️ THE DEFAULT COMBO IS maxi:narrow AND IS NOT IN comboImages. It falls
   // back to colorImages, same as every other item. The other three cells are
@@ -466,7 +481,7 @@ export const catalog: CatalogItem[] = [
     slug: "open-abaya",
     name: "Open Abaya",
     category: "Abaya",
-    price: 699,
+    price: 949,
     descriptor: "Folded edge, open front",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -547,19 +562,18 @@ export const catalog: CatalogItem[] = [
     name: "Buttoned Abaya",
     category: "Abaya",
     paramSet: "AbayaJacket",
-    // 699, confirmed by the founder on 2026-09-19: "keep the same price for
-    // now". Deliberately the same as the Open Abaya -- same cloth, the same
-    // 3.5m in margins.mjs, the same 90 AED tailoring, and cord-and-button
-    // closures that do not move the cost. It also follows her own positioning,
-    // "one price per piece type, fabric and every option included": two abayas
-    // at two prices invites a question the page cannot answer.
+    // 949 INCLUDING A SHAYLA, moved off 699 alongside the Open Abaya on
+    // 2026-09-27. Deliberately the same as the Open Abaya -- same cloth, the same
+    // 4.5m lay, the same 90 AED tailoring, and cord-and-button closures that do
+    // not move the cost. It follows her own positioning, "one price per piece
+    // type, fabric and every option included": two abayas at two prices invites a
+    // question the page cannot answer.
     //
-    // ⚠️ "FOR NOW" IS PART OF THE ANSWER. The metres behind both abayas are
-    // still modelled, never quoted -- see abaya-metres on the board -- so this
-    // is a confirmed price on an unconfirmed cost, not a settled margin. When
-    // the fabric is quoted, re-check both abayas together, and change this line
-    // and margins.mjs in the same commit.
-    price: 699,
+    // ⏳ WHETHER THE SHAYLA COMES WITH THIS ONE TOO IS UNCONFIRMED. She wrote
+    // "Abaya 949 + sheila" without naming which abaya, and one price per piece
+    // type is her own rule, so both carry it until she says otherwise. It is a
+    // styling question, not a cost one: the margin is identical either way.
+    price: 949,
     descriptor: "Frog closures, worn open or closed",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -593,15 +607,18 @@ export const catalog: CatalogItem[] = [
     slug: "slip-dress",
     name: "Slip Dress",
     category: "Dress",
-    // ⚠️ PRICE 649, AND IT IS THE SAME ON BOTH DRESSES ON PURPOSE. Founder,
-    // 2026-09-20, after the first proposal priced them 599 and 699: "why are
-    // both dresses 100 aed difference???" She was right -- the real cost gap
-    // is about 30 AED of tailoring on identical cloth, and the 100 came from
-    // rounding each to a clean number. Both inputs are QUOTED, not estimated:
-    // 2.5-3m of cloth (founder and tailor independently) and 90 to make (the
-    // tailor's "abaya and dress" rate, which covers both of ours). Change one,
-    // change the other, and change margins.mjs with them.
-    price: 649,
+    // ⚠️ PRICE 699, AND IT IS THE SAME ON BOTH DRESSES ON PURPOSE. Founder,
+    // 2026-09-27, up from 649 in the same pass that took the abayas to 949. The
+    // "same on both" is hers too, 2026-09-20, after the first proposal priced
+    // them 599 and 699: "why are both dresses 100 aed difference???" She was
+    // right -- the real cost gap is about 30 AED of tailoring on identical cloth,
+    // and the 100 came from rounding each to a clean number. Both inputs are
+    // QUOTED, not estimated: 2.5-3m of cloth (founder and tailor independently)
+    // and 90 to make (the tailor's "abaya and dress" rate, which covers both of
+    // ours). At 2.75m that is 59.8%, alongside pants at 60.5%. 799 was proposed
+    // and put back down the same day -- see BASE_PRICE_BY_CATEGORY for why.
+    // Change one, change the other, and change margins.mjs with them.
+    price: 699,
     descriptor: "Sleeveless, cut to fall",
     badge: "NEW",
     gradient: ["#f5f0e8", "#e8e4dc"],
@@ -635,15 +652,18 @@ export const catalog: CatalogItem[] = [
     slug: "buttoned-dress",
     name: "Buttoned Dress",
     category: "Dress",
-    // ⚠️ PRICE 649, AND IT IS THE SAME ON BOTH DRESSES ON PURPOSE. Founder,
-    // 2026-09-20, after the first proposal priced them 599 and 699: "why are
-    // both dresses 100 aed difference???" She was right -- the real cost gap
-    // is about 30 AED of tailoring on identical cloth, and the 100 came from
-    // rounding each to a clean number. Both inputs are QUOTED, not estimated:
-    // 2.5-3m of cloth (founder and tailor independently) and 90 to make (the
-    // tailor's "abaya and dress" rate, which covers both of ours). Change one,
-    // change the other, and change margins.mjs with them.
-    price: 649,
+    // ⚠️ PRICE 699, AND IT IS THE SAME ON BOTH DRESSES ON PURPOSE. Founder,
+    // 2026-09-27, up from 649 in the same pass that took the abayas to 949. The
+    // "same on both" is hers too, 2026-09-20, after the first proposal priced
+    // them 599 and 699: "why are both dresses 100 aed difference???" She was
+    // right -- the real cost gap is about 30 AED of tailoring on identical cloth,
+    // and the 100 came from rounding each to a clean number. Both inputs are
+    // QUOTED, not estimated: 2.5-3m of cloth (founder and tailor independently)
+    // and 90 to make (the tailor's "abaya and dress" rate, which covers both of
+    // ours). At 2.75m that is 59.8%, alongside pants at 60.5%. 799 was proposed
+    // and put back down the same day -- see BASE_PRICE_BY_CATEGORY for why.
+    // Change one, change the other, and change margins.mjs with them.
+    price: 699,
     descriptor: "Sleeveless, buttons to the hem, with pockets",
     badge: "NEW",
     gradient: ["#f5f0e8", "#e8e4dc"],

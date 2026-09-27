@@ -4670,3 +4670,109 @@ And note what the green build was worth here: `verify-catalog.mjs` passes on
 this, correctly — every path exists and the hero resolves. The defect was the
 *opening colour*, which no check looks at. **Two builds and a staging pass went
 by; her eye caught it in under a minute.**
+
+## 2026-09-27 — the prices moved, and the margin model was reading 9 of 12 items
+
+**She walked the abaya up herself and the arithmetic followed her, not the other
+way round.** 699 → 749 → "799 + scarf" → 999 → **"949 with scard is good"**. The
+reason the first number could not hold: she corrected the lay twice in one
+conversation, first to "3.5-4", then to **"4-4.5 not 3.5 to 4"**. `margins.mjs`
+had been modelling 3.5. At 4.5m the cloth alone is 162 AED and the old 699 earns
+**50.3%**; 949 with the shayla earns **58.1%**, which is the shirt's own margin.
+
+Final: **abaya 949 including a shayla, dress 699**, both in `catalog.ts` and
+`BASE_PRICE_BY_CATEGORY`.
+
+**The dress went up and then came back down, on the numbers.** 799 was proposed
+and she asked the right question — "dress can be less than 799 or you think
+should stay 799?" At 2.75m and 90 to make, 799 earns **64.4%**, the only price in
+the range above the band, and it asked the most money for the simplest garment:
+sleeveless, 2.75m, chosen for being easy to make, sitting 150 AED under a 5.2m
+abaya with a shayla. 699 is 59.8%, alongside pants at 60.5%, and the ladder reads
+**449 / 519 / 699 / 949**. Her call: "ok".
+
+> **Neither price was argued from taste.** Every step was a number she could
+> check, and the one time the model disagreed with her instinct (799) the model
+> won on the comparison a *customer* would make, not on the margin.
+
+### ⚠️ `readCatalog()` IN `margins.mjs` HAS BEEN READING 9 OF 12 ITEMS
+
+Found by accident, and worth being precise about how: the free-fitting block was
+printing `dress 649 · abaya 699` as **literal text**, so it was rewritten to
+derive both from the catalogue. It then printed a dress price of nothing at all.
+
+The parser was one regex with `{0,200}` character windows between `slug`, `name`,
+`category` and `price`. Every item carrying a price rationale in comments —
+`buttoned-abaya`, `slip-dress`, `buttoned-dress` — pushed `price:` outside the
+window and **simply never matched**. Confirmed against `git show HEAD:` that it
+was already 9 of 12 *before* today's edits, so every basket, threshold, payback
+and exposure figure in that file has been computed on an incomplete catalogue for
+days. **Nothing errored. The output looked entirely sensible.**
+
+It now splits into item blocks, takes the first field of each, and **throws** if
+the count does not match the number of `slug:` lines. A model that quietly drops
+products is worse than one that stops.
+
+> **This is §7's "a number that AGREES with you is not proof" in its purest
+> form.** Nobody would have caught it by reading the output, because nine items'
+> worth of numbers is a perfectly plausible nine items' worth of numbers. It was
+> caught only because something was changed from typed to derived, and the
+> derivation had nothing to say.
+
+Two more typed facts went with it: the basket totals (`Abaya + gilet` was hard
+coded at **1169** — 690 plus 479, and 690 was never a price this shop charged)
+and the `550` threshold line, which claimed a band while `fitting.thresholdAed`
+is **0** and `fitting.everyone` is `true`. The block now says there is no
+threshold, because there is not one.
+
+### The journal: the argument inverted, not just the number
+
+`shaklek-blog` audited all four articles. Nothing was rubbish and nothing was
+deleted, but the cost article's whole pitch was *"AED 699 sits below the AED 800
+full-custom floor and below the AED 800–3,000 boutiques, and that is the whole
+claim."* **At 949 we are inside that band.** A price rise in `catalog.ts` is a
+copy job in `blog.ts`, and it was rewritten to concede the position and argue
+what actually differs inside the band: most of it is nida or crepe, which is
+polyester, cut to a size chart.
+
+⚠️ **AND "an abaya takes roughly three metres" was published in that same
+article.** Her own 4–4.5 makes it wrong, and it fed a stated total of "AED 260 to
+AED 550" for the buy-cloth-and-find-a-tailor route. Now four to four and a half
+metres, AED 280 to AED 650.
+
+**Two real errors the audit found, both live on production:**
+
+- **The Negev callout contradicted the paper it cited.** We claimed a covered arm
+  is "frequently cooler than a bare one" and credited Shkolnik et al. (Nature
+  283:373-375, 1980). That study tested a black robe, a white robe, an army
+  uniform **and shorts**, and found heat gain much the same across all four — it
+  shows covering costs you nothing, not that it makes you cooler. Our own page
+  listed "and shorts" twelve lines below the claim.
+- **"We open in early October" was still live** on an indexed page, eight days
+  after she removed the date from the pre-launch page ("remove early october,
+  just say opening soon"). It was the only dated promise anywhere public. The
+  comment in `coming-soon/page.tsx` that flagged it said "three blog answers";
+  it was one.
+
+Also fixed: Daniels measured 4,063 pilots on **140** dimensions and tested the
+ten that decide a cockpit (stated as "ten dimensions" twice, and the correct
+version is the stronger one); "a garment can be shown accurately on a screen
+before it exists" narrowed to the cut, because `fabric-swatch-per-colour` is on
+the board calling rendered colourways a mis-selling problem; moisture regain
+defined the same way in both articles; polyester at 0.4% rather than a generous
+0.2 floor; navy dropped from the jewel-tone sentence (burgundy is in the cited
+forecasts, navy is not); a lede that was stricter than its own table; "three
+floors of nothing but abayas" when the mall also sells gowns and jewellery.
+
+### What is NOT done, and it gates the price
+
+⚠️ **NOTHING ON THE SITE MENTIONS THE SHAYLA.** No photograph in either abaya set
+contains one, the descriptors say "Folded edge, open front" and "Frog closures,
+worn open or closed", and `catalog.ts` has no field for an inclusion. Selling an
+unphotographed inclusion at 250 AED above the old price is the return-item
+failure in §7. On the board as `shayla-included`, with the three things only she
+can answer: its size, whether the buttoned abaya carries one too, and the
+tailor's price to hem it. **It cannot break the price** — even a generous 1m
+shayla at 20 to hem holds 58.4% — so it is a photography and copy job, not a
+pricing risk.
+

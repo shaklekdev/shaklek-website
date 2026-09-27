@@ -121,12 +121,19 @@ const INPUTS = {
   //    from.
   //    ⚠️ THIS IS METRES ONLY. His price for MAKING each dress is still open
   //    and is the bigger unknown -- see tailoringAed below.
-  // ✅ ABAYA 3.0-3.5, founder 2026-09-20: "between 3 and 3.5 depending on the
-  //    size, for me it's 3m". STAYS MODELLED AT 3.5, the worse end, per the
-  //    range rule above: her own 3m is a size-S data point, not the range. At
-  //    3.0 the abaya reads 60.0% instead of 57.4%, so the price is safer than
-  //    this model claims, never riskier.
-  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 2.75, Abaya: 3.5, Gilet: 2.0 },
+  // ✅ ABAYA 5.2 = 4.5 GARMENT + 0.7 SHAYLA, and both halves changed on
+  //    2026-09-27. Founder, same day: the lay is "4-4.5 not 3.5 to 4", which
+  //    itself superseded her 3.0-3.5 of 2026-09-20 ("between 3 and 3.5 depending
+  //    on the size, for me it's 3m" -- a size-S data point, not the range).
+  //    Modelled at 4.5, the worse end, per the range rule above.
+  //    ⚠️ THE 0.7 IS THE SHAYLA, WHICH IS NOW PART OF THE PRODUCT. She set the
+  //    price at 949 "with scarf" the same day, so the cloth for it is a cost of
+  //    goods, not a gift. 0.7m is a nested estimate for a shayla cut from 138cm
+  //    cloth; it is the one number here that nobody has quoted.
+  //    ⚠️ WHAT THIS MOVED: cloth alone went from 126 to 188 AED, and the 124m
+  //    already bought fell from 35 abayas to 23. The old 699 would now earn
+  //    50.3%; 949 earns 58.1%, which is the shirt's own margin.
+  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 2.75, Abaya: 5.2, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
   // ✅ SHIRT 35, NOT 40 — the tailor quotes 30-35, founder 2026-09-12. The
@@ -153,7 +160,12 @@ const INPUTS = {
   //    already had. Reverted to 90.
   //    Worth 3.1 margin points on every dress: 649 reads 58.6% rather than
   //    55.5%, which puts it between the abaya's 57.4% and the shirt's 59.7%.
-  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 90, Abaya: 90, Gilet: 55 },
+  // ⏳ ABAYA 105 = 90 TO MAKE THE GARMENT + 15 TO HEM THE SHAYLA, and the 15 is
+  //    a GUESS, not a quote. The tailor's 80-90 covered "abaya and dress"; a
+  //    shayla hem is a line he has never priced. It cannot break the price --
+  //    even a generous 1m shayla at 20 to hem holds 58.4% -- but it is the only
+  //    unquoted number inside a shipping price, so ask him.
+  tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 90, Abaya: 105, Gilet: 55 },
 
   shippingAed: 21, // Founder, 2026-08-22
 
@@ -342,11 +354,41 @@ function unitEconomics(price, category, fabricAedPerMetre) {
   return { price, fabric, tailoring, pack, fees, remake, cogs, gross: price - cogs, gm: (price - cogs) / price };
 }
 
+// ⚠️ THIS WAS SILENTLY READING 9 OF 12 ITEMS, and had been since the day a
+// long comment was written between `category:` and `price:`. The old version
+// was one regex with {0,200} windows between fields, so buttoned-abaya,
+// slip-dress and buttoned-dress -- each carrying a price rationale in comments
+// -- simply never matched, and every basket, threshold and payback number in
+// this file was computed on an incomplete catalogue. Nothing errored. Found
+// 2026-09-27 only because the threshold block printed a dress price of
+// `undefined` after being changed to derive it.
+//
+// So: split into item blocks first, take the FIRST field of each, and REFUSE to
+// return a short list. A model that quietly drops products is worse than one
+// that stops.
 function readCatalog() {
   const src = readFileSync(join(REPO, "website/src/data/catalog.ts"), "utf8");
+  const expected = (src.match(/^ {4}slug: "/gm) || []).length;
   const items = [];
-  const re = /slug:\s*"([^"]+)"[\s\S]{0,400}?name:\s*"([^"]+)"[\s\S]{0,200}?category:\s*"([^"]+)"[\s\S]{0,200}?price:\s*(\d+)/g;
-  for (const m of src.matchAll(re)) items.push({ slug: m[1], name: m[2], category: m[3], price: Number(m[4]) });
+  // Item blocks start at four-space `slug:`; everything up to the next one (or
+  // end of file) belongs to that item, comments included.
+  const starts = [...src.matchAll(/^ {4}slug: "/gm)].map((m) => m.index);
+  for (let i = 0; i < starts.length; i++) {
+    const block = src.slice(starts[i], i + 1 < starts.length ? starts[i + 1] : src.length);
+    const f = (re) => (block.match(re) || [])[1];
+    const slug = f(/slug: "([^"]+)"/);
+    const name = f(/name: "([^"]+)"/);
+    const category = f(/category: "([^"]+)"/);
+    const price = f(/^\s*price: (\d+),/m);
+    if (!slug || !name || !category || !price) continue;
+    items.push({ slug, name, category, price: Number(price) });
+  }
+  if (items.length !== expected) {
+    throw new Error(
+      `readCatalog parsed ${items.length} of ${expected} catalogue items. ` +
+        `Every number in this file would be wrong. Fix the parser, do not run past this.`,
+    );
+  }
   return items;
 }
 
@@ -514,18 +556,52 @@ function orderEcon(parts, price, extra = 0, rr = INPUTS.remakeRate) {
 const TH = INPUTS.fitting.thresholdAed, FIT = INPUTS.fitting.aed;
 const singles = Object.entries(INPUTS.metresPerGarment);
 console.log(`\nTHE ${TH} THRESHOLD — free in-person fitting, ${FIT} AED, ONCE PER CUSTOMER`);
-console.log(`  Set so a single dress or abaya qualifies, as well as any two pieces.`);
-console.log(`    qualifies      dress 649 · abaya 699 · any pair (cheapest 2 shirts ${(2 * SHIRT_PRICE).toFixed(0)})`);
-console.log(`    does not       shirt ${SHIRT_PRICE} · gilet 479 · trousers 519`);
-console.log(`  The band is (519, 649]. Dress and abaya are both quoted now: 2.5-3m and`);
-console.log(`  90 to make, the same rate for both. Both dresses sell at 649.`);
+// ⚠️ DERIVED, NEVER TYPED. This block used to print "dress 649 · abaya 699"
+// as literal text and went stale the hour she moved both prices on 2026-09-27.
+// Read the catalogue instead, so the band cannot lie about itself.
+const cheapest = (cat) => {
+  const ps = items.filter((i) => i.category === cat).map((i) => i.price);
+  return ps.length ? Math.min(...ps) : null;
+};
+const qualifies = ["Dress", "Abaya"].map((c) => [c, cheapest(c)]).filter(([, p]) => p !== null);
+if (TH === 0) {
+  // fitting.everyone is true and thresholdAed is 0, so there is no band to
+  // print. Do not print one: a "(519, 649]" line here is what went stale.
+  console.log(`  NO THRESHOLD TODAY. thresholdAed is 0 and fitting.everyone is`);
+  console.log(`  ${INPUTS.fitting.everyone}, so the fitting is offered on every order`);
+  console.log(`  ${INPUTS.fitting.dubaiOnly ? "in Dubai" : "anywhere"}, once per customer, at ${FIT} AED of our time.`);
+  console.log(`  Cheapest order it can land on: ${Math.min(...items.map((i) => i.price))} AED.`);
+} else {
+  const excluded = items.filter((i) => i.price <= TH);
+  const lowestQualifying = Math.min(...qualifies.map(([, p]) => p));
+  const highestExcluded = excluded.length ? Math.max(...excluded.map((i) => i.price)) : 0;
+  console.log(`  Set so a single dress or abaya qualifies, as well as any two pieces.`);
+  console.log(`    qualifies      ${qualifies.map(([c, p]) => `${c.toLowerCase()} ${p}`).join(" · ")} · any pair (cheapest 2 shirts ${(2 * SHIRT_PRICE).toFixed(0)})`);
+  console.log(`    does not       ${[...new Set(excluded.map((i) => `${i.name} ${i.price}`))].join(" · ")}`);
+  console.log(`  The band is (${highestExcluded}, ${lowestQualifying}] and ${TH} sits ${TH > highestExcluded && TH <= lowestQualifying ? "INSIDE it" : "⚠️ OUTSIDE IT -- the threshold is broken"}.`);
+}
 
+// ⚠️ BASKET TOTALS ARE ADDED UP, NOT TYPED. "Abaya + gilet" was written here
+// as 1169 -- 690 plus 479 -- and 690 was never a price this shop charged. It
+// survived the abaya at 699 and would have survived it at 949. The only number
+// still typed is the gilet's, because no gilet exists in catalog.ts.
+const GILET_PRICE = 479; // ⏳ PROPOSAL ONLY. No gilet ships; its stitching is unquoted too.
+// NB: `priceFor(category, gm)` already exists above and means something else
+// entirely -- the price a margin WOULD need. This one is the shelf price we
+// actually charge. Two different questions, two names.
+const shelfPrice = (cat) => {
+  const ps = items.filter((i) => i.category === cat).map((i) => i.price);
+  if (ps.length) return Math.min(...ps);
+  if (cat === "Gilet") return GILET_PRICE;
+  throw new Error(`No catalogue price for ${cat} and no declared placeholder.`);
+};
+const basket = (parts) => parts.reduce((t, c) => t + shelfPrice(c), 0);
 const BASKETS2 = [
-  ["Shirt + trousers", ["Shirt", "Pants"], 968],
-  ["Shirt + shirt", ["Shirt", "Shirt"], 898],
-  ["Abaya + gilet", ["Abaya", "Gilet"], 1169],
-  ["Abaya + gilet + shirt", ["Abaya", "Gilet", "Shirt"], 1618],
-];
+  ["Shirt + trousers", ["Shirt", "Pants"]],
+  ["Shirt + shirt", ["Shirt", "Shirt"]],
+  ["Abaya + gilet", ["Abaya", "Gilet"]],
+  ["Abaya + gilet + shirt", ["Abaya", "Gilet", "Shirt"]],
+].map(([name, parts]) => [name, parts, basket(parts)]);
 console.log(`\n  A FITTING AT ${FIT} vs 10% OFF — what each costs you on the same basket`);
 console.log(`  ${"basket".padEnd(24)}${"list".padStart(7)}${"10% off".padStart(9)}${"fitting".padStart(9)}${"fitting wins by".padStart(17)}`);
 for (const [name, parts, price] of BASKETS2) {

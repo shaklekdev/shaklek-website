@@ -24,7 +24,8 @@
  *     an abaya cost in Dubai") or in a closing sell. Nowhere else. An article
  *     that scatters prices through its body is an advertisement.
  *   - IT MUST MATCH catalog.ts, read at the time of writing, never memory.
- *     Today: Shirt 449, Pants 519, Abaya 699. Change one, change both, and the
+ *     Today: Shirt 449, Pants 519, Dress 699, Abaya 949 (a shayla included).
+ *     Change one, change both, and the
  *     comment on BASE_PRICE_BY_CATEGORY names this file for that reason.
  *   - SOMEBODY ELSE'S PRICE CARRIES `market: true` on its block. Ours never
  *     does. See the note directly below.
@@ -184,7 +185,7 @@ export const articles: Article[] = [
     blocks: [
       {
         type: "p",
-        text: "The short version: keep the shirt and the pants in the same colour as each other, keep the abaya in the same family, and let the abaya be the only loose layer. Then choose a plant fibre, because both layers have to let sweat out.",
+        text: "The short version: keep the shirt and the pants in the same colour as each other, let the abaya either stay tonal with them or contrast on purpose, and let it be the only loose layer. Then choose a plant fibre, because both layers have to let sweat out.",
       },
 
       { type: "h2", text: "The colour rule, and why it holds" },
@@ -252,7 +253,7 @@ export const articles: Article[] = [
           },
         ],
         caption:
-          "Navy, burgundy, ivory and white are the four we cut. Navy and burgundy sit in the jewel-tone group named across 2026 Gulf abaya forecasts; ivory and sand sit in the earthy neutral group.",
+          "Navy, burgundy, ivory and white are the four we cut. Burgundy sits in the jewel-tone group named across 2026 Gulf abaya forecasts; ivory and sand sit in the earthy neutral group, and navy reads as a deep neutral in either.",
       },
       {
         type: "p",
@@ -308,7 +309,7 @@ export const articles: Article[] = [
       { type: "h2", text: "And the abaya has to breathe too" },
       {
         type: "p",
-        text: "Sweat leaves your skin, crosses the inner layer, and then has to get out through the abaya. There is a number for this. Textile moisture regain, the share of its own weight a fibre will hold as water, is about 12% for linen and 8.5% for cotton, against 0.2 to 0.4% for polyester. Nida and most abaya crepes are polyester. So a breathable shirt underneath a polyester abaya is sealed inside something that is not, and the outer layer is the one in direct sun.",
+        text: "Sweat leaves your skin, crosses the inner layer, and then has to get out through the abaya. There is a number for this. Textile moisture regain, the share of its own weight a fibre will hold as water, is about 12% for linen and 8.5% for cotton, against about 0.4% for polyester. Nida and most abaya crepes are polyester. So a breathable shirt underneath a polyester abaya is sealed inside something that is not, and the outer layer is the one in direct sun.",
       },
       {
         type: "p",
@@ -343,7 +344,7 @@ export const articles: Article[] = [
         // Pants is 519, Abaya is 690. Change one, change both. This article
         // sells TWO garments, which is the ~71% margin line, and it carried no
         // number and no way to act until now.
-        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519, with an open abaya at AED 699 joining them when we open. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
+        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 449 and pants AED 519. Linen dresses at AED 699 and an open abaya at AED 949 with a matching shayla join them when we open, in one colourway each to begin with. If you are in Dubai we come to you and take the measurements ourselves, free on your first order, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -408,7 +409,7 @@ export const articles: Article[] = [
       },
 
       { type: "h2", text: "The three prices, and what each one buys" },
-      { type: "h3", text: "Ready-made, from AED 300 upward", market: true },
+      { type: "h3", text: "Ready-made, from about AED 300 for one you would want to wear", market: true },
       {
         type: "p",
         // ⚠️ NO CEILING HERE. An earlier version capped ready-made at 600.
@@ -444,7 +445,7 @@ export const articles: Article[] = [
           "Meena Bazaar, Bur Dubai. Rails and tailors in the same few streets, which is the actual reason to go: you can buy cloth and have it cut on one trip.",
           "Karama, the Centre and the old market. Plain everyday abayas rather than occasion pieces, at everyday prices.",
           "Ajman market. Named across UAE shopping guides as a bargain destination on the same footing as Sharjah, worth the drive only if you are already out that way.",
-          "Abaya Mall in Mirdif. Three floors of nothing but abayas, for comparing fifty in an afternoon instead of five.",
+          "Abaya Mall in Mirdif. Three floors built around abaya shops, for comparing fifty in an afternoon instead of five.",
         ],
       },
       {
@@ -464,7 +465,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "The number sounds low until the cloth is added. An abaya takes roughly three metres, and our own 2026 supplier quotes put a metre at about AED 20 for local cotton, AED 36 for imported linen landed here, and about AED 65 for good linen bought locally. So the honest total for this route is AED 260 to AED 550 before any embroidery, and it is only the cheapest one if you already know what fabric you want and do not mind two trips.",
+        text: "The number sounds low until the cloth is added. An open abaya takes four metres and often four and a half, and our own 2026 supplier quotes put a metre at about AED 20 for local cotton, AED 36 for imported linen landed here, and about AED 65 for good linen bought locally. So the honest total for this route is AED 280 to AED 650 before any embroidery, and it is only the cheapest one if you already know what fabric you want and do not mind two trips.",
       },
       { type: "h3", text: "Full custom, from about AED 800" },
       {
@@ -536,11 +537,11 @@ export const articles: Article[] = [
         // 800 for full custom and put our number ABOVE a band it actually sits
         // below. Rule 3b is about framing a true number, not inventing a
         // flattering one, and an unsupportable flourish fails it just as badly.
-        text: "Ours will be AED 699 when we open: cut to your measurements, in 100% natural linen, made after it is ordered. The comparison that matters is not the AED 300 rail, because that is a size run and this is not. It is the AED 800 that full custom starts at, and the AED 800 to AED 3,000 the Dubai boutique labels charge for a piece that was still cut to a chart rather than to you. AED 699 sits below both, and that is the whole claim. We hold the number by making one design properly instead of sourcing something different for every order, and in Dubai we come to you and take the measurements ourselves rather than charging for the visit.",
+        text: "Ours will be AED 949 when we open, with a matching shayla in the same cloth: cut to your measurements, in 100% natural linen, made after it is ordered. That is not the AED 300 rail and it does not pretend to be. It sits just above the AED 800 where full custom starts, at the bottom of the AED 800 to AED 3,000 the Dubai boutique labels charge. What differs inside that band is what you get for it. Most of it is nida or crepe, which is polyester, cut to a size chart. Ours is linen, cut to you, and in Dubai the measuring is free on a first order rather than a line on the bill.",
       },
       {
         type: "callout",
-        text: "We open in early October. If you are in Dubai we come to you and take the measurements ourselves before anything is cut, free on your first order. Leave your email on the home page and we will tell you the day.",
+        text: "We open soon. If you are in Dubai we come to you and take the measurements ourselves before anything is cut, free on your first order. Leave your email on the home page and we will tell you the day.",
       },
       {
         type: "link",
@@ -601,7 +602,7 @@ export const articles: Article[] = [
       { type: "h3", text: "Linen" },
       {
         type: "p",
-        text: "The best answer for Gulf heat, and it is not close. Linen holds about 12% of its own weight in water before it feels wet, against 8.5% for cotton, and it gives that water up to the air faster. The weave is open. The fibre is stiff enough that the cloth stands slightly away from skin instead of clinging, so air moves underneath it. It creases immediately and it will not stop, and that is the trade for the other three.",
+        text: "The best answer for Gulf heat, and it is not close. Linen will hold about 12% of its own weight in water at ordinary room humidity, against 8.5% for cotton, and it gives that water up to the air faster. The weave is open. The fibre is stiff enough that the cloth stands slightly away from skin instead of clinging, so air moves underneath it. It creases immediately and it will not stop, and that is the trade for the other three.",
       },
       { type: "h3", text: "Cotton" },
       {
@@ -622,7 +623,7 @@ export const articles: Article[] = [
       { type: "h3", text: "Polyester, nylon, acrylic" },
       {
         type: "p",
-        text: "Avoid in summer unless the garment was specifically engineered for sport. Polyester holds 0.2 to 0.4% of its weight in water, roughly thirty times less than linen, so sweat sits on your skin instead of moving into the cloth. A polyester dress in August humidity is uncomfortable in a way that has nothing to do with how it looks. This is also the fibre most abayas are cut from, since nida and most abaya crepes are polyester.",
+        text: "Avoid in summer unless the garment was specifically engineered for sport. Polyester holds about 0.4% of its weight in water, roughly thirty times less than linen, so sweat sits on your skin instead of moving into the cloth. A polyester dress in August humidity is uncomfortable in a way that has nothing to do with how it looks. This is also the fibre most abayas are cut from, since nida and most abaya crepes are polyester.",
       },
       { type: "h3", text: "Rayon and viscose" },
       {
@@ -659,7 +660,7 @@ export const articles: Article[] = [
       },
       {
         type: "callout",
-        text: "Sleeves are worth more thought than they get. A covered arm in loose linen is frequently cooler than a bare one in direct sun, because the cloth shades the skin while air still moves underneath it. That is the same effect measured in the Negev robe study below, and it is why loose covering clothing is traditional across every hot region of the world rather than in spite of the heat.",
+        text: "Sleeves are worth more thought than they get. Covering an arm in loose linen costs you almost nothing in heat. The Negev study below put the same volunteer in a robe and in shorts and found heat gain much the same either way, because air moving between cloth and skin carries the difference off. What the sleeve adds is shade on the skin, at no cost in warmth.",
       },
 
       {
@@ -778,7 +779,7 @@ export const articles: Article[] = [
         // which is a summary of a citation rather than a citation. Lt Gilbert S.
         // Daniels, "The 'Average Man'?", USAF Wright Air Development Center
         // technical note, 1952. The number is 4,063 and it is the whole point.
-        text: "There is a well known finding from aviation. In 1952 a US Air Force researcher called Gilbert Daniels measured 4,063 pilots on ten dimensions and checked how many fell within the middle range on all ten at once. The answer was none. Not a small number. Zero. The Air Force's response was to ban the average outright and require adjustable cockpits instead.",
+        text: "There is a well known finding from aviation. In 1952 a US Air Force researcher called Gilbert Daniels measured 4,063 pilots on 140 dimensions, then took the ten that decide whether a cockpit fits and checked how many pilots fell within the middle range on all ten at once. The answer was none. Not a small number. Zero. The Air Force's response was to ban the average outright and require adjustable cockpits instead.",
       },
       {
         type: "p",
@@ -787,7 +788,7 @@ export const articles: Article[] = [
 
       {
         type: "quote",
-        text: "Four thousand and sixty-three pilots, measured on ten dimensions. The number who were average on all ten at once was zero.",
+        text: "Four thousand and sixty-three pilots, measured on 140 dimensions. The number who were average on the ten that mattered was zero.",
       },
       { type: "h2", text: "What actually changes" },
       { type: "h3", text: "The shoulder, which is the one that cannot be fixed later" },
@@ -870,7 +871,7 @@ export const articles: Article[] = [
       { type: "h2", text: "Why it is possible now when it was not before" },
       {
         type: "p",
-        text: "Made to order used to mean a shop, an appointment and several fittings, and it was priced accordingly. Two things changed. Measurements can now be taken in person, free on a first order. And a garment can be shown accurately on a screen before it exists, so choosing a cut no longer requires imagining it.",
+        text: "Made to order used to mean a shop, an appointment and several fittings, and it was priced accordingly. Two things changed. Measurements can now be taken in person in Dubai, free on a first order. And the cut of a garment can be shown on a screen before it exists, so choosing a length or a leg width no longer requires imagining it.",
       },
       {
         type: "p",
