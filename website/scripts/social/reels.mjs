@@ -6,13 +6,17 @@ import { buildReel, IMG } from "./reel-beats.mjs";
 
 const GOLD = "#9c8445", CREAM = "#faf8f4", INK = "#1a1a1a", PAPER = "#fafafa", NAVY = "#0a2d4a";
 
-/** Photo beat: image under a bottom-weighted veil, words at the foot, slow push. */
-const photo = ({ img, words, sub, frames, pos = "50% 40%", from = 1.0, to = 1.07 }) => ({
+/** Photo beat: image under a bottom-weighted veil, words at the foot, slow push.
+ *  `x`/`y` = [start, end] drift in % of the frame, for a pan instead of a push.
+ *  Keep |drift| under (scale - 1) * 50 or an edge shows. Founder, 2026-10-10:
+ *  the same push on every shot read as repetitive, so vary it per beat. */
+const photo = ({ img, words, sub, frames, pos = "50% 40%", from = 1.0, to = 1.07, x = [0, 0], y = [0, 0] }) => ({
   frames, motion: true, words: words + " " + (sub ?? ""),
   render: (t) => {
     const s = (from + (to - from) * t).toFixed(4);
+    const tx = (x[0] + (x[1] - x[0]) * t).toFixed(3), ty = (y[0] + (y[1] - y[0]) * t).toFixed(3);
     return `
-    <img class="bg" src="${img}" style="object-position:${pos};transform:scale(${s});transform-origin:50% 45%">
+    <img class="bg" src="${img}" style="object-position:${pos};transform:translate(${tx}%,${ty}%) scale(${s});transform-origin:50% 45%">
     <div class="veil" style="background:linear-gradient(to bottom,rgba(26,26,26,.12) 0%,rgba(26,26,26,.30) 38%,rgba(26,26,26,.93) 100%)"></div>
     <div class="mark">Shaklek</div>
     <div class="pad" style="justify-content:flex-end;gap:30px">
@@ -89,16 +93,19 @@ const REELS = {
      inside each. Nothing here is decoration waiting for a voiceover. */
   craft: (I) => ({
     beats: [
-      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 72, pos: "50% 50%", to: 1.06 }),
+      // One move per shot, each following what is in it: pull back from the
+      // bolt, slide along the tape, push into the hands, travel down the
+      // seam, drift across the needle.
+      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 72, pos: "50% 50%", from: 1.12, to: 1.0 }),
       // Founder, 2026-10-10: "until you ask for it"; the textless chalk beat
       // read as an empty picture and is gone; the floating-scissors shot is
       // replaced by real hands at work. "Cut and pinned / And sewn" read as too
       // much (founder, same day): two lines, cut to measure, sewn here. "At a
       // time" so the close does not read as "buy one piece".
-      photo({ img: I.tape, words: "Until you ask for it.", frames: 66, pos: "50% 55%", to: 1.06 }),
+      photo({ img: I.tape, words: "Until you ask for it.", frames: 66, pos: "50% 55%", from: 1.1, to: 1.1, x: [3.5, -3.5] }),
       photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 66, pos: "50% 50%", to: 1.07 }),
-      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 60, pos: "50% 50%", to: 1.06 }),
-      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 84, pos: "50% 50%", to: 1.07 }),
+      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 60, pos: "50% 50%", from: 1.1, to: 1.1, y: [-3.5, 3.5] }),
+      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 84, pos: "50% 50%", from: 1.1, to: 1.06, x: [-3, 1.5] }),
       close("Join the waitlist.", NAVY),
     ],
     caption: `Nothing in this shop exists yet.

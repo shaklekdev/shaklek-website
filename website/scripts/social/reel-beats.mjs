@@ -97,7 +97,9 @@ function renderFrames(beats, name) {
       const t = steps === 1 ? 1 : s / (steps - 1);
       const file = `${TMP}/${name}-${String(n++).padStart(4, "0")}.png`;
       fs.writeFileSync(`${TMP}/f.html`, frameHtml(beat, t, s));
-      execFileSync(CHROME, ["--headless", "--disable-gpu", "--hide-scrollbars",
+      // Own profile: without it headless Chrome shares the founder's open
+      // Chrome profile and exits 2 on its lock (2026-10-10, mid-render).
+      execFileSync(CHROME, ["--headless", "--disable-gpu", "--hide-scrollbars", `--user-data-dir=${TMP}/chrome-profile`,
         "--virtual-time-budget=2500", `--window-size=${W},${H}`,
         `--screenshot=${file}`, `file://${TMP}/f.html`], { stdio: "ignore" });
       if (!fs.existsSync(file)) throw new Error(`chrome produced nothing at beat ${n}`);
