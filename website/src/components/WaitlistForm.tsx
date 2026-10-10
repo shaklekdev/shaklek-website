@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/metaPixel";
 
 // Posts to /api/waitlist, which already existed for Shaklek+ early access and
 // already carries everything §0 asks of a public write route: rejectCrossOrigin,
@@ -38,6 +39,9 @@ export default function WaitlistForm() {
         return;
       }
       setState({ status: "done", message: "" });
+      // The conversion the pre-launch ads optimise for. No email goes with it:
+      // track() carries no PII and no-ops without the pixel id or consent.
+      track("Lead", { content_name: "waitlist" });
     } catch {
       setState({ status: "error", message: "That did not go through. Please try again." });
     }
