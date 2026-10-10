@@ -90,11 +90,15 @@ const REELS = {
   craft: (I) => ({
     beats: [
       photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 72, pos: "50% 50%", to: 1.06 }),
-      photo({ img: I.tape, words: "Until somebody asks for something.", frames: 66, pos: "50% 55%", to: 1.06 }),
-      photo({ img: I.chalk, words: "", frames: 48, pos: "50% 50%", to: 1.08 }),
-      photo({ img: I.scissors, words: "Then it gets cut.", frames: 66, pos: "50% 50%", to: 1.07 }),
+      // Founder, 2026-10-10: "until you ask for it"; the textless chalk beat
+      // read as an empty picture and is gone; the floating-scissors shot is
+      // replaced by real hands at work, so its line says "cut and pinned", not just "cut",
+      // because the photo shows pinning. "At a time" so the close does not
+      // read as "buy one piece".
+      photo({ img: I.tape, words: "Until you ask for it.", frames: 66, pos: "50% 55%", to: 1.06 }),
+      photo({ img: I.tailorHands, words: "Then it gets cut and pinned.", frames: 66, pos: "50% 50%", to: 1.07 }),
       photo({ img: I.machine, words: "And sewn.", frames: 60, pos: "50% 50%", to: 1.06 }),
-      photo({ img: I.needle, words: "One piece. For one person.", frames: 84, pos: "50% 50%", to: 1.07 }),
+      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 84, pos: "50% 50%", to: 1.07 }),
       close("Join the waitlist.", NAVY),
     ],
     caption: `Nothing in this shop exists yet.

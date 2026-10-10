@@ -51,6 +51,10 @@ export const IMG = {
   needle: b64(`${REPO}/brand-assets/craft/src/needle.jpg`),
   machine: b64(`${REPO}/brand-assets/craft/src/machine.jpg`),
   bolt: b64(`${REPO}/brand-assets/craft/src/bolt.jpg`),
+  // The approved waitlist-page photo: real hands pinning linen, shears and
+  // chalk on the bench. Replaced the craft scissors shot on 2026-10-10, whose
+  // blades floated over the cloth with no hand on them (founder: "unreal").
+  tailorHands: b64(`${REPO}/website/public/marketing/pre-launch/tailor-hands.jpg`),
 };
 
 // Same type system as the carousels. Anything that diverges here reads as a
