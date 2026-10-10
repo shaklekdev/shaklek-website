@@ -27,6 +27,7 @@ Tick the box and leave it; `status.mjs` hides closed items after 30 days.
 
 ## Items
 
+- [ ] open-2026-10-24 | founder | confirmed:2026-10-10 | FOUNDER DECISION: two-week tease, then OPEN THE SHOP ON 2026-10-24 (her words: "ok let's do this"). Chosen over opening today because there is no audience yet (0 posts, 3 waitlist rows on prod) and over a long tease because waitlists cool after ~1 month; leaves a month before White Friday 22-29 Nov. Before opening: rotate-keys, shayla-included (949 includes it, site does not say so), staging checkout pass, then launch-checklist step 0. Missing colourways to be generated the weekend of 2026-10-11
 - [ ] rotate-keys | founder | confirmed:2026-09-12 | RESEND_API_KEY, RECONCILE_TOKEN and CLERK_WEBHOOK_SECRET were exposed in a terminal and are still valid
 - [x] sitemap-gsc | founder | confirmed:2026-09-14 | DONE: URL-prefix property https://www.shaklek.com verified by META TAG, sitemap submitted and accepted, 8 URLs live. ⚠️ The tag lives in layout.tsx as Next metadata `verification:` and MUST NOT be removed; Google re-checks and ownership lapses silently. The FILE method fails here because proxy.ts rewrites every path to /coming-soon while the shop is shut, so a google-xxxx.html at the root is rewritten and verification fails with no useful error. Same trap for Bing, Pinterest, anything asking you to drop a file at the site root
 - [ ] www-timeouts | founder | confirmed:2026-09-13 | One datapoint needed: load the site on mobile data with wifi off. Every other angle is exhausted and the Route 53 check is IPv4 only
