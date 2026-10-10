@@ -260,13 +260,17 @@ export default function ComingSoonPage() {
               brightest sand in the frame and was the softest of the three
               without it; a heavier scrim alone would have dulled the cloth. */}
           <p className="absolute inset-x-0 bottom-0 px-6 pb-8 font-display text-2xl leading-tight text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.5)] sm:hidden">
-            <span className="block">Clothes that fit you perfectly,</span>
-            <span className="block">and respect your skin,</span>
+            <span className="block">Clothes that respect your skin,</span>
+            <span className="block">and fit you perfectly,</span>
             <span className="block">should not be an occasion.</span>
           </p>
         </div>
 
         {/* ⚠️ ONE LINE, AND IT IS DOING FOUR JOBS. Founder's, 2026-09-14.
+
+            REORDERED 2026-10-10, founder: skin first, then fit, so the
+            headline runs in the same order as the cards beneath it (linen,
+            then tailored). Same words; she chose to keep all of them.
 
             "should not be an occasion" is the load-bearing phrase and the
             reason this line exists. It makes the democratising argument
@@ -312,8 +316,8 @@ export default function ComingSoonPage() {
                 a line of its own, which read worse than no break at all. Each
                 span is now a phrase that fits, and the commas mean it still
                 reads correctly if a narrow screen reflows one of them. */}
-            <span className="block">Clothes that fit you perfectly,</span>
-            <span className="block">and respect your skin,</span>
+            <span className="block">Clothes that respect your skin,</span>
+            <span className="block">and fit you perfectly,</span>
             <span className="block">should not be an occasion.</span>
           </p>
         </div>
