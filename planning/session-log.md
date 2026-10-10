@@ -18,6 +18,18 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-10-10 — Meta pixel live
+
+Pixel `1901863017445226` and the domain-verification token are set as
+**branch-level overrides on `main` only** (staging untouched, so test traffic
+never reaches the ad data). Shipped c30a2db, job 377 SUCCEED. Verified live:
+token inside `<head>` on www and on apex-after-redirect; pixel id in a served
+JS chunk (not in HTML, correctly, since it only loads after consent).
+Waitlist signup now fires `Lead`. Founder connected the Shaklek Instagram to
+the page (it sat in a separate Accounts Center). Business portfolio is
+`shaklek.uae`. Next for her: press Verify on the domain, create the ad account.
+Released: nothing held.
+
 ### 2026-09-27 — todo review (OPEN.md only, uncommitted)
 
 Edited `planning/OPEN.md` only: closed `google-business-profile` (founder's
