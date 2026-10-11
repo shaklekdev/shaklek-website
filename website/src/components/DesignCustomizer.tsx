@@ -29,7 +29,7 @@ import { resolveFitNotes } from "@/data/fitNotes";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
 import ProductDisclosure from "@/components/ProductDisclosure";
-import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
+import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSignup";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
 
@@ -509,9 +509,11 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
       {/* Shaklek+ sits AFTER the decision. It advertises features nobody can
           buy yet, so it must never stand between the customer and the cart --
           it used to render between the sliders and the fit. */}
-      <div className="mt-10 border-t border-border pt-8">
-        <ShaklekPlusSignup source="customizer" />
-      </div>
+      {SHAKLEK_PLUS_ON ? (
+        <div className="mt-10 border-t border-border pt-8">
+          <ShaklekPlusSignup source="customizer" />
+        </div>
+      ) : null}
       </div>
     </div>
   );

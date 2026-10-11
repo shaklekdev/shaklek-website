@@ -1,5 +1,11 @@
 "use client";
 
+// ⚠️ HIDDEN, founder 2026-10-11: "should we remove shaklek+ banner for now ?
+// it's already too much". The offer is not settled (OPEN.md shaklek-plus-review)
+// and it sat under every product and the Pay button. Flip to true to bring it
+// back on both; nothing else was removed.
+export const SHAKLEK_PLUS_ON = false;
+
 import { useState } from "react";
 
 // Shaklek+ used to be a dashed box listing locked features and nothing to do

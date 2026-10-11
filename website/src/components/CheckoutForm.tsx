@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import ShaklekPlusSignup from "@/components/ShaklekPlusSignup";
+import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSignup";
 import { previewDiscountAed, previewTotalAed } from "@/lib/promoPreview";
 import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
@@ -404,9 +404,11 @@ export default function CheckoutForm({ total }: { total: number }) {
       )}
       {/* Shaklek+ sits after the decision, not before it -- it must never
           compete with the Pay button. */}
-      <div className="mt-6">
-        <ShaklekPlusSignup source="checkout" compact />
-      </div>
+      {SHAKLEK_PLUS_ON ? (
+        <div className="mt-6">
+          <ShaklekPlusSignup source="checkout" compact />
+        </div>
+      ) : null}
     </div>
   );
 }
