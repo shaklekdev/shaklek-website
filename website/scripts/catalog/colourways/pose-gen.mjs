@@ -113,7 +113,12 @@ for (let i = 0; i < gen.length; i += 3) {
   const m = FAMILY(L, a, b);
   if (!m) continue;
   n += m;
-  const [r, g, bb] = lab2rgb(L, SW.a, SW.b);
+  // ⚠️ BURGUNDY x0.8 LIGHTNESS. Toned exactly onto the swatch photo it read
+  // "a bit faded" to the founder beside the darker burgundy already in the
+  // catalogue; she approved a 20% darker test, 2026-10-11 ("much better").
+  // The swatch's lightness is the one value colors.ts says was inherited from
+  // a lifted photograph, not measured -- this is that error, corrected by eye.
+  const [r, g, bb] = lab2rgb(L * (colour === "Burgundy" ? 0.8 : 1), SW.a, SW.b);
   toned[i] = Math.round(gen[i] * (1 - m) + r * m);
   toned[i + 1] = Math.round(gen[i + 1] * (1 - m) + g * m);
   toned[i + 2] = Math.round(gen[i + 2] * (1 - m) + bb * m);

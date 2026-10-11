@@ -585,6 +585,7 @@ export const catalog: CatalogItem[] = [
     colorImages: {
       Ivory: { front: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg" },
       Navy: { front: "/catalog/abaya-jacket/abaya-jacket-navy-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v1.jpg" },
+      Burgundy: { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v1.jpg" },
     },
     comboImages: {
       Ivory: {
@@ -596,6 +597,11 @@ export const catalog: CatalogItem[] = [
         "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-maxi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v1.jpg" },
         "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-4-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v1.jpg" },
         "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v1.jpg" },
+      },
+      Burgundy: {
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-maxi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v1.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-4-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v1.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v1.jpg" },
       },
     },
     // The photographed base is the LONG one worn OPEN, which is maxi:4, and
@@ -643,6 +649,7 @@ export const catalog: CatalogItem[] = [
     colorImages: {
       Ivory: { front: "/catalog/slip-dress/slip-dress-ivory-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg" },
       Navy: { front: "/catalog/slip-dress/slip-dress-navy-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v1.jpg" },
+      Burgundy: { front: "/catalog/slip-dress/slip-dress-burgundy-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v1.jpg" },
     },
     comboImages: {
       Ivory: {
@@ -654,6 +661,11 @@ export const catalog: CatalogItem[] = [
         "v:maxi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v1.jpg" },
         "round:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v1.jpg" },
         "v:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v1.jpg" },
+      },
+      Burgundy: {
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v1.jpg" },
+        "round:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v1.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
@@ -694,6 +706,7 @@ export const catalog: CatalogItem[] = [
     colorImages: {
       Ivory: { front: "/catalog/buttoned-dress/buttoned-dress-ivory-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg" },
       Navy: { front: "/catalog/buttoned-dress/buttoned-dress-navy-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v1.jpg" },
+      Burgundy: { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-back-v1.jpg" },
     },
     comboImages: {
       Ivory: {
@@ -705,6 +718,11 @@ export const catalog: CatalogItem[] = [
         "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-maxi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v1.jpg" },
         "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-round-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v1.jpg" },
         "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v1.jpg" },
+      },
+      Burgundy: {
+        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-v-maxi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-back-v1.jpg" },
+        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-round-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-v-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-midi-back-v1.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
