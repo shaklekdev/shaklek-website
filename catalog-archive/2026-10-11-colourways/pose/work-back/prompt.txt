@@ -1,0 +1,5 @@
+Edit IMAGE 1, a close crop of the lower part of a woman seen from behind in a long navy linen abaya. Return the SAME crop, same size and framing, with these changes only, matching IMAGE 2:
+- the navy abaya's hem sits just ABOVE her ankles, a little higher than now
+- below the hem, her IVORY wide-leg linen trousers are clearly visible, falling straight to her shoes, exactly like IMAGE 2
+- her shoes are nude-beige flat shoes like IMAGE 2, NOT white
+Everything else stays identical to IMAGE 1: the navy colour and linen weave of the abaya, its folds, her stance, the floor, the light and the shadow.

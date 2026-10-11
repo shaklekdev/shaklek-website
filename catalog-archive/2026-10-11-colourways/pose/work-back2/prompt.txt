@@ -1,0 +1,5 @@
+Edit IMAGE 1, the lower half of a woman seen from behind in a long navy linen abaya. Return the SAME crop, same size and framing, with these changes only, matching IMAGE 2:
+- the navy abaya's hem is ONE straight, level, unbroken edge across its whole width, sitting just ABOVE her ankles. The back panel is a single continuous sheet: no slit, no opening, no split, no uneven or longer side.
+- below that hem, her IVORY wide-leg linen trousers are visible, falling straight to her shoes, as in IMAGE 2
+- her shoes are nude-beige flat shoes as in IMAGE 2, NOT white
+Everything else stays identical to IMAGE 1: the navy colour and linen weave of the abaya and its folds above the hem, her hands, her stance, the floor, the light and the shadow.
