@@ -4788,3 +4788,17 @@ tailor's price to hem it. **It cannot break the price** — even a generous 1m
 shayla at 20 to hem holds 58.4% — so it is a photography and copy job, not a
 pricing risk.
 
+
+## 2026-10-11 — craft reel, her edits
+
+`brand-assets/reels/craft.mp4` (10s). Lines now "Cut to your measurements." /
+"Sewn in the UAE." (she found "cut and pinned / and sewn" too much; "your local
+tailor" declined, it reads as the customer's own tailor). One move per shot,
+doubled after she could not see 3-4% drifts; takes cut ~30%; text centred on
+the picture (`centre: true`, craft only); close charcoal, not navy. The linen
+reel still closes on navy, unasked.
+
+⚠️ Headless Chrome exited 2 on frame 0 whenever her Chrome was open (shared
+profile lock). `reel-beats.mjs` now passes its own `--user-data-dir`. A render
+is ~12s a frame, ~20 min a reel. `higgsfield.mjs` is still uncommitted from an
+interrupted session.
