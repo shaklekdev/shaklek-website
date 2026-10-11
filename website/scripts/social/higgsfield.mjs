@@ -12,6 +12,8 @@
 //   node scripts/social/higgsfield.mjs run <id>...               cost of those shots (free)
 //   node scripts/social/higgsfield.mjs run <id>... --go          generate (costs money)
 //
+//   Shot fields: id, prompt, [image], [lastImage], [duration=5], [sound=off], [negative], [model]
+//
 // Key: HIGGSFIELD_API_KEY="<id>:<secret>" in website/.env.local.
 // Docs: https://docs.higgsfield.ai/docs/llms.txt
 //
@@ -35,7 +37,11 @@ const KEY = env.match(/^HIGGSFIELD_API_KEY=(.+)$/m)?.[1]?.trim();
 if (!KEY) throw new Error("HIGGSFIELD_API_KEY missing from website/.env.local");
 
 const API = "https://api.higgsfield.ai";
-const DEFAULT_MODEL = "kling-video/v2.5-turbo/pro/image-to-video";
+// A shot with an `image` animates that photo; a shot without one is
+// text-to-video (mood shots only: water, palms, cloth -- never a garment we
+// sell, which text-to-video would invent).
+const I2V = "kling-video/v3.0/std/image-to-video";
+const T2V = "kling-video/v3.0/std/text-to-video";
 const NEGATIVE =
   "changing the garment, new seams, buttons, collar, belt, pockets, patterns, logos, text, extra limbs, face change, flicker";
 const auth = { Authorization: `Key ${KEY}`, "Content-Type": "application/json" };
@@ -45,15 +51,18 @@ const save = () => fs.writeFileSync(SHOTS, JSON.stringify(shots, null, 2) + "\n"
 const find = (id) => shots.find((s) => s.id === id) ?? fail(`no shot "${id}" in higgsfield-shots.json`);
 function fail(msg) { console.error(msg); process.exit(1); }
 
-const model = (s) => s.model ?? DEFAULT_MODEL;
+const model = (s) => s.model ?? (s.image ? I2V : T2V);
 const duration = (s) => s.duration ?? 5;
-const imagePath = (s) => path.resolve(REPO, s.image);
+const sound = (s) => s.sound ?? "off";
+const imagePath = (s) => s.image && path.resolve(REPO, s.image);
+const lastPath = (s) => s.lastImage && path.resolve(REPO, s.lastImage);
 // The image's bytes are in the fingerprint, so swapping the photo under the
 // same filename also voids the approval.
 function fingerprint(s) {
   const h = crypto.createHash("sha256");
-  h.update(JSON.stringify([s.prompt, model(s), duration(s), s.negative ?? NEGATIVE]));
-  h.update(fs.readFileSync(imagePath(s)));
+  h.update(JSON.stringify([s.prompt, model(s), duration(s), sound(s), s.negative ?? NEGATIVE]));
+  if (s.image) h.update(fs.readFileSync(imagePath(s)));
+  if (s.lastImage) h.update(fs.readFileSync(lastPath(s)));
   return h.digest("hex").slice(0, 16);
 }
 const isApproved = (s) => s.approved?.fingerprint === fingerprint(s);
@@ -65,8 +74,14 @@ async function call(url, body) {
   return JSON.parse(text);
 }
 
-const request = (s) => ({ prompt: s.prompt, duration: duration(s), negative_prompt: s.negative ?? NEGATIVE });
-const estimate = (s) => call(`${API}/estimate/${model(s)}`, { ...request(s), image_url: "https://example.com/x.jpg" });
+const request = (s) => ({
+  prompt: s.prompt, duration: duration(s), sound: sound(s), negative_prompt: s.negative ?? NEGATIVE,
+  ...(s.image ? {} : { aspect_ratio: "9:16" }), // i2v takes the photo's shape
+});
+const placeholder = (s) => s.image
+  ? { image_url: "https://example.com/x.jpg", ...(s.lastImage ? { last_image_url: "https://example.com/y.jpg" } : {}) }
+  : {};
+const estimate = (s) => call(`${API}/estimate/${model(s)}`, { ...request(s), ...placeholder(s) });
 
 async function upload(file) {
   const type = file.endsWith(".png") ? "image/png" : "image/jpeg";
@@ -85,7 +100,10 @@ function outPath(s) {
 }
 
 async function generate(s) {
-  const body = { ...request(s), image_url: await upload(imagePath(s)) };
+  const body = { ...request(s) };
+  if (s.image) body.image_url = await upload(imagePath(s));
+  // last frame pinned: the clip ends exactly on this photo
+  if (s.lastImage) body.last_image_url = await upload(lastPath(s));
   let job = await call(`${API}/${model(s)}`, body);
   console.log(`${s.id}: submitted ${job.request_id}`);
   for (let wait = 5000; !["completed", "failed", "nsfw", "canceled"].includes(job.status); wait = Math.min(wait * 1.5, 30000)) {
@@ -107,12 +125,13 @@ if (cmd === "list" || !cmd) {
   if (!shots.length) console.log("no shots yet: add them to scripts/social/higgsfield-shots.json");
   let total = 0;
   for (const s of shots) {
-    if (!fs.existsSync(imagePath(s))) { console.log(`${s.id}  MISSING IMAGE ${s.image}`); continue; }
+    const missing = [s.image, s.lastImage].filter((f) => f && !fs.existsSync(path.resolve(REPO, f)));
+    if (missing.length) { console.log(`${s.id}  MISSING ${missing.join(", ")}`); continue; }
     const e = await estimate(s);
     total += Number(e.usd);
     const st = isApproved(s) ? `approved by ${s.approved.by} ${s.approved.date}`
       : s.approved ? "CHANGED SINCE APPROVAL" : "not approved";
-    console.log(`${s.id}  ${e.usd} USD  ${st}\n  ${s.image}\n  "${s.prompt}"\n`);
+    console.log(`${s.id}  ${duration(s)}s ${s.image ? "from photo" : "text only"} sound ${sound(s)}  ${e.usd} USD  ${st}\n  ${s.image ?? ""}\n  "${s.prompt}"\n`);
   }
   if (shots.length) console.log(`all shots: ${total.toFixed(3)} USD`);
 } else if (cmd === "approve") {
