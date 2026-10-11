@@ -97,16 +97,18 @@ const REELS = {
       // bolt, slide along the tape, push into the hands, travel down the
       // seam, drift across the needle. Doubled on 2026-10-11: at 3-4% of the
       // frame the founder could not tell the moves apart on a phone.
-      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 72, pos: "50% 50%", from: 1.25, to: 1.0 }),
+      // Takes cut ~30% the same day ("too long"): about 1.5s a shot, the
+      // longest line keeps 2s so it can still be read.
+      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.25, to: 1.0 }),
       // Founder, 2026-10-10: "until you ask for it"; the textless chalk beat
       // read as an empty picture and is gone; the floating-scissors shot is
       // replaced by real hands at work. "Cut and pinned / And sewn" read as too
       // much (founder, same day): two lines, cut to measure, sewn here. "At a
       // time" so the close does not read as "buy one piece".
-      photo({ img: I.tape, words: "Until you ask for it.", frames: 66, pos: "50% 55%", from: 1.2, to: 1.2, x: [8, -8] }),
-      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 66, pos: "50% 50%", to: 1.15 }),
-      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 60, pos: "50% 50%", from: 1.2, to: 1.2, y: [-8, 8] }),
-      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 84, pos: "50% 50%", from: 1.2, to: 1.1, x: [-8, 3] }),
+      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.2, to: 1.2, x: [8, -8] }),
+      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.15 }),
+      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.2, to: 1.2, y: [-8, 8] }),
+      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.2, to: 1.1, x: [-8, 3] }),
       // Charcoal like every other screen; navy read as an odd one out (2026-10-11).
       close("Join the waitlist."),
     ],
