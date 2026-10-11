@@ -322,6 +322,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                below still takes the real category, because its note examples
                are per garment type. */
             category={paramKeyFor(item)}
+            availableColors={Object.keys(item.colorImages ?? {})}
             previewImage={previewImage}
             previewBackImage={previewBackImage}
             previewGradient={item.gradient}

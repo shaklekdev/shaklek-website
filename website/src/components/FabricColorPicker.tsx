@@ -9,9 +9,15 @@ export default function FabricColorPicker({
   color,
   onFabricChange,
   onColorChange,
+  available,
 }: {
   fabric: Fabric;
   color: string;
+  /** The colours this piece is photographed in. Every piece used to show all
+   *  four, so a White Open Abaya and a Navy dress could be put in the cart
+   *  with no photograph behind them (founder caught it on staging,
+   *  2026-10-11). The server refuses anything outside this list too. */
+  available: string[];
   onFabricChange: (fabric: Fabric) => void;
   onColorChange: (color: string) => void;
 }) {
@@ -32,7 +38,7 @@ export default function FabricColorPicker({
     <div className="mt-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="flex flex-wrap items-center gap-3">
-        {colors.map((c) => (
+        {colors.filter((c) => available.includes(c.name)).map((c) => (
           <button
             key={c.name}
             aria-label={c.name}

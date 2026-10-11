@@ -57,7 +57,7 @@ for (const [label, input, expected] of cases) {
 
 console.log("\nhostile body: tampered price, name and category, quantity 3");
 const hostile = resolveOrderPricing([
-  { slug: "wide-leg-trousers", price: 5, name: "FREE", category: "Shirt", quantity: 3 },
+  { slug: "wide-leg-trousers", color: "Navy", price: 5, name: "FREE", category: "Shirt", quantity: 3 },
 ]);
 console.log("  " + JSON.stringify(hostile));
 const h = hostile.ok && hostile.priced[0];
@@ -71,10 +71,22 @@ if (!hostileOk) bad++;
 console.log(`  ${hostileOk ? "ok  " : "FAIL"} catalog price/name/category win, total = price x quantity`);
 
 console.log("\none over-cap line refuses the whole order (no silent trim)");
-const mixed = resolveOrderPricing([{ slug: "oversized-shirt", quantity: 1 }, { slug: "oversized-shirt", quantity: 11 }]);
-const mixedOk = mixed.ok === false;
+const mixed = resolveOrderPricing([{ slug: "oversized-shirt", color: "Ivory", quantity: 1 }, { slug: "oversized-shirt", color: "Ivory", quantity: 11 }]);
+const mixedOk = mixed.ok === false && /up to/.test(mixed.error);
 if (!mixedOk) bad++;
 console.log(`  ${mixedOk ? "ok  " : "FAIL"} ${JSON.stringify(mixed)}`);
+
+// COLOUR is checked here too: it reaches the tailor's sheet, so the request
+// may only name a colour the piece is photographed in (2026-10-11).
+console.log("\ncolour must be one the piece is photographed in");
+const abaya = catalog.find((i) => i.slug === "open-abaya");
+for (const [color, want] of [["Burgundy", true], ["White", false], ["constructor", false], [undefined, false], [{}, false]]) {
+  const r = resolveOrderPricing([{ slug: "open-abaya", color, quantity: 1 }]);
+  const ok = r.ok === want && (!r.ok || r.priced[0].color === color);
+  if (!ok) bad++;
+  console.log(`  ${ok ? "ok  " : "FAIL"} open-abaya ${JSON.stringify(color)} -> ${r.ok ? "accepted" : "refused"}`);
+}
+if (Object.hasOwn(abaya.colorImages, "White")) { bad++; console.log("  FAIL the fixture assumes no White abaya"); }
 
 console.log(bad === 0 ? "\nPASS — quantity cannot be used to move money." : `\n${bad} FAILURE(S)`);
 process.exit(bad === 0 ? 0 : 1);

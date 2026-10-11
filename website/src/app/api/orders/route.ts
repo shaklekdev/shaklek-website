@@ -131,7 +131,9 @@ async function persistOrder(
         // Resolved against what we can actually make, never taken from the
         // request -- see resolveFabric in src/data/fabrics.ts.
         fabric: resolveFabric(item.fabric),
-        color: text(item.color, 40),
+        // Resolved against the piece's photographed colours, never the raw
+        // request string -- see resolveItem in src/lib/pricing.ts.
+        color: priced[index].color,
         size: text(item.size, 40),
         measurements: text(item.measurements),
         // Re-resolved against the category the SERVER priced, not the one the
@@ -509,6 +511,9 @@ export async function POST(req: NextRequest) {
     name: priced[index].name,
     price: priced[index].price,
     quantity: priced[index].quantity,
+    // Resolved, not the request's strings, so this path and the DB path agree.
+    color: priced[index].color,
+    fabric: resolveFabric(item.fabric),
   }));
   const { emailed } = await sendOrderNotificationEmail(
     emailItems,

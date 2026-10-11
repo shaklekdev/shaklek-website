@@ -12,6 +12,7 @@ export type IncomingItem = {
   name?: unknown;
   category?: unknown;
   quantity?: unknown;
+  color?: unknown;
 };
 
 // A cart line can now be ordered more than once. Quantity is money -- it
@@ -45,7 +46,19 @@ export type PricedItem = {
   name: string;
   category: string;
   price: number;
+  // Resolved against the colours this piece is photographed in. Until
+  // 2026-10-11 the order route stored whatever string the request carried, and
+  // the picker offered all four colours on every piece, so a White Open Abaya
+  // or a Navy dress could be ordered and would land on the tailor's sheet in a
+  // colour we never photographed, and in White's case never sell.
+  color: string;
 };
+
+// Own-property only: "constructor" and friends walk the prototype chain and
+// come back truthy -- see isKnownColor in DesignCustomizer.tsx.
+export function colorsFor(item: CatalogItem): string[] {
+  return Object.keys(item.colorImages ?? {});
+}
 
 const bySlug = new Map<string, CatalogItem>(catalog.map((item) => [item.slug, item]));
 
@@ -77,12 +90,16 @@ export function resolveItem(item: IncomingItem): PricedItem | null {
   const catalogItem = slug ? bySlug.get(slug) : undefined;
   if (!catalogItem) return null;
 
+  const color = typeof item.color === "string" ? item.color : "";
+  if (!Object.hasOwn(catalogItem.colorImages ?? {}, color)) return null;
+
   return {
     slug: catalogItem.slug,
     quantity,
     name: catalogItem.name,
     category: catalogItem.category,
     price: catalogItem.price,
+    color,
   };
 }
 
@@ -101,6 +118,15 @@ export function resolveOrderPricing(items: IncomingItem[]):
       return {
         ok: false,
         error: `You can order up to ${MAX_QUANTITY_PER_ITEM} of one piece. Please reduce the quantity or add it as a second line.`,
+      };
+    }
+
+    // Same reasoning as the quantity check: say the real reason.
+    const known = typeof item.slug === "string" ? bySlug.get(item.slug) : undefined;
+    if (known && !Object.hasOwn(known.colorImages ?? {}, typeof item.color === "string" ? item.color : "")) {
+      return {
+        ok: false,
+        error: `${known.name} comes in ${colorsFor(known).join(", ")}. Please choose one of those colours.`,
       };
     }
 

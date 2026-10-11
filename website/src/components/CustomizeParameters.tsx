@@ -37,8 +37,10 @@ export default function CustomizeParameters({
   preloadImages = [],
   deferredPreloads = [],
   primaryAction,
+  availableColors,
 }: {
   spec: DesignSpec;
+  availableColors: string[];
   onSpecChange: (spec: DesignSpec) => void;
   itemName: string;
   price: number;
@@ -279,6 +281,7 @@ export default function CustomizeParameters({
         color={spec.color}
         onFabricChange={handleFabricChange}
         onColorChange={handleColorChange}
+        available={availableColors}
       />
 
       {/* THE PRODUCT CHARACTERISTICS ARE ONE STEP, so they sit SIDE BY SIDE.
