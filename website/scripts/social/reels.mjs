@@ -100,19 +100,20 @@ const REELS = {
       // One move per shot, each following what is in it: pull back from the
       // bolt, slide along the tape, push into the hands, travel down the
       // seam, drift across the needle. Doubled on 2026-10-11: at 3-4% of the
-      // frame the founder could not tell the moves apart on a phone.
+      // frame the founder could not tell the moves apart on a phone; eased
+      // to ~60% of that after "too accelerated", and drawn every frame.
       // Takes cut ~30% the same day ("too long"): about 1.5s a shot, the
       // longest line keeps 2s so it can still be read.
-      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.25, to: 1.0, centre: true }),
+      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.15, to: 1.0, centre: true }),
       // Founder, 2026-10-10: "until you ask for it"; the textless chalk beat
       // read as an empty picture and is gone; the floating-scissors shot is
       // replaced by real hands at work. "Cut and pinned / And sewn" read as too
       // much (founder, same day): two lines, cut to measure, sewn here. "At a
       // time" so the close does not read as "buy one piece".
-      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.2, to: 1.2, x: [8, -8], centre: true }),
-      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.15, centre: true }),
-      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.2, to: 1.2, y: [-8, 8], centre: true }),
-      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.2, to: 1.1, x: [-8, 3], centre: true }),
+      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.13, to: 1.13, x: [5, -5], centre: true }),
+      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.1, centre: true }),
+      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.13, to: 1.13, y: [-5, 5], centre: true }),
+      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.13, to: 1.07, x: [-5, 2], centre: true }),
       // Charcoal like every other screen; navy read as an odd one out (2026-10-11).
       close("Join the waitlist."),
     ],
@@ -213,5 +214,5 @@ const names = which === "all" ? Object.keys(REELS) : [which];
 for (const n of names) {
   if (!REELS[n]) throw new Error(`no reel "${n}". have: ${Object.keys(REELS).join(", ")}`);
   const { beats, caption } = REELS[n](IMG);
-  buildReel(n, beats, caption);
+  await buildReel(n, beats, caption);
 }
