@@ -4870,3 +4870,15 @@ On staging (b35680a), not main: navy + burgundy for Open Abaya, Buttoned Abaya,
 Slip Dress, Buttoned Dress, all `-v3.jpg`; Open Abaya hero now ivory; old files
 in `catalog-archive/retired-2026-10-11/`. ~$23 spent today on generation.
 Shayla photos exist (`public/catalog/shayla/`) but are not on any page yet.
+
+### 2026-10-11 (close) — shipped to production at her request
+
+She asked to save and push everything. Live now: colour picker + server colour
+check, 52 new colourway photos, shayla on every abaya page and tech pack,
+Complete your look on every product page, no product count on the home rail,
+and `.claude/agents/shaklek-fashion.md` (a stylist agent, built because a
+session paired the Buttoned Dress with the Buttoned Abaya -- "basic fashion
+rules"). A shaklek-fashion review of all 12 pairings was started and NOT
+applied: run it again next session and show her the changes first.
+Not mine, left uncommitted for the session that owns them: the reel archive,
+`higgsfield-shots.json`, `planning/marketing/video-ideas.md`.
