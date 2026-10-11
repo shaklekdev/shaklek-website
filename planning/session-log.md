@@ -20,7 +20,7 @@ Rules that make this work:
 
 ### 2026-10-11 — first teaser reel (Higgsfield), uncommitted
 
-Final: `brand-assets/reels/teaser-final.mp4` (7.6 s, film look, sound) +
+Final, approved by her: `brand-assets/reels/teaser-final.mp4` (11.4 s, film look, sound) +
 `teaser-final.caption.txt`. Built by `brand-assets/reels/teaser/build.mjs`
 (`LOOK=film`), sound laid with `teaser/mux.swift` from `clips/teaser-sound-1.mp4`.
 Cut points are hers via `teaser/trim.html`. Higgsfield: Kling 3.0 discount
@@ -4845,3 +4845,28 @@ burgundy x0.8, approved by eye). Lessons paid for today (~$11 total, ~$3 wasted)
 
 Archive: `catalog-archive/2026-10-11-colourways/` (187 images, rejected included).
 Still uncommitted from another session: `website/scripts/social/higgsfield.mjs`, `higgsfield-shots.json`.
+
+### 2026-10-11 (evening) — the colourways re-shot as genuinely new photographs
+
+She caught what my checks did not: the "new pose" sets kept the ivory frame --
+same framing, hair and backdrop, only the mouth and arms moved. Measured after
+she said it: head-and-background difference from the ivory 1.1-3.1, where two
+different photos score ~34. Pro treats a whole photo in IMAGE 1 as a canvas.
+
+**Method now: `scripts/catalog/colourways/fresh-gen.mjs`.** Garment cropped from
+the neck down + swatch + face crop, three separate references, "a BRAND NEW
+photograph"; rejects novelty <= 5 (the check was tested on a known copy, 3.9,
+and the approved test, 7.6). Batch driver and every prompt:
+`catalog-archive/2026-10-11-colourways/fresh/`.
+
+⚠️ **AND NOVELTY IS NOT DESIGN.** A new photo can change the garment. 13 of 52
+did: length, sleeve width, a back pleat, a closure on a back, a straight shift
+for the flared buttoned dress, flip-flops. Found only by putting each one beside
+the photo its design came from, at 450px. Then 2 more too short by her eye. Do
+that comparison for EVERY cell before showing her, not after she says "you
+changed the design in many".
+
+On staging (b35680a), not main: navy + burgundy for Open Abaya, Buttoned Abaya,
+Slip Dress, Buttoned Dress, all `-v3.jpg`; Open Abaya hero now ivory; old files
+in `catalog-archive/retired-2026-10-11/`. ~$23 spent today on generation.
+Shayla photos exist (`public/catalog/shayla/`) but are not on any page yet.
