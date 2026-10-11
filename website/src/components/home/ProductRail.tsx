@@ -44,9 +44,10 @@ export default function ProductRail({
             <h2 className="text-lg text-text">{title}</h2>
             <p className="mt-1 text-[13px] text-text-3">{subtitle}</p>
           </div>
-          <p className="shrink-0 text-[13px] text-text-3">
-            {catalog.length} pieces
-          </p>
+          {/* ⚠️ NO COUNT, same call as /catalog (founder, 2026-09-14). It read
+              "{catalog.length} pieces" and she flagged it as wrong on
+              2026-10-11: a number on the page goes stale every time the range
+              moves, and nobody remembers to look. */}
         </div>
       </section>
 

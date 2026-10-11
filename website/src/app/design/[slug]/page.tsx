@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import DesignCustomizer from "@/components/DesignCustomizer";
-import { catalog } from "@/data/catalog";
+import { catalog, completeTheLook } from "@/data/catalog";
+import CatalogCard from "@/components/CatalogCard";
 import type { Metadata } from "next";
 import { DEFAULT_OG_IMAGE, NOINDEX, pageMetadata } from "@/lib/seo";
 
@@ -49,6 +50,7 @@ export default async function DesignPage({
   const item = catalog.find((i) => i.slug === slug);
 
   if (!item) notFound();
+  const looks = completeTheLook(item.slug);
 
   return (
     <div className="flex flex-1 flex-col bg-bg">
@@ -109,6 +111,20 @@ export default async function DesignPage({
           to confirm based on your location.
         </p>
       </div>
+      {/* COMPLETE YOUR LOOK, curated per piece in catalog.ts (COMPLETE_THE_LOOK).
+          ⚠️ BELOW EVERYTHING, never beside the buy block: the customizer is one
+          decision and a row of other garments next to Add to cart competes with
+          it (OPEN.md complete-your-look). Founder, 2026-10-11: on every page. */}
+      {looks.length ? (
+        <section className="mx-auto w-full max-w-xl px-4 pb-16 sm:px-6 lg:max-w-5xl">
+          <h2 className="border-t border-border pt-8 text-lg text-text">Complete your look</h2>
+          <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-6 lg:grid-cols-3">
+            {looks.map((l) => (
+              <CatalogCard key={l.slug} item={l} />
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

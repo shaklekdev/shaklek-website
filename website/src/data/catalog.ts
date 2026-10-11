@@ -762,3 +762,31 @@ export const SHAYLA: IncludedPiece = {
 export function includedWith(category: string | null | undefined): IncludedPiece[] {
   return category === "Abaya" ? [SHAYLA] : [];
 }
+
+// ⚠️ COMPLETE YOUR LOOK: CURATED, NEVER COMPUTED. Founder, 2026-10-11: "we need
+// to build the complete your look on every single product page". OPEN.md
+// complete-your-look: a "same category" rule would show four shirts under a
+// shirt, which is a size chart, not a look. First picks follow what the
+// photographs already wear underneath (navy shirt + wide-leg under the abaya,
+// a slip under the open abaya, ivory wide-leg under the buttoned abaya); she
+// edits this list, nothing else. Only slugs that exist in `catalog` render.
+export const COMPLETE_THE_LOOK: Record<string, string[]> = {
+  "oversized-shirt": ["wide-leg-trousers", "pleated-trousers", "open-abaya"],
+  "structured-blouse": ["pleated-trousers", "wide-leg-trousers", "buttoned-abaya"],
+  "wrap-top": ["banded-trousers", "wide-leg-trousers", "open-abaya"],
+  "utility-shirt": ["cargo-trousers", "banded-trousers", "buttoned-abaya"],
+  "wide-leg-trousers": ["oversized-shirt", "structured-blouse", "buttoned-abaya"],
+  "banded-trousers": ["wrap-top", "utility-shirt", "open-abaya"],
+  "pleated-trousers": ["structured-blouse", "oversized-shirt", "open-abaya"],
+  "cargo-trousers": ["utility-shirt", "oversized-shirt", "buttoned-abaya"],
+  "open-abaya": ["slip-dress", "oversized-shirt", "wide-leg-trousers"],
+  "buttoned-abaya": ["wide-leg-trousers", "structured-blouse", "slip-dress"],
+  "slip-dress": ["open-abaya", "buttoned-abaya"],
+  "buttoned-dress": ["open-abaya", "buttoned-abaya"],
+};
+
+export function completeTheLook(slug: string): CatalogItem[] {
+  return (COMPLETE_THE_LOOK[slug] ?? [])
+    .map((s) => catalog.find((i) => i.slug === s))
+    .filter((i): i is CatalogItem => Boolean(i) && i!.slug !== slug);
+}
