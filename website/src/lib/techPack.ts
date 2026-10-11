@@ -13,7 +13,7 @@ import {
   renderParamsForCategory,
   paramKeyFor,
 } from "@/data/parameterSliders";
-import { catalog } from "@/data/catalog";
+import { catalog, includedWith } from "@/data/catalog";
 import { colors } from "@/data/colors";
 import { nearestSize, rowForSize, sizeLabel } from "@/data/sizeChart";
 import { constructionFor, noteForOption } from "@/data/construction";
@@ -330,6 +330,12 @@ export function buildPdf(
         .filter(Boolean)
         .join(" · ");
       doc.text(line, left + 20, doc.y + 2, { width: width - 80 });
+      // ⚠️ INCLUDED PIECES ARE CUT TOO. Every abaya is sold with a shayla
+      // (catalog.ts, includedWith); without this line the tailor is never told.
+      for (const inc of includedWith(item.category ?? catalogItemFor(item)?.category)) {
+        doc.font("Helvetica-Bold").fontSize(9.5).fillColor(INK)
+          .text(`+ ALSO CUT ${qty}: ${inc.name} in ${item.color ?? "the same colour"}. ${inc.spec}.`, left + 20, doc.y + 2, { width: width - 80 });
+      }
       doc.moveDown(0.6);
     }
 
@@ -372,7 +378,13 @@ export function buildPdf(
         .text(`CUT ${qty}`, left, titleY - 24, { width, align: "right" });
       doc.y = titleY;
       doc.moveDown(0.15);
-      doc.fontSize(9.5).fillColor(MUTED).font("Helvetica").text(category);
+      doc.fontSize(9.5).fillColor(MUTED).font("Helvetica").text(category, left, doc.y, { width });
+      for (const inc of includedWith(category)) {
+        doc.moveDown(0.2);
+        doc.font("Helvetica-Bold").fontSize(10.5).fillColor(INK)
+          .text(`+ ALSO CUT ${qty}: ${inc.name} in ${item.color ?? "the same colour"} -- ${inc.spec}.`, left, doc.y, { width });
+        doc.font("Helvetica");
+      }
       doc.moveDown(0.5);
       rule("#ccc");
       doc.moveDown(0.5);

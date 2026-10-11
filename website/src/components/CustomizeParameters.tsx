@@ -6,6 +6,8 @@ import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
 import { renderParamsForCategory, premiumParamsForCategory } from "@/data/parameterSliders";
 import FabricColorPicker from "@/components/FabricColorPicker";
+import IncludedPieces from "@/components/IncludedPieces";
+import type { IncludedPiece } from "@/data/catalog";
 import { SELLABLE_FABRICS } from "@/data/fabrics";
 
 const PREVIEW_SIZES = "(min-width: 640px) 576px, 100vw";
@@ -38,9 +40,13 @@ export default function CustomizeParameters({
   deferredPreloads = [],
   primaryAction,
   availableColors,
+  included = [],
+  includedCopy,
 }: {
   spec: DesignSpec;
   availableColors: string[];
+  included?: IncludedPiece[];
+  includedCopy?: { heading: string; line: string };
   onSpecChange: (spec: DesignSpec) => void;
   itemName: string;
   price: number;
@@ -283,6 +289,10 @@ export default function CustomizeParameters({
         onColorChange={handleColorChange}
         available={availableColors}
       />
+
+      {includedCopy ? (
+        <IncludedPieces pieces={included} color={spec.color} heading={includedCopy.heading} line={includedCopy.line} />
+      ) : null}
 
       {/* THE PRODUCT CHARACTERISTICS ARE ONE STEP, so they sit SIDE BY SIDE.
           Founder, 2026-08-27: "aligner les caractéristiques du produit car

@@ -732,3 +732,33 @@ export const catalog: CatalogItem[] = [
     defaultChanges: { neckline: "round", garment_length: "maxi" },
   },
 ];
+
+// ⚠️ WHAT A PIECE INCLUDES, BY CATEGORY -- so every abaya carries the shayla,
+// including any abaya added later, without anyone remembering to tick a box.
+// Founder, 2026-10-11: "the sheyla should appear in every abaya". It is part of
+// the 949, not a gift ("Abaya 949 + sheila", 2026-09-27), and it is cut from the
+// same linen in the colour chosen for the abaya. Size is hers, the same day:
+// 68 x 180 cm finished, 0.9m of cloth (planning/margins.mjs).
+// ⚠️ THE TECH PACK PRINTS THIS. If it only lived on the product page, the
+// tailor would never be told to cut one and the paid-for piece would not ship.
+export type IncludedPiece = {
+  name: string;
+  /** One line for the tailor: size, cloth, finish. */
+  spec: string;
+  /** Product photo per colour; a colour missing here shows no photo, never another colour's. */
+  images: Partial<Record<string, string>>;
+};
+
+export const SHAYLA: IncludedPiece = {
+  name: "Shayla",
+  spec: "68 x 180 cm finished, same linen and same colour as the abaya, narrow hand-rolled hem on all four edges",
+  images: {
+    Ivory: "/catalog/shayla/shayla-ivory-v1.jpg",
+    Navy: "/catalog/shayla/shayla-navy-v1.jpg",
+    Burgundy: "/catalog/shayla/shayla-burgundy-v1.jpg",
+  },
+};
+
+export function includedWith(category: string | null | undefined): IncludedPiece[] {
+  return category === "Abaya" ? [SHAYLA] : [];
+}

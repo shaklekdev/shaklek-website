@@ -4,6 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
+import { includedWith } from "@/data/catalog";
+
+// The line under the colour circles on every abaya. Cleared by shaklek-marketing
+// 2026-10-11 against catalog.ts, fabrics.ts and margins.mjs. "the price", never
+// a number: 949 lives in catalog.ts. ⏳ An Arabic version exists in that review
+// but every Arabic string is founder-read before it ships (productDisclosure.ts).
+const INCLUDED_COPY = {
+  heading: "Matching shayla included",
+  line: "Same 100% linen, in the colour you choose. 68 x 180 cm, hemmed. Included in the price, not sold separately.",
+};
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import {
   changesFromLabels,
@@ -323,6 +333,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                are per garment type. */
             category={paramKeyFor(item)}
             availableColors={Object.keys(item.colorImages ?? {})}
+            included={includedWith(item.category)}
+            includedCopy={INCLUDED_COPY}
             previewImage={previewImage}
             previewBackImage={previewBackImage}
             previewGradient={item.gradient}
