@@ -184,7 +184,8 @@ if (!NOTONE) {
     const a = Math.min(1, Math.max(0, (la - l - 0.15) / 0.15));
     if (!a) continue;
     const L = Math.max(0, Bgen[j] + WEAVE * (Lsrc[j] - Bsrc[j]));
-    const [r, g, b] = lab2rgb(L, SW_A, SW_B);
+    // Burgundy x0.8 lightness, the same correction pose-gen.mjs carries (founder, 2026-10-11).
+    const [r, g, b] = lab2rgb(L * (colour === "Burgundy" ? 0.8 : 1), SW_A, SW_B);
     toned[i] = Math.round(sized[i] * (1 - a) + r * a);
     toned[i + 1] = Math.round(sized[i + 1] * (1 - a) + g * a);
     toned[i + 2] = Math.round(sized[i + 2] * (1 - a) + b * a);

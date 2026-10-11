@@ -1,0 +1,15 @@
+Edit IMAGE 1 and return the SAME photograph with exactly ONE change: the linen shayla (head scarf) she is wearing is now made in the NAVY linen shown in IMAGE 2.
+
+THE COLOUR is the cloth in IMAGE 2: a deep, MUTED navy linen, about hue 227, saturation near 0.54, lightness near 0.15. Not bright, not electric, not royal, not glossy. Highlights fall soft and greyed. Matte, uniform, and identical in tone across the whole garment, both sides, front panels, sleeves and back.
+
+IT IS LINEN. Keep the weave visible: slubs, grain, soft creases, real shadow inside every fold. Every fold, crease, drape and shadow of the linen shayla (head scarf) stays exactly where it is in IMAGE 1. It must read as the same cloth photographed in a darker dye, not as colour filled in.
+
+EVERYTHING ELSE IS IDENTICAL TO IMAGE 1, pixel for pixel where possible:
+- the same woman, the same face, the same expression, the same hair, the same skin tone; her hands and feet keep their natural skin colour
+- the same pose, the same framing, the same crop, the same camera angle
+- the linen shayla (head scarf)'s exact shape: the same length and hem height, the same sleeve length, the same width, the same neckline, the same seams
+- the same shoes
+- every fold, loop and hemmed end of the scarf exactly where it is
+- the same backdrop and floor, the same light and the same shadow under her. Do NOT tint the background, the floor or the skin.
+
+IMAGE 2 is a flat photograph of the cloth only. Do not copy anything else from it.

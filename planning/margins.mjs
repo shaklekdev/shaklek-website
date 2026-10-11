@@ -121,7 +121,11 @@ const INPUTS = {
   //    from.
   //    ⚠️ THIS IS METRES ONLY. His price for MAKING each dress is still open
   //    and is the bigger unknown -- see tailoringAed below.
-  // ✅ ABAYA 5.2 = 4.5 GARMENT + 0.7 SHAYLA, and both halves changed on
+  // ✅ ABAYA 5.4 = 4.5 GARMENT + 0.9 SHAYLA. The shayla is now SIZED, founder
+  //    2026-10-11: 68 x 180 cm finished, two cut side by side across the 138cm
+  //    cloth, so 0.9m each (180 + hems). It comes with BOTH abayas. The 0.7
+  //    below was the nested guess it replaces. History of the 5.2:
+  // ABAYA 5.2 = 4.5 GARMENT + 0.7 SHAYLA, and both halves changed on
   //    2026-09-27. Founder, same day: the lay is "4-4.5 not 3.5 to 4", which
   //    itself superseded her 3.0-3.5 of 2026-09-20 ("between 3 and 3.5 depending
   //    on the size, for me it's 3m" -- a size-S data point, not the range).
@@ -133,7 +137,7 @@ const INPUTS = {
   //    ⚠️ WHAT THIS MOVED: cloth alone went from 126 to 188 AED, and the 124m
   //    already bought fell from 35 abayas to 23. The old 699 would now earn
   //    50.3%; 949 earns 58.1%, which is the shirt's own margin.
-  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 2.75, Abaya: 5.2, Gilet: 2.0 },
+  metresPerGarment: { Shirt: 2.0, Skirt: 1.5, Pants: 2.0, Dress: 2.75, Abaya: 5.4, Gilet: 2.0 },
 
   // Cut-and-sew, paid to the subcontracted tailor.
   // ✅ SHIRT 35, NOT 40 — the tailor quotes 30-35, founder 2026-09-12. The
