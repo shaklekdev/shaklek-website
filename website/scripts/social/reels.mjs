@@ -9,19 +9,23 @@ const GOLD = "#9c8445", CREAM = "#faf8f4", INK = "#1a1a1a", PAPER = "#fafafa", N
 /** Photo beat: image under a bottom-weighted veil, words at the foot, slow push.
  *  `x`/`y` = [start, end] drift in % of the frame, for a pan instead of a push.
  *  Keep |drift| under (scale - 1) * 50 or an edge shows. Founder, 2026-10-10:
- *  the same push on every shot read as repetitive, so vary it per beat. */
-const photo = ({ img, words, sub, frames, pos = "50% 40%", from = 1.0, to = 1.07, x = [0, 0], y = [0, 0] }) => ({
+ *  the same push on every shot read as repetitive, so vary it per beat.
+ *  `centre` puts the line in the middle of the picture under an even veil
+ *  instead of at the foot (founder, 2026-10-11, craft reel). */
+const photo = ({ img, words, sub, frames, pos = "50% 40%", from = 1.0, to = 1.07, x = [0, 0], y = [0, 0], centre = false }) => ({
   frames, motion: true, words: words + " " + (sub ?? ""),
   render: (t) => {
     const s = (from + (to - from) * t).toFixed(4);
     const tx = (x[0] + (x[1] - x[0]) * t).toFixed(3), ty = (y[0] + (y[1] - y[0]) * t).toFixed(3);
     return `
     <img class="bg" src="${img}" style="object-position:${pos};transform:translate(${tx}%,${ty}%) scale(${s});transform-origin:50% 45%">
-    <div class="veil" style="background:linear-gradient(to bottom,rgba(26,26,26,.12) 0%,rgba(26,26,26,.30) 38%,rgba(26,26,26,.93) 100%)"></div>
+    <div class="veil" style="background:${centre
+      ? "radial-gradient(ellipse 90% 45% at 50% 50%,rgba(26,26,26,.62) 0%,rgba(26,26,26,.38) 100%)"
+      : "linear-gradient(to bottom,rgba(26,26,26,.12) 0%,rgba(26,26,26,.30) 38%,rgba(26,26,26,.93) 100%)"}"></div>
     <div class="mark">Shaklek</div>
-    <div class="pad" style="justify-content:flex-end;gap:30px">
+    <div class="pad" style="justify-content:${centre ? "center;align-items:center;text-align:center" : "flex-end"};gap:30px">
       <div class="rule"></div>
-      <div class="d" style="color:${PAPER};font-size:112px;line-height:1.03;text-wrap:pretty">${words}</div>
+      <div class="d" style="color:${PAPER};font-size:112px;line-height:1.03;text-wrap:${centre ? "balance" : "pretty"}">${words}</div>
       ${sub ? `<div class="ui" style="color:#d6d0c6;font-size:38px;line-height:1.5;max-width:840px">${sub}</div>` : ""}
     </div>`;
   },
@@ -99,16 +103,16 @@ const REELS = {
       // frame the founder could not tell the moves apart on a phone.
       // Takes cut ~30% the same day ("too long"): about 1.5s a shot, the
       // longest line keeps 2s so it can still be read.
-      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.25, to: 1.0 }),
+      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.25, to: 1.0, centre: true }),
       // Founder, 2026-10-10: "until you ask for it"; the textless chalk beat
       // read as an empty picture and is gone; the floating-scissors shot is
       // replaced by real hands at work. "Cut and pinned / And sewn" read as too
       // much (founder, same day): two lines, cut to measure, sewn here. "At a
       // time" so the close does not read as "buy one piece".
-      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.2, to: 1.2, x: [8, -8] }),
-      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.15 }),
-      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.2, to: 1.2, y: [-8, 8] }),
-      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.2, to: 1.1, x: [-8, 3] }),
+      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.2, to: 1.2, x: [8, -8], centre: true }),
+      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.15, centre: true }),
+      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.2, to: 1.2, y: [-8, 8], centre: true }),
+      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.2, to: 1.1, x: [-8, 3], centre: true }),
       // Charcoal like every other screen; navy read as an odd one out (2026-10-11).
       close("Join the waitlist."),
     ],
