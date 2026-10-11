@@ -554,9 +554,12 @@ export const catalog: CatalogItem[] = [
   // maxi:4 and maxi:5 use the SAME back file, and so do midi:4 and midi:5.
   // Four fronts plus two backs is six photographs per colourway, not eight.
   //
-  // ⚠️ IVORY ONLY, AND THE OTHER THREE COLOURWAYS ARE PHOTOSHOP. Her decision
-  // the same day: navy, burgundy and white are recolours of these exact frames,
-  // never new generations, so hem, pose and framing match by construction.
+  // ⚠️ COLOURWAYS ARE NEW PHOTOGRAPHS, NOT RECOLOURS -- superseding the
+  // September "Photoshop" plan. Founder, 2026-10-11: no White on either abaya
+  // or the dresses, and every colour and every design cell gets its own pose
+  // and a realistic expression (a recolour of the same frame "shows tooooo ai").
+  // Garment shape is copied from the ivory cell of the same design and the
+  // colour is toned onto the real swatch: scripts/catalog/colourways/pose-gen.mjs.
   {
     slug: "buttoned-abaya",
     name: "Buttoned Abaya",
@@ -581,12 +584,18 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg",
     colorImages: {
       Ivory: { front: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg" },
+      Navy: { front: "/catalog/abaya-jacket/abaya-jacket-navy-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v1.jpg" },
     },
     comboImages: {
       Ivory: {
         "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-back-v1-wb.jpg" },
         "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-back-v1-wb.jpg" },
         "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1-wb.jpg" },
+      },
+      Navy: {
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-maxi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v1.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-4-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v1.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-5-front-v1.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v1.jpg" },
       },
     },
     // The photographed base is the LONG one worn OPEN, which is maxi:4, and
@@ -633,12 +642,18 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg",
     colorImages: {
       Ivory: { front: "/catalog/slip-dress/slip-dress-ivory-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg" },
+      Navy: { front: "/catalog/slip-dress/slip-dress-navy-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v1.jpg" },
     },
     comboImages: {
       Ivory: {
         "v:maxi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-back-v1.jpg" },
         "round:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-back-v1.jpg" },
         "v:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-back-v1.jpg" },
+      },
+      Navy: {
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v1.jpg" },
+        "round:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v1.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
@@ -678,12 +693,18 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg",
     colorImages: {
       Ivory: { front: "/catalog/buttoned-dress/buttoned-dress-ivory-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg" },
+      Navy: { front: "/catalog/buttoned-dress/buttoned-dress-navy-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v1.jpg" },
     },
     comboImages: {
       Ivory: {
         "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-back-v1.jpg" },
         "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-back-v1.jpg" },
         "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-back-v1.jpg" },
+      },
+      Navy: {
+        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-maxi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v1.jpg" },
+        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-round-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v1.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
