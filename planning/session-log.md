@@ -18,6 +18,21 @@ Rules that make this work:
 
 ## Active claims
 
+### 2026-10-11 — first teaser reel (Higgsfield), uncommitted
+
+Final: `brand-assets/reels/teaser-final.mp4` (7.6 s, film look, sound) +
+`teaser-final.caption.txt`. Built by `brand-assets/reels/teaser/build.mjs`
+(`LOOK=film`), sound laid with `teaser/mux.swift` from `clips/teaser-sound-1.mp4`.
+Cut points are hers via `teaser/trim.html`. Higgsfield: Kling 3.0 discount
+claimed (7 days from 2026-10-11, with Kling 2.5 + Marketing Studio Image),
+$15 card-verification credit, ~$1.70 spent. ⚠️ Auto top-up shows ON
+($25 below $3.13) and neither of us could switch it off; she is asking support.
+Lessons: regenerating a still changes her face AND the dress every time (two
+failed walk remakes); a metric picked see-through frames as "sharpest"; grading
+the walk toward the other shots made it worse. AI look = the face: show less of it.
+⚠️ `brand-assets/` is gitignored, so the paid clips, stills and build scripts
+exist only on this Mac. **Holding:** `website/scripts/social/higgsfield-shots.json`.
+
 ### 2026-10-10 — Meta pixel live
 
 Pixel `1901863017445226` and the domain-verification token are set as
@@ -4802,3 +4817,31 @@ reel still closes on navy, unasked.
 profile lock). `reel-beats.mjs` now passes its own `--user-data-dir`. A render
 is ~12s a frame, ~20 min a reel. `higgsfield.mjs` is still uncommitted from an
 interrupted session.
+
+## 2026-10-11 (later) — colour picker fix, then 36 colourway photographs
+
+**Shipped to staging, not main:** (1) the picker offered all four colours on every
+piece and `/api/orders` stored any colour string -- now only `colorImages` colours
+are offered and accepted (security agent: no Critical/High). (2) Navy + Burgundy for
+the Buttoned Abaya, Slip Dress and Buttoned Dress. No White on any of them (founder).
+
+**What she wants, and it overrides CLAUDE.md §3 for poses:** same woman, but EVERY
+photo -- each colour AND each design cell -- its own pose and a realistic, subtle
+expression. A recolour of the same frame "shows tooooo ai". Saved as a memory.
+
+**Method that worked:** `scripts/catalog/colourways/pose-gen.mjs` -- Pro, the ivory
+photo of THAT design as IMAGE 1 (garment shape), the real swatch as IMAGE 2, then
+toned in Lab onto `public/fabric/linen-<c>.jpg` (lightness from the generation;
+burgundy x0.8, approved by eye). Lessons paid for today (~$11 total, ~$3 wasted):
+- Flash cannot change length or neckline; it returns the input. Pro only.
+- A vague "new pose" comes back as IMAGE 1's stance. Say "VISIBLY DIFFERENT FROM
+  IMAGE 1" and describe the body concretely. "Arms relaxed down" = the old stance.
+- A full ivory reference makes Pro copy its pose; crop the reference (`derive-cell.mjs --ref-crop`).
+- Hands hide closures: say "ALL FOUR clearly visible with nothing in front of them".
+- A small detail (a 5th closure) failed twice on the whole frame and worked first
+  time on a 300x450 crop edited alone and feathered back in.
+- Count closures and check necklines on a brightened crop; navy-on-navy hides them.
+- Same-pose recolours (`recolour-gen.mjs`) are kept only as reference.
+
+Archive: `catalog-archive/2026-10-11-colourways/` (187 images, rejected included).
+Still uncommitted from another session: `website/scripts/social/higgsfield.mjs`, `higgsfield-shots.json`.
