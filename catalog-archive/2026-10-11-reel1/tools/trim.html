@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teaser Trim</title>
+<style>
+:root{--bg:#faf8f4;--ink:#1a1a1a;--mut:#6b6b6b;--line:#e4dfd6;--gold:#9c8445;--card:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#161514;--ink:#f1ede6;--mut:#a39d93;--line:#34312d;--gold:#c9ad6a;--card:#201f1d}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,sans-serif}
+header{padding:20px 16px 8px;max-width:1300px;margin:auto}
+h1{font:300 30px/1.1 Georgia,serif;margin:0 0 6px}
+header p{margin:0;color:var(--mut)}
+main{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding:16px;max-width:1300px;margin:auto}
+.c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px}
+.c.off{opacity:.45}
+.c h2{font-size:14px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+video{width:100%;aspect-ratio:9/16;background:#000;border-radius:6px;display:block}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+button{font:inherit;font-size:13px;padding:6px 9px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;cursor:pointer}
+button.p{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.t{font-variant-numeric:tabular-nums;color:var(--mut);font-size:13px}
+.t b{color:var(--ink)}
+input[type=number]{width:52px;font:inherit;font-size:13px;padding:4px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink)}
+textarea{width:100%;height:120px;font:12px ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--card);color:var(--ink)}
+footer{max-width:1300px;margin:auto;padding:0 16px 40px}
+.note{width:100%;font:inherit;font-size:13px;padding:5px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink);margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Teaser trim</h1>
+  <p>Play a clip, pause where it should start and press <b>Start here</b>, then where it should end and press <b>End here</b>. Use ◀ ▶ to move one frame. Untick a clip to drop it. Then press <b>Copy</b> at the bottom and paste it to Claude.</p>
+</header>
+<main id="g"></main>
+<footer>
+  <div class="row"><button class="p" id="copy">Copy</button><span class="t" id="tot"></span></div>
+  <textarea id="out" readonly></textarea>
+</footer>
+<script>
+const CLIPS = ["teaser-1-face-1","teaser-2-feet-1","teaser-3-walk-1","teaser-4-weave-1","teaser-5-lift-1"];
+// current cut in build.mjs, so she starts from what she saw
+const INIT = {"teaser-1-face-1":[0.5,2.1],"teaser-2-feet-1":[1.5,2.6],"teaser-3-walk-1":[0.5,1.9],"teaser-4-weave-1":[1.0,1.8],"teaser-5-lift-1":[1.8,4.3]};
+const F = 1/24;
+let saved = {}; try { saved = JSON.parse(localStorage.getItem("teaser-trim") || "{}"); } catch {}
+const st = CLIPS.map((id, i) => saved[id] || { id, on: true, order: i + 1, start: INIT[id][0], end: INIT[id][1], note: "" });
+const fmt = (s) => s.toFixed(2) + "s";
+const g = document.getElementById("g");
+st.forEach((s) => {
+  const c = document.createElement("div"); c.className = "c" + (s.on ? "" : " off");
+  c.innerHTML = `<h2><span>${s.id.replace("teaser-","").replace("-1","")}</span>
+    <label class="t"><input type="checkbox" ${s.on ? "checked" : ""}> use</label></h2>
+    <video src="../clips/${s.id}.mp4" muted playsinline preload="auto" controls></video>
+    <div class="row"><button data-a="-">◀</button><button data-a="+">▶</button>
+      <button data-a="r">½ speed</button><button data-a="l">Play cut</button></div>
+    <div class="row"><button class="p" data-a="s">Start here</button><button class="p" data-a="e">End here</button></div>
+    <div class="row t">from <b class="s"></b> to <b class="e"></b> = <b class="d"></b>
+      &nbsp; order <input type="number" min="1" max="9" value="${s.order}"></div>
+    <input class="note" placeholder="note (optional)" value="${s.note.replace(/"/g,"&quot;")}">`;
+  g.appendChild(c);
+  const v = c.querySelector("video");
+  const paint = () => { c.querySelector(".s").textContent = fmt(s.start); c.querySelector(".e").textContent = fmt(s.end);
+    c.querySelector(".d").textContent = fmt(Math.max(0, s.end - s.start)); c.className = "c" + (s.on ? "" : " off"); save(); };
+  let looping = false;
+  v.addEventListener("timeupdate", () => { if (looping && v.currentTime >= s.end) { v.currentTime = s.start; } });
+  v.addEventListener("pause", () => { looping = false; });
+  c.addEventListener("click", (e) => {
+    const a = e.target.dataset?.a; if (!a) return;
+    if (a === "-") { v.pause(); v.currentTime = Math.max(0, v.currentTime - F); }
+    if (a === "+") { v.pause(); v.currentTime = Math.min(v.duration, v.currentTime + F); }
+    if (a === "r") { v.playbackRate = v.playbackRate === 1 ? 0.5 : 1; e.target.textContent = v.playbackRate === 1 ? "½ speed" : "normal speed"; }
+    if (a === "l") { v.currentTime = s.start; looping = true; v.play(); }
+    if (a === "s") { s.start = +v.currentTime.toFixed(3); if (s.end <= s.start) s.end = Math.min(v.duration, s.start + 1); paint(); }
+    if (a === "e") { s.end = +v.currentTime.toFixed(3); if (s.end <= s.start) s.start = Math.max(0, s.end - 1); paint(); }
+  });
+  c.querySelector("input[type=checkbox]").onchange = (e) => { s.on = e.target.checked; paint(); };
+  c.querySelector("input[type=number]").oninput = (e) => { s.order = +e.target.value || s.order; save(); };
+  c.querySelector(".note").oninput = (e) => { s.note = e.target.value; save(); };
+  v.addEventListener("loadedmetadata", () => { v.currentTime = s.start; });
+  paint();
+});
+function save() {
+  try { localStorage.setItem("teaser-trim", JSON.stringify(Object.fromEntries(st.map((s) => [s.id, s])))); } catch {}
+  const use = st.filter((s) => s.on).sort((a, b) => a.order - b.order);
+  const out = use.map((s) => ({ clip: s.id + ".mp4", start: s.start, end: s.end, ...(s.note ? { note: s.note } : {}) }));
+  document.getElementById("out").value = JSON.stringify(out, null, 1);
+  document.getElementById("tot").textContent = `${use.length} clips, ${use.reduce((t, s) => t + s.end - s.start, 0).toFixed(1)}s before the end card`;
+}
+document.getElementById("copy").onclick = async () => {
+  const t = document.getElementById("out"); t.select();
+  try { await navigator.clipboard.writeText(t.value); } catch { document.execCommand("copy"); }
+  document.getElementById("copy").textContent = "Copied"; setTimeout(() => (document.getElementById("copy").textContent = "Copy"), 1500);
+};
+save();
+</script>
+</body>
+</html>

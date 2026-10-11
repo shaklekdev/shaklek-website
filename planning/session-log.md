@@ -30,8 +30,13 @@ $15 card-verification credit, ~$1.70 spent. ⚠️ Auto top-up shows ON
 Lessons: regenerating a still changes her face AND the dress every time (two
 failed walk remakes); a metric picked see-through frames as "sharpest"; grading
 the walk toward the other shots made it worse. AI look = the face: show less of it.
-⚠️ `brand-assets/` is gitignored, so the paid clips, stills and build scripts
-exist only on this Mac. **Holding:** `website/scripts/social/higgsfield-shots.json`.
+Also done: post 1 "the name" (`brand-assets/reels/name.mp4` + caption). Ideas for
+the next videos: planning/marketing/video-ideas.md. ⚠️ OPEN: the teaser's text
+was rendered with fallback fonts (Google Fonts @import from a data: page never
+loaded); build-name.mjs embeds the fonts and proves them, build.mjs must be
+fixed the same way and teaser-final rebuilt BEFORE it is posted.
+`brand-assets/` is gitignored: safekeeping copy of finals, clips, stills and
+tools in `catalog-archive/2026-10-11-reel1/`. Released: nothing held.
 
 ### 2026-10-10 — Meta pixel live
 

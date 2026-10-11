@@ -1,1 +1,73 @@
-[]
+[
+  {
+    "id": "teaser-1-face",
+    "image": "brand-assets/reels/teaser/stills/s1-face.jpg",
+    "duration": 5,
+    "prompt": "She breathes in slowly through the nose, her shoulders and chest rise a little, a few strands of hair lift in the sea breeze and settle on her cheek, then she breathes out and the corners of her closed lips lift into a small smile at the very end. Eyes stay closed the whole time. Micro movement only, no head turn, no body turn. The row of small buttons and the open ivory linen abaya stay exactly as they are. Camera locked, no zoom, shallow depth of field, warm low golden-hour light, sea calm behind.",
+    "negative": "eyes opening, eye flicker, teeth, open mouth, talking, head turn, face changing, hair merging into skin, plastic skin, beauty filter, buttons moving, headscarf, earrings, jewellery, text, watermark, zoom, camera move",
+    "approved": {
+      "by": "founder",
+      "date": "2026-10-11",
+      "fingerprint": "cb291b61c4265696"
+    }
+  },
+  {
+    "id": "teaser-2-feet",
+    "image": "brand-assets/reels/teaser/stills/s2-feet.jpg",
+    "duration": 5,
+    "prompt": "A sudden strong gust lifts the ivory linen hem away from the bare feet and whips it sideways, then the cloth falls back heavily. A thin sheet of sea foam slides forward over the feet and pulls back. The linen is matte and opaque with a visible slub weave, it never becomes see-through against the light. Camera locked at ankle height, no zoom. Warm low golden-hour side light, natural motion blur on the cloth.",
+    "negative": "sheer, transparent, see-through, chiffon, silk, satin, shiny, extra toes, deformed feet, extra legs, shoes, sandals, text, watermark, people, buildings, camera shake, zoom",
+    "approved": {
+      "by": "founder",
+      "date": "2026-10-11",
+      "fingerprint": "8bf2c90acc6abb3f"
+    }
+  },
+  {
+    "id": "teaser-3-walk",
+    "image": "brand-assets/reels/teaser/stills/s3-walk-2k.jpg",
+    "duration": 5,
+    "prompt": "The woman keeps walking towards the camera along the wet sand at an unhurried pace, barefoot. A steady sea breeze, with one strong gust at the start that lifts the open ivory linen abaya away from her body and blows her long dark hair across her face; she does not react. The abaya stays on both shoulders, worn open, its front edges visible. The linen is matte and opaque and moves heavily. Small waves break behind her, palms sway slightly. Camera locked at hip height, no zoom. Same warm golden-hour light, same sky, same beach.",
+    "negative": "face changing, extra fingers, extra hands, sheer, transparent, see-through, silk, satin, shiny, headscarf, shoes, sandals, abaya closing, belt, collar, cardigan, text, watermark, zoom, close-up, people, buildings, boats, tilted horizon",
+    "approved": {
+      "by": "founder",
+      "date": "2026-10-11",
+      "fingerprint": "3a2e386412a5586d"
+    }
+  },
+  {
+    "id": "teaser-4-weave",
+    "duration": 5,
+    "prompt": "Extreme macro of ivory linen cloth, natural slub weave, backlit by low warm sun so pinpoints of light show through the gaps between the threads. A slow breath of wind lifts the cloth and the light shifts through the weave. Ivory, not white. Matte, no sheen. Shallow depth of field, the texture fills the whole frame, no garment edges, no hands. Vertical 9:16, camera locked, photoreal.",
+    "negative": "glossy, satin, silk, sheen, shiny, plastic, pattern, print, embroidery, lace, mesh, gauze, chiffon, transparent, hands, fingers, text, watermark, zoom",
+    "approved": {
+      "by": "founder",
+      "date": "2026-10-11",
+      "fingerprint": "c70a410a57c6e0a6"
+    }
+  },
+  {
+    "id": "teaser-5-lift",
+    "image": "brand-assets/reels/teaser/stills/s5-shoulder.jpg",
+    "duration": 5,
+    "prompt": "Her other hand enters from the lower right, fingers relaxed, takes the edge of the ivory linen abaya at her elbow and draws it slowly up along her arm and over her shoulder in one calm movement, then lets go; the linen settles heavily on the shoulder and holds. Her hair moves gently in the breeze. She stays still otherwise, chin where it is. Matte opaque slub linen. Camera locked, no zoom, shallow depth of field, warm low golden-hour light on the skin.",
+    "negative": "six fingers, extra fingers, fused fingers, extra hand, extra arm, long nails, nail polish, rings, bracelets, sheer, transparent, silk, satin, shiny, face turning to camera, eyes, text, watermark, zoom, camera move",
+    "approved": {
+      "by": "founder",
+      "date": "2026-10-11",
+      "fingerprint": "1b14b7ec06b32733"
+    }
+  },
+  {
+    "id": "teaser-sound",
+    "duration": 10,
+    "sound": "on",
+    "prompt": "Close-up of a calm turquoise sea at golden hour, small gentle waves breaking softly on wet sand, warm sea breeze moving the water. Sound: natural soft waves and a gentle steady wind only. Near the start, close to the microphone, one slow deep inhale through the nose and a soft relaxed exhale. No music, no voice, no talking, no birds, no people, calm and intimate.",
+    "negative": "music, singing, talking, voice, speech, crowd, birds, seagulls, engine, boat, thunder, text, watermark",
+    "approved": {
+      "by": "founder",
+      "date": "2026-10-11",
+      "fingerprint": "d45941ef49385427"
+    }
+  }
+]
