@@ -658,14 +658,14 @@ export const catalog: CatalogItem[] = [
         "v:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-back-v1.jpg" },
       },
       Navy: {
-        "v:maxi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v1.jpg" },
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-maxi-front-v2.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v1.jpg" },
         "round:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v1.jpg" },
         "v:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v1.jpg" },
       },
       Burgundy: {
         "v:maxi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v1.jpg" },
         "round:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v1.jpg" },
-        "v:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v1.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-midi-front-v2.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v1.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
