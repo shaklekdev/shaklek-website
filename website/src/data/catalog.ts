@@ -770,6 +770,9 @@ export function includedWith(category: string | null | undefined): IncludedPiece
 // photographs already wear underneath (navy shirt + wide-leg under the abaya,
 // a slip under the open abaya, ivory wide-leg under the buttoned abaya); she
 // edits this list, nothing else. Only slugs that exist in `catalog` render.
+// ⚠️ HER STYLING RULE, 2026-10-11: structure balances the open one, plain
+// balances the closed one. Buttoned Dress <-> Open Abaya; Slip Dress <->
+// Buttoned Abaya. Never Buttoned Dress with Buttoned Abaya.
 export const COMPLETE_THE_LOOK: Record<string, string[]> = {
   "oversized-shirt": ["wide-leg-trousers", "pleated-trousers", "open-abaya"],
   "structured-blouse": ["pleated-trousers", "wide-leg-trousers", "buttoned-abaya"],
@@ -779,10 +782,10 @@ export const COMPLETE_THE_LOOK: Record<string, string[]> = {
   "banded-trousers": ["wrap-top", "utility-shirt", "open-abaya"],
   "pleated-trousers": ["structured-blouse", "oversized-shirt", "open-abaya"],
   "cargo-trousers": ["utility-shirt", "oversized-shirt", "buttoned-abaya"],
-  "open-abaya": ["slip-dress", "oversized-shirt", "wide-leg-trousers"],
+  "open-abaya": ["buttoned-dress", "oversized-shirt", "wide-leg-trousers"],
   "buttoned-abaya": ["wide-leg-trousers", "structured-blouse", "slip-dress"],
-  "slip-dress": ["open-abaya", "buttoned-abaya"],
-  "buttoned-dress": ["open-abaya", "buttoned-abaya"],
+  "slip-dress": ["buttoned-abaya"],
+  "buttoned-dress": ["open-abaya"],
 };
 
 export function completeTheLook(slug: string): CatalogItem[] {
