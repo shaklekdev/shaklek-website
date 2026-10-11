@@ -102,18 +102,20 @@ const REELS = {
       // seam, drift across the needle. Doubled on 2026-10-11: at 3-4% of the
       // frame the founder could not tell the moves apart on a phone; eased
       // to ~60% of that after "too accelerated", and drawn every frame.
+      // Then slower again, the seam most: y is % of 1920, so the same number
+      // travels nearly twice as far as an x drift (founder, same day).
       // Takes cut ~30% the same day ("too long"): about 1.5s a shot, the
       // longest line keeps 2s so it can still be read.
-      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.15, to: 1.0, centre: true }),
+      photo({ img: I.bolt, words: "Right now, this is all there is.", frames: 51, pos: "50% 50%", from: 1.1, to: 1.0, centre: true }),
       // Founder, 2026-10-10: "until you ask for it"; the textless chalk beat
       // read as an empty picture and is gone; the floating-scissors shot is
       // replaced by real hands at work. "Cut and pinned / And sewn" read as too
       // much (founder, same day): two lines, cut to measure, sewn here. "At a
       // time" so the close does not read as "buy one piece".
-      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.13, to: 1.13, x: [5, -5], centre: true }),
-      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.1, centre: true }),
-      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.13, to: 1.13, y: [-5, 5], centre: true }),
-      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.13, to: 1.07, x: [-5, 2], centre: true }),
+      photo({ img: I.tape, words: "Until you ask for it.", frames: 42, pos: "50% 55%", from: 1.1, to: 1.1, x: [3.5, -3.5], centre: true }),
+      photo({ img: I.tailorHands, words: "Cut to your measurements.", frames: 45, pos: "50% 50%", to: 1.06, centre: true }),
+      photo({ img: I.machine, words: "Sewn in the UAE.", frames: 42, pos: "50% 50%", from: 1.08, to: 1.08, y: [-2, 2], centre: true }),
+      photo({ img: I.needle, words: "One piece at a time, made only for you.", frames: 63, pos: "50% 50%", from: 1.1, to: 1.06, x: [-3, 1.5], centre: true }),
       // Charcoal like every other screen; navy read as an odd one out (2026-10-11).
       close("Join the waitlist."),
     ],
