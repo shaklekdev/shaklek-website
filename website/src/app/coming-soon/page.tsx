@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 import Image from "next/image";
 import WaitlistForm from "@/components/WaitlistForm";
+import BrandLockup from "@/components/BrandLockup";
 
 // THE PRE-LAUNCH PAGE. Every path on the site rewrites here while STORE_OPEN is
 // not "true" (src/proxy.ts), so this is the whole site to a visitor today.
@@ -166,9 +167,7 @@ export default function ComingSoonPage() {
               case. 0.138em is 4/29 expressed relatively, so it holds at any
               size. Do not retune it here without changing the header and the
               artwork together. */}
-          <p className="font-wordmark text-3xl tracking-[0.138em] text-text sm:text-5xl">
-            Shaklek
-          </p>
+          <BrandLockup size="lg" />
           {/* ⚠️ NO DATE. Founder, 2026-09-19: "remove early october, just say
               opening soon." A month on the page is a promise with a deadline
               attached, and it ages badly the moment it slips. NOTE: "early

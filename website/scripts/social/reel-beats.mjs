@@ -33,6 +33,15 @@ const OUT = `${REPO}/brand-assets/reels`;
 const W = 1080, H = 1920, FPS = 30;
 
 const b64 = (p) => `data:image/jpeg;base64,${fs.readFileSync(p).toString("base64")}`;
+// ⚠️ THE MASTER LOGO, never "Shaklek" typed in a font. Founder, 2026-10-11:
+// "different fonts in different places... it feels like we're changing the
+// brand". Same file as the packaging, the site and the emails.
+const svg = (p) => `data:image/svg+xml;base64,${fs.readFileSync(p).toString("base64")}`;
+export const LOGO = {
+  white: svg(`${REPO}/branding/source/shaklek-logo-white-on-dark.svg`),
+  dark: svg(`${REPO}/branding/source/shaklek-logo.svg`),
+};
+
 export const IMG = {
   shoulder: b64(`${REPO}/brand-assets/carousels/04-nobody-knows-their-shoulder/shoulder.jpg`),
   hands: b64(`${REPO}/brand-assets/carousels/04-nobody-knows-their-shoulder/hands.jpg`),
@@ -70,8 +79,7 @@ html,body{width:${W}px;height:${H}px;overflow:hidden;background:#1a1a1a}
 .eyebrow{font-family:-apple-system,sans-serif;font-weight:300;letter-spacing:.26em;font-size:34px}
 .rule{width:72px;height:1px;background:#9c8445}
 .pad{position:absolute;inset:0;display:flex;flex-direction:column;padding:120px 92px}
-.mark{position:absolute;left:92px;top:96px;font-family:"Italiana",Georgia,serif;
-  letter-spacing:.138em;font-size:38px;color:rgba(250,250,250,.86)}
+.mark{position:absolute;left:92px;top:96px;width:200px;height:auto;opacity:.92}
 .markd{color:rgba(26,26,26,.7)}
 img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .veil{position:absolute;inset:0}

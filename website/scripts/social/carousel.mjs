@@ -22,6 +22,11 @@ import { lint } from "./copy-rules.mjs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+// ⚠️ The end card uses the MASTER LOGO file, not "Shaklek" typed in Italiana:
+// it was set at 14px tracking, nearly double the brand's 4/29 (founder,
+// 2026-10-11: "make everything the same").
+const LOGO_WHITE = `data:image/svg+xml;base64,${fs.readFileSync(new URL("../../../branding/source/shaklek-logo-white-on-dark.svg", import.meta.url)).toString("base64")}`;
+
 // Repo root, derived from this file's own location instead of hardcoded.
 // It was the literal "/Users/nadatlohi/Desktop/Shaklek" until 2026-08-31, when
 // the repo moved off the iCloud-synced Desktop and every one of these scripts
@@ -75,7 +80,7 @@ img.p{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   border-radius:999px;padding:10px 24px}
 .end{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;
   justify-content:center;background:#171512;gap:24px}
-.end .m{font-family:Italiana,serif;font-size:${band.k + 26}px;letter-spacing:14px;color:#fff}
+.end .logo{width:560px;height:auto}
 .end .r{width:130px;height:2px;background:#c4a964}
 .end .a{font-family:'Reem Kufi',sans-serif;font-size:${band.s + 6}px;color:#fff;direction:rtl}
 .end .u{margin-top:26px;font-family:Inter,sans-serif;font-size:${band.s}px;color:#c8c1b5;letter-spacing:.04em}
@@ -107,8 +112,7 @@ function build(set) {
     set.slides.forEach((sl, i) => {
       const n = String(i + 1).padStart(2, "0");
       const inner = sl.end
-        ? `<div class="end"><div class="m">Shaklek</div><div class="r"></div>
-             <div class="a" dir="rtl" lang="ar">شكلك</div><div class="u">shaklek.com</div></div>`
+        ? `<div class="end"><img class="logo" src="${LOGO_WHITE}" alt="Shaklek"><div class="u">shaklek.com</div></div>`
         : `<div class="band"><div class="k">${sl.k}</div>${sl.s ? `<div class="s">${sl.s}</div>` : ""}</div>
            <div class="stage"><img class="p" src="${sl.src}" style="${FOCUS[sl.focus ?? "full"]}">
              ${sl.tag ? `<div class="tag"><span class="d"></span>${sl.tag}</div>` : ""}

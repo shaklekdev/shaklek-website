@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
+import BrandLockup from "@/components/BrandLockup";
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
 // onto the home page. Two reasons, both the founder's: it was a click that led
@@ -143,22 +144,8 @@ export default function Header() {
             the lockup as a whole sits left on the page. Left-aligning the
             pieces individually hung the rule and the Arabic off the "S" and
             left the mark looking unfinished under its own right half. */}
-        <Link href="/" className="col-start-2 flex flex-col items-center leading-none">
-          {/* Italiana, founder's pick 2026-08-26. Single weight and hairline
-              thins, so it goes UP a step in size -- at 24px its strokes start
-              to disappear on a phone -- and gains letter-spacing, which is
-              what a display face this fine is drawn to be given. */}
-          <span className="font-wordmark text-[27px] tracking-[4px] text-text sm:text-[29px]">
-            Shaklek
-          </span>
-          <span className="my-1.5 h-px w-9 bg-gold" aria-hidden="true" />
-          <span
-            dir="rtl"
-            lang="ar"
-            className="font-arabic text-sm tracking-[1px] text-text"
-          >
-            شكلك
-          </span>
+        <Link href="/" className="col-start-2 flex flex-col items-center leading-none" aria-label="Shaklek, home">
+          <BrandLockup />
         </Link>
         <div className="flex items-center gap-5 justify-self-end">
           {/* ONE LINK FOR BOTH STATES, and no Clerk in this component.

@@ -2,7 +2,7 @@
  * The two reels. `node reels.mjs shoulder` / `node reels.mjs label` / `all`.
  * Format rationale and the beat model live in reel-beats.mjs.
  */
-import { buildReel, IMG } from "./reel-beats.mjs";
+import { buildReel, IMG, LOGO } from "./reel-beats.mjs";
 
 const GOLD = "#9c8445", CREAM = "#faf8f4", INK = "#1a1a1a", PAPER = "#fafafa", NAVY = "#0a2d4a";
 
@@ -22,7 +22,7 @@ const photo = ({ img, words, sub, frames, pos = "50% 40%", from = 1.0, to = 1.07
     <div class="veil" style="background:${centre
       ? "radial-gradient(ellipse 90% 45% at 50% 50%,rgba(26,26,26,.62) 0%,rgba(26,26,26,.38) 100%)"
       : "linear-gradient(to bottom,rgba(26,26,26,.12) 0%,rgba(26,26,26,.30) 38%,rgba(26,26,26,.93) 100%)"}"></div>
-    <div class="mark">Shaklek</div>
+    <img class="mark" src="${LOGO.white}" alt="Shaklek">
     <div class="pad" style="justify-content:${centre ? "center;align-items:center;text-align:center" : "flex-end"};gap:30px">
       <div class="rule"></div>
       <div class="d" style="color:${PAPER};font-size:112px;line-height:1.03;text-wrap:${centre ? "balance" : "pretty"}">${words}</div>
@@ -35,7 +35,7 @@ const photo = ({ img, words, sub, frames, pos = "50% 40%", from = 1.0, to = 1.07
 const text = ({ eyebrow, words, sub, frames, dark = true, bg, build = 1, size = 108 }) => ({
   frames, build, words: [eyebrow, words, sub].filter(Boolean).join(" "),
   render: (_t, step) => `
-    <div class="mark ${dark ? "" : "markd"}">Shaklek</div>
+    <img class="mark" src="${dark ? LOGO.white : LOGO.dark}" alt="Shaklek">
     <div class="f" style="background:${bg ?? (dark ? INK : CREAM)}"></div>
     <div class="pad" style="justify-content:center;gap:28px">
       ${eyebrow ? `<div class="eyebrow" style="color:${GOLD}">${eyebrow}</div>` : ""}
@@ -59,7 +59,7 @@ const listBeat = (frames) => ({
   frames, build: 3, words: "What the tailor measures. Seventeen. A website can ask you for four.",
   render: (_t, step) => `
     <div class="f" style="background:${CREAM}"></div>
-    <div class="mark markd">Shaklek</div>
+    <img class="mark" src="${LOGO.dark}" alt="Shaklek">
     <div class="pad" style="justify-content:center;gap:26px">
       <div class="eyebrow" style="color:${GOLD}">WHAT THE TAILOR MEASURES</div>
       <div class="d" style="color:${INK};font-size:126px;line-height:1.0">Seventeen.</div>

@@ -42,6 +42,16 @@ export type MailRow = { name: string; spec?: string; amount: string };
 
 const FOOT = "Shaklek, Dubai";
 
+// ⚠️ THE LOGO IS AN IMAGE IN EMAIL, NOT TEXT. Founder, 2026-10-11, comparing
+// the confirmation email with the site: "different fonts in different places...
+// it feels like we're changing the brand". Email clients do not load web fonts,
+// so "Shaklek" set in a font stack came out in Cormorant/Georgia with no Arabic
+// and no gold rule. This is the master lockup (branding/source/shaklek-logo.svg,
+// the one on the packaging) rasterised to public/brand/shaklek-logo-email.png.
+// Absolute, because a mail client has no base URL. alt="Shaklek" plus the
+// serif styles on the <img> is what shows when a client blocks images.
+const LOGO_URL = "https://www.shaklek.com/brand/shaklek-logo-email.png";
+
 // The site's own tokens, from globals.css, so an email and the page it links to
 // are recognisably the same brand: text #1a1a1a, muted #6b6b6b, faint #a0a0a0,
 // gold #9c8445. The two backgrounds are warmer than the site's white because an
@@ -167,14 +177,13 @@ export function buildEmail(opts: {
     : "";
 
   const html = `<!doctype html>
-<html><body style="margin:0;padding:0;background:${OUTER};">
+<html><head><meta charset="utf-8"><style>@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&display=swap');</style></head><body style="margin:0;padding:0;background:${OUTER};">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${OUTER};padding:32px 16px;">
 <tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:${PAPER};border:1px solid ${RULE};">
-<tr><td style="padding:36px 32px 0;">
-  <div style="font-family:${SERIF};font-size:26px;letter-spacing:3px;color:${INK};">Shaklek</div>
-  <div style="height:1px;background:${GOLD};width:34px;margin-top:14px;font-size:0;line-height:0;">&nbsp;</div>
+<tr><td align="center" style="padding:36px 32px 0;">
+  <img src="${LOGO_URL}" width="150" height="65" alt="Shaklek" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:150px;height:auto;font-family:${SERIF};font-size:26px;letter-spacing:3px;color:${INK};">
 </td></tr>${
     heading
       ? `

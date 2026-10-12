@@ -84,6 +84,7 @@ const OPEN_WHILE_SHUT = [
   "/legal",
   "/_next",
   "/catalog/", // public/catalog/*.jpg -- note the trailing slash
+  "/brand/", // public/brand/: the master logo, which every EMAIL loads from www (2026-10-11)
   "/fonts",
   "/robots.txt",
   "/sitemap.xml",
@@ -140,5 +141,5 @@ export const config = {
   // which is the standard Next.js catch-all. The per-path decision is made in
   // reachableWhileShut() rather than here, because a list in one place that is
   // read by one function is auditable and a regex in two places is not.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|catalog/|fonts/).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|catalog/|brand/|fonts/).*)"],
 };

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BrandLockup from "@/components/BrandLockup";
 
 // Where /api/waitlist/unsubscribe lands someone who clicked the link.
 //
@@ -51,7 +52,7 @@ export default async function WaitlistUnsubscribedPage({
     <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-20 text-center">
       <div className="flex max-w-md flex-col gap-5">
         <Link href="/" className="leading-none">
-          <span className="font-wordmark text-3xl tracking-[0.138em] text-text">Shaklek</span>
+          <BrandLockup />
         </Link>
         <h1 className="font-display text-2xl leading-snug text-text">{copy.heading}</h1>
         <p className="text-sm leading-relaxed text-text-2">{copy.body}</p>

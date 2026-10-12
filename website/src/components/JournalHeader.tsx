@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import { isStoreOpen } from "@/lib/storeOpen";
+import BrandLockup from "@/components/BrandLockup";
 
 // The header the journal wears, which depends on whether there is a shop to
 // point at.
@@ -28,7 +29,7 @@ export default function JournalHeader() {
     <header className="border-b border-border bg-bg">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
         <Link href="/" className="leading-none">
-          <span className="font-wordmark text-2xl tracking-[0.138em] text-text">Shaklek</span>
+          <BrandLockup />
         </Link>
         <Link
           href="/blog"
