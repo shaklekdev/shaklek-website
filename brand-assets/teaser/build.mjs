@@ -30,6 +30,11 @@ import { lint } from "../../website/scripts/social/copy-rules.mjs";
 const HERE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/$/, "");
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const TMP = "/tmp/shaklek-teaser";
+// ⚠️ The lockup slide draws the MASTER LOGO file, not Italiana typed in CSS
+// (founder 2026-10-11: "make everything the same"). Webfont kerning and the
+// rule's spacing drift from the logo; the outlined SVG cannot.
+const LOGO = `data:image/svg+xml;base64,${fs.readFileSync(new URL("../../branding/source/shaklek-logo.svg", import.meta.url)).toString("base64")}`;
+const LOGO_WHITE = `data:image/svg+xml;base64,${fs.readFileSync(new URL("../../branding/source/shaklek-logo-white-on-dark.svg", import.meta.url)).toString("base64")}`;
 const INK = "#1a1a1a", NAVY = "#0a2d4a", CREAM = "#faf8f4", GOLD = "#9c8445", PAPER = "#fafafa";
 // Warm nudes for tonal variation inside the light palette, plus the burgundy
 // used as a TYPE colour only. The ground never goes dark.
@@ -275,13 +280,10 @@ const nameCard = ({ bg = NAVY }) => (k) => `
     is a brand asset. Do not redraw it here. */
 const lockupSlide = ({ bg = CREAM }) => (k) => {
   const dark = bg !== CREAM && bg !== SAND && bg !== DEEP_SAND;
-  const ink = dark ? PAPER : INK;
   return `
   <div class="f" style="background:${bg}"></div>
   <div class="pad" style="justify-content:center;align-items:center;text-align:center;gap:0">
-    <div class="w" style="color:${ink};font-size:${Math.round(118 * k)}px;line-height:1">Shaklek</div>
-    <div class="rule" style="width:${Math.round(88 * k)}px;margin:${Math.round(34 * k)}px 0"></div>
-    <div class="ar" dir="rtl" lang="ar" style="color:${ink};font-size:${Math.round(58 * k)}px;line-height:1.4">شكلك</div>
+    <img src="${dark ? LOGO_WHITE : LOGO}" alt="Shaklek" style="width:${Math.round(640 * k)}px;height:auto">
   </div>`;
 };
 
@@ -530,7 +532,8 @@ Opening soon. shaklek.com
 ];
 
 fs.mkdirSync(TMP, { recursive: true });
-for (const post of POSTS) {
+// ONLY=01-the-name renders one post.
+for (const post of POSTS.filter((p) => !process.env.ONLY || p.name === process.env.ONLY)) {
   lint(post.caption, `${post.name} caption`);
   for (const [key, S] of Object.entries(SIZES)) {
     const dir = `${HERE}/${S.out}/${post.name}`;
@@ -541,7 +544,7 @@ for (const post of POSTS) {
       const html = `<!doctype html><meta charset="utf-8"><style>${css(S.W, S.H, S.scale)}</style><div class="f">${body}</div>`;
       fs.writeFileSync(`${TMP}/t.html`, html);
       const png = `${dir}/${String(i + 1).padStart(2, "0")}.png`;
-      execFileSync(CHROME, ["--headless", "--disable-gpu", "--hide-scrollbars",
+      execFileSync(CHROME, ["--headless", "--disable-gpu", "--hide-scrollbars", `--user-data-dir=${TMP}/profile`,
         "--virtual-time-budget=3000", `--window-size=${S.W},${S.H}`, `--screenshot=${png}`, `file://${TMP}/t.html`], { stdio: "ignore" });
       if (!fs.existsSync(png)) throw new Error(`chrome produced nothing for ${post.name} ${i + 1}`);
     });
