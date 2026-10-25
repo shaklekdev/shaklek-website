@@ -219,7 +219,9 @@ for (let k = 0; k < faceN; k++) {
 const SPLIT_S = 2.5, SLOW = 0.7, splitN = Math.round(SPLIT_S * FPS), liftRate = LIFT.length / FPS / SPLIT_S;
 for (let k = 0; k < splitN; k++) {
   const t = k / FPS;
-  await put((last = await split3([[await at(WEAVE, t * SLOW), 0.3], [await at(LIFT, t * liftRate), 0.2], [await at(FEET, t * SLOW), 0.5]])));
+  // AD cut (founder 2026-10-25): "Your clothes fitting." sits on the three bands, not the walk.
+  await put((last = await split3([[await at(WEAVE, t * SLOW), 0.3], [await at(LIFT, t * liftRate), 0.2], [await at(FEET, t * SLOW), 0.5]])),
+    AD ? [["line2", fade(k - 6, 14) * (1 - fade(k - (splitN - 10), 10))]] : []);
 }
 // 3. the walk toward camera: "Your clothes fitting."
 // Grading this shot toward the others was tried (channel transfer to the face
@@ -232,7 +234,7 @@ let lastRaw;
 for (let k = 0; k < walkN; k++) {
   lastRaw = await at(WALK, k * WALK_SLOW / FPS);
   const png = await sharp(lastRaw, { raw: { width: W, height: H, channels: 3 } }).png().toBuffer();
-  await put((last = png), [["line2", fade(k - 6, 14) * (1 - fade(k - (walkN - 10), 10))]]);
+  await put((last = png), AD ? [] : [["line2", fade(k - 6, 14) * (1 - fade(k - (walkN - 10), 10))]]);
 }
 // end card: the last image melts (blur and dim rise together over 0.9 s),
 // then the four elements fade in one after another.
