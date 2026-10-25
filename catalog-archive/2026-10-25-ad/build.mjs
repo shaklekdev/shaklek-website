@@ -229,7 +229,9 @@ for (let k = 0; k < splitN; k++) {
 // The difference is the source, not the grade; see session log 2026-10-11.
 // Slowed to 70% to give the end 1-2 s more (founder's feedback); the cut
 // itself cannot run past ~1.9 s.
-const WALK_SLOW = 0.7, walkN = Math.round((WALK.length / WALK_SLOW));
+// AD cut (founder 2026-10-25): "the walk is too long, we could lose people there".
+// Same speed, cut at 1.3 s instead of ~2.7 s, so the waitlist card lands sooner.
+const WALK_SLOW = 0.7, walkN = AD ? Math.round(1.3 * FPS) : Math.round((WALK.length / WALK_SLOW));
 let lastRaw;
 for (let k = 0; k < walkN; k++) {
   lastRaw = await at(WALK, k * WALK_SLOW / FPS);
