@@ -98,8 +98,10 @@ export default async function DesignPage({
           the Pay bar. */}
       <div className="mx-auto w-full max-w-xl px-4 pb-10 sm:px-6 lg:max-w-5xl">
         <p className="border-t border-border pt-6 text-sm leading-relaxed text-text-2">
-          The visit and delivery are both included, in Dubai.{" "}
-          <span className="font-medium text-text">Outside Dubai?</span>{" "}
+          Delivery is included everywhere in the UAE. The measurement visit is
+          in Dubai;{" "}
+          <span className="font-medium text-text">outside Dubai</span>, use the{" "}
+          <a href="/size-guide" className="underline">size guide</a> or{" "}
           <a
             href="https://wa.me/971504766769"
             target="_blank"
@@ -108,7 +110,7 @@ export default async function DesignPage({
           >
             WhatsApp us
           </a>{" "}
-          to confirm based on your location.
+          your measurements.
         </p>
       </div>
       {/* COMPLETE YOUR LOOK, curated per piece in catalog.ts (COMPLETE_THE_LOOK).

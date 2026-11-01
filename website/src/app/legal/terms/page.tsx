@@ -108,7 +108,9 @@ export default function TermsPage() {
         Every piece is made after you order it. We strive to have most orders
         ready in approximately 10 working days. That is an estimate and not a
         guarantee: we confirm your date once your details are final, and we
-        contact you directly if anything moves. We deliver in Dubai.
+        contact you directly if anything moves. Delivery is included in the price to any address in the UAE. The
+        at-home measurement visit is offered within Dubai only; elsewhere you
+        choose a standard size or send measurements taken from our size guide.
       </p>
       <p>
         Please check your delivery address carefully. If a parcel is returned to

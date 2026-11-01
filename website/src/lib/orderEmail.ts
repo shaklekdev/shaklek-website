@@ -214,12 +214,12 @@ export function buildCustomerConfirmation(opts: {
     totals,
     // ⚠️ THE LEAD TIME AND THE CITY, BOTH HEDGED THE SAME WAY THEY ARE ON THE
     // SITE. "strive to" and "approximately" match the terms of sale, which call
-    // this an estimate and not a guarantee, and "we deliver in Dubai" is the
-    // scope limit that stops this reading as a nationwide promise.
+    // this an estimate and not a guarantee, and delivery is UAE-wide since
+    // 2026-11-01 (founder); only the measurement visit is Dubai-only.
     button: undefined,
     note: {
       lines: [
-        "A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor. We strive to have it ready in approximately 10 working days from confirmation, and we deliver in Dubai.",
+        "A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor. We strive to have it ready in approximately 10 working days from confirmation, and delivery is included anywhere in the UAE.",
         `Want this order and any future ones in one place? Sign up with this same address (${email}) and it will already be there.`,
       ],
       button: { label: "Create a free account", url: `${appUrl}/sign-up` },

@@ -32,8 +32,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       <>
         We strive to have it ready in approximately 10 working days from the moment a
         stylist confirms your details, which
-        usually happens within a day of ordering. We deliver in Dubai and
-        delivery is included in the price. More locations coming soon.
+        usually happens within a day of ordering. We deliver everywhere in
+        the UAE, and delivery is included in the price.
       </>
     ),
   },
@@ -81,7 +81,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             seventeen-field form nobody completes, or turning away every
             customer outside Dubai. A person on the other end can also tell her
             HOW to take the awkward ones, which a form cannot. */}
-        Outside Dubai we cannot come to you yet, so send us your measurements
+        Outside Dubai, send us your measurements
         on{" "}
         <a
           href="https://wa.me/971504766769"
@@ -235,10 +235,10 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Do you deliver outside Dubai?",
     a: (
       <>
-        Not yet. For now we cover Dubai only, for both the measuring
-        appointment and delivery, and more locations are coming soon. If you
-        are outside Dubai and want a piece, get in touch and we will see what
-        we can do.
+        Yes. We deliver everywhere in the UAE, included in the price. The
+        at-home measurement visit is in Dubai; outside Dubai, use the size
+        guide or choose a standard size, and send us any questions on
+        WhatsApp.
       </>
     ),
   },

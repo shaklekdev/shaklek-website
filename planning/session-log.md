@@ -4887,3 +4887,63 @@ rules"). A shaklek-fashion review of all 12 pairings was started and NOT
 applied: run it again next session and show her the changes first.
 Not mine, left uncommitted for the session that owns them: the reel archive,
 `higgsfield-shots.json`, `planning/marketing/video-ideas.md`.
+
+### 2026-10-29 — first read of the Meta ad
+
+Ads Manager, campaign "Waitlist - teaser video - Oct 2026", 25-28 Oct: AED 10.21
+spent, 729 impressions, 8 landing page views at AED 1.28 each. Prod waitlist: 0
+signups since the ad went live (last row 24 Oct; read by count, no PII). Site and
+/api/waitlist healthy. The cost per view is fine; the problem is that it SPENDS
+~AED 3/day against the AED 30/day plan. Suspected: the ad set budget is set lower
+than intended (or lifetime), or the hard age/gender limits are throttling delivery.
+Not changed -- asked the founder to check the ad set budget. Ends 1 Nov.
+Follow-up, same day, checked in Ads Manager myself: the budget suspicion was WRONG --
+ad set is AED 30.00 DAILY. Per day: 25 Oct 8.71 (7 LPV), 26 Oct 0.09, 27 Oct 0,
+28 Oct 1.41. Ad and ad set "Active", audience est. 3.9-4.6M, highest-volume bid,
+billing clean (card paid 7.35 on 25 Oct, no account spending limit), no warnings in
+notifications. Cause unproven; leading guess is Meta throttling a brand-new,
+unverified advertiser (banner "Verify who's behind your ads"). Nothing changed.
+Founder submitted advertiser verification 2026-10-29; Meta will notify. Re-read daily spend after it clears.
+
+### 2026-10-31 — ad re-read
+Totals 25-30 Oct: AED 15.46, 1,007 impressions, 13 LPV (29 Oct 0.55/1, 30 Oct 4.70/4).
+Still ~AED 3/day against 30. "Get verified" banner still showing, no verification
+notification yet. Prod waitlist: still 0 signups since 24 Oct. Nothing changed.
+Same day: tested "pixel gated on cookie consent hides visitors from Meta" -- FALSE.
+~16 link clicks (AED 15.46 / CPC 0.97) vs 13 LPV, so consent loses ~3. CTR (link)
+1.59%, normal. The ad works when shown; Meta is simply not spending. Still unverified.
+⚠️ TWO META AD ACCOUNTS. The live waitlist ad runs in 156136761 (unnamed, billing name
+"Shaklek For Online Selling") -- NOT in "Shaklek Ads" 925448527060452, which belongs to
+business portfolio 2462620734249883, has the same Mastercard, and has never spent.
+Founder says the verification banner is gone (2026-10-31). Opening ad should run from
+"Shaklek Ads"; confirm pixel 1901863017445226 is assigned to it before publishing.
+Founder started a draft Leads/instant-form campaign "waitlist test 1" there; advised not to publish.
+Founder confirmed: banner gone on Shaklek Ads after adding her phone number; still shown on 156136761. Run all future ads from Shaklek Ads.
+2026-10-31: founder moved opening to 11 Nov (OPEN.md updated). Opening ad cut brand-assets/reels/teaser-ad-open-film.mp4 = 'Now open at shaklek.com' + 11·11·26 (OPEN=1 in teaser/build.mjs), not yet approved. Proposed daily posting via Business Suite Planner, awaiting her go.
+2026-10-31: founder's slide-by-slide notes on brand-assets/caroussel-9-final-2 (9 posts). Slides are flattened JPGs with no source; re-lettered with caroussel-9-final-2/_tools/patch-slide.mjs into <post>/v2/ (originals untouched). Post 1 done (17 = shirt+trousers, visit = Dubai only, per shaklek-marketing). Posts 2,4,5,6,8,9 pending, one at a time.
+- 2026-11-01 post 1 v2: founder chose 'up to seventeen ... your pants' (her call: pocket placement, length, knee, leg vary by design). Slides 1-2 dropped to v2/_dropped (her: slide 2 is not a hook). Slide 4 rebuilt on brand brown with gradient, old black-band version in _dropped. Caption updated. Awaiting her OK.
+- 2026-11-01 POST 1 CLOSED (founder 'let's close the post'): caroussel-9-final-2/1/v2/01-03.png + caption.txt. 01 'It takes up to [17] measurements to make your pants fit perfectly', 02 chalk photo + 'You don't have to know them. Just choose your piece, we make it fit.', 03 logo + 'Opening 11·11' + waitlist. Marketing OK ('we make it fit' backed by free alteration/remake within 14 days in terms). Superseded versions in v2/_dropped. Next: post 2.
+- 2026-11-01 post 2 v2 drafted in caroussel-9-final-2/2/v2 (01 orig, 02 'Traps the heat. Holds the smell.' (marketing: polyester doesn't trap sweat), 03 'We chose 100% linen. Plant-based, breathable, gentle on the skin.', 04 orig close). Split slide dropped. Sources in v2/src. Old Bridge+Proof slides -> separate post 2b, not built yet. Awaiting founder.
+- 2026-11-01 POST 2 CLOSED: caroussel-9-final-2/2/v2 01-04 + caption. 01 'Not to alarm you, but / check the label (gold italic) on what you're wearing.' with master logo. Next: post 2b (old Bridge 'We chose 100% linen / You choose everything else' + Proof 'Your piece. Your cut.').
+- 2026-11-01 post 2b drafted in caroussel-9-final-2/2b (Bridge cover, Proof 'Your piece. Your cut.' with marketing's 3 lines, post 2 close card, caption). Awaiting founder.
+
+### 2026-11-01 — full site review (security, UI, copy agents; read-only, nothing changed)
+Staging fast-forwarded to main (caf0654, docs only). Before 11 Nov: (1) webhook marks paid on any
+checkout.session.completed, no payment_status check, no payment_method_types pin (confirmed by grep);
+(2) staging branch lacks NEXT_PUBLIC_APP_URL, so every staging write 403s and no checkout rehearsal is
+possible; restore script omits it; (3) outside-Dubai orders pay with no disclaimer in terms/checkout;
+(4) cookie bar (z-50) covers sticky Add-to-cart (z-40) on first visit. Lesser: rateLimit still only
+throttle on /api/orders + promo; order/waitlist tokens derive from STRIPE_WEBHOOK_SECRET; shayla absent
+from Stripe line/email/terms; our-story "192 ways" (96 linen-only); privacy names Amazon SES (unused);
+"more locations coming soon" x5; promo field with no code; journal lines stale on opening; small tap
+targets; Wrap Top long-sleeve back shows short sleeve; no h1 on product pages. Awaiting her go on fixes.
+- 2026-11-01 post 2b restyled dark (founder chose option A): 01 'WE CHOSE 100% LINEN / you choose everything else.', 02 'YOUR FAVOURITE SHIRT' 4 tilted framed photos 'your way.' + 'One price, whatever you choose', 03 = post 1 opening card. Awaiting OK.
+2026-11-01: webhook fix 6c77610 (payment_status gate + async_payment_succeeded/failed). Tested on a local
+prod build with signed test events: completed+unpaid -> awaiting, not paid; paid -> reaches transition.
+Staging deployed green; full staging checkout NOT possible (NEXT_PUBLIC_APP_URL missing on branch).
+NOT verified: whether the live Stripe webhook endpoint subscribes to async_payment_* events (reading
+Stripe config was blocked); if not, an unpaid-then-paid order stays pending until reconcile/manual.
+Founder wants delivery INCLUDED UAE-wide, measurement visit Dubai only; awaiting courier cost + fit promise.
+- 2026-11-01 POST 2b CLOSED: caroussel-9-final-2/2b 01 (framed flax, 'WE CHOSE 100% LINEN', Bodoni italic 'you choose everything else.'), 02 ('YOUR PIECE', 4 tilted Utility Shirt combos, Bodoni 'your way.', 'One price, whatever you choose'), 03 opening card. Founder rejected flax cutout. Next: post 4.
+- 2026-11-01 post 4 v2 drafted in caroussel-9-final-2/4/v2 (needle slide dropped; size-label slide; trousers per marketing; no visit/free). Marketing flagged 'pants' reads as underwear in UAE/British English -> post 1 says 'pants', founder to decide.
+2026-11-01: UAE-wide delivery copy live (11 places + 2 comments); OPEN.md: courier-contract added, outside-dubai-disclaimers closed; margins.mjs shippingOutsideDubaiAed=28 placeholder.

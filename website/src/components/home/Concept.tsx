@@ -63,8 +63,8 @@ export default function Concept() {
           </ol>
 
           {/* The footnote for the asterisk in step 02, and it is NOT optional:
-              step 02 says "we come to you" and names no city. The visit and
-              delivery are Dubai only, and a promise that names no city
+              step 02 says "we come to you" and names no city. The visit is
+              Dubai only (delivery is UAE-wide since 2026-11-01), and a promise that names no city
               mis-sells everybody outside it. If the marker ever leaves step
               02, this leaves with it -- a footnote with nothing pointing at it
               is as bad as a marker with no footnote. */}

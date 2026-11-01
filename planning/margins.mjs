@@ -172,6 +172,10 @@ const INPUTS = {
   tailoringAed: { Shirt: 35, Skirt: 60, Pants: 50, Dress: 90, Abaya: 105, Gilet: 55 },
 
   shippingAed: 21, // Founder, 2026-08-22
+  // ⏳ PLACEHOLDER, NOT A QUOTE. Founder, 2026-11-01: delivery is now INCLUDED
+  // across the UAE (the measurement visit stays Dubai only), and she believes a
+  // courier is "around 28 aed" outside Dubai. Replace with the real courier rate.
+  shippingOutsideDubaiAed: 28,
 
   // Fitoor Packaging LLC (Ajman), estimate FRP2608-1149, 100-unit pricing.
   // The cotton bag is deliberately NOT bought from Fitoor — at AED 20 it was
@@ -446,7 +450,8 @@ const MAILER_AED = 2.0; // her own stock, not on the Fitoor quote
 const BASKETS = {
   "Everything on the quote": { businessCard: true, tissueSeal: true, tissueWrap: true },
   "PLAN - Dubai (hand bag)": {},
-  "Outside Dubai (mailer)": { handBag: false, __addAed: MAILER_AED },
+  // Mailer instead of hand bag, plus the courier premium over Dubai delivery.
+  "Outside Dubai (courier)": { handBag: false, __addAed: MAILER_AED + (INPUTS.shippingOutsideDubaiAed - INPUTS.shippingAed) },
   "+ business card in parcel": { businessCard: true },
   "If the note were cut": { thankYouCard: false, envelope: false },
 };

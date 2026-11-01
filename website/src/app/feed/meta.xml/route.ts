@@ -49,7 +49,7 @@ export async function GET() {
         `${item.descriptor}. Made to order in 100% natural linen, cut to your ` +
         `measurements or a standard size for the same price. Choose the cut, the ` +
         `length and the colour, and a tailor makes it for you in approximately ` +
-        `10 working days. Delivered in Dubai.`;
+        `10 working days. Delivered anywhere in the UAE.`;
 
       entries.push(
         [

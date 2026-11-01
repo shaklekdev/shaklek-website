@@ -165,6 +165,8 @@ export const STEPS = [
 // ("free in Dubai, not Dubai only"). Delivery is Dubai-only now as well as the
 // visit, so an offer to "advise" someone in Sharjah about a visit we would not
 // be delivering to was the wrong promise.
+// ⚠️ SUPERSEDED 2026-11-01 (founder): DELIVERY IS NOW INCLUDED ACROSS THE UAE.
+// Only the measurement visit stays Dubai-only, and STEPS_NOTE says both.
 // ⚠️ THE ASTERISK IS BACK, AND IT IS HERS, 2026-09-16. She removed one on
 // 2026-09-14 ("no need to put that asterix") when the body carried "free on
 // your first order, in Dubai" itself and the marker pointed at nothing new.
@@ -177,7 +179,7 @@ export const STEPS = [
 // Her draft read "free measurement on first order"; the wording here is hers
 // with that phrase kept intact, so the homepage does not become the tenth
 // variant.
-export const STEPS_NOTE = "*Free on your first order, in Dubai. More locations coming soon.";
+export const STEPS_NOTE = "*Measurement visit free on your first order, in Dubai. Delivery included everywhere in the UAE.";
 
 
 // ⚠️ THERE IS NO LEAD TIME ON THE HOMEPAGE, AND PUTTING ONE BACK IS A COPY

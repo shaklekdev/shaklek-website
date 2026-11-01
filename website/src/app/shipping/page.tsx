@@ -19,7 +19,7 @@ export default function ShippingPage() {
   return (
     <LegalPage
       title="Delivery"
-      intro="Made to order, delivered in Dubai, included in the price."
+      intro="Made to order, delivered anywhere in the UAE, included in the price."
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
@@ -42,9 +42,8 @@ export default function ShippingPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Where we deliver</h2>
       <p>
-        In <strong>Dubai</strong>, for now. More locations coming soon. If you
-        are outside Dubai, message us on WhatsApp before you order and we will
-        tell you what we can do.
+        <strong>Everywhere in the UAE</strong>, included in the price. The
+        at-home measurement visit is in Dubai only.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Your address</h2>
