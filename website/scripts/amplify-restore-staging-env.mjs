@@ -59,6 +59,11 @@ const LITERALS = {
   // Staging IS the working copy of the shop. That is safe only because of the
   // guards below: test keys, dev database.
   STORE_OPEN: "true",
+  // ⚠️ WITHOUT THIS EVERY BROWSER WRITE ON STAGING 403s: requestGuards.ts
+  // allowlists only the canonical origin, which falls back to www.shaklek.com,
+  // and success_url points at production. Missing since the 2026-09-12 wipe;
+  // found by the 2026-11-01 security review.
+  NEXT_PUBLIC_APP_URL: "https://staging.dqcptedylrif0.amplifyapp.com",
 };
 
 const envLocal = new Map(

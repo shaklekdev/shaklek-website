@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { CONSENT_REOPEN, readConsent, writeConsent } from "@/lib/consent";
 
@@ -31,6 +31,28 @@ export default function CookieConsent() {
     return () => window.removeEventListener(CONSENT_REOPEN, reopen);
   }, []);
 
+  // ⚠️ PUBLISHES ITS OWN HEIGHT AS --consent-h so the product page's sticky
+  // Add-to-cart bar can sit ABOVE it instead of under it. Before this the bar
+  // (z-50, ~163px on a phone) covered the sticky button on every first visit,
+  // i.e. every ad click. Site review, 2026-11-01.
+  const barRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const root = document.documentElement;
+    const el = barRef.current;
+    if (state === "hidden" || !el) {
+      root.style.removeProperty("--consent-h");
+      return;
+    }
+    const set = () => root.style.setProperty("--consent-h", `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      root.style.removeProperty("--consent-h");
+    };
+  }, [state]);
+
   if (state === "hidden") return null;
 
   const choose = (v: "granted" | "denied") => {
@@ -40,6 +62,7 @@ export default function CookieConsent() {
 
   return (
     <div
+      ref={barRef}
       role="dialog"
       aria-label="Cookie choices"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-surface px-4 py-4 sm:px-6"
