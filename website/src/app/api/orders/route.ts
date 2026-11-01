@@ -4,6 +4,7 @@ import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
 import { resolveOrderPricing, type PricedItem } from "@/lib/pricing";
 import { resolveFabric } from "@/data/fabrics";
+import { includedWith } from "@/data/catalog";
 import { resolveFitNotes } from "@/data/fitNotes";
 import { issueOrderAccessToken } from "@/lib/orderAccess";
 import { rateLimit } from "@/lib/rateLimit";
@@ -457,7 +458,14 @@ export async function POST(req: NextRequest) {
         price_data: {
           currency: "aed",
           unit_amount: Math.round(item.price * 100),
-          product_data: { name: item.name },
+          // The 949 buys a shayla too, so the paid record says so (site
+          // review 2026-11-01). Derived from the server-priced category.
+          product_data: {
+            name: item.name,
+            ...(includedWith(item.category).length
+              ? { description: `Includes a matching ${includedWith(item.category).map((p) => p.name.toLowerCase()).join(" and ")}` }
+              : {}),
+          },
         },
       })),
       success_url: `${origin}/order-confirmed?order_id=${orderId}&t=${accessToken}`,

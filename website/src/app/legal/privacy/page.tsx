@@ -126,8 +126,8 @@ export default function PrivacyPage() {
         We use a small number of providers, each handling only what its job
         needs: <strong>Stripe</strong> (payments and delivery address),{" "}
         <strong>Clerk</strong> (sign-in), <strong>Neon</strong> (the order
-        database, hosted in Frankfurt), <strong>Resend</strong> and Amazon SES
-        (order emails), <strong>AWS Amplify and CloudFront</strong> (hosting,
+        database, hosted in Frankfurt), <strong>Resend</strong> (order
+        emails), <strong>AWS Amplify and CloudFront</strong> (hosting,
         Ireland), and <strong>Google Fonts</strong>, which receives your IP
         address in order to serve the typeface. The tailor assigned to your order
         receives a spec sheet with what to make, no name, no email, no address.

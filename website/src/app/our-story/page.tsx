@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { renderParamsForCategory } from "@/data/parameterSliders";
 import { colors, sizes } from "@/data/colors";
+import { SELLABLE_FABRICS } from "@/data/fabrics";
 import { BENEFITS, POSITIONING } from "@/data/homeContent";
 
 export const metadata: Metadata = pageMetadata({
@@ -178,10 +179,13 @@ const tenetGroups = [
 // `available: true` in fabrics.ts, half of these 192 ways cannot be ordered.
 // That is a known and accepted state, not an oversight. It stops being a
 // question the moment cotton is sellable.
+// ⚠️ SUPERSEDED 2026-11-01: the founder approved "192 -> 96" after the site
+// review flagged that half the 192 cannot be ordered. It now counts SELLABLE
+// fabrics, so it returns to 192 by itself the day cotton is switched on.
 const SHIRT_WAYS =
   renderParamsForCategory("Shirt").reduce((n, p) => n * p.options.length, 1) *
   colors.length *
-  2 *
+  SELLABLE_FABRICS.length *
   sizes.length;
 
 export default function OurStoryPage() {
@@ -433,7 +437,7 @@ export default function OurStoryPage() {
                   ways". It stays as {SHIRT_WAYS}, computed from
                   parameterSliders.ts and colors.ts, because this sentence has
                   already gone stale twice with a typed number in it. The
-                  computed value is 192 today, so the page reads exactly as she
+                  computed value was 192; since 2026-11-01 it counts sellable fabrics only (96), as she
                   wrote it. */}
               <p>
                 I&apos;ve spent more than half my life trying to understand my

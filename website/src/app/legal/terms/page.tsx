@@ -72,7 +72,8 @@ export default function TermsPage() {
       <h2 className="pt-2 text-base font-medium text-text">Prices and payment</h2>
       <p>
         Prices are fixed per category and shown in AED before you pay. They
-        include the fabric and every option offered on the piece. Payment is
+        include the fabric and every option offered on the piece, and every
+        abaya comes with a matching shayla in the same linen and colour. Payment is
         taken by Stripe; Shaklek never sees or stores your card details.
         Delivery address and payment are collected on Stripe&apos;s secure page
         after you press Pay.

@@ -11,6 +11,7 @@
 // the customer and as a pricing error to the stylist. Derived, not stored:
 // nothing new has to be persisted to say it truthfully.
 import { orderRef } from "@/lib/orderRef";
+import { includedWith } from "@/data/catalog";
 import { buildEmail, type MailRow } from "@/lib/mail";
 
 export function discountLine(items: { price: number; quantity?: number }[], total: number): number {
@@ -24,6 +25,9 @@ export function discountLine(items: { price: number; quantity?: number }[], tota
 
 export type NotifyOrderItem = {
   name: string;
+  // Server-resolved category; used to name what the price includes (the
+  // abaya's shayla) on both emails.
+  category?: string | null;
   // Units of this line. Server-resolved before it reaches here (see
   // src/lib/pricing.ts) -- shown so a two-garment line doesn't read to the
   // stylist as one. Optional because the removed /upload path built this shape
@@ -62,7 +66,8 @@ export async function sendOrderNotificationEmail(
   const itemLines = items
     .map((item, i) => {
       const qty = item.quantity && item.quantity > 1 ? ` x${item.quantity}` : "";
-      const parts = [`${i + 1}. ${item.name}${qty} · ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
+      const inc = includedWith(item.category).map((p) => ` + ${p.name}`).join("");
+      const parts = [`${i + 1}. ${item.name}${inc}${qty} · ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
       if (item.measurements) parts.push(`   Measurements: ${item.measurements}`);
       if (item.changes && item.changes.length) parts.push(`   Changes: ${item.changes.join(", ")}`);
       if (item.freeformNotes) parts.push(`   Note: "${item.freeformNotes}"`);
@@ -183,7 +188,7 @@ export function buildCustomerConfirmation(opts: {
       .join(" \u00b7 ");
     const changes = item.changes?.length ? item.changes.join(", ") : "";
     return {
-      name: `${item.name}${item.quantity && item.quantity > 1 ? ` \u00d7${item.quantity}` : ""}`,
+      name: `${item.name}${includedWith(item.category).map((p) => ` with matching ${p.name.toLowerCase()}`).join("")}${item.quantity && item.quantity > 1 ? ` \u00d7${item.quantity}` : ""}`,
       spec: [spec, changes].filter(Boolean).join(" \u2014 ") || undefined,
       amount: `AED ${item.price}`,
     };

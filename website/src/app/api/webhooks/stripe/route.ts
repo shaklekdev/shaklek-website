@@ -193,6 +193,7 @@ export async function POST(req: NextRequest) {
   if (order) {
     const emailItems = items.map((item) => ({
       name: item.name,
+      category: item.category,
       fabric: item.fabric,
       color: item.color,
       size: item.size,
