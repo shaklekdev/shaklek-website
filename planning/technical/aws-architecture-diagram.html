@@ -683,6 +683,19 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       test-mode endpoint is registered against the staging URL and its secret is
       set at branch level.
     </p>
+    <p>
+      <strong>2026-11-01: <code>NEXT_PUBLIC_APP_URL</code> added at branch level</strong>
+      (<code>https://staging.dqcptedylrif0.amplifyapp.com</code>), now 15 overrides.
+      It had been missing since the 2026-09-12 wipe, so the origin guard fell back
+      to <code>www.shaklek.com</code> and <strong>every browser write on staging
+      returned 403</strong> &mdash; no checkout rehearsal was possible.
+      <code>scripts/amplify-restore-staging-env.mjs</code> now sets it.
+      <strong>Verified:</strong> a POST to <code>/api/orders</code> with the staging
+      Origin returns 400 (validation), not 403. Same day: the Stripe webhook only
+      marks an order paid when <code>payment_status</code> is paid and handles
+      <code>async_payment_succeeded/failed</code>; whether the live endpoint
+      subscribes to the async events is <strong>unverified</strong>.
+    </p>
   </div>
 
   <h3 class="flow-h3">P0 — DONE 2026-08-26 <span class="flow-tag">738 KB to 310 KB</span></h3>
