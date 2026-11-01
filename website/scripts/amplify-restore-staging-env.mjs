@@ -81,6 +81,17 @@ for (const k of FROM_ENV_LOCAL) {
   else missing.push(k);
 }
 
+// ⚠️ STAGING HAS ITS OWN STRIPE ENDPOINT, so its own signing secret. The
+// STRIPE_WEBHOOK_SECRET in .env.local belongs to local `stripe listen`; copying
+// it to staging meant every real delivery would fail signature checks. Worse,
+// until 2026-11-01 the test account had NO endpoint for staging at all, so a
+// staging checkout never became "paid" (dev DB: one paid order ever, 08-30).
+if (envLocal.get("STAGING_STRIPE_WEBHOOK_SECRET")) {
+  vars.STRIPE_WEBHOOK_SECRET = envLocal.get("STAGING_STRIPE_WEBHOOK_SECRET");
+} else {
+  missing.push("STAGING_STRIPE_WEBHOOK_SECRET (staging endpoint secret)");
+}
+
 // ---- the guards -----------------------------------------------------------
 const db = vars.DATABASE_URL ?? "";
 const stripe = vars.STRIPE_SECRET_KEY ?? "";
