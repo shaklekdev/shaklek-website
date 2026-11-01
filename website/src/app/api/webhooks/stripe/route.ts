@@ -41,7 +41,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Invalid signature" }, { status: 400 });
   }
 
-  if (event.type !== "checkout.session.completed" && event.type !== "checkout.session.expired") {
+  // ⚠️ "completed" DOES NOT MEAN "PAID". Stripe sends checkout.session.completed
+  // when the customer finishes the hosted page; for a delayed method (bank
+  // transfer, some pay-later) the money has not moved yet and payment_status is
+  // "unpaid". The real outcome arrives later as async_payment_succeeded or
+  // async_payment_failed. This handler used to mark every "completed" paid and
+  // email the stylist, so enabling one such method in the Dashboard would have
+  // put unpaid garments into production. Security review, 2026-11-01.
+  const HANDLED = new Set([
+    "checkout.session.completed",
+    "checkout.session.async_payment_succeeded",
+    "checkout.session.async_payment_failed",
+    "checkout.session.expired",
+  ]);
+  if (!HANDLED.has(event.type)) {
     return NextResponse.json({ ok: true, skipped: event.type });
   }
 
@@ -74,6 +87,7 @@ export async function POST(req: NextRequest) {
     collected_information?: { shipping_details?: ShippingDetails | null } | null;
     shipping_details?: ShippingDetails | null;
     customer_details?: { phone?: string | null; name?: string | null } | null;
+    payment_status?: "paid" | "unpaid" | "no_payment_required" | null;
   };
   const orderId = session.client_reference_id;
 
@@ -91,7 +105,7 @@ export async function POST(req: NextRequest) {
   // A session expiring (customer abandoned checkout, ~24h timeout) just means
   // the order stops sitting at pending_payment forever -- nothing was made,
   // so no stylist notification, unlike the paid path below.
-  if (event.type === "checkout.session.expired") {
+  if (event.type === "checkout.session.expired" || event.type === "checkout.session.async_payment_failed") {
     // Same gate: an expiry event arriving after a successful payment (or a
     // replay of one) must not flip a paid order to failed.
     await db
@@ -99,6 +113,15 @@ export async function POST(req: NextRequest) {
       .set({ status: "payment_failed" })
       .where(and(eq(schema.orders.id, orderId), eq(schema.orders.status, "pending_payment")));
     return NextResponse.json({ ok: true });
+  }
+
+  // Only a settled payment reaches the paid transition below. A 100%-off
+  // session reports "no_payment_required", which is settled. Anything else
+  // (an "unpaid" completed session) waits for async_payment_succeeded; the
+  // order stays pending_payment and the nightly reconcile watches it too.
+  if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") {
+    console.log(`[webhooks/stripe] order ${orderId} ${event.type} with payment_status=${session.payment_status ?? "missing"} — not marked paid`);
+    return NextResponse.json({ ok: true, awaiting: true });
   }
 
   // AED is a two-decimal currency, so amount_total is in fils. Guard the
