@@ -69,6 +69,19 @@ export default function CheckoutForm({ total }: { total: number }) {
   const previewDiscount = promo ? previewDiscountAed(total, promo) : 0;
   const previewTotal = promo ? previewTotalAed(total, promo) : total;
 
+  // ⚠️ THE BACK BUTTON FROM STRIPE RESTORES THIS PAGE FROZEN MID-SUBMIT.
+  // Safari and Chrome keep the page in the back/forward cache, so a customer
+  // who goes to Stripe, changes her mind and comes back found "Processing…"
+  // forever and no way to pay. Founder hit it on the 2026-11-02 staging
+  // rehearsal. A persisted pageshow means we are that restored copy: unfreeze.
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => {
+      if (e.persisted) setSubmitting(false);
+    };
+    window.addEventListener("pageshow", onShow);
+    return () => window.removeEventListener("pageshow", onShow);
+  }, []);
+
   // Signed-in customers checkout under their account email, not whatever
   // they happen to type -- orders are matched to /account by email, so
   // letting it drift would silently strand an order outside their history.
