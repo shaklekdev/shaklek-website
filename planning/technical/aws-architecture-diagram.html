@@ -694,7 +694,13 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       Origin returns 400 (validation), not 403. Same day: the Stripe webhook only
       marks an order paid when <code>payment_status</code> is paid and handles
       <code>async_payment_succeeded/failed</code>; whether the live endpoint
-      subscribes to the async events is <strong>unverified</strong>.
+      subscribes to the async events: <strong>yes since 2026-11-02</strong> &mdash;
+      the founder added them; live endpoint <code>shaklek-live-orders</code> now
+      lists 4 events (completed, expired, async_payment_succeeded/failed), active,
+      0% errors. Staging got its OWN sandbox endpoint the same day (there was none
+      since ~2026-08-30, so staging checkouts never became paid); secret is
+      <code>STAGING_STRIPE_WEBHOOK_SECRET</code> in .env.local, applied by the
+      restore script. Rehearsal passed: order 631e30b6 pending &rarr; paid.
     </p>
   </div>
 
