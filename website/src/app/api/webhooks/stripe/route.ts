@@ -88,6 +88,7 @@ export async function POST(req: NextRequest) {
     shipping_details?: ShippingDetails | null;
     customer_details?: { phone?: string | null; name?: string | null } | null;
     payment_status?: "paid" | "unpaid" | "no_payment_required" | null;
+    payment_intent?: string | null;
   };
   const orderId = session.client_reference_id;
 
@@ -148,6 +149,30 @@ export async function POST(req: NextRequest) {
     console.error(`[webhooks/stripe] order ${orderId} paid with NO shipping address`);
   }
 
+  // ⚠️ HOW SHE ACTUALLY PAID, FROM STRIPE. orders.payment_method was the
+  // option selected on OUR checkout page (it defaults to Apple Pay), so a card
+  // payment was recorded and emailed as "apple-pay". Found on the 2026-11-02
+  // staging rehearsal. The charge says what really happened; a wallet payment
+  // is still a card underneath, so the wallet wins when there is one. Best
+  // effort: a failed lookup keeps the booked value and never blocks "paid".
+  let paidWith: string | null = null;
+  if (typeof session.payment_intent === "string") {
+    try {
+      const pi = await stripe.paymentIntents.retrieve(session.payment_intent, { expand: ["latest_charge"] });
+      const charge = pi.latest_charge;
+      if (charge && typeof charge === "object") {
+        const d = charge.payment_method_details;
+        const wallet = d?.card?.wallet?.type;
+        paidWith = (wallet ?? d?.type ?? null)?.replace(/_/g, "-") ?? null;
+      }
+    } catch (err) {
+      console.error(
+        `[webhooks/stripe] order ${orderId} payment method lookup failed:`,
+        err instanceof Error ? err.message : "unknown",
+      );
+    }
+  }
+
   // Stripe delivers events AT LEAST ONCE -- it retries any non-2xx, and staff
   // can resend an event by hand from the Dashboard. This update used to be
   // unconditional, so a retry re-sent both the stylist notification and the
@@ -159,6 +184,7 @@ export async function POST(req: NextRequest) {
     .update(schema.orders)
     .set({
       status: "paid",
+      ...(paidWith ? { paymentMethod: paidWith } : {}),
       // Only overwrite when Stripe told us a figure. Falling back to the
       // booked total is right for a session that carries no amount_total.
       ...(chargedAed !== null ? { totalAed: chargedAed } : {}),
