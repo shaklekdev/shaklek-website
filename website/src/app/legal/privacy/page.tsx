@@ -41,7 +41,7 @@ const adsEnabled = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy & Cookies" updated="15 September 2026">
+    <LegalPage title="Privacy & Cookies" updated="5 November 2026">
       <p>
         This explains what Shaklek collects, why, and who else touches it. We
         collect what we need to make and deliver your order, and little else. We
@@ -158,8 +158,8 @@ export default function PrivacyPage() {
           <p>
             <strong>Meta Pixel, and only with your agreement.</strong> Nothing
             is set and nothing reaches Meta until you have chosen. We ask on your
-            first visit, with Accept and Decline weighted equally, and if you do
-            not answer the answer is no.
+            first visit, with Decline one tap away, and if you do not answer the
+            answer is no.
           </p>
           <p>
             If you accept, Meta&apos;s pixel lets us measure how our advertising
@@ -181,8 +181,10 @@ export default function PrivacyPage() {
           <p>
             <strong>We do not send Meta your name, email, address, phone number
             or measurements.</strong> Only the item, the amount and the order
-            reference. Advanced Matching, which would hash and send your email,
-            is switched off.
+            reference, plus the cookie id, IP address and browser the pixel
+            already passes, sent from our server as well so an ad blocker does
+            not hide a sale. Advanced Matching, which would hash and send your
+            email, is switched off.
           </p>
           <p>
             To be exact about what that promise covers: it is about what{" "}

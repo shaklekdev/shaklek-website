@@ -14,21 +14,40 @@ import { CONSENT_REOPEN, readConsent, writeConsent } from "@/lib/consent";
 // So: small, bottom, non blocking, dismissible by an actual choice. It is the
 // legal surface, not a marketing one.
 //
-// DECLINE IS A REAL BUTTON, equal in weight to accept. A consent flow where
-// refusing is hidden, greyed, or needs a second click is not freely given
-// consent, and the pattern has a name and a fine attached to it in Europe.
+// DECLINE IS A REAL BUTTON, ONE CLICK, ALWAYS VISIBLE. A consent flow where
+// refusing is hidden or needs a second click is not freely given consent, and
+// "Accept + Learn more" has a name and a fine attached to it in Europe (CNIL).
+// Founder, 2026-11-05, wanted Accept as the only option; she agreed instead to:
+// Accept as the prominent button, Decline as a quieter one-click text button
+// beside it, friendlier words, and the bar arriving after a few seconds rather
+// than over the first image. That raises acceptance without hiding refusal.
 export default function CookieConsent() {
   // Never render on the server: the answer lives in localStorage, so a
   // server-rendered bar would flash for people who already answered.
   const [state, setState] = useState<"hidden" | "asking">("hidden");
 
   useEffect(() => {
-    if (readConsent() === "unset") setState("asking");
+    // A few seconds after landing (or on the first scroll), not over the first
+    // image. Reopening from the footer is immediate.
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const show = () => {
+      if (readConsent() === "unset") setState("asking");
+      window.removeEventListener("scroll", show);
+      if (t) clearTimeout(t);
+    };
+    if (readConsent() === "unset") {
+      t = setTimeout(show, 4000);
+      window.addEventListener("scroll", show, { passive: true, once: true });
+    }
     // The footer link reopens this so a choice can be changed. Consent that
     // cannot be withdrawn as easily as it was given is not a lawful basis.
     const reopen = () => setState("asking");
     window.addEventListener(CONSENT_REOPEN, reopen);
-    return () => window.removeEventListener(CONSENT_REOPEN, reopen);
+    return () => {
+      window.removeEventListener(CONSENT_REOPEN, reopen);
+      window.removeEventListener("scroll", show);
+      if (t) clearTimeout(t);
+    };
   }, []);
 
   // ⚠️ PUBLISHES ITS OWN HEIGHT AS --consent-h so the product page's sticky
@@ -98,25 +117,25 @@ export default function CookieConsent() {
             was rejected as false: the pixel does collect behaviour, and Meta is
             a joint controller for it. */}
         <p className="text-sm text-text-2">
-          With your permission, we use cookies to see how our advertising
-          performs. They tell us nothing about who you are, and we run no other
-          analytics.{" "}
+          May we use cookies? They help us show Shaklek to women who will love
+          it, and tell us which of our ads work. They tell us nothing about who
+          you are, and we run no other analytics.{" "}
           <Link href="/legal/privacy" className="underline">
             How we handle data
           </Link>
         </p>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex shrink-0 items-center gap-5">
           <button
             type="button"
             onClick={() => choose("denied")}
-            className="border border-border-strong px-4 py-2 text-sm text-text hover:bg-surface-2"
+            className="min-h-[44px] px-2 text-sm text-text-2 underline underline-offset-4 hover:text-text"
           >
             Decline
           </button>
           <button
             type="button"
             onClick={() => choose("granted")}
-            className="bg-accent px-4 py-2 text-sm text-white hover:bg-accent-light"
+            className="min-h-[44px] rounded-full bg-accent px-8 py-2.5 text-sm text-white hover:bg-accent-light"
           >
             Accept
           </button>
