@@ -163,7 +163,9 @@ const PILLARS = [
 // full body / half body (founder, 2026-11-05).
 const COLLECTION: { slug: string; color: string; src?: string; half?: boolean }[] = [
   { slug: "cargo-trousers", color: "Ivory" },
-  { slug: "utility-shirt", color: "Burgundy", src: "/coming-soon/utility-shirt-burgundy-curvy-v2.jpg" },
+  // Founder, 2026-11-05: the Tie-Waist "isn't the best" here; the Structured
+  // Blouse on the same curvier model (Pro edit of the burgundy catalogue photo).
+  { slug: "structured-blouse", color: "Burgundy", src: "/coming-soon/structured-blouse-burgundy-curvy-v1.jpg" },
   { slug: "slip-dress", color: "Navy" },
   { slug: "open-abaya", color: "Ivory" },
 ];
@@ -196,14 +198,6 @@ export default function ComingSoonPage() {
               October" is still written into three blog answers in
               src/data/blog.ts -- left alone because she named this page, but
               they are the next thing to look at if the date moves. */}
-          {/* ⚠️ SAY WHAT IT IS, FIRST. Founder, 2026-11-05: people who saw the
-              page "didn't understand right away it's made to order or
-              tailored". The hero line is about feeling; this line is the fact,
-              above it, before anything else is read. ONE word, "tailored": the
-              founder cut "made to order" from this line as a repeat. */}
-          <p className="text-xs uppercase tracking-[0.22em] text-text">
-            Tailored to you &middot; 100% linen
-          </p>
           <p className="text-xs uppercase tracking-[0.22em] text-gold">
             Opening 11&middot;11
           </p>
@@ -288,6 +282,14 @@ export default function ComingSoonPage() {
           {/* The shadow is not decoration. The last line sits over the
               brightest sand in the frame and was the softest of the three
               without it; a heavier scrim alone would have dulled the cloth. */}
+          {/* ⚠️ THE FACT SITS ON THE PICTURE. Founder, 2026-11-05: visitors
+              did not see at once that it is tailored, and a separate line
+              under the logo made the page "too crowded", so it lives here, on
+              the hero, phone and desktop alike. One word, "tailored". */}
+          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/45 to-transparent" />
+          <p className="absolute inset-x-0 top-0 px-6 pt-5 text-center text-[11px] font-medium uppercase tracking-[0.24em] text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] sm:pt-6 sm:text-xs">
+            Tailored to you &middot; 100% linen
+          </p>
           <p className="absolute inset-x-0 bottom-0 px-6 pb-8 font-display text-2xl leading-tight text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.5)] sm:hidden">
             <span className="block">Clothes that respect your skin,</span>
             <span className="block">and fit you perfectly,</span>
