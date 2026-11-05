@@ -702,6 +702,18 @@ ol.flow code{font-family:var(--font-mono);font-size:.85em;background:var(--gold-
       <code>STAGING_STRIPE_WEBHOOK_SECRET</code> in .env.local, applied by the
       restore script. Rehearsal passed: order 631e30b6 pending &rarr; paid.
     </p>
+    <p>
+      <strong>2026-11-05: Meta Conversions API (option A) deployed, INERT until a
+      token is set.</strong> <code>src/lib/metaCapi.ts</code>: InitiateCheckout from
+      <code>/api/orders</code>, Purchase from the Stripe webhook after the paid
+      transition, only when the cookie bar was accepted (consent travels in Stripe
+      session metadata: <code>capi, fbp, fbc, ua, slugs</code>). No email, phone or IP.
+      Same <code>event_id</code> as the pixel for dedup. Build-spec allowlist now
+      includes <code>META_CAPI_TOKEN</code> and <code>META_CAPI_TEST_CODE</code>
+      (staging only); neither value is set yet. Blocked on: the pixel 1901863017445226
+      is owned by the old ad account 156136761, not the shaklek.uae portfolio, so no
+      token can be generated until it is added there.
+    </p>
   </div>
 
   <h3 class="flow-h3">P0 — DONE 2026-08-26 <span class="flow-tag">738 KB to 310 KB</span></h3>
