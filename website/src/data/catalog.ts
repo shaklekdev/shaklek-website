@@ -64,7 +64,7 @@ export type CatalogItem = {
 // in this file and they must agree.
 // ⬆ REPRICED 2026-11-05, founder chose option A (+~20%) after marketing and
 // fashion people told her the prices were low for made-to-order with home
-// tailoring: shirt 449->549, pants 519->619, dress 699->849, abaya 949->1149.
+// tailoring: shirt 449->549, pants 519->619, dress 699->849, abaya 949->999 (A said 1149; founder chose 999).
 export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
   Shirt: 549,
   Skirt: 549, // no skirt ships yet; less cloth than a shirt, more stitching, so it lands on the same number
@@ -79,7 +79,7 @@ export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
               // chosen for being easy to make, sitting 150 AED under a 5.2m abaya with a
               // shayla. 699 is 59.8%, alongside pants at 60.5%, and it keeps the ladder
               // 449 / 519 / 699 / 949. Her call, 2026-09-27.
-  Abaya: 1149, // ⬆ 1149 since 2026-11-05 (option A). Was: ✅ 949, AND IT INCLUDES A SHAYLA. Founder, 2026-09-27, walking the
+  Abaya: 999, // 999 since 2026-11-05: option A said 1149, founder moved it to 999 to stay under 1,000 (custom abayas are cheap at local tailors). Was: ✅ 949, AND IT INCLUDES A SHAYLA. Founder, 2026-09-27, walking the
               // number up herself: 749, then 799-with-scarf, then 999, then "949 with
               // scarf is good". The shayla is not a gift -- ~0.7m of cloth plus a hem,
               // about 50 AED landed -- which is exactly why 799-with-scarf was rejected
@@ -484,7 +484,7 @@ export const catalog: CatalogItem[] = [
     slug: "open-abaya",
     name: "Open Abaya",
     category: "Abaya",
-    price: 1149,
+    price: 999,
     descriptor: "Folded edge, open front",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -579,7 +579,7 @@ export const catalog: CatalogItem[] = [
     // "Abaya 949 + sheila" without naming which abaya, and one price per piece
     // type is her own rule, so both carry it until she says otherwise. It is a
     // styling question, not a cost one: the margin is identical either way.
-    price: 1149,
+    price: 999,
     descriptor: "Frog closures, worn open or closed",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],

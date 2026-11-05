@@ -60,7 +60,7 @@ whole, as the ads do.
 | Oversized Shirt | AED 549 | catalog.ts:130-133 |
 | Wide-leg Trousers | AED 619 | catalog.ts:172-175 |
 | Slip Dress | AED 849 | catalog.ts:622-636 |
-| Open Abaya, with matching shayla | AED 1,149 | catalog.ts:481-484, 753-762 |
+| Open Abaya, with matching shayla | AED 999 | catalog.ts:481-484, 753-762 |
 
 If three: drop the Slip Dress. Note the founder asked for "pants" in social
 copy (session-log 2026-11-01); the catalogue name is "Wide-leg Trousers" and a

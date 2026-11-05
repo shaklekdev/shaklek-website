@@ -470,7 +470,7 @@ for (const [key, f] of Object.entries(INPUTS.fabrics)) {
   console.log(`  ${f.aedPerMetre.toFixed(2).padStart(6)}  ${f.label}`);
 }
 
-console.log(`\nLAUNCH OPTIONS  (✅ DECIDED 2026-09-08: linen only, China cloth; REPRICED 2026-11-05 to 549/619/849/1149, option A)`);
+console.log(`\nLAUNCH OPTIONS  (✅ DECIDED 2026-09-08: linen only, China cloth; REPRICED 2026-11-05 to 549/619/849/999 (abaya 999 by founder))`);
 console.log(`  ${"option".padEnd(28)}${"fabric".padStart(7)}${"shirt".padStart(9)}${"margin".padStart(8)}${"pants".padStart(8)}${"margin".padStart(8)}   after ads at ${INPUTS.cacScenariosAed.join(" / ")}`);
 for (const opt of INPUTS.launchOptions) {
   const perM = INPUTS.fabrics[opt.fabric].aedPerMetre;

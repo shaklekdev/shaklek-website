@@ -196,6 +196,14 @@ export default function ComingSoonPage() {
               October" is still written into three blog answers in
               src/data/blog.ts -- left alone because she named this page, but
               they are the next thing to look at if the date moves. */}
+          {/* ⚠️ SAY WHAT IT IS, FIRST. Founder, 2026-11-05: people who saw the
+              page "didn't understand right away it's made to order or
+              tailored". The hero line is about feeling; this line is the fact,
+              above it, before anything else is read. ONE word, "tailored": the
+              founder cut "made to order" from this line as a repeat. */}
+          <p className="text-xs uppercase tracking-[0.22em] text-text">
+            Tailored to you &middot; 100% linen
+          </p>
           <p className="text-xs uppercase tracking-[0.22em] text-gold">
             Opening 11&middot;11
           </p>
