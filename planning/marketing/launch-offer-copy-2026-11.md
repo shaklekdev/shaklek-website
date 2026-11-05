@@ -73,7 +73,7 @@ dashes, no "AI", no "free", no "gift", no "linen bag", no "your body" or "your
 skin". Initials offer in a, d, e. Price in b and c.
 
 **(a) Bag with initials, `brand-assets/bag-initials/bag-initials-ad-NT.jpg`**
-- Primary (112): Linen, made after you order it, in the UAE. The first 50 orders leave with their initials on the Shaklek bag.
+- Primary: Every order comes in the Shaklek bag. The first 50 are embroidered with your initials. 100% linen, made in the UAE.
 - Headline (33): First 50 orders: your initials
 - Description (19): Opening 11 November
 
@@ -93,7 +93,7 @@ skin". Initials offer in a, d, e. Price in b and c.
 - Description (19): Opening 11 November
 
 **(e) Teaser video**
-- Primary (116): Shaklek opens 11 November. Linen made to your measurements, in the UAE. The first 50 orders carry their initials.
+- Primary: Shaklek opens 11 November. 100% linen, cut after you order it, in the UAE. The first 50 orders carry your initials.
 - Headline (19): Opening 11 November
 - Description (20): Know the day we open
 
