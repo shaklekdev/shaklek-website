@@ -267,7 +267,7 @@ function trackPurchaseOnce(
       num_items: items.reduce((n, i) => n + (i.quantity ?? 1), 0),
       order_id: orderId,
       ...money(total),
-    });
+    }, `purchase-${orderId}`); // same id the webhook sends server-side (lib/metaCapi.ts)
   } catch {
     // Never let analytics break the page that confirms someone's order.
   }

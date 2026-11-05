@@ -5,6 +5,7 @@ import { getStripe } from "@/lib/stripe";
 import { resolveOrderPricing, type PricedItem } from "@/lib/pricing";
 import { resolveFabric } from "@/data/fabrics";
 import { includedWith } from "@/data/catalog";
+import { cleanEventId, cleanFbCookie, sendCapiEvent } from "@/lib/metaCapi";
 import { resolveFitNotes } from "@/data/fitNotes";
 import { issueOrderAccessToken } from "@/lib/orderAccess";
 import { rateLimit } from "@/lib/rateLimit";
@@ -253,13 +254,33 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Malformed request" }, { status: 400 });
   }
 
-  const { items, method, total, email, promotionCode } = (order ?? {}) as {
+  const { items, method, total, email, promotionCode, capi } = (order ?? {}) as {
     items: OrderItem[];
     method: string;
     total: number;
     email: string;
     promotionCode?: unknown;
+    capi?: { consent?: unknown; eventId?: unknown; fbp?: unknown; fbc?: unknown };
   };
+
+  // ⚠️ CONVERSIONS API ONLY WITH AN EXPLICIT `consent: true` FROM THE COOKIE
+  // BAR (lib/metaPixel.ts capiHandoff). Anything else, including a missing or
+  // malformed object, means no server event for this order. Every field is
+  // re-validated: this body is untrusted, and these values reach Meta.
+  const adConsent = capi?.consent === true;
+  const capiUser = adConsent
+    ? {
+        fbp: cleanFbCookie(capi?.fbp),
+        fbc: cleanFbCookie(capi?.fbc),
+        // No IP: the first X-Forwarded-For hop is client-written, so it could be
+        // forged, and _fbp plus the user agent are enough (security review
+        // 2026-11-05). toWellFormed: a slice can split a surrogate pair, which
+        // Stripe metadata may reject.
+        ip: null,
+        ua: (req.headers.get("user-agent") ?? "").slice(0, 400).toWellFormed() || null,
+      }
+    : null;
+  const icEventId = adConsent ? cleanEventId(capi?.eventId) : null;
 
   // Only ever a code *string* from the client. It is looked up against
   // Stripe below and the discount comes from there -- a caller cannot assert
@@ -406,6 +427,20 @@ export async function POST(req: NextRequest) {
       integration_identifier: "shaklek-checkout-rqkazmjg",
       customer_email: email,
       client_reference_id: orderId,
+      // The webhook sends the Purchase to Meta only if this says so. Pixel
+      // cookie ids and user agent ride along because the webhook never sees
+      // the browser; no email, no IP (lib/metaCapi.ts, option A).
+      ...(capiUser
+        ? {
+            metadata: {
+              capi: "1",
+              ...(capiUser.fbp ? { fbp: capiUser.fbp } : {}),
+              ...(capiUser.fbc ? { fbc: capiUser.fbc } : {}),
+              ...(capiUser.ua ? { ua: capiUser.ua } : {}),
+              slugs: priced.map((p) => p.slug).join(",").slice(0, 480),
+            },
+          }
+        : {}),
       // Shaklek prices in AED and settles in AED. Adaptive Pricing lets Stripe
       // present a converted local price instead, at a 2-4% conversion fee paid
       // by the customer -- so a garment listed at AED 429 can be shown as some
@@ -510,6 +545,19 @@ export async function POST(req: NextRequest) {
 
     if (!session.url) {
       return NextResponse.json({ ok: false, error: "Stripe session had no URL" }, { status: 502 });
+    }
+    // Awaited (a serverless function may be frozen after it responds) but
+    // bounded at 3 s and unable to throw, so checkout never waits on Meta.
+    if (capiUser && icEventId) {
+      await sendCapiEvent({
+        name: "InitiateCheckout",
+        eventId: icEventId,
+        sourceUrl: `${origin}/checkout`,
+        user: capiUser,
+        value: serverTotal,
+        contentIds: priced.map((p) => p.slug),
+        numItems: units,
+      });
     }
     return NextResponse.json({ ok: true, checkoutUrl: session.url });
   }

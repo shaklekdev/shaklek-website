@@ -7,7 +7,7 @@ import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSign
 import { previewDiscountAed, previewTotalAed } from "@/lib/promoPreview";
 import { useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/CartContext";
-import { money, track } from "@/lib/metaPixel";
+import { capiHandoff, money, newEventId, track } from "@/lib/metaPixel";
 
 type PaymentMethod = "apple-pay" | "card";
 
@@ -127,18 +127,19 @@ export default function CheckoutForm({ total }: { total: number }) {
     // Fired before the network call, so a customer who abandons on Stripe's
     // hosted page is still counted as having started checkout -- that gap is
     // the number worth optimising against. Cannot throw; see lib/metaPixel.
+    const icEventId = newEventId("ic");
     track("InitiateCheckout", {
       content_type: "product",
       content_ids: items.map((i) => i.slug),
       contents: items.map((i) => ({ id: i.slug, quantity: i.quantity ?? 1 })),
       num_items: units,
       ...money(promo ? previewTotal : total),
-    });
+    }, icEventId);
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, method, total, email, promotionCode: promo?.code ?? null }),
+        body: JSON.stringify({ items, method, total, email, promotionCode: promo?.code ?? null, capi: capiHandoff(icEventId) }),
       });
 
       // Every failure path below used to fall through to the success page:
@@ -383,16 +384,23 @@ export default function CheckoutForm({ total }: { total: number }) {
             <strong className="font-medium text-text-2">When.</strong>{" "}
             {deliveryEstimate}
           </p>
+          {/* ⚠️ NO WINDOW AND NO "WHETHER WE MEASURED YOU", 2026-11-05.
+              Founder, full site pass: the dated fit guarantee (10 days) is
+              stated in legal/terms and one /faq answer only; product page and
+              checkout get ONE short reassurance without a date. "Whether we
+              measured you" went because the at-home visit is off the site
+              until she defines slots (OPEN.md measuring-slots). The
+              faulty/wrong-item clause (14 days) is terms-only as well, so the
+              sentence that paraphrased it under Refunds is gone and the link
+              carries it. */}
           <p>
-            <strong className="font-medium text-text-2">If the fit is off.</strong>{" "}
-            One free alteration or remake within 14 days, whether we measured
-            you or you picked a standard size.
+            <strong className="font-medium text-text-2">If the fit isn&apos;t right,</strong>{" "}
+            one alteration or remake is included.
           </p>
           <p>
             <strong className="font-medium text-text-2">Refunds.</strong> Each
             piece is made for you, so we don&apos;t offer change-of-mind
-            refunds. Anything faulty or not as ordered is always remade or
-            refunded.{" "}
+            refunds.{" "}
             <a
               href="/legal/terms#returns"
               target="_blank"

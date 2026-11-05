@@ -4,6 +4,7 @@ import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
 import { readBoundedText } from "@/lib/requestGuards";
 import { sendOrderNotificationEmail, sendCustomerConfirmationEmail } from "@/lib/orderEmail";
+import { cleanFbCookie, sendCapiEvent } from "@/lib/metaCapi";
 
 // Stripe calls this once it has actually confirmed a payment -- this is the
 // only trustworthy point to mark an order paid and notify the stylist,
@@ -89,6 +90,7 @@ export async function POST(req: NextRequest) {
     customer_details?: { phone?: string | null; name?: string | null } | null;
     payment_status?: "paid" | "unpaid" | "no_payment_required" | null;
     payment_intent?: string | null;
+    metadata?: Record<string, string> | null;
   };
   const orderId = session.client_reference_id;
 
@@ -245,6 +247,23 @@ export async function POST(req: NextRequest) {
       order.customers.email,
       order.orders.id,
     );
+  }
+
+  // Conversions API: the Purchase, only when checkout recorded consent. Same
+  // event_id as the pixel on /order-confirmed, so Meta counts it once. After
+  // the emails, bounded and unable to throw: Meta never delays fulfilment.
+  const md = session.metadata ?? {};
+  if (md.capi === "1" && order) {
+    await sendCapiEvent({
+      name: "Purchase",
+      eventId: `purchase-${orderId}`,
+      sourceUrl: `${(process.env.NEXT_PUBLIC_APP_URL || "https://www.shaklek.com").replace(/\/$/, "")}/order-confirmed`,
+      user: { fbp: cleanFbCookie(md.fbp), fbc: cleanFbCookie(md.fbc), ua: md.ua ?? null, ip: null },
+      value: Number(order.orders.totalAed),
+      contentIds: (md.slugs ?? "").split(",").filter(Boolean),
+      numItems: items.length,
+      orderId,
+    });
   }
 
   return NextResponse.json({ ok: true });

@@ -33,7 +33,7 @@ function fbq(): Fbq | null {
 }
 
 /** Standard Meta event. Silently does nothing when the pixel is not configured. */
-export function track(event: string, params?: Record<string, unknown>) {
+export function track(event: string, params?: Record<string, unknown>, eventId?: string) {
   try {
     // Defence in depth. Gating the script already means fbq never exists
     // without consent, but a visitor who accepts and then declines within the
@@ -44,9 +44,34 @@ export function track(event: string, params?: Record<string, unknown>) {
     if (!marketingAllowed()) return;
     const f = fbq();
     if (!f) return;
-    f("track", event, params ?? {});
+    // eventID lets Meta drop the server (Conversions API) copy of the same event.
+    f("track", event, params ?? {}, eventId ? { eventID: eventId } : undefined);
   } catch {
     // Deliberately swallowed. See rule 1.
+  }
+}
+
+/** A fresh id shared by a pixel event and its server twin (lib/metaCapi.ts). */
+export function newEventId(prefix: string): string {
+  try {
+    return `${prefix}-${crypto.randomUUID().replace(/-/g, "").slice(0, 20)}`;
+  } catch {
+    return `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
+  }
+}
+
+/**
+ * What checkout hands the server for the Conversions API -- ONLY when the
+ * visitor accepted the cookie bar, and only the pixel's own cookie ids. No
+ * consent: undefined, and the server sends nothing (lib/metaCapi.ts).
+ */
+export function capiHandoff(eventId: string): { consent: true; eventId: string; fbp: string | null; fbc: string | null } | undefined {
+  try {
+    if (!marketingAllowed()) return undefined;
+    const jar = Object.fromEntries(document.cookie.split("; ").map((c) => [c.slice(0, c.indexOf("=")), c.slice(c.indexOf("=") + 1)]));
+    return { consent: true, eventId, fbp: jar._fbp ?? null, fbc: jar._fbc ?? null };
+  } catch {
+    return undefined;
   }
 }
 
