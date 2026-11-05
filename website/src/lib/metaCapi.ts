@@ -55,7 +55,10 @@ export async function sendCapiEvent(ev: {
   orderId?: string;
 }): Promise<void> {
   const token = process.env.META_CAPI_TOKEN;
-  const pixel = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  // META_CAPI_PIXEL_ID is server-only and set on STAGING alone: it lets the
+  // server send TEST events (with META_CAPI_TEST_CODE) while staging's browser
+  // carries no pixel, so a test checkout never lands in the live dataset.
+  const pixel = process.env.META_CAPI_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID;
   if (!token || !pixel) return; // not configured: a silent no-op, like the pixel
   if (!ev.user.ua) return; // Meta rejects website events without a user agent
 

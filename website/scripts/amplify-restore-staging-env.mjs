@@ -64,6 +64,12 @@ const LITERALS = {
   // and success_url points at production. Missing since the 2026-09-12 wipe;
   // found by the 2026-11-01 security review.
   NEXT_PUBLIC_APP_URL: "https://staging.dqcptedylrif0.amplifyapp.com",
+  // Conversions API on staging: server-side TEST events only (Events Manager >
+  // Test events). No NEXT_PUBLIC pixel here on purpose, so staging's browser
+  // never sends events into the live dataset. The token is inherited from the
+  // app level. Founder's test code, 2026-11-05.
+  META_CAPI_PIXEL_ID: "1158121223302126",
+  META_CAPI_TEST_CODE: "TEST35991",
 };
 
 const envLocal = new Map(
