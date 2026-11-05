@@ -198,9 +198,6 @@ export default function ComingSoonPage() {
               October" is still written into three blog answers in
               src/data/blog.ts -- left alone because she named this page, but
               they are the next thing to look at if the date moves. */}
-          <p className="text-xs uppercase tracking-[0.22em] text-gold">
-            Opening 11&middot;11
-          </p>
         </header>
 
         {/* priority: this is the only image above the fold on a phone and the
@@ -277,24 +274,26 @@ export default function ComingSoonPage() {
               them at sm. It stops short of the top so the sky is untouched. */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent sm:hidden"
+            className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
           />
           {/* The shadow is not decoration. The last line sits over the
               brightest sand in the frame and was the softest of the three
               without it; a heavier scrim alone would have dulled the cloth. */}
-          {/* ⚠️ THE FACT SITS ON THE PICTURE. Founder, 2026-11-05: visitors
-              did not see at once that it is tailored, and a separate line
-              under the logo made the page "too crowded", so it lives here, on
-              the hero, phone and desktop alike. One word, "tailored". */}
-          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/45 to-transparent" />
-          <p className="absolute inset-x-0 top-0 px-6 pt-5 text-center text-[11px] font-medium uppercase tracking-[0.24em] text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] sm:pt-6 sm:text-xs">
-            Tailored to you &middot; 100% linen
-          </p>
-          <p className="absolute inset-x-0 bottom-0 px-6 pb-8 font-display text-2xl leading-tight text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.5)] sm:hidden">
-            <span className="block">Clothes that respect your skin,</span>
-            <span className="block">and fit you perfectly,</span>
-            <span className="block">should not be an occasion.</span>
-          </p>
+          {/* ⚠️ ONE FACT ON THE PICTURE, NOTHING ELSE. Founder, 2026-11-05: the
+              hero was "too full of text"; she chose to keep only what visitors
+              had missed (that it is tailored) and drop the three-line slogan,
+              phone and desktop alike. */}
+          {/* Centred, with the date under it, founder 2026-11-05 ("make it
+              centered and the opening is below it"). The date left the header
+              to sit here. */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2.5 px-6 pb-8 text-center text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.5)] sm:pb-10">
+            {/* Cormorant italic, the site's own display face: she chose "B"
+                over a bolder Cormorant, Bodoni and a sans (2026-11-05). */}
+            <p className="font-display text-3xl italic leading-tight sm:text-4xl">
+              Tailored to you. 100% linen.
+            </p>
+            <p className="text-xs uppercase tracking-[0.24em]">Opening 11&middot;11</p>
+          </div>
         </div>
 
         {/* ⚠️ ONE LINE, AND IT IS DOING FOUR JOBS. Founder's, 2026-09-14.
@@ -333,26 +332,7 @@ export default function ComingSoonPage() {
             provocative earns a stop-scroll. On the brand's own front page it
             opens by telling a stranger she got dressed wrong, which sells to
             people already convinced and repels everyone else. */}
-        <div className="hidden flex-col gap-5 text-center sm:flex">
-          <p className="mx-auto max-w-xl font-display text-2xl leading-snug text-text sm:text-3xl">
-            {/* ⚠️ THE LINE BREAK IS DELIBERATE, do not let it reflow. Founder,
-                2026-09-14: "I find this sentence too long, it's very hard to
-                read." The cause is nine words of subject before the verb
-                arrives, so the reader carries the whole clause before the
-                sentence resolves. Breaking before "should" puts the subject on
-                one line and the payoff on the next, and changes no words.
-
-                THREE PHRASES, NOT TWO. Breaking only before "should" left an
-                eight-word first clause that still wrapped, orphaning "skin" on
-                a line of its own, which read worse than no break at all. Each
-                span is now a phrase that fits, and the commas mean it still
-                reads correctly if a narrow screen reflows one of them. */}
-            <span className="block">Clothes that respect your skin,</span>
-            <span className="block">and fit you perfectly,</span>
-            <span className="block">should not be an occasion.</span>
-          </p>
-        </div>
-
+        
         {/* ⚠️ THE MEASURING VISIT USED TO BE A GOLD-BORDERED BLOCK HERE, and
             it was removed on 2026-09-14 at the founder's instruction: "this is
             saying way too much before the launch, it should be integrated in
