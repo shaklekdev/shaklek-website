@@ -3,13 +3,16 @@ import { SITE_NAME, SITE_TAGLINE } from "@/lib/seo";
 import Image from "next/image";
 import WaitlistForm from "@/components/WaitlistForm";
 import BrandLockup from "@/components/BrandLockup";
+import { catalog, includedWith } from "@/data/catalog";
 
 // THE PRE-LAUNCH PAGE. Every path on the site rewrites here while STORE_OPEN is
 // not "true" (src/proxy.ts), so this is the whole site to a visitor today.
 //
 // ⚠️ COPY RULES, from planning/marketing/personas.md. Not style preferences.
 // These are claims that would be false:
-//   - NO PRICE, anywhere. Pricing is still being reworked.
+//   - PRICES ARE SHOWN since 2026-11-03 (founder): the collection strip reads
+//     each price from catalog.ts, never a typed number. They were hidden while
+//     pricing was reworked; that work is done.
 //   - "100% linen", never "100% plant based". There are buttons and a zip fly.
 //   - "Made in the UAE" is APPROVED and is what this page says. Only "100%
 //     made in the UAE" is banned, because the 100% claims the fabric. The cloth is
@@ -149,6 +152,22 @@ const PILLARS = [
   },
 ];
 
+// The four pieces shown under the form, one per colour so the strip is not
+// four ivory photos. Prices come from catalog.ts so they cannot drift.
+// `src` overrides the catalogue photo. The Utility Shirt is shown on a curvier
+// model (founder, 2026-11-05: "I would like to have the big size model");
+// generated from the burgundy catalogue photo with gemini-3-pro-image, shirt
+// details checked against it side by side. Archive:
+// catalog-archive/2026-11-05-coming-soon-plus/.
+// `half` crops a full-length photo to head-to-waist, so the strip alternates
+// full body / half body (founder, 2026-11-05).
+const COLLECTION: { slug: string; color: string; src?: string; half?: boolean }[] = [
+  { slug: "cargo-trousers", color: "Ivory" },
+  { slug: "utility-shirt", color: "Burgundy", src: "/coming-soon/utility-shirt-burgundy-curvy-v2.jpg" },
+  { slug: "slip-dress", color: "Navy" },
+  { slug: "open-abaya", color: "Ivory" },
+];
+
 export default function ComingSoonPage() {
   return (
     <main className="flex flex-col items-center px-6 py-5 sm:py-20">
@@ -168,14 +187,17 @@ export default function ComingSoonPage() {
               size. Do not retune it here without changing the header and the
               artwork together. */}
           <BrandLockup size="lg" />
-          {/* ⚠️ NO DATE. Founder, 2026-09-19: "remove early october, just say
+          {/* ⚠️ THE DATE IS BACK, founder 2026-11-05: "change opening soon to
+              opening on the 11/11". 11 Nov is confirmed (OPEN.md) and every ad
+              and post says it. If it slips, change it here the same day.
+              History: NO DATE. Founder, 2026-09-19: "remove early october, just say
               opening soon." A month on the page is a promise with a deadline
               attached, and it ages badly the moment it slips. NOTE: "early
               October" is still written into three blog answers in
               src/data/blog.ts -- left alone because she named this page, but
               they are the next thing to look at if the date moves. */}
           <p className="text-xs uppercase tracking-[0.22em] text-gold">
-            Opening soon
+            Opening 11&middot;11
           </p>
         </header>
 
@@ -351,10 +373,67 @@ export default function ComingSoonPage() {
             stray line between two things that were already separated. The
             bottom rule stays: it is what still separates the ask from the three
             pictures below. */}
+        {/* THE LAUNCH OFFER, founder 2026-11-03. Every order already ships in
+            the Shaklek bag; the first fifty get it embroidered with the
+            customer's initials. ⚠️ The bag is a LINEN BLEND: never write
+            "linen bag" here (planning/OPEN.md launch-gift-initials). Wording is
+            hers (option 3), checked by the marketing agent. */}
+        {/* ⚠️ A ROW ON PHONE TOO, with a small picture. Stacked, the 4:5 bag
+            photo pushed the email box ~300px further down, which is the exact
+            failure she reported on 2026-09-19 ("they don't understand there is
+            the subscribe"). Keep the form near the fold. */}
+        <div className="flex flex-row items-center gap-4 text-left sm:gap-8">
+          <div className="relative aspect-[4/5] w-24 shrink-0 overflow-hidden bg-surface-2 sm:w-56">
+            <Image
+              src="/coming-soon/bag-initials-v1.jpg"
+              alt="The Shaklek bag with small gold embroidered initials under the logo"
+              fill
+              sizes="224px"
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-col gap-3">
+            <p className="font-display text-lg leading-snug text-text sm:text-3xl">
+              The first 50 orders come in a Shaklek bag embroidered with your initials.
+            </p>
+          </div>
+        </div>
+
         <div className="flex flex-col items-center gap-4 border-b border-border py-6 text-center sm:py-10">
           <div className="flex w-full justify-center">
             <WaitlistForm />
           </div>
+        </div>
+
+        {/* THE COLLECTION, founder 2026-11-03: a visitor from an ad should see
+            what we sell and what it costs before she leaves. */}
+        <div className="flex flex-col gap-4">
+          <p className="text-center font-display text-xl text-text">
+            From the opening collection. Every option included.
+          </p>
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {COLLECTION.map(({ slug, color, src: override, half }) => {
+              const item = catalog.find((c) => c.slug === slug);
+              if (!item) return null;
+              const src = override ?? item.colorImages?.[color]?.front ?? item.image;
+              if (!src) return null;
+              return (
+                <li key={slug} className="flex flex-col gap-2">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden bg-surface-2">
+                    <Image src={src} alt={`${item.name} in ${color.toLowerCase()} linen`} fill sizes="(max-width: 640px) 50vw, 25vw" className={half ? "origin-top scale-[1.8] object-cover object-top" : "object-cover"} />
+                  </div>
+                  <p className="text-sm text-text">
+                    {item.name}
+                    {/* 949 includes the shayla; never show that price without naming it (OPEN.md). */}
+                    {includedWith(item.category).length ? (
+                      <span className="text-text-2">, with matching {includedWith(item.category).map((p) => p.name.toLowerCase()).join(", ")}</span>
+                    ) : null}
+                  </p>
+                  <p className="text-xs text-text-2">AED {item.price}</p>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
         {/* ⚠️ TWO DIFFERENT LAYOUTS, AND THE PHONE ONE IS THE POINT.
