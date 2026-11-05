@@ -12,7 +12,7 @@ import { includedWith } from "@/data/catalog";
 // but every Arabic string is founder-read before it ships (productDisclosure.ts).
 const INCLUDED_COPY = {
   heading: "Matching shayla included",
-  line: "Same 100% linen, in the colour you choose. 68 x 180 cm, hemmed. Included in the price, not sold separately.",
+  line: "Same 100% linen, in the colour you choose. 68 x 180 cm, hemmed. Included in the price of every abaya.",
 };
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import {
@@ -310,8 +310,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10 lg:max-w-5xl">
       {editingId && (
         <p className="mb-4 rounded-shaklek-xs border border-border-strong bg-surface-2 px-4 py-3 text-xs text-text-2">
-          Editing a piece already in your cart. Your changes replace it, you won&apos;t
-          end up with two.
+          Editing a piece already in your cart. Your changes replace it.
         </p>
       )}
 
@@ -435,7 +434,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     sits at 11px under the price with the visit line, not in a
                     pill next to the button. */}
                 <p className="mt-0.5 text-[11px] text-text-3">
-                  Made after you order, ready in about 10 working days.
+                  Made for you, piece by piece. Up to 3 weeks.
                 </p>
               </div>
               <button

@@ -133,13 +133,36 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       valueAr: "غسيل آلي لطيف",
     },
     {
-      // ✅ FOUNDER-READ AND APPROVED 2026-08-28.
+      // ✅ FOUNDER-READ AND APPROVED 2026-08-28 (at 14 days).
+      //
+      // ⚠️ THIS ROW STAYS DATED WHILE THE REST OF THE SITE DOES NOT. Founder,
+      // 2026-11-05: the 10-day fit guarantee is stated in full only in
+      // legal/terms and one /faq answer; marketing pages get one undated line.
+      // This row is the exception because Cabinet Resolution 66/2023 Art. 40
+      // requires "terms and conditions of return or exchange" on the product
+      // page itself, and a term without its window is not a term.
+      //
+      // ⚠️ 14 -> 10 IN THE ARABIC TOO, 2026-11-05, AND IT NEEDS HER EYES. The
+      // English moved to 10 days the same day; an Arabic row still saying 14
+      // would have been the legally binding copy contradicting the terms.
+      // Arabic counts 3-10 with the plural ("أيام"), 11-99 with the singular
+      // accusative ("يوماً"), so the noun changed with the number. That is a
+      // grammar change in a founder-read string: she must read it rendered,
+      // with dir="rtl", before launch.
+      //
+      // ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05: "no negative language on
+      // the website". English was "...if the fit is not right." Same term, same
+      // window; the condition is now "should the fit need adjusting". The Arabic
+      // still reads "إذا لم يكن المقاس مناسباً" (if the size is not suitable),
+      // which is the same negative form; it is founder-read copy and is NOT
+      // edited here. A parallel positive form for her to consider:
+      // "إذا احتاج المقاس إلى تعديل" (if the size needs adjusting).
       label: "Returns and exchange",
       labelAr: "الإرجاع والاستبدال",
       value:
-        "One free alteration or remake within 14 days of delivery if the fit is not right.",
+        "One free alteration within 10 days of delivery, should the fit need adjusting.",
       valueAr:
-        "تعديل واحد مجاني أو إعادة تصنيع خلال 14 يوماً من التسليم إذا لم يكن المقاس مناسباً.",
+        "تعديل واحد مجاني خلال 10 أيام من التسليم إذا لم يكن المقاس مناسباً.",
     },
     {
       // ✅ FOUNDER-READ AND APPROVED 2026-08-28.

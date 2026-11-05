@@ -25,8 +25,8 @@ export default function CheckoutPage() {
       <div className="flex flex-1 flex-col bg-bg">
         <Header />
         <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
-          <h1 className="text-[26px] text-text">Nothing to check out</h1>
-          <p className="subtitle mt-2">Your cart is empty.</p>
+          <h1 className="text-[26px] text-text">Your cart is empty</h1>
+          <p className="subtitle mt-2">Choose a piece from the catalogue to continue.</p>
           <Link
             href="/catalog"
             className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"

@@ -8,7 +8,7 @@ been edited into the site; this is copy for the founder to approve.
 
 - Prices: `website/src/data/catalog.ts` lines 130-133 (Oversized Shirt 449),
   172-175 (Wide-leg Trousers 519), 481-484 (Open Abaya 949), 622-636 (Slip
-  Dress 699). Lowest catalogue price is 449, so "From AED 449" is true.
+  Dress 699). Lowest catalogue price is 449, so "From AED 549" is true.
 - Abaya includes a matching shayla: `catalog.ts` lines 753-762 (`SHAYLA`,
   `includedWith("Abaya")`).
 - Fabric: `website/src/data/fabrics.ts` line 62-63, `100% natural linen`,
@@ -49,18 +49,18 @@ Alternative headline if "your initials" reads as a promise of a mechanism:
 
 Lead-in (7 words): **From the opening collection. Every option included.**
 
-Price format: show each piece's own price, "AED 449", not "From AED 449" per
+Price format: show each piece's own price, "AED 549", not "From AED 549" per
 piece. Every piece has one price with every option included (the founder's
 positioning, `catalog.ts` lines 571-576), so "From" on a single piece would
-imply options cost extra. Use "From AED 449" only for the collection as a
+imply options cost extra. Use "From AED 549" only for the collection as a
 whole, as the ads do.
 
 | Piece | Price | Source |
 |---|---|---|
-| Oversized Shirt | AED 449 | catalog.ts:130-133 |
-| Wide-leg Trousers | AED 519 | catalog.ts:172-175 |
-| Slip Dress | AED 699 | catalog.ts:622-636 |
-| Open Abaya, with matching shayla | AED 949 | catalog.ts:481-484, 753-762 |
+| Oversized Shirt | AED 549 | catalog.ts:130-133 |
+| Wide-leg Trousers | AED 619 | catalog.ts:172-175 |
+| Slip Dress | AED 849 | catalog.ts:622-636 |
+| Open Abaya, with matching shayla | AED 1,149 | catalog.ts:481-484, 753-762 |
 
 If three: drop the Slip Dress. Note the founder asked for "pants" in social
 copy (session-log 2026-11-01); the catalogue name is "Wide-leg Trousers" and a
@@ -78,12 +78,12 @@ skin". Initials offer in a, d, e. Price in b and c.
 - Description (19): Opening 11 November
 
 **(b) Label carousel**
-- Primary (122): Most of us are wearing plastic in 40 degrees. Linen is a plant: it lets the heat go. Cut after you order it, from AED 449.
+- Primary (122): Most of us are wearing plastic in 40 degrees. Linen is a plant: it lets the heat go. Cut after you order it, from AED 549.
 - Headline (27): 100% linen, made in the UAE
-- Description (12): From AED 449
+- Description (12): From AED 549
 
 **(c) "Up to 17 measurements" slide**
-- Primary (108): Up to seventeen measurements, not one size. Linen, cut after you order it and made in the UAE. From AED 449.
+- Primary (108): Up to seventeen measurements, not one size. Linen, cut after you order it and made in the UAE. From AED 549.
 - Headline (28): Up to seventeen measurements
 - Description (19): Opening 11 November
 

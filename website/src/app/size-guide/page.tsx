@@ -20,7 +20,7 @@ export default function SizeGuidePage() {
   return (
     <LegalPage
       title="Size Guide"
-      intro="These are your body measurements in centimetres, not the garment's. Measure yourself, not a piece you already own."
+      intro="Body measurements in centimetres. Measure yourself rather than a piece you already own."
     >
       {/* The customer's own numbers come first. Founder: the size guide should
           open with "your measurements", and the regional chart is the
@@ -94,9 +94,8 @@ export default function SizeGuidePage() {
 
       <h2 className="pt-2 text-base font-medium text-text">How to measure</h2>
       <p>
-        Measure your body, not a garment you already own, and keep the tape
-        level and snug without pulling it tight. It is easier over light
-        clothing than over none.
+        Measure your body rather than a garment you already own, and keep the
+        tape level and snug. It is easiest over light clothing.
       </p>
       <p>
         <strong>Bust</strong>: around the fullest part, tape level under the
@@ -108,17 +107,23 @@ export default function SizeGuidePage() {
       <h2 className="pt-2 text-base font-medium text-text">
         Between two sizes?
       </h2>
+      {/* ⚠️ 2026-11-05, TWO THINGS LEFT THIS PARAGRAPH. Founder:
+          (1) the free at-home visit is off the whole site until she defines
+              appointment slots (OPEN.md measuring-slots) -- so no "come and
+              measure you", no "free", no "in Dubai";
+          (2) the fit guarantee is stated in full only in legal/terms and one
+              /faq answer ("mention it ONLY WHERE IT HAS TO BE"). The sentence
+              that repeated it here is gone. */}
+      {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. Was "Then a standard
+          size is the wrong tool ... a size chart is an average of thousands of
+          bodies and exact for almost none of them." Same point, said as what
+          Tailored does. */}
       <p>
-        Then a standard size is the wrong tool. Choose <strong>Tailored</strong>{" "}
-        when you order and we come and measure you, free on your first order, in
-        Dubai. It costs
-        exactly the same, and it is the reason made-to-order exists. Most people
-        are between sizes somewhere; a size chart is an average of thousands of
-        bodies and exact for almost none of them.
-      </p>
-      <p>
-        Either way you get one free alteration or remake within 14 days of
-        delivery if the fit is not right.
+        Then <strong>Tailored</strong> is made for you. Choose it when you
+        order and we take your measurements with you afterwards, before
+        anything is cut. It costs exactly the same, and it is the reason
+        made-to-order exists. Most people are between sizes somewhere; a size
+        chart is an average of thousands of bodies, and Tailored is cut to one.
       </p>
 
       {/* A button, not a sentence with a link buried in it. This is the end of
@@ -138,9 +143,8 @@ export default function SizeGuidePage() {
 
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
         These are consolidated from published UAE-market body-measurement charts
-        and are a guide, not a promise about a specific garment. If you want
-        certainty, choose Tailored and we come and measure you, free on your first
-        order, in Dubai.
+        and are a guide to choosing a standard size. For an exact fit, choose
+        Tailored and we take your measurements with you after you order.
       </p>
     </LegalPage>
   );

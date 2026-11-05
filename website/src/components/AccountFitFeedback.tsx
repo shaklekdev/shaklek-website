@@ -35,7 +35,7 @@ export default function AccountFitFeedback({ entries }: { entries: FitEntry[] })
       <div className="mt-4 border border-[#E7E0D2] p-5">
         <p className="text-sm text-text">Your fit notes</p>
         <p className="mt-2 text-[13px] text-text-3">
-          Deleted. Your tailor will not see them on your next order.
+          Deleted. Your next order starts fresh.
         </p>
       </div>
     );

@@ -45,8 +45,8 @@ export default function CheckoutForm({ total }: { total: number }) {
   const units = items.reduce((n, i) => n + (i.quantity ?? 1), 0);
   const deliveryEstimate =
     units > 2
-      ? "Approximately 10 working days. An order this size can take a little longer, and we confirm the date with you before anything is cut."
-      : "Approximately 10 working days, delivery included.";
+      ? "Made for you, piece by piece. Allow up to 3 weeks; with several pieces we confirm your exact date with you before anything is cut."
+      : "Made for you, piece by piece. Allow up to 3 weeks, delivery included.";
   const { isSignedIn, user } = useUser();
   const [method, setMethod] = useState<PaymentMethod>("apple-pay");
   const [email, setEmail] = useState("");
@@ -362,9 +362,16 @@ export default function CheckoutForm({ total }: { total: number }) {
           a retailer decline a change-of-mind refund only where the policy is
           displayed, and something a customer must expand to find is a weak
           version of displayed. */}
+      {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. Was "No change-of-mind
+          refunds on made-to-order pieces." The rule is still displayed here in
+          the open, as the comment above requires; it now says what applies
+          (final once made, one alteration for fit, faulty or wrong items
+          remade or refunded) instead of what is withheld. */}
       <p className="mt-4 text-center text-xs text-text-3">
         Delivery and card details are taken on the next screen, secured by
-        Stripe. No change-of-mind refunds on made-to-order pieces.
+        Stripe. Made to order for you, so a finished piece is final: one
+        alteration is included for fit, and faulty or wrong items are remade or
+        refunded.
       </p>
 
       <details className="group mt-3 border-t border-border pt-3">
@@ -394,13 +401,12 @@ export default function CheckoutForm({ total }: { total: number }) {
               sentence that paraphrased it under Refunds is gone and the link
               carries it. */}
           <p>
-            <strong className="font-medium text-text-2">If the fit isn&apos;t right,</strong>{" "}
-            one alteration or remake is included.
+            <strong className="font-medium text-text-2">Fit.</strong>{" "}
+            Cut from your measurements and your choices, with special care. If it still needs a touch, one alteration is included.
           </p>
           <p>
-            <strong className="font-medium text-text-2">Refunds.</strong> Each
-            piece is made for you, so we don&apos;t offer change-of-mind
-            refunds.{" "}
+            <strong className="font-medium text-text-2">Refunds.</strong> See
+            the{" "}
             <a
               href="/legal/terms#returns"
               target="_blank"

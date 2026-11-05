@@ -170,7 +170,7 @@ export default async function AccountPage() {
         <h2 className="mt-8 text-lg text-text">Your orders</h2>
 
         {orders === null ? (
-          <p className="subtitle mt-6">Nothing to show yet, database not configured.</p>
+          <p className="subtitle mt-6">Your orders will appear here.</p>
         ) : orders.length === 0 ? (
           <div className="mt-10 text-center">
             <p className="subtitle">No orders yet under {email}.</p>

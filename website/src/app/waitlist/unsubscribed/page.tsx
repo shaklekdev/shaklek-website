@@ -26,7 +26,7 @@ const COPY = {
     // No "are you sure", no win-back, no offer. Someone who has just left is
     // the worst possible audience for either, and an unsubscribe that argues
     // back is how a complaint gets filed instead.
-    body: "We will not write to you again. If you signed up by mistake and want back on, the form is on our home page.",
+    body: "You are off the list. If you change your mind, the form is on our home page.",
   },
   invalid: {
     heading: "That link has expired or was already used.",

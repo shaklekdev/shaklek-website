@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import BrandLockup from "@/components/BrandLockup";
+import { WHATSAPP_HANDLE, WHATSAPP_URL } from "@/lib/contact";
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
 // onto the home page. Two reasons, both the founder's: it was a click that led
@@ -122,7 +123,7 @@ export default function Header() {
             Same number as the footer. wa.me opens WhatsApp on a phone and
             web.whatsapp.com on a desktop, so one link covers both. */}
         <a
-          href="https://wa.me/971504766769"
+          href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Message us on WhatsApp"
@@ -136,7 +137,7 @@ export default function Header() {
             <span className="block text-[10px] tracking-wide text-text-3 uppercase">
               Need help? Message us
             </span>
-            <span className="block text-[13px] font-medium">+971 50 476 6769</span>
+            <span className="block text-[13px] font-medium">WhatsApp {WHATSAPP_HANDLE}</span>
           </span>
         </a>
         {/* items-CENTER, not items-start. The lockup is three stacked pieces --

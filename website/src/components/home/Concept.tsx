@@ -62,12 +62,13 @@ export default function Concept() {
             ))}
           </ol>
 
-          {/* The footnote for the asterisk in step 02, and it is NOT optional:
-              step 02 says "we come to you" and names no city. The visit is
-              Dubai only (delivery is UAE-wide since 2026-11-01), and a promise that names no city
-              mis-sells everybody outside it. If the marker ever leaves step
-              02, this leaves with it -- a footnote with nothing pointing at it
-              is as bad as a marker with no footnote. */}
+          {/* ⚠️ NO LONGER A FOOTNOTE, 2026-11-05. It was the asterisk's
+              footnote for step 02's "we come to you", naming Dubai as the
+              visit's scope. The founder pulled the at-home visit site-wide
+              until she defines appointment slots (OPEN.md measuring-slots),
+              step 02 lost its marker, and STEPS_NOTE is now just the delivery
+              line. When the visit returns with slots, the marker and the
+              city come back together, never one without the other. */}
           <p className="mt-5 text-[12px] leading-relaxed text-text-3">
             {STEPS_NOTE}
           </p>

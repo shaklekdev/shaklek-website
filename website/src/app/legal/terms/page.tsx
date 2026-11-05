@@ -106,12 +106,20 @@ export default function TermsPage() {
         only once a month of real orders says you can.
       */}
       <p>
-        Every piece is made after you order it. We strive to have most orders
-        ready in approximately 10 working days. That is an estimate and not a
-        guarantee: we confirm your date once your details are final, and we
-        contact you directly if anything moves. Delivery is included in the price to any address in the UAE. The
-        at-home measurement visit is offered within Dubai only; elsewhere you
-        choose a standard size or send measurements taken from our size guide.
+        Every piece is made after you order it. We allow up to 3 weeks for
+        most orders. That is an estimate rather than a fixed date: we confirm
+        your date once your details are final, and we contact you directly if
+        anything moves. Delivery is included in the price to any address in the UAE.{" "}
+        {/* ⚠️ "THE AT-HOME MEASUREMENT VISIT IS OFFERED WITHIN DUBAI ONLY" CAME
+            OUT, 2026-11-05. Founder pulled the visit from the whole site until
+            she defines appointment slots (OPEN.md measuring-slots). Terms must
+            not describe a service the site no longer offers -- the same reason
+            the uploads and measurements-form clauses below were deleted. What
+            is true today: Tailored means we contact her after the order and
+            take the measurements before cutting. */}
+        If you choose Tailored, we contact you after your order to take your
+        measurements before anything is cut; otherwise you choose a standard
+        size from our size guide.
       </p>
       <p>
         Please check your delivery address carefully. If a parcel is returned to
@@ -121,34 +129,51 @@ export default function TermsPage() {
       </p>
 
       <h2 id="returns" className="pt-2 text-base font-medium text-text">
-        If the fit isn&apos;t right
+        Fit and alterations
       </h2>
       <p>
-        You get <strong>one free alteration or remake</strong> within 14 days of
-        delivery. This applies whether you chose a standard size or sent your own
+        {/* ⚠️ ALTERATION ONLY, founder 2026-11-05: adjustments, never a full
+            remake for fit. Remake/refund is for faulty or wrong items below.
+
+            ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05: "no negative
+            language on the website". Heading was "If the fit isn't right";
+            "what feels wrong" and "if an alteration genuinely isn't possible"
+            reworded. Every term is unchanged: one alteration, 10 days, store
+            credit where alteration is not enough. */}
+        You get <strong>one free alteration</strong> within 10 days of
+        delivery: we adjust the piece you received (taking in, letting out
+        where the seam allowance permits, or changing the hem). This applies whether you chose a standard size or sent your own
         measurements. Message us at{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>{" "}
-        or on WhatsApp with a photo and what feels wrong, and a stylist will
-        arrange it. If an alteration genuinely isn&apos;t possible, we will offer
-        store credit instead.
+        or on WhatsApp with a photo and what you would like adjusted, and a
+        stylist will arrange it. If the piece needs more than an alteration can
+        give, we offer store credit instead.
       </p>
       <p>
-        Made-to-order pieces cannot be restocked or resold, so we do not offer
-        cash refunds once a piece has been made. The alteration, remake and
-        store-credit route above is how fit problems are resolved. Nothing here
-        affects your statutory rights as a consumer in the UAE.
+        {/* ⚠️ THE NO-CHANGE-OF-MIND-REFUND RULE, stated here and in the Art. 40
+            disclosure. Was "cannot be restocked or resold, so we do not offer
+            cash refunds once a piece has been made." Same rule, same force,
+            said as what applies: a made piece is hers, refunds are for faulty
+            or wrong items, fit is the alteration. Do not soften further; UAE
+            consumer law lets a retailer decline a change-of-mind refund only
+            where the policy is displayed. */}
+        Each piece is made for one person, so once it has been made it is
+        yours: a made-to-order piece is final, and a change of mind after
+        production is outside what a refund covers. Refunds are reserved for
+        faulty or wrong items (below), and fit is resolved through the
+        alteration and store credit above. Nothing here affects your statutory
+        rights as a consumer in the UAE.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">
-        If something arrives faulty
+        If something arrives faulty or wrong
       </h2>
       <p>
         If a piece arrives damaged, or is not what you ordered, tell us within
         14 days of delivery and we will remake it or refund it in full,
-        including delivery. That is separate from the fit guarantee above and
-        does not use it up.
+        including delivery. That is in addition to the alteration above.
       </p>
 
       {/* ⚠️ "DESIGNS YOU UPLOAD" IS GONE, deleted 2026-09-15. /upload was
@@ -169,9 +194,9 @@ export default function TermsPage() {
             printed care label were giving three different instructions, and
             the terms were the one a customer could hold us to. */}
         Linen behaves like the natural fibre it is: it creases, and it softens
-        with wear. Follow the care label. Damage from washing against the label,
-        alteration by another tailor, or ordinary wear is not covered by the fit
-        guarantee.
+        with wear. Follow the care label. The alteration above covers the fit
+        of the piece as delivered; care that departs from the label, work by
+        another tailor, and ordinary wear sit outside it.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Accounts</h2>
@@ -206,8 +231,8 @@ export default function TermsPage() {
       </p>
       <p>
         Delivery estimates assume normal conditions. Events outside our
-        reasonable control, courier disruption, fabric supply failure, illness,
-        or anything similar, may delay an order. We will always tell you.
+        reasonable control, courier disruption, a delay in fabric supply,
+        illness, or anything similar, may move a date. We will always tell you.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Changes</h2>

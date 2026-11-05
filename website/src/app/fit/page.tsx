@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import FitFeedbackForm from "@/components/FitFeedbackForm";
+import { WHATSAPP_URL } from "@/lib/contact";
 
 // NOT INDEXED. This page is reached from a QR code on a card inside a parcel,
 // by someone who has already bought. In a search result it is a form asking
@@ -60,10 +61,14 @@ export default function FitPage() {
             line above it already says "Your next piece starts from this one",
             which is the same promise in seven words. */}
         <FitFeedbackForm />
+        {/* ⚠️ THE FIT GUARANTEE SENTENCE LEFT THIS LINE, 2026-11-05. Founder,
+            full site pass: "mention it ONLY WHERE IT HAS TO BE" -- the dated
+            version lives in legal/terms and one /faq answer. The WhatsApp
+            contact stays: this page is where someone with a real problem
+            lands, and the route to a person is the thing she needs. */}
         <p className="mt-10 border-t border-[#E7E0D2] pt-5 text-[12.5px] leading-relaxed text-text-3">
-          Something actually wrong? You get one free alteration or remake within
-          14 days.{" "}
-          <a href="https://wa.me/971504766769" className="underline">
+          Anything we can help with?{" "}
+          <a href={WHATSAPP_URL} className="underline">
             Message us
           </a>
           .{" "}

@@ -149,8 +149,16 @@ export default function SizePicker({
             the reason this brand charges what it charges. Standard is the
             fallback for someone who does not want us in her house, not the
             starting point. */}
+        {/* ⚠️ "(free)" CAME OFF THE BUTTON, 2026-11-05. Founder: the free
+            at-home measuring visit is off the whole site until she defines
+            appointment slots (OPEN.md measuring-slots). Tailored still costs
+            nothing extra -- the price is the same either way and the cards
+            show it -- but "free" was the visit's word, and a button that
+            says free next to a line that no longer offers a visit reads as a
+            discount that does not exist. Never say "free" here until the
+            slots exist. */}
         {([
-          ["tailored", "Tailored (free)"],
+          ["tailored", "Tailored"],
           ["standard", "Standard"],
         ] as const).map(([mode, label]) => (
           <button
@@ -189,15 +197,23 @@ export default function SizePicker({
           that does not name a city has been mis-sold.
 
           ⚠️ THE SEQUENCE IS: SHE ORDERS, THEN WE REACH OUT. There is no booking
-          system. Nothing here may imply she is picking a slot now. */}
+          system. Nothing here may imply she is picking a slot now.
+
+          ⚠️ 2026-11-05: THE VISIT IS GONE FROM THIS LINE, SITE-WIDE. Founder:
+          "remove the free visiting ... because i will define specific slots"
+          (OPEN.md measuring-slots). Until slots exist the promise is only
+          that we contact her after the order, on WhatsApp, and take the
+          measurements before anything is cut -- no "come to you", no "free",
+          no city. The paragraphs above describe the visit as it WAS; they
+          stay so the line can come back exactly once booking exists. */}
       <p className="mt-2.5 text-[11px] leading-relaxed text-text-2">
         {sizeMode === "tailored" ? (
           <>
-            <span className="font-medium text-text">We come to you and measure you. Free on your first order, in Dubai.</span>{" "}
-            Order first and we get in touch to arrange it, before anything is cut.
+            <span className="font-medium text-text">After you order, we contact you on WhatsApp to take your measurements</span>{" "}
+            before anything is cut.
           </>
         ) : (
-          <>Or choose Tailored and we come and measure you, free on your first order, in Dubai.</>
+          <>Or choose Tailored and we take your measurements with you after you order.</>
         )}
       </p>
       {/* No helper line under this toggle. It said "Cut to your measurements,
@@ -272,9 +288,9 @@ export default function SizePicker({
                 </tbody>
               </table>
               <p className="mt-3 text-xs text-text-3">
-                Measure your body, not a garment: bust at the fullest point, waist at
-                the narrowest, hip at the fullest. Between two sizes, or not close to
-                any of them? Choose Tailored and we measure you instead, or
+                Measure your body rather than a garment: bust at the fullest point, waist at
+                the narrowest, hip at the fullest. Between two sizes? Choose Tailored and
+                we take your measurements with you after you order, or
                 read the{" "}
                 <a href="/size-guide" className="underline" target="_blank" rel="noopener noreferrer">
                   full size guide

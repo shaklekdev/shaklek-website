@@ -8,7 +8,7 @@ import { rejectCrossOrigin, rejectOversizedBody, isUuid } from "@/lib/requestGua
  * Spend, or give back, ONE GARMENT'S fit guarantee.
  *
  * The promise is printed on the thank-you card and cannot be recalled: "one
- * free alteration or remake within 14 days of delivery". Two columns make it
+ * free alteration or remake within 10 days of delivery". Two columns make it
  * computable -- orders.delivered_at starts the clock, and this sets the other
  * one. Until something wrote it, "one" was unenforceable and the columns were
  * inert.
@@ -121,7 +121,7 @@ export async function POST(
       .where(and(eq(schema.orderItems.id, itemId), eq(schema.orderItems.orderId, id)));
     if (exists && !exists.deliveredAt) {
       return NextResponse.json(
-        { error: "Mark the order delivered first — the 14 days run from delivery" },
+        { error: "Mark the order delivered first — the 10 days run from delivery" },
         { status: 409 },
       );
     }

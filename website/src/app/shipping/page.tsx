@@ -2,6 +2,7 @@ import LegalPage from "@/components/LegalPage";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { WHATSAPP_URL } from "@/lib/contact";
 
 export const metadata: Metadata = pageMetadata({
   title: "Delivery",
@@ -23,14 +24,20 @@ export default function ShippingPage() {
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
-        Approximately <strong>ten working days</strong> from your order.
+        Allow <strong>up to 3 weeks</strong> from your order. Each piece is cut
+        and sewn for you, one at a time, with special care.
         Nothing is cut before your piece is confirmed, which is the point of
         made-to-order.
       </p>
+      {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. This said "Ten days is
+          an estimate, not a guarantee. If anything moves, whether fabric
+          supply, a courier delay or an unusually busy week at the bench, we
+          contact you directly rather than letting the date slip quietly." The
+          "ten days" was also stale against the 3-week line above it. The
+          estimate wording that binds lives in legal/terms. */}
       <p>
-        Ten days is an estimate, not a guarantee. If anything moves, whether fabric
-        supply, a courier delay or an unusually busy week at the bench, we
-        contact you directly rather than letting the date slip quietly.
+        We confirm your date with you once your details are final, and if
+        anything changes along the way we tell you directly.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">What it costs</h2>
@@ -41,31 +48,43 @@ export default function ShippingPage() {
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Where we deliver</h2>
+      {/* ⚠️ "THE AT-HOME MEASUREMENT VISIT IS IN DUBAI ONLY" CAME OUT,
+          2026-11-05. Founder pulled the visit from the whole site until she
+          defines appointment slots (OPEN.md measuring-slots). */}
       <p>
-        <strong>Everywhere in the UAE</strong>, included in the price. The
-        at-home measurement visit is in Dubai only.
+        <strong>Everywhere in the UAE</strong>, included in the price.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Your address</h2>
+      {/* ⚠️ ONE LINE, NOT A POLICY. This paragraph repeated the returned-parcel
+          clause from legal/terms almost word for word; founder, 2026-11-05,
+          full site pass. The rule lives in the terms so the two copies cannot
+          drift apart; this page keeps the instruction and the pointer. */}
       <p>
-        Your delivery address and phone number are collected on the secure
-        payment page, after you press Pay, not before. Please check them
-        carefully. If a parcel comes back to us because the address was wrong
-        or nobody could receive it, we will arrange redelivery and may ask you
-        to cover the extra courier cost.
+        Your delivery address is taken on the secure payment page after you
+        press Pay. Check it carefully; how redelivery works is set out in the{" "}
+        <Link href="/legal/terms" className="underline">
+          terms
+        </Link>
+        .
       </p>
 
+      {/* ⚠️ THE FIT GUARANTEE AND THE FAULTY-ITEM CLAUSE LEFT THIS PAGE,
+          2026-11-05. Founder, full site pass: "if something isn't bringing
+          conversion, mention it ONLY WHERE IT HAS TO BE" -- she is tired of
+          the same information repeated everywhere. The dated versions (10
+          days for fit, 14 for faulty or wrong) now live in legal/terms, plus
+          one /faq answer for fit. This page keeps the instruction and the
+          pointer, not the promise, so the two numbers cannot drift apart
+          again across four files. */}
       <h2 className="pt-2 text-base font-medium text-text">When it arrives</h2>
       <p>
-        Try it on promptly. If the fit is not right you have{" "}
-        <strong>one free alteration or remake within 14 days</strong> of
-        delivery. If a piece arrives damaged or is not what you ordered, tell us
-        within 14 days and we remake or refund it in full, including delivery.
-        That is separate from the fit guarantee and does not use it up. The{" "}
+        Try it on when it arrives. If the fit needs a touch, or anything else
+        needs our attention, message us; the{" "}
         <Link href="/legal/terms#returns" className="underline">
           full terms
         </Link>{" "}
-        set both out.
+        set out exactly what is covered.
       </p>
 
       <p>
@@ -75,7 +94,7 @@ export default function ShippingPage() {
         </a>{" "}
         or message us on{" "}
         <a
-          href="https://wa.me/971504766769"
+          href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="underline"

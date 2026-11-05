@@ -362,11 +362,16 @@ export default async function ArticlePage({
               (launch-checklist.md). Founder, 2026-09-13: "it should never be
               visible to customers before launch".
 
-              So while shut there is ONE honest destination, the pre-launch page,
-              and the reason to go there is the measuring visit rather than a
-              catalogue nobody can open. It reverts to the real buttons the
-              moment STORE_OPEN is true, which is why this is a branch and not a
-              deletion. */}
+              So while shut there is ONE honest destination, the pre-launch page.
+              It reverts to the real buttons the moment STORE_OPEN is true, which
+              is why this is a branch and not a deletion.
+
+              ⚠️ THE VISIT LINE IS GONE FROM THE SHUT STATE, 2026-11-05. It read
+              "If you are in Dubai we come to you and take your measurements
+              ourselves, free on your first order." Founder pulled the at-home
+              visit from the whole site until she defines appointment slots
+              (OPEN.md measuring-slots); the article bodies in data/blog.ts lost
+              the same sentence the same day. */}
           <div className={`${TEXT} mt-20 border-t border-border pt-10`}>
             <p className="text-[17px] text-text-2">
               Shaklek makes clothes to order in the UAE. You choose the cut, the
@@ -390,8 +395,8 @@ export default async function ArticlePage({
             ) : (
               <>
                 <p className="mt-3 text-[17px] text-text-2">
-                  We are not open yet. If you are in Dubai we come to you and
-                  take your measurements ourselves, free on your first order.
+                  We are not open yet. Leave your email and we will tell you
+                  the day.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link

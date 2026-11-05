@@ -31,7 +31,7 @@ import { absoluteUrl } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Catalog",
   description:
-    "Every Shaklek piece, made to order in 100% natural linen and cut to your measurements. Shirts and pants from AED 449.",
+    "Every Shaklek piece, made to order in 100% natural linen and cut to your measurements. Shirts and pants from AED 549.",
   alternates: { canonical: absoluteUrl("/catalog") },
 };
 
@@ -75,9 +75,16 @@ export default function CatalogPage() {
 
               ⚠️ "Customisable", not "customizable". The hero says
               "Customisable pieces" and the site is on UK spelling throughout;
-              only "customizer" as a thing we call the tool keeps the z. */}
-          Customisable and tailored essentials in high-quality 100% natural linen; we
-          come and measure you in Dubai.
+              only "customizer" as a thing we call the tool keeps the z.
+
+              ⚠️ "WE COME AND MEASURE YOU IN DUBAI" CAME OUT, 2026-11-05. Founder
+              pulled the at-home visit from the whole site until she defines
+              appointment slots (OPEN.md measuring-slots). With it went the
+              city: Dubai was only here as the visit's scope limit, and
+              delivery is UAE-wide. "Cut to your measurements" is what is
+              still true. */}
+          Customisable and tailored essentials in high-quality 100% natural linen,
+          cut to your measurements.
         </p>
 
         {/* ⚠️ A PLAIN <a>, NOT next/link, AND THAT IS THE WHOLE TRICK. A hash

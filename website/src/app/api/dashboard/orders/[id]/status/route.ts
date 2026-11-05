@@ -10,7 +10,7 @@ import { isUuid } from "@/lib/requestGuards";
 //
 // "delivered" is the founder's own step: the courier collects from her and
 // hands to the customer, so she is the only system that knows it happened.
-// It is not cosmetic -- it is what starts the 14-day clock on the alteration
+// It is not cosmetic -- it is what starts the 10-day clock on the alteration
 // promise printed on the thank-you card.
 const ALLOWED_STATUSES = ["paid", "in_progress", "shipped", "delivered", "canceled"];
 

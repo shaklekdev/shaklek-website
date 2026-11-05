@@ -72,7 +72,7 @@ export default function PrivacyPage() {
       <p>
         <strong>When you order:</strong> your email address, your delivery name,
         address and phone number, the details of the piece you configured, your
-        size, or the measurements we take at your fitting, any note you wrote
+        size, or the measurements we take with you after your order, any note you wrote
         for the tailor,
         and confirmation from Stripe that payment succeeded. We never see or
         store your card number.
@@ -95,7 +95,7 @@ export default function PrivacyPage() {
       <h2 className="pt-2 text-base font-medium text-text">Measurements</h2>
       <p>
         Measurements are body data, so we treat them as sensitive. We take them
-        at your fitting, and only if you choose Tailored; a standard size
+        after your order, and only if you choose Tailored; a standard size
         XS–XXL needs none. They go to the tailor making your piece and nowhere
         else, and you can ask us to delete them at any time at
         hello@shaklek.com.

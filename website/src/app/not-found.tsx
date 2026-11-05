@@ -9,8 +9,7 @@ export default function NotFound() {
         <p className="font-display text-5xl text-text-3">404</p>
         <h1 className="mt-4 text-[26px] text-text">Nothing here</h1>
         <p className="subtitle mt-2">
-          The page you&apos;re looking for doesn&apos;t exist, or the design
-          may have moved.
+          This page has moved. Everything we make is in the catalogue.
         </p>
         <Link
           href="/catalog"

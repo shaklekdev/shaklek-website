@@ -152,7 +152,7 @@ export default function LaunchOffer() {
               {state === "sending" ? "Sending" : "Send me the code"}
             </button>
             <p className="mt-3 text-xs text-text-3">
-              One email with your code. We do not pass your address to anyone.
+              One email with your code. Your address stays with us.
             </p>
           </>
         )}

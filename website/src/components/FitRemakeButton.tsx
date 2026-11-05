@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
  *
  * She agrees the remake with the customer on WhatsApp -- that is deliberate,
  * not a gap: a photo is free there and is the best abuse filter available. This
- * records the outcome so "ONE free alteration or remake within 14 days" is
+ * records the outcome so "ONE free alteration or remake within 10 days" is
  * enforceable, which it was not while nothing wrote the column.
  *
  * ⚠️ THE WINDOW IS SHOWN BUT NEVER ENFORCED HERE. Day 15 still gets a button.
@@ -16,7 +16,9 @@ import { useRouter } from "next/navigation";
  * may choose to do, and a dashboard that refuses a goodwill remake would make
  * that decision for her silently. It shows the number and she decides.
  */
-const WINDOW_DAYS = 14;
+// 10, not 14: founder 2026-11-05 ("14 is too much for return"). The FIT
+// guarantee only; the faulty-item window in legal/terms stays 14 days.
+const WINDOW_DAYS = 10;
 
 export default function FitRemakeButton({
   orderId,
@@ -54,7 +56,7 @@ export default function FitRemakeButton({
     return (
       <div className="mt-0.5 flex items-center gap-2 text-[11px] text-slate-500">
         <span className="text-slate-600">
-          Fit remake used {new Date(usedAt).toLocaleDateString("en-AE", { dateStyle: "medium" })}
+          Fit alteration used {new Date(usedAt).toLocaleDateString("en-AE", { dateStyle: "medium" })}
         </span>
         <button
           onClick={() => set(false)}
@@ -68,14 +70,14 @@ export default function FitRemakeButton({
   }
 
   // Whole days remaining, counted from delivery. Math.ceil so the day the
-  // parcel arrives reads "14 days left", not 13.
+  // parcel arrives reads "10 days left", not 9.
   const elapsedMs = Date.now() - new Date(deliveredAt!).getTime();
   const left = WINDOW_DAYS - Math.floor(elapsedMs / 86_400_000);
 
   return (
     <div className="mt-0.5 flex items-center gap-2 text-[11px]">
       <span className={left > 0 ? "text-emerald-700" : "text-slate-400"}>
-        {left > 0 ? `Fit remake available · ${left} day${left === 1 ? "" : "s"} left` : "Fit window closed"}
+        {left > 0 ? `Fit alteration available · ${left} day${left === 1 ? "" : "s"} left` : "Fit window closed"}
       </span>
       <button
         onClick={() => set(true)}

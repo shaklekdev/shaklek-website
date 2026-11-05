@@ -95,22 +95,32 @@ export default async function DesignPage({
 
           It sits BELOW the customizer on purpose. Above it, it competes with
           the fabric and the sliders; below, it is the last thing read before
-          the Pay bar. */}
+          the Pay bar.
+
+          ⚠️ 2026-11-05: THE VISIT SENTENCE AND "OUTSIDE DUBAI" ARE GONE. Founder
+          pulled the free at-home visit from the whole site until she defines
+          appointment slots (OPEN.md measuring-slots), so there is no
+          Dubai/elsewhere split left to explain: SizePicker now says we take
+          the measurements after the order, on WhatsApp, for everyone.
+
+          What this paragraph carries instead is the ONE fit reassurance the
+          product page is allowed. Founder, 2026-11-05, full site pass: "if
+          something isn't bringing conversion, mention it ONLY WHERE IT HAS TO
+          BE". The dated 10-day version lives in legal/terms and one /faq
+          answer only; here it is one line, no date, because a window is a
+          condition and a condition at the moment of choosing reads as a
+          caveat. The legally required returns row in ProductDisclosure above
+          is the other mention on this page and it is the law's, not ours.
+
+          ⚠️ NO WHATSAPP LINK HERE, 2026-11-05. The page said WhatsApp three
+          times -- header, SizePicker, this paragraph. Founder kept two: the
+          header "Need help" link, which is on every page, and the SizePicker
+          line, which is the one that helps the Tailored decision. */}
       <div className="mx-auto w-full max-w-xl px-4 pb-10 sm:px-6 lg:max-w-5xl">
         <p className="border-t border-border pt-6 text-sm leading-relaxed text-text-2">
-          Delivery is included everywhere in the UAE. The measurement visit is
-          in Dubai;{" "}
-          <span className="font-medium text-text">outside Dubai</span>, use the{" "}
-          <a href="/size-guide" className="underline">size guide</a> or{" "}
-          <a
-            href="https://wa.me/971504766769"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            WhatsApp us
-          </a>{" "}
-          your measurements.
+          Every piece is cut from your measurements and your choices, with
+          special care. If it still needs a touch, one alteration is included.
+          Delivery is included everywhere in the UAE.
         </p>
       </div>
       {/* COMPLETE YOUR LOOK, curated per piece in catalog.ts (COMPLETE_THE_LOOK).

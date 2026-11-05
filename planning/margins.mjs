@@ -91,8 +91,8 @@ const INPUTS = {
   // needs no fabric commitment at all: 25 AED/m buys it 2.2m at a time, 20 at
   // 100m. The trigger is evidence that price is the objection, not a guess.
   launchOptions: [
-    { label: "LINEN ONLY (chosen)", shirt: 449, pants: 519, fabric: "chinaLinen" },
-    { label: "...on local cloth instead", shirt: 449, pants: 519, fabric: "localLinen" },
+    { label: "LINEN ONLY (chosen)", shirt: 549, pants: 619, fabric: "chinaLinen" },
+    { label: "...on local cloth instead", shirt: 549, pants: 619, fabric: "localLinen" },
     { label: "Cotton tier, added later", shirt: 389, pants: 429, fabric: "localCotton" },
   ],
 
@@ -470,7 +470,7 @@ for (const [key, f] of Object.entries(INPUTS.fabrics)) {
   console.log(`  ${f.aedPerMetre.toFixed(2).padStart(6)}  ${f.label}`);
 }
 
-console.log(`\nLAUNCH OPTIONS  (✅ DECIDED 2026-09-08: linen only, 449/519, China cloth)`);
+console.log(`\nLAUNCH OPTIONS  (✅ DECIDED 2026-09-08: linen only, China cloth; REPRICED 2026-11-05 to 549/619/849/1149, option A)`);
 console.log(`  ${"option".padEnd(28)}${"fabric".padStart(7)}${"shirt".padStart(9)}${"margin".padStart(8)}${"pants".padStart(8)}${"margin".padStart(8)}   after ads at ${INPUTS.cacScenariosAed.join(" / ")}`);
 for (const opt of INPUTS.launchOptions) {
   const perM = INPUTS.fabrics[opt.fabric].aedPerMetre;

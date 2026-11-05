@@ -62,11 +62,14 @@ export type CatalogItem = {
 // from the catalogue, and the FAQ published the old ladder as fact.
 // KEEP THESE IN STEP WITH THE ITEMS BELOW. A price lives in exactly two places
 // in this file and they must agree.
+// ⬆ REPRICED 2026-11-05, founder chose option A (+~20%) after marketing and
+// fashion people told her the prices were low for made-to-order with home
+// tailoring: shirt 449->549, pants 519->619, dress 699->849, abaya 949->1149.
 export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
-  Shirt: 449,
-  Skirt: 449, // no skirt ships yet; less cloth than a shirt, more stitching, so it lands on the same number
-  Pants: 519,
-  Dress: 699, // ✅ TWO DRESSES SHIP, AND THIS IS 699. Founder, 2026-09-27, up from 649.
+  Shirt: 549,
+  Skirt: 549, // no skirt ships yet; less cloth than a shirt, more stitching, so it lands on the same number
+  Pants: 619,
+  Dress: 849, // ⬆ 849 since 2026-11-05 (founder, option A, +~20%: "prices are low for made-to-order"). Was: ✅ TWO DRESSES SHIP, AND THIS IS 699. Founder, 2026-09-27, up from 649.
               // The comment here used to read "NO DRESS AT LAUNCH ... nothing is
               // photographed, priced or listed" -- stale since 2026-09-20, when slip-dress
               // and buttoned-dress both landed in this file with twelve frames each.
@@ -76,7 +79,7 @@ export const BASE_PRICE_BY_CATEGORY: Record<CatalogItem["category"], number> = {
               // chosen for being easy to make, sitting 150 AED under a 5.2m abaya with a
               // shayla. 699 is 59.8%, alongside pants at 60.5%, and it keeps the ladder
               // 449 / 519 / 699 / 949. Her call, 2026-09-27.
-  Abaya: 949, // ✅ 949, AND IT INCLUDES A SHAYLA. Founder, 2026-09-27, walking the
+  Abaya: 1149, // ⬆ 1149 since 2026-11-05 (option A). Was: ✅ 949, AND IT INCLUDES A SHAYLA. Founder, 2026-09-27, walking the
               // number up herself: 749, then 799-with-scarf, then 999, then "949 with
               // scarf is good". The shayla is not a gift -- ~0.7m of cloth plus a hem,
               // about 50 AED landed -- which is exactly why 799-with-scarf was rejected
@@ -130,7 +133,7 @@ export const catalog: CatalogItem[] = [
     slug: "oversized-shirt",
     name: "Oversized Shirt",
     category: "Shirt",
-    price: 449,
+    price: 549,
     descriptor: "Relaxed fit",
     badge: "TRENDING",
     gradient: ["#f5f0e8", "#e8e4dc"],
@@ -172,7 +175,7 @@ export const catalog: CatalogItem[] = [
     slug: "wide-leg-trousers",
     name: "Wide-leg Trousers",
     category: "Pants",
-    price: 519,
+    price: 619,
     descriptor: "High waist",
     gradient: ["#ede8e4", "#e0dcd8"],
     image: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-combo-wide-cropped-front-v2.jpg",
@@ -214,7 +217,7 @@ export const catalog: CatalogItem[] = [
     slug: "structured-blouse",
     name: "Peplum Blouse",
     category: "Shirt",
-    price: 449,
+    price: 549,
     descriptor: "Minimal dart",
     gradient: ["#efeae4", "#e2ded8"],
     image: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg",
@@ -255,7 +258,7 @@ export const catalog: CatalogItem[] = [
     slug: "banded-trousers",
     name: "Cuffed Trousers",
     category: "Pants",
-    price: 519,
+    price: 619,
     descriptor: "Tailored, cuffed hem",
     gradient: ["#f0ece4", "#e2ddd4"],
     image: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-front.jpg",
@@ -294,7 +297,7 @@ export const catalog: CatalogItem[] = [
     slug: "wrap-top",
     name: "Wrap Top",
     category: "Shirt",
-    price: 449,
+    price: 549,
     descriptor: "Soft drape, tie waist",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -336,7 +339,7 @@ export const catalog: CatalogItem[] = [
     slug: "pleated-trousers",
     name: "Pleated Trousers",
     category: "Pants",
-    price: 519,
+    price: 619,
     descriptor: "Relaxed leg, pleated",
     badge: "NEW",
     gradient: ["#efe9df", "#e2ddd2"],
@@ -376,7 +379,7 @@ export const catalog: CatalogItem[] = [
     slug: "cargo-trousers",
     name: "Cargo Trousers",
     category: "Pants",
-    price: 519,
+    price: 619,
     descriptor: "Wide leg, side pockets",
     badge: "NEW",
     gradient: ["#e9e2d2", "#ddd3bd"],
@@ -416,7 +419,7 @@ export const catalog: CatalogItem[] = [
     slug: "utility-shirt",
     name: "Tie-Waist Shirt",
     category: "Shirt",
-    price: 449,
+    price: 549,
     descriptor: "Chest pockets, tie waist",
     badge: "NEW",
     gradient: ["#ede6d9", "#ddd4c4"],
@@ -481,7 +484,7 @@ export const catalog: CatalogItem[] = [
     slug: "open-abaya",
     name: "Open Abaya",
     category: "Abaya",
-    price: 949,
+    price: 1149,
     descriptor: "Folded edge, open front",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -576,7 +579,7 @@ export const catalog: CatalogItem[] = [
     // "Abaya 949 + sheila" without naming which abaya, and one price per piece
     // type is her own rule, so both carry it until she says otherwise. It is a
     // styling question, not a cost one: the margin is identical either way.
-    price: 949,
+    price: 1149,
     descriptor: "Frog closures, worn open or closed",
     badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
@@ -633,7 +636,7 @@ export const catalog: CatalogItem[] = [
     // ours). At 2.75m that is 59.8%, alongside pants at 60.5%. 799 was proposed
     // and put back down the same day -- see BASE_PRICE_BY_CATEGORY for why.
     // Change one, change the other, and change margins.mjs with them.
-    price: 699,
+    price: 849,
     descriptor: "Sleeveless, cut to fall",
     badge: "NEW",
     gradient: ["#f5f0e8", "#e8e4dc"],
@@ -690,7 +693,7 @@ export const catalog: CatalogItem[] = [
     // ours). At 2.75m that is 59.8%, alongside pants at 60.5%. 799 was proposed
     // and put back down the same day -- see BASE_PRICE_BY_CATEGORY for why.
     // Change one, change the other, and change margins.mjs with them.
-    price: 699,
+    price: 849,
     descriptor: "Sleeveless, buttons to the hem, with pockets",
     badge: "NEW",
     gradient: ["#f5f0e8", "#e8e4dc"],

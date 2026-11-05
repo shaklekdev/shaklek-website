@@ -8,8 +8,17 @@ import Link from "next/link";
  * <details> so it works with no JavaScript, and so a phone gets real
  * open/close behaviour for free.
  *
- * Five, not the full nine on /faq. These are the ones that block a purchase;
+ * Four, not the full list on /faq. These are the ones that block a purchase;
  * the rest are for someone already committed enough to open the page.
+ *
+ * ⚠️ IT WAS FIVE UNTIL 2026-11-05. "What if it doesn't fit?" came out of this
+ * list on the founder's full site pass: "if something isn't bringing
+ * conversion, mention it ONLY WHERE IT HAS TO BE". The dated fit guarantee is
+ * stated in legal/terms and in ONE /faq answer; the product page and checkout
+ * carry a one-line undated reassurance. This is not the same FAQ as /faq (it
+ * is its own list), so it does not get the dated answer, and a second
+ * undated line on the home page would be a third statement of a policy.
+ * Policies are operational, not value; the home page sells.
  *
  * Delivery time lives HERE and at checkout, and nowhere in the marketing copy
  * above. The founder's adviser was right that speed is the wrong headline for
@@ -32,8 +41,12 @@ const QUESTIONS = [
     q: "Do I have to know my measurements?",
     a: (
       <>
-        No. Choose Tailored and we come to you and take them, free on your first
-        order, in Dubai.
+        {/* ⚠️ "WE COME TO YOU ... FREE ON YOUR FIRST ORDER, IN DUBAI" CAME OUT,
+            2026-11-05. Founder pulled the at-home visit from the whole site
+            until she defines appointment slots (OPEN.md measuring-slots).
+            Same wording as the matching /faq answer, on purpose. */}
+        No. Choose Tailored and we take you through them after you order,
+        before anything is cut.
         Or pick a standard size from XS to XXL, for the same price. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide
@@ -46,18 +59,8 @@ const QUESTIONS = [
     q: "How long does it take?",
     a: (
       <>
-        About ten working days. Your piece is made after you order, one at a
-        time, by one tailor.
-      </>
-    ),
-  },
-  {
-    q: "What if it doesn't fit?",
-    a: (
-      <>
-        You get one free alteration or remake within 14 days of delivery,
-        whether you chose a standard size or we measured you. Message
-        us with a photo and a stylist arranges it.
+        Up to 3 weeks. Your piece is cut and sewn after you order, one at a
+        time, with special care: this is not fast fashion.
       </>
     ),
   },
@@ -66,8 +69,8 @@ const QUESTIONS = [
     a: (
       <>
         100% natural linen, and nothing else. It is a plant fibre that
-        breathes in Gulf heat and softens with wear. Linen creases. That is the fibre
-        behaving normally, not a fault.
+        breathes in Gulf heat and softens with every wear, creasing gently the
+        way linen does.
       </>
     ),
   },

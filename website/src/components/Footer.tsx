@@ -2,6 +2,7 @@ import Link from "next/link";
 import CookieChoicesLink from "@/components/CookieChoicesLink";
 import { isStoreOpen } from "@/lib/storeOpen";
 import { SITE_TAGLINE } from "@/lib/seo";
+import { WHATSAPP_URL } from "@/lib/contact";
 
 export default function Footer() {
   return (
@@ -73,7 +74,7 @@ export default function Footer() {
             hello@shaklek.com
           </a>
           <a
-            href="https://wa.me/971504766769"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-text-2"

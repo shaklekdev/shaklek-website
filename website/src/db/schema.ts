@@ -116,7 +116,7 @@ export const orders = pgTable("orders", {
   shippingPostalCode: text("shipping_postal_code"),
   shippingCountry: text("shipping_country"),
   // WHEN THE PARCEL REACHED HER. The anchor for "one free alteration or remake
-  // within 14 days of delivery" -- printed on the thank-you card, which cannot
+  // within 10 days of delivery" (14 until 2026-11-05) -- once printed on the thank-you card (since removed), which cannot
   // be recalled, so this is not optional bookkeeping.
   //
   // ⚠️ NOT DERIVABLE FROM `status`. That is one overwritable field: mark an

@@ -125,8 +125,16 @@ export const STEPS = [
     // pair read like a template. The fabric is named ONCE per section and it
     // is named in 01, where she is choosing. If 01 ever loses it, this gets it
     // back: linen is the only sellable fabric and it is a reason to buy.
+    // ⚠️ 2026-11-05: "WE COME TO YOU" AND THE ASTERISK ARE GONE. Founder
+    // pulled the free at-home visit from the whole site until she defines
+    // appointment slots (OPEN.md measuring-slots): "remove the free visiting
+    // ... because i will define specific slots". Everything above about the
+    // visit leading the sentence is history until then. What is still true,
+    // and still hers in rhythm: we take the measurements, your tailor makes
+    // it, we bring it to your door. Nothing may say free, come to you, or
+    // name a city until booking exists.
     title: "We do the rest",
-    body: "We come to you and take your measurements*. Your tailor makes your piece. We then bring it to your door.",
+    body: "We take your measurements. Your tailor makes your piece. We then bring it to your door.",
     // Still the one the whole proposition rests on. With only two steps the
     // emphasis is doing less work than it was, but it is the half a visitor
     // has to believe, so it keeps it.
@@ -179,7 +187,13 @@ export const STEPS = [
 // Her draft read "free measurement on first order"; the wording here is hers
 // with that phrase kept intact, so the homepage does not become the tenth
 // variant.
-export const STEPS_NOTE = "*Measurement visit free on your first order, in Dubai. Delivery included everywhere in the UAE.";
+// ⚠️ 2026-11-05: THE VISIT CLAUSE AND ITS ASTERISK ARE GONE. Founder pulled
+// the at-home visit site-wide until she defines appointment slots (OPEN.md
+// measuring-slots). Step 02 no longer carries a marker, so this is no longer a
+// footnote -- it is the one delivery line on the home page, and it stays only
+// because "included" is a price claim, which sells. If it ever stops being
+// true, delete the line rather than hedge it.
+export const STEPS_NOTE = "Delivery included everywhere in the UAE.";
 
 
 // ⚠️ THERE IS NO LEAD TIME ON THE HOMEPAGE, AND PUTTING ONE BACK IS A COPY
@@ -314,8 +328,15 @@ export const BENEFITS = [
     // summarising the sentence directly underneath it. No trailing full stop:
     // the other three titles have none, and a period on one of four reads as a
     // typo rather than a choice.
-    k: "Free measurement appointment",
-    v: `One price per piece type, from AED ${Math.min(...catalog.map((i) => i.price))}. The fabric and every option you choose are in it, and your measuring visit in Dubai is free on your first order.`,
+    // ⚠️ 2026-11-05: THE VISIT LEFT THIS TILE, TITLE AND BODY. Founder pulled
+    // the free at-home visit from the whole site until she defines appointment
+    // slots (OPEN.md measuring-slots). The long note above records why the
+    // title led on it and why "first order" kept coming back; all of that
+    // resumes the day slots exist. Until then the tile is the price claim on
+    // its own -- one fixed price, everything you choose inside it -- and the
+    // word "free" does not appear, because "free" was the visit's word.
+    k: "One fixed price per piece",
+    v: `From AED ${Math.min(...catalog.map((i) => i.price))}. The fabric, your measurements and every option you choose are in it.`,
     icon: "tag",
   },
   // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
