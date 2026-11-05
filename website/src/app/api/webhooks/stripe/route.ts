@@ -258,7 +258,13 @@ export async function POST(req: NextRequest) {
       name: "Purchase",
       eventId: `purchase-${orderId}`,
       sourceUrl: `${(process.env.NEXT_PUBLIC_APP_URL || "https://www.shaklek.com").replace(/\/$/, "")}/order-confirmed`,
-      user: { fbp: cleanFbCookie(md.fbp), fbc: cleanFbCookie(md.fbc), ua: md.ua ?? null, ip: null },
+      user: {
+        fbp: cleanFbCookie(md.fbp),
+        fbc: cleanFbCookie(md.fbc),
+        ua: md.ua ?? null,
+        // written by our own /api/orders, re-checked anyway
+        ip: md.ip && /^[0-9a-fA-F:.]{2,45}$/.test(md.ip) ? md.ip : null,
+      },
       value: Number(order.orders.totalAed),
       contentIds: (md.slugs ?? "").split(",").filter(Boolean),
       numItems: items.length,

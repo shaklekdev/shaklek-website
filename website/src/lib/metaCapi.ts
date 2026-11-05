@@ -44,6 +44,22 @@ export function cleanEventId(v: unknown): string | null {
   return typeof v === "string" && /^[A-Za-z0-9_\-]{6,64}$/.test(v) ? v : null;
 }
 
+/**
+ * The visitor's IP, from the first X-Forwarded-For hop. ⚠️ THAT HOP IS
+ * CLIENT-WRITABLE: a visitor can put any address there. Accepted on purpose
+ * (security review 2026-11-05 rated it Low): a forged value only spoils that
+ * visitor's own event. And it is NEEDED: Meta rejects a website event carrying
+ * only a user agent (error 2804050, tested 2026-11-05), and an ad-blocked
+ * visitor -- the case this file exists for -- has no _fbp cookie, so IP + user
+ * agent is the only accepted pair left. The pixel sends Meta the same IP.
+ */
+export function clientIp(headers: Headers): string | null {
+  const ip = (headers.get("x-forwarded-for") ?? "").split(",")[0].trim();
+  const v4 = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+  const v6 = /^[0-9a-fA-F:]{2,39}$/;
+  return v4.test(ip) || (v6.test(ip) && ip.includes(":")) ? ip : null;
+}
+
 export async function sendCapiEvent(ev: {
   name: "InitiateCheckout" | "Purchase";
   eventId: string;
@@ -61,6 +77,7 @@ export async function sendCapiEvent(ev: {
   const pixel = process.env.META_CAPI_PIXEL_ID || process.env.NEXT_PUBLIC_META_PIXEL_ID;
   if (!token || !pixel) return; // not configured: a silent no-op, like the pixel
   if (!ev.user.ua) return; // Meta rejects website events without a user agent
+  if (!ev.user.ip && !ev.user.fbp && !ev.user.fbc) return; // and with nothing to match on (2804050)
 
   const user_data: Record<string, string> = { client_user_agent: ev.user.ua.slice(0, 400) };
   if (ev.user.ip) user_data.client_ip_address = ev.user.ip;

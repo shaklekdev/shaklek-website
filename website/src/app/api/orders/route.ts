@@ -5,7 +5,7 @@ import { getStripe } from "@/lib/stripe";
 import { resolveOrderPricing, type PricedItem } from "@/lib/pricing";
 import { resolveFabric } from "@/data/fabrics";
 import { includedWith } from "@/data/catalog";
-import { cleanEventId, cleanFbCookie, sendCapiEvent } from "@/lib/metaCapi";
+import { cleanEventId, cleanFbCookie, clientIp, sendCapiEvent } from "@/lib/metaCapi";
 import { resolveFitNotes } from "@/data/fitNotes";
 import { issueOrderAccessToken } from "@/lib/orderAccess";
 import { rateLimit } from "@/lib/rateLimit";
@@ -272,11 +272,10 @@ export async function POST(req: NextRequest) {
     ? {
         fbp: cleanFbCookie(capi?.fbp),
         fbc: cleanFbCookie(capi?.fbc),
-        // No IP: the first X-Forwarded-For hop is client-written, so it could be
-        // forged, and _fbp plus the user agent are enough (security review
-        // 2026-11-05). toWellFormed: a slice can split a surrogate pair, which
-        // Stripe metadata may reject.
-        ip: null,
+        // IP is required when the pixel was blocked (no _fbp): see clientIp().
+        // toWellFormed: a slice can split a surrogate pair, which Stripe
+        // metadata may reject.
+        ip: clientIp(req.headers),
         ua: (req.headers.get("user-agent") ?? "").slice(0, 400).toWellFormed() || null,
       }
     : null;
@@ -437,6 +436,7 @@ export async function POST(req: NextRequest) {
               ...(capiUser.fbp ? { fbp: capiUser.fbp } : {}),
               ...(capiUser.fbc ? { fbc: capiUser.fbc } : {}),
               ...(capiUser.ua ? { ua: capiUser.ua } : {}),
+              ...(capiUser.ip ? { ip: capiUser.ip } : {}),
               slugs: priced.map((p) => p.slug).join(",").slice(0, 480),
             },
           }
