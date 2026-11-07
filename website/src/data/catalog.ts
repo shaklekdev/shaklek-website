@@ -173,7 +173,7 @@ export const catalog: CatalogItem[] = [
   },
   {
     slug: "wide-leg-trousers",
-    name: "Wide-leg Trousers",
+    name: "Relaxed Trousers",
     category: "Pants",
     price: 619,
     descriptor: "High waist",
