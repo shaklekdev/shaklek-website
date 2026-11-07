@@ -32,7 +32,7 @@ export default function BagOfferBar() {
         onClick={() => setOpen(true)}
         className="block w-full bg-surface-2 px-4 py-2 text-center text-[11px] tracking-wide text-text sm:text-xs"
       >
-        The first 50 orders come in a Shaklek bag embroidered with your initials
+        The first 50 orders come in a Shaklek bag embroidered with your initials.
         <span className="ml-1 underline underline-offset-2">Customize your bag</span>
       </button>
       {open ? (
