@@ -77,7 +77,7 @@ export default function Concept() {
         {/* Words first on a phone, photo after and short. */}
         <div className="relative order-last h-[200px] w-full sm:h-full sm:min-h-[260px]">
           <Image
-            src="/marketing/story-tailoring.jpg"
+            src="/marketing/story-tailoring-v2.jpg"
             alt="A tailor working on a single piece"
             fill
             sizes="(min-width: 640px) 50vw, 100vw"
