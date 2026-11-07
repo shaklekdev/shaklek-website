@@ -200,7 +200,7 @@ if (DRY) { console.log(`\n${prompt}\n`); process.exit(0); }
 // ---------------------------------------------------------------- generate
 const { execFileSync } = await import("node:child_process");
 const dest = out ?? `/tmp/cell-${item}-${cell.replace(":", "-")}-${view}-${colour.toLowerCase()}.png`;
-const refPhoto = path.join(PUBLIC, "catalog/cargo-trousers/cargo-trousers-navy-front.jpg");
+const refPhoto = path.join(PUBLIC, "catalog/cargo-trousers/cargo-trousers-navy-front-v2.jpg");
 execFileSync(
   "node",
   [

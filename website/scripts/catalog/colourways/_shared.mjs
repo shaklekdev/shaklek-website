@@ -148,8 +148,8 @@ export function renameForColour(rel, from, to) {
  * prepare-masks.mjs makes and for the same reason.
  */
 const REFERENCE_PHOTO = {
-  Navy: "catalog/cargo-trousers/cargo-trousers-navy-front.jpg",
-  Burgundy: "catalog/cargo-trousers/cargo-trousers-burgundy-front.jpg",
+  Navy: "catalog/cargo-trousers/cargo-trousers-navy-front-v2.jpg",
+  Burgundy: "catalog/cargo-trousers/cargo-trousers-burgundy-front-v2.jpg",
   White: "catalog/cargo-trousers/cargo-trousers-white-front.jpg",
   Ivory: "catalog/banded-trousers/banded-trousers-ivory-front.jpg",
 };

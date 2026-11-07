@@ -848,11 +848,11 @@ export const articles: Article[] = [
         // colorImages in catalog.ts, not the filename.
         type: "looks",
         a: {
-          bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg",
+          bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front-v2.jpg",
           label: "Wide leg, full length",
         },
         b: {
-          bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.jpg",
+          bottom: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front-v2.jpg",
           label: "Straight leg, cropped",
         },
         caption: "The same navy pant, two cuts of it. You choose which one gets made, and nothing is cut until you do.",
