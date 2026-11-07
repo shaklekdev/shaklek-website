@@ -8,7 +8,7 @@ const OUT = S + "/" + process.env.OUTDIR;
 fs.mkdirSync(OUT, { recursive: true });
 const C = "/catalog/structured-blouse/structured-blouse-";
 const PHOTO = {
-  Ivory: { "short:normal": C + "front.jpg", "short:longer": C + "ivory-combo-short-longer-front.jpg", "long:normal": C + "ivory-combo-long-normal-front.jpg", "long:longer": C + "ivory-combo-long-longer-front.jpg" },
+  Ivory: { "short:normal": "/private/tmp/claude-501/-Users-nadatlohi-dev-Shaklek/1bf43002-c532-43fa-9381-3a640ba440e4/scratchpad/aligned/structured-blouse-front.jpg", "short:longer": "/private/tmp/claude-501/-Users-nadatlohi-dev-Shaklek/1bf43002-c532-43fa-9381-3a640ba440e4/scratchpad/aligned/structured-blouse-ivory-combo-short-longer-front.jpg", "long:normal": "/private/tmp/claude-501/-Users-nadatlohi-dev-Shaklek/1bf43002-c532-43fa-9381-3a640ba440e4/scratchpad/aligned/structured-blouse-ivory-combo-long-normal-front.jpg", "long:longer": "/private/tmp/claude-501/-Users-nadatlohi-dev-Shaklek/1bf43002-c532-43fa-9381-3a640ba440e4/scratchpad/aligned/structured-blouse-ivory-combo-long-longer-front.jpg" },
   Navy: { "long:normal": C + "navy-combo-long-normal-front.jpg" },
   Burgundy: { "long:normal": C + "burgundy-combo-long-normal-front.jpg" },
   White: { "long:normal": C + "white-combo-long-normal-front-v2.jpg" },
@@ -37,10 +37,10 @@ body{width:1080px;height:1920px;overflow:hidden;background:#ece9e6;font-family:-
 .end{position:absolute;inset:0;background:#f3f0ec}
 .end p{position:absolute;left:0;right:0;text-align:center;font-family:-apple-system,'Helvetica Neue',sans-serif;font-weight:700;font-size:80px;letter-spacing:-2px;color:#1a1a1a;line-height:1.05}.end b{font-weight:700;color:#6b2333}
 </style></head><body>
-${st.end ? `<div class=end><p style="top:600px">You <b>design</b> it.<br>We <b>cut</b> it.</p><img src="file:///Users/nadatlohi/dev/Shaklek/branding/source/shaklek-logo.svg" style="position:absolute;top:960px;left:50%;transform:translate(-50%,-50%);width:440px"><p style="top:1110px;font-size:34px;font-weight:600;letter-spacing:.3em">OPENING 11·11</p></div>` : `
+${st.end ? `<div class=end><p style="top:600px">You <b>design</b> it.<br>We <b>cut</b> it.</p><img src="file:///Users/nadatlohi/dev/Shaklek/branding/source/shaklek-monogram.svg" style="position:absolute;top:980px;left:50%;transform:translate(-50%,-50%);width:230px"><p style="top:1120px;font-size:32px;font-weight:600;letter-spacing:.34em">TAILORED LINEN</p></div>` : `
 <div class=cap><span>${st.cap}</span></div>
-${st.prev ? `<div class=ph style="background-image:url('file://${PUB}${st.prev}')"></div>` : ""}
-<div class=ph style="background-image:url('file://${PUB}${ph(st)}');opacity:${st.alpha ?? 1}"></div>
+${st.prev ? `<div class=ph style="background-image:url('file://${st.prev.startsWith("/catalog")?PUB+st.prev:st.prev}')"></div>` : ""}
+<div class=ph style="background-image:url('file://${ph(st).startsWith("/catalog")?PUB+ph(st):ph(st)}');opacity:${st.alpha ?? 1}"></div>
 <div class=bar>
  <div class=grp><span class=lab>Sleeve</span>${chip(st, "Short", st.sleeve === "short")}${chip(st, "Long", st.sleeve === "long")}</div>
  <div class=sep></div>
@@ -53,7 +53,7 @@ ${st.prev ? `<div class=ph style="background-image:url('file://${PUB}${st.prev}'
 // timeline
 const C1 = "This shirt <b>doesn’t exist.</b>", C2 = "Until <b>you decide</b><br>how it’s made.", C3 = "<b>The sleeve.</b> The length.", C4 = "<b>The colour.</b>", C5 = "Then we <b>cut it.</b>";
 const frames = [];
-let cur = { colour: "Ivory", sleeve: "long", length: "normal" };
+let cur = { colour: "Ivory", sleeve: "short", length: "normal" };
 const hold = (cap, extra, d) => frames.push([{ cap, ...cur, ...extra }, d]);
 const step = (cap, tap, change, total) => {
   hold(cap, { tap }, 0.15);
@@ -62,16 +62,11 @@ const step = (cap, tap, change, total) => {
   for (const a of [0.3, 0.6, 0.85]) hold(cap, { tap, prev, alpha: a }, 1 / 30);
   hold(cap, { tap }, total - 0.15 - 0.1);
 };
-hold(C1, {}, 0.45);
-step(C1, "Short", { sleeve: "short" }, 0.75);
-step(C2, "Longer", { length: "longer" }, 0.8);
-step(C2, "Long", { sleeve: "long" }, 0.8);
-step(C2, "Normal", { length: "normal" }, 0.8);
-step(C2, "Short", { sleeve: "short" }, 0.8);
-step(C3, "Long", { sleeve: "long" }, 0.5);
-step(C3, "Longer", { length: "longer" }, 0.6);
-step(C4, "Normal", { length: "normal" }, 0.5);
-for (const c of ["Navy", "Burgundy", "White", "Ivory"]) step(C4, c, { colour: c }, 0.7);
+hold(C1, {}, 1.4);
+step(C1, "Longer", { length: "longer" }, 0.8);
+step(C2, "Long", { sleeve: "long" }, 0.9);
+step(C2, "Normal", { length: "normal" }, 0.9);
+for (const c of ["Navy", "Burgundy"]) step(C2, c, { colour: c }, 0.7);
 hold(C5, {}, 1.0);
 frames.push([{ end: 1 }, 2.0]);
 
