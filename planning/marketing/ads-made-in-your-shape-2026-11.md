@@ -133,3 +133,73 @@ measurements" and "made in your shape" are in the playbook's allowed form.
 **CTA button:** Sign up (Meta list; matches meta-ads-playbook §1).
 
 **Chosen set:** Primary 1 · Headline 1 · Description · Sign up.
+
+## Ad 4 — draft copy (2026-11-07)
+5-slide Meta carousel (4:5) + 9:16 video cut. Pre-launch waitlist, UAE women
+25–55. Concept founder-approved (natural fabric, no health claims). Grainy colour
+backgrounds, sans 700, key words in burgundy. Reviewed by the marketing agent.
+
+Facts checked: 100% linen is the only sellable fabric (`website/src/data/fabrics.ts:63,84`;
+care label composition "100% linen", `productDisclosure.ts:97`). Polyester is
+PET, the plastic of water bottles; nylon and acrylic are also petroleum-derived
+plastics. The live site already says "polyester, which is plastic"
+(`coming-soon/page.tsx:59`). **"One ingredient" was cut:** it claims the whole
+garment, and sewing thread is normally polyester, buttons unrecorded
+(`planning/unit-economics.md:104`, `tailor-capacity.md:131`, question still
+open with the tailor). Same reason the hang tag says FABRIC, not MATERIALS.
+No health, skin, "non-toxic" or "breathes" lines. No second-person body claims:
+"we" and "our" carry slides 1 and 2, so nothing asserts a fact about the viewer.
+No dashes, no "AI", no "photo".
+
+**Slides (key words in burgundy in bold):**
+1. We read every label **on our food.**
+2. So why not **the one on our clothes?**
+   Not accusatory: "our" puts the writer in it; no "you never". Keep.
+3. **Polyester.** small: Nylon. Acrylic. Plastic, made from oil. Polyester is the same plastic as a water bottle.
+4. Over the flax field image (`public/marketing/pre-launch/flax-field.jpg`): **Linen grows.** small: From one plant: flax.
+   ("Flax" was cut from the site because nobody knows the word, pillars.md:58.
+   Here the small line teaches it, so it stays.)
+5. Over the linen macro: **One fabric.** small: 100% linen, nothing blended in. Cut to your shape after you order.
+   End card: ش monogram + TAILORED LINEN + **Opening 11·11** + Sign up (end-card
+   rule above; the draft was missing the date).
+
+Hook (slide 1): opens on a shared habit, not a fault. It is a quieter frame one
+than ad 3 (no product, no motion), which is the format's trade: Layere's text
+slide on flat colour is the one that gets shared. Concrete alternative if she
+wants more picture in it: "We read the label on a tub of yoghurt."
+
+**Primary text (visible limit 125):**
+1. (124) We read every label on our food. The one on our clothes is worth a look. Ours: 100% linen, cut after you order. Opens 11·11.
+2. (113) We read every label on our food. The one on our clothes is worth a look too. Ours says 100% linen. Opening 11·11.
+
+**Headlines (limit 40):**
+1. (23) One fabric. 100% linen.
+2. (26) Linen. Nothing blended in.
+
+**Description (limit 30):** (23) Opening 11·11. Sign up.
+
+**CTA button:** Sign up.
+
+## Ad 4 — FINAL (2026-11-07)
+3-slide 4:5 carousel, `brand-assets/ads-2026-11/ad4-luxury/v8/` (slide-1/2/3.png,
+sheet.jpg). Locked as rendered; no slide copy change.
+
+Facts checked: 100% linen is the only sellable fabric (`fabrics.ts:63,84`).
+"Most clothes are plastic": Textile Exchange Materials Market Report, synthetics
+roughly two thirds of global fibre; polyester, nylon, acrylic are all
+petroleum-derived. "They don't breathe" and "breathable, gentle on the skin" are
+standard fibre descriptors in the category (comfort claims, not health claims).
+"Cut to you, after the order" = made to order (`coming-soon/page.tsx:61`).
+Opening 11·11 per `OPEN.md:30`. Logo is the master SVG
+(`branding/source/shaklek-logo-white-on-dark.svg`, `spec.mjs:41`), not typed.
+No dashes, no "AI", no "photo".
+
+Meta risk, stated once: slide 1 "Your skin is suffering silently." is second
+person + implied physical condition (Personal Attributes policy). Moderate to
+high chance of automated rejection; appealable. Founder's choice. Fallback if
+rejected: **"Our skin never gets a break."** (same slide, nothing else moves).
+
+**Primary text (123):** Most clothes today are plastic. Ours: 100% natural linen, cut to you after you order. Opening 11·11. Sign up to hear first.
+**Headline (28):** Tailored to you. 100% linen.
+**Description (23):** Opening 11·11. Sign up.
+**CTA:** Sign up (runs until 11·11).
