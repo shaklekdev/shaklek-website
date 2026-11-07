@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import BrandLockup from "@/components/BrandLockup";
+import BagOfferBar from "@/components/BagOfferBar";
 import { WHATSAPP_HANDLE, WHATSAPP_URL } from "@/lib/contact";
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
@@ -86,6 +87,7 @@ export default function Header() {
   // background is #ffffff, so at rest the two render the same pixels.
   return (
     <header className="sticky top-0 z-50 bg-white">
+      <BagOfferBar />
       {/* Wordmark LEFT, icons right, menu in a black band underneath. The bar
           is Youssef's layout; the left-aligned mark is the founder's amendment
           to it (2026-08-26) -- a centred wordmark reads as a fashion editorial,
