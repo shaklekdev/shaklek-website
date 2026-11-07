@@ -21,7 +21,7 @@ const res = await fetch(
       contents: [{ parts: [{ text: prompt }] }],
       // ⚠️ THE CATALOGUE IS 2:3 PORTRAIT. Without this the model defaults to
       // landscape and the figure ends up small in a wide frame.
-      generationConfig: { imageConfig: { aspectRatio: "2:3" } },
+      generationConfig: { imageConfig: { aspectRatio: process.env.ASPECT || "2:3" } }, // ASPECT=9:16 for reels
     }) });
 
 const json = await res.json();

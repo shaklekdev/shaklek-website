@@ -69,5 +69,29 @@
       "date": "2026-10-11",
       "fingerprint": "d45941ef49385427"
     }
+  },
+  {
+    "id": "ad1-tear",
+    "image": "catalog-archive/2026-11-07-ad1-size-chart/frame-f2-tear-b.png",
+    "sound": "on",
+    "negative": "music, singing, talking, voice, speech, extra hands, extra fingers, text, logos, brand names, watermark, flicker",
+    "prompt": "The hands pull apart and the ivory linen rips down the middle with a sharp, crisp fabric-tearing sound; loose threads fray along the torn edges. Camera still.",
+    "approved": {
+      "by": "founder",
+      "date": "2026-11-07",
+      "fingerprint": "ead67ac621b29f03"
+    }
+  },
+  {
+    "id": "ad1-sew",
+    "image": "catalog-archive/2026-11-07-ad1-size-chart/frame-f4-sew-b.png",
+    "sound": "on",
+    "negative": "music, singing, talking, voice, speech, extra hands, extra fingers, text, logos, brand names, watermark, flicker",
+    "prompt": "The sewing machine needle runs fast, the hands feed the ivory linen forward, the line of stitches grows behind the needle. Sound of the sewing machine running. Camera still.",
+    "approved": {
+      "by": "founder",
+      "date": "2026-11-07",
+      "fingerprint": "ed02e81afb598a11"
+    }
   }
 ]
