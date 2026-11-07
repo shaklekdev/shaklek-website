@@ -44,14 +44,14 @@ export default function BagOfferBar() {
           onClick={() => setOpen(false)}
         >
           <div
-            className="relative max-h-[90vh] w-full max-w-sm overflow-y-auto bg-white p-5 text-center"
+            className="relative max-h-[90vh] w-full max-w-sm overflow-y-auto bg-white px-5 pb-5 pt-11 text-center"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute right-3 top-2 text-xl text-text-2"
+              className="absolute right-2 top-1 flex h-10 w-10 items-center justify-center text-2xl text-text-2"
             >
               ×
             </button>
