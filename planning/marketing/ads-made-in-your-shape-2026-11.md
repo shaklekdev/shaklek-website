@@ -199,7 +199,7 @@ person + implied physical condition (Personal Attributes policy). Moderate to
 high chance of automated rejection; appealable. Founder's choice. Fallback if
 rejected: **"Our skin never gets a break."** (same slide, nothing else moves).
 
-**Primary text (123):** Most clothes today are plastic. Ours: 100% natural linen, cut to you after you order. Opening 11·11. Sign up to hear first.
+**Primary text:** 16 hours a day against plastic clothes. Ours: 100% natural linen, cut to you after you order. Opening 11·11. (founder 2026-11-07)
 **Headline (28):** Tailored to you. 100% linen.
 **Description (23):** Opening 11·11. Sign up.
 **CTA:** Sign up (runs until 11·11).
