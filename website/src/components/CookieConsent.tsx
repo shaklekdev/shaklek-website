@@ -84,9 +84,9 @@ export default function CookieConsent() {
       ref={barRef}
       role="dialog"
       aria-label="Cookie choices"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-surface px-4 py-4 sm:px-6"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-border-strong bg-surface px-4 py-2 sm:px-6"
     >
-      <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-4xl flex-row items-center justify-between gap-3">
         {/* Never a COUNT. Two cookies are set, _fbp always and _fbc on an ad
             click, and lib/consent.ts deletes both; an earlier "one cookie"
             understated the ask and contradicted the code behind it.
@@ -116,15 +116,16 @@ export default function CookieConsent() {
             founder's own suggestion, "nothing is collecting any information",
             was rejected as false: the pixel does collect behaviour, and Meta is
             a joint controller for it. */}
-        <p className="text-sm text-text-2">
-          May we use cookies? They help us show Shaklek to women who will love
-          it, and tell us which of our ads work. They tell us nothing about who
-          you are, and we run no other analytics.{" "}
+        {/* Founder, 2026-11-09: "way too long ... why are we dragging this much
+            attention". One line; the detail lives on /legal/privacy (layered
+            notice, see above). */}
+        <p className="text-xs text-text-2 sm:text-sm">
+          We use cookies to improve our ads.{" "}
           <Link href="/legal/privacy" className="underline">
-            How we handle data
+            Privacy
           </Link>
         </p>
-        <div className="flex shrink-0 items-center gap-5">
+        <div className="flex shrink-0 items-center gap-3">
           <button
             type="button"
             onClick={() => choose("denied")}
@@ -135,7 +136,7 @@ export default function CookieConsent() {
           <button
             type="button"
             onClick={() => choose("granted")}
-            className="min-h-[44px] rounded-full bg-accent px-8 py-2.5 text-sm text-white hover:bg-accent-light"
+            className="min-h-[40px] rounded-full bg-accent px-5 py-2 text-sm text-white hover:bg-accent-light"
           >
             Accept
           </button>
