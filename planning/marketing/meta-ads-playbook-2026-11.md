@@ -32,6 +32,8 @@ Check every proposal against these. Breaking one needs the founder's explicit OK
 8. **Format per placement.** Feed 4:5, Stories/Reels 9:16. Carousels in Stories show slide 1 unless tapped ("Expand story").
 9. **Truth = our records, not Meta's column.** Count sign-ups from the waitlist emails and orders from the dashboard. Billing from the transaction list (AED 12 threshold chunks).
 10. **Before launch, test the conversion event** with a real submit (cookies accepted) and see it in Events Manager.
+11. **Never test checkout events with a test order on production.** Prove ViewContent/AddToCart on prod (cookies accepted, Events Manager > Test events); InitiateCheckout/Purchase are proven on staging with the CAPI test code (done 2026-11-05). /api/orders writes a real order row and Stripe session, so the first real order is the prod proof.
+12. **Defaults hide in five places; check each ad before publish** (found 2026-11-10): Multi-advertiser ads (Ad setup, ticked by default), Flex media (Enhancements > Media), Format display options > Single media (shows ONE carousel card alone), Essential enhancements (Relevant comments, Show spotlights), and AI companion images (Creative generation step). Duplicating an ad re-enables Profile end card + Highlight carousel card. Check the ad's "Review defaults" panel reads none on.
 
 ## Decision log (append one dated line per decision)
 
@@ -40,6 +42,7 @@ Check every proposal against these. Breaking one needs the founder's explicit OK
 - 2026-11-09 Excluded follower audiences; carousel reorder off; split into Feeds 4:5 (B) and Stories+Reels 9:16 (A); Enhance CTA off on all 6 ads.
 - 2026-11-09 Numbers ~AED 89, ~1,080 impr, 34 clicks, 8 LPV, 0 waitlist emails. Decision: CTA -> Sign up, budget -> AED 30/day, hands off until 11-11.
 - 2026-11-10 Numbers AED 141, 1,682 impr (1,393 reach), 37 link clicks, 8 LPV, 1 Lead (likely founder test), 0 real sign-ups, a few new followers. CPM ~AED 85. Founder advised: soft-open 11-11, replace with one opening campaign optimised on Add to cart/Initiate checkout; real launch push early Dec.
+- 2026-11-10 Founder yes: built DRAFT "Opening 11-11 - Sales" (not published): Sales, Add to cart, AED 30/day CBO, Dubai + Abu Dhabi, 25+, both EXCLUDE audiences. Ads: Customizer (Peplum, 4:5 + 9:16, -> /design/structured-blouse), Linen carousel (3 slides -> /design/open-abaya), Size chart (-> /catalog; media still the customizer video, founder must swap in ad1-final-now-open-v3.mp4 + feed-4x5/ad1-size-chart-now-open-4x5.mp4). CTA Shop now, utm_campaign=opening-1111. Every enhancement, Flex media, multi-advertiser, single-media display, relevant comments, spotlights OFF. Created RETARGET audiences (website 30d, IG engagers 30d, engaged video viewers 60d), not targeted yet. Pause "waitlist test 1" only after the new one shows impressions.
 
 ## 1. Objective and the learning phase
 
