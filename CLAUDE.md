@@ -254,6 +254,17 @@ spoofed `X-Forwarded-For` and with none. Until it is backed by a shared store or
 a WAF rule, the public waitlist is an unthrottled mail cannon on the production
 Resend key, and an open shop allows unlimited live Checkout sessions.
 
+### Paid ads: the playbook decides, and every decision goes back into it
+
+Founder's instruction, 2026-11-10. **Before any decision about Meta (or any paid)
+ads** — launch, pause, budget, objective, button, audience, placements, new
+creative — run the `shaklek-ads` agent (`.claude/agents/shaklek-ads.md`). It
+reads `planning/marketing/meta-ads-playbook-2026-11.md` ("Hard rules" and
+"Decision log"), checks the proposal against every rule, and **after the founder
+decides, appends the decision and the numbers to the Decision log** and updates
+the rules when something new is learned. The first campaign broke five of our own
+written rules in three days because nobody re-read the playbook.
+
 ### Before shipping anything in that blast radius
 
 Run the security agent: `.claude/agents/shaklek-security.md`. There are also

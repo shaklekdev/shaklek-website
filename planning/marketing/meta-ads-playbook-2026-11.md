@@ -18,6 +18,29 @@ Research done 2026-11-02. Most of the sources are practitioner and agency blogs.
   - Cost per lead of AED 30 or less is good. Hold the budget, or raise it at most +20% at a time.
 - **11 Nov:** email the waitlist first. Then start a new **Sales** campaign (Advantage+ sales). Upload the waitlist as a customer list (consent permitting) for "existing customers", plus site-visitor and IG/video engager audiences. Optimise for Purchase if the budget is at least AED 75/day. Otherwise optimise for Initiate Checkout for the first week.
 
+## Hard rules (learned from our own campaigns; the shaklek-ads agent keeps this current)
+
+Check every proposal against these. Breaking one needs the founder's explicit OK.
+
+1. **Ask Meta for an event it can actually see.** Waitlist "Lead" was near-invisible (cookie consent + almost no sign-ups), so Meta optimised blind and paid ~AED 85 CPM. Pick the most frequent event that still means intent (Add to cart / Initiate checkout), move to Purchase after ~10 orders.
+2. **The button must match the page.** "Shop now" to a closed shop = taps that bounce. Waitlist = "Sign up"; open shop = "Shop now".
+3. **One campaign, one budget, few ads.** Splitting AED 30/day across 2 ad sets and 6 ads starves learning.
+4. **One change batch, then 72 h hands off.** Every edit sent all ads back to review/learning (lost most of 9 Nov).
+5. **Verify delivery, not status.** Campaign, ad set and ad toggles ON, Delivery "Active", impressions > 0 a few hours later. (7-8 Nov: ad set OFF overnight, nothing ran.)
+6. **Exclude friends.** Every ad set excludes the two EXCLUDE follower audiences.
+7. **All Advantage+ creative enhancements OFF**, incl. Highlight carousel card (reordered our carousel), Profile end card, Enhance CTA ("Tap to shop here 📍" sticker), site links/summaries (wrote false claims).
+8. **Format per placement.** Feed 4:5, Stories/Reels 9:16. Carousels in Stories show slide 1 unless tapped ("Expand story").
+9. **Truth = our records, not Meta's column.** Count sign-ups from the waitlist emails and orders from the dashboard. Billing from the transaction list (AED 12 threshold chunks).
+10. **Before launch, test the conversion event** with a real submit (cookies accepted) and see it in Events Manager.
+
+## Decision log (append one dated line per decision)
+
+- 2026-11-07 Launched "waitlist test 1": Leads/Website, Lead event, Dubai + Abu Dhabi, 25+, AED 75/day (playbook said 30), CTA Shop now (founder), ads 1/3/4. Rules 2-5 broken.
+- 2026-11-08 Ad set found OFF since publish; switched on.
+- 2026-11-09 Excluded follower audiences; carousel reorder off; split into Feeds 4:5 (B) and Stories+Reels 9:16 (A); Enhance CTA off on all 6 ads.
+- 2026-11-09 Numbers ~AED 89, ~1,080 impr, 34 clicks, 8 LPV, 0 waitlist emails. Decision: CTA -> Sign up, budget -> AED 30/day, hands off until 11-11.
+- 2026-11-10 Numbers AED 141, 1,682 impr (1,393 reach), 37 link clicks, 8 LPV, 1 Lead (likely founder test), 0 real sign-ups, a few new followers. CPM ~AED 85. Founder advised: soft-open 11-11, replace with one opening campaign optimised on Add to cart/Initiate checkout; real launch push early Dec.
+
 ## 1. Objective and the learning phase
 
 - Learning needs about **50 optimisation events per ad set within 7 days** of the last significant edit. Below that, the ad set shows "Learning limited", and budget, audience or optimisation-event edits reset it. ([Jon Loomer, 10 or 50 events](https://www.jonloomer.com/qvt/learning-phase-10-or-50-events/); [Jetfuel 2026](https://jetfuel.agency/what-is-the-meta-ads-learning-phase-how-to-exit-it-faster-in-2026/))
