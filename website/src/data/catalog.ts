@@ -401,7 +401,7 @@ export const catalog: CatalogItem[] = [
       Navy: {
         "straight:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-straight-cropped-front.jpg", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-straight-cropped-back.jpg" },
         "wide:full": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-full-front.jpg", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-full-back.jpg" },
-        "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-cropped-front.jpg", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-cropped-back.jpg" },
+        "wide:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-cropped-front.jpg", back: "/catalog/cargo-trousers/cargo-trousers-navy-combo-wide-cropped-back-v2.jpg" },
       },
       Ivory: {
         "straight:cropped": { front: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-straight-cropped-front.jpg", back: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-straight-cropped-back.jpg" },
@@ -608,7 +608,7 @@ export const catalog: CatalogItem[] = [
         "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-5-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v3.jpg" },
       },
       Burgundy: {
-        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-maxi-5-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v3.jpg" },
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-maxi-5-front-v4.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v3.jpg" },
         "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-4-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v3.jpg" },
         "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-5-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v3.jpg" },
       },
