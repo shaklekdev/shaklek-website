@@ -12,5 +12,9 @@
 // click or scan must land on the WhatsApp Business profile @shaklek, not see a
 // phone number. Checked: wa.me/shaklek 302s to api.whatsapp.com/send/?
 // username=shaklek&type=username. The visible handle is WHATSAPP_HANDLE.
-export const WHATSAPP_URL = "https://wa.me/shaklek";
+// ⚠️ 2026-11-11 opening night: wa.me/shaklek (username link) did NOT open a
+// chat for a customer test, the username route is not active. Back to the
+// number, which always works. Restore the username only after testing it on a
+// phone that is not the founder's.
+export const WHATSAPP_URL = "https://wa.me/971504766769";
 export const WHATSAPP_HANDLE = "@shaklek";
