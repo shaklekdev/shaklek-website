@@ -796,7 +796,7 @@ export const COMPLETE_THE_LOOK: Record<string, string[]> = {
   "cargo-trousers": ["utility-shirt", "oversized-shirt", "buttoned-abaya"],
   "open-abaya": ["buttoned-dress", "oversized-shirt", "wide-leg-trousers"],
   "buttoned-abaya": ["structured-blouse", "banded-trousers", "slip-dress"], // founder 2026-11-11: a matching set + the dress, like the open abaya
-  "slip-dress": ["buttoned-abaya"],
+  "slip-dress": ["buttoned-abaya", "open-abaya"], // founder 2026-11-11: second card
   "buttoned-dress": ["open-abaya"],
 };
 

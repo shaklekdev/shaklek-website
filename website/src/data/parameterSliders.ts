@@ -233,8 +233,9 @@ export const ABAYA_PARAMS: SliderParam[] = [
     type: "garment_length",
     tier: "render",
     options: [
-      { value: "midi", text: "Shorter" },
-      { value: "maxi", text: "Longer" },
+      // Founder, 2026-11-11: same words as the Buttoned Abaya.
+      { value: "midi", text: "Midi" },
+      { value: "maxi", text: "Maxi" },
     ],
     defaultIndex: 1,
     labelFor: (text) => `${text} length`,
