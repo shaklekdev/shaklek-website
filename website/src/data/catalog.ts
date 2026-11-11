@@ -782,14 +782,17 @@ export function includedWith(category: string | null | undefined): IncludedPiece
 // ⚠️ HER STYLING RULE, 2026-10-11: structure balances the open one, plain
 // balances the closed one. Buttoned Dress <-> Open Abaya; Slip Dress <->
 // Buttoned Abaya. Never Buttoned Dress with Buttoned Abaya.
+// ORDER RULE, founder 2026-11-11: 1) the matching set piece, 2) another top or
+// trouser, 3) an abaya. Sets: Oversized Shirt + Relaxed (wide-leg) Trousers,
+// Peplum Blouse + Banded, Wrap Top + Pleated, Utility Shirt + Cargo.
 export const COMPLETE_THE_LOOK: Record<string, string[]> = {
   "oversized-shirt": ["wide-leg-trousers", "pleated-trousers", "open-abaya"],
-  "structured-blouse": ["pleated-trousers", "wide-leg-trousers", "buttoned-abaya"],
-  "wrap-top": ["banded-trousers", "wide-leg-trousers", "open-abaya"],
+  "structured-blouse": ["banded-trousers", "wide-leg-trousers", "buttoned-abaya"],
+  "wrap-top": ["pleated-trousers", "wide-leg-trousers", "open-abaya"],
   "utility-shirt": ["cargo-trousers", "banded-trousers", "buttoned-abaya"],
   "wide-leg-trousers": ["oversized-shirt", "structured-blouse", "buttoned-abaya"],
-  "banded-trousers": ["wrap-top", "utility-shirt", "open-abaya"],
-  "pleated-trousers": ["structured-blouse", "oversized-shirt", "open-abaya"],
+  "banded-trousers": ["structured-blouse", "utility-shirt", "open-abaya"],
+  "pleated-trousers": ["wrap-top", "oversized-shirt", "open-abaya"],
   "cargo-trousers": ["utility-shirt", "oversized-shirt", "buttoned-abaya"],
   "open-abaya": ["buttoned-dress", "oversized-shirt", "wide-leg-trousers"],
   "buttoned-abaya": ["wide-leg-trousers", "structured-blouse", "slip-dress"],
