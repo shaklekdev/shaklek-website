@@ -465,3 +465,18 @@ export function customerChosenLabels(
   );
   return (labels ?? []).filter((l) => allowed.has(l));
 }
+
+// Display-only, for surfaces that know a line by its NAME (order confirmation
+// page, customer email). Same filter as the cart: never echo premium defaults
+// ("1 pocket, Button closure") the customer was never offered. Founder test
+// order, 2026-11-11.
+export function chosenLabelsForName(
+  name: string,
+  category: string | undefined,
+  labels: string[] | null | undefined,
+  lookup: { name: string; category: string }[],
+  keyFor: (item: { name: string; category: string }) => string,
+): string[] {
+  const found = lookup.find((c) => c.name === name);
+  return customerChosenLabels(found ? keyFor(found) : (category ?? ""), labels);
+}

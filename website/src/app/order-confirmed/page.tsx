@@ -1,5 +1,7 @@
 "use client";
 
+import { catalog } from "@/data/catalog";
+import { chosenLabelsForName, paramKeyFor } from "@/data/parameterSliders";
 import { Suspense, useEffect, useState } from "react";
 import { orderRef } from "@/lib/orderRef";
 import { money, track } from "@/lib/metaPixel";
@@ -22,6 +24,12 @@ type DisplayItem = {
   price: number;
   previewImage?: string;
 };
+
+// Founder test order 2026-11-11: this page showed "1 pocket, Button closure"
+// on a Peplum Blouse. Same display filter as the cart.
+function chosen(item: { name: string; changes: string[] }): string[] {
+  return chosenLabelsForName(item.name, undefined, item.changes, catalog, (c) => paramKeyFor(c));
+}
 
 type DisplayOrder = {
   items: DisplayItem[];
@@ -176,10 +184,10 @@ function OrderConfirmedContent() {
               <p className="text-[15px] font-medium text-text">{item.name}</p>
               <p className="mt-1 text-xs text-text-2">
                 {item.fabric === "cotton" ? "Cotton" : item.fabric === "linen" ? "Linen" : item.fabric} ·{" "}
-                {item.color} · Size {item.size}
+                {item.color} · {item.size === "Tailored" ? "Tailored to you" : `Size ${item.size}`}
               </p>
-              {item.changes.length > 0 && (
-                <p className="mt-1 text-xs text-text-2">{item.changes.join(", ")}</p>
+              {chosen(item).length > 0 && (
+                <p className="mt-1 text-xs text-text-2">{chosen(item).join(", ")}</p>
               )}
               <p className="mt-3 font-display text-lg text-text">AED {item.price}</p>
             </div>

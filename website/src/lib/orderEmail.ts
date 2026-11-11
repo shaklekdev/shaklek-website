@@ -11,7 +11,8 @@
 // the customer and as a pricing error to the stylist. Derived, not stored:
 // nothing new has to be persisted to say it truthfully.
 import { orderRef } from "@/lib/orderRef";
-import { includedWith } from "@/data/catalog";
+import { catalog, includedWith } from "@/data/catalog";
+import { chosenLabelsForName, paramKeyFor } from "@/data/parameterSliders";
 import { buildEmail, type MailRow } from "@/lib/mail";
 
 export function discountLine(items: { price: number; quantity?: number }[], total: number): number {
@@ -183,10 +184,12 @@ export function buildCustomerConfirmation(opts: {
   // and still hand-built on purpose -- do not "tidy" that one into here, and do
   // not double-escape by wrapping these in esc() as the old code did.
   const rows: MailRow[] = items.map((item) => {
-    const spec = [item.fabric, item.color, item.size ? `Size ${item.size}` : null]
-      .filter(Boolean)
-      .join(" \u00b7 ");
-    const changes = item.changes?.length ? item.changes.join(", ") : "";
+    const fabric = item.fabric ? item.fabric.charAt(0).toUpperCase() + item.fabric.slice(1) : null;
+    const size = item.size === "Tailored" ? "Tailored to you" : item.size ? `Size ${item.size}` : null;
+    const spec = [fabric, item.color, size].filter(Boolean).join(" \u00b7 ");
+    // Customer-facing: hide premium defaults never offered (see parameterSliders).
+    const shown = chosenLabelsForName(item.name, item.category ?? undefined, item.changes, catalog, (c) => paramKeyFor(c));
+    const changes = shown.length ? shown.join(", ") : "";
     return {
       name: `${item.name}${includedWith(item.category).map((p) => ` with matching ${p.name.toLowerCase()}`).join("")}${item.quantity && item.quantity > 1 ? ` \u00d7${item.quantity}` : ""}`,
       spec: [spec, changes].filter(Boolean).join(" \u00b7 ") || undefined,
