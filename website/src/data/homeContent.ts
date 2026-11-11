@@ -43,7 +43,9 @@ export const HERO = {
   // custom-qamis.com (Dubai, online customiser, menswear) was offline when
   // checked. SITE ONLY: do not put "first" in Meta ads (substantiation risk).
   // Re-check competitors before reusing it anywhere.
-  line: "The first UAE-made label you customise yourself. 100% linen.",
+  line: "The first UAE-made label you customise yourself.",
+  // Second line, under it (founder 2026-11-12).
+  sub: "100% natural linen",
 };
 
 // The concept, on the page the visitor lands on.
