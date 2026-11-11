@@ -1,3 +1,4 @@
+import { includedWith } from "@/data/catalog";
 import { catalog } from "@/data/catalog";
 import { colors } from "@/data/colors";
 import { SITE_URL } from "@/lib/seo";
@@ -56,7 +57,7 @@ export async function GET() {
           "    <item>",
           `      <g:id>${esc(`${item.slug}-${c.name.toLowerCase()}`)}</g:id>`,
           `      <g:item_group_id>${esc(item.slug)}</g:item_group_id>`,
-          `      <g:title>${esc(`${item.name} in ${c.name}`)}</g:title>`,
+          `      <g:title>${esc(`${item.name}${includedWith(item.category).map((p) => ` + ${p.name}`).join("")} in ${c.name}`)}</g:title>`,
           `      <g:description>${esc(description)}</g:description>`,
           `      <g:link>${esc(link)}</g:link>`,
           `      <g:image_link>${esc(image)}</g:image_link>`,

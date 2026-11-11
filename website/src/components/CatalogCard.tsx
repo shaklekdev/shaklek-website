@@ -1,3 +1,4 @@
+import { includedWith } from "@/data/catalog";
 import Link from "next/link";
 import type { CatalogItem } from "@/data/catalog";
 import { colors } from "@/data/colors";
@@ -63,7 +64,12 @@ export default function CatalogCard({
       )}
 
       <Link href={href} tabIndex={-1} className="mt-4 block text-center">
-        <p className="font-display text-[15px] text-text">{item.name}</p>
+        {/* Founder, 2026-11-11: the abaya price reads as too expensive unless the
+            shayla is in the NAME on the card, not only on the product page. */}
+        <p className="font-display text-[15px] text-text">
+          {item.name}
+          {includedWith(item.category).map((p) => ` + ${p.name}`).join("")}
+        </p>
         {/* ⚠️ NO DESCRIPTOR LINE ON THE CARD. Founder, 2026-09-20: "let's drop
             the description we put on every piece." The field still EXISTS in
             catalog.ts and is still used in three places a visitor never sees --

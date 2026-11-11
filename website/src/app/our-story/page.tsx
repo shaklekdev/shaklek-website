@@ -108,8 +108,10 @@ function ImagePlaceholder({
 
 const tenetGroups = [
   {
-    caption: "A finished piece: natural fabric texture, a personal detail visible",
-    image: "/marketing/story-materials-v2.jpg",
+    // Founder, 2026-11-11: the shirt-with-cotton photo contradicted a linen
+    // brand. The flax plant (linen's plant) from the Instagram carousel instead.
+    caption: "Flax, the plant linen is made from.",
+    image: "/marketing/pre-launch/flax-stalks.jpg",
     items: [
       {
         // ⚠️ NO HEALTH CLAIM HERE, EVER. This block used to say breathable
@@ -143,7 +145,7 @@ const tenetGroups = [
   // is bought, so there is no stock, nothing left over, and nothing to mark
   // down. Say the mechanism and let the reader draw the conclusion.
   {
-    caption: "A tailor at work on a single piece, price tag visible",
+    caption: "One tailor, one piece.",
     image: "/marketing/story-tailoring.jpg",
     items: [
       {
@@ -236,9 +238,8 @@ export default function OurStoryPage() {
 
       <div className="mx-auto w-full max-w-2xl px-6 py-14">
         <p className="subtitle mt-3 max-w-md text-justify hyphens-auto">
-          We make elegant fashion essentials, not fast trends. Pieces you can
-          change to your taste, kind to the skin, and shaped to fit you, not
-          the other way around.
+          We make elegant fashion essentials, not fast trends: pieces you can
+          customise to your taste and shape.
         </p>
         <p className="subtitle mt-4 max-w-md text-justify hyphens-auto">
           Every piece here starts as an idea, not a rack of stock waiting for
@@ -277,6 +278,16 @@ export default function OurStoryPage() {
             </li>
           ))}
         </ul>
+        {/* Second way in to the founder's note (founder, 2026-11-11: the hero
+            link alone is too small to be noticed). */}
+        <p className="mt-8 text-center">
+          <a
+            href="#from-our-founder"
+            className="inline-block border-b border-text-3 pb-0.5 text-[14px] text-text transition-colors hover:border-text"
+          >
+            A word from our founder ↓
+          </a>
+        </p>
 
         {/* ⚠️ NO VISIT LINE HERE. One was added on 2026-09-16 because a crawl
             showed this page mentioned neither the visit nor Dubai anywhere --
@@ -322,8 +333,12 @@ export default function OurStoryPage() {
                 trades a checkable fact for a sentiment any label could print.
                 This keeps the one claim most brands cannot make -- a single
                 tailor, cutting after the order -- and one "your". */}
+            {/* Founder, 2026-11-11: the ready-to-wear line is the punchiest on the
+                page and most readers never reach the bottom, so it swapped
+                places with the tailor line. */}
             <p className="font-display text-[22px] leading-snug text-white sm:text-[30px]">
-              Your piece, cut by one tailor, after you order it.
+              {POSITIONING.line}{" "}
+              <span className="text-gold-light">{POSITIONING.emphasis}</span>
             </p>
             {/* THE CTA GOES HERE, NOT IN THE HERO.
                 A call to action converts where intent peaks, and on a story
@@ -446,10 +461,12 @@ export default function OurStoryPage() {
                 full of polyester and chemical finishes, couldn&apos;t possibly
                 have no effect on me.
               </p>
+              {/* Founder, 2026-11-11: "too expensive" sat badly on a site that is
+                  not cheap either; polyester is the letter's real complaint. */}
               <p>
                 I wanted something timelessly elegant, comfortable, and kind to
-                my skin. And whenever I finally found the piece, it was too
-                expensive, not quite my taste, or not my fit.
+                my skin. And whenever I finally found the piece, it was
+                synthetic, not quite my taste, or not my fit.
               </p>
               <p>
                 I&apos;m a tech girl who happens to love fashion, and I kept
@@ -479,7 +496,7 @@ export default function OurStoryPage() {
               </p>
               <p>
                 If you have an idea or feedback to make Shaklek better, please
-                reach out. This isn&apos;t just a brand. It&apos;s yours.
+                reach out. This isn&apos;t just a brand. It&apos;s your brand.
               </p>
                 <p className="pt-1 text-sm font-medium text-text">
                   Nada, founder of Shaklek
@@ -529,8 +546,7 @@ export default function OurStoryPage() {
               carries no slogan at all. One line per surface is the whole point
               of the exercise; putting it back on the home page undoes it. */}
           <p className="font-display text-[24px] leading-snug text-white sm:text-[32px]">
-            {POSITIONING.line}{" "}
-            <span className="text-gold-light">{POSITIONING.emphasis}</span>
+            Your piece, cut by one tailor, after you order it.
           </p>
           <p className="mt-8">
             {/* /#catalog, not "/". A button that drops someone at the top of

@@ -336,7 +336,7 @@ export const BENEFITS = [
     // its own -- one fixed price, everything you choose inside it -- and the
     // word "free" does not appear, because "free" was the visit's word.
     k: "One fixed price per piece",
-    v: `From AED ${Math.min(...catalog.map((i) => i.price))}. The fabric, your measurements and every option you choose are in it.`,
+    v: `From AED ${Math.min(...catalog.map((i) => i.price))}, longer or shorter, the same price. The fabric, your measurements and every option you choose are in it.`,
     icon: "tag",
   },
   // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
