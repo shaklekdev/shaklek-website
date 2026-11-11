@@ -185,7 +185,8 @@ export default function CustomizeParameters({
             <button
               aria-label="Show front"
               onClick={() => setView("front")}
-              className={`absolute top-1/2 left-3 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-text shadow-[var(--shadow)] backdrop-blur-sm transition-opacity hover:bg-white ${
+              /* before:-inset-1: 36px arrow, 44px tap target -- founder review 2026-11-11. */
+              className={`absolute top-1/2 left-3 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-text shadow-[var(--shadow)] backdrop-blur-sm transition-opacity before:absolute before:-inset-1 before:content-[''] hover:bg-white ${
                 view === "front" ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
             >
@@ -194,7 +195,7 @@ export default function CustomizeParameters({
             <button
               aria-label="Show back"
               onClick={() => setView("back")}
-              className={`absolute top-1/2 right-3 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-text shadow-[var(--shadow)] backdrop-blur-sm transition-opacity hover:bg-white ${
+              className={`absolute top-1/2 right-3 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-text shadow-[var(--shadow)] backdrop-blur-sm transition-opacity before:absolute before:-inset-1 before:content-[''] hover:bg-white ${
                 view === "back" ? "pointer-events-none opacity-0" : "opacity-100"
               }`}
             >
@@ -236,7 +237,9 @@ export default function CustomizeParameters({
           over the picture covers the thing the customer came to look at, and
           the price was only visible two steps later on the fit tab. */}
       <div className="mt-3 text-center">
-        <p className="font-display text-[15px] text-text">{itemName}</p>
+        {/* The page h1 (it had none) -- founder review 2026-11-11. leading/tracking
+            reset the global h1 rule so it looks exactly as the <p> did. */}
+        <h1 className="font-display text-[15px] leading-normal tracking-normal text-text">{itemName}</h1>
         <p className="mt-1 text-xs text-text-2">AED {price}</p>
       </div>
 

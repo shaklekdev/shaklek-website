@@ -1,13 +1,19 @@
 import { SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import Header from "@/components/Header";
 import { NOINDEX } from "@/lib/seo";
 
-export const metadata: Metadata = NOINDEX;
+// Founder review 2026-11-11: the page had no header, no title and a raw
+// slate background -- a dead end with no way back to the shop.
+export const metadata: Metadata = { ...NOINDEX, title: "Sign up" };
 
 export default function SignUpPage() {
   return (
-    <div className="flex flex-1 items-center justify-center bg-slate-50 py-20">
-      <SignUp />
+    <div className="flex flex-1 flex-col bg-bg">
+      <Header />
+      <div className="flex flex-1 items-center justify-center py-20">
+        <SignUp />
+      </div>
     </div>
   );
 }

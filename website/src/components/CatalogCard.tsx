@@ -94,7 +94,9 @@ export default function CatalogCard({
           nicer phrase, because the whole problem is comprehension. */}
       <Link
         href={href}
-        className="mt-3 block border border-border-strong px-3 py-2 text-center text-[12px] text-text transition-colors hover:border-text hover:bg-text hover:text-white"
+        /* ::before extends the hit area 6px above and below (32 -> 44px); the
+           visible box is unchanged -- founder review 2026-11-11. */
+        className="relative mt-3 block border border-border-strong px-3 py-2 text-center text-[12px] text-text transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] hover:border-text hover:bg-text hover:text-white"
       >
         Customise this piece
       </Link>

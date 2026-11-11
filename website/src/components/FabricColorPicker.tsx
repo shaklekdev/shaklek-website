@@ -49,7 +49,9 @@ export default function FabricColorPicker({
                never blank while the image loads, and so it still reads on a
                surface that cannot fetch one. Bigger than the old 24px dot,
                because a weave has to be visible to be worth showing. */
-            className={`h-9 w-9 rounded-full border-2 bg-cover bg-center transition-all ${
+            /* ::before -inset-1 makes the 36px chip a 44px tap target (gap-3 keeps
+               neighbours from overlapping) -- founder review 2026-11-11. */
+            className={`relative h-9 w-9 rounded-full border-2 bg-cover bg-center transition-all before:absolute before:-inset-1 before:content-[''] ${
               c.name === color ? "border-accent scale-110" : "border-transparent"
             }`}
             style={{ backgroundColor: c.hex, backgroundImage: `url(${c.swatch})` }}

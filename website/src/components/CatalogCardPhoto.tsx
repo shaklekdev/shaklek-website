@@ -108,7 +108,10 @@ export default function CatalogCardPhoto({
         // Vertical, anchored bottom-right and growing upward: the TRENDING/NEW
         // badge already sits at top-right. No container -- each dot carries its
         // own white ring and soft shadow so it lifts off the photograph.
-        <div className="absolute right-2 bottom-2 flex flex-col items-center gap-1">
+        // Founder review 2026-11-11: each target is 44 wide x 28 tall (gap folded
+        // into the height, pitch unchanged at 28px); -right-0.5 keeps the dot
+        // centres where they were.
+        <div className="absolute -right-0.5 bottom-2 flex flex-col items-center">
           {photos.map((p) => (
             <button
               key={p.name}
@@ -124,7 +127,7 @@ export default function CatalogCardPhoto({
               // 24x24 is the WCAG 2.5.8 AA minimum, with a 4px gap so adjacent
               // colours are 28px apart centre to centre. The visible dot stays
               // 10px; only the target is larger.
-              className="group/swatch grid h-6 w-6 cursor-pointer place-items-center"
+              className="group/swatch grid h-7 w-11 cursor-pointer place-items-center"
             >
               <span
                 className={`h-2.5 w-2.5 rounded-full border border-black/10 shadow-[0_1px_3px_rgba(0,0,0,0.18)] transition-transform duration-200 group-hover/swatch:scale-110 ${

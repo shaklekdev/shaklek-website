@@ -33,9 +33,10 @@ export default function Footer() {
             because they work and because a site collecting email addresses has
             to reach its own privacy policy. Everything comes back when
             STORE_OPEN is true. */}
-        <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 sm:justify-end">
+        {/* Founder review 2026-11-11: every link is a 44px-tall tap target; gap-y-0 because the links now carry their own height. */}
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-0 sm:justify-end">
           {isStoreOpen() && (
-            <Link href="/faq" className="hover:text-text-2">
+            <Link href="/faq" className="inline-flex min-h-11 items-center hover:text-text-2">
               Questions
             </Link>
           )}
@@ -47,37 +48,37 @@ export default function Footer() {
               orphans rank badly. Footer plus one contextual link from the FAQ
               fabric answer is the right weight for now. Revisit the header once
               there are enough articles to be worth browsing. */}
-          <Link href="/blog" className="hover:text-text-2">
+          <Link href="/blog" className="inline-flex min-h-11 items-center hover:text-text-2">
             Journal
           </Link>
           {isStoreOpen() && (
             <>
-              <Link href="/size-guide" className="hover:text-text-2">
+              <Link href="/size-guide" className="inline-flex min-h-11 items-center hover:text-text-2">
                 Size guide
               </Link>
-              <Link href="/shipping" className="hover:text-text-2">
+              <Link href="/shipping" className="inline-flex min-h-11 items-center hover:text-text-2">
                 Delivery
               </Link>
-              <Link href="/legal/terms#returns" className="hover:text-text-2">
+              <Link href="/legal/terms#returns" className="inline-flex min-h-11 items-center hover:text-text-2">
                 Returns &amp; Alterations
               </Link>
             </>
           )}
-          <Link href="/legal/terms" className="hover:text-text-2">
+          <Link href="/legal/terms" className="inline-flex min-h-11 items-center hover:text-text-2">
             Terms
           </Link>
-          <Link href="/legal/privacy" className="hover:text-text-2">
+          <Link href="/legal/privacy" className="inline-flex min-h-11 items-center hover:text-text-2">
             Privacy &amp; Cookies
           </Link>
           <CookieChoicesLink />
-          <a href="mailto:hello@shaklek.com" className="hover:text-text-2">
+          <a href="mailto:hello@shaklek.com" className="inline-flex min-h-11 items-center hover:text-text-2">
             hello@shaklek.com
           </a>
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-text-2"
+            className="inline-flex min-h-11 items-center hover:text-text-2"
           >
             WhatsApp
           </a>

@@ -9,7 +9,7 @@ import { WHATSAPP_URL } from "@/lib/contact";
 // bad look. The URL is short and printed on the card, so it needs no help
 // being found by the people it is for.
 export const metadata: Metadata = {
-  title: "Thank you for your order · Shaklek",
+  title: "Thank you for your order", // layout template appends "· Shaklek" (founder review 2026-11-11)
   description: "Tell your tailor how your piece fitted, so the next one starts from it.",
   robots: { index: false, follow: false },
 };

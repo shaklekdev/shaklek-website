@@ -22,7 +22,7 @@ export default function LegalPage({
           <p className="mt-1 text-xs text-text-3">Last updated {updated}</p>
         )}
         {intro && <p className="mt-2 max-w-lg text-sm text-text-3">{intro}</p>}
-        <div className="prose-legal mt-8 space-y-5 text-justify text-[14px] leading-relaxed text-text-2 hyphens-auto">
+        <div className="prose-legal mt-8 space-y-5 text-justify text-[14px] [&_h2]:text-left [&_h3]:text-left leading-relaxed text-text-2 hyphens-auto">
           {children}
         </div>
       </div>

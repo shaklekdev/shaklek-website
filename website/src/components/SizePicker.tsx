@@ -395,7 +395,13 @@ export default function SizePicker({
             to collect the feedback with the customer." The fit preferences are
             a worse version of a conversation that is now happening in person,
             and asking twice is how the two answers end up disagreeing. */}
-        {sizeMode !== "tailored" && options.length > 0 && (
+        {/* Founder review 2026-11-11: the wrapper (and the free-text
+            detailSlot inside it) now renders in EVERY size mode and category;
+            only the fit chips keep the tailored/options gate above. The FAQ
+            tells customers to use "Something else? Tell us here", and in
+            Tailored mode -- the default -- and on every abaya it did not
+            exist. */}
+        {(
           /* COLLAPSED BY DEFAULT, like the size chart above it.
              Founder, 2026-08-27: "make it your way, peut être retractable".
              Her reasoning is the good part -- a customer who does not want to
@@ -438,6 +444,7 @@ export default function SizePicker({
               {/* The labels are the ADJUSTMENT wanted, never the fault
                   reported -- see fitNotes.ts. Ids are untouched, so orders
                   already placed still resolve. */}
+            {sizeMode !== "tailored" && options.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1.5">
               {options.map((n) => {
                 const on = fitNotes.includes(n.id);
@@ -464,6 +471,7 @@ export default function SizePicker({
                 );
               })}
             </div>
+            )}
               {detailSlot}
             </div>
           </details>

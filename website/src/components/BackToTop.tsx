@@ -44,7 +44,9 @@ export default function BackToTop() {
       }}
       aria-label="Back to top"
       title="Back to top"
-      className="fixed right-5 bottom-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-border-strong bg-white/95 text-text shadow-sm backdrop-blur-sm transition-colors hover:border-text hover:bg-text hover:text-white"
+      // Sits above the cookie bar (which publishes --consent-h) -- founder review 2026-11-11.
+      style={{ bottom: "calc(1.25rem + var(--consent-h, 0px))" }}
+      className="fixed right-5 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-border-strong bg-white/95 text-text shadow-sm backdrop-blur-sm transition-colors hover:border-text hover:bg-text hover:text-white"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path

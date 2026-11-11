@@ -9,7 +9,7 @@ import { requestConsentChange } from "@/lib/consent";
 // which is also what a screen reader needs to be told.
 export default function CookieChoicesLink() {
   return (
-    <button type="button" onClick={requestConsentChange} className="hover:text-text-2">
+    <button type="button" onClick={requestConsentChange} className="inline-flex min-h-11 items-center hover:text-text-2">
       Cookie choices
     </button>
   );

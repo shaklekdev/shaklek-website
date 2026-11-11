@@ -95,7 +95,9 @@ export default function CartPage() {
                   </div>
                 </div>
                 <p className="mt-1 text-xs text-text-2">
-                  {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size {item.size}
+                  {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} ·{" "}
+                  {/* "Size Tailored" read as a size called Tailored -- founder review 2026-11-11. */}
+                  {item.size === "Tailored" ? "Tailored to you" : `Size ${item.size}`}
                 </p>
                 {customerChosenLabels(paramKeyForLine(item), item.changes).length > 0 && (
                   <p className="mt-1 text-xs text-text-2">
@@ -171,10 +173,12 @@ export default function CartPage() {
           ))}
         </div>
 
-        <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
+        {/* Stacked below 640px: at 390px the total and two buttons shared one row
+            and both wrapped mid-word -- founder review 2026-11-11. */}
+        <div className="mt-8 flex flex-col gap-5 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs text-text-3">Total</p>
-            <p className="font-display text-2xl text-text">AED {total}</p>
+            <p className="font-display text-2xl text-text whitespace-nowrap">AED {total}</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Adding a second piece used to mean finding your own way back --
@@ -182,13 +186,13 @@ export default function CartPage() {
                 the fold. */}
             <Link
               href="/catalog"
-              className="rounded-full border border-border-strong px-6 py-3.5 text-sm text-text transition-colors hover:bg-surface-2"
+              className="flex-1 rounded-full border border-border-strong px-4 py-3.5 text-center text-sm whitespace-nowrap text-text transition-colors hover:bg-surface-2 sm:flex-none sm:px-6"
             >
               Add another piece
             </Link>
             <Link
               href="/checkout"
-              className="rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
+              className="flex-1 rounded-full bg-accent px-8 py-3.5 text-center text-sm whitespace-nowrap text-white transition-opacity hover:opacity-90 sm:flex-none"
             >
               Checkout
             </Link>

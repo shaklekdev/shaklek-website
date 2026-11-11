@@ -71,8 +71,9 @@ export default function CheckoutPage() {
                     )}
                   </p>
                   <p className="mt-1 text-xs text-text-2">
-                    {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} · Size{" "}
-                    {item.size}
+                    {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} ·{" "}
+                    {/* founder review 2026-11-11: same wording as /cart */}
+                    {item.size === "Tailored" ? "Tailored to you" : `Size ${item.size}`}
                   </p>
                   {customerChosenLabels(paramKeyForLine(item), item.changes).length > 0 && (
                     <p className="mt-1 text-xs text-text-2">

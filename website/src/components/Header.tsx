@@ -129,7 +129,9 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Message us on WhatsApp"
-          className="flex items-center gap-2.5 justify-self-start text-text transition-colors hover:text-text-2"
+          /* before:-inset-[11px] grows the 22px icon's HIT AREA to 44px without
+             moving a pixel -- founder review 2026-11-11 (mobile tap targets). */
+          className="relative flex items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2"
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
@@ -168,7 +170,8 @@ export default function Header() {
             href="/account"
             aria-label="Your account"
             title="Your account"
-            className="flex h-6 w-6 items-center justify-center text-text transition-colors hover:text-text-2"
+            /* 44px hit area via ::before, glyph unchanged -- founder review 2026-11-11. */
+            className="relative flex h-6 w-6 items-center justify-center text-text transition-colors before:absolute before:-inset-2.5 before:content-[''] hover:text-text-2"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.6" />
@@ -183,9 +186,9 @@ export default function Header() {
           <Link
             href="/cart"
             aria-label={`Cart, ${units} ${units === 1 ? "item" : "items"}`}
-            /* h-6 w-6 gives the link a 24x24 hit area (WCAG 2.5.8 minimum);
-               the glyph stays 20x20, centred inside it. */
-            className="relative flex h-6 w-6 items-center justify-center text-text hover:text-text-2 transition-colors"
+            /* h-6 w-6 keeps the 24x24 box the badge is anchored to; the
+               ::before extends the HIT AREA to 44x44 -- founder review 2026-11-11. */
+            className="relative flex h-6 w-6 items-center justify-center text-text hover:text-text-2 transition-colors before:absolute before:-inset-2.5 before:content-['']"
           >
             {/* Both wheels sit centred on y=21, spanning 19-23 inside the
                 24-high viewBox. The left one was "M9 21", which put its centre
@@ -236,7 +239,10 @@ export default function Header() {
                  an even-weight sans, full white, and a little letter-spacing to
                  stop it closing up. The serif belongs in the wordmark and the
                  headings, not in 13px navigation. */
-              className="font-body text-[13.5px] tracking-[0.06em] text-white transition-colors hover:text-white/70"
+              /* min-h-11 with -my-3 (44 - 2*12 = the 20px text line) keeps the
+                 bar at its current height while the tap target is 44px --
+                 founder review 2026-11-11. */
+              className="font-body -my-3 inline-flex min-h-11 items-center text-[13.5px] tracking-[0.06em] text-white transition-colors hover:text-white/70"
             >
               {link.label}
             </Link>
