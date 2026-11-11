@@ -198,9 +198,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Do you deliver outside Dubai?",
     a: (
       <>
-        Yes. We deliver everywhere in the UAE, included in the price. Use the
-        size guide or choose a standard size, and send us any questions on
-        WhatsApp.
+        Yes. We deliver everywhere in the UAE, and delivery is included in
+        the price.
       </>
     ),
   },

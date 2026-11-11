@@ -189,7 +189,7 @@ export function buildCustomerConfirmation(opts: {
     const changes = item.changes?.length ? item.changes.join(", ") : "";
     return {
       name: `${item.name}${includedWith(item.category).map((p) => ` with matching ${p.name.toLowerCase()}`).join("")}${item.quantity && item.quantity > 1 ? ` \u00d7${item.quantity}` : ""}`,
-      spec: [spec, changes].filter(Boolean).join(" \u2014 ") || undefined,
+      spec: [spec, changes].filter(Boolean).join(" \u00b7 ") || undefined,
       amount: `AED ${item.price}`,
     };
   });

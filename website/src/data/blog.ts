@@ -361,7 +361,7 @@ export const articles: Article[] = [
         // are ivory only; the OPEN ABAYA has three (Burgundy, Navy, Ivory). A blanket
         // "one colourway each" was published here on 2026-09-27 and was false for the
         // abaya within the hour. Check colorImages, do not generalise.
-        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 549 and pants AED 619. Linen dresses at AED 849 and an open abaya at AED 999 with a matching shayla join them when we open, the dresses in ivory to begin with. Every piece is cut to your own measurements, taken after you order and before anything is cut, which is how the pants end up clearing the floor rather than dragging on it.",
+        text: "We cut shirts and pants in 100% natural linen in the UAE, in ivory, white, navy and burgundy, made after they are ordered rather than before. Shirts are AED 549 and pants AED 619. Linen dresses at AED 849 and an open abaya at AED 999 with a matching shayla are sold alongside them, in ivory, navy and burgundy. Every piece is cut to your own measurements, taken after you order and before anything is cut, which is how the pants end up clearing the floor rather than dragging on it.",
       },
       {
         type: "link",
@@ -564,11 +564,11 @@ export const articles: Article[] = [
         // the shayla; against the labels it is that the piece is cut to you.
         // ⚠️ "JUST above AED 800" also went: 949 is 149 above it, 19%, and
         // "just" was doing work the number does not support.
-        text: "Ours will be AED 999 when we open, and the number buys two pieces: the abaya and a matching shayla in the same cloth, both in 100% natural linen, both cut to your measurements, made after they are ordered. That sits above the AED 800 where full custom starts, and at the foot of the AED 800 to AED 3,000 the Dubai labels charge for a piece cut to a pattern rather than to you. Against full custom, what differs is that the price is fixed, the cloth is linen and the shayla is in it.",
+        text: "Ours is AED 999, and the number buys two pieces: the abaya and a matching shayla in the same cloth, both in 100% natural linen, both cut to your measurements, made after they are ordered. That sits above the AED 800 where full custom starts, and at the foot of the AED 800 to AED 3,000 the Dubai labels charge for a piece cut to a pattern rather than to you. Against full custom, what differs is that the price is fixed, the cloth is linen and the shayla is in it.",
       },
       {
         type: "callout",
-        text: "We open soon. Leave your email on the home page and we will tell you the day.",
+        text: "Both abayas are in the catalogue, with the shayla included.",
       },
       {
         type: "link",

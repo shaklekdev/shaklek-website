@@ -132,7 +132,7 @@ const tenetGroups = [
         // essentials is the brand's stated niche, and until now the site
         // never said so anywhere a customer would read it.
         title: "Timeless pieces, customised by you, for you",
-        body: "Those lovely shirts you wished had longer sleeves. Those comfy pants you wish had pockets. We believe in uniqueness, and in making fashion accessible to everyone, so the things you'd normally just live with, you can actually change. And they are essentials, not this season's: chosen to still be worn in five years, cut properly, in fabric that softens instead of wearing out.",
+        body: "Those lovely shirts you wished had longer sleeves. Those trousers you wish had pockets. We believe in uniqueness, so the things you'd normally just live with, you can actually change. And they are essentials, not this season's: chosen to still be worn in five years, cut properly, in fabric that softens instead of wearing out.",
       },
     ],
   },
@@ -147,7 +147,7 @@ const tenetGroups = [
   {
     // Founder, 2026-11-11: this repeated the tailoring band just above it.
     caption: "Cut one piece at a time.",
-    image: "/marketing/pre-launch/tailor-hands.jpg",
+    image: "/marketing/story-tailor-hands-golden.jpg", // founder picked "F golden hour" grade, 2026-11-11 (variants in catalog-archive/2026-11-11-story-hands)
     items: [
       {
         title: "Tailoring for your shape",

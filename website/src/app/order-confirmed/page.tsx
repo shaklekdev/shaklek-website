@@ -207,7 +207,7 @@ function OrderConfirmedContent() {
 
       {!isSignedIn && (
         <div className="mt-4 rounded-shaklek-sm border border-border bg-surface p-5 text-left">
-          <p className="text-sm text-text">Want to track this order in one place?</p>
+          <p className="text-sm text-text">Want this order in one place?</p>
           <p className="mt-1 text-xs text-text-2">
             A free account keeps your order history and fit notes in one place.
           </p>

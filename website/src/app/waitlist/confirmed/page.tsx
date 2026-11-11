@@ -26,7 +26,7 @@ const COPY = {
     // Must match the confirm email in substance. If the page and the email
     // describe different promises, one of them is a lie and the reader has no
     // way to tell which.
-    body: "We will tell you the day we open, and now and then when something new is made.",
+    body: "We will write now and then when something new is made.",
   },
   invalid: {
     heading: "That link has expired or was already used.",

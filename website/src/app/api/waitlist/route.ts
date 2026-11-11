@@ -260,7 +260,7 @@ export async function POST(req: NextRequest) {
         // on the list, so there is nothing to do." under a subject reading
         // "You are already on the list", so the first sentence of the email
         // carried no information at all.
-        "Nothing to do, then. We will write the day we open, and now and then when there is something new.",
+        "Nothing to do, then. We will write now and then when there is something new.",
       ],
       unsubscribeUrl: unsubUrl,
     });
@@ -306,14 +306,14 @@ export async function POST(req: NextRequest) {
         // in one sentence, so the second is "cut", which is also the more
         // accurate verb: cutting is the step that cannot be undone.
         "We are Shaklek. 100% natural linen, cut to your shape, made here in the UAE, and nothing cut before somebody wants it.",
-        "Tap below and we will tell you the day we open.",
+        "Tap below and we will write now and then when something new is made.",
         "If you did not ask for this, ignore it and you will never hear from us again.",
       ],
       button: { label: "Confirm my email", url: confirmUrl },
     });
     const sent = await sendMail(apiKey, {
       to: email,
-      subject: "Confirm your email, and we will tell you when we open",
+      subject: "Confirm your email for Shaklek",
       headers: unsubscribeHeaders(unsubUrl),
       text: body.text,
       html: body.html,

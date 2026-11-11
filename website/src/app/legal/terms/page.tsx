@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 // rule) are exactly the kind that consumer law can override.
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms, Returns & Alterations" updated="15 September 2026">
+    <LegalPage title="Terms, Returns & Alterations" updated="5 November 2026">
       <p>
         Shaklek is a made-to-order clothing studio in the United Arab Emirates.
         These terms cover how orders, production, delivery, alterations and
