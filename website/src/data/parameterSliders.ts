@@ -366,7 +366,12 @@ export function defaultChangesForCategory(
   category: string,
   overrides?: Partial<Record<string, string>>,
 ): SilhouetteChange[] {
-  const params = paramsForCategory(category);
+  // ⚠️ PREMIUM (never-offered) SLIDERS ARE NOT COMMITTED TO THE ORDER.
+  // Founder, 2026-11-11, after a test order sent "1 pocket, Button closure" to
+  // the tailor for a Peplum Blouse that has neither. Those were generic
+  // category defaults, not facts about the design; what each design really
+  // has belongs on its own tech pack (OPEN.md tailor-tech-packs).
+  const params = paramsForCategory(category)?.filter((p) => p.tier !== "premium");
   if (!params) return [];
   return params.map((param) => {
     const overrideValue = overrides?.[param.type];
