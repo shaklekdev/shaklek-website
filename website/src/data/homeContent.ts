@@ -38,7 +38,12 @@ export const HERO = {
   // echo of the hero.
   // Founder + marketing agent, opening night 2026-11-11: one beat per value
   // (customisable / tailored / linen).
-  line: "Your cut. Your measurements. 100% linen.",
+  // ⚠️ "FIRST" IS A COMPARATIVE CLAIM. Founder's decision 2026-11-12, after a
+  // check: Sumissura (online customiser, women's linen) is not UAE-made;
+  // custom-qamis.com (Dubai, online customiser, menswear) was offline when
+  // checked. SITE ONLY: do not put "first" in Meta ads (substantiation risk).
+  // Re-check competitors before reusing it anywhere.
+  line: "The first UAE-made label you customise yourself. 100% linen.",
 };
 
 // The concept, on the page the visitor lands on.
