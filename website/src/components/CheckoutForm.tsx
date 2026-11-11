@@ -48,7 +48,22 @@ export default function CheckoutForm({ total }: { total: number }) {
       ? "Made for you, piece by piece. Allow up to 3 weeks; with several pieces we confirm your exact date with you before anything is cut."
       : "Made for you, piece by piece. Allow up to 3 weeks, delivery included.";
   const { isSignedIn, user } = useUser();
-  const [method, setMethod] = useState<PaymentMethod>("apple-pay");
+  // Founder, 2026-11-11: Apple Pay was preselected on every device, Android
+  // included. Card is the default; Apple Pay is offered (and preselected) only
+  // where the browser says it can actually pay with it.
+  const [method, setMethod] = useState<PaymentMethod>("card");
+  const [applePay, setApplePay] = useState(false);
+  useEffect(() => {
+    const aps = (window as unknown as { ApplePaySession?: { canMakePayments?: () => boolean } }).ApplePaySession;
+    try {
+      if (aps?.canMakePayments?.()) {
+        setApplePay(true);
+        setMethod("apple-pay");
+      }
+    } catch {
+      /* not available: stay on card */
+    }
+  }, []);
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -297,7 +312,7 @@ export default function CheckoutForm({ total }: { total: number }) {
       </p>
       <p className="mb-3 text-sm text-text">{isSignedIn ? "Payment method" : "Pay as guest"}</p>
       <div className="space-y-2">
-        {methods.map((m) => (
+        {methods.filter((m) => m.id !== "apple-pay" || applePay).map((m) => (
           <button
             key={m.id}
             onClick={() => setMethod(m.id)}
