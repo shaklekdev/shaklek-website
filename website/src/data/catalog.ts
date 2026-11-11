@@ -307,10 +307,13 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/wrap-top/wrap-top-ivory-combo-long-normal-front-v2.jpg",
     backImage: "/catalog/wrap-top/wrap-top-ivory-back-v4.jpg",
     colorImages: {
-      Ivory: { front: "/catalog/wrap-top/wrap-top-ivory-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-ivory-back-v4.jpg" },
-      White: { front: "/catalog/wrap-top/wrap-top-white-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-white-back-v4.jpg" },
-      Navy: { front: "/catalog/wrap-top/wrap-top-navy-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-navy-back-v4.jpg" },
-      Burgundy: { front: "/catalog/wrap-top/wrap-top-burgundy-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v4.jpg" },
+      Ivory: { front: "/catalog/wrap-top/wrap-top-ivory-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-ivory-back-v3.jpg" },
+      White: { front: "/catalog/wrap-top/wrap-top-white-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-white-back-v3.jpg" },
+      Navy: { front: "/catalog/wrap-top/wrap-top-navy-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-navy-back-v3.jpg" },
+      Burgundy: { front: "/catalog/wrap-top/wrap-top-burgundy-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v3.jpg" },
+      // ⚠️ These base backs show SHORT sleeves (short:normal falls back here).
+      // Until 2026-11-11 they were the long-sleeved back-v4: short front, long
+      // back. back-v4 stays under "long:normal" below, where it is correct.
     },
     // "short:normal" isn't generated -- it's identical to colorImages above
     // (the existing photo's short sleeve is the "short" option for this item).
