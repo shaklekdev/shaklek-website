@@ -132,7 +132,6 @@ export const catalog: CatalogItem[] = [
   {
     slug: "oversized-shirt",
     name: "Oversized Shirt",
-    badge: "NEW",
     category: "Shirt",
     price: 549,
     descriptor: "Relaxed fit",
@@ -216,9 +215,6 @@ export const catalog: CatalogItem[] = [
   {
     slug: "structured-blouse",
     name: "Peplum Blouse",
-    // Founder, 2026-11-11: moved from the Oversized Shirt; the piece everyone
-    // she showed the site to picked out.
-    badge: "TRENDING",
     category: "Shirt",
     price: 549,
     descriptor: "Minimal dart",
@@ -302,7 +298,6 @@ export const catalog: CatalogItem[] = [
     category: "Shirt",
     price: 549,
     descriptor: "Soft drape, tie waist",
-    badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
     image: "/catalog/wrap-top/wrap-top-ivory-combo-long-normal-front-v2.jpg",
     backImage: "/catalog/wrap-top/wrap-top-ivory-back-v4.jpg",
@@ -347,7 +342,6 @@ export const catalog: CatalogItem[] = [
     category: "Pants",
     price: 619,
     descriptor: "Relaxed leg, pleated",
-    badge: "NEW",
     gradient: ["#efe9df", "#e2ddd2"],
     image: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-cropped-front.jpg",
     backImage: "/catalog/pleated-trousers/pleated-trousers-ivory-combo-wide-cropped-back-v2.jpg",
@@ -387,7 +381,6 @@ export const catalog: CatalogItem[] = [
     category: "Pants",
     price: 619,
     descriptor: "Wide leg, side pockets",
-    badge: "NEW",
     gradient: ["#e9e2d2", "#ddd3bd"],
     image: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-full-front.jpg",
     backImage: "/catalog/cargo-trousers/cargo-trousers-ivory-combo-wide-full-back.jpg",
@@ -427,7 +420,6 @@ export const catalog: CatalogItem[] = [
     category: "Shirt",
     price: 549,
     descriptor: "Chest pockets, tie waist",
-    badge: "NEW",
     gradient: ["#ede6d9", "#ddd4c4"],
     image: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-front-v2.jpg",
     backImage: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-back-v2.jpg",
@@ -492,7 +484,6 @@ export const catalog: CatalogItem[] = [
     category: "Abaya",
     price: 999,
     descriptor: "Folded edge, open front",
-    badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
     image: "/catalog/abaya/abaya-ivory-front.jpg",
     backImage: "/catalog/abaya/abaya-ivory-back.jpg",
@@ -587,7 +578,6 @@ export const catalog: CatalogItem[] = [
     // styling question, not a cost one: the margin is identical either way.
     price: 999,
     descriptor: "Frog closures, worn open or closed",
-    badge: "NEW",
     gradient: ["#f2ede4", "#e6e0d6"],
     image: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg",
     backImage: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg",
@@ -644,7 +634,6 @@ export const catalog: CatalogItem[] = [
     // Change one, change the other, and change margins.mjs with them.
     price: 849,
     descriptor: "Sleeveless, cut to fall",
-    badge: "NEW",
     gradient: ["#f5f0e8", "#e8e4dc"],
     // ⚠️ SLEEVELESS, ALWAYS, AND THERE IS NO SLEEVE SLIDER FOR A DRESS. Both
     // dresses are sleeveless on every neckline and every length.
@@ -701,7 +690,6 @@ export const catalog: CatalogItem[] = [
     // Change one, change the other, and change margins.mjs with them.
     price: 849,
     descriptor: "Sleeveless, buttons to the hem, with pockets",
-    badge: "NEW",
     gradient: ["#f5f0e8", "#e8e4dc"],
     // ⚠️ SLEEVELESS, ALWAYS. The neckline choice is ROUND (buttons running
     // right up to the neckline) or V (a pointed shirt collar with the buttons
