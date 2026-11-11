@@ -349,7 +349,7 @@ export async function POST(req: NextRequest) {
       ? bagInitials.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase()
       : "";
   if (initials && Array.isArray(items) && items[0]) {
-    const prev = text(items[0].freeformNotes);
+    const prev = text(items[0].freeformNotes, MAX_TEXT - 24);
     items[0] = {
       ...items[0],
       freeformNotes: `Bag initials: ${initials.split("").join(".")}${prev ? `\n${prev}` : ""}`,

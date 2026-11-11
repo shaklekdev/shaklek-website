@@ -686,10 +686,11 @@ export function buildPdf(
         .filter((c) => renderTypes.has(c.type))
         .map((c) => noteForOption(category, c.type, c.value))
         .filter((n): n is string => !!n);
-      const premiumNotes = typed
-        .filter((c) => !renderTypes.has(c.type))
-        .map((c) => noteForOption(category, c.type, c.value))
-        .filter((n): n is string => !!n);
+      // Founder, 2026-11-11: generic premium defaults ("patch chest pocket",
+      // "button closure") are not facts about the design and were printed for
+      // a Peplum Blouse that has neither. A design's own construction belongs
+      // on its per-design tech pack (OPEN.md tailor-tech-packs), not here.
+      const premiumNotes: string[] = [];
 
       if (cutNotes.length) {
         section("Cut as ordered");

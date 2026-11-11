@@ -109,6 +109,10 @@ export function resolveOrderPricing(items: IncomingItem[]):
   const priced: PricedItem[] = [];
 
   for (const item of items) {
+    // A null / non-object line used to throw on item.quantity (HTTP 500).
+    if (!item || typeof item !== "object") {
+      return { ok: false, error: "Unrecognised item in order" };
+    }
     // Check the quantity cap first so the customer is told the real reason.
     // resolveItem() returns null for both an unknown slug and an over-cap
     // quantity, so without this an honest request for 11 shirts came back as
