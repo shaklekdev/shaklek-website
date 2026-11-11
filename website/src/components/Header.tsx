@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import BrandLockup from "@/components/BrandLockup";
@@ -85,8 +86,24 @@ export default function Header() {
   // frame that anything moves underneath it -- which, thanks to the 20s
   // hero-ken-burns loop, meant every frame even when idle. The page
   // background is #ffffff, so at rest the two render the same pixels.
+  // Publishes the sticky header's real height as --header-h so in-page anchor
+  // links (footer "Returns & Alterations" -> /legal/terms#returns, "Why choose
+  // us", the founder's note) land BELOW it instead of under it. Opening-night
+  // bug from a customer: the bag offer bar made every anchor land too low.
+  const headerRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const set = () =>
+      document.documentElement.style.setProperty("--header-h", `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header ref={headerRef} className="sticky top-0 z-50 bg-white">
       <BagOfferBar />
       {/* Wordmark LEFT, icons right, menu in a black band underneath. The bar
           is Youssef's layout; the left-aligned mark is the founder's amendment

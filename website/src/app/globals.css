@@ -67,6 +67,11 @@ body {
   height: 100%;
 }
 
+/* Anchor links land below the sticky header (height set by Header.tsx). */
+html {
+  scroll-padding-top: calc(var(--header-h, 180px) + 12px);
+}
+
 body {
   background: var(--bg);
   color: var(--text);
