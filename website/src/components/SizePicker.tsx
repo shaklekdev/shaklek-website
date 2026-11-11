@@ -206,14 +206,23 @@ export default function SizePicker({
           measurements before anything is cut -- no "come to you", no "free",
           no city. The paragraphs above describe the visit as it WAS; they
           stay so the line can come back exactly once booking exists. */}
-      <p className="mt-2.5 text-[11px] leading-relaxed text-text-2">
+      {/* ⚠️ THE VISIT IS BACK, 2026-11-12. Founder, opening night, after friends
+          said they did not understand how they get measured: "MAIS BIENSUR
+          SINON COMMENT ON MESURE LES GENS". Dubai only for the visit (her
+          2026-09-14 rule); elsewhere we guide them on WhatsApp. Still no
+          booking system: we reach out AFTER the order. */}
+      <p className="mt-3 text-[13px] leading-relaxed text-text-2">
         {sizeMode === "tailored" ? (
           <>
-            <span className="font-medium text-text">After you order, we contact you on WhatsApp to take your measurements</span>{" "}
-            before anything is cut.
+            <span className="font-medium text-text">We come to you to take your measurements.</span>{" "}
+            After you order, we contact you on WhatsApp and visit you in Dubai,
+            free. Outside Dubai, we guide you to take them yourself.
           </>
         ) : (
-          <>Or choose Tailored and we take your measurements with you after you order.</>
+          <>
+            Or choose <span className="font-medium text-text">Tailored</span>: after
+            you order, we come to you in Dubai to take your measurements, free.
+          </>
         )}
       </p>
       {/* No helper line under this toggle. It said "Cut to your measurements,

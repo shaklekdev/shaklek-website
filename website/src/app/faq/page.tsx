@@ -75,7 +75,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         >
           WhatsApp
         </a>{" "}
-        to take your measurements before anything is cut. If you already have
+        and come to you in Dubai to take your measurements, free, before
+        anything is cut. Outside Dubai, we guide you to take them yourself. If you already have
         your own, send them the same way or in the notes on your order, and a
         stylist goes through them with you. Or pick a standard size from XS to
         XXL. The price is the same either way. The{" "}

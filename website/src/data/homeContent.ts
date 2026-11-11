@@ -136,7 +136,7 @@ export const STEPS = [
     // it, we bring it to your door. Nothing may say free, come to you, or
     // name a city until booking exists.
     title: "We do the rest",
-    body: "We take your measurements. Your tailor makes your piece. We then bring it to your door.",
+    body: "We come to you in Dubai to take your measurements, free. Your tailor makes your piece. We then bring it to your door.", // visit back, founder 2026-11-12
     // Still the one the whole proposition rests on. With only two steps the
     // emphasis is doing less work than it was, but it is the half a visitor
     // has to believe, so it keeps it.
