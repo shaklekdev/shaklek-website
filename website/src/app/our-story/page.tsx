@@ -145,8 +145,9 @@ const tenetGroups = [
   // is bought, so there is no stock, nothing left over, and nothing to mark
   // down. Say the mechanism and let the reader draw the conclusion.
   {
-    caption: "One tailor, one piece.",
-    image: "/marketing/story-tailoring.jpg",
+    // Founder, 2026-11-11: this repeated the tailoring band just above it.
+    caption: "Cut one piece at a time.",
+    image: "/marketing/pre-launch/tailor-hands.jpg",
     items: [
       {
         title: "Tailoring for your shape",
