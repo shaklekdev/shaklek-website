@@ -27,9 +27,14 @@ export default function BagOfferBar() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- read once after mount (SSR has no storage)
     if (saved) setInitials(saved);
   }, []);
-  useEffect(() => {
-    if (letters) localStorage.setItem(BAG_INITIALS_KEY, letters);
-  }, [letters]);
+  // Saved only on the explicit button (founder, 2026-11-11: silent autosave
+  // left customers unsure whether anything was kept).
+  const [saved, setSaved] = useState(false);
+  const save = () => {
+    if (!letters) return;
+    localStorage.setItem(BAG_INITIALS_KEY, letters);
+    setSaved(true);
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -92,16 +97,28 @@ export default function BagOfferBar() {
               <input
                 type="text"
                 value={initials}
-                onChange={(e) => setInitials(e.target.value)}
+                onChange={(e) => {
+                  setInitials(e.target.value);
+                  setSaved(false);
+                }}
                 maxLength={5}
                 autoComplete="off"
                 placeholder="N T"
                 className="mt-1 block w-full border border-border px-3 py-2 text-base tracking-widest text-text normal-case"
               />
             </label>
-            <p className="mt-4 text-sm leading-relaxed text-text">
-              The first 50 orders come in a Shaklek bag embroidered with your
-              initials.
+            <button
+              type="button"
+              onClick={save}
+              disabled={!letters}
+              className="mt-3 min-h-[44px] w-full rounded-full bg-accent px-5 py-2.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+            >
+              {saved ? "Saved" : "Save my initials"}
+            </button>
+            <p aria-live="polite" className="mt-3 text-sm leading-relaxed text-text">
+              {saved
+                ? `Saved: ${shown}. Your initials will be on your order at checkout.`
+                : "The first 50 orders come in a Shaklek bag embroidered with your initials."}
             </p>
           </div>
         </div>
