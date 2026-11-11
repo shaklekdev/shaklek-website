@@ -43,6 +43,16 @@ removed. So while production is closed:
 
 ## TO LAUNCH — do these together, in this order
 
+> ⚠️ **BEFORE ANY LAUNCH OR RE-LAUNCH: THE FOUNDER SIGNS UP ON PRODUCTION HERSELF**
+> (Safari, a never-used email, and "Continue with Google"), and a second phone
+> taps WhatsApp. Opening night 2026-11-11 shipped with Google sign-in enabled in
+> Clerk PRODUCTION without custom credentials ("Access blocked: missing
+> client_id") and a WhatsApp username link that opened nothing. Every review
+> that day ran on staging (Clerk TEST instance, shared Google keys, so it
+> worked) or logged-out, and sessions must not create production accounts, so
+> neither defect was visible to any automated check. Only a human test on the
+> live domain catches this class.
+
 0. ⚠️ **TURN THE STORE ON. IT IS OFF IN CODE NOW, AND IT FAILS CLOSED.**
    Added 2026-09-12 with the "launching soon" page: `/api/orders` refuses every
    order with a 503 unless `STORE_OPEN === "true"`. The polarity is deliberate —
