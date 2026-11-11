@@ -132,10 +132,10 @@ export const catalog: CatalogItem[] = [
   {
     slug: "oversized-shirt",
     name: "Oversized Shirt",
+    badge: "NEW",
     category: "Shirt",
     price: 549,
     descriptor: "Relaxed fit",
-    badge: "TRENDING",
     gradient: ["#f5f0e8", "#e8e4dc"],
     image: "/catalog/oversized-shirt/oversized-shirt-front.jpg",
     backImage: "/catalog/oversized-shirt/oversized-shirt-back-v2.jpg",
@@ -216,6 +216,9 @@ export const catalog: CatalogItem[] = [
   {
     slug: "structured-blouse",
     name: "Peplum Blouse",
+    // Founder, 2026-11-11: moved from the Oversized Shirt; the piece everyone
+    // she showed the site to picked out.
+    badge: "TRENDING",
     category: "Shirt",
     price: 549,
     descriptor: "Minimal dart",
