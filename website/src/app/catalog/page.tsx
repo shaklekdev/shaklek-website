@@ -29,7 +29,7 @@ import { absoluteUrl } from "@/lib/seo";
  * That is the real trigger for taking products off the home page.
  */
 export const metadata: Metadata = {
-  title: "Catalog",
+  title: "Catalogue",
   description:
     "Every Shaklek piece, made to order in 100% natural linen and cut to your measurements. Shirts and pants from AED 549.",
   alternates: { canonical: absoluteUrl("/catalog") },

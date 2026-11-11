@@ -69,11 +69,15 @@ export default function BagOfferBar() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close"
-              className="absolute right-2 top-1 flex h-10 w-10 items-center justify-center text-2xl text-text-2"
+              className="absolute right-2 top-1 flex h-11 w-11 items-center justify-center text-2xl text-text-2"
             >
               ×
             </button>
-            <div className="relative mx-auto aspect-[2/3] w-full overflow-hidden bg-surface-2 [container-type:inline-size]">
+            {/* Height-capped (40vh) and width derived from the 2:3 ratio, so on an
+                iPhone 13/SE the Save button sits inside the visible modal without
+                scrolling. The box stays exactly 2:3, so the cqw overlay below keeps
+                its lock on the embroidery -- founder review 2026-11-11. */}
+            <div className="relative mx-auto aspect-[2/3] h-[min(40vh,516px)] w-auto overflow-hidden bg-surface-2 [container-type:inline-size]">
               <Image
                 src="/coming-soon/bag-blank-v1.jpg"
                 alt="The Shaklek bag with your initials embroidered in gold under the logo"
@@ -103,6 +107,7 @@ export default function BagOfferBar() {
                 }}
                 maxLength={5}
                 autoComplete="off"
+                autoFocus // founder review 2026-11-11: cursor ready when the modal opens
                 placeholder="N T"
                 className="mt-1 block w-full border border-border px-3 py-2 text-base tracking-widest text-text normal-case"
               />

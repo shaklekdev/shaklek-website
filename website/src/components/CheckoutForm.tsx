@@ -334,6 +334,7 @@ export default function CheckoutForm({ total }: { total: number }) {
       <input
         id="checkout-email"
         type="email"
+        autoComplete="email"
         required
         readOnly={isSignedIn}
         value={email}

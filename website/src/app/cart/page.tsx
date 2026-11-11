@@ -29,13 +29,13 @@ export default function CartPage() {
         <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
           <h1 className="text-[26px] text-text">Your cart is empty</h1>
           <p className="subtitle mt-2">
-            Browse the catalog to get started.
+            Browse the catalogue to get started.
           </p>
           <Link
             href="/catalog"
             className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
           >
-            Browse catalog
+            Browse catalogue
           </Link>
         </div>
       </div>
@@ -129,7 +129,8 @@ export default function CartPage() {
                       onClick={() => setQuantity(item.id, item.quantity - 1)}
                       disabled={item.quantity <= 1}
                       aria-label={`Fewer ${item.name}`}
-                      className="h-8 w-8 rounded-full text-sm text-text-2 transition-colors hover:text-text disabled:opacity-30"
+                      // h-11 w-11: 44px tap targets -- founder review 2026-11-11
+                      className="h-11 w-11 rounded-full text-sm text-text-2 transition-colors hover:text-text disabled:opacity-30"
                     >
                       −
                     </button>
@@ -140,14 +141,16 @@ export default function CartPage() {
                       onClick={() => setQuantity(item.id, item.quantity + 1)}
                       disabled={item.quantity >= MAX_QUANTITY_PER_ITEM}
                       aria-label={`More ${item.name}`}
-                      className="h-8 w-8 rounded-full text-sm text-text-2 transition-colors hover:text-text disabled:opacity-30"
+                      className="h-11 w-11 rounded-full text-sm text-text-2 transition-colors hover:text-text disabled:opacity-30"
                     >
                       +
                     </button>
                   </div>
                 </div>
 
-                <div className="mt-2 flex gap-4">
+                {/* gap-6 + before:-inset hit areas give Edit and Remove 44px tap
+                    targets that touch but never overlap -- founder review 2026-11-11 */}
+                <div className="mt-2 flex gap-6">
                   {/* Kept after /upload was removed on 2026-09-12. Slugless
                       lines can no longer be created and readStoredCart drops
                       any that were stored, so this is now always true -- but a
@@ -156,14 +159,14 @@ export default function CartPage() {
                   {item.slug && (
                     <Link
                       href={`/design/${item.slug}?edit=${item.id}`}
-                      className="text-xs text-text-2 underline hover:text-text"
+                      className="relative text-xs text-text-2 underline before:absolute before:-inset-x-3 before:-inset-y-3.5 before:content-[''] hover:text-text"
                     >
                       Edit
                     </Link>
                   )}
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="text-xs text-text-3 underline hover:text-text-2"
+                    className="relative text-xs text-text-3 underline before:absolute before:-inset-x-3 before:-inset-y-3.5 before:content-[''] hover:text-text-2"
                   >
                     Remove
                   </button>

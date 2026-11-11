@@ -34,7 +34,7 @@ const NAV_LINKS = [
   // ever saw the home page and an ad click could not be told from a story
   // click. It also left /catalog orphaned, which is what makes a route rank
   // badly. The home page keeps its products either way.
-  { href: "/catalog", label: "Catalog" },
+  { href: "/catalog", label: "Catalogue" }, // UK spelling, founder review 2026-11-11
   { href: "/our-story", label: "Our story" },
 ];
 
@@ -128,7 +128,7 @@ export default function Header() {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Message us on WhatsApp"
+          aria-label="WhatsApp" // founder review 2026-11-11: icon-only below 640px
           /* before:-inset-[11px] grows the 22px icon's HIT AREA to 44px without
              moving a pixel -- founder review 2026-11-11 (mobile tap targets). */
           className="relative flex items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2"

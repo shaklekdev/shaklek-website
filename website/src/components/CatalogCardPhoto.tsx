@@ -86,7 +86,9 @@ export default function CatalogCardPhoto({
               fill
               sizes="(min-width: 640px) 248px, 220px"
               loading={eager && c === initial ? "eager" : "lazy"}
-              className={`object-cover transition-[opacity,transform] duration-300 group-hover:scale-[1.03] ${
+              // object-top: the 2:3 photo is cropped into a 3:4 card, so anchor
+              // the crop at the top and keep the head -- founder review 2026-11-11
+              className={`object-cover object-top transition-[opacity,transform] duration-300 group-hover:scale-[1.03] ${
                 c === color ? "opacity-100" : "opacity-0"
               }`}
             />
@@ -108,9 +110,9 @@ export default function CatalogCardPhoto({
         // Vertical, anchored bottom-right and growing upward: the TRENDING/NEW
         // badge already sits at top-right. No container -- each dot carries its
         // own white ring and soft shadow so it lifts off the photograph.
-        // Founder review 2026-11-11: each target is 44 wide x 28 tall (gap folded
-        // into the height, pitch unchanged at 28px); -right-0.5 keeps the dot
-        // centres where they were.
+        // Founder review 2026-11-11: each target is 44 wide x 36 tall (gap folded
+        // into the height, 36px pitch); -right-0.5 keeps the dot centres where
+        // they were horizontally.
         <div className="absolute -right-0.5 bottom-2 flex flex-col items-center">
           {photos.map((p) => (
             <button
@@ -124,10 +126,10 @@ export default function CatalogCardPhoto({
               aria-label={`Show ${name} in ${p.name}`}
               aria-pressed={p.name === color}
               title={p.name}
-              // 24x24 is the WCAG 2.5.8 AA minimum, with a 4px gap so adjacent
-              // colours are 28px apart centre to centre. The visible dot stays
-              // 10px; only the target is larger.
-              className="group/swatch grid h-7 w-11 cursor-pointer place-items-center"
+              // 44x36 target, 36px pitch, so a tap never lands on the neighbour
+              // (founder review 2026-11-11; was 28px pitch). The visible dot
+              // stays 10px; only the target is larger.
+              className="group/swatch grid h-9 w-11 cursor-pointer place-items-center"
             >
               <span
                 className={`h-2.5 w-2.5 rounded-full border border-black/10 shadow-[0_1px_3px_rgba(0,0,0,0.18)] transition-transform duration-200 group-hover/swatch:scale-110 ${

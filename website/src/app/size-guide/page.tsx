@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 import { SIZE_CHART } from "@/data/sizeChart";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Size Guide",
+  title: "Size guide",
   description:
     "Body measurements in centimetres for Shaklek sizes XS to XXL, with UK and EU equivalents, and how to measure yourself.",
   path: "/size-guide",
@@ -19,7 +19,7 @@ export const metadata: Metadata = pageMetadata({
 export default function SizeGuidePage() {
   return (
     <LegalPage
-      title="Size Guide"
+      title="Size guide"
       intro="Body measurements in centimetres. Measure yourself rather than a piece you already own."
     >
       {/* The customer's own numbers come first. Founder: the size guide should
@@ -51,8 +51,10 @@ export default function SizeGuidePage() {
         would rather pick a size than measure.
       </p>
 
+      {/* No min-width: six short columns fit a 342px column at 390 wide, and
+          the forced 460px clipped the Hip column -- founder review 2026-11-11 */}
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[460px] text-left text-sm">
+        <table className="w-full text-left text-sm">
           <caption className="sr-only">
             Body measurements in centimetres for each Shaklek size
           </caption>

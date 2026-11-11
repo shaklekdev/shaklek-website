@@ -123,13 +123,13 @@ function OrderConfirmedContent() {
       <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
         <h1 className="text-[26px] text-text">No recent order found</h1>
         <p className="subtitle mt-2">
-          If you just placed an order, check your email, otherwise head back to the catalog.
+          If you just placed an order, check your email, otherwise head back to the catalogue.
         </p>
         <Link
           href="/catalog"
           className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
         >
-          Back to catalog
+          Back to catalogue
         </Link>
       </div>
     );
@@ -234,7 +234,7 @@ function OrderConfirmedContent() {
       )}
 
       <Link href="/catalog" className="mt-8 inline-block text-sm text-text-2 underline">
-        Back to catalog
+        Back to catalogue
       </Link>
     </div>
   );

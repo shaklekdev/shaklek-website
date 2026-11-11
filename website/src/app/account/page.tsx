@@ -178,7 +178,7 @@ export default async function AccountPage() {
               href="/catalog"
               className="mt-6 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
             >
-              Browse the catalog
+              Browse the catalogue
             </a>
           </div>
         ) : (

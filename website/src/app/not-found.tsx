@@ -1,5 +1,9 @@
 import Link from "next/link";
 import Header from "@/components/Header";
+import type { Metadata } from "next";
+
+// founder review 2026-11-11: the 404 carried the site's default title.
+export const metadata: Metadata = { title: "Page not found" };
 
 export default function NotFound() {
   return (
@@ -15,7 +19,7 @@ export default function NotFound() {
           href="/catalog"
           className="mt-8 rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
         >
-          Back to catalog
+          Back to catalogue
         </Link>
       </div>
     </div>
