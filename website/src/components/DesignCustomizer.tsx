@@ -12,7 +12,7 @@ import { includedWith } from "@/data/catalog";
 // but every Arabic string is founder-read before it ships (productDisclosure.ts).
 const INCLUDED_COPY = {
   heading: "Matching shayla included",
-  line: "Same 100% linen, in the colour you choose. 68 x 180 cm, hemmed. Included in the price of every abaya.",
+  line: "Same 100% linen, in the colour you choose. 68 x 180 cm.", // founder 2026-11-11: shorter; the heading already says included
 };
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import {
