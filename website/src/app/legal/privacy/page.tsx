@@ -123,14 +123,15 @@ export default function PrivacyPage() {
         Who else processes it
       </h2>
       <p>
-        We use a small number of providers, each handling only what its job
-        needs: <strong>Stripe</strong> (payments and delivery address),{" "}
-        <strong>Clerk</strong> (sign-in), <strong>Neon</strong> (the order
-        database, hosted in Frankfurt), <strong>Resend</strong> (order
-        emails), <strong>AWS Amplify and CloudFront</strong> (hosting,
-        Ireland), and <strong>Google Fonts</strong>, which receives your IP
-        address in order to serve the typeface. The tailor assigned to your order
-        receives a spec sheet with what to make, no name, no email, no address.
+        {/* Founder, 2026-11-12: categories, not vendor names. Privacy law asks
+            us to state the categories of recipients and where data is held,
+            not to publish our technical stack. Names are given on request. */}
+        We use a small number of trusted providers, each handling only what
+        its job needs: our payment provider (payments and delivery address),
+        our sign-in provider, our order database and website hosting (both in
+        the EU), and our email provider (order emails). The tailor assigned to
+        your order receives a spec sheet with what to make, no name, no email,
+        no address. You can ask us for the list of providers at any time.
       </p>
       <p>
         Because our hosting and database sit in the EU, your data is transferred
@@ -147,10 +148,9 @@ export default function PrivacyPage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Cookies</h2>
       <p>
-        This site sets very few. <strong>Sign-in cookies</strong> set by Clerk
-        keep you logged in between pages, without them accounts cannot work.
+        This site sets very few. <strong>Sign-in cookies</strong> keep you logged in between pages, without them accounts cannot work.
         Your <strong>cart</strong> is kept in your browser&apos;s local storage,
-        not sent anywhere until you check out. <strong>Stripe</strong> sets its
+        not sent anywhere until you check out. Our <strong>payment provider</strong> sets its
         own cookies on its payment page for fraud prevention.
       </p>
       {adsEnabled ? (
