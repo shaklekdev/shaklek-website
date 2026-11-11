@@ -795,7 +795,7 @@ export const COMPLETE_THE_LOOK: Record<string, string[]> = {
   "pleated-trousers": ["wrap-top", "oversized-shirt", "open-abaya"],
   "cargo-trousers": ["utility-shirt", "oversized-shirt", "buttoned-abaya"],
   "open-abaya": ["buttoned-dress", "oversized-shirt", "wide-leg-trousers"],
-  "buttoned-abaya": ["wide-leg-trousers", "structured-blouse", "slip-dress"],
+  "buttoned-abaya": ["wide-leg-trousers", "oversized-shirt", "slip-dress"], // founder 2026-11-11: a matching set + the dress, like the open abaya
   "slip-dress": ["buttoned-abaya"],
   "buttoned-dress": ["open-abaya"],
 };
