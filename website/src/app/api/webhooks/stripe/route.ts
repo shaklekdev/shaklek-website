@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   if (!stripe || !webhookSecret) {
     console.log("[webhooks/stripe] Stripe not fully configured — ignoring webhook call.");
-    return NextResponse.json({ ok: false, error: "Stripe not configured" }, { status: 501 });
+    return NextResponse.json({ ok: false, error: "Not available" }, { status: 501 });
   }
 
   const signature = req.headers.get("stripe-signature");
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
   const db = getDb();
   if (!db) {
     console.error("[webhooks/stripe] DATABASE_URL not set — cannot finalize order", orderId);
-    return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 500 });
+    return NextResponse.json({ ok: false, error: "Not available" }, { status: 500 });
   }
 
   // A session expiring (customer abandoned checkout, ~24h timeout) just means

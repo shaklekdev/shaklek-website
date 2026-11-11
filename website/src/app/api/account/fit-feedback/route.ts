@@ -30,7 +30,7 @@ export async function DELETE(req: NextRequest) {
   if (!email) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
 
   const db = getDb();
-  if (!db) return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 500 });
+  if (!db) return NextResponse.json({ ok: false, error: "Not available" }, { status: 500 });
 
   // Every entry she has ever sent, not just the latest. "Delete my fit notes"
   // cannot leave four of the five behind.

@@ -422,8 +422,7 @@ export default function CheckoutForm({ total }: { total: number }) {
           (final once made, one alteration for fit, faulty or wrong items
           remade or refunded) instead of what is withheld. */}
       <p className="mt-4 text-center text-xs text-text-3">
-        Delivery and card details are taken on the next screen, secured by
-        Stripe. Made to order for you, so a finished piece is final: one
+        Delivery and card details are taken securely on the next screen. Made to order for you, so a finished piece is final: one
         alteration is included for fit, and faulty or wrong items are remade or
         refunded.
       </p>

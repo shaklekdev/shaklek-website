@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const db = getDb();
   if (!db) {
-    return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 501 });
+    return NextResponse.json({ ok: false, error: "Not available" }, { status: 501 });
   }
 
   // uuid() would throw a Postgres cast error on a non-uuid id, which is both

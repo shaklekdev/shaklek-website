@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   if (!email) return NextResponse.json({ ok: false, error: "Not signed in" }, { status: 401 });
 
   const db = getDb();
-  if (!db) return NextResponse.json({ ok: false, error: "DB not configured" }, { status: 500 });
+  if (!db) return NextResponse.json({ ok: false, error: "Not available" }, { status: 500 });
 
   let body: Record<string, unknown>;
   try {

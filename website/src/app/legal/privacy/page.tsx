@@ -74,7 +74,7 @@ export default function PrivacyPage() {
         address and phone number, the details of the piece you configured, your
         size, or the measurements we take with you after your order, any note you wrote
         for the tailor,
-        and confirmation from Stripe that payment succeeded. We never see or
+        and confirmation from our payment provider that payment succeeded. We never see or
         store your card number.
       </p>
       {/* ⚠️ AN ACCOUNT NO LONGER SAVES MEASUREMENTS. The form came off /account
@@ -182,8 +182,7 @@ export default function PrivacyPage() {
             <strong>We do not send Meta your name, email, address, phone number
             or measurements.</strong> Only the item, the amount and the order
             reference, plus the cookie id, IP address and browser the pixel
-            already passes, sent from our server as well so an ad blocker does
-            not hide a sale. Advanced Matching, which would hash and send your
+            already passes. Advanced Matching, which would hash and send your
             email, is switched off.
           </p>
           <p>

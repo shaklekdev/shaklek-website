@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
   // existing anyway.
   if (!secret) {
     console.log("[webhooks/clerk] CLERK_WEBHOOK_SECRET not set — ignoring webhook call.");
-    return NextResponse.json({ ok: false, error: "Clerk webhook not configured" }, { status: 501 });
+    return NextResponse.json({ ok: false, error: "Not available" }, { status: 501 });
   }
 
   // Declared-length check first: it is free and rejects the common case before

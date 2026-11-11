@@ -563,7 +563,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!session.url) {
-      return NextResponse.json({ ok: false, error: "Stripe session had no URL" }, { status: 502 });
+      return NextResponse.json({ ok: false, error: "Payment could not start. Please try again." }, { status: 502 });
     }
     // Awaited (a serverless function may be frozen after it responds) but
     // bounded at 3 s and unable to throw, so checkout never waits on Meta.
