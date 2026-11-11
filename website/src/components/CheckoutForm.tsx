@@ -16,6 +16,8 @@ const methods: { id: PaymentMethod; label: string; sub: string }[] = [
   { id: "card", label: "Card", sub: "Visa, Mastercard" },
 ];
 
+const PROMO_ENABLED = process.env.NEXT_PUBLIC_PROMO_ENABLED === "true";
+
 const LAST_ORDER_KEY = "shaklek-last-order";
 
 export default function CheckoutForm({ total }: { total: number }) {
@@ -218,6 +220,13 @@ export default function CheckoutForm({ total }: { total: number }) {
       {/* Discounts used to be reachable only after the redirect, on Stripe's
           page -- so someone arriving from a campaign with a code in hand saw
           the full price here and had to trust it would be honoured. */}
+      {/* HIDDEN UNLESS A CODE EXISTS. Founder + marketing agent, 2026-11-11: an
+          empty discount box at the moment of paying tells a full-price buyer a
+          cheaper price exists and sends people to search for codes that do not
+          exist (none is active in Stripe). To bring it back for an influencer or
+          White Friday code: set NEXT_PUBLIC_PROMO_ENABLED=true in Amplify, ADD
+          it to the build-spec env allowlist, and redeploy. */}
+      {PROMO_ENABLED && (
       <div className="mb-5">
         <label htmlFor="promo-code" className="mb-2 block text-sm text-text">
           Discount code <span className="text-text-3">(optional)</span>
@@ -289,6 +298,7 @@ export default function CheckoutForm({ total }: { total: number }) {
           </div>
         )}
       </div>
+      )}
 
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
         Your email <span className="text-text-3">(required)</span>

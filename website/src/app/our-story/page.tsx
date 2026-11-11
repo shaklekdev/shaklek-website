@@ -520,8 +520,8 @@ export default function OurStoryPage() {
           and centred type needs the room on a phone. */}
       <section className="relative w-full overflow-hidden">
         <Image
-          src="/marketing/story-materials-v2.jpg"
-          alt="A finished linen piece with raw cotton beside it"
+          src="/marketing/hero-banner.jpg"
+          alt="Linen drying in the wind by the sea"
           fill
           sizes="100vw"
           className="object-cover"
