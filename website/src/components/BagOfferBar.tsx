@@ -11,12 +11,25 @@ import Image from "next/image";
 //
 // ⚠️ "first 50" is a gift-with-purchase advert from a Dubai DET licence; whether
 // it needs a DET promotion permit is open (planning/OPEN.md det-permit).
+export const BAG_INITIALS_KEY = "shaklek-bag-initials";
+
 export default function BagOfferBar() {
   const [open, setOpen] = useState(false);
   const [initials, setInitials] = useState("");
   // Letters only, at most three, shown the way the embroidery is: "N.T".
   const letters = initials.replace(/[^a-z]/gi, "").toUpperCase().slice(0, 3);
   const shown = (letters || "NT").split("").join(".");
+
+  // Kept in localStorage so checkout can prefill "Initials for your bag" and
+  // the order carries them (founder, 2026-11-11). Same key as CheckoutForm.
+  useEffect(() => {
+    const saved = localStorage.getItem(BAG_INITIALS_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once after mount (SSR has no storage)
+    if (saved) setInitials(saved);
+  }, []);
+  useEffect(() => {
+    if (letters) localStorage.setItem(BAG_INITIALS_KEY, letters);
+  }, [letters]);
 
   useEffect(() => {
     if (!open) return;

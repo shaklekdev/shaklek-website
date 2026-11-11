@@ -254,7 +254,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "Malformed request" }, { status: 400 });
   }
 
-  const { items, method, total, email, promotionCode, capi } = (order ?? {}) as {
+  const { items, method, total, email, promotionCode, capi, bagInitials } = (order ?? {}) as {
+    bagInitials?: unknown;
     items: OrderItem[];
     method: string;
     total: number;
@@ -336,6 +337,24 @@ export async function POST(req: NextRequest) {
   }
 
   const paymentMethod = text(method, 40) || "unknown";
+
+  // BAG INITIALS (launch offer: first 50 orders, Shaklek bag embroidered with
+  // the customer's initials). Founder, 2026-11-11: what she types in the bag
+  // preview must reach the order. Letters only, max 3, uppercased: anything
+  // else a client sends is dropped. Stored as the first line of the first
+  // item's free-form notes so the dashboard, the staff email and the tailor's
+  // sheet all carry it with no schema change on opening day.
+  const initials =
+    typeof bagInitials === "string"
+      ? bagInitials.replace(/[^A-Za-z]/g, "").slice(0, 3).toUpperCase()
+      : "";
+  if (initials && Array.isArray(items) && items[0]) {
+    const prev = text(items[0].freeformNotes);
+    items[0] = {
+      ...items[0],
+      freeformNotes: `Bag initials: ${initials.split("").join(".")}${prev ? `\n${prev}` : ""}`,
+    };
+  }
 
   let orderId: string | null = null;
   try {

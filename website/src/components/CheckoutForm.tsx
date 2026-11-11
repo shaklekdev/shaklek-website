@@ -16,6 +16,8 @@ const methods: { id: PaymentMethod; label: string; sub: string }[] = [
   { id: "card", label: "Card", sub: "Visa, Mastercard" },
 ];
 
+import { BAG_INITIALS_KEY } from "@/components/BagOfferBar";
+
 const PROMO_ENABLED = process.env.NEXT_PUBLIC_PROMO_ENABLED === "true";
 
 const LAST_ORDER_KEY = "shaklek-last-order";
@@ -69,6 +71,12 @@ export default function CheckoutForm({ total }: { total: number }) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [bagInitials, setBagInitials] = useState("");
+  useEffect(() => {
+    const saved = localStorage.getItem(BAG_INITIALS_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once after mount (SSR has no storage)
+    if (saved) setBagInitials(saved);
+  }, []);
   const [promoInput, setPromoInput] = useState("");
   const [promoChecking, setPromoChecking] = useState(false);
   const [promoError, setPromoError] = useState<string | null>(null);
@@ -156,7 +164,7 @@ export default function CheckoutForm({ total }: { total: number }) {
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, method, total, email, promotionCode: promo?.code ?? null, capi: capiHandoff(icEventId) }),
+        body: JSON.stringify({ items, method, total, email, bagInitials, promotionCode: promo?.code ?? null, capi: capiHandoff(icEventId) }),
       });
 
       // Every failure path below used to fall through to the success page:
@@ -299,6 +307,26 @@ export default function CheckoutForm({ total }: { total: number }) {
         )}
       </div>
       )}
+
+      {/* Launch offer: the first 50 orders come in a Shaklek bag embroidered
+          with the customer's initials. Prefilled from the bag preview in the top
+          bar; sent with the order and saved in its notes (api/orders). */}
+      <label htmlFor="bag-initials" className="mb-2 block text-sm text-text">
+        Initials for your Shaklek bag <span className="text-text-3">(optional)</span>
+      </label>
+      <input
+        id="bag-initials"
+        value={bagInitials}
+        onChange={(e) => {
+          const v = e.target.value.replace(/[^a-z]/gi, "").toUpperCase().slice(0, 3);
+          setBagInitials(v);
+          if (v) localStorage.setItem(BAG_INITIALS_KEY, v);
+        }}
+        maxLength={3}
+        autoCapitalize="characters"
+        placeholder="e.g. NT"
+        className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+      />
 
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
         Your email <span className="text-text-3">(required)</span>
