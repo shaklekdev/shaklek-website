@@ -123,7 +123,7 @@ export default function SizeGuidePage() {
       <p>
         Then <strong>Tailored</strong> is made for you. Choose it when you
         order and we take your measurements with you afterwards, before
-        anything is cut. It costs exactly the same, and it is the reason
+        your piece is made. It costs exactly the same, and it is the reason
         made-to-order exists. Most people are between sizes somewhere; a size
         chart is an average of thousands of bodies, and Tailored is cut to one.
       </p>

@@ -305,7 +305,7 @@ export async function POST(req: NextRequest) {
         // "made here... nothing made before" then repeated the same word twice
         // in one sentence, so the second is "cut", which is also the more
         // accurate verb: cutting is the step that cannot be undone.
-        "We are Shaklek. 100% natural linen, cut to your shape, made here in the UAE, and nothing cut before somebody wants it.",
+        "We are Shaklek. 100% natural linen, cut to your shape, made here in the UAE, and nothing made before somebody wants it.",
         "Tap below and we will write now and then when something new is made.",
         "If you did not ask for this, ignore it and you will never hear from us again.",
       ],

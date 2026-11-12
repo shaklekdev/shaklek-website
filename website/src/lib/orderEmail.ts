@@ -227,7 +227,7 @@ export function buildCustomerConfirmation(opts: {
     button: undefined,
     note: {
       lines: [
-        "A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor. Your piece is then cut and sewn for you with special care; allow up to 3 weeks from confirmation, and delivery is included anywhere in the UAE.",
+        "A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor. Your piece is then made for you with special care; allow up to 3 weeks from confirmation, and delivery is included anywhere in the UAE.",
         `Want this order and any future ones in one place? Sign up with this same address (${email}) and it will already be there.`,
       ],
       button: { label: "Create a free account", url: `${appUrl}/sign-up` },

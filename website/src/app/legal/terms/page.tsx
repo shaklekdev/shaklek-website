@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 // rule) are exactly the kind that consumer law can override.
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms, Returns & Alterations" updated="5 November 2026">
+    <LegalPage title="Terms, Returns & Alterations" updated="12 November 2026">
       <p>
         Shaklek is a made-to-order clothing studio in the United Arab Emirates.
         These terms cover how orders, production, delivery, alterations and
@@ -55,8 +55,8 @@ export default function TermsPage() {
       <h2 className="pt-2 text-base font-medium text-text">How an order works</h2>
       <p>
         You choose a piece, its fabric, colour and cut, and either a standard
-        size or Tailored, where we take your measurements ourselves. Nothing is cut
-        until you have paid and a
+        size or Tailored, where we take your measurements ourselves. Your piece is
+        made for you after you order, once a
         stylist has confirmed the details with you. Because each piece is made
         for one person, the specification is fixed at that point, this is the
         one thing worth knowing before you order, and it is why we confirm with
@@ -68,6 +68,9 @@ export default function TermsPage() {
         listed in error, or if we suspect fraudulent use of a payment method.
         If we do, you are refunded in full.
       </p>
+      {/* CUSTOMER CANCELLATION: founder 2026-11-12, deliberately NOT stated.
+          Her call: "say nothing, cancellation is not possible". Do not add a
+          cancellation window without asking her. */}
 
       <h2 className="pt-2 text-base font-medium text-text">Prices and payment</h2>
       <p>
@@ -116,9 +119,9 @@ export default function TermsPage() {
             not describe a service the site no longer offers -- the same reason
             the uploads and measurements-form clauses below were deleted. What
             is true today: Tailored means we contact her after the order and
-            take the measurements before cutting. */}
+            take the measurements before the piece is made. */}
         If you choose Tailored, we contact you after your order to take your
-        measurements before anything is cut; otherwise you choose a standard
+        measurements before your piece is made; otherwise you choose a standard
         size from our size guide.
       </p>
       <p>

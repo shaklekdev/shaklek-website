@@ -31,7 +31,7 @@ const QUESTIONS = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is cut until you order it. There is no warehouse and no stock.
+        Nothing is made until you order it. There is no warehouse and no stock.
         Your piece is made for you, which is why it can be cut to your
         measurements rather than an average.
       </>
@@ -46,7 +46,7 @@ const QUESTIONS = [
             until she defines appointment slots (OPEN.md measuring-slots).
             Same wording as the matching /faq answer, on purpose. */}
         No. Choose Tailored and we take you through them after you order,
-        before anything is cut.
+        before your piece is made.
         Or pick a standard size from XS to XXL, for the same price. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide

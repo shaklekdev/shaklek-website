@@ -44,12 +44,12 @@ export default function CheckoutForm({ total }: { total: number }) {
   //
   // Stated once, and it does not pretend a large order is as quick as a
   // single piece -- one tailor makes these by hand. What it promises is a
-  // confirmed date before anything is cut, which is true and is already how
+  // confirmed date before the pieces are made, which is true and is already how
   // the studio works.
   const units = items.reduce((n, i) => n + (i.quantity ?? 1), 0);
   const deliveryEstimate =
     units > 2
-      ? "Made for you, piece by piece. Allow up to 3 weeks; with several pieces we confirm your exact date with you before anything is cut."
+      ? "Made for you, piece by piece. Allow up to 3 weeks; with several pieces we confirm your exact date with you before we start."
       : "Made for you, piece by piece. Allow up to 3 weeks, delivery included.";
   const { isSignedIn, user } = useUser();
   // Founder, 2026-11-11: Apple Pay was preselected on every device, Android

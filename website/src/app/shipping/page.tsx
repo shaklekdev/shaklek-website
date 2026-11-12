@@ -26,7 +26,7 @@ export default function ShippingPage() {
       <p>
         Allow <strong>up to 3 weeks</strong> from your order. Each piece is cut
         and sewn for you, one at a time, with special care.
-        Nothing is cut before your piece is confirmed, which is the point of
+        Nothing is made before you order it, which is the point of
         made-to-order.
       </p>
       {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. This said "Ten days is

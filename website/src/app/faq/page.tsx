@@ -20,7 +20,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is cut until you order it. There is no warehouse and no stock.
+        Nothing is made until you order it. There is no warehouse and no stock.
         Your piece is made for you, piece by piece and with special care, which
         is why we allow up to 3 weeks rather than the next morning, and why it can be cut to your
         measurements rather than an average.
@@ -76,7 +76,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
           WhatsApp
         </a>{" "}
         and come to you in Dubai to take your measurements, free, before
-        anything is cut. Outside Dubai, we guide you to take them yourself. If you already have
+        your piece is made. Outside Dubai, we guide you to take them yourself. If you already have
         your own, send them the same way or in the notes on your order, and a
         stylist goes through them with you. Or pick a standard size from XS to
         XXL. The price is the same either way. The{" "}
@@ -115,7 +115,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             Same policy, said as what we do: refunds are for faulty or wrong
             items, fit is the alteration. The binding wording stays in
             legal/terms. */}
-        Every piece is cut for one person after you order it, so a finished
+        Every piece is made for one person after you order it, so a finished
         piece is yours to keep. Refunds are reserved for pieces that arrive
         faulty or are not what you ordered, which we remake or refund in full
         within 14 days. Fit is covered by the alteration above. See the{" "}
@@ -163,12 +163,12 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             charged for something we cannot make." Payment is taken at checkout
             and the stylist confirms afterwards, so "before you are charged" was
             also untrue. What is true: a stylist goes through the request with
-            her before anything is cut; the terms cover a full refund if an order
+            her before the piece is made; the terms cover a full refund if an order
             is declined before production. */}
         Write it in the note field when you customise: a shorter sleeve, a
         wider collar. We are a small studio with one tailor, and a stylist
         reads every order and goes through your request with you before
-        anything is cut, so you know exactly what is being made for you.
+        your piece is made, so you know exactly what is being made for you.
       </>
     ),
   },
