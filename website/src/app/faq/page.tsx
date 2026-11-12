@@ -20,7 +20,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is made until you order it. There is no warehouse and no stock.
+        Nothing is made until you order it.
         Your piece is made for you, piece by piece and with special care, which
         is why we allow up to 3 weeks rather than the next morning, and why it can be cut to your
         measurements rather than an average.
@@ -36,7 +36,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             fashion". Was "approximately 10 working days". */}
         Allow up to 3 weeks from the moment a stylist confirms your details,
         which usually happens within a day of ordering. Each piece is cut and
-        sewn for you, one at a time, with special care: this is not fast
+        sewn for you, with special care: this is not fast
         fashion, and we take the time to get it right. We deliver everywhere in
         the UAE, and delivery is included in the price.
       </>
@@ -166,23 +166,20 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             her before the piece is made; the terms cover a full refund if an order
             is declined before production. */}
         Write it in the note field when you customise: a shorter sleeve, a
-        wider collar. We are a small studio with our own team, and a stylist
-        reads every order and goes through your request with you before
+        wider collar. Our stylists go through your request with you before
         your piece is made, so you know exactly what is being made for you.
       </>
     ),
   },
   {
-    q: "Is there a real person behind this?",
+    q: "How do I reach you?",
     a: (
       <>
-        Yes. Every order is read and confirmed by a stylist before it goes to
-        our team. A person checks what you asked for, and a person makes it.
-        You can reach us at{" "}
+        Our client team is on{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>{" "}
-        or on{" "}
+        and{" "}
         <a
           href={WHATSAPP_URL}
           target="_blank"
@@ -191,7 +188,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         >
           WhatsApp
         </a>
-        , and a person will answer.
+        , and we confirm every order with you before your piece is made.
       </>
     ),
   },
@@ -210,7 +207,7 @@ export default function FaqPage() {
   return (
     <LegalPage
       title="Questions"
-      intro="For anything else, write to us. A person reads every message."
+      intro="For anything else, write to us. We are glad to help."
     >
       {FAQS.map(({ q, a }) => (
         <div key={q}>

@@ -182,7 +182,7 @@ export default function FitFeedbackForm() {
           maxLength={FIT_NOTE_MAX}
           onChange={(e) => setNote(e.target.value)}
           rows={3}
-          placeholder="In your own words. The tailor reads this."
+          placeholder="In your own words."
           className="mt-3 w-full border border-[#DDD6C8] px-4 py-3 text-[14px] text-text placeholder:text-text-3 focus:border-text focus:outline-none"
         />
       </div>

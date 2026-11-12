@@ -188,7 +188,7 @@ export const articles: Article[] = [
     // cited source or to something visible in our own catalogue.
     title: "What to wear under an open abaya in summer",
     description:
-      "The colour rule, the three combinations that work, and the four mistakes people make. A practical guide for Gulf heat, from a workshop cutting linen in the UAE.",
+      "The colour rule, the three combinations that work, and the four mistakes people make. A practical guide for Gulf heat, from a linen label made in the UAE.",
     published: "2026-09-13",
     readingMinutes: 6,
     intro:
@@ -399,7 +399,7 @@ export const articles: Article[] = [
     readingMinutes: 6,
     intro:
       "Three different things get called an abaya price in Dubai, and they are not close to each other. Knowing which one you are being quoted is most of the answer.",
-    hero: { src: "/marketing/story-tailoring.jpg", alt: "A tailor at work.", w: 1584, h: 672 },
+    hero: { src: "/marketing/story-tailoring.jpg", alt: "Tailoring at Shaklek.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
@@ -482,7 +482,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "The number sounds low until the cloth is added. An open abaya takes four metres and often four and a half, and our own 2026 supplier quotes put a metre at about AED 20 for local cotton, AED 36 for imported linen landed here, and about AED 65 for good linen bought locally. So the honest total for this route is AED 280 to AED 650 before any embroidery, and it is only the cheapest one if you already know what fabric you want and do not mind two trips.",
+        text: "The number sounds low until the cloth is added. An open abaya takes four metres or more, and good linen costs several times what polyester crepe does. So the real total for this route is AED 280 to AED 650 before any embroidery, and it is only the cheapest one if you already know what fabric you want and do not mind two trips.",
       },
       { type: "h3", text: "Full custom, from about AED 800" },
       {
@@ -584,7 +584,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures. The places and their prices come from 2026 abaya shopping guides by Noor Zara, Lamis, UAE Service Guide and Dubai-On, Tripadvisor reviews of Naif Souk, Sharjah retailer listings for the Central Souq figures, and Satwa tailoring listings for the stitching prices. Fabric costs per metre are our own 2026 supplier quotes. Fibre composition of nida is from abaya fabric suppliers including Fabric UK and The Hijab Company.",
+        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures. The places and their prices come from 2026 abaya shopping guides by Noor Zara, Lamis, UAE Service Guide and Dubai-On, Tripadvisor reviews of Naif Souk, Sharjah retailer listings for the Central Souq figures, and Satwa tailoring listings for the stitching prices. Fibre composition of nida is from abaya fabric suppliers including Fabric UK and The Hijab Company.",
       },
     ],
   },
@@ -779,7 +779,7 @@ export const articles: Article[] = [
     readingMinutes: 5,
     intro:
       "A medium is not a body. It is a statistical average of thousands of bodies, and the average of a large group of people resembles almost none of them.",
-    hero: { src: "/marketing/story-tailoring.jpg", alt: "A tailor at work.", w: 1584, h: 672 },
+    hero: { src: "/marketing/story-tailoring.jpg", alt: "Tailoring at Shaklek.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
@@ -912,7 +912,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and a tailor makes that one. Nothing sits in a warehouse waiting for a body it might fit.",
+        text: "Shaklek is made to order in the UAE. You choose the cut, the length and the colour, you see the piece as you choose it, and our team makes that one. Nothing sits in a warehouse waiting for a body it might fit.",
       },
       {
         type: "link",

@@ -30,11 +30,11 @@ const COPY = {
   },
   invalid: {
     heading: "That link has expired or was already used.",
-    body: "If you have already unsubscribed you are off the list and nothing more is needed. If you are still receiving email from us, write to hello@shaklek.com and we will remove you by hand.",
+    body: "If you have already unsubscribed you are off the list and nothing more is needed. If you are still receiving email from us, write to hello@shaklek.com and we will remove you straight away.",
   },
   error: {
     heading: "Something went wrong at our end.",
-    body: "You may still be on the list. Try the link again in a few minutes, and if it still fails, write to hello@shaklek.com and we will remove you by hand.",
+    body: "You may still be on the list. Try the link again in a few minutes, and if it still fails, write to hello@shaklek.com and we will remove you straight away.",
   },
 } as const;
 

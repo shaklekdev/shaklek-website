@@ -25,7 +25,7 @@ export default function ShippingPage() {
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
         Allow <strong>up to 3 weeks</strong> from your order. Each piece is cut
-        and sewn for you, one at a time, with special care.
+        and sewn for you, with special care.
         Nothing is made before you order it, which is the point of
         made-to-order.
       </p>

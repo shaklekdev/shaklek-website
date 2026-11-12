@@ -155,7 +155,7 @@ const tenetGroups = [
         // your body, not a size chart" and "nothing is made until you order
         // it" are both card copy now. Founder: "cut for you and made to order
         // are repeated a lot". The long version says what a card cannot.
-        body: "Our team cuts one piece at a time, so there is no minimum run and no stock waiting for a body that happens to fit it. That is the part most labels cannot copy: nothing here is made before somebody wants it, so there is nothing left over to discount, and nothing made that nobody asked for.",
+        body: "Our team cuts one piece at a time, for the person who ordered it. That is the part most labels cannot copy: nothing here is made before somebody wants it.",
       },
       {
         title: "Fixed prices",
@@ -244,7 +244,7 @@ export default function OurStoryPage() {
         </p>
         <p className="subtitle mt-4 max-w-md text-justify hyphens-auto">
           Every piece here starts as an idea, not a rack of stock waiting for
-          someone your size to walk in. A real tailor makes it, one piece at
+          someone your size to walk in. Our team makes it, one piece at
           a time, for the person who ordered it. That comes down to four
           things:
         </p>
@@ -317,7 +317,7 @@ export default function OurStoryPage() {
       <section className="relative mb-14 w-full overflow-hidden">
         <Image
           src="/marketing/story-tailoring.jpg"
-          alt="A tailor at work on a single piece"
+          alt="Tailoring at Shaklek."
           fill
           sizes="100vw"
           className="object-cover"

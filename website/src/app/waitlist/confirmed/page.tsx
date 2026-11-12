@@ -34,7 +34,7 @@ const COPY = {
   },
   error: {
     heading: "Something went wrong at our end.",
-    body: "Your address is safe. Try the link again in a few minutes, and if it still fails, write to hello@shaklek.com and we will add you by hand.",
+    body: "Your address is safe. Try the link again in a few minutes, and if it still fails, write to hello@shaklek.com and we will take care of it.",
   },
 } as const;
 

@@ -78,7 +78,7 @@ export default function Concept() {
         <div className="relative order-last h-[200px] w-full sm:h-full sm:min-h-[260px]">
           <Image
             src="/marketing/story-tailoring-v2.jpg"
-            alt="A tailor working on a single piece"
+            alt="Tailoring at Shaklek."
             fill
             sizes="(min-width: 640px) 50vw, 100vw"
             className="object-cover"

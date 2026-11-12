@@ -47,8 +47,7 @@ export default function SizeGuidePage() {
 
       <h2 className="pt-2 text-base font-medium text-text">Standard sizes</h2>
       <p>
-        Consolidated from published UAE-market charts, as a reference if you
-        would rather pick a size than measure.
+        Our standard sizes, if you would rather pick a size than be measured.
       </p>
 
       {/* No min-width: six short columns fit a 342px column at 390 wide, and
@@ -144,8 +143,7 @@ export default function SizeGuidePage() {
       </p>
 
       <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
-        These are consolidated from published UAE-market body-measurement charts
-        and are a guide to choosing a standard size. For an exact fit, choose
+        These are a guide to choosing a standard size. For an exact fit, choose
         Tailored and we take your measurements with you after you order.
       </p>
     </LegalPage>

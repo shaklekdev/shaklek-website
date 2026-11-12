@@ -375,7 +375,7 @@ export default async function ArticlePage({
           <div className={`${TEXT} mt-20 border-t border-border pt-10`}>
             <p className="text-[17px] text-text-2">
               Shaklek makes clothes to order in the UAE. You choose the cut, the
-              length and the colour, and a tailor makes that one piece.
+              length and the colour, and our team makes that one piece.
             </p>
             {isStoreOpen() ? (
               <div className="mt-6 flex flex-wrap gap-3">

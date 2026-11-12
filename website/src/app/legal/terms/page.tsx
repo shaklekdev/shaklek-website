@@ -56,8 +56,8 @@ export default function TermsPage() {
       <p>
         You choose a piece, its fabric, colour and cut, and either a standard
         size or Tailored, where we take your measurements ourselves. Your piece is
-        made for you after you order, once a
-        stylist has confirmed the details with you. Because each piece is made
+        made for you after you order, once we
+        have confirmed the details with you. Because each piece is made
         for one person, the specification is fixed at that point, this is the
         one thing worth knowing before you order, and it is why we confirm with
         you first rather than after.
@@ -153,8 +153,8 @@ export default function TermsPage() {
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>{" "}
-        or on WhatsApp with a photo and what you would like adjusted, and a
-        stylist will arrange it. If the piece needs more than an alteration can
+        or on WhatsApp with a photo and what you would like adjusted, and we
+        will arrange it. If the piece needs more than an alteration can
         give, we offer store credit instead.
       </p>
       <p>
@@ -237,8 +237,8 @@ export default function TermsPage() {
       </p>
       <p>
         Delivery estimates assume normal conditions. Events outside our
-        reasonable control, courier disruption, a delay in fabric supply,
-        illness, or anything similar, may move a date. We will always tell you.
+        reasonable control, such as courier or supply disruption, may move a
+        date. We will always tell you.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Changes</h2>
@@ -253,11 +253,11 @@ export default function TermsPage() {
       <p>
         These terms are governed by the laws of the United Arab Emirates, and
         the courts of Dubai have jurisdiction over any dispute. We would much
-        rather sort anything out directly first, write to{" "}
+        rather sort anything out directly first: write to{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
-        </a>{" "}
-        and a person will read it.
+        </a>
+        .
       </p>
     </LegalPage>
   );

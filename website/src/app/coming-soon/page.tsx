@@ -148,7 +148,7 @@ const PILLARS = [
     // "LOCAL" is the founder's, 2026-09-14, and it is the word carrying the
     // card: the title says where, this says who, and local is what makes the
     // two one claim rather than a fact and a nicety.
-    body: "By your local tailor, who works to every detail you choose.",
+    body: "Handmade by our team, to every detail you choose.",
   },
 ];
 

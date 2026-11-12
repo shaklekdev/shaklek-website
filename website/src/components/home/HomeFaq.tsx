@@ -31,7 +31,7 @@ const QUESTIONS = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is made until you order it. There is no warehouse and no stock.
+        Nothing is made until you order it.
         Your piece is made for you, which is why it can be cut to your
         measurements rather than an average.
       </>
@@ -59,8 +59,8 @@ const QUESTIONS = [
     q: "How long does it take?",
     a: (
       <>
-        Up to 3 weeks. Your piece is cut and sewn after you order, one at a
-        time, with special care: this is not fast fashion.
+        Up to 3 weeks. Your piece is cut and sewn after you order, with
+        special care: this is not fast fashion.
       </>
     ),
   },

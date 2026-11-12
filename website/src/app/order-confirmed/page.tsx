@@ -197,19 +197,10 @@ function OrderConfirmedContent() {
 
       <p className="mt-4 text-right font-display text-xl text-text">Total AED {order.total}</p>
 
-      <p className="mt-6 text-xs text-text-3">
-        {order.status === "paid" || order.emailed
-          ? "Your stylist has been notified and will reach out shortly."
-          : order.status
-            ? "Payment received, confirming with your stylist now."
-            : "Order received. A stylist will be in touch."}
-      </p>
-
       <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">
-        <strong className="text-text">What happens next:</strong> a
-        Shaklek stylist reviews your order and reaches out, by WhatsApp
-        or email, within 24 hours to confirm the details before it goes
-        to your tailor. Your piece is then made for you, with special care, and we
+        <strong className="text-text">What happens next:</strong> we
+        contact you within 24 hours, by WhatsApp or email, to confirm your
+        details. Your piece is then made for you, with special care, and we
         allow up to 3 weeks from confirmation.
       </div>
 

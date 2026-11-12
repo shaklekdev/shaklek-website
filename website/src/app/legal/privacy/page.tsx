@@ -41,15 +41,15 @@ const adsEnabled = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy & Cookies" updated="5 November 2026">
+    <LegalPage title="Privacy & Cookies" updated="12 November 2026">
       <p>
         This explains what Shaklek collects, why, and who else touches it. We
         collect what we need to make and deliver your order, and little else. We
         do not sell personal data.{" "}
         {adsEnabled ? (
           <>
-            We use one advertising measurement tool, the Meta Pixel, described
-            under Cookies below. There is no other analytics on this site.
+            We measure our advertising with Meta, only with your consent. See
+            Cookies below.
           </>
         ) : (
           <>We run no advertising cookies, and there is no analytics on this site.</>
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
         <strong className="text-text-2">Shaklek For Online Selling</strong>{" "}
         (شكلك للبيع عبر الإنترنت), a sole establishment licensed in Dubai,
         United Arab Emirates under commercial licence no.{" "}
-        <strong className="text-text-2">1645657</strong>. Reach a person at{" "}
+        <strong className="text-text-2">1645657</strong>. Contact:{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>
@@ -96,17 +96,14 @@ export default function PrivacyPage() {
       <p>
         Measurements are body data, so we treat them as sensitive. We take them
         after your order, and only if you choose Tailored; a standard size
-        XS–XXL needs none. They go to the tailor making your piece and nowhere
+        XS–XXL needs none. They are used to make your piece and go nowhere
         else, and you can ask us to delete them at any time at
         hello@shaklek.com.
       </p>
       <p>
         If you scan the card in your parcel and tell us how a piece fitted, we
-        keep that answer with your measurements and show it to the tailor making
-        your next piece. It is why we ask for your email on that page: only to
-        put your answer with your order. That page sends you nothing, and we
-        keep each answer with the order it was about, so nothing you have told us
-        is ever replaced by something newer. All of it is shown to you in your
+        keep that answer with your measurements and use it for
+        your next piece. We use your email only to put your answer with your order. All of it is shown to you in your
         account, and you can delete it there whenever you like.
       </p>
 
@@ -126,12 +123,12 @@ export default function PrivacyPage() {
         {/* Founder, 2026-11-12: categories, not vendor names. Privacy law asks
             us to state the categories of recipients and where data is held,
             not to publish our technical stack. Names are given on request. */}
-        We use a small number of trusted providers, each handling only what
+        We use trusted providers, each handling only what
         its job needs: our payment provider (payments and delivery address),
         our sign-in provider, our order database and website hosting (both in
-        the EU), and our email provider (order emails). The tailor assigned to
-        your order receives a spec sheet with what to make, no name, no email,
-        no address. You can ask us for the list of providers at any time.
+        the EU), and our email provider (order emails). Our tailoring team
+        receives only what is needed to make your piece, never your contact
+        details. You can ask us for the list of providers at any time.
       </p>
       <p>
         Because our hosting and database sit in the EU, your data is transferred
@@ -164,8 +161,7 @@ export default function PrivacyPage() {
           <p>
             If you accept, Meta&apos;s pixel lets us measure how our advertising
             on Instagram and Facebook actually performs: which piece was looked
-            at, what reached the cart, what became an order, and the amount. It
-            is how we know whether a campaign earned its place. Meta is a joint
+            at, what reached the cart, what became an order, and the amount. Meta is a joint
             controller for this information and uses it to measure and target
             advertising. See{" "}
             <a
@@ -182,8 +178,7 @@ export default function PrivacyPage() {
             <strong>We do not send Meta your name, email, address, phone number
             or measurements.</strong> Only the item, the amount and the order
             reference, plus the cookie id, IP address and browser the pixel
-            already passes. Advanced Matching, which would hash and send your
-            email, is switched off.
+            already passes.
           </p>
           <p>
             To be exact about what that promise covers: it is about what{" "}
@@ -198,9 +193,8 @@ export default function PrivacyPage() {
             <strong>You can change your mind at any time.</strong> Use{" "}
             <strong>Cookie choices</strong> at the bottom of any page. Declining
             does more than switch it off from here on: it deletes the cookies
-            Meta has already set on this browser. The pixel script itself stays in memory
-            until your next page load, but no further events are sent from the
-            moment you decline.
+            Meta has already set on this browser. Nothing
+            further is sent from the moment you decline.
           </p>
           <p>
             There are no other advertising, behavioural or affiliate cookies. You

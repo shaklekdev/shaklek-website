@@ -212,7 +212,7 @@ export function buildCustomerConfirmation(opts: {
     kind: "transactional",
     // Without this the inbox preview is whatever text comes first, which here
     // is the order reference -- a row of characters that tells her nothing.
-    preheader: `A stylist will be in touch within 24 hours.`,
+    preheader: `We will be in touch within 24 hours.`,
     heading: "Order confirmed",
     eyebrow: ref ? `Order reference ${ref}` : undefined,
     lines: [
@@ -227,7 +227,7 @@ export function buildCustomerConfirmation(opts: {
     button: undefined,
     note: {
       lines: [
-        "A Shaklek stylist will reach out within 24 hours to confirm details before it goes to your tailor. Your piece is then made for you with special care; allow up to 3 weeks from confirmation, and delivery is included anywhere in the UAE.",
+        "We will contact you within 24 hours to confirm your details. Your piece is then made for you with special care; allow up to 3 weeks from confirmation, and delivery is included anywhere in the UAE.",
         `Want this order and any future ones in one place? Sign up with this same address (${email}) and it will already be there.`,
       ],
       button: { label: "Create a free account", url: `${appUrl}/sign-up` },

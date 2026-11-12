@@ -35,7 +35,7 @@ export async function generateMetadata({
 
   return pageMetadata({
     title: item.name,
-    description: `${item.name}. ${item.descriptor}. Made to order in your measurements, from AED ${item.price}. Choose the colour, cut and length, and a tailor makes it for you.`,
+    description: `${item.name}. ${item.descriptor}. Made to order in your measurements, from AED ${item.price}. Choose the colour, cut and length, and our team makes it for you.`,
     path: `/design/${item.slug}`,
     images: [image],
   });
