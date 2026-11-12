@@ -40,11 +40,14 @@ export default function CustomizeParameters({
   deferredPreloads = [],
   primaryAction,
   availableColors,
+  soldOutColors = [],
   included = [],
   includedCopy,
 }: {
   spec: DesignSpec;
   availableColors: string[];
+  /** Colours whose linen has run out for this piece (src/lib/fabricStock.ts). */
+  soldOutColors?: string[];
   included?: IncludedPiece[];
   includedCopy?: { heading: string; line: string };
   onSpecChange: (spec: DesignSpec) => void;
@@ -291,6 +294,7 @@ export default function CustomizeParameters({
         onFabricChange={handleFabricChange}
         onColorChange={handleColorChange}
         available={availableColors}
+        soldOut={soldOutColors}
       />
 
       {includedCopy ? (

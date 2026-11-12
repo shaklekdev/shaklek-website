@@ -10,6 +10,7 @@ export default function FabricColorPicker({
   onFabricChange,
   onColorChange,
   available,
+  soldOut = [],
 }: {
   fabric: Fabric;
   color: string;
@@ -18,6 +19,9 @@ export default function FabricColorPicker({
    *  with no photograph behind them (founder caught it on staging,
    *  2026-10-11). The server refuses anything outside this list too. */
   available: string[];
+  /** Colours whose linen has run out for this piece. Still shown, crossed out,
+   *  so the customer sees the range rather than a colour silently vanishing. */
+  soldOut?: string[];
   onFabricChange: (fabric: Fabric) => void;
   onColorChange: (color: string) => void;
 }) {
@@ -41,7 +45,8 @@ export default function FabricColorPicker({
         {colors.filter((c) => available.includes(c.name)).map((c) => (
           <button
             key={c.name}
-            aria-label={c.name}
+            aria-label={soldOut.includes(c.name) ? `${c.name}, sold out` : c.name}
+            title={soldOut.includes(c.name) ? `${c.name}: sold out` : c.name}
             aria-pressed={c.name === color}
             onClick={() => onColorChange(c.name)}
             /* ⚠️ THE CHIP IS A PHOTOGRAPH OF THE CLOTH, not a flat colour.
@@ -53,6 +58,10 @@ export default function FabricColorPicker({
                neighbours from overlapping) -- founder review 2026-11-11. */
             className={`relative h-9 w-9 rounded-full border-2 bg-cover bg-center transition-all before:absolute before:-inset-1 before:content-[''] ${
               c.name === color ? "border-accent scale-110" : "border-transparent"
+            } ${
+              soldOut.includes(c.name)
+                ? "opacity-40 after:absolute after:left-1/2 after:top-1/2 after:h-[2px] after:w-[130%] after:-translate-x-1/2 after:-translate-y-1/2 after:-rotate-45 after:bg-text after:content-['']"
+                : ""
             }`}
             style={{ backgroundColor: c.hex, backgroundImage: `url(${c.swatch})` }}
           />

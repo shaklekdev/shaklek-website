@@ -50,6 +50,28 @@ function isKnownColor(item: CatalogItem, name: string | null | undefined) {
 
 export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [spec, setSpec] = useState<DesignSpec>(() => createSpecFromCatalog(item));
+  // FABRIC STOCK (founder 2026-11-12: the linen is limited). Colours whose
+  // remaining linen no longer fits this piece. Display only -- /api/orders
+  // refuses a sold-out colour on its own. See src/lib/fabricStock.ts.
+  const [soldOutColors, setSoldOutColors] = useState<string[]>([]);
+  useEffect(() => {
+    let live = true;
+    fetch("/api/stock")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { soldOut?: Record<string, string[]> } | null) => {
+        if (!live || !d?.soldOut) return;
+        setSoldOutColors(
+          Object.entries(d.soldOut)
+            .filter(([, cats]) => cats.includes(item.category))
+            .map(([color]) => color),
+        );
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [item.category]);
+  const colorSoldOut = soldOutColors.includes(spec.color);
   const [savedMeasurements, setSavedMeasurements] = useState<SavedMeasurements | undefined>();
   // Set when the customer arrived from a cart line's Edit link. Saving then
   // overwrites that line instead of appending a second one.
@@ -332,6 +354,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                are per garment type. */
             category={paramKeyFor(item)}
             availableColors={Object.keys(item.colorImages ?? {})}
+            soldOutColors={soldOutColors}
             included={includedWith(item.category)}
             includedCopy={INCLUDED_COPY}
             previewImage={previewImage}
@@ -439,7 +462,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               </div>
               <button
                 onClick={handleSave}
-                disabled={!spec.constraints.passed}
+                disabled={!spec.constraints.passed || colorSoldOut}
                 className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
                 // ⚠️ THE MEASUREMENTS GATE IS GONE, and so is its tooltip.
                 // SizePicker.tsx:88 now sets measurementsValid to a literal
@@ -453,7 +476,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     : undefined
                 }
               >
-                {editingId ? "Save changes" : "Add to cart"}
+                {colorSoldOut ? `${spec.color} sold out` : editingId ? "Save changes" : "Add to cart"}
               </button>
             </div>
 
@@ -487,7 +510,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             </div>
             <button
               onClick={handleSave}
-              disabled={!spec.constraints.passed}
+              disabled={!spec.constraints.passed || colorSoldOut}
               className="shrink-0 rounded-full bg-accent px-7 py-3 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
               title={
                 !spec.constraints.passed
@@ -495,7 +518,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                   : undefined
               }
             >
-              {editingId ? "Save changes" : "Add to cart"}
+              {colorSoldOut ? `${spec.color} sold out` : editingId ? "Save changes" : "Add to cart"}
             </button>
           </div>
         </div>

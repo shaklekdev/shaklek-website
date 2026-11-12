@@ -7,6 +7,7 @@ import { resolveFabric } from "@/data/fabrics";
 import { includedWith } from "@/data/catalog";
 import { cleanEventId, cleanFbCookie, clientIp, sendCapiEvent } from "@/lib/metaCapi";
 import { resolveFitNotes } from "@/data/fitNotes";
+import { reserveFabricOrThrow, SoldOutError } from "@/lib/fabricStock";
 import { issueOrderAccessToken } from "@/lib/orderAccess";
 import { rateLimit } from "@/lib/rateLimit";
 import { canonicalOrigin, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
@@ -115,6 +116,12 @@ async function persistOrder(
   // upsert stays outside: it is idempotent and a customer with no order is
   // harmless, where an order with no lines is not.
   return await db.transaction(async (tx) => {
+  // FABRIC STOCK. Throws SoldOutError before anything is written, so a
+  // sold-out colour leaves no order row behind. See src/lib/fabricStock.ts.
+  await reserveFabricOrThrow(
+    tx,
+    priced.map((p) => ({ color: p.color, category: p.category, quantity: p.quantity })),
+  );
   const [orderRow] = await tx
     .insert(schema.orders)
     .values({
@@ -360,6 +367,16 @@ export async function POST(req: NextRequest) {
   try {
     orderId = await persistOrder(items, priced, paymentMethod, serverTotal, email);
   } catch (err) {
+    if (err instanceof SoldOutError) {
+      return NextResponse.json(
+        {
+          ok: false,
+          soldOut: err.color,
+          error: `There is not enough ${err.color} linen left for this order. Please choose another colour. You have not been charged.`,
+        },
+        { status: 409 },
+      );
+    }
     console.error("[orders] Failed to persist order to DB:", err);
   }
 
@@ -442,6 +459,11 @@ export async function POST(req: NextRequest) {
     try {
     session = await stripe.checkout.sessions.create({
       mode: "payment",
+      // 30 minutes (Stripe's minimum) instead of the 24h default: an unpaid
+      // checkout holds fabric stock until this expires and the webhook marks
+      // it payment_failed. Must stay SHORTER than the hold window in
+      // src/lib/fabricStock.ts (35 min), or a late payment could oversell.
+      expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
       integration_identifier: "shaklek-checkout-rqkazmjg",
       customer_email: email,
       client_reference_id: orderId,
