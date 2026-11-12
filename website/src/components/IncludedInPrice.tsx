@@ -3,6 +3,7 @@ import {
   INCLUDED_CHECKOUT_LINE,
   INCLUDED_HEADING,
   INCLUDED_HOME_CHIPS,
+  INCLUDED_HOME_FOOTNOTE,
   INCLUDED_HOME_LEAD,
   INCLUDED_HOME_LINE,
   includedLines,
@@ -75,6 +76,9 @@ export default function IncludedInPrice({
               </span>
             </Fragment>
           ))}
+        </p>
+        <p aria-hidden="true" className="mt-1 text-[10px] tracking-[0.1em] text-text-3">
+          {INCLUDED_HOME_FOOTNOTE}
         </p>
       </div>
     );

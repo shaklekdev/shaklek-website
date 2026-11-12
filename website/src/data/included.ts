@@ -40,18 +40,21 @@ export function includedLines(category: string | null | undefined): IncludedLine
 
 /** Checkout, under the order lines, before paying. */
 export const INCLUDED_CHECKOUT_LINE =
-  "All included: fitting in Dubai, every option, linen, UAE delivery and one alteration.";
+  "All included: private home fitting in Dubai, every option, linen, UAE delivery and one alteration.";
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */
 export const INCLUDED_HOME_LINE =
-  "All included: fitting, every option, delivery and one alteration.";
+  "All included: private home fitting in Dubai, every option, delivery and one alteration.";
 
 /** The same sentence as the home rail draws it: a lead and four items. The
  *  words are the sentence's own words, so the two never disagree. */
 export const INCLUDED_HOME_LEAD = "All included";
 export const INCLUDED_HOME_CHIPS: IncludedLine[] = [
-  { key: "home", label: "Fitting" },
+  { key: "home", label: "Private home fitting*" },
   { key: "sliders", label: "Every option" },
   { key: "parcel", label: "Delivery" },
   { key: "needle", label: "One alteration" },
 ];
+
+/** Footnote for the asterisk on "Private home fitting*" (founder, 2026-11-12). */
+export const INCLUDED_HOME_FOOTNOTE = "*In Dubai";
