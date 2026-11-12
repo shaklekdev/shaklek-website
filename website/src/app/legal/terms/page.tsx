@@ -120,9 +120,12 @@ export default function TermsPage() {
             the uploads and measurements-form clauses below were deleted. What
             is true today: Tailored means we contact her after the order and
             take the measurements before the piece is made. */}
-        If you choose Tailored, we contact you after your order to take your
-        measurements before your piece is made; otherwise you choose a standard
-        size from our size guide.
+        {/* Visit back on the site 2026-11-12 (founder): terms must match. */}
+        If you choose Tailored, we contact you after your order to arrange a
+        private home fitting in Dubai, included in the price, where we take your
+        measurements before your piece is made. Outside Dubai, we guide you to
+        take them yourself. Otherwise you choose a standard size from our size
+        guide.
       </p>
       <p>
         Please check your delivery address carefully. If a parcel is returned to

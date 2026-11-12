@@ -6,6 +6,7 @@ import { catalog } from "@/data/catalog";
 import Header from "@/components/Header";
 import CheckoutForm from "@/components/CheckoutForm";
 import { useCart } from "@/lib/CartContext";
+import IncludedInPrice from "@/components/IncludedInPrice";
 
 /** The slider set a cart line's product uses. The line stores a slug, so the
  *  catalogue item is recoverable; without this the labels are filtered against
@@ -88,6 +89,10 @@ export default function CheckoutPage() {
             </div>
           ))}
         </div>
+
+        {/* Founder priority 2026-11-12: the price is the whole price, said once
+            more at the moment of paying. Shared copy in data/included.ts. */}
+        <IncludedInPrice variant="line" />
 
         <CheckoutForm total={total} />
       </div>

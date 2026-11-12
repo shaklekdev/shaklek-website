@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CatalogCard from "@/components/CatalogCard";
 import { catalog } from "@/data/catalog";
+import IncludedInPrice from "@/components/IncludedInPrice";
 
 /**
  * The four pieces shown on the home page, by catalogue slug, in this order.
@@ -42,6 +43,15 @@ export default function ProductRail({
   // ⚠️ THE /catalog PAGE IS DIFFERENT and keeps it in its own intro paragraph:
   // there is no Concept section above it, so that page would otherwise never
   // say it at all. Same promise, different neighbours.
+  //
+  //
+  // ⚠️ 2026-11-12, LATER THE SAME DAY: THE PRICE CLAIM SITS UNDER THIS
+  // HEADING (IncludedInPrice "chips"). Founder priority: it must be obvious
+  // that the price includes everything, and this is the first text a cold
+  // visitor reads next to the clothes. It names the fitting, which the note
+  // above argued against -- the difference is that this is a PRICE line (what
+  // the number covers), not a second description of the visit; Concept below
+  // still explains what happens. Copy lives in data/included.ts.
   subtitle = "Make it yours in the next step.",
 }: {
   title?: string;
@@ -72,6 +82,7 @@ export default function ProductRail({
               2026-10-11: a number on the page goes stale every time the range
               moves, and nobody remembers to look. */}
         </div>
+        <IncludedInPrice variant="chips" />
       </section>
 
       {/* A SWIPEABLE ROW OF FOUR, since 2026-11-12. It was a grid of the whole

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { includedWith } from "@/data/catalog";
+import IncludedInPrice from "@/components/IncludedInPrice";
 
 // The line under the colour circles on every abaya. Cleared by shaklek-marketing
 // 2026-10-11 against catalog.ts, fabrics.ts and margins.mjs. "the price", never
@@ -479,6 +480,19 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 {colorSoldOut ? `${spec.color} sold out` : editingId ? "Save changes" : "Add to cart"}
               </button>
             </div>
+
+            {/* ⚠️ WHAT THE PRICE INCLUDES, DIRECTLY UNDER THE PRICE AND THE
+                BUTTON. Founder priority 2026-11-12: it must be obvious that
+                AED {price} is the whole price -- fitting, every option, linen,
+                delivery, one alteration. One card (IncludedInPrice), copy from
+                data/included.ts so checkout and the home page agree. On a phone
+                this is the next thing after Add to cart, so it is seen without
+                hunting; it is NOT in the sticky bar, which stays name + price
+                + button. The shayla line appears here for abayas; the
+                IncludedPieces photo block under the colour swatches stays
+                because it shows the shayla IN HER COLOUR, which a line of text
+                cannot. They are a full screen apart on every breakpoint. */}
+            <IncludedInPrice variant="card" category={item.category} />
 
             {/* The consumer information UAE law requires with a product:
                 fibre composition, origin, care and return terms, in Arabic
