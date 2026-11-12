@@ -252,7 +252,7 @@ export const BENEFITS = [
     // "watch it change"; the watch-it-change promise lives in STEPS 01 and
     // must stay attached to the options that actually do.
     k: "100% custom-made",
-    v: "Change the sleeve, the length, the leg, the fit. Your piece does not exist until you ask for it. No shelf, no overproduction.",
+    v: "Nothing is made until you order it.", // shortened: founder + marketing, 2026-11-12
     icon: "sewing-machine",
   },
   // ⚠️ SECOND, AND IT SAYS LINEN, NOT "NATURAL". Both are hers, 2026-09-16:
@@ -283,7 +283,7 @@ export const BENEFITS = [
   // point on the page.
   {
     k: "100% natural linen",
-    v: "Breathable plant fibre against your skin, never synthetic. It creases, and it softens with wear.",
+    v: "Breathable, never synthetic.",
     icon: "flax",
   },
   // ⚠️ THE VISIT IS IN THIS TILE, AND IT IS A PRICE CLAIM, NOT THE OFFER AGAIN.
@@ -347,7 +347,7 @@ export const BENEFITS = [
     // its own -- one fixed price, everything you choose inside it -- and the
     // word "free" does not appear, because "free" was the visit's word.
     k: "One fixed price per piece",
-    v: `From AED ${Math.min(...catalog.map((i) => i.price))}, longer or shorter, the same price. The fabric, your measurements and every option you choose are in it.`,
+    v: `From AED ${Math.min(...catalog.map((i) => i.price))}, every option included.`,
     icon: "tag",
   },
   // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
@@ -378,7 +378,7 @@ export const BENEFITS = [
     // happens, which is where a garment is cut and sewn. productDisclosure.ts
     // already carries it as the legal origin field.
     k: "Made in the UAE",
-    v: "Cut and sewn here by one tailor, never shipped in from a factory abroad.",
+    v: "Cut and sewn by our tailor, never a factory.",
     icon: "pin",
   },
 ];

@@ -54,9 +54,12 @@ export default function Home() {
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <Hero />
-      <Benefits />
+      {/* Founder + marketing agent, 2026-11-12: a cold visitor from an ad must
+          see the clothes first (COS / Arket pattern), then the one unusual
+          mechanism (private home fitting), then the reasons. */}
       <ProductRail />
       <Concept />
+      <Benefits />
       <HomeFaq />
       <BackToTop />
     </div>

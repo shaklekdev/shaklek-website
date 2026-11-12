@@ -15,7 +15,7 @@ import { catalog } from "@/data/catalog";
 export const HOME_RAIL_SLUGS = [
   "buttoned-abaya", // Buttoned Abaya
   "structured-blouse", // Peplum Blouse
-  "open-abaya", // Open Abaya
+  "buttoned-dress", // Buttoned Dress (shirt collar) - founder 2026-11-12
   "wide-leg-trousers", // Relaxed Trousers
 ];
 
