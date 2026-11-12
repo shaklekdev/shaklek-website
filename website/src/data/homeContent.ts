@@ -283,7 +283,7 @@ export const BENEFITS = [
   // point on the page.
   {
     k: "100% natural linen",
-    v: "Breathable, never synthetic.",
+    v: "Never synthetic, always skin-friendly.", // founder 2026-11-12
     icon: "flax",
   },
   // ⚠️ THE VISIT IS IN THIS TILE, AND IT IS A PRICE CLAIM, NOT THE OFFER AGAIN.
