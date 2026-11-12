@@ -36,7 +36,7 @@ for (const [ci, combo] of combos.entries()) {
       const p = item.comboImages?.Navy?.[combo]?.front ?? item.colorImages?.Navy?.front ?? item.image;
       file = p ? path.join("public", p) : null;
     } else {
-      file = path.join("public/catalog/flats", flatFileName(slug, combo, kind));
+      file = path.join("public/catalog/x58b984b978b45122d30e4b9d", flatFileName(slug, combo, kind));
     }
     if (!file || !fs.existsSync(file)) continue;
     layers.push({

@@ -102,9 +102,9 @@ script.
    `[À REMPLIR PAR TOI: the piece that almost worked. What was it, and what
    was wrong with it?]`
 3. **Who she is.** "A tech girl who happens to love fashion" (`:473`).
-   `[À REMPLIR PAR TOI: what you did or do in tech, in one sentence you are
-   comfortable saying on camera. Where you grew up, how long you have lived in
-   the UAE, why here.]`
+   **Record only, not said on camera (2026-11-12).**
+   `[À REMPLIR PAR TOI: where you grew up, how long you have lived in the
+   UAE, why here.]`
 4. **The question.** "What if clothes adapted to us instead of us adapting to
    clothes?" (`:415-416`) and "Show me every version of a piece before it
    exists. Then make only the one I chose." (`:474-476`)
@@ -120,7 +120,8 @@ script.
    Internal dates: fine to say "this summer", no need for the day.
 7. **The fabric decision.** The plan was linen and organic cotton. On
    2026-08-26 there was no cotton supplier, so the label launched in linen
-   only (`homeContent.ts:17-22`). The linen was bought and paid in September:
+   only (`homeContent.ts:17-22`). **Record only: on camera this is "we chose
+   one fabric", never the cotton or the supplier (2026-11-12).** The linen was bought and paid in September:
    one cloth, four colours, Ivory, Navy, Burgundy, White
    (`CLAUDE.md`, `src/data/colors.ts`).
    `[À REMPLIR PAR TOI: the day you chose the cloth. Did you touch it first,
@@ -132,10 +133,9 @@ script.
    sewing, the first piece they made for you. Their first name ONLY if they
    agree to be named.]`
 9. **The opening that moved.** Planned for 26 Oct, pushed to 1 Nov, then to
-   11 Nov (`planning/OPEN.md`, open-2026-11-11). On 8 Nov she shot the
+   11 Nov (`planning/OPEN.md`, open-2026-11-11). **Record only, never said
+   on camera (2026-11-12).** On 8 Nov she shot the
    Buttoned Abaya herself in Al Fahidi, old Dubai (session log 2026-11-11).
-   `[À REMPLIR PAR TOI: why you moved the date, in your words. The record
-   says that you did, not why.]`
 10. **11·11·2026: open.** The shop opened on the night of 11 Nov. Launch gift:
     initials embroidered on the Shaklek bag for the first 50 orders (never
     "linen bag", it is a blend). What an order includes today: private home
@@ -161,15 +161,17 @@ viewer (her rule).
 
 ### Ep 1. Why I started
 
-- **Hook, spoken:** "I work in tech. And I opened a clothing label. Here is why."
+- **Hook, spoken:** "I spent years looking for clothes that were kind to my
+  skin."
 - **On screen:** `WHY I STARTED SHAKLEK`
 - **Talking points:**
   - Years of caring about everything that touched my skin, and clothes were
     the one thing worn all day (beat 1). No medical detail.
   - Whenever I found the piece, it was synthetic, not my taste, or not my fit
     (beat 2). `[À REMPLIR: the piece that almost worked]`
-  - The question I kept asking: show me every version before it exists, then
-    make only the one I chose (beat 4).
+  - The question I kept asking: why couldn't I see every version of a piece
+    before choosing it, and have only that one made (beat 4).
+  - **Not on camera:** her tech background, or "technology" as the answer.
   - So that is what we built: you change the piece on screen, and we make
     that one, in linen.
 - **Ending:** "We opened on the eleventh of November. Come and see. The link
@@ -257,8 +259,8 @@ viewer (her rule).
 
 ### Ep 6. With our tailor
 
-- **Hook, spoken:** (in the atelier, a piece on the table) "This did not
-  exist last week. Somebody ordered it, so we are making it."
+- **Hook, spoken:** (in the atelier, a piece on the table) "Every piece here
+  starts with an order."
 - **On screen:** `MADE AFTER YOU ORDER`
 - **Talking points:**
   - Nothing is made before it is ordered. No stock, nothing left over.
@@ -304,8 +306,7 @@ viewer (her rule).
   that."
 - **On screen:** `MADE IN THE UAE` then `CUT HERE. SEWN HERE.`
 - **Talking points:**
-  - Every piece is cut and sewn here, after the order. Nothing is imported
-    finished.
+  - Every piece is cut and sewn here, after the order.
   - We are a licensed Dubai business, and the licence is on every product
     page (`src/data/productDisclosure.ts`, Sold by row).
   - `[À REMPLIR: why making it here matters to you. Your own reason.]`
@@ -314,32 +315,29 @@ viewer (her rule).
 - **Ending:** "Made here, worn here."
 - **Persona:** Maryam. **Pillar:** 9 (subject of 4).
 - **Never:** "100% made in the UAE" (the cloth is woven abroad), "the first",
-  or "local fabric". **Her call before filming:** whether to say out loud
-  "the linen is woven abroad, and cut and sewn here". It is the honest answer
-  to Maryam's objection and it is safer said by us than asked in a comment.
-  The standing rule is never to name the mill or its country unprompted
-  (`personas-v2-ads-2026-11.md`, Maryam).
+  or "local fabric". **Do not bring up where the cloth is woven.** On camera:
+  "Cut and sewn here, after you order." Only if a customer asks directly, the
+  honest answer is that the linen is woven abroad and cut and sewn here.
+  Never name the mill or its country (`personas-v2-ads-2026-11.md`, Maryam).
 
-### Ep 9. What we got wrong
+### Ep 9. One fabric, done properly
 
-- **Hook, spoken:** "We moved our opening date. Twice."
-- **On screen:** `WHAT WE GOT WRONG`
-- **Talking points (pick ONE story, all four are true and on record):**
-  - The opening moved from 26 October to 1 November to 11 November.
-    `[À REMPLIR: why, and what you learned]`
-  - We planned two fabrics. The cotton had no supplier we trusted in time, so
-    we opened with linen only, and it became the brand.
-  - The first cut of the opening film was heavily graded. It looked sad. The
-    one we posted is almost the footage as it was shot.
-  - `[À REMPLIR: a mistake only you know. A sample that came back wrong? A
-    decision you reversed?]`
-  - Then the lesson, in one sentence, in your words.
-- **Ending:** "We would rather open late than open wrong."
-  `[À REMPLIR: only if that is how you feel about it]`
+- **Hook, spoken:** "We chose one fabric and decided to do it properly."
+- **On screen:** `ONE FABRIC. DONE PROPERLY.`
+- **Talking points:**
+  - One cloth, 100% linen, in four colours: Ivory, White, Navy, Burgundy.
+  - `[À REMPLIR: why linen, in your words. Comfort and how it wears in the
+    heat. No health claim.]`
+  - What doing it properly means: you see the piece change on screen before
+    you choose, and we make only that one, after it is ordered.
+  - `[À REMPLIR: one detail you insisted on. A finish, a hem, the shayla cut
+    from the same linen.]`
+- **Ending:** "One fabric, done properly."
 - **Persona:** all four; this is the trust episode (objection "who are you,
   is this real", `objection-handling.md` section 4). **Pillar:** 9.
-- **Do not tell:** anything about payments, security, suppliers by name,
-  costs or margins. A lesson, not a confession.
+- **Do not tell (audit 2026-11-12):** the opening date moving, the second
+  fabric that was planned, any supplier, the film edit, payments, security,
+  costs or margins. A choice, not a confession.
 
 ### Ep 10. You asked
 
@@ -358,7 +356,7 @@ viewer (her rule).
       one at a time.
     - "Do you deliver outside Dubai?" Yes, everywhere in the UAE, included.
       The home fitting is in Dubai; elsewhere we guide you.
-- **Ending:** "Ask us anything. A person answers." (true: `faq/page.tsx:176`)
+- **Ending:** "Ask us anything."
 - **Persona:** whoever asked. **Pillar:** 9. Repeatable: this becomes the
   standing format once questions come in.
 
@@ -486,12 +484,13 @@ exception.
 ## Open for the founder
 
 1. The `[À REMPLIR PAR TOI]` items in section 2 (ten) and in episodes 1 to
-   10. The ones that block filming: her tech background (ep 1), her own fit
-   story (ep 3), the tailor's story and consent (ep 6), why the opening moved
-   (ep 9), a real customer question (ep 10).
+   10. The ones that block filming: her own fit story (ep 3), the tailor's
+   story and consent (ep 6), her reason for linen (ep 9), a real customer
+   question (ep 10).
 2. The language she speaks on camera.
 3. Yes or no on the voice exception in section 5.
-4. Episode 8: whether to say "the linen is woven abroad" out loud.
+4. Episode 8: settled 2026-11-12. Where the cloth is woven is not said on
+   camera; it is the answer only if a customer asks.
 5. `/our-story` still says "A solo tailor" and "cut by one tailor"
    (`page.tsx:158`, `:550`) while the home page says "Handmade by our team"
    (`homeContent.ts:381`). Episode 6 uses "our tailor / our team" with no

@@ -214,7 +214,7 @@ export default function FitFeedbackForm() {
         disabled={!canSend}
         className="w-full bg-text py-4 text-[13px] tracking-[0.08em] text-white transition-opacity disabled:opacity-35"
       >
-        {state === "sending" ? "SENDING…" : "SEND TO MY TAILOR"}
+        {state === "sending" ? "SENDING…" : "SEND"}
       </button>
     </form>
   );

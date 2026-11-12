@@ -12,7 +12,7 @@ import { renderParamsForCategory } from "../src/data/parameterSliders.ts";
 import { flatFileName } from "../src/data/flats.ts";
 import { measureFlat, judgeFlat } from "./catalog/gen-flat.mjs";
 
-const DIR = "public/catalog/flats";
+const DIR = "public/catalog/x58b984b978b45122d30e4b9d";
 let missing = 0, checked = 0;
 const inks = [];
 

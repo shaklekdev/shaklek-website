@@ -367,7 +367,7 @@ export const articles: Article[] = [
         type: "link",
         slug: "how-much-does-an-abaya-cost-in-dubai",
         reason:
-          "You have settled what goes underneath. If the abaya itself is still to buy, this is what the three price bands actually cost in 2026, and which souq or district each one is bought in.",
+          "You have settled what goes underneath. If the abaya itself is still to buy, this is what ready-made and full custom actually cost in 2026, and what drives the number.",
       },
       {
         type: "link",
@@ -394,12 +394,12 @@ export const articles: Article[] = [
     slug: "how-much-does-an-abaya-cost-in-dubai",
     title: "How much does an abaya cost in Dubai?",
     description:
-      "Ready-made, tailoring only, and full custom are three different prices for three different things. What each costs in 2026, and what actually drives the number.",
+      "Ready-made and full custom are two different prices for two different things. What each costs in 2026, and what actually drives the number.",
     published: "2026-09-13",
     readingMinutes: 6,
     intro:
-      "Three different things get called an abaya price in Dubai, and they are not close to each other. Knowing which one you are being quoted is most of the answer.",
-    hero: { src: "/marketing/story-tailoring.jpg", alt: "Tailoring at Shaklek.", w: 1584, h: 672 },
+      "Two different things get called an abaya price in Dubai, and they are not close to each other. Knowing which one you are being quoted is most of the answer.",
+    hero: { src: "/marketing/story-tailoring.jpg", alt: "Linen on the cutting table.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",
@@ -418,14 +418,14 @@ export const articles: Article[] = [
         // location alone. So the honest answer is the band somebody actually
         // buys in, with the floor named as what it is and where it is.
         market: true,
-        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear starts at about AED 300, and there is no ceiling. Dubai's known boutique labels sit between AED 800 and AED 3,000, and the designer end runs past AED 5,000. Paying a tailor to cut and sew one when you bring your own cloth is about AED 200 to AED 350 for the labour, before the fabric. A full custom piece, where somebody sources the cloth and makes it to your measurements, usually starts at about AED 800.",
+        text: "The short answer, for 2026: a ready-made abaya you would actually want to wear starts at about AED 300, and there is no ceiling. Dubai's known boutique labels sit between AED 800 and AED 3,000, and the designer end runs past AED 5,000. A full custom piece, where somebody sources the cloth and makes it to your measurements, usually starts at about AED 800.",
       },
       {
         type: "p",
-        text: "Most confusion about abaya pricing comes from those three being quoted as though they were the same thing.",
+        text: "Most confusion about abaya pricing comes from those two being quoted as though they were the same thing.",
       },
 
-      { type: "h2", text: "The three prices, and what each one buys" },
+      { type: "h2", text: "The two prices, and what each one buys" },
       { type: "h3", text: "Ready-made, from about AED 300 for one you would want to wear", market: true },
       {
         type: "p",
@@ -459,7 +459,6 @@ export const articles: Article[] = [
         items: [
           "Naif Souk, Deira. The cheapest rails in Dubai and the ones shoppers name for it. Reviewers report paying around AED 100 for pieces listed nearer AED 250 elsewhere, and bargaining is expected rather than rude.",
           "Sharjah Central Souq, the Blue Souq, by the Jubail bus station. Listings start around AED 50, and a good ready-to-wear piece in Sharjah generally runs AED 200 to AED 500. Go for the choice of abayas and shawls in one building.",
-          "Meena Bazaar, Bur Dubai. Rails and tailors in the same few streets, which is the actual reason to go: you can buy cloth and have it cut on one trip.",
           "Karama, the Centre and the old market. Plain everyday abayas rather than occasion pieces, at everyday prices.",
           "Ajman market. Named across UAE shopping guides as a bargain destination on the same footing as Sharjah, worth the drive only if you are already out that way.",
           "Abaya Mall in Mirdif. Three floors built around abaya shops, for comparing fifty in an afternoon instead of five.",
@@ -468,21 +467,6 @@ export const articles: Article[] = [
       {
         type: "p",
         text: "If a quote surprises you in either direction, ask what the fibre is before anything else. That one question separates the AED 150 rail from the AED 600 one more reliably than anything you can see from across a shop.",
-      },
-      { type: "h3", text: "Tailoring only, about AED 200 to AED 350" },
-      {
-        type: "p",
-        // The metre prices here are OUR OWN, from real 2026 quotes in
-        // planning/pricing-todo.md: local 100% linen at AED 65/m, imported at
-        // AED 36/m landed, local cotton at AED 20. Said as our own workshop
-        // figures rather than as a market survey, because that is what they
-        // are. That exception survives the 2026-09-13 feedback; the one that
-        // did not is attributing a claim to a person at this company.
-        text: "You buy the cloth yourself and pay a tailor to cut and sew it. The fabric shops and the tailors sit in the same districts, which is why people go there: Satwa for tailoring, Meena Bazaar in Bur Dubai for cloth and stitching in the same few streets, and the fabric shops off Naif Road in Deira. Published 2026 guides put plain nida stitching at AED 200 to AED 350, and Satwa tailoring listings start near AED 180 for cutting and sewing.",
-      },
-      {
-        type: "p",
-        text: "The number sounds low until the cloth is added. An open abaya takes four metres or more, and good linen costs several times what polyester crepe does. So the real total for this route is AED 280 to AED 650 before any embroidery, and it is only the cheapest one if you already know what fabric you want and do not mind two trips.",
       },
       { type: "h3", text: "Full custom, from about AED 800" },
       {
@@ -584,7 +568,7 @@ export const articles: Article[] = [
       },
       {
         type: "p",
-        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures. The places and their prices come from 2026 abaya shopping guides by Noor Zara, Lamis, UAE Service Guide and Dubai-On, Tripadvisor reviews of Naif Souk, Sharjah retailer listings for the Central Souq figures, and Satwa tailoring listings for the stitching prices. Fibre composition of nida is from abaya fabric suppliers including Fabric UK and The Hijab Company.",
+        text: "Price ranges above are from 2026 UAE market guides published by Luxury and More, Khayat and NYLA, cross-checked against ready-made pricing listed by Dubai abaya retailers and Best Dubai Things\u2019 2026 shop survey for the Deira and Mall of the Emirates figures. The places and their prices come from 2026 abaya shopping guides by Noor Zara, Lamis, UAE Service Guide and Dubai-On, Tripadvisor reviews of Naif Souk, and Sharjah retailer listings for the Central Souq figures. Fibre composition of nida is from abaya fabric suppliers including Fabric UK and The Hijab Company.",
       },
     ],
   },
@@ -779,7 +763,7 @@ export const articles: Article[] = [
     readingMinutes: 5,
     intro:
       "A medium is not a body. It is a statistical average of thousands of bodies, and the average of a large group of people resembles almost none of them.",
-    hero: { src: "/marketing/story-tailoring.jpg", alt: "Tailoring at Shaklek.", w: 1584, h: 672 },
+    hero: { src: "/marketing/story-tailoring.jpg", alt: "Linen on the cutting table.", w: 1584, h: 672 },
     blocks: [
       {
         type: "p",

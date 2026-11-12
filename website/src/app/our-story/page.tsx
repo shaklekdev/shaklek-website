@@ -18,7 +18,7 @@ export const metadata: Metadata = pageMetadata({
       url: "/marketing/story-hero.jpg",
       width: 1584,
       height: 672,
-      alt: "Shaklek tailoring studio.",
+      alt: "Linen, cut and pinned.",
     },
   ],
 });
@@ -317,7 +317,7 @@ export default function OurStoryPage() {
       <section className="relative mb-14 w-full overflow-hidden">
         <Image
           src="/marketing/story-tailoring.jpg"
-          alt="Tailoring at Shaklek."
+          alt="Linen on the cutting table."
           fill
           sizes="100vw"
           className="object-cover"
@@ -457,8 +457,8 @@ export default function OurStoryPage() {
                   wrote it. */}
               <p>
                 I&apos;ve spent more than half my life trying to understand my
-                own body, and a long stretch of it changing everything that
-                touched my skin, day and night. The clothes I wore all day,
+                own body, and years of caring about everything that touched my
+                skin. The clothes I wore all day,
                 full of polyester and chemical finishes, couldn&apos;t possibly
                 have no effect on me.
               </p>

@@ -12,7 +12,10 @@
 // check in scripts/test-flats.mjs both walk the real directory. Nothing has to
 // be kept in sync by hand.
 
-export const FLATS_DIR = "/catalog/flats";
+// Unguessable folder name on purpose (founder 2026-11-12: internal assets must not be public).
+// Amplify serves public/ from the CDN before any middleware runs, so a 404 rule cannot hide them;
+// nothing public links here and the tech pack reads the files from disk.
+export const FLATS_DIR = "/catalog/x58b984b978b45122d30e4b9d";
 
 /** Canonical filename for one flat. `comboKey` is `comboKeyForCategory()` output. */
 export function flatFileName(slug: string, comboKey: string, view: "front" | "back"): string {

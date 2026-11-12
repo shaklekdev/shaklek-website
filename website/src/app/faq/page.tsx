@@ -34,7 +34,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         {/* ⚠️ CONSERVATIVE ON PURPOSE, founder 2026-11-05: "make it
             conservative and show we put a lot of work, this is not fast
             fashion". Was "approximately 10 working days". */}
-        Allow up to 3 weeks from the moment a stylist confirms your details,
+        Allow up to 3 weeks from the moment we confirm your details,
         which usually happens within a day of ordering. Each piece is cut and
         sewn for you, with special care: this is not fast
         fashion, and we take the time to get it right. We deliver everywhere in
@@ -77,8 +77,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         </a>{" "}
         and come to you in Dubai to take your measurements, free, before
         your piece is made. Outside Dubai, we guide you to take them yourself. If you already have
-        your own, send them the same way or in the notes on your order, and a
-        stylist goes through them with you. Or pick a standard size from XS to
+        your own, send them the same way or in the notes on your order, and we
+        go through them with you. Or pick a standard size from XS to
         XXL. The price is the same either way. The{" "}
         <Link href="/size-guide" className="underline">
           size guide
@@ -166,7 +166,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             her before the piece is made; the terms cover a full refund if an order
             is declined before production. */}
         Write it in the note field when you customise: a shorter sleeve, a
-        wider collar. Our stylists go through your request with you before
+        wider collar. We go through your request with you before
         your piece is made, so you know exactly what is being made for you.
       </>
     ),

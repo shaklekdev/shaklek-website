@@ -107,17 +107,6 @@ function reachableWhileShut(pathname: string): boolean {
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
 
-  // TECHNICAL FLATS ARE INTERNAL (founder, 2026-11-12: nothing about how we
-  // work is public). The tailor's tech pack reads them from disk on the
-  // server (lib/techPack.ts readPublicImage), so blocking HTTP access costs
-  // nothing. Covers the direct path and the image optimizer.
-  if (
-    pathname.startsWith("/catalog/flats/") ||
-    (pathname === "/_next/image" && (req.nextUrl.searchParams.get("url") ?? "").includes("/catalog/flats/"))
-  ) {
-    return new NextResponse("Not found", { status: 404 });
-  }
-
   // API ROUTES ARE NEVER REWRITTEN, even while shut. Rewriting a POST to a
   // page returns 405 from the page router, which means /api/orders' own 503
   // never runs and CheckoutForm gets an HTML body where it expects JSON. Every
@@ -152,5 +141,5 @@ export const config = {
   // which is the standard Next.js catch-all. The per-path decision is made in
   // reachableWhileShut() rather than here, because a list in one place that is
   // read by one function is auditable and a regex in two places is not.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|catalog/|brand/|fonts/).*)", "/catalog/flats/:path*", "/_next/image"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|catalog/|brand/|fonts/).*)"],
 };

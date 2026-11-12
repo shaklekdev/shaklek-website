@@ -16,7 +16,7 @@ import { catalog } from "../../src/data/catalog.ts";
 import { renderParamsForCategory } from "../../src/data/parameterSliders.ts";
 import { flatFileName } from "../../src/data/flats.ts";
 
-const DIR = "public/catalog/flats";
+const DIR = "public/catalog/x58b984b978b45122d30e4b9d";
 const W = 400, H = 480;
 
 async function widthProfile(file) {
