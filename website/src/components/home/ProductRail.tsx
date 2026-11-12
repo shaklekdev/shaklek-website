@@ -52,7 +52,7 @@ export default function ProductRail({
   // above argued against -- the difference is that this is a PRICE line (what
   // the number covers), not a second description of the visit; Concept below
   // still explains what happens. Copy lives in data/included.ts.
-  subtitle = "Make it yours in the next step.",
+  subtitle = "Custom made for you. Make it yours in the next step.",
 }: {
   title?: string;
   subtitle?: string;
