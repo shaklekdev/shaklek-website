@@ -26,7 +26,7 @@ import { flatFileName } from "../../src/data/flats.ts";
 const FLASH = "gemini-2.5-flash-image";
 const PRO = "gemini-3-pro-image";
 const COST = { [FLASH]: 0.039, [PRO]: 0.134 };
-const OUT_DIR = "public/catalog/x58b984b978b45122d30e4b9d";
+const OUT_DIR = "internal/flats";
 
 const argv = process.argv.slice(2);
 const only = argv.includes("--items")

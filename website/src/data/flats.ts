@@ -12,17 +12,19 @@
 // check in scripts/test-flats.mjs both walk the real directory. Nothing has to
 // be kept in sync by hand.
 
-// Unguessable folder name on purpose (founder 2026-11-12: internal assets must not be public).
-// Amplify serves public/ from the CDN before any middleware runs, so a 404 rule cannot hide them;
-// nothing public links here and the tech pack reads the files from disk.
-export const FLATS_DIR = "/catalog/x58b984b978b45122d30e4b9d";
+// INTERNAL, NOT PUBLIC (founder 2026-11-12: nothing about how we work is public).
+// The flats live OUTSIDE public/, in website/internal/flats, so no URL serves them:
+// Amplify's CDN serves public/ before any middleware runs, so a 404 rule cannot hide
+// a public file. Only the staff-gated spec-sheet route reads them from disk; the files
+// are shipped to the server via outputFileTracingIncludes in next.config.ts.
+export const FLATS_DIR = "internal/flats";
 
 /** Canonical filename for one flat. `comboKey` is `comboKeyForCategory()` output. */
 export function flatFileName(slug: string, comboKey: string, view: "front" | "back"): string {
   return `${slug}-${comboKey.replace(/:/g, "-")}-${view}-flat.png`;
 }
 
-/** Public path for one flat. Existence is not checked here -- callers fall back. */
+/** Project-relative path for one flat (internal, not served). Existence is not checked here -- callers fall back. */
 export function flatPath(slug: string, comboKey: string, view: "front" | "back"): string {
   return `${FLATS_DIR}/${flatFileName(slug, comboKey, view)}`;
 }

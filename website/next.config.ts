@@ -96,6 +96,12 @@ const buildConfig = (isDev: boolean): NextConfig => ({
   // Framework disclosure. Off by default here rather than left on.
   poweredByHeader: false,
 
+  // Technical flats are internal (website/internal/flats, NOT public/). Ship them
+  // to the server for the staff-only spec sheet, which reads them from disk.
+  outputFileTracingIncludes: {
+    "/api/dashboard/orders/[id]/spec-sheet": ["./internal/flats/**/*"],
+  },
+
   // ⚠️ A DELETED ARTICLE STILL HAS INBOUND LINKS AND AN INDEX ENTRY.
   //
   // /blog/natural-fabrics-better-for-your-body was removed on 2026-09-13, not

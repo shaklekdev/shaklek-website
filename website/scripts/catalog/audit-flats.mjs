@@ -24,7 +24,7 @@ import { catalog } from "../../src/data/catalog.ts";
 import { renderParamsForCategory } from "../../src/data/parameterSliders.ts";
 import { flatFileName } from "../../src/data/flats.ts";
 
-const DIR = "public/catalog/x58b984b978b45122d30e4b9d";
+const DIR = "internal/flats";
 const W = 400, H = 480;
 
 // Bounding box of the ink, plus the widest ink span in a horizontal band.

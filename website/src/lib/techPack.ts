@@ -81,6 +81,17 @@ function flatsFor(item: SpecItem, comboKey: string | null) {
   };
 }
 
+// Flats are not under public/ (see src/data/flats.ts): flatPath() is relative to
+// the project root, so read them from there.
+function readFlat(rel: string | undefined): Buffer | null {
+  if (!rel) return null;
+  try {
+    return fs.readFileSync(path.join(process.cwd(), rel));
+  } catch {
+    return null;
+  }
+}
+
 function readPublicImage(publicPath: string | undefined): Buffer | null {
   if (!publicPath) return null;
   try {
@@ -394,9 +405,9 @@ export function buildPdf(
       const flats = flatsFor(item, comboKey);
       const cells = [
         { label: "Front — photograph", buf: readPublicImage(front) },
-        { label: "Front — technical flat", buf: readPublicImage(flats.front) },
+        { label: "Front — technical flat", buf: readFlat(flats.front) },
         { label: "Back — photograph", buf: readPublicImage(back) },
-        { label: "Back — technical flat", buf: readPublicImage(flats.back) },
+        { label: "Back — technical flat", buf: readFlat(flats.back) },
       ].filter((c) => c.buf);
 
       if (cells.length) {
@@ -437,7 +448,7 @@ export function buildPdf(
       // point of this warning is that the tailor is never left guessing whether
       // a drawing was meant to be there.
       const missingViews = comboKey
-        ? (["front", "back"] as const).filter((v) => !readPublicImage(flats[v]))
+        ? (["front", "back"] as const).filter((v) => !readFlat(flats[v]))
         : [];
       if (missingViews.length) {
         para(
