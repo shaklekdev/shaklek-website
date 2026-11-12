@@ -23,11 +23,21 @@ export const metadata: Metadata = {
 };
 
 /**
- * The home page, restructured 2026-08-25 to the founder's brief.
+ * The home page, restructured 2026-08-25 to the founder's brief and reordered
+ * 2026-11-12 on opening-night feedback.
  *
- * Banner, then the concept in three steps beside the tailor's hands, then the
- * three reasons to buy here, then the clothes in a grid, then five questions
- * answered in place.
+ * Banner, then the reasons to buy here ("Why choose us"), then four pieces in
+ * a swipeable row with a link to the full catalogue, then the concept in two
+ * steps beside the tailor's hands, then five questions answered in place.
+ *
+ * ⚠️ THE ORDER CHANGED ON 2026-11-12. Friends told the founder the page was
+ * too long, repeated the whole catalogue, and buried "Why choose us" at the
+ * bottom. Benefits used to sit AFTER the rail (its own header comment still
+ * records the 2026-08-25 reasoning: Concept + Benefits above the clothes
+ * pushed the first garment to y=1864 on a phone). That objection was to TWO
+ * explainer blocks ahead of the clothes; now there is one short one, and
+ * Concept moved below the rail, so the first garment is nearer the top than
+ * it was in either arrangement.
  *
  * The through-line is that a visitor should never have to leave this page to
  * understand the offer or to have a question answered. /how-it-works is gone
@@ -44,9 +54,9 @@ export default function Home() {
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <Hero />
-      <Concept />
-      <ProductRail />
       <Benefits />
+      <ProductRail />
+      <Concept />
       <HomeFaq />
       <BackToTop />
     </div>

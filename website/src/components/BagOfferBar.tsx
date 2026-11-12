@@ -43,16 +43,67 @@ export default function BagOfferBar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // "DELIVERY INCLUDED" JOINED THE BAR ON 2026-11-12. Opening-night feedback
+  // via the founder: friends wanted delivery-included to be prominent, and the
+  // bar is the one line on every page. Wording matches STEPS_NOTE in
+  // homeContent.ts ("everywhere in the UAE" there, "across the UAE" here), and
+  // the shipping page is the source of truth for what is actually covered.
+  //
+  // On a phone the bag sentence alone already wraps to two lines at 390px, so
+  // showing both messages stacked would make the bar three lines tall. Instead,
+  // below `sm` the two messages ALTERNATE every six seconds in the same two-line
+  // slot (CSS grid stacks them in one cell, so the bar never changes height and
+  // nothing below it shifts). From `sm` up both sit on one line. The inactive
+  // message is aria-hidden and not focusable so a screen reader hears each
+  // once, and the bag button is the only thing that opens the popup.
+  const [showDelivery, setShowDelivery] = useState(false);
+  useEffect(() => {
+    const id = window.setInterval(() => setShowDelivery((v) => !v), 6000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const bagLine = (
+    <>
+      The first 50 orders come in a Shaklek bag embroidered with your initials.
+      <span className="ml-1 underline underline-offset-2">Customise your bag</span>
+    </>
+  );
+  const deliveryLine = "Delivery included across the UAE.";
+
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="block w-full bg-surface-2 px-4 py-2 text-center text-[11px] tracking-wide text-text sm:text-xs"
-      >
-        The first 50 orders come in a Shaklek bag embroidered with your initials.
-        <span className="ml-1 underline underline-offset-2">Customise your bag</span>
-      </button>
+      {/* Phone: one two-line slot, the two messages crossfade. */}
+      <div className="grid w-full bg-surface-2 px-4 py-2 text-center text-[11px] tracking-wide text-text sm:hidden">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-hidden={showDelivery}
+          tabIndex={showDelivery ? -1 : 0}
+          className={`col-start-1 row-start-1 block w-full transition-opacity duration-500 ${
+            showDelivery ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        >
+          {bagLine}
+        </button>
+        <span
+          aria-hidden={!showDelivery}
+          className={`col-start-1 row-start-1 flex items-center justify-center transition-opacity duration-500 ${
+            showDelivery ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        >
+          {deliveryLine}
+        </span>
+      </div>
+      {/* Tablet and up: both on one line. */}
+      <div className="hidden w-full items-center justify-center gap-x-3 bg-surface-2 px-4 py-2 text-center text-xs tracking-wide text-text sm:flex sm:flex-wrap">
+        <button type="button" onClick={() => setOpen(true)} className="block">
+          {bagLine}
+        </button>
+        <span aria-hidden="true" className="text-text-3">
+          ·
+        </span>
+        <span>{deliveryLine}</span>
+      </div>
       {open ? (
         <div
           role="dialog"

@@ -143,7 +143,9 @@ export const STEPS = [
     // it, we bring it to your door. Nothing may say free, come to you, or
     // name a city until booking exists.
     title: "We do the rest",
-    body: "We come to you in Dubai to take your measurements, free. Your tailor makes your piece. We then bring it to your door.", // visit back, founder 2026-11-12
+    // Visit back 2026-11-12, and named "private home fitting" the same day
+    // (founder wording). Always "we", never "I".
+    body: "A private home fitting in Dubai, free. Your tailor makes your piece. We bring it to your door.",
     // Still the one the whole proposition rests on. With only two steps the
     // emphasis is doing less work than it was, but it is the half a visitor
     // has to believe, so it keeps it.

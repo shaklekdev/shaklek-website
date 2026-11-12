@@ -1,8 +1,25 @@
+import Link from "next/link";
 import CatalogCard from "@/components/CatalogCard";
 import { catalog } from "@/data/catalog";
 
-/** The catalog carousel, extracted so the home-page variants can order the
- *  page differently without duplicating it. */
+/**
+ * The four pieces shown on the home page, by catalogue slug, in this order.
+ *
+ * ⚠️ FOUR, NOT THE WHOLE CATALOGUE. Founder, 2026-11-12, after opening-night
+ * feedback from friends: the home page repeated the entire catalogue and was
+ * too long. The home shows a taste; /catalog shows everything. Change the
+ * selection by editing this list -- a slug that is not in catalog.ts is
+ * skipped silently rather than crashing the page, so check the rendered rail
+ * after editing. Slugs are the `slug:` fields in src/data/catalog.ts.
+ */
+export const HOME_RAIL_SLUGS = [
+  "buttoned-abaya", // Buttoned Abaya
+  "structured-blouse", // Peplum Blouse
+  "open-abaya", // Open Abaya
+  "wide-leg-trousers", // Relaxed Trousers
+];
+
+/** The home-page rail: four pieces in a swipeable row and a link to the rest. */
 export default function ProductRail({
   title = "Start with a piece",
   // A "Tap a colour to see it on the piece" hint lived here briefly and the
@@ -12,9 +29,10 @@ export default function ProductRail({
   // ⚠️ THE VISIT IS NOT IN THIS SUBTITLE, AND IT WAS FOR ABOUT AN HOUR ON
   // 2026-09-16. Open item "measuring-visit-pages" asks for it on the catalogue
   // grid and this looked like the place. It is not, because of WHERE this
-  // component sits: directly under Concept, whose step 02 is "We come to you
-  // and take your measurements" with the free-on-your-first-order footnote
-  // under it. Adding it here put the same promise twice within one scroll, and
+  // component sits: one scroll from Concept, whose step 02 is the private home
+  // fitting. (Since 2026-11-12 the rail sits ABOVE Concept, under Benefits,
+  // rather than directly under it -- the neighbours changed, the reasoning did
+  // not.) Adding it here put the same promise twice within one scroll, and
   // the home FAQ further down makes three.
   //
   // Founder, the same day, reading the product page where the identical thing
@@ -29,6 +47,11 @@ export default function ProductRail({
   title?: string;
   subtitle?: string;
 }) {
+  const items = HOME_RAIL_SLUGS.flatMap((slug) => {
+    const item = catalog.find((i) => i.slug === slug);
+    return item ? [item] : [];
+  });
+
   return (
     <>
       {/* Anchored so "Add another piece" from the cart lands on the clothes
@@ -51,17 +74,42 @@ export default function ProductRail({
         </div>
       </section>
 
-      {/* A GRID, not a carousel. Arrows were added on 2026-08-25 and the
-          founder's follow-up was that a carousel is not obvious to everyone --
-          which matches what her own visitors told her, that eight pieces read
-          as two. A grid has no hidden state: everything is on the page, and
-          two columns on a phone means a customer sees four garments without
-          touching anything. Nothing to discover, nothing to swipe. */}
+      {/* A SWIPEABLE ROW OF FOUR, since 2026-11-12. It was a grid of the whole
+          catalogue from 2026-08-25: arrows had been tried and the founder's
+          note was that a carousel is not obvious to everyone, and her visitors
+          said eight pieces read as two. On opening night friends said the
+          opposite problem -- the home repeats the whole catalogue and is too
+          long -- so the founder chose four pieces in a row plus a link to the
+          rest. Two things keep the "not obvious" objection answered: on a
+          phone each card is ~72% of the viewport, so the next card is always
+          visibly cut off at the right edge (nothing hidden, the swipe is
+          implied by the picture), and on a laptop all four fit in the row with
+          nothing to scroll. Native scroll-snap, no JS, no arrows.
+
+          -mx-6/px-6 lets the row bleed to the screen edges while the first card
+          stays aligned with the heading above; scroll-pl-6 keeps that
+          alignment on every snap stop. */}
       <section className="mx-auto w-full max-w-6xl px-6 pb-16">
-        <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
-          {catalog.map((item, i) => (
-            <CatalogCard key={item.slug} item={item} eager={i < 4} />
+        <div
+          className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-pl-6 px-6 pb-1 sm:gap-6"
+          aria-label="Pieces to start with"
+        >
+          {items.map((item) => (
+            <div
+              key={item.slug}
+              className="w-[72%] shrink-0 snap-start sm:w-[40%] lg:w-[calc(25%-18px)]"
+            >
+              <CatalogCard item={item} eager />
+            </div>
           ))}
+        </div>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/catalog"
+            className="inline-flex min-h-[44px] items-center rounded-full border border-border-strong px-6 text-sm text-text transition-colors hover:border-text hover:bg-surface-2"
+          >
+            See the full catalogue
+          </Link>
         </div>
       </section>
     </>

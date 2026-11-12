@@ -214,14 +214,16 @@ export default function SizePicker({
       <p className="mt-3 text-[13px] leading-relaxed text-text-2">
         {sizeMode === "tailored" ? (
           <>
-            <span className="font-medium text-text">We come to you to take your measurements.</span>{" "}
-            After you order, we contact you on WhatsApp and visit you in Dubai,
-            free. Outside Dubai, we guide you to take them yourself.
+            {/* "Private home fitting" is the founder's phrase for the visit
+                (2026-11-12). Always "we", never "I". */}
+            <span className="font-medium text-text">Private home fitting in Dubai, free.</span>{" "}
+            After you order, we contact you on WhatsApp to book it. Outside
+            Dubai, we guide you to take your measurements yourself.
           </>
         ) : (
           <>
-            Or choose <span className="font-medium text-text">Tailored</span>: after
-            you order, we come to you in Dubai to take your measurements, free.
+            Or choose <span className="font-medium text-text">Tailored</span>: a
+            private home fitting in Dubai, free, booked on WhatsApp after you order.
           </>
         )}
       </p>
