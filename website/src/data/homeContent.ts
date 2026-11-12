@@ -378,7 +378,7 @@ export const BENEFITS = [
     // happens, which is where a garment is cut and sewn. productDisclosure.ts
     // already carries it as the legal origin field.
     k: "Made in the UAE",
-    v: "Cut and sewn by our tailor, never a factory.",
+    v: "Handmade by our team.", // founder 2026-11-12 ("we" voice: a team, not one tailor)
     icon: "pin",
   },
 ];
