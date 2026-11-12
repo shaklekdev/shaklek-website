@@ -22,7 +22,7 @@ export const HOME_RAIL_SLUGS = [
 
 /** The home-page rail: four pieces in a swipeable row and a link to the rest. */
 export default function ProductRail({
-  title = "Start with a piece",
+  title = "Custom made for you",
   // A "Tap a colour to see it on the piece" hint lived here briefly and the
   // founder cut it: a row of colour dots on a photograph is already an
   // invitation, and explaining an interaction in words is text everyone reads
@@ -52,7 +52,7 @@ export default function ProductRail({
   // above argued against -- the difference is that this is a PRICE line (what
   // the number covers), not a second description of the visit; Concept below
   // still explains what happens. Copy lives in data/included.ts.
-  subtitle = "Custom made for you. Make it yours in the next step.",
+  subtitle = "Make it yours in the next step.",
 }: {
   title?: string;
   subtitle?: string;
