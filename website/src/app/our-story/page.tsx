@@ -155,7 +155,7 @@ const tenetGroups = [
         // your body, not a size chart" and "nothing is made until you order
         // it" are both card copy now. Founder: "cut for you and made to order
         // are repeated a lot". The long version says what a card cannot.
-        body: "A solo tailor cuts one piece at a time, so there is no minimum run and no stock waiting for a body that happens to fit it. That is the part most labels cannot copy: nothing here is made before somebody wants it, so there is nothing left over to discount, and nothing made that nobody asked for.",
+        body: "Our team cuts one piece at a time, so there is no minimum run and no stock waiting for a body that happens to fit it. That is the part most labels cannot copy: nothing here is made before somebody wants it, so there is nothing left over to discount, and nothing made that nobody asked for.",
       },
       {
         title: "Fixed prices",
@@ -547,7 +547,7 @@ export default function OurStoryPage() {
               carries no slogan at all. One line per surface is the whole point
               of the exercise; putting it back on the home page undoes it. */}
           <p className="font-display text-[24px] leading-snug text-white sm:text-[32px]">
-            Your piece, cut by one tailor, after you order it.
+            Your piece, cut by our team, after you order it.
           </p>
           <p className="mt-8">
             {/* /#catalog, not "/". A button that drops someone at the top of

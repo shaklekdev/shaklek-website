@@ -166,7 +166,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             her before the piece is made; the terms cover a full refund if an order
             is declined before production. */}
         Write it in the note field when you customise: a shorter sleeve, a
-        wider collar. We are a small studio with one tailor, and a stylist
+        wider collar. We are a small studio with our own team, and a stylist
         reads every order and goes through your request with you before
         your piece is made, so you know exactly what is being made for you.
       </>
@@ -177,7 +177,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     a: (
       <>
         Yes. Every order is read and confirmed by a stylist before it goes to
-        the tailor. A person checks what you asked for, and a person makes it.
+        our team. A person checks what you asked for, and a person makes it.
         You can reach us at{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
