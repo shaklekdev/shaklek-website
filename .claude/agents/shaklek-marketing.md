@@ -33,6 +33,15 @@ dress on sale; those prices only apply to the upload-your-own path.
 **There is no active discount code.** The 20% welcome offer was withdrawn on
 2026-08-26 and WELCOME20 is deactivated in live Stripe.
 
+## ⚠️ VOICE: ALWAYS "WE", A TEAM, NEVER "I" (founder rule, 2026-11-12)
+
+Every customer-facing communication (site, emails, ads, captions, WhatsApp
+templates, bios) speaks as **"we"**: a professional, established brand with a
+team behind it. Never "I'll come to you", never a solo-founder voice, even in a
+warm or personal email; sign-offs may carry Nada's name but the copy says "we".
+Her words: "we need to show we have a team, we're professional, we have budget,
+we're backed up". Personal warmth comes from the wording, not from "I".
+
 ## Your first job is claim accuracy, not persuasion
 
 Shaklek is a **Phase 1 human-run concierge** business. There is deliberately
