@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import {
   INCLUDED_CHECKOUT_LINE,
   INCLUDED_HEADING,
@@ -54,32 +53,23 @@ export default function IncludedInPrice({
   }
 
   if (variant === "chips") {
+    // Home rail, right of the heading: "All included" then one item per line,
+    // right-aligned (founder, 2026-11-12: "put all included on the right side
+    // with the options below").
     return (
-      <div className="mt-3">
+      <div className="shrink-0 text-right">
         <p className="sr-only">{INCLUDED_HOME_LINE}</p>
-        <p
-          aria-hidden="true"
-          className="text-[11px] uppercase leading-relaxed tracking-[0.18em] text-text-2"
-        >
-          {/* The dot travels with the word before it, so a wrapped line never
-              starts with one. */}
-          <span className="whitespace-nowrap">
-            <span className="font-medium text-text">{INCLUDED_HOME_LEAD}</span>
-            <span className="ml-2 text-gold">·</span>
-          </span>
-          {INCLUDED_HOME_CHIPS.map((c, i) => (
-            <Fragment key={c.key}>
-              {" "}
-              <span className="whitespace-nowrap">
-                {c.label}
-                {i < INCLUDED_HOME_CHIPS.length - 1 && <span className="ml-2 text-gold">·</span>}
-              </span>
-            </Fragment>
-          ))}
-        </p>
-        <p aria-hidden="true" className="mt-1 text-[10px] tracking-[0.1em] text-text-3">
-          {INCLUDED_HOME_FOOTNOTE}
-        </p>
+        <div aria-hidden="true">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-text">
+            {INCLUDED_HOME_LEAD}
+          </p>
+          <ul className="mt-1.5 space-y-0.5 text-[10px] uppercase leading-relaxed tracking-[0.14em] text-text-2">
+            {INCLUDED_HOME_CHIPS.map((c) => (
+              <li key={c.key}>{c.label}</li>
+            ))}
+          </ul>
+          <p className="mt-1 text-[10px] tracking-[0.1em] text-text-3">{INCLUDED_HOME_FOOTNOTE}</p>
+        </div>
       </div>
     );
   }

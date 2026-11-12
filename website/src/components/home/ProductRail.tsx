@@ -72,7 +72,9 @@ export default function ProductRail({
         id="catalog"
         className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-14 pb-5"
       >
-        <div className="flex items-end justify-between gap-4">
+        {/* The price claim sits on the RIGHT, stacked, so the left column is
+            only the heading (founder, 2026-11-12: "too much text on the left"). */}
+        <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-lg text-text">{title}</h2>
             <p className="mt-1 text-[13px] text-text-3">{subtitle}</p>
@@ -81,8 +83,8 @@ export default function ProductRail({
               "{catalog.length} pieces" and she flagged it as wrong on
               2026-10-11: a number on the page goes stale every time the range
               moves, and nobody remembers to look. */}
+          <IncludedInPrice variant="chips" />
         </div>
-        <IncludedInPrice variant="chips" />
       </section>
 
       {/* A SWIPEABLE ROW OF FOUR, since 2026-11-12. It was a grid of the whole
