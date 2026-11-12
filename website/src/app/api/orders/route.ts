@@ -459,11 +459,12 @@ export async function POST(req: NextRequest) {
     try {
     session = await stripe.checkout.sessions.create({
       mode: "payment",
-      // 30 minutes (Stripe's minimum) instead of the 24h default: an unpaid
+      // 31 minutes instead of the 24h default (Stripe's minimum is 30 and it
+      // rejects a value that lands under it after clock skew): an unpaid
       // checkout holds fabric stock until this expires and the webhook marks
       // it payment_failed. Must stay SHORTER than the hold window in
-      // src/lib/fabricStock.ts (35 min), or a late payment could oversell.
-      expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+      // src/lib/fabricStock.ts (36 min), or a late payment could oversell.
+      expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
       integration_identifier: "shaklek-checkout-rqkazmjg",
       customer_email: email,
       client_reference_id: orderId,

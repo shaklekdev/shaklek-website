@@ -10,12 +10,12 @@ type Exec = Pick<Db, "execute">;
 // states that will never be made: payment_failed (Stripe session expired or
 // was abandoned -- set by the webhook) and canceled (set by staff). A
 // pending_payment order holds its fabric while the customer is on Stripe's
-// page, but only for 35 minutes: /api/orders sets the Stripe session to expire
-// after 30 (security review 2026-11-12 -- the 24h default let scripted unpaid
+// page, but only for 36 minutes: /api/orders sets the Stripe session to expire
+// after 31 (security review 2026-11-12 -- the 24h default let scripted unpaid
 // checkouts make every colour read sold out). The extra 5 minutes keep the
 // hold longer than the session, so a payment completed in the last second
 // still finds its fabric reserved; a webhook that never arrives cannot lock
-// cloth for more than 35 minutes.
+// cloth for more than 36 minutes.
 async function usedMetresByColor(db: Exec): Promise<Record<string, number>> {
   const rows = (await db.execute(sql`
     select oi.color as color, oi.category as category, count(*)::int as n
@@ -23,7 +23,7 @@ async function usedMetresByColor(db: Exec): Promise<Record<string, number>> {
     join orders o on o.id = oi.order_id
     where o.created_at >= ${STOCK_SINCE}::timestamptz
       and o.status not in ('payment_failed', 'canceled')
-      and (o.status <> 'pending_payment' or o.created_at > now() - interval '35 minutes')
+      and (o.status <> 'pending_payment' or o.created_at > now() - interval '36 minutes')
     group by oi.color, oi.category
   `)) as unknown as { color: string | null; category: string | null; n: number }[];
   const used: Record<string, number> = {};
