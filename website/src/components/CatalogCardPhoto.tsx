@@ -32,7 +32,6 @@ export default function CatalogCardPhoto({
   badge,
   elaborate,
   eager,
-  noFace,
 }: {
   href: string;
   name: string;
@@ -41,8 +40,6 @@ export default function CatalogCardPhoto({
   badge?: string;
   elaborate?: boolean;
   eager?: boolean;
-  /** Founder, 2026-11-12: home rail crops faces out (garment-first, editorial). */
-  noFace?: boolean;
 }) {
   const [color, setColor] = useState(initial);
   // Only the colours actually looked at. Each stays mounted once shown, so
@@ -91,9 +88,7 @@ export default function CatalogCardPhoto({
               loading={eager && c === initial ? "eager" : "lazy"}
               // object-top: the 2:3 photo is cropped into a 3:4 card, so anchor
               // the crop at the top and keep the head -- founder review 2026-11-11
-              className={`object-cover transition-[opacity,transform] duration-300 ${
-                noFace ? "origin-bottom scale-[1.3] object-bottom" : "object-top group-hover:scale-[1.03]"
-              } ${
+              className={`object-cover object-top transition-[opacity,transform] duration-300 group-hover:scale-[1.03] ${
                 c === color ? "opacity-100" : "opacity-0"
               }`}
             />
