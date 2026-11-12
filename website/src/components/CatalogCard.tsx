@@ -7,8 +7,10 @@ import CatalogCardPhoto, { type CardPhoto } from "./CatalogCardPhoto";
 export default function CatalogCard({
   item,
   eager = false,
+  fromMouth = false,
 }: {
   item: CatalogItem;
+  fromMouth?: boolean;
   // Set on the cards that are above the fold. Deliberately `loading="eager"`
   // and not next/image's `priority`: priority also injects a <link rel=
   // "preload">, which would make these photos compete with the homepage hero
@@ -44,6 +46,7 @@ export default function CatalogCard({
           badge={item.badge}
           elaborate={item.dressTier === "elaborate"}
           eager={eager}
+          fromMouth={fromMouth}
         />
       ) : (
         // No photography yet -- the gradient placeholder, with nothing to
