@@ -5089,3 +5089,4 @@ She sent 13 trimmed .mov extracts (~/Downloads/20261108_*.mov/MOV, some already 
 - Wed 18 detail reel rejected by founder; she will shoot a new video in the burgundy abaya for Wed 18.
 - 2026-11-12 Tue 17 'All included' tile final (straightened 2.2°, watermark cropped). New house text-on-image style recorded: planning/marketing/text-on-image-style.md.
 - 2026-11-12 'Included in the price' live (founder priority via shaklek-fa): src/data/included.ts (shared copy), IncludedInPrice (card/chips/line), LineIcon; product card under price/Add to cart, home rail chips, checkout line; terms now describe the private home fitting (Dubai, included; guided elsewhere).
+- 2026-11-12 Included block redesigned (commit 3041336, live): text only, no icons (founder: 'emojis look cheap'), lead 'All included' instead of 'One price.' (unclear). Product: tracked-caps label + hairline list; home: one tracked-caps line with gold dots; checkout: line between hairlines.
