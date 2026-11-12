@@ -44,14 +44,14 @@ export const INCLUDED_CHECKOUT_LINE =
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */
 export const INCLUDED_HOME_LINE =
-  "All included: private home fitting in Dubai, every option, delivery and one alteration.";
+  "All included: private home fitting in Dubai, every customisation, delivery and one alteration.";
 
 /** The same sentence as the home rail draws it: a lead and four items. The
  *  words are the sentence's own words, so the two never disagree. */
 export const INCLUDED_HOME_LEAD = "All included";
 export const INCLUDED_HOME_CHIPS: IncludedLine[] = [
   { key: "home", label: "Private home fitting*" },
-  { key: "sliders", label: "Every option" },
+  { key: "sliders", label: "Every customisation" },
   { key: "parcel", label: "Delivery" },
   { key: "needle", label: "One alteration" },
 ];
