@@ -1,4 +1,4 @@
-import LineIcon from "@/components/LineIcon";
+import { Fragment } from "react";
 import {
   INCLUDED_CHECKOUT_LINE,
   INCLUDED_HEADING,
@@ -9,17 +9,19 @@ import {
 } from "@/data/included";
 
 /**
- * "The price includes everything", drawn three ways from one copy source
- * (data/included.ts). Founder, 2026-11-12: "I'm expecting you to put this info
- * nicely" -- so a designed block, not a bullet list: the Benefits tile icons,
- * the display font for the heading, the site's border and surface tokens.
+ * "All included in the price", drawn three ways from one copy source
+ * (data/included.ts).
  *
- * - `card`  product page, under the price and Add to cart. Two columns from sm,
- *           one on a phone, one icon per line.
- * - `chips` home rail, under the heading: "One price." and four icon chips.
- *           The full sentence is kept for screen readers so what is read aloud
- *           is the marketing-cleared line, not four fragments.
- * - `line`  checkout, under the order lines: one quiet row with the flax icon.
+ * TEXT ONLY, NO ICONS. Founder, 2026-11-12, on the first version with line
+ * icons and pill chips: "those emojis look cheap not high end brand". The
+ * register is a luxury house's: small tracked caps, hairline rules, words.
+ * And "one price is not clear", so the lead is "All included".
+ *
+ * - `card`  product page, under the price and Add to cart: tracked-caps
+ *           heading, then the lines separated by hairlines.
+ * - `chips` home rail, under the heading: "All included" then four words
+ *           separated by thin dots. Full sentence kept for screen readers.
+ * - `line`  checkout, under the order lines: one quiet line between hairlines.
  */
 export default function IncludedInPrice({
   variant,
@@ -30,23 +32,19 @@ export default function IncludedInPrice({
 }) {
   if (variant === "card") {
     return (
-      <section
-        aria-labelledby="included-in-price"
-        className="mt-5 rounded-shaklek-sm border border-border bg-surface px-5 py-5 sm:px-6"
-      >
-        <h2
+      <section aria-labelledby="included-in-price" className="mt-6 border-t border-border pt-5">
+        {/* A <p>, not an <h2>: globals.css styles every h2 in the display
+            font at section size, which turned this into a 2-line banner. */}
+        <p
           id="included-in-price"
-          className="font-display text-[19px] leading-tight tracking-normal text-text"
+          className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-text"
         >
           {INCLUDED_HEADING}
-        </h2>
-        <ul className="mt-4 grid gap-x-8 gap-y-3.5 sm:grid-cols-2">
+        </p>
+        <ul className="mt-3 divide-y divide-border">
           {includedLines(category).map((l) => (
-            <li key={l.label} className="flex items-start gap-3">
-              <span className="mt-px shrink-0 text-gold">
-                <LineIcon name={l.icon} size={20} />
-              </span>
-              <span className="text-[13px] leading-snug text-text-2">{l.label}</span>
+            <li key={l.key} className="py-2.5 text-[13px] leading-snug text-text-2">
+              {l.label}
             </li>
           ))}
         </ul>
@@ -56,32 +54,35 @@ export default function IncludedInPrice({
 
   if (variant === "chips") {
     return (
-      <div className="mt-4">
+      <div className="mt-3">
         <p className="sr-only">{INCLUDED_HOME_LINE}</p>
-        <div aria-hidden="true" className="flex flex-wrap items-center gap-2">
-          <span className="font-display text-[17px] leading-none text-text">{INCLUDED_HOME_LEAD}</span>
-          {INCLUDED_HOME_CHIPS.map((c) => (
-            <span
-              key={c.label}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[12px] leading-none text-text-2"
-            >
-              <span className="text-gold">
-                <LineIcon name={c.icon} size={14} />
+        <p
+          aria-hidden="true"
+          className="text-[11px] uppercase leading-relaxed tracking-[0.18em] text-text-2"
+        >
+          {/* The dot travels with the word before it, so a wrapped line never
+              starts with one. */}
+          <span className="whitespace-nowrap">
+            <span className="font-medium text-text">{INCLUDED_HOME_LEAD}</span>
+            <span className="ml-2 text-gold">·</span>
+          </span>
+          {INCLUDED_HOME_CHIPS.map((c, i) => (
+            <Fragment key={c.key}>
+              {" "}
+              <span className="whitespace-nowrap">
+                {c.label}
+                {i < INCLUDED_HOME_CHIPS.length - 1 && <span className="ml-2 text-gold">·</span>}
               </span>
-              {c.label}
-            </span>
+            </Fragment>
           ))}
-        </div>
+        </p>
       </div>
     );
   }
 
   // line
   return (
-    <p className="mt-3 flex items-start gap-2.5 rounded-shaklek-sm bg-surface-2 px-4 py-3 text-xs leading-relaxed text-text-2">
-      <span className="mt-px shrink-0 text-gold">
-        <LineIcon name="flax" size={16} />
-      </span>
+    <p className="mt-4 border-y border-border py-3 text-xs leading-relaxed text-text-2">
       {INCLUDED_CHECKOUT_LINE}
     </p>
   );
