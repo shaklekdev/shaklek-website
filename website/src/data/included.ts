@@ -18,7 +18,7 @@ export type IncludedLine = { key: string; label: string };
 
 const INCLUDED_LINES: IncludedLine[] = [
   { key: "home", label: "Private home fitting, in Dubai" },
-  { key: "sliders", label: "Every customisation option" },
+  { key: "sliders", label: "Every customisation" },
   { key: "flax", label: "100% natural linen" },
   { key: "parcel", label: "Delivery across the UAE" },
   { key: "needle", label: "One fit alteration, within 10 days" },
@@ -40,7 +40,7 @@ export function includedLines(category: string | null | undefined): IncludedLine
 
 /** Checkout, under the order lines, before paying. */
 export const INCLUDED_CHECKOUT_LINE =
-  "All included: private home fitting in Dubai, every option, linen, UAE delivery and one alteration.";
+  "All included: private home fitting in Dubai, every customisation, linen, UAE delivery and one alteration.";
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */
 export const INCLUDED_HOME_LINE =
