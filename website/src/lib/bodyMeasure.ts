@@ -200,9 +200,16 @@ function checkFull(v: View, view: "front" | "side") {
   // height (and so the scale) is wrong.
   if (ext.top < v.height * 0.005 || ext.bottom > v.height * 0.995)
     throw new MeasureError("not-full-body", view);
-  for (const i of [L.lShoulder, L.rShoulder, L.lHip, L.rHip, L.lAnkle, L.rAnkle]) {
-    const vis = v.landmarks[i].visibility;
-    if (vis !== undefined && vis < 0.3) throw new MeasureError("not-full-body", view);
+  // One of each PAIR must be visible, not both: in profile the far shoulder,
+  // hip and ankle are hidden behind the body by definition (realistic test
+  // photos, 2026-11-13, were all refused as "not full body" for this).
+  const vis = (i: number) => v.landmarks[i].visibility ?? 1;
+  for (const [a, b] of [
+    [L.lShoulder, L.rShoulder],
+    [L.lHip, L.rHip],
+    [L.lAnkle, L.rAnkle],
+  ]) {
+    if (Math.max(vis(a), vis(b)) < 0.3) throw new MeasureError("not-full-body", view);
   }
   return ext;
 }
@@ -238,27 +245,20 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   // first gap between them was at the KNEE, and the inside leg read 47cm.
   // Arms ~45deg out and feet apart remove both, the same pose measuring apps
   // ask for.
-  const armAngle = (sh: number, wr: number) => {
-    const a = f(sh);
-    const b = f(wr);
-    return (Math.atan2(Math.abs(b.x - a.x), Math.abs(b.y - a.y)) * 180) / Math.PI;
-  };
-  if (Math.min(armAngle(L.lShoulder, L.lWrist), armAngle(L.rShoulder, L.rWrist)) < 20)
-    throw new MeasureError("arms-touching", "front");
-  // Straight and pointing DOWN: a raised or bent arm puts the upper arm across
-  // the shoulder row (test photo read shoulders 45cm) and shortens the arm.
-  for (const [sh, el, wr] of [
-    [L.lShoulder, L.lElbow, L.lWrist],
-    [L.rShoulder, L.rElbow, L.rWrist],
-  ] as const) {
-    if (!(f(wr).y > f(el).y && f(el).y > f(sh).y)) throw new MeasureError("arms-touching", "front");
+  // ⚠️ POSE IS TOLERATED, NOT POLICED (founder, 2026-11-13: "not every
+  // customer will stand perfectly like that"). Arms hanging against the body
+  // are cut out of the front width below (arm lines), so the only pose still
+  // refused is hands raised ABOVE the shoulders, which puts the arms across
+  // the shoulder row.
+  for (const wr of [L.lWrist, L.rWrist]) {
+    if (f(wr).y < Math.min(fShoulderL.y, fShoulderR.y)) throw new MeasureError("arms-touching", "front");
   }
   // Feet together is NOT rejected (founder, 2026-11-13: being sent back to
   // photo 1 again and again is what makes people give up). It only means the
   // inside leg cannot be seen, so it is left blank (0) for us to confirm.
   const feetApart = Math.abs(f(L.lAnkle).x - f(L.rAnkle).x) / fH >= 0.06;
   // In profile: shoulders nearly on top of each other.
-  if (Math.abs(s(L.lShoulder).x - s(L.rShoulder).x) / sH > 0.07)
+  if (Math.abs(s(L.lShoulder).x - s(L.rShoulder).x) / sH > 0.09)
     throw new MeasureError("side-not-profile", "side");
 
   // Fractions of height (0 = top of head) for the bands.
@@ -298,12 +298,21 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
     const t = (y - seg[0].y) / Math.max(1, seg[1].y - seg[0].y);
     return seg[0].x + (seg[1].x - seg[0].x) * Math.max(0, Math.min(1, t));
   };
+  // Typical upper-arm half width, from ANSUR II women: flexed biceps
+  // circumference = 0.1878 x stature on average, so half its diameter is
+  // 0.1878 / (2 pi) = 0.0299 x stature. Used whenever the forearm cannot be
+  // measured on its own -- hands resting on the hips make the forearm's run
+  // the WHOLE TORSO, and the first version then cut the entire body out
+  // (front width 0 on both realistic test photos).
+  const typicalHalf = 0.0299 * fH;
   const forearmHalf = (el: number, wr: number) => {
     const m = mid(f(el), f(wr));
-    return runWidthAt(front, m.y, m.x) / 2;
+    const half = runWidthAt(front, m.y, m.x) / 2;
+    return half > 0 && half < typicalHalf ? half : 0;
   };
-  const upperHalf =
+  const measuredHalf =
     Math.max(forearmHalf(L.lElbow, L.lWrist), forearmHalf(L.rElbow, L.rWrist)) * 1.3;
+  const upperHalf = measuredHalf > 0 ? Math.min(measuredHalf, typicalHalf * 1.5) : typicalHalf;
   const frontWidthPx = (y: number, cx: number) => {
     let sum = 0;
     let n = 0;
@@ -350,19 +359,6 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   const waistF = scan(0.5, 0.85, W, "min");
   const hipLevelF = scan(0.85, 1.3, W, "max");
 
-  // Hands resting against the thighs make the hip run include the arms.
-  for (const wi of [L.lWrist, L.rWrist]) {
-    const w = f(wi);
-    const fr = frac(w.y);
-    if (Math.abs(fr - hipLevelF) < torso * 0.25) {
-      const row = Math.round(fRow(hipLevelF));
-      const cx = Math.round(fCx(hipLevelF));
-      // wrist inside the measured run => arms touching
-      const half = runWidthAt(front, row, cx) / 2;
-      if (Math.abs(w.x - cx) < half - 2) throw new MeasureError("arms-touching", "front");
-    }
-  }
-
   const bust = ellipsePerimeter(W(bustF), D(bustF));
   const waist = ellipsePerimeter(W(waistF), D(waistF));
   const hip = ellipsePerimeter(W(hipLevelF), D(hipLevelF));
@@ -388,7 +384,14 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
       }
     }
   }
-  const inseam = crotchY < 0 ? 0 : (fe.bottom - crotchY) * fScale;
+  // No visible gap (feet together, loose trousers): place the crotch from the
+  // hip joint instead. ANSUR II, 1,986 women measured by the US Army (public
+  // file ANSUR_II_FEMALE_Public.csv, openlab.psu.edu/ansur2): crotch height =
+  // trochanterion height - 0.0388 x stature on average (sd 0.0100). The
+  // detected hip joint stands in for the trochanter -- an approximation,
+  // corrected by CALIBRATION once tape data exists.
+  if (crotchY < 0) crotchY = fHip.y + 0.0388 * fH;
+  const inseam = (fe.bottom - crotchY) * fScale;
 
   const raw: Estimate = { bust, waist, hip, height: heightCm, shoulder, sleeve, outseam, inseam };
   const out = {} as Estimate;
@@ -403,7 +406,7 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
     out.hip >= 60 && out.hip <= 170 &&
     out.waist < out.hip &&
     out.sleeve > 30 && out.sleeve < 90 &&
-    (out.inseam === 0 || (out.inseam > 40 && out.inseam < out.outseam));
+    out.inseam > 40 && out.inseam < out.outseam;
   if (!ok) throw new MeasureError("implausible", "both");
   return out;
 }
