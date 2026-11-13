@@ -53,13 +53,14 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   },
   // ⚠️ Corrected 2026-11-13 against the catalogue photographs. The blouse entry
   // described a different garment ("single dart pair, no princess seam, set-in
-  // sleeve, straight hem"); the photos show princess seams, a waistband, a
+  // sleeve, straight hem"); the photos show front waist darts, back princess seams, a waistband, a
   // gathered peplum and puff sleeves. The photograph wins.
   "structured-blouse": {
-    silhouette: "Fitted blouse: princess seams, seamed waistband and gathered peplum, puff sleeves",
+    silhouette: "Fitted blouse: front waist darts, back princess seams, seamed waistband, gathered peplum, puff sleeves",
     details: [
       { text: "Band (mandarin) collar, open in a deep V below it — no buttons in the V", view: "front" },
-      { text: "Princess seams front and back, shoulder to waistband" },
+      { text: "Front: one vertical waist dart each side, from under the bust to the waistband", view: "front" },
+      { text: "Back: princess seams from the shoulders to the waistband", view: "back" },
       { text: "Separate waistband seamed at the natural waist, front and back" },
       { text: "Gathered peplum below the waistband" },
       { text: "Buttons down the centre front from the bottom of the V through the waistband and peplum", view: "front" },
