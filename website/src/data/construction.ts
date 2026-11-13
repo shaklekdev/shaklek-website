@@ -51,31 +51,41 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
       { text: "Rounded shirt-tail hem, sides shorter than centre front and back" },
     ],
   },
+  // ⚠️ Corrected 2026-11-13 against the catalogue photographs. The blouse entry
+  // described a different garment ("single dart pair, no princess seam, set-in
+  // sleeve, straight hem"); the photos show princess seams, a waistband, a
+  // gathered peplum and puff sleeves. The photograph wins.
   "structured-blouse": {
-    silhouette: "Clean blouse with light waist shaping from a single dart pair",
+    silhouette: "Fitted blouse: princess seams, seamed waistband and gathered peplum, puff sleeves",
     details: [
-      { text: "One bust dart pair only — no princess seam, no side dart stack", view: "front" },
-      { text: "Full-length front placket with buttons", view: "front" },
-      { text: "Set-in sleeve at the natural shoulder point" },
-      { text: "Straight hem, equal front and back" },
+      { text: "Band (mandarin) collar, open in a deep V below it — no buttons in the V", view: "front" },
+      { text: "Princess seams front and back, shoulder to waistband" },
+      { text: "Separate waistband seamed at the natural waist, front and back" },
+      { text: "Gathered peplum below the waistband" },
+      { text: "Buttons down the centre front from the bottom of the V through the waistband and peplum", view: "front" },
+      { text: "Puff sleeve gathered at the head. Short: gathered into a narrow band. Long: gathered into a deep cuff with 3 buttons" },
     ],
   },
   "wrap-top": {
-    silhouette: "Wrap-front top with a self-fabric tie closing at the waist",
+    silhouette: "Wrap-front top with a self-fabric tie closing at the side",
     details: [
-      { text: "Front wraps left over right and ties at the side seam", view: "front" },
+      { text: "Front wraps over in a soft crossover V and ties at the side seam", view: "front" },
       { text: "Self-fabric tie cut from the same cloth, not a purchased band" },
       { text: "No buttons and no zip — the tie is the only closure" },
+      { text: "Long sleeve gathered into a narrow band at the wrist" },
       { text: "Plain single back panel, no opening", view: "back" },
     ],
   },
   "utility-shirt": {
-    silhouette: "Utility shirt with patch chest pockets and a self-fabric waist tie",
+    silhouette: "Utility shirt with flap chest pockets and a drawstring waist",
     details: [
-      { text: "Two patch chest pockets, square-cut, topstitched", view: "front" },
+      { text: "Pointed shirt collar on a stand" },
+      { text: "Two chest pockets WITH FLAPS, topstitched", view: "front" },
       { text: "Full-length front placket with buttons", view: "front" },
-      { text: "Self-fabric waist tie" },
-      { text: "Straight hem, equal front and back" },
+      { text: "Drawstring cord through a channel at the waist, gathering front and back, tied at centre front" },
+      { text: "Back yoke", view: "back" },
+      { text: "Flap pocket on the upper sleeve" },
+      { text: "Long sleeve: buttoned cuff. Short sleeve: turned-up cuff" },
     ],
   },
   "wide-leg-trousers": {
@@ -125,7 +135,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
 // scripts/test-construction.mjs fails if any option is missing one.
 export const OPTION_CONSTRUCTION: Record<string, string> = {
   // Shirt — render tier
-  "Shirt:sleeve_length:short": "Short sleeve, finishing above the elbow, plain turned hem.",
+  "Shirt:sleeve_length:short": "Short sleeve, finishing above the elbow. Sleeve end as in this piece's construction (band, cuff or plain turned hem).",
   "Shirt:sleeve_length:long": "Long sleeve, finishing at the wrist bone. Sleeve end as in this piece's construction (cuff or plain turned hem).",
   "Shirt:garment_length:normal": "Standard body length, hem sitting at the high hip.",
   "Shirt:garment_length:longer": "Extended body length, hem sitting at the low hip.",
