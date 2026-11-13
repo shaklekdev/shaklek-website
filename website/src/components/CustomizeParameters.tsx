@@ -153,7 +153,7 @@ export default function CustomizeParameters({
           one column, so nothing may be sticky in it. object-contain because
           the box is not 3:4. */}
       <div
-        className="relative mx-auto aspect-[2/3] max-h-[54vh] w-auto touch-pan-y select-none overflow-hidden bg-white lg:max-h-none lg:w-full"
+        className="relative mx-auto aspect-[2/3] max-h-[64vh] w-auto touch-pan-y select-none overflow-hidden bg-white lg:max-h-none lg:w-full"
         style={
           activeImage
             ? undefined

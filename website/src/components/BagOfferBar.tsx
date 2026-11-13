@@ -81,8 +81,9 @@ export default function BagOfferBar() {
 
   const bagLine = (
     <>
-      The first 50 orders come in a Shaklek bag embroidered with your initials.
-      <span className="ml-1 underline underline-offset-2">Customise your bag</span>
+      <span className="sm:hidden">First 50 orders: <span className="underline underline-offset-2">your initials on the bag</span></span>
+      <span className="hidden sm:inline">The first 50 orders come in a Shaklek bag embroidered with your initials.
+      <span className="ml-1 underline underline-offset-2">Customise your bag</span></span>
     </>
   );
   const deliveryLine = "Delivery included across the UAE.";
