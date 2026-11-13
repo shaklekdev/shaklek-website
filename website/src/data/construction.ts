@@ -61,7 +61,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     details: [
       { text: "High round neckline, no collar" },
       { text: "Sleeveless with cut-in armholes, faced" },
-      { text: "Princess seams on the front, from the armhole to the hem", view: "front" },
+      { text: "Centre-front seam from the neckline to the hem", view: "front" },
       { text: "Centre-back seam, shoulder to hem", view: "back" },
       { text: "No waist seam, no belt; A-line skirt widening to the hem" },
     ],

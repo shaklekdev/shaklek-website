@@ -1,0 +1,10 @@
+{ "name": "Buttoned Dress",
+  "order": { "fields": { "Size": "", "Colour": "", "Neckline": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3 · seamed at the natural waist" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "photos": { "front": "../../../website/public/catalog/buttoned-dress/buttoned-dress-navy-front-v3.jpg", "back": "../../../website/public/catalog/buttoned-dress/buttoned-dress-navy-back-v3.jpg" },
+  "details": [
+    { "file": "d-bodice.png", "title": "Bodice", "sub": "round neck · sleeveless · waist seam" },
+    { "file": "d-buttons.png", "title": "Buttons", "sub": "small covered buttons, close together · neck to hem" },
+    { "file": "d-pocket.png", "title": "Pocket", "sub": "in the side seam, below the waist seam" },
+    { "file": "d-back.png", "title": "Back", "sub": "centre-back seam · waist seam · no buttons" } ],
+  "pattern": "pattern.jpg" }

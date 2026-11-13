@@ -1,0 +1,9 @@
+{ "name": "Slip Dress",
+  "order": { "fields": { "Size": "", "Colour": "", "Neckline": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3 · no waist seam" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "photos": { "front": "../../../website/public/catalog/slip-dress/slip-dress-navy-front-v3.jpg", "back": "../../../website/public/catalog/slip-dress/slip-dress-navy-back-v3.jpg" },
+  "details": [
+    { "file": "d-neck.png", "title": "Neck + armholes", "sub": "high round neck · cut-in armholes, faced · centre-front seam" },
+    { "file": "d-back.png", "title": "Back", "sub": "centre-back seam · no waist seam" },
+    { "file": "d-hem.png", "title": "Hem", "sub": "A-line · plain narrow hem" } ],
+  "pattern": "pattern.jpg" }
