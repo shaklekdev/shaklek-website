@@ -6,8 +6,11 @@ type Db = NonNullable<ReturnType<typeof getDb>>;
 // Anything with .execute -- the db itself or a transaction handle.
 type Exec = Pick<Db, "execute">;
 
-// Max metres per colour that UNPAID checkouts may hold (two abayas).
-const PENDING_CAP_METRES = 11;
+// Unpaid checkouts hold NO fabric. Founder decision 2026-11-13: stock is only
+// taken once a payment succeeds, so nobody can block the shop by starting
+// checkouts and never paying. Accepted risk: two customers paying for the very
+// last metres at the same moment -> one refund.
+const PENDING_CAP_METRES = 0;
 
 // WHICH ORDERS HOLD FABRIC. Everything placed since STOCK_SINCE except the two
 // states that will never be made: payment_failed (Stripe session expired or
