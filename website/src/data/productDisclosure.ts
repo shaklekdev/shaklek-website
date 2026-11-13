@@ -129,8 +129,12 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       // tub symbol on the label, which is the standard form -- and it keeps
       // digits out of an Arabic run, which is what printed "%001" backwards on
       // this label three times.
-      value: "Gentle machine wash",
-      valueAr: "غسيل آلي لطيف",
+      // 2026-11-13 founder: show the temperature on the site (a friend asked
+      // for it). 30°C is the tub symbol already on the approved label. This
+      // row is WEB ONLY -- the label artwork does not import it -- so digits
+      // here cannot reach the printed Arabic run. The Arabic needs her read.
+      value: "Gentle machine wash at 30°C",
+      valueAr: "غسيل آلي لطيف على درجة حرارة 30 مئوية",
     },
     {
       // ✅ FOUNDER-READ AND APPROVED 2026-08-28 (at 14 days).
