@@ -71,9 +71,15 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     details: [
       { text: "Round neckline, no collar, sleeveless with faced armholes" },
       { text: "Seamed waist at the natural waist, front and back" },
-      { text: "Small fabric-covered buttons close together, centre front from the neck to the hem", view: "front" },
+      { text: "Small fabric-covered buttons close together down the centre front; the dress opens at the bottom below the last button", view: "front" },
       { text: "Side-seam pockets in the skirt" },
-      { text: "Back bodice with a centre-back seam; A-line skirt widening to the hem", view: "back" },
+      { text: "Back bodice with a centre-back seam; WIDE flared skirt, as in the website photo", view: "back" },
+      // ⚠️ FIT, founder 2026-11-13 after the first test piece came back wrong.
+      { text: "FITTED bodice: bust darts and waist darts front, darts at the back. Not straight, not loose" },
+      { text: "Armhole CLOSE to the body, cut in like the website photo (narrow shoulder): lies flat at the side, NO gap. Not higher, just close" },
+      { text: "Small buttons close together on a NARROW button stand, loops in thin ELASTIC cord (same colour) so the closure is soft, not rigid; no interfacing in the stand; open at the bottom below the last button", view: "front" },
+      { text: "NO SKIN between the buttons: a small band of the same linen, 3-4 cm wide, sewn BEHIND the left front edge for the whole length of the buttons; outside look unchanged", view: "front" },
+      { text: "SMALL pockets: opening just big enough for a hand, bag hand-deep, flat" },
     ],
   },
   "oversized-shirt": {

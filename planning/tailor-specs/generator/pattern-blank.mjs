@@ -127,14 +127,15 @@ Object.assign(TOPS, {
     ["BACK ×2", "centre-back seam", "M 0,0 Q 4,0 6,-1 L 12,0 Q 12,10 17,16 L 18,30 Q 21,70 30,110 L 0,110 Z"],
     ["NECK + ARMHOLE FACING", "front ×1 + back ×1", "M 0,0 L 18,0 Q 20,8 22,14 L 17,16 Q 13,8 12,4 L 0,4 Z"],
   ]},
-  "buttoned-dress": { title: "BUTTONED DRESS", rows: DRESS_ROWS, layout: "dress", cols: [[200, 240], [620, 240], [200, 620], [620, 620], [1060, 240], [1060, 560], [1060, 860]], pieces: [
+  "buttoned-dress": { title: "BUTTONED DRESS", rows: DRESS_ROWS, layout: "dress", cols: [[200, 240], [620, 240], [200, 620], [620, 620], [1060, 240], [1060, 560], [1060, 820], [1060, 1200]], pieces: [
     ["FRONT BODICE ×2", "button stand at CF", "M -2,6 L 0,6 Q 4,6 6,0 L 12,1 Q 12,10 17,16 L 17,36 L -2,36 Z"],
     ["BACK BODICE ×2", "centre-back seam", "M 0,1 Q 4,1 6,0 L 12,1 Q 12,10 17,16 L 17,36 L 0,36 Z"],
     ["FRONT SKIRT ×2", "button stand · pocket at side", "M -2,0 L 17,0 Q 22,40 28,74 L -2,74 Z"],
     ["BACK SKIRT ×1", "on fold", "M 0,0 L 17,0 Q 22,40 28,74 L 0,74 Z", "fold"],
     ["POCKET BAG ×4", "side seam", "M 0,0 L 14,0 L 16,22 Q 8,26 0,20 Z"],
     ["NECK + ARMHOLE FACING", "front ×2 + back ×1", "M 0,0 L 18,0 Q 20,8 22,14 L 17,16 Q 13,8 12,4 L 0,4 Z"],
-    ["BUTTON LOOPS", "small covered buttons, close together", "M 0,0 L 30,0 L 30,1 L 0,1 Z"],
+    ["BAND BEHIND BUTTONS ×1", "3-4 cm · behind left edge · no skin", "M 0,0 L 4,0 L 4,40 L 0,40 Z"],
+    ["ELASTIC CORD LOOPS", "thin, same colour · soft closure", "M 0,0 L 30,0 L 30,1 L 0,1 Z"],
   ]},
 });
 if (TOPS[kind]) {
