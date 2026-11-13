@@ -245,8 +245,9 @@ export default function SizePicker({
           booking system: we reach out AFTER the order. */}
       {sizeMode === "tailored" ? (
         <div className="mt-3">
-          <p className="text-[12px] text-text-2">How should we take your measurements?</p>
-          <div className="mt-1.5 grid grid-cols-2 gap-1.5 lg:max-w-xs">
+          {/* No question above these two (founder, 2026-11-13: "too much
+              text"); the two buttons say it. */}
+          <div className="grid grid-cols-2 gap-1.5 lg:max-w-xs">
             {([
               ["home", "Home fitting"],
               ["online", "Online fitting"],
