@@ -4,7 +4,7 @@ import {
   INCLUDED_HOME_CHIPS,
   INCLUDED_HOME_FOOTNOTE,
   INCLUDED_HOME_LEAD,
-  includedLines,
+  INCLUDED_PRODUCT_LINES,
 } from "@/data/included";
 
 /**
@@ -24,30 +24,36 @@ import {
  */
 export default function IncludedInPrice({
   variant,
-  category,
 }: {
   variant: "card" | "chips" | "line";
+  // Still accepted (callers pass it) though no line depends on it since the
+  // shayla line moved out, 2026-11-13.
   category?: string | null;
 }) {
   if (variant === "card") {
+    // FOLDED, like Product information and the home's "All included +"
+    // (founder, 2026-11-13). Same box, same + / − as the other disclosures on
+    // this page, so it reads as one family rather than a promotional card.
     return (
-      <section aria-labelledby="included-in-price" className="mt-6 border-t border-border pt-5">
-        {/* A <p>, not an <h2>: globals.css styles every h2 in the display
-            font at section size, which turned this into a 2-line banner. */}
-        <p
-          id="included-in-price"
-          className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-text"
-        >
-          {INCLUDED_HEADING}
-        </p>
-        <ul className="mt-3 divide-y divide-border">
-          {includedLines(category).map((l) => (
-            <li key={l.key} className="py-2.5 text-[13px] leading-snug text-text-2">
+      <details className="group mt-5 border border-border-strong">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
+          <span className="text-[13px] text-text">{INCLUDED_HEADING}</span>
+          <span aria-hidden="true" className="shrink-0 text-lg leading-none text-text-3 group-open:hidden">
+            +
+          </span>
+          <span aria-hidden="true" className="hidden shrink-0 text-lg leading-none text-text-3 group-open:block">
+            &minus;
+          </span>
+        </summary>
+        <ul className="divide-y divide-border border-t border-border">
+          {INCLUDED_PRODUCT_LINES.map((l) => (
+            <li key={l.key} className="px-4 py-2.5 text-[13px] text-text-2">
               {l.label}
             </li>
           ))}
         </ul>
-      </section>
+        <p className="border-t border-border px-4 py-2 text-[11px] text-text-3">{INCLUDED_HOME_FOOTNOTE}</p>
+      </details>
     );
   }
 
