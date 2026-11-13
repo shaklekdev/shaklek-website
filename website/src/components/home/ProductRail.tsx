@@ -22,7 +22,7 @@ export const HOME_RAIL_SLUGS = [
 
 /** The home-page rail: four pieces in a swipeable row and a link to the rest. */
 export default function ProductRail({
-  title = "Custom made for you",
+  title = "Begin your piece",
   // A "Tap a colour to see it on the piece" hint lived here briefly and the
   // founder cut it: a row of colour dots on a photograph is already an
   // invitation, and explaining an interaction in words is text everyone reads
@@ -70,16 +70,16 @@ export default function ProductRail({
           sticky header, which would otherwise cover the heading. */}
       <section
         id="catalog"
-        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-8 pb-2 sm:pt-10"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-10 pb-4 sm:pt-12"
       >
         {/* The price claim sits on the RIGHT, stacked, so the left column is
             only the heading (founder, 2026-11-12: "too much text on the left"). */}
-        <div className="flex items-start justify-between gap-3 sm:gap-4">
+        <div className="flex items-center justify-between gap-3 sm:gap-4">
           <div className="min-w-0">
-            {/* Visually hidden since 2026-11-13 (founder: "Custom made for
-                you" repeats the hero's "Custom made"). Kept for screen readers
-                and the page outline. */}
-            <h2 className="sr-only">{title}</h2>
+            {/* "Begin your piece" since 2026-11-13 (founder chose it over "Create
+                yours" / "Choose a piece to begin"; "Custom made for you" was cut
+                for repeating the hero). It invites; the card button acts. */}
+            <h2 className="text-lg text-text">{title}</h2>
             {/* No subtitle on the home (founder, 2026-11-13, "too much text...
                 be strategic"): every card already says "Customise this piece".
                 Pass `subtitle` explicitly to show one. */}
