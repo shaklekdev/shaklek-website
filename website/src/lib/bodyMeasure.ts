@@ -143,6 +143,27 @@ export function runWidthAt(v: View, y: number, cx: number): number {
   return r - l + 1;
 }
 
+/** Left and right edge of the run containing cx on row y, or null. */
+export function runEdgesAt(v: View, y: number, cx: number): { l: number; r: number } | null {
+  const w = runWidthAt(v, y, cx);
+  if (!w) return null;
+  const yi = Math.round(y);
+  const row = yi * v.width;
+  let c = Math.round(cx);
+  if (c < 0 || c >= v.width || !v.mask[row + c]) {
+    const reach = Math.round(v.width * 0.1);
+    for (let d = 1; d <= reach; d++) {
+      if (c - d >= 0 && v.mask[row + c - d]) { c = c - d; break; }
+      if (c + d < v.width && v.mask[row + c + d]) { c = c + d; break; }
+    }
+  }
+  let l = c;
+  let r = c;
+  while (l > 0 && v.mask[row + l - 1]) l--;
+  while (r < v.width - 1 && v.mask[row + r + 1]) r++;
+  return { l, r };
+}
+
 /** Mean of a few rows around y, to smooth a ragged mask edge. */
 function smoothWidth(v: View, y: number, cx: number): number {
   let s = 0;
@@ -232,7 +253,10 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   ] as const) {
     if (!(f(wr).y > f(el).y && f(el).y > f(sh).y)) throw new MeasureError("arms-touching", "front");
   }
-  if (Math.abs(f(L.lAnkle).x - f(L.rAnkle).x) / fH < 0.1) throw new MeasureError("legs-together", "front");
+  // Feet together is NOT rejected (founder, 2026-11-13: being sent back to
+  // photo 1 again and again is what makes people give up). It only means the
+  // inside leg cannot be seen, so it is left blank (0) for us to confirm.
+  const feetApart = Math.abs(f(L.lAnkle).x - f(L.rAnkle).x) / fH >= 0.06;
   // In profile: shoulders nearly on top of each other.
   if (Math.abs(s(L.lShoulder).x - s(L.rShoulder).x) / sH > 0.07)
     throw new MeasureError("side-not-profile", "side");
@@ -261,7 +285,48 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
 
   const fRow = (fr: number) => fe.top + fr * fH;
   const sRow = (fr: number) => se.top + fr * sH;
-  const W = (fr: number) => smoothWidth(front, fRow(fr), fCx(fr)) * fScale;
+  // ⚠️ ARMS ARE CUT OUT OF THE FRONT WIDTH. Even in an A-pose the upper arm
+  // touches the body just under the armpit, so the raw silhouette at bust
+  // level is torso + both arms: the test photo read bust 110 for a slim
+  // model. Each arm is a line shoulder -> elbow -> wrist; the torso edge can
+  // be no further out than that line minus half an upper arm. Upper-arm half
+  // width = forearm half width (measured where the forearm hangs free)
+  // x 1.3, an approximation to be corrected by CALIBRATION, not by feel.
+  const armX = (sh: number, el: number, wr: number, y: number) => {
+    const a = f(sh), b = f(el), c = f(wr);
+    const seg = y <= b.y ? [a, b] : [b, c];
+    const t = (y - seg[0].y) / Math.max(1, seg[1].y - seg[0].y);
+    return seg[0].x + (seg[1].x - seg[0].x) * Math.max(0, Math.min(1, t));
+  };
+  const forearmHalf = (el: number, wr: number) => {
+    const m = mid(f(el), f(wr));
+    return runWidthAt(front, m.y, m.x) / 2;
+  };
+  const upperHalf =
+    Math.max(forearmHalf(L.lElbow, L.lWrist), forearmHalf(L.rElbow, L.rWrist)) * 1.3;
+  const frontWidthPx = (y: number, cx: number) => {
+    let sum = 0;
+    let n = 0;
+    for (let d = -2; d <= 2; d++) {
+      const e = runEdgesAt(front, y + d, cx);
+      if (!e) continue;
+      let { l, r } = e;
+      for (const [sh, el, wr] of [
+        [L.lShoulder, L.lElbow, L.lWrist],
+        [L.rShoulder, L.rElbow, L.rWrist],
+      ] as const) {
+        const ax = armX(sh, el, wr, y + d);
+        if (ax < cx) l = Math.max(l, ax + upperHalf);
+        else r = Math.min(r, ax - upperHalf);
+      }
+      if (r > l) {
+        sum += r - l + 1;
+        n++;
+      }
+    }
+    return n ? sum / n : 0;
+  };
+  const W = (fr: number) => frontWidthPx(fRow(fr), fCx(fr)) * fScale;
   const D = (fr: number) => smoothWidth(side, sRow(fr), sCx(fr)) * sScale;
 
   const scan = (a: number, b: number, score: (fr: number) => number, pick: "max" | "min") => {
@@ -313,15 +378,17 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
 
   // Crotch: first row below the hip joints where the body centre is background
   // (the gap between the legs).
-  let crotchY = fHip.y;
+  let crotchY = -1;
   const crotchLimit = Math.min(fe.bottom, fHip.y + torso * fH * 0.5);
-  for (let y = Math.round(fHip.y); y < crotchLimit; y++) {
-    if (!front.mask[y * front.width + Math.round(fHip.x)]) {
-      crotchY = y;
-      break;
+  if (feetApart) {
+    for (let y = Math.round(fHip.y); y < crotchLimit; y++) {
+      if (!front.mask[y * front.width + Math.round(fHip.x)]) {
+        crotchY = y;
+        break;
+      }
     }
   }
-  const inseam = (fe.bottom - crotchY) * fScale;
+  const inseam = crotchY < 0 ? 0 : (fe.bottom - crotchY) * fScale;
 
   const raw: Estimate = { bust, waist, hip, height: heightCm, shoulder, sleeve, outseam, inseam };
   const out = {} as Estimate;
@@ -336,7 +403,7 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
     out.hip >= 60 && out.hip <= 170 &&
     out.waist < out.hip &&
     out.sleeve > 30 && out.sleeve < 90 &&
-    out.inseam > 40 && out.inseam < out.outseam;
+    (out.inseam === 0 || (out.inseam > 40 && out.inseam < out.outseam));
   if (!ok) throw new MeasureError("implausible", "both");
   return out;
 }

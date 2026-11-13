@@ -58,7 +58,10 @@ const FIELDS: { key: keyof Estimate; label: string; min: number; max: number }[]
   { key: "outseam", label: "Waist to floor", min: 60, max: 140 },
   { key: "inseam", label: "Inside leg", min: 40, max: 110 },
 ];
+// Inside leg may be left blank: it cannot be measured when the feet are
+// together, and our team confirms it on WhatsApp.
 const inRange = (f: (typeof FIELDS)[number], v: string | undefined) => {
+  if (f.key === "inseam" && (v === undefined || v.trim() === "")) return true;
   const n = Number(v);
   return v !== undefined && v.trim() !== "" && Number.isFinite(n) && n >= f.min && n <= f.max;
 };
@@ -71,6 +74,16 @@ type Landmarker = {
   };
 };
 let landmarkerPromise: Promise<Landmarker> | null = null;
+async function getCpuLandmarker(): Promise<Landmarker> {
+  const { FilesetResolver, PoseLandmarker } = await import("@mediapipe/tasks-vision");
+  const files = await FilesetResolver.forVisionTasks("/fitting");
+  return (await PoseLandmarker.createFromOptions(files, {
+    baseOptions: { modelAssetPath: "/fitting/pose-full.task", delegate: "CPU" },
+    runningMode: "IMAGE",
+    numPoses: 1,
+    outputSegmentationMasks: true,
+  })) as unknown as Landmarker;
+}
 function getLandmarker(): Promise<Landmarker> {
   if (!landmarkerPromise) {
     landmarkerPromise = (async () => {
@@ -96,17 +109,68 @@ function getLandmarker(): Promise<Landmarker> {
   return landmarkerPromise;
 }
 
-/** Decode, honour EXIF rotation, downscale, analyse, drop the pixels. */
+/** A failure the customer can quote to us: which stage broke. */
+class StageError extends Error {
+  constructor(public code: "decode" | "engine" | "detect", cause: unknown) {
+    super(`${code}: ${cause instanceof Error ? cause.message : String(cause)}`);
+  }
+}
+
+// ⚠️ DECODE THROUGH AN <img>, NOT createImageBitmap. On the founder's iPhone
+// (2026-11-13) the first version looped back to photo 1 with nothing measured:
+// iPhone photos are often HEIC, which Safari's <img> decodes but
+// createImageBitmap(file, {imageOrientation}) does not reliably. An <img>
+// also applies the EXIF rotation by default in every current browser.
+function loadImage(file: File): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(img);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("image could not be read"));
+    };
+    img.src = url;
+  });
+}
+
+/** Decode, downscale, analyse, drop the pixels. */
 async function analyse(file: File): Promise<View> {
-  const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
-  const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
+  let img: HTMLImageElement;
+  try {
+    img = await loadImage(file);
+  } catch (e) {
+    throw new StageError("decode", e);
+  }
+  const w0 = img.naturalWidth;
+  const h0 = img.naturalHeight;
+  const scale = Math.min(1, 1280 / Math.max(w0, h0));
   const canvas = document.createElement("canvas");
-  canvas.width = Math.round(bitmap.width * scale);
-  canvas.height = Math.round(bitmap.height * scale);
-  canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close();
-  const lm = await getLandmarker();
-  const res = lm.detect(canvas);
+  canvas.width = Math.round(w0 * scale);
+  canvas.height = Math.round(h0 * scale);
+  canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+  img.src = "";
+  let lm: Landmarker;
+  try {
+    lm = await getLandmarker();
+  } catch (e) {
+    throw new StageError("engine", e);
+  }
+  let res: ReturnType<Landmarker["detect"]>;
+  try {
+    res = lm.detect(canvas);
+  } catch (e) {
+    // Some phones create the GPU engine but fail on first use; retry on CPU.
+    try {
+      landmarkerPromise = getCpuLandmarker();
+      res = (await landmarkerPromise).detect(canvas);
+    } catch (e2) {
+      throw new StageError("detect", e2 ?? e);
+    }
+  }
   const maskObj = res.segmentationMasks?.[0];
   const landmarks = res.landmarks[0] ?? [];
   let mask = new Uint8Array(0);
@@ -183,15 +247,19 @@ export default function OnlineFitting({
       const [fv, sv] = await Promise.all([analyse(front), analyse(sideFile)]);
       const e = estimate(fv, sv, h);
       setEst(e);
-      setEdits(Object.fromEntries(FIELDS.map((f) => [f.key, String(e[f.key])])));
+      setEdits(Object.fromEntries(FIELDS.map((f) => [f.key, e[f.key] ? String(e[f.key]) : ""])));
       setStep("result");
     } catch (err) {
       if (err instanceof MeasureError) {
-        setError(PROBLEM_TEXT[err.problem]);
+        const which = err.view === "side" ? "side photo" : err.view === "front" ? "front photo" : "photos";
+        setError(`${PROBLEM_TEXT[err.problem]} (Your ${which}. Code: ${err.problem})`);
         setStep(err.view === "side" ? "side" : "front");
         if (err.view !== "side") setFront(null);
       } else {
-        setError("Something went wrong on this device. Please try again, or choose the private home fitting.");
+        const code = err instanceof StageError ? err.code : "other";
+        setError(
+          `We could not read the photos on this phone. Try again, or choose the private home fitting. (Code: ${code})`,
+        );
         setStep("front");
         setFront(null);
       }
@@ -215,7 +283,7 @@ export default function OnlineFitting({
     const out = { ...est };
     for (const f of FIELDS) {
       if (!inRange(f, edits[f.key])) return;
-      out[f.key] = Math.round(Number(edits[f.key]));
+      out[f.key] = edits[f.key]?.trim() ? Math.round(Number(edits[f.key])) : 0;
     }
     onDone({ estimate: out, topSize, trouserSize });
   }
@@ -331,7 +399,11 @@ export default function OnlineFitting({
                 <li>Head to feet in the photo, phone at waist height</li>
               </ul>
             </div>
-            {error && <p role="alert" className="mt-5 border-l-2 border-gold pl-3 text-[13px] leading-relaxed text-text">{error}</p>}
+            {error && (
+              <p role="alert" className="mt-5 bg-surface-2 px-4 py-3 text-[13px] leading-relaxed text-text">
+                {error}
+              </p>
+            )}
             <div className="mt-6 space-y-2">
               <button type="button" className={btn} onClick={() => (step === "front" ? frontCam : sideCam).current?.click()}>
                 Take the photo
@@ -396,7 +468,7 @@ export function onlineFittingNote(r: OnlineFittingResult): string {
   const sizes = [r.topSize && `top ${r.topSize}`, r.trouserSize && `trousers EU ${r.trouserSize}`].filter(Boolean).join(", ");
   return (
     `Online fitting (estimated, to confirm on WhatsApp): shoulders ${e.shoulder}cm; arm ${e.sleeve}cm; ` +
-    `waist to floor ${e.outseam}cm; inside leg ${e.inseam}cm` +
+    `waist to floor ${e.outseam}cm; inside leg ${e.inseam ? `${e.inseam}cm` : "to measure"}` +
     (sizes ? `; usual size ${sizes}` : "")
   );
 }
