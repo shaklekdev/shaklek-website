@@ -54,10 +54,16 @@ export type Estimate = {
 };
 
 /** tape / estimate, per measurement. 1 = uncalibrated. Set from validation data only. */
+// hip / waist: ANSUR II women (1,986, public CSV), real circumference divided
+// by the ellipse through the same breadth and depth: buttock 1.0966 (sd
+// 0.0175), waist 1.0610 (sd 0.0221). The ellipse systematically
+// under-reads; founder's own photos read hip 86 against her tape 100
+// (2026-11-13). Bust is NOT corrected yet: ANSUR's chest ratio is 1.165 and
+// would move a bust by ~15cm, too much to apply without a tape check.
 export const CALIBRATION: Record<keyof Estimate, number> = {
   bust: 1,
-  waist: 1,
-  hip: 1,
+  waist: 1.061,
+  hip: 1.0966,
   height: 1,
   shoulder: 1,
   sleeve: 1,
@@ -367,8 +373,12 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   // already left the body there), not the joint-to-joint distance, which sits
   // inside the shoulder and read 30cm on the test photo.
   const shoulder = smoothWidth(front, fShoulder.y, fShoulder.x) * fScale;
-  const arm = (sh: number, el: number, wr: number) => dist(f(sh), f(el)) + dist(f(el), f(wr));
-  const sleeve = ((arm(L.lShoulder, L.lElbow, L.lWrist) + arm(L.rShoulder, L.rElbow, L.rWrist)) / 2) * fScale;
+  // ARM LENGTH FROM HEIGHT, NOT FROM THE PHOTO. Joint-to-joint in the photo
+  // read 48-52 on every test and 50 against the founder's tape 60: the
+  // detected shoulder sits inside the shoulder bone and a hanging arm is
+  // foreshortened. ANSUR II women: sleeve outseam = 0.3337 x stature
+  // (sd 0.0111, i.e. about +/-2cm at 170cm), tighter than the photo.
+  const sleeve = 0.3337 * heightCm;
 
   const outseam = (fe.bottom - fRow(waistF)) * fScale;
 
