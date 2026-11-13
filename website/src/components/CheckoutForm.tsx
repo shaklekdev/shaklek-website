@@ -325,7 +325,7 @@ export default function CheckoutForm({ total }: { total: number }) {
         maxLength={3}
         autoCapitalize="characters"
         placeholder="e.g. NT"
-        className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+        className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-base text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
       />
 
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
@@ -340,7 +340,7 @@ export default function CheckoutForm({ total }: { total: number }) {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
-        className={`mb-1 w-full rounded-shaklek-xs border border-border-strong p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none ${
+        className={`mb-1 w-full rounded-shaklek-xs border border-border-strong p-3 text-base text-text placeholder:text-text-3 focus:border-accent focus:outline-none ${
           isSignedIn ? "bg-surface-2" : "bg-white"
         }`}
       />
