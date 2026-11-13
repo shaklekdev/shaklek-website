@@ -47,7 +47,7 @@ export default function FabricColorPicker({
       <p className="mb-2 text-[13px] text-text-2" aria-live="polite">
         <span className="uppercase tracking-[0.14em] text-text-2">Colour:</span>{" "}
         <span className="text-text">{color}</span>
-        {soldOut.includes(color) ? <span className="text-text-2"> — sold out</span> : null}
+        {soldOut.includes(color) ? <span className="text-text-2">, sold out</span> : null}
       </p>
       <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="flex flex-wrap items-center gap-3">

@@ -307,7 +307,9 @@ export const ABAYA_JACKET_PARAMS: SliderParam[] = [
       { value: "5", text: "Five" },
     ],
     defaultIndex: 0,
-    labelFor: (text) => text,
+    // The button reads "Four" under its "Closures" heading; the cart, the
+    // confirmation and the tailor see the label alone, so it names itself.
+    labelFor: (text) => `${text} closures`,
   },
   {
     name: "Pockets",
