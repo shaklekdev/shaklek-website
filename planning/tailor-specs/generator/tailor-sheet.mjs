@@ -151,8 +151,8 @@ function table(title, sub, headers, rowsT, widths) {
     y += hgt;
   }
 }
-if (DESIGN[slug]) table("DESIGN MEASUREMENTS", "PROPOSED values for size M - to validate on the first piece, then fixed. Widths follow her body: add the ease to HER measurement.",
-  ["OPTION", "WHAT", "VALUE", "HOW TO MEASURE ON THE GARMENT"], DESIGN[slug].map((r) => [r[0] === "all" ? "ALL" : r[0], r[1], r[2], r[3]]), [190, 200, 430, 290]);
+if (DESIGN[slug]) table("DESIGN RULES", "No size here: every rule uses HER measurements (page HER MEASUREMENTS). PROPOSED - check on the first piece.",
+  ["OPTION", "WHAT", "RULE", "CHECK ON THE GARMENT"], DESIGN[slug].map((r) => [r[0] === "all" ? "ALL" : r[0], r[1], r[2], r[3]]), [190, 200, 430, 290]);
 
 // HER MEASUREMENTS — what to take, whether the virtual fitting gives it, and
 // what to use when it does not.
