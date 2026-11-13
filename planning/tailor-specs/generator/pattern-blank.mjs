@@ -18,7 +18,8 @@ function piece(ox, oy, d, dashed = []) {
   return { X: (x) => ox + x * s, Y: (y) => oy + y * s };
 }
 const fold = (P, x, y1, y2) => { o += `<line x1="${P.X(x)}" y1="${P.Y(y1)}" x2="${P.X(x)}" y2="${P.Y(y2)}" stroke="${G}" stroke-width="7"/>`; T(P.X(x) - 14, P.Y((y1 + y2) / 2), "FOLD", { size: 24, color: G, rot: -90 }); };
-function dim(P, x1, y1, x2, y2, L, off = [0, 0]) {
+function dim() { return; }
+function _dimUnused(P, x1, y1, x2, y2, L, off = [0, 0]) {
   const a = [P.X(x1) + off[0], P.Y(y1) + off[1]], b = [P.X(x2) + off[0], P.Y(y2) + off[1]];
   o += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${DIM}" stroke-width="2.5" marker-start="url(#a)" marker-end="url(#a)"/>`;
   const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
@@ -42,7 +43,7 @@ if (kind === "open-abaya") {
   P = piece(1200, 240, "M -22,9 Q -11,-0.5 0,0 Q 11,-0.5 22,9 L 20,62 L -20,62 Z", [[-20.4, 50, 20.4, 50]]);
   name(P, 0, 34, "SLEEVE ×2", "set-in"); T(P.X(0), P.Y(57), "CUFF — fold to OUTSIDE", { size: 22, color: G });
   dim(P, -22, 9, 22, 9, "G", [0, -50]); dim(P, -28, 0, -28, 62, "F"); dim(P, -20, 62, 20, 62, "H", [0, 40]); dim(P, 22, 50, 22, 62, "K", [40, 0]);
-  rows = [["A", "Length, shoulder to floor"], ["B", "Chest (¼)"], ["C", "Hem (¼) — wider than B, it sweeps"], ["D", "Shoulder, neck to seam (drops 6 cm)"], ["E", "Armhole depth"], ["F", "Sleeve length incl. cuff"], ["G", "Sleeve width at top"], ["H", "Sleeve end width"], ["I", "Fold-back band width"], ["J", "Back neck (½)"], ["K", "Cuff depth"]];
+  rows = [["1", "Height"], ["2", "Bust (full, around)"], ["3", "Waist (full, around)"], ["4", "Hip (full, around)"], ["5", "Shoulder width (shoulder to shoulder)"], ["6", "Arm length (shoulder to wrist)"], ["7", "Upper arm (around)"], ["8", "Wrist (around)"], ["9", "Length wanted (shoulder to hem)"]];
 } else {
   title = "BUTTONED ABAYA";
   // FRONT x2: round neck then V to the first bar; straight column
@@ -59,13 +60,14 @@ if (kind === "open-abaya") {
   P = piece(1200, 240, "M -22,9 Q -11,-0.5 0,0 Q 11,-0.5 22,9 L 21,58 L -21,58 Z");
   name(P, 0, 34, "SLEEVE ×2", "plain end, no cuff");
   dim(P, -22, 9, 22, 9, "G", [0, -50]); dim(P, -28, 0, -28, 58, "F"); dim(P, -21, 58, 21, 58, "H", [0, 40]);
-  rows = [["A", "Length, shoulder to floor"], ["B", "Chest (¼)"], ["C", "Hem (¼) — SAME as B, straight"], ["D", "Shoulder, neck to seam (drops 6 cm)"], ["E", "Armhole depth"], ["F", "Sleeve length"], ["G", "Sleeve width at top"], ["H", "Sleeve end width"], ["J", "Neck width (½)"], ["M", "V depth, neck to 1st bar"], ["N", "Space between bars"], ["O", "Bar length (black cord, black button)"]];
+  rows = [["1", "Height"], ["2", "Bust (full, around)"], ["3", "Waist (full, around)"], ["4", "Hip (full, around)"], ["5", "Shoulder width (shoulder to shoulder)"], ["6", "Arm length (shoulder to wrist)"], ["7", "Upper arm (around)"], ["8", "Wrist (around)"], ["9", "Length wanted (shoulder to hem)"]];
 }
 // TABLE
 const tx = 1650, ty = 200;
-T(tx, ty, "MEASUREMENTS (cm)", { size: 36, anchor: "start" });
+T(tx, ty, "HER MEASUREMENTS — full body (cm)", { size: 36, anchor: "start" });
+  T(tx, ty + 34, "measured on her · the tailor adds the ease", { size: 24, anchor: "start", bold: false, color: "#666" });
 rows.forEach(([k, n], i) => {
-  const y = ty + 60 + i * 58;
+  const y = ty + 100 + i * 64;
   o += `<circle cx="${tx + 22}" cy="${y - 10}" r="22" fill="${DIM}"/>`; T(tx + 22, y, k, { size: 28, color: "white" });
   T(tx + 60, y, n, { size: 24, anchor: "start", bold: false, color: "#444" });
   const v = values[k];
@@ -74,7 +76,7 @@ rows.forEach(([k, n], i) => {
 const H = 240 + L * s + 160;
 const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="${DIM}"/></marker></defs><rect width="100%" height="100%" fill="white"/>
 <text x="40" y="70" font-family="Helvetica" font-weight="bold" font-size="52" fill="${INK}">${title} — PATTERN</text>
-<text x="40" y="118" font-family="Helvetica" font-size="30" fill="${DIM}">shape only · cm per customer in the table · NO seam allowance drawn · red letter = measurement · green = fold</text>${o}
+<text x="40" y="118" font-family="Helvetica" font-size="30" fill="${DIM}">shape of the pieces · her full body measurements in the table · NO seam allowance drawn · green = fold</text>${o}
 <text x="40" y="${H - 40}" font-family="Helvetica" font-weight="bold" font-size="32" fill="${INK}">100% linen · NO interfacing anywhere · it must hang and fall</text></svg>`;
 await sharp(Buffer.from(svg)).jpeg({ quality: 92 }).toFile(out);
 console.log("wrote", out);
