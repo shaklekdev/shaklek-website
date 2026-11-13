@@ -79,7 +79,7 @@ const QUESTIONS = [
 export default function HomeFaq() {
   return (
     <section className="border-t border-border bg-card/40">
-      <div className="mx-auto w-full max-w-3xl px-6 py-14">
+      <div className="mx-auto w-full max-w-3xl px-6 py-12 sm:py-16">
         <h2 className="text-lg text-text">FAQ</h2>
         <div className="mt-6 divide-y divide-border border-y border-border">
           {QUESTIONS.map(({ q, a }) => (

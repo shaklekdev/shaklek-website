@@ -70,14 +70,17 @@ export default function ProductRail({
           sticky header, which would otherwise cover the heading. */}
       <section
         id="catalog"
-        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-14 pb-5"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-12 pb-6 sm:pt-16"
       >
         {/* The price claim sits on the RIGHT, stacked, so the left column is
             only the heading (founder, 2026-11-12: "too much text on the left"). */}
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-lg text-text">{title}</h2>
-            <p className="mt-1 text-[13px] text-text-3">{subtitle}</p>
+        <div className="flex items-start justify-between gap-3 sm:gap-4">
+          <div className="min-w-0">
+            <h2 className="text-balance text-lg text-text">{title}</h2>
+            {/* Smaller on a phone: founder, 2026-11-13, "trop de texte entre le
+                hero et le carrousel" -- then "not losing it completely, making
+                it smaller". */}
+            <p className="mt-1 text-[11px] leading-snug text-text-3 sm:text-[13px]">{subtitle}</p>
           </div>
           {/* ⚠️ NO COUNT, same call as /catalog (founder, 2026-09-14). It read
               "{catalog.length} pieces" and she flagged it as wrong on
@@ -102,7 +105,7 @@ export default function ProductRail({
           -mx-6/px-6 lets the row bleed to the screen edges while the first card
           stays aligned with the heading above; scroll-pl-6 keeps that
           alignment on every snap stop. */}
-      <section className="mx-auto w-full max-w-6xl px-6 pb-16">
+      <section className="mx-auto w-full max-w-6xl px-6">
         <div
           className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-pl-6 px-6 pb-1 sm:gap-6"
           aria-label="Pieces to start with"

@@ -33,7 +33,12 @@ import { STEPS, STEPS_NOTE } from "@/data/homeContent";
  */
 export default function Concept() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 pt-12">
+    <section className="mx-auto w-full max-w-6xl px-6 pt-12 sm:pt-16">
+      {/* HOME RHYTHM (founder, 2026-11-13: uneven gaps "look amateur"): every
+          home section opens with pt-12 / sm:pt-16 and nothing else adds bottom
+          padding, so the gap between any two sections is identical; title to
+          content is always 24px (mt-6 / mb-6 / pb-6). Keep it that way. */}
+
       <h2 className="text-lg text-text">How it works</h2>
 
       <div className="mt-6 grid items-center gap-8 sm:grid-cols-2 sm:gap-10">

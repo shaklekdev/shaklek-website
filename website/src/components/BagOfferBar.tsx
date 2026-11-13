@@ -56,10 +56,27 @@ export default function BagOfferBar() {
   // nothing below it shifts). From `sm` up both sit on one line. The inactive
   // message is aria-hidden and not focusable so a screen reader hears each
   // once, and the bag button is the only thing that opens the popup.
+  //
+  // ⚠️ FADE OUT, SWAP, FADE IN -- NEVER A CROSSFADE. The first version faded
+  // one message in while the other faded out in the same cell, so for half a
+  // second both were drawn on top of each other; founder, 2026-11-13: the
+  // bar "mixes the two texts". Now the slot fades to 0, the message swaps
+  // while invisible, then fades back in. Only one is ever visible.
   const [showDelivery, setShowDelivery] = useState(false);
+  const [fading, setFading] = useState(false);
   useEffect(() => {
-    const id = window.setInterval(() => setShowDelivery((v) => !v), 6000);
-    return () => window.clearInterval(id);
+    let swap: number | undefined;
+    const id = window.setInterval(() => {
+      setFading(true);
+      swap = window.setTimeout(() => {
+        setShowDelivery((v) => !v);
+        setFading(false);
+      }, 400);
+    }, 6000);
+    return () => {
+      window.clearInterval(id);
+      window.clearTimeout(swap);
+    };
   }, []);
 
   const bagLine = (
@@ -72,24 +89,25 @@ export default function BagOfferBar() {
 
   return (
     <>
-      {/* Phone: one two-line slot, the two messages crossfade. */}
-      <div className="grid w-full bg-surface-2 px-4 py-2 text-center text-[11px] tracking-wide text-text sm:hidden">
+      {/* Phone: one two-line slot; the slot fades out, swaps, fades in. The
+          inactive message is `invisible` (keeps its height, never drawn). */}
+      <div
+        className={`grid w-full bg-surface-2 px-4 py-2 text-center text-[11px] tracking-wide text-text transition-opacity duration-300 sm:hidden ${
+          fading ? "opacity-0" : "opacity-100"
+        }`}
+      >
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-hidden={showDelivery}
           tabIndex={showDelivery ? -1 : 0}
-          className={`col-start-1 row-start-1 block w-full transition-opacity duration-500 ${
-            showDelivery ? "pointer-events-none opacity-0" : "opacity-100"
-          }`}
+          className={`col-start-1 row-start-1 block w-full ${showDelivery ? "invisible" : ""}`}
         >
           {bagLine}
         </button>
         <span
           aria-hidden={!showDelivery}
-          className={`col-start-1 row-start-1 flex items-center justify-center transition-opacity duration-500 ${
-            showDelivery ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
+          className={`col-start-1 row-start-1 flex items-center justify-center ${showDelivery ? "" : "invisible"}`}
         >
           {deliveryLine}
         </span>

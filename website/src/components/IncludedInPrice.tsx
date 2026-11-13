@@ -60,10 +60,10 @@ export default function IncludedInPrice({
       <div className="shrink-0 text-right">
         <p className="sr-only">{INCLUDED_HOME_LINE}</p>
         <div aria-hidden="true">
-          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-text">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-text sm:tracking-[0.18em]">
             {INCLUDED_HOME_LEAD}
           </p>
-          <ul className="mt-1.5 space-y-0.5 text-[10px] uppercase leading-relaxed tracking-[0.14em] text-text-2">
+          <ul className="mt-1.5 space-y-0.5 text-[10px] uppercase leading-relaxed tracking-[0.08em] text-text-2 sm:tracking-[0.14em]">
             {INCLUDED_HOME_CHIPS.map((c) => (
               <li key={c.key}>{c.label}</li>
             ))}

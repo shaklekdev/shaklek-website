@@ -24,7 +24,7 @@ export default function Benefits() {
        browser scrolls the heading to y=0 and the header sits on top of it. */
     <section
       id="why-choose-us"
-      className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pb-16"
+      className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-12 sm:pt-16"
     >
       {/* Named, because an unlabelled row of three claims under the catalogue
           reads as decoration. As a section with a question for a title it is
