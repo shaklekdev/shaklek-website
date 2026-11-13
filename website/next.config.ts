@@ -64,7 +64,15 @@ const META_ENDPOINT = "https://www.facebook.com";
 
 const buildCsp = (isDev: boolean) => [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} ${CLERK_HOSTS} ${CLERK_PROTECT} https://challenges.cloudflare.com ${META_SCRIPT}`,
+  // 'wasm-unsafe-eval' (2026-11-13): online fitting runs a pose model as
+  // WebAssembly IN THE BROWSER so body photos never leave the phone. It
+  // allows compiling WASM only -- not eval() of JS strings. The engine and the
+  // model are self-hosted under /fitting/, so no new origin is trusted.
+  // ⚠️ The engine also tries to POST usage counters to odml.pa.googleapis.com
+  // and cannot be switched off; connect-src below BLOCKS it (security review
+  // 2026-11-13: counters only, no image data, but still a third party). Never
+  // add googleapis.com to connect-src.
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDev ? " 'unsafe-eval'" : ""} ${CLERK_HOSTS} ${CLERK_PROTECT} https://challenges.cloudflare.com ${META_SCRIPT}`,
   `connect-src 'self' ${CLERK_HOSTS} ${CLERK_PROTECT} https://clerk-telemetry.com https://*.clerk-telemetry.com https://img.clerk.com ${META_ENDPOINT}`,
   `img-src 'self' data: blob: https://img.clerk.com ${META_ENDPOINT}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",

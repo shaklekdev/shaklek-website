@@ -95,10 +95,19 @@ export default function PrivacyPage() {
       <h2 className="pt-2 text-base font-medium text-text">Measurements</h2>
       <p>
         Measurements are body data, so we treat them as sensitive. We take them
-        after your order, and only if you choose Tailored; a standard size
-        XS–XXL needs none. They are used to make your piece and go nowhere
-        else, and you can ask us to delete them at any time at
-        hello@shaklek.com.
+        only if you choose Tailored; a standard size XS–XXL needs none. They
+        are used to make your piece and go nowhere else, and you can ask us to
+        delete them at any time at hello@shaklek.com.
+      </p>
+      {/* ONLINE FITTING EXISTS SINCE 2026-11-13 (components/OnlineFitting.tsx).
+          The 2026-08-24 note above was right then: this paragraph must stay
+          true to the code -- photos analysed in the browser, never uploaded,
+          never stored. If that ever changes, this changes first. */}
+      <p>
+        If you choose online fitting, your two photos are read on your own
+        device to estimate your measurements. The photos are never sent to us
+        and never stored; only the measurements you confirm are added to your
+        order.
       </p>
       <p>
         If you scan the card in your parcel and tell us how a piece fitted, we

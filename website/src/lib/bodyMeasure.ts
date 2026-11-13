@@ -1,0 +1,342 @@
+// ONLINE FITTING: body measurements from two photos and a height.
+//
+// Founder, 2026-11-13: "now your highest priority is to make that fitting
+// online because many people don't want home fitting". Plan agreed 2026-11-12
+// (planning/OPEN.md camera-measuring-TOP-PRIORITY).
+//
+// PURE FUNCTIONS, NO BROWSER APIs, so the maths can be tested with
+// `npx tsx` against synthetic silhouettes (no test file yet: write one before
+// changing the bands or the calibration).
+// The browser side (components/OnlineFitting.tsx) runs MediaPipe's pose
+// landmarker ON THE PHONE and hands this file a person mask + 33 landmarks
+// per photo. ⚠️ THE PHOTOS NEVER LEAVE THE DEVICE. Only the resulting
+// numbers travel, in the order's existing `measurements` string.
+//
+// HOW IT WORKS
+//   1. Scale: her height in cm / her height in pixels (top of the mask to the
+//      bottom of the mask). Each photo gets its own scale, so the two photos
+//      may be taken at different distances.
+//   2. Levels are matched between the photos as a FRACTION OF HEIGHT, not as
+//      pixel rows, for the same reason.
+//   3. Bust = the level with the greatest side depth in the bust band; waist =
+//      the narrowest front width in the waist band; hip = the widest front
+//      width in the hip band. Bands come from the front photo's shoulder and
+//      hip landmarks, so they follow her proportions rather than a fixed %.
+//   4. Circumference = ellipse through front width x side depth (Ramanujan).
+//   5. Lengths (sleeve, outseam, inseam) are straight pixel distances x scale.
+//
+// ⚠️ THESE ARE ESTIMATES AND ARE NOT YET VALIDATED. An ellipse is a model of a
+// torso, not a torso. Before customers rely on the numbers, compare against
+// tape measurements on 5-10 real women and set CALIBRATION below from the
+// mean ratio tape/estimate. Until then every number is labelled "estimated"
+// and the tailor confirms on WhatsApp. NEVER tune these factors by feel.
+
+export type Landmark = { x: number; y: number; visibility?: number }; // x,y normalised 0..1
+
+export type View = {
+  /** Person mask, row-major, 1 = person. width*height entries. */
+  mask: Uint8Array;
+  width: number;
+  height: number;
+  /** MediaPipe pose landmarks (33), normalised to the image. */
+  landmarks: Landmark[];
+};
+
+export type Estimate = {
+  bust: number;
+  waist: number;
+  hip: number;
+  height: number;
+  shoulder: number;
+  sleeve: number;
+  outseam: number; // natural waist to floor
+  inseam: number; // crotch to floor
+};
+
+/** tape / estimate, per measurement. 1 = uncalibrated. Set from validation data only. */
+export const CALIBRATION: Record<keyof Estimate, number> = {
+  bust: 1,
+  waist: 1,
+  hip: 1,
+  height: 1,
+  shoulder: 1,
+  sleeve: 1,
+  outseam: 1,
+  inseam: 1,
+};
+
+// MediaPipe pose landmark indices.
+const L = {
+  nose: 0,
+  lShoulder: 11,
+  rShoulder: 12,
+  lElbow: 13,
+  rElbow: 14,
+  lWrist: 15,
+  rWrist: 16,
+  lHip: 23,
+  rHip: 24,
+  lAnkle: 27,
+  rAnkle: 28,
+} as const;
+
+export type Problem =
+  | "no-person"
+  | "not-full-body"
+  | "front-not-facing"
+  | "side-not-profile"
+  | "arms-touching"
+  | "legs-together"
+  | "implausible";
+
+export class MeasureError extends Error {
+  constructor(
+    public problem: Problem,
+    public view: "front" | "side" | "both",
+  ) {
+    super(`${view}: ${problem}`);
+  }
+}
+
+/** First and last row containing any person pixel. */
+export function verticalExtent(v: View): { top: number; bottom: number } | null {
+  let top = -1;
+  let bottom = -1;
+  for (let y = 0; y < v.height; y++) {
+    const row = y * v.width;
+    for (let x = 0; x < v.width; x++) {
+      if (v.mask[row + x]) {
+        if (top < 0) top = y;
+        bottom = y;
+        break;
+      }
+    }
+  }
+  return top < 0 ? null : { top, bottom };
+}
+
+/**
+ * Width of the contiguous run of person pixels on row y that contains column
+ * cx (or the nearest person pixel to it). Taking the run, not the outermost
+ * pixels, is what keeps arms held away from the body out of a torso width.
+ */
+export function runWidthAt(v: View, y: number, cx: number): number {
+  const yi = Math.round(y);
+  if (yi < 0 || yi >= v.height) return 0;
+  const row = yi * v.width;
+  let c = Math.round(cx);
+  if (c < 0 || c >= v.width || !v.mask[row + c]) {
+    // nearest person pixel within 10% of the width
+    const reach = Math.round(v.width * 0.1);
+    let found = -1;
+    for (let d = 1; d <= reach && found < 0; d++) {
+      if (c - d >= 0 && v.mask[row + c - d]) found = c - d;
+      else if (c + d < v.width && v.mask[row + c + d]) found = c + d;
+    }
+    if (found < 0) return 0;
+    c = found;
+  }
+  let l = c;
+  let r = c;
+  while (l > 0 && v.mask[row + l - 1]) l--;
+  while (r < v.width - 1 && v.mask[row + r + 1]) r++;
+  return r - l + 1;
+}
+
+/** Mean of a few rows around y, to smooth a ragged mask edge. */
+function smoothWidth(v: View, y: number, cx: number): number {
+  let s = 0;
+  let n = 0;
+  for (let d = -2; d <= 2; d++) {
+    const w = runWidthAt(v, y + d, cx);
+    if (w > 0) {
+      s += w;
+      n++;
+    }
+  }
+  return n ? s / n : 0;
+}
+
+/** Ramanujan's approximation for the perimeter of an ellipse with axes a, b (full widths). */
+export function ellipsePerimeter(width: number, depth: number): number {
+  const a = width / 2;
+  const b = depth / 2;
+  return Math.PI * (3 * (a + b) - Math.sqrt((3 * a + b) * (a + 3 * b)));
+}
+
+const px = (v: View, p: Landmark) => ({ x: p.x * v.width, y: p.y * v.height });
+const dist = (a: { x: number; y: number }, b: { x: number; y: number }) =>
+  Math.hypot(a.x - b.x, a.y - b.y);
+const mid = (a: { x: number; y: number }, b: { x: number; y: number }) => ({
+  x: (a.x + b.x) / 2,
+  y: (a.y + b.y) / 2,
+});
+
+function checkFull(v: View, view: "front" | "side") {
+  const ext = verticalExtent(v);
+  if (!ext || v.landmarks.length < 33) throw new MeasureError("no-person", view);
+  // Head and feet must both be inside the frame with a little margin, or the
+  // height (and so the scale) is wrong.
+  if (ext.top < v.height * 0.005 || ext.bottom > v.height * 0.995)
+    throw new MeasureError("not-full-body", view);
+  for (const i of [L.lShoulder, L.rShoulder, L.lHip, L.rHip, L.lAnkle, L.rAnkle]) {
+    const vis = v.landmarks[i].visibility;
+    if (vis !== undefined && vis < 0.3) throw new MeasureError("not-full-body", view);
+  }
+  return ext;
+}
+
+/**
+ * The whole estimate. Throws MeasureError with a problem the UI can turn into
+ * a plain instruction ("step back so your feet are in the photo").
+ */
+export function estimate(front: View, side: View, heightCm: number): Estimate {
+  const fe = checkFull(front, "front");
+  const se = checkFull(side, "side");
+  const fH = fe.bottom - fe.top;
+  const sH = se.bottom - se.top;
+  const fScale = heightCm / fH;
+  const sScale = heightCm / sH;
+
+  const f = (i: number) => px(front, front.landmarks[i]);
+  const s = (i: number) => px(side, side.landmarks[i]);
+
+  const fShoulderL = f(L.lShoulder);
+  const fShoulderR = f(L.rShoulder);
+  const fHipL = f(L.lHip);
+  const fHipR = f(L.rHip);
+  const fShoulder = mid(fShoulderL, fShoulderR);
+  const fHip = mid(fHipL, fHipR);
+
+  // Facing the camera: shoulders well apart relative to height.
+  if (dist(fShoulderL, fShoulderR) / fH < 0.12) throw new MeasureError("front-not-facing", "front");
+  // A-POSE IS REQUIRED, and it is checked rather than hoped for. Measured on
+  // a test photo (2026-11-13): with the arms hanging close, the bust row ran
+  // straight through the upper arms (front width flat at ~38cm from shoulder
+  // to bust) and the bust came out ~10cm high; with the legs together the
+  // first gap between them was at the KNEE, and the inside leg read 47cm.
+  // Arms ~45deg out and feet apart remove both, the same pose measuring apps
+  // ask for.
+  const armAngle = (sh: number, wr: number) => {
+    const a = f(sh);
+    const b = f(wr);
+    return (Math.atan2(Math.abs(b.x - a.x), Math.abs(b.y - a.y)) * 180) / Math.PI;
+  };
+  if (Math.min(armAngle(L.lShoulder, L.lWrist), armAngle(L.rShoulder, L.rWrist)) < 20)
+    throw new MeasureError("arms-touching", "front");
+  // Straight and pointing DOWN: a raised or bent arm puts the upper arm across
+  // the shoulder row (test photo read shoulders 45cm) and shortens the arm.
+  for (const [sh, el, wr] of [
+    [L.lShoulder, L.lElbow, L.lWrist],
+    [L.rShoulder, L.rElbow, L.rWrist],
+  ] as const) {
+    if (!(f(wr).y > f(el).y && f(el).y > f(sh).y)) throw new MeasureError("arms-touching", "front");
+  }
+  if (Math.abs(f(L.lAnkle).x - f(L.rAnkle).x) / fH < 0.1) throw new MeasureError("legs-together", "front");
+  // In profile: shoulders nearly on top of each other.
+  if (Math.abs(s(L.lShoulder).x - s(L.rShoulder).x) / sH > 0.07)
+    throw new MeasureError("side-not-profile", "side");
+
+  // Fractions of height (0 = top of head) for the bands.
+  const frac = (y: number) => (y - fe.top) / fH;
+  const shoulderF = frac(fShoulder.y);
+  const hipF = frac(fHip.y);
+  const torso = hipF - shoulderF;
+  if (torso <= 0.1) throw new MeasureError("implausible", "front");
+
+  // Body centre column at a given fraction, per view.
+  const fCx = (fr: number) => {
+    const t = (fr - shoulderF) / torso;
+    return fShoulder.x + (fHip.x - fShoulder.x) * Math.max(0, Math.min(1.3, t));
+  };
+  const sShoulder = mid(s(L.lShoulder), s(L.rShoulder));
+  const sHip = mid(s(L.lHip), s(L.rHip));
+  const sFrac = (y: number) => (y - se.top) / sH;
+  const sShoulderF = sFrac(sShoulder.y);
+  const sHipF = sFrac(sHip.y);
+  const sCx = (fr: number) => {
+    const t = (fr - sShoulderF) / Math.max(0.1, sHipF - sShoulderF);
+    return sShoulder.x + (sHip.x - sShoulder.x) * Math.max(0, Math.min(1.3, t));
+  };
+
+  const fRow = (fr: number) => fe.top + fr * fH;
+  const sRow = (fr: number) => se.top + fr * sH;
+  const W = (fr: number) => smoothWidth(front, fRow(fr), fCx(fr)) * fScale;
+  const D = (fr: number) => smoothWidth(side, sRow(fr), sCx(fr)) * sScale;
+
+  const scan = (a: number, b: number, score: (fr: number) => number, pick: "max" | "min") => {
+    let best = a;
+    let bestV = pick === "max" ? -Infinity : Infinity;
+    const steps = 40;
+    for (let i = 0; i <= steps; i++) {
+      const fr = shoulderF + torso * (a + ((b - a) * i) / steps);
+      const val = score(fr);
+      if (!(val > 0)) continue;
+      if (pick === "max" ? val > bestV : val < bestV) {
+        bestV = val;
+        best = fr;
+      }
+    }
+    return best;
+  };
+
+  // Bands as fractions of the shoulder-to-hip-joint distance.
+  const bustF = scan(0.2, 0.5, D, "max");
+  const waistF = scan(0.5, 0.85, W, "min");
+  const hipLevelF = scan(0.85, 1.3, W, "max");
+
+  // Hands resting against the thighs make the hip run include the arms.
+  for (const wi of [L.lWrist, L.rWrist]) {
+    const w = f(wi);
+    const fr = frac(w.y);
+    if (Math.abs(fr - hipLevelF) < torso * 0.25) {
+      const row = Math.round(fRow(hipLevelF));
+      const cx = Math.round(fCx(hipLevelF));
+      // wrist inside the measured run => arms touching
+      const half = runWidthAt(front, row, cx) / 2;
+      if (Math.abs(w.x - cx) < half - 2) throw new MeasureError("arms-touching", "front");
+    }
+  }
+
+  const bust = ellipsePerimeter(W(bustF), D(bustF));
+  const waist = ellipsePerimeter(W(waistF), D(waistF));
+  const hip = ellipsePerimeter(W(hipLevelF), D(hipLevelF));
+
+  // Silhouette width at the shoulder joints' row (in an A-pose the arms have
+  // already left the body there), not the joint-to-joint distance, which sits
+  // inside the shoulder and read 30cm on the test photo.
+  const shoulder = smoothWidth(front, fShoulder.y, fShoulder.x) * fScale;
+  const arm = (sh: number, el: number, wr: number) => dist(f(sh), f(el)) + dist(f(el), f(wr));
+  const sleeve = ((arm(L.lShoulder, L.lElbow, L.lWrist) + arm(L.rShoulder, L.rElbow, L.rWrist)) / 2) * fScale;
+
+  const outseam = (fe.bottom - fRow(waistF)) * fScale;
+
+  // Crotch: first row below the hip joints where the body centre is background
+  // (the gap between the legs).
+  let crotchY = fHip.y;
+  const crotchLimit = Math.min(fe.bottom, fHip.y + torso * fH * 0.5);
+  for (let y = Math.round(fHip.y); y < crotchLimit; y++) {
+    if (!front.mask[y * front.width + Math.round(fHip.x)]) {
+      crotchY = y;
+      break;
+    }
+  }
+  const inseam = (fe.bottom - crotchY) * fScale;
+
+  const raw: Estimate = { bust, waist, hip, height: heightCm, shoulder, sleeve, outseam, inseam };
+  const out = {} as Estimate;
+  for (const k of Object.keys(raw) as (keyof Estimate)[]) {
+    out[k] = Math.round(raw[k] * CALIBRATION[k]);
+  }
+
+  // Sanity: the same ranges the manual fields accept, plus ordering a body obeys.
+  const ok =
+    out.bust >= 60 && out.bust <= 160 &&
+    out.waist >= 50 && out.waist <= 150 &&
+    out.hip >= 60 && out.hip <= 170 &&
+    out.waist < out.hip &&
+    out.sleeve > 30 && out.sleeve < 90 &&
+    out.inseam > 40 && out.inseam < out.outseam;
+  if (!ok) throw new MeasureError("implausible", "both");
+  return out;
+}
