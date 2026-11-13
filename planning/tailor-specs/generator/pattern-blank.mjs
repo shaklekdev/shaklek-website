@@ -108,16 +108,16 @@ const TOPS = {
 const PANT_FRONT = "M 0,0 L 22,0 L 23,18 Q 23,24 28,26 L 26,100 L 2,100 L 0,26 Z";
 const PANT_BACK = "M 3,-3 L 25,0 L 26,18 Q 27,26 33,28 L 29,100 L 4,100 L 1,28 Z";
 const PANT_ROWS = [["1", "Height"], ["2", "Waist (full, around)"], ["3", "Hip (full, around)"], ["4", "Thigh (around)"], ["5", "Knee (around)"], ["6", "Ankle (around)"], ["7", "Rise: front waist through legs to back waist"], ["8", "Inside leg (crotch to floor)"], ["9", "Outside leg (waist to floor)"], ["10", "Length wanted (waist to hem)"]];
-const pant = (title, extra, front = "FRONT ×2") => ({ title, rows: PANT_ROWS, pieces: [
+const pant = (title, extra, front = "FRONT ×2", loops = true) => ({ title, rows: PANT_ROWS, pieces: [
   [front, "mirror L / R", PANT_FRONT], ["BACK ×2", "dart · welt pocket", PANT_BACK],
   ["WAISTBAND ×2", "button", "M 0,0 L 40,0 L 40,4 L 0,4 Z"], ["FLY + FLY SHIELD", "zip fly", "M 0,0 L 4,0 L 4,18 Q 4,21 1,21 L 0,21 Z"],
   ["POCKET BAG ×4", "side pocket", "M 0,0 L 14,0 L 16,24 Q 8,28 0,22 Z"], ["WELT ×2 + BAG ×2", "back pocket", "M 0,0 L 13,0 L 13,3 L 0,3 Z"],
-  ["BELT LOOPS ×6", "", "M 0,0 L 1.2,0 L 1.2,6 L 0,6 Z"], ...extra ] });
+  ...(loops ? [["BELT LOOPS ×6", "", "M 0,0 L 1.2,0 L 1.2,6 L 0,6 Z"]] : [["DRAWSTRING CORD", "through front waistband · bow", "M 0,0 L 60,0 L 60,1 L 0,1 Z"]]), ...extra ] });
 Object.assign(TOPS, {
   "wide-leg-trousers": pant("RELAXED TROUSERS", [], "FRONT ×2 · 1 pleat each"),
   "banded-trousers": pant("BANDED TROUSERS", [["CUFF", "cut-on, turn up to OUTSIDE", "M 0,0 L 22,0 L 22,8 L 0,8 Z"]]),
   "pleated-trousers": pant("PLEATED TROUSERS", [], "FRONT ×2 · 2 pleats each"),
-  "cargo-trousers": pant("CARGO TROUSERS", [["CARGO POCKET ×2 + FLAP ×4", "bellows · 1 button", "M 0,0 L 16,0 L 16,20 L 0,20 Z"]]),
+  "cargo-trousers": pant("CARGO TROUSERS", [["CARGO POCKET ×2 + FLAP ×4", "bellows · 1 button", "M 0,0 L 16,0 L 16,20 L 0,20 Z"]], "FRONT ×2", false),
 });
 if (TOPS[kind]) {
   title = TOPS[kind].title;
