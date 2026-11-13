@@ -1,0 +1,12 @@
+{ "name": "Utility Shirt",
+  "order": { "fields": { "Size": "", "Colour": "", "Sleeve": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "photos": { "front": "../../../website/public/catalog/utility-shirt/utility-shirt-navy-combo-long-normal-front-v2.jpg", "back": "../../../website/public/catalog/utility-shirt/utility-shirt-navy-combo-long-normal-back-v2.jpg" },
+  "details": [
+    { "file": "d-collar.png", "title": "Collar", "sub": "pointed, on stand" },
+    { "file": "d-pocket.png", "title": "Chest pocket x2", "sub": "flap with 1 button · topstitched" },
+    { "file": "d-waist.png", "title": "Drawstring waist", "sub": "channel all round · cord tied at centre front" },
+    { "file": "d-sleevepocket.png", "title": "Sleeve pocket", "sub": "upper sleeve · flap with 1 button" },
+    { "file": "d-cuff.png", "title": "Cuff + sleeve placket", "sub": "1 button each" },
+    { "file": "d-yoke.png", "title": "Back", "sub": "straight yoke" } ],
+  "pattern": "pattern.jpg" }
