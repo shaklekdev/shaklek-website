@@ -110,7 +110,7 @@ const PANT_BACK = "M 3,-3 L 25,0 L 26,18 Q 27,26 33,28 L 29,100 L 4,100 L 1,28 Z
 const PANT_ROWS = [["1", "Height"], ["2", "Waist (full, around)"], ["3", "Hip (full, around)"], ["4", "Thigh (around)"], ["5", "Knee (around)"], ["6", "Ankle (around)"], ["7", "Rise: front waist through legs to back waist"], ["8", "Inside leg (crotch to floor)"], ["9", "Outside leg (waist to floor)"], ["10", "Length wanted (waist to hem)"]];
 const pant = (title, extra, front = "FRONT ×2") => ({ title, rows: PANT_ROWS, pieces: [
   [front, "mirror L / R", PANT_FRONT], ["BACK ×2", "dart · welt pocket", PANT_BACK],
-  ["WAISTBAND ×2", "button", "M 0,0 L 40,0 L 40,4 L 0,4 Z"], ["FLY + FLY SHIELD", "button fly", "M 0,0 L 4,0 L 4,18 Q 4,21 1,21 L 0,21 Z"],
+  ["WAISTBAND ×2", "button", "M 0,0 L 40,0 L 40,4 L 0,4 Z"], ["FLY + FLY SHIELD", "zip fly", "M 0,0 L 4,0 L 4,18 Q 4,21 1,21 L 0,21 Z"],
   ["POCKET BAG ×4", "side pocket", "M 0,0 L 14,0 L 16,24 Q 8,28 0,22 Z"], ["WELT ×2 + BAG ×2", "back pocket", "M 0,0 L 13,0 L 13,3 L 0,3 Z"],
   ["BELT LOOPS ×6", "", "M 0,0 L 1.2,0 L 1.2,6 L 0,6 Z"], ...extra ] });
 Object.assign(TOPS, {

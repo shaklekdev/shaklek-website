@@ -3,7 +3,7 @@
   "views": { "front": "v-front.png", "back": "v-back.png" },
   "photos": { "front": "../../../website/public/catalog/banded-trousers/banded-trousers-navy-front.jpg", "back": "../../../website/public/catalog/banded-trousers/banded-trousers-navy-back-v2.jpg" },
   "details": [
-    { "file": "d-waist.png", "title": "Front waist", "sub": "button fly · side pockets · no pleats" },
+    { "file": "d-waist.png", "title": "Front waist", "sub": "zip fly + 1 button · side pockets · no pleats" },
     { "file": "d-back.png", "title": "Back waist", "sub": "darts · 2 welt pockets, no flap, no button" },
     { "file": "d-cuff.png", "title": "Cuff", "sub": "FLAT turned-up cuff · never gathered or tapered" } ],
   "pattern": "pattern.jpg" }

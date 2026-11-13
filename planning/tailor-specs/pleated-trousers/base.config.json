@@ -3,7 +3,7 @@
   "views": { "front": "v-front.png", "back": "v-back.png" },
   "photos": { "front": "../../../website/public/catalog/pleated-trousers/pleated-trousers-navy-front-v3.jpg", "back": "../../../website/public/catalog/pleated-trousers/pleated-trousers-navy-back-v2.jpg" },
   "details": [
-    { "file": "d-waist.png", "title": "Front waist", "sub": "2 deep pleats each side · belt loops · button fly" },
+    { "file": "d-waist.png", "title": "Front waist", "sub": "2 deep pleats each side · belt loops · zip fly + 1 button" },
     { "file": "d-back.png", "title": "Back waist", "sub": "darts · 2 welt pockets, no flap, no button" },
     { "file": "d-hem.png", "title": "Leg + hem", "sub": "full at hip, gently narrower to ankle · plain hem" } ],
   "pattern": "pattern.jpg" }
