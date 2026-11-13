@@ -125,7 +125,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     details: [
       { text: "Zip fly, closed at the waistband with one button", view: "front" },
       { text: "Cargo pockets on the outer thigh, both legs: bellows patch pocket with a flap and one button" },
-      { text: "Belt loops on the waistband" },
+      { text: "NO belt loops — the drawstring replaces them" },
       { text: "Cord drawstring through the front waistband, tied in a bow at centre front over the zip", view: "front" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
       { text: "Plain hem, no cuff" },
