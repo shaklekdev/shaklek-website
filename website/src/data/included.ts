@@ -57,3 +57,14 @@ export const INCLUDED_HOME_CHIPS: IncludedLine[] = [
 
 /** Footnote for the asterisk on "Private home fitting*" (founder, 2026-11-12). */
 export const INCLUDED_HOME_FOOTNOTE = "*In Dubai";
+
+/** Product page (founder, 2026-11-13): folded like the home, and only what the
+ *  page does not already say -- the shayla has its own photo block above and
+ *  the linen is in the name and Product information, so both are left out
+ *  here ("remove repetitive stuff, it's too low cost showing"). */
+export const INCLUDED_PRODUCT_LINES: { key: string; label: string }[] = [
+  { key: "home", label: "Private home fitting*" },
+  { key: "sliders", label: "Every customisation" },
+  { key: "parcel", label: "UAE delivery" },
+  { key: "needle", label: "One fit alteration, within 10 days" },
+];

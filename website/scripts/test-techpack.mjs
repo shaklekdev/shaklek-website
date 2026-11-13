@@ -82,8 +82,10 @@ check(says(t, "BODY measurements"), "the body-vs-garment caveat is missing");
 check(t.includes("Short sleeve"), "the ordered sleeve length is not described");
 check(t.includes("Extended body length"), "the ordered garment length is not described");
 // Premium sliders are committed at their default and must still reach the tailor.
-check(t.includes("One patch chest pocket"), "the committed pocket choice is not printed");
-check(says(t, "Button closure through the full front placket"), "the committed closure is not printed");
+// Founder 2026-11-11 (a795a8b): generic premium defaults are NOT printed; a
+// design's own closure/pockets come from construction.ts instead.
+check(!t.includes("One patch chest pocket"), "a generic pocket default is printed again");
+check(!says(t, "Button closure through the full front placket"), "a generic closure default is printed again");
 // Founder decision 2026-08-24: the 11 ruled blanks are gone. They asked the
 // workshop for data Shaklek does not hold, on every order, forever -- and no
 // tailor ever asked for them. The pack is only what to make now.
