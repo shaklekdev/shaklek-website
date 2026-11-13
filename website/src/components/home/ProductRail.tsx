@@ -70,13 +70,16 @@ export default function ProductRail({
           sticky header, which would otherwise cover the heading. */}
       <section
         id="catalog"
-        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-12 pb-6 sm:pt-16"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-8 pb-2 sm:pt-10"
       >
         {/* The price claim sits on the RIGHT, stacked, so the left column is
             only the heading (founder, 2026-11-12: "too much text on the left"). */}
         <div className="flex items-start justify-between gap-3 sm:gap-4">
           <div className="min-w-0">
-            <h2 className="text-balance text-lg text-text">{title}</h2>
+            {/* Visually hidden since 2026-11-13 (founder: "Custom made for
+                you" repeats the hero's "Custom made"). Kept for screen readers
+                and the page outline. */}
+            <h2 className="sr-only">{title}</h2>
             {/* No subtitle on the home (founder, 2026-11-13, "too much text...
                 be strategic"): every card already says "Customise this piece".
                 Pass `subtitle` explicitly to show one. */}
