@@ -33,6 +33,49 @@ export type ConstructionNotes = {
 };
 
 export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
+  // From the founder-corrected tailor sheets (planning/tailor-specs/sent/*-MAXI.jpg).
+  "open-abaya": {
+    silhouette: "Open abaya with no neckline and no closures, sweeping wider to the hem",
+    details: [
+      { text: "No neckline, no collar, no lapel: two front panels hang free, always worn open" },
+      { text: "Front edge folded back to the OUTSIDE in one continuous band, up the front, round the back neck, down to the hem; not sewn on, no interfacing" },
+      { text: "Shoulder seam dropped about 6 cm down the arm; set-in sleeve" },
+      { text: "Deep cuff: sleeve end turned back to the outside" },
+      { text: "Back is one panel: no seam, no vent, no slit", view: "back" },
+      { text: "Plain hem, no band, no turn-up" },
+    ],
+  },
+  "buttoned-abaya": {
+    silhouette: "Straight-column abaya with four black cord closures, worn open or closed",
+    details: [
+      { text: "Round collarless neck, then a V wide at the neck tapering to a point at the first closure bar", view: "front" },
+      { text: "Four short flat bars of BLACK cord, each with a small BLACK button, about a fifth of the body width; open below the last bar", view: "front" },
+      { text: "Shoulder seam dropped about 6 cm down the arm; set-in sleeve; plain soft sleeve end, no cuff" },
+      { text: "Back is one unbroken panel: no yoke, no seam, no vent, no closures", view: "back" },
+      { text: "Straight horizontal hem, soft edge, no band" },
+    ],
+  },
+  // Written 2026-11-13 from the catalogue photographs (navy, round:maxi).
+  "slip-dress": {
+    silhouette: "Sleeveless A-line maxi dress, high round neck, falling straight from the bust",
+    details: [
+      { text: "High round neckline, no collar" },
+      { text: "Sleeveless with cut-in armholes, faced" },
+      { text: "Princess seams on the front, from the armhole to the hem", view: "front" },
+      { text: "Centre-back seam, shoulder to hem", view: "back" },
+      { text: "No waist seam, no belt; A-line skirt widening to the hem" },
+    ],
+  },
+  "buttoned-dress": {
+    silhouette: "Sleeveless fit-and-flare maxi dress with a seamed waist and buttons to the hem",
+    details: [
+      { text: "Round neckline, no collar, sleeveless with faced armholes" },
+      { text: "Seamed waist at the natural waist, front and back" },
+      { text: "Small fabric-covered buttons close together, centre front from the neck to the hem", view: "front" },
+      { text: "Side-seam pockets in the skirt" },
+      { text: "Back bodice with a centre-back seam; A-line skirt widening to the hem", view: "back" },
+    ],
+  },
   "oversized-shirt": {
     silhouette: "Relaxed straight-cut shirt, dropped shoulder, no waist shaping",
     // Corrected 2026-11-13 against the catalogue photographs (founder): the
