@@ -145,7 +145,7 @@ check(t.includes("Keep the side pockets flat."), "the customer's request was dro
 check(says(t, "Cut to the numbers above, not to this size"),
   "the nearest-size cross-check is not marked as advisory");
 check(t.includes("Wide leg"), "the ordered leg width is not described");
-check(t.includes("Cargo side pockets"), "the garment's defining detail is missing");
+check(t.includes("Cargo pockets on the outer thigh"), "the garment's defining detail is missing");
 // A front page must not instruct the tailor to draw back-only details.
 check(says(t, "Simple welt back pockets"), "the back pocket detail is missing entirely");
 

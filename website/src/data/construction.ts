@@ -122,6 +122,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
     details: [
       { text: "Cargo pockets on the outer thigh, both legs: bellows patch pocket with a flap and one button" },
       { text: "Belt loops on the waistband" },
+      { text: "Cord drawstring through the front waistband, tied in a bow at centre front over the zip", view: "front" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
       { text: "Plain hem, no cuff" },
     ],
@@ -162,7 +163,7 @@ export const OPTION_CONSTRUCTION: Record<string, string> = {
   "Pants:waist_rise:normal": "Waistband sitting at the natural waist.",
   "Pants:waist_rise:high": "High-rise waistband sitting above the natural waist.",
   "Pants:closure:button": "Button fly.",
-  "Pants:closure:zip": "Zip fly, with an inner button at the waistband.",
+  "Pants:closure:zip": "Zip fly, closed at the waistband with one button.",
   "Pants:pocket:none": "No pockets. Omit entirely — do not topstitch a pocket outline.",
   "Pants:pocket:yes":
     "Side seam pockets, plus simple welt back pockets — no flaps, no buttons.",

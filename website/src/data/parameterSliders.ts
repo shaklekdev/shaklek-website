@@ -115,7 +115,8 @@ export const PANTS_PARAMS: SliderParam[] = [
       { value: "button", text: "Button fly" },
       { value: "zip", text: "Zip fly" },
     ],
-    defaultIndex: 0,
+    // Zip, founder 2026-11-13: "tout est fermeture eclair dans les designs".
+    defaultIndex: 1,
     labelFor: (text) => text,
   },
   {
