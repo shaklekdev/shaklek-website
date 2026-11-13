@@ -242,7 +242,11 @@ export default function CustomizeParameters({
       <div className="mt-3 text-center">
         {/* The page h1 (it had none) -- founder review 2026-11-11. leading/tracking
             reset the global h1 rule so it looks exactly as the <p> did. */}
-        <h1 className="font-display text-[15px] leading-normal tracking-normal text-text">{itemName}</h1>
+        {/* ⚠️ INLINE STYLE ON PURPOSE. globals.css sets h1 { font-size: 32px }
+            unlayered, and unlayered CSS beats Tailwind v4's layered utilities,
+            so text-[15px] here was ignored and the name rendered at 32px
+            (founder 2026-11-13: "too big"). */}
+        <h1 className="font-display leading-normal text-text" style={{ fontSize: 15, letterSpacing: 0 }}>{itemName}</h1>
         <p className="mt-1 text-xs text-text-2">AED {price}</p>
       </div>
 

@@ -47,7 +47,7 @@ export default function DetailField({
         htmlFor="customization-notes"
         className="mb-2 block text-[12px] text-text-3"
       >
-        Something else? Tell us here (optional)
+        Tell us how you like your fit, or anything else (optional)
       </label>
       <textarea
         id="customization-notes"

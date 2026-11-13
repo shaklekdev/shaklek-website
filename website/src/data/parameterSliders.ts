@@ -303,8 +303,8 @@ export const ABAYA_JACKET_PARAMS: SliderParam[] = [
     type: "closure",
     tier: "render",
     options: [
-      { value: "4", text: "Four, worn open" },
-      { value: "5", text: "Five, worn closed" },
+      { value: "4", text: "Four" },
+      { value: "5", text: "Five" },
     ],
     defaultIndex: 0,
     labelFor: (text) => text,

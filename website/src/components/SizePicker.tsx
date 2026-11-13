@@ -428,9 +428,6 @@ export default function SizePicker({
                 <span className="font-display block text-[15px] text-text">
                   Make it your way
                 </span>
-                <span className="mt-0.5 block text-[11px] text-text-3">
-                  Tell us how you usually like your fit. Optional.
-                </span>
               </span>
               <span
                 aria-hidden="true"
