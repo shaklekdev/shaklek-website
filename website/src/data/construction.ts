@@ -92,6 +92,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "wide-leg-trousers": {
     silhouette: "High-waisted pant falling straight from the hip with no taper",
     details: [
+      { text: "Zip fly, closed at the waistband with one button", view: "front" },
       { text: "High waistband sitting at the natural waist, with belt loops" },
       { text: "One front pleat each side, released below the waistband", view: "front" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
@@ -102,6 +103,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "banded-trousers": {
     silhouette: "Tailored pant with a flat turned-up cuff at the hem",
     details: [
+      { text: "Zip fly, closed at the waistband with one button", view: "front" },
       { text: "Flat turned-up cuff — never gathered, elasticated or tapered" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
       { text: "Leg falls straight to the cuff" },
@@ -110,6 +112,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "pleated-trousers": {
     silhouette: "Relaxed pant with front pleats falling from the waistband",
     details: [
+      { text: "Zip fly, closed at the waistband with one button", view: "front" },
       { text: "Two deep front pleats each side, released from the waistband, pressed at the top only", view: "front" },
       { text: "Belt loops on the waistband" },
       { text: "Full at the hip, gently narrower towards the ankle" },
@@ -120,6 +123,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "cargo-trousers": {
     silhouette: "Wide-leg cargo pant with patch pockets on the outside of each leg",
     details: [
+      { text: "Zip fly, closed at the waistband with one button", view: "front" },
       { text: "Cargo pockets on the outer thigh, both legs: bellows patch pocket with a flap and one button" },
       { text: "Belt loops on the waistband" },
       { text: "Cord drawstring through the front waistband, tied in a bow at centre front over the zip", view: "front" },
