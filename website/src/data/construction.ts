@@ -35,44 +35,65 @@ export type ConstructionNotes = {
 export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "oversized-shirt": {
     silhouette: "Relaxed straight-cut shirt, dropped shoulder, no waist shaping",
+    // Corrected 2026-11-13 against the catalogue photographs (founder): the
+    // back photo shows a ROUNDED shirt-tail hem with shorter sides, a straight
+    // back yoke, a centre-back box pleat and a buttoned sleeve placket. This
+    // entry said "Straight hem, equal front and back" and "Convertible collar",
+    // and it pins the flat prompts, so the generated back flats came out
+    // straight-hemmed too. The photograph wins.
     details: [
       { text: "Full-length front placket with buttons", view: "front" },
-      { text: "Convertible collar with stand" },
+      { text: "Pointed shirt collar on a collar stand, soft (light or no interfacing)" },
       { text: "Dropped shoulder seam sitting below the natural shoulder point" },
-      { text: "Straight hem, equal front and back" },
+      { text: "Straight back yoke, shoulder to shoulder", view: "back" },
+      { text: "Centre-back box pleat below the yoke", view: "back" },
+      { text: "Long sleeve: buttoned sleeve placket and buttoned cuff" },
+      { text: "Rounded shirt-tail hem, sides shorter than centre front and back" },
     ],
   },
+  // ⚠️ Corrected 2026-11-13 against the catalogue photographs. The blouse entry
+  // described a different garment ("single dart pair, no princess seam, set-in
+  // sleeve, straight hem"); the photos show front waist darts, back princess seams, a waistband, a
+  // gathered peplum and puff sleeves. The photograph wins.
   "structured-blouse": {
-    silhouette: "Clean blouse with light waist shaping from a single dart pair",
+    silhouette: "Fitted blouse: front waist darts, back princess seams, seamed waistband, gathered peplum, puff sleeves",
     details: [
-      { text: "One bust dart pair only — no princess seam, no side dart stack", view: "front" },
-      { text: "Full-length front placket with buttons", view: "front" },
-      { text: "Set-in sleeve at the natural shoulder point" },
-      { text: "Straight hem, equal front and back" },
+      { text: "Band (mandarin) collar, open in a deep V below it — no buttons in the V", view: "front" },
+      { text: "Front: one vertical waist dart each side, from under the bust to the waistband", view: "front" },
+      { text: "Back: princess seams from the shoulders to the waistband", view: "back" },
+      { text: "Separate waistband seamed at the natural waist, front and back" },
+      { text: "Gathered peplum below the waistband" },
+      { text: "Buttons down the centre front from the bottom of the V through the waistband and peplum", view: "front" },
+      { text: "Puff sleeve gathered at the head. Short: gathered into a narrow band. Long: gathered into a deep cuff with 3 buttons" },
     ],
   },
   "wrap-top": {
-    silhouette: "Wrap-front top with a self-fabric tie closing at the waist",
+    silhouette: "Wrap-front top with a self-fabric tie closing at the side",
     details: [
-      { text: "Front wraps left over right and ties at the side seam", view: "front" },
+      { text: "Front wraps over in a soft crossover V and ties at the side seam", view: "front" },
       { text: "Self-fabric tie cut from the same cloth, not a purchased band" },
       { text: "No buttons and no zip — the tie is the only closure" },
+      { text: "Long sleeve gathered into a narrow band at the wrist" },
       { text: "Plain single back panel, no opening", view: "back" },
     ],
   },
   "utility-shirt": {
-    silhouette: "Utility shirt with patch chest pockets and a self-fabric waist tie",
+    silhouette: "Utility shirt with flap chest pockets and a drawstring waist",
     details: [
-      { text: "Two patch chest pockets, square-cut, topstitched", view: "front" },
+      { text: "Pointed shirt collar on a stand" },
+      { text: "Two chest pockets WITH FLAPS, topstitched", view: "front" },
       { text: "Full-length front placket with buttons", view: "front" },
-      { text: "Self-fabric waist tie" },
-      { text: "Straight hem, equal front and back" },
+      { text: "Drawstring cord through a channel at the waist, gathering front and back, tied at centre front" },
+      { text: "Back yoke", view: "back" },
+      { text: "Flap pocket on the upper sleeve" },
+      { text: "Long sleeve: buttoned cuff. Short sleeve: turned-up cuff" },
     ],
   },
   "wide-leg-trousers": {
     silhouette: "High-waisted pant falling straight from the hip with no taper",
     details: [
-      { text: "High waistband sitting at the natural waist" },
+      { text: "High waistband sitting at the natural waist, with belt loops" },
+      { text: "One front pleat each side, released below the waistband", view: "front" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
       { text: "No taper anywhere in the leg" },
       { text: "Plain hem, no cuff" },
@@ -89,7 +110,9 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "pleated-trousers": {
     silhouette: "Relaxed pant with front pleats falling from the waistband",
     details: [
-      { text: "Front pleats released from the waistband, pressed at the top only", view: "front" },
+      { text: "Two deep front pleats each side, released from the waistband, pressed at the top only", view: "front" },
+      { text: "Belt loops on the waistband" },
+      { text: "Full at the hip, gently narrower towards the ankle" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
       { text: "Plain hem, no cuff" },
     ],
@@ -97,7 +120,9 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "cargo-trousers": {
     silhouette: "Wide-leg cargo pant with patch pockets on the outside of each leg",
     details: [
-      { text: "Cargo side pockets on the outer thigh, both legs" },
+      { text: "Cargo pockets on the outer thigh, both legs: bellows patch pocket with a flap and one button" },
+      { text: "Belt loops on the waistband" },
+      { text: "Cord drawstring through the front waistband, tied in a bow at centre front over the zip", view: "front" },
       { text: "Simple welt back pockets — no flaps, no buttons", view: "back" },
       { text: "Plain hem, no cuff" },
     ],
@@ -116,8 +141,8 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
 // scripts/test-construction.mjs fails if any option is missing one.
 export const OPTION_CONSTRUCTION: Record<string, string> = {
   // Shirt — render tier
-  "Shirt:sleeve_length:short": "Short sleeve, finishing above the elbow, plain turned hem.",
-  "Shirt:sleeve_length:long": "Long sleeve, finishing at the wrist bone, plain turned hem.",
+  "Shirt:sleeve_length:short": "Short sleeve, finishing above the elbow. Sleeve end as in this piece's construction (band, cuff or plain turned hem).",
+  "Shirt:sleeve_length:long": "Long sleeve, finishing at the wrist bone. Sleeve end as in this piece's construction (cuff or plain turned hem).",
   "Shirt:garment_length:normal": "Standard body length, hem sitting at the high hip.",
   "Shirt:garment_length:longer": "Extended body length, hem sitting at the low hip.",
   // Shirt — premium tier (committed at its default, not customer-editable)
@@ -138,7 +163,7 @@ export const OPTION_CONSTRUCTION: Record<string, string> = {
   "Pants:waist_rise:normal": "Waistband sitting at the natural waist.",
   "Pants:waist_rise:high": "High-rise waistband sitting above the natural waist.",
   "Pants:closure:button": "Button fly.",
-  "Pants:closure:zip": "Zip fly, with an inner button at the waistband.",
+  "Pants:closure:zip": "Zip fly, closed at the waistband with one button.",
   "Pants:pocket:none": "No pockets. Omit entirely — do not topstitch a pocket outline.",
   "Pants:pocket:yes":
     "Side seam pockets, plus simple welt back pockets — no flaps, no buttons.",

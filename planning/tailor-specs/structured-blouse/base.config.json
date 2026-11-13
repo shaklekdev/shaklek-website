@@ -1,0 +1,11 @@
+{ "name": "Structured Blouse",
+  "order": { "fields": { "Size": "", "Colour": "", "Sleeve": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3 · fitted at the waist" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "photos": { "front": "../../../website/public/catalog/structured-blouse/structured-blouse-navy-combo-long-normal-front.jpg", "back": "../../../website/public/catalog/structured-blouse/structured-blouse-navy-combo-long-normal-back.jpg" },
+  "details": [
+    { "file": "d-collar.png", "title": "Collar", "sub": "mandarin band · deep V · no buttons in the V" },
+    { "file": "d-waist.png", "title": "Waistband + peplum", "sub": "seamed waistband · gathered peplum · front dart" },
+    { "file": "d-sleevehead.png", "title": "Sleeve head", "sub": "puff · gathered into the armhole" },
+    { "file": "d-cuff.png", "title": "Long sleeve cuff", "sub": "gathered into deep cuff · 3 buttons" },
+    { "file": "d-back.png", "title": "Back", "sub": "2 princess seams, shoulder to waistband" } ],
+  "pattern": "pattern.jpg" }

@@ -1,0 +1,12 @@
+{ "name": "Oversized Shirt",
+  "order": { "fields": { "Size": "", "Colour": "", "Sleeve": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3 · loose, not fitted" },
+  "views": { "front": "v-front.jpg", "back": "v-back.jpg" },
+  "photos": { "front": "../../../website/public/catalog/oversized-shirt/oversized-shirt-front.jpg", "back": "../../../website/public/catalog/oversized-shirt/oversized-shirt-back-v2.jpg" },
+  "details": [
+    { "file": "d-collar.jpg", "title": "Collar", "sub": "pointed, on stand, 1 button · soft" },
+    { "file": "d-placket.jpg", "title": "Closure", "sub": "front placket · buttons + 1 on stand" },
+    { "file": "d-armhole.jpg", "title": "Shoulder + armhole", "sub": "shoulder drops 5-6 cm · deep loose armhole" },
+    { "file": "d-cuff.jpg", "title": "Cuff + sleeve placket", "sub": "1 button each · 2 pleats" },
+    { "file": "d-yoke.jpg", "title": "Back", "sub": "straight yoke · box pleat" },
+    { "file": "d-hem.jpg", "title": "Hem", "sub": "rounded · sides 6 cm higher" } ],
+  "pattern": "pattern.jpg" }

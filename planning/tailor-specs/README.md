@@ -15,6 +15,19 @@ deliberately** — "he will be only doing that otherwise we will lose him". One
 garment, one length, front and back. Do not hand a tailor the four-variant sheet
 when he is making one thing.
 
+## ⚠️ THE TEMPLATE FOR EVERY PIECE (founder 2026-11-13)
+
+`generator/tailor-sheet.mjs <config.json> <out.pdf>` → 3 pages, always the same:
+1 order strip + FRONT/BACK flats + website photos · 2 detail close-ups (collar,
+closure, shoulder/armhole, cuff, back, hem…) with one-line captions · 3 pattern
+with cm. Pilot and reference: `oversized-shirt/` (config, flats, details, pattern).
+
+- Flats are generated FROM the website photo and checked side by side with it.
+- Every close-up is generated FROM the approved flat, or the collar drifts.
+- The pattern is drawn by script (`oversized-shirt/pattern-M.mjs`); its cm are
+  drafting standards on sizeChart M, NOT measured on a garment.
+- Minimal English, capital words: the tailor reads little English.
+
 ## ⚠️ THE METHOD, AND IT IS THE ONLY PART THAT MATTERS
 
 **PUT THE PHOTOGRAPH BESIDE THE DRAWING AND LOOK AT THEM TOGETHER.** Every

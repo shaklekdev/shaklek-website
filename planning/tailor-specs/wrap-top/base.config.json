@@ -1,0 +1,9 @@
+{ "name": "Wrap Top",
+  "order": { "fields": { "Size": "", "Colour": "", "Sleeve": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3 · no buttons, no zip" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "photos": { "front": "../../../website/public/catalog/wrap-top/wrap-top-navy-combo-long-normal-front-v2.jpg", "back": "../../../website/public/catalog/wrap-top/wrap-top-navy-back-v4.jpg" },
+  "details": [
+    { "file": "d-neck.png", "title": "Neckline", "sub": "crossover V · fronts wrap over" },
+    { "file": "d-tie.png", "title": "Side tie", "sub": "self-fabric tie knotted at the side seam" },
+    { "file": "d-cuff.png", "title": "Long sleeve end", "sub": "gathered into a narrow band" } ],
+  "pattern": "pattern.jpg" }

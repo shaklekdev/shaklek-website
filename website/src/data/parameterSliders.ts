@@ -115,7 +115,8 @@ export const PANTS_PARAMS: SliderParam[] = [
       { value: "button", text: "Button fly" },
       { value: "zip", text: "Zip fly" },
     ],
-    defaultIndex: 0,
+    // Zip, founder 2026-11-13: "tout est fermeture eclair dans les designs".
+    defaultIndex: 1,
     labelFor: (text) => text,
   },
   {
@@ -303,11 +304,13 @@ export const ABAYA_JACKET_PARAMS: SliderParam[] = [
     type: "closure",
     tier: "render",
     options: [
-      { value: "4", text: "Four, worn open" },
-      { value: "5", text: "Five, worn closed" },
+      { value: "4", text: "Four" },
+      { value: "5", text: "Five" },
     ],
     defaultIndex: 0,
-    labelFor: (text) => text,
+    // The button reads "Four" under its "Closures" heading; the cart, the
+    // confirmation and the tailor see the label alone, so it names itself.
+    labelFor: (text) => `${text} closures`,
   },
   {
     name: "Pockets",
