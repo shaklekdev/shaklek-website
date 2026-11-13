@@ -31,7 +31,10 @@ const MAX_CHANGES = 40;
 // garments, so the real bench load needs its own ceiling. Without this,
 // 20 lines x 10 units is a 200-garment order against a solo tailor -- and
 // 200 order_items rows written from a single request.
-const MAX_UNITS = 20;
+// 6, not 20: since fabric stock (2026-11-12) an unpaid order holds cloth, so
+// one anonymous request must not be able to hold a whole roll (security audit
+// 2026-11-13 H1). Bigger orders go through WhatsApp.
+const MAX_UNITS = 6;
 
 function text(value: unknown, max = MAX_TEXT): string {
   return typeof value === "string" ? value.slice(0, max) : "";
@@ -377,7 +380,9 @@ export async function POST(req: NextRequest) {
         { status: 409 },
       );
     }
-    console.error("[orders] Failed to persist order to DB:", err);
+    // Name only: a Drizzle error message embeds the query params (email,
+    // measurements, notes) and CloudWatch outlives the order (audit 2026-11-13 M5).
+    console.error("[orders] Failed to persist order to DB:", err instanceof Error ? err.name : "unknown", (err as { cause?: { code?: string } })?.cause?.code ?? "");
   }
 
   const stripe = getStripe();

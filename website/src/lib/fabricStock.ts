@@ -6,6 +6,9 @@ type Db = NonNullable<ReturnType<typeof getDb>>;
 // Anything with .execute -- the db itself or a transaction handle.
 type Exec = Pick<Db, "execute">;
 
+// Max metres per colour that UNPAID checkouts may hold (two abayas).
+const PENDING_CAP_METRES = 11;
+
 // WHICH ORDERS HOLD FABRIC. Everything placed since STOCK_SINCE except the two
 // states that will never be made: payment_failed (Stripe session expired or
 // was abandoned -- set by the webhook) and canceled (set by staff). A
@@ -17,19 +20,29 @@ type Exec = Pick<Db, "execute">;
 // still finds its fabric reserved; a webhook that never arrives cannot lock
 // cloth for more than 36 minutes.
 async function usedMetresByColor(db: Exec): Promise<Record<string, number>> {
+  // Paid (and later) orders count in full. Unpaid checkouts are capped per
+  // colour (PENDING_CAP_METRES): without a cap, anonymous unpaid checkouts can
+  // hold every roll and make the shop read sold out (security audit 2026-11-13
+  // H1, proven on staging). The cap bounds a possible oversell to a couple of
+  // pieces, which a refund covers; holding the shop hostage is worse.
   const rows = (await db.execute(sql`
-    select oi.color as color, oi.category as category, count(*)::int as n
+    select oi.color as color, oi.category as category, (o.status = 'pending_payment') as pending, count(*)::int as n
     from order_items oi
     join orders o on o.id = oi.order_id
     where o.created_at >= ${STOCK_SINCE}::timestamptz
       and o.status not in ('payment_failed', 'canceled')
       and (o.status <> 'pending_payment' or o.created_at > now() - interval '36 minutes')
-    group by oi.color, oi.category
-  `)) as unknown as { color: string | null; category: string | null; n: number }[];
-  const used: Record<string, number> = {};
+    group by oi.color, oi.category, (o.status = 'pending_payment')
+  `)) as unknown as { color: string | null; category: string | null; pending: boolean; n: number }[];
+  const paid: Record<string, number> = {}, pend: Record<string, number> = {};
   for (const r of rows) {
     if (!r.color) continue;
-    used[r.color] = (used[r.color] ?? 0) + Number(r.n) * metresFor(r.category);
+    const t = r.pending ? pend : paid;
+    t[r.color] = (t[r.color] ?? 0) + Number(r.n) * metresFor(r.category);
+  }
+  const used: Record<string, number> = {};
+  for (const c of new Set([...Object.keys(paid), ...Object.keys(pend)])) {
+    used[c] = (paid[c] ?? 0) + Math.min(pend[c] ?? 0, PENDING_CAP_METRES);
   }
   return used;
 }

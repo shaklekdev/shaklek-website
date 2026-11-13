@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
   type ShippingDetails = { name?: string | null; address?: StripeAddress | null };
 
   const session = event.data.object as {
+    id: string;
     client_reference_id: string | null;
     // What Stripe actually collected, in the currency's smallest unit (fils
     // for AED), AFTER any promotion code. The order row was written at
@@ -114,7 +115,7 @@ export async function POST(req: NextRequest) {
     await db
       .update(schema.orders)
       .set({ status: "payment_failed" })
-      .where(and(eq(schema.orders.id, orderId), eq(schema.orders.status, "pending_payment")));
+      .where(and(eq(schema.orders.id, orderId), eq(schema.orders.stripeSessionId, session.id), eq(schema.orders.status, "pending_payment")));
     return NextResponse.json({ ok: true });
   }
 
@@ -199,7 +200,10 @@ export async function POST(req: NextRequest) {
       shippingPostalCode: address?.postal_code ?? null,
       shippingCountry: address?.country ?? null,
     })
-    .where(and(eq(schema.orders.id, orderId), eq(schema.orders.status, "pending_payment")))
+    // Bound to the session we created for this order (audit 2026-11-13 M4):
+    // a signed event from any OTHER session carrying this reference (e.g. a
+    // Payment Link paid with ?client_reference_id=) must not mark it paid.
+    .where(and(eq(schema.orders.id, orderId), eq(schema.orders.stripeSessionId, session.id), eq(schema.orders.status, "pending_payment")))
     .returning({ id: schema.orders.id });
 
   if (!transitioned) {

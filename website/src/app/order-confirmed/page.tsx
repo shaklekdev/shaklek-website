@@ -2,7 +2,7 @@
 
 import { catalog } from "@/data/catalog";
 import { chosenLabelsForName, paramKeyFor } from "@/data/parameterSliders";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState , useLayoutEffect} from "react";
 import { orderRef } from "@/lib/orderRef";
 import { money, track } from "@/lib/metaPixel";
 import { useSearchParams } from "next/navigation";
@@ -53,11 +53,18 @@ function fromLocalStorage(): DisplayOrder | null {
 
 function OrderConfirmedContent() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get("order_id");
+  // Read once and keep: the URL is scrubbed right after (below), so the order
+  // id and its access token never reach third-party scripts that report the
+  // page URL, such as the Meta pixel (security audit 2026-11-13 M3).
+  const [initialParams] = useState(() => ({ orderId: searchParams.get("order_id"), t: searchParams.get("t") }));
+  useLayoutEffect(() => {
+    if (window.location.search) window.history.replaceState(null, "", "/order-confirmed");
+  }, []);
+  const orderId = initialParams.orderId;
   // Signed access token minted with the Checkout Session and carried back in
   // Stripe's success_url. /api/orders/:id needs it (or a Clerk session that
   // owns the order) -- an order id alone no longer authorizes a read.
-  const accessToken = searchParams.get("t");
+  const accessToken = initialParams.t;
   const { clear } = useCart();
   const { isSignedIn } = useUser();
   const [order, setOrder] = useState<DisplayOrder | null | undefined>(undefined);

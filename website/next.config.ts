@@ -188,7 +188,9 @@ const buildConfig = (isDev: boolean): NextConfig => ({
       {
         // Order data, account data and the staff dashboard must never sit in
         // a shared CloudFront cache or a browser back-forward cache.
-        source: "/api/:path*",
+        // /api/stock is excluded: it is public, holds no personal data, and sets
+        // its own short CDN cache so traffic cannot queue on the DB (audit L1).
+        source: "/api/:path((?!stock$).*)",
         headers: [
           { key: "Cache-Control", value: "no-store, no-cache, must-revalidate, private" },
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
