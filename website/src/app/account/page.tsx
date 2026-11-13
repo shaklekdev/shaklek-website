@@ -6,6 +6,8 @@ import AccountNameForm from "@/components/AccountNameForm";
 import AccountFitFeedback from "@/components/AccountFitFeedback";
 import { fitFeedbackLines } from "@/data/fitFeedback";
 import { orderRef } from "@/lib/orderRef";
+import { issueFittingToken } from "@/lib/orderAccess";
+import { WHATSAPP_URL } from "@/lib/contact";
 import { getDb, schema } from "@/db/client";
 import type { Metadata } from "next";
 import { NOINDEX } from "@/lib/seo";
@@ -215,6 +217,35 @@ export default async function AccountPage() {
                     </p>
                   ))}
                 </div>
+                {/* VIRTUAL FITTING FROM THE ACCOUNT (founder, 2026-11-13: she
+                    must be able to do it later from her account). Only while
+                    the order is paid and not yet being made -- the same window
+                    /api/orders/[id]/fitting accepts. The link carries a
+                    fitting-only token minted here, server-side, for an order
+                    this verified email owns. */}
+                {order.status === "paid" && order.items.some((i) => i.size === "Tailored") ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-3 text-[13px]">
+                    {order.items.some((i) => i.size === "Tailored" && i.measurements) ? (
+                      <span className="text-text-2">Measurements received ✓</span>
+                    ) : (
+                      <span className="text-text">Your free fitting:</span>
+                    )}
+                    <a
+                      href={`/measure/${order.id}?t=${issueFittingToken(order.id)}`}
+                      className="underline underline-offset-4 text-text"
+                    >
+                      {order.items.some((i) => i.size === "Tailored" && i.measurements) ? "Redo virtual fitting" : "Virtual fitting"}
+                    </a>
+                    <a
+                      href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hello, I would like to book my home fitting. Order ${orderRef(order.id)}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-4 text-text-2"
+                    >
+                      Home fitting · WhatsApp
+                    </a>
+                  </div>
+                ) : null}
               </div>
             ))}
           </div>
