@@ -276,17 +276,15 @@ export default function SizePicker({
               </>
             ) : online ? (
               <>
-                <span className="font-medium text-text">Your measurements are added.</span>{" "}
-                Bust {online.estimate.bust}, waist {online.estimate.waist}, hip {online.estimate.hip} cm.
-                We confirm them with you on WhatsApp before cutting.{" "}
+                <span className="font-medium text-text">Measurements added.</span>{" "}
+                Bust {online.estimate.bust} · waist {online.estimate.waist} · hip {online.estimate.hip} cm.{" "}
                 <button type="button" onClick={() => setFittingOpen(true)} className="underline underline-offset-4">
                   Redo
                 </button>
               </>
             ) : (
               <>
-                <span className="font-medium text-text">Two photos and your height,</span> from anywhere in
-                the UAE. Your photos stay on your phone.{" "}
+                <span className="font-medium text-text">Two photos and your height.</span>{" "}
                 <button type="button" onClick={() => setFittingOpen(true)} className="underline underline-offset-4">
                   Start online fitting
                 </button>

@@ -309,24 +309,20 @@ export default function OnlineFitting({
         </button>
         {fileInputs}
 
+        {/* LEAST TEXT (founder, 2026-11-13: "people don't like reading
+            anymore. concise steps, bullet points"). Keep every screen to a
+            title, at most three short bullets and one button. */}
         {step === "intro" && (
           <>
             <p className="font-display text-[22px] leading-tight text-text">Online fitting</p>
-            <p className="mt-3 text-[13px] leading-relaxed text-text-2">
-              Two photos and your height. We estimate your measurements, you check them, and our team
-              confirms them with you on WhatsApp before anything is cut.
-            </p>
-            <p className={`mt-6 ${label}`}>You will need</p>
-            <ul className="mt-2 space-y-1 text-[13px] leading-relaxed text-text-2">
-              <li>Someone to take the photos, or your phone propped up on a timer</li>
-              <li>Fitted clothes, bare feet, hair down or tied low</li>
-              <li>A plain wall and good light</li>
-            </ul>
-            <p className="mt-6 border-y border-border py-3 text-[12px] leading-relaxed text-text-2">
-              Your photos stay on your phone. They are read here, never sent to us and never stored.
-              Only the measurements are added to your order.
-            </p>
-            <button type="button" className={`mt-6 ${btn}`} onClick={() => { setStep("height"); void getLandmarker().catch(() => {}); }}>
+            <ol className="mt-4 space-y-1.5 text-[14px] text-text">
+              <li>1. Your height</li>
+              <li>2. A photo from the front</li>
+              <li>3. A photo from the side</li>
+            </ol>
+            <p className="mt-4 text-[12px] text-text-3">Fitted clothes · bare feet · plain wall</p>
+            <p className="mt-6 text-[12px] text-text-2">Your photos stay on your phone. Never sent, never stored.</p>
+            <button type="button" className={`mt-3 ${btn}`} onClick={() => { setStep("height"); void getLandmarker().catch(() => {}); }}>
               I agree, start
             </button>
           </>
@@ -336,7 +332,7 @@ export default function OnlineFitting({
           <>
             <p className="font-display text-[22px] leading-tight text-text">Your height</p>
             <label className="mt-5 block">
-              <span className={label}>Height in cm, without shoes</span>
+              <span className={label}>cm, without shoes</span>
               <input
                 type="number"
                 inputMode="numeric"
@@ -348,20 +344,17 @@ export default function OnlineFitting({
                 placeholder="130–210"
               />
             </label>
-            <p className="mt-2 text-[12px] leading-relaxed text-text-3">
-              Your exact height is what makes every other measurement accurate.
-            </p>
-            <p className={`mt-6 ${label}`}>The size you usually wear (optional)</p>
+            <p className={`mt-6 ${label}`}>Usual size (optional)</p>
             <div className="mt-2 grid grid-cols-2 gap-3">
               <label className="block text-[12px] text-text-2">
-                Tops and dresses
+                Tops
                 <select value={topSize} onChange={(e) => setTopSize(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
                   <option value="">Not sure</option>
                   {TOPS.map((s) => <option key={s}>{s}</option>)}
                 </select>
               </label>
               <label className="block text-[12px] text-text-2">
-                Trousers (EU)
+                Trousers
                 <select value={trouserSize} onChange={(e) => setTrouserSize(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
                   <option value="">Not sure</option>
                   {TROUSERS.map((s) => <option key={s}>{s}</option>)}
@@ -382,21 +375,19 @@ export default function OnlineFitting({
             </p>
             <div className="mt-5 flex items-center gap-5">
               <Pose side={step === "side"} />
-              <ul className="space-y-1.5 text-[13px] leading-relaxed text-text-2">
+              <ul className="space-y-1.5 text-[14px] text-text">
                 {step === "front" ? (
                   <>
-                    <li>Stand straight, facing the camera</li>
-                    <li>Arms out from your body, like an A</li>
-                    <li>Feet apart, shoulder width</li>
+                    <li>Arms out, like an A</li>
+                    <li>Feet apart</li>
                   </>
                 ) : (
                   <>
                     <li>Turn to your right</li>
-                    <li>Arms relaxed by your sides</li>
-                    <li>Feet together</li>
+                    <li>Arms down</li>
                   </>
                 )}
-                <li>Head to feet in the photo, phone at waist height</li>
+                <li>Head to feet in the photo</li>
               </ul>
             </div>
             {error && (
@@ -417,18 +408,14 @@ export default function OnlineFitting({
 
         {step === "working" && (
           <div className="py-16 text-center" aria-live="polite">
-            <p className="font-display text-[20px] text-text">Taking your measurements</p>
-            <p className="mt-2 text-[13px] text-text-3">A few seconds, on your phone.</p>
+            <p className="font-display text-[20px] text-text">Measuring…</p>
           </div>
         )}
 
         {step === "result" && est && (
           <>
             <p className="font-display text-[22px] leading-tight text-text">Your measurements</p>
-            <p className="mt-2 text-[13px] leading-relaxed text-text-2">
-              Estimated, in cm. Correct anything you know better. Our team confirms them with you on
-              WhatsApp before cutting.
-            </p>
+            <p className="mt-2 text-[12px] text-text-3">Edit if needed. We confirm them on WhatsApp.</p>
             <div className="mt-5 divide-y divide-border border-y border-border">
               {FIELDS.map((f) => (
                 <label key={f.key} className="flex items-center justify-between py-2.5 text-[13px] text-text-2">
@@ -453,7 +440,7 @@ export default function OnlineFitting({
               Use these measurements
             </button>
             <button type="button" className="mt-3 w-full text-center text-[12px] text-text-2 underline underline-offset-4" onClick={() => { setFront(null); setEst(null); setStep("front"); }}>
-              Take the photos again
+              Retake
             </button>
           </>
         )}
