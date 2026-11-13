@@ -1,0 +1,9 @@
+{ "name": "Cargo Trousers",
+  "order": { "fields": { "Size": "", "Colour": "", "Leg": "", "Length": "", "Fabric": "Linen" }, "notes": "Cut to her measurements · table on page 3 · waist at the NATURAL waist" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "photos": { "front": "../../../website/public/catalog/cargo-trousers/cargo-trousers-navy-front.jpg", "back": "../../../website/public/catalog/cargo-trousers/cargo-trousers-navy-back-v4.jpg" },
+  "details": [
+    { "file": "d-waist.png", "title": "Front waist", "sub": "belt loops · button fly · side pockets" },
+    { "file": "d-cargo.png", "title": "Cargo pocket x2", "sub": "outer thigh · bellows · flap with 1 button" },
+    { "file": "d-back.png", "title": "Back waist", "sub": "2 welt pockets, no flap, no button" } ],
+  "pattern": "pattern.jpg" }

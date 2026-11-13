@@ -104,11 +104,27 @@ const TOPS = {
     ["DRAWSTRING CHANNEL", "+ cord", "M 0,0 L 50,0 L 50,3 L 0,3 Z"],
   ]},
 };
+
+const PANT_FRONT = "M 0,0 L 22,0 L 23,18 Q 23,24 28,26 L 26,100 L 2,100 L 0,26 Z";
+const PANT_BACK = "M 3,-3 L 25,0 L 26,18 Q 27,26 33,28 L 29,100 L 4,100 L 1,28 Z";
+const PANT_ROWS = [["1", "Height"], ["2", "Waist (full, around)"], ["3", "Hip (full, around)"], ["4", "Thigh (around)"], ["5", "Knee (around)"], ["6", "Ankle (around)"], ["7", "Rise: front waist through legs to back waist"], ["8", "Inside leg (crotch to floor)"], ["9", "Outside leg (waist to floor)"], ["10", "Length wanted (waist to hem)"]];
+const pant = (title, extra, front = "FRONT ×2") => ({ title, rows: PANT_ROWS, pieces: [
+  [front, "mirror L / R", PANT_FRONT], ["BACK ×2", "dart · welt pocket", PANT_BACK],
+  ["WAISTBAND ×2", "button", "M 0,0 L 40,0 L 40,4 L 0,4 Z"], ["FLY + FLY SHIELD", "button fly", "M 0,0 L 4,0 L 4,18 Q 4,21 1,21 L 0,21 Z"],
+  ["POCKET BAG ×4", "side pocket", "M 0,0 L 14,0 L 16,24 Q 8,28 0,22 Z"], ["WELT ×2 + BAG ×2", "back pocket", "M 0,0 L 13,0 L 13,3 L 0,3 Z"],
+  ["BELT LOOPS ×6", "", "M 0,0 L 1.2,0 L 1.2,6 L 0,6 Z"], ...extra ] });
+Object.assign(TOPS, {
+  "wide-leg-trousers": pant("RELAXED TROUSERS", [], "FRONT ×2 · 1 pleat each"),
+  "banded-trousers": pant("BANDED TROUSERS", [["CUFF", "cut-on, turn up to OUTSIDE", "M 0,0 L 22,0 L 22,8 L 0,8 Z"]]),
+  "pleated-trousers": pant("PLEATED TROUSERS", [], "FRONT ×2 · 2 pleats each"),
+  "cargo-trousers": pant("CARGO TROUSERS", [["CARGO POCKET ×2 + FLAP ×4", "bellows · 1 button", "M 0,0 L 16,0 L 16,20 L 0,20 Z"]]),
+});
 if (TOPS[kind]) {
   title = TOPS[kind].title;
   const cols = [[200, 240], [620, 240], [1060, 240], [200, 760], [620, 760], [1060, 760], [200, 1200], [620, 1200], [1060, 1200]];
+  const pantCols = [[200, 240], [620, 240], [1060, 240], [1060, 430], [1060, 700], [200, 960], [620, 960], [1060, 1060]];
   TOPS[kind].pieces.forEach(([nm, sub, d, fl], i) => {
-    const [ox, oy] = cols[i];
+    const [ox, oy] = (TOPS[kind].rows ? pantCols : cols)[i];
     const xs = [...d.matchAll(/(-?\d+\.?\d*),(-?\d+\.?\d*)/g)].map((m) => [+m[1], +m[2]]);
     const minX = Math.min(...xs.map((a) => a[0])), maxX = Math.max(...xs.map((a) => a[0])), maxY = Math.max(...xs.map((a) => a[1]));
     const P = piece(ox - minX * s + 40, oy, d);
@@ -116,7 +132,7 @@ if (TOPS[kind]) {
     T(P.X((minX + maxX) / 2), P.Y(maxY) + 44, nm, { size: 28 });
     if (sub) T(P.X((minX + maxX) / 2), P.Y(maxY) + 76, sub, { size: 22, color: G });
   });
-  rows = [["1", "Height"], ["2", "Bust (full, around)"], ["3", "Waist (full, around)"], ["4", "Hip (full, around)"], ["5", "Shoulder width (shoulder to shoulder)"], ["6", "Arm length (shoulder to wrist)"], ["7", "Upper arm (around)"], ["8", "Wrist (around)"], ["9", "Neck (around)"], ["10", "Length wanted (shoulder to hem)"]];
+  rows = TOPS[kind].rows || [["1", "Height"], ["2", "Bust (full, around)"], ["3", "Waist (full, around)"], ["4", "Hip (full, around)"], ["5", "Shoulder width (shoulder to shoulder)"], ["6", "Arm length (shoulder to wrist)"], ["7", "Upper arm (around)"], ["8", "Wrist (around)"], ["9", "Neck (around)"], ["10", "Length wanted (shoulder to hem)"]];
 }
 // TABLE
 const tx = 1650, ty = 200;
@@ -133,6 +149,6 @@ const H = TOPS[kind] ? 1560 : 240 + L * s + 160;
 const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="${DIM}"/></marker></defs><rect width="100%" height="100%" fill="white"/>
 <text x="40" y="70" font-family="Helvetica" font-weight="bold" font-size="52" fill="${INK}">${title} — PATTERN</text>
 <text x="40" y="118" font-family="Helvetica" font-size="30" fill="${DIM}">shape of the pieces · her full body measurements in the table · NO seam allowance drawn · green = fold</text>${o}
-<text x="40" y="${H - 40}" font-family="Helvetica" font-weight="bold" font-size="32" fill="${INK}">${TOPS[kind] ? "100% linen · light interfacing in collar, stand and cuffs only" : "100% linen · NO interfacing anywhere · it must hang and fall"}</text></svg>`;
+<text x="40" y="${H - 40}" font-family="Helvetica" font-weight="bold" font-size="32" fill="${INK}">${TOPS[kind]?.rows ? "100% linen · light interfacing in waistband only" : TOPS[kind] ? "100% linen · light interfacing in collar, stand and cuffs only" : "100% linen · NO interfacing anywhere · it must hang and fall"}</text></svg>`;
 await sharp(Buffer.from(svg)).jpeg({ quality: 92 }).toFile(out);
 console.log("wrote", out);
