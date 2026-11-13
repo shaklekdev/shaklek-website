@@ -512,7 +512,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         // bottom follows the cookie bar's height while it is open (CookieConsent
         // publishes --consent-h), so the button is never underneath it.
         <div
-          className="fixed inset-x-0 z-40 border-t border-border bg-white/95 backdrop-blur-sm"
+          className="fixed inset-x-0 z-40 border-t border-border bg-white"
           style={{ bottom: "var(--consent-h, 0px)" }}
         >
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-3">

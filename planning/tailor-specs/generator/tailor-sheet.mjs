@@ -37,7 +37,7 @@ const GREEN = "#1e8449", INK = "#111111", GREY = "#777777";
 function header(title, page) {
   doc.rect(0, 0, W, 54).fill(INK);
   doc.fillColor("white").font("Helvetica-Bold").fontSize(24).text(`${cfg.name.toUpperCase()}  —  ${title}`, 30, 16);
-  doc.fontSize(14).text(`${page} / 3`, W - 90, 22);
+  if (page) doc.fontSize(14).text(`${page} / 3`, W - 90, 22);
 }
 function strip(y) {
   const o = cfg.order;
@@ -74,6 +74,28 @@ const px = xs[1] + flatW + 50;
 doc.fillColor(GREY).font("Helvetica-Bold").fontSize(12).text("WEBSITE PHOTO", px, y);
 doc.image(await img(cfg.photos.front, 500), px, y + 18, { fit: [photoW * 1.6, (viewH - 60) / 2], align: "left" });
 doc.image(await img(cfg.photos.back, 500), px, y + 30 + (viewH - 60) / 2, { fit: [photoW * 1.6, (viewH - 60) / 2], align: "left" });
+
+// OPTIONAL PAGE — FIT CORRECTIONS after a test piece came back wrong.
+// cfg.fit = { wrong: "photo of the test piece", rules: ["FITTED BODICE — ...", ...] }
+if (cfg.fit) {
+  doc.addPage(); header("FIT — FIX THESE", "");
+  const fx = 40, fy = 80, fw = cfg.fit.wrong ? 420 : 0;
+  if (cfg.fit.wrong) {
+    doc.rect(fx, fy, fw, 30).fill("#c0392b");
+    doc.fillColor("white").font("Helvetica-Bold").fontSize(16).text("X  TEST PIECE — WRONG", fx + 10, fy + 8);
+    doc.image(await img(cfg.fit.wrong, 900), fx, fy + 36, { fit: [fw, H - fy - 80], align: "center" });
+  }
+  let ry = fy;
+  const rx = fx + fw + (fw ? 40 : 0), rw = W - rx - 40;
+  cfg.fit.rules.forEach((r, i) => {
+    const [a, b] = r.split(" — ");
+    doc.circle(rx + 16, ry + 16, 16).fill("#c0392b");
+    doc.fillColor("white").font("Helvetica-Bold").fontSize(16).text(String(i + 1), rx + 4, ry + 7, { width: 24, align: "center" });
+    doc.fillColor(INK).font("Helvetica-Bold").fontSize(22).text(a.toUpperCase(), rx + 44, ry + 2, { width: rw - 44 });
+    if (b) doc.fillColor(GREY).font("Helvetica").fontSize(16).text(b, rx + 44, doc.y + 2, { width: rw - 44 });
+    ry = doc.y + 26;
+  });
+}
 
 // PAGE 2 — details
 doc.addPage(); header("DETAILS", 2);
