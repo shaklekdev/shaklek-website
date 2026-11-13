@@ -270,10 +270,8 @@ export default function SizePicker({
           <p className="mt-3 text-[13px] leading-relaxed text-text-2">
             {method === "home" ? (
               <>
-                {/* "Private home fitting" is the founder's phrase for the visit
-                    (2026-11-12). Always "we", never "I". */}
-                <span className="font-medium text-text">Private home fitting in Dubai, free.</span>{" "}
-                After you order, we contact you on WhatsApp to book it.
+                {/* Founder's words, 2026-11-13: "do we have to tell more?" -- no. */}
+                <span className="font-medium text-text">Free home fitting in Dubai</span> upon confirmation.
               </>
             ) : online ? (
               <>
@@ -295,8 +293,7 @@ export default function SizePicker({
         </div>
       ) : (
         <p className="mt-3 text-[13px] leading-relaxed text-text-2">
-          Or choose <span className="font-medium text-text">Tailored</span>: a private home fitting in
-          Dubai, or an online fitting with two photos.
+          Or choose <span className="font-medium text-text">Tailored</span>: home or online fitting.
         </p>
       )}
       {fittingOpen ? <OnlineFitting onDone={applyOnline} onClose={() => setFittingOpen(false)} /> : null}
@@ -498,8 +495,10 @@ export default function SizePicker({
           <details className="group mt-4 border border-border-strong">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
               <span>
+                {/* "Any special request?" (founder, 2026-11-13): "Make it your
+                    way" promised endless customising, which we do not offer. */}
                 <span className="font-display block text-[15px] text-text">
-                  Make it your way
+                  Any special request?
                 </span>
               </span>
               <span
