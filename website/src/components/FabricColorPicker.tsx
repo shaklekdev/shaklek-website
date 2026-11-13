@@ -40,6 +40,15 @@ export default function FabricColorPicker({
   // and the note drops underneath the pair.
   return (
     <div className="mt-5">
+      {/* THE COLOUR NAME, VISIBLE. Founder, 2026-11-13: on mobile the name
+          lived only in title/aria-label, so a customer could not tell us which
+          colour she wanted (an offline order hit this). aria-live so a screen
+          reader hears the change on tap. */}
+      <p className="mb-2 text-[13px] text-text-2" aria-live="polite">
+        <span className="uppercase tracking-[0.14em] text-text-2">Colour:</span>{" "}
+        <span className="text-text">{color}</span>
+        {soldOut.includes(color) ? <span className="text-text-2"> — sold out</span> : null}
+      </p>
       <div className="flex flex-wrap items-center justify-between gap-4">
       <div className="flex flex-wrap items-center gap-3">
         {colors.filter((c) => available.includes(c.name)).map((c) => (
