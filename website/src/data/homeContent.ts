@@ -45,7 +45,7 @@ export const HERO = {
   // Re-check competitors before reusing it anywhere.
   line: "The first UAE-made label you customise yourself.",
   // Second line, under it (founder 2026-11-12).
-  sub: "Handmade · 100% natural linen", // founder 2026-11-12
+  sub: "Handmade · Custom made · 100% linen", // founder 2026-11-13, smaller under the title
 };
 
 // The concept, on the page the visitor lands on.

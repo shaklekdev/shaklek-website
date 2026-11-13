@@ -52,7 +52,7 @@ export default function ProductRail({
   // above argued against -- the difference is that this is a PRICE line (what
   // the number covers), not a second description of the visit; Concept below
   // still explains what happens. Copy lives in data/included.ts.
-  subtitle = "Make it yours in the next step.",
+  subtitle,
 }: {
   title?: string;
   subtitle?: string;
@@ -77,10 +77,10 @@ export default function ProductRail({
         <div className="flex items-start justify-between gap-3 sm:gap-4">
           <div className="min-w-0">
             <h2 className="text-balance text-lg text-text">{title}</h2>
-            {/* Smaller on a phone: founder, 2026-11-13, "trop de texte entre le
-                hero et le carrousel" -- then "not losing it completely, making
-                it smaller". */}
-            <p className="mt-1 text-[11px] leading-snug text-text-3 sm:text-[13px]">{subtitle}</p>
+            {/* No subtitle on the home (founder, 2026-11-13, "too much text...
+                be strategic"): every card already says "Customise this piece".
+                Pass `subtitle` explicitly to show one. */}
+            {subtitle ? <p className="mt-1 text-[13px] text-text-3">{subtitle}</p> : null}
           </div>
           {/* ⚠️ NO COUNT, same call as /catalog (founder, 2026-09-14). It read
               "{catalog.length} pieces" and she flagged it as wrong on

@@ -4,7 +4,6 @@ import {
   INCLUDED_HOME_CHIPS,
   INCLUDED_HOME_FOOTNOTE,
   INCLUDED_HOME_LEAD,
-  INCLUDED_HOME_LINE,
   includedLines,
 } from "@/data/included";
 
@@ -53,24 +52,29 @@ export default function IncludedInPrice({
   }
 
   if (variant === "chips") {
-    // Home rail, right of the heading: "All included" then one item per line,
-    // right-aligned (founder, 2026-11-12: "put all included on the right side
-    // with the options below").
+    // Home rail, right of the heading: "All included +" only; tapping unfolds
+    // the list (founder, 2026-11-13: "keep the all included with a + that
+    // unfolds and shows all options" -- too much text above the clothes).
+    // <details>, so it works without JavaScript and is keyboard-accessible.
     return (
-      <div className="shrink-0 text-right">
-        <p className="sr-only">{INCLUDED_HOME_LINE}</p>
-        <div aria-hidden="true">
-          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-text sm:tracking-[0.18em]">
-            {INCLUDED_HOME_LEAD}
-          </p>
-          <ul className="mt-1.5 space-y-0.5 text-[10px] uppercase leading-relaxed tracking-[0.08em] text-text-2 sm:tracking-[0.14em]">
+      // The list drops DOWN over the top of the cards (absolute) rather than
+      // widening this column, so the title beside it never re-wraps on open.
+      <details className="group relative z-10 shrink-0 text-right">
+        <summary className="inline-flex min-h-[44px] cursor-pointer list-none items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-text sm:tracking-[0.18em] [&::-webkit-details-marker]:hidden">
+          {INCLUDED_HOME_LEAD}
+          <span aria-hidden="true" className="text-base font-light leading-none text-gold transition-transform group-open:rotate-45">
+            +
+          </span>
+        </summary>
+        <div className="absolute right-0 top-full w-max border border-border bg-bg px-4 py-3 shadow-sm">
+          <ul className="space-y-0.5 text-[10px] uppercase leading-relaxed tracking-[0.12em] text-text-2 sm:tracking-[0.14em]">
             {INCLUDED_HOME_CHIPS.map((c) => (
               <li key={c.key}>{c.label}</li>
             ))}
           </ul>
           <p className="mt-1 text-[10px] tracking-[0.1em] text-text-3">{INCLUDED_HOME_FOOTNOTE}</p>
         </div>
-      </div>
+      </details>
     );
   }
 

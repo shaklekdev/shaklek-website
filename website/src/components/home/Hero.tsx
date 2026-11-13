@@ -61,7 +61,7 @@ export default function Hero({ compact = false }: { compact?: boolean }) {
         <h1 className="font-display mx-auto max-w-xl text-[22px] leading-snug text-text sm:text-[26px]">
           {HERO.line}
         </h1>
-        <p className="mt-2 text-[13px] tracking-[0.18em] text-text-2 uppercase sm:text-sm">
+        <p className="mt-2 text-[10px] tracking-[0.18em] text-text-2 uppercase sm:text-xs">
           {HERO.sub}
         </p>
       </div>
