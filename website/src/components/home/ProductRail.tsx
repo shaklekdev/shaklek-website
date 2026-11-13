@@ -104,10 +104,17 @@ export default function ProductRail({
 
           -mx-6/px-6 lets the row bleed to the screen edges while the first card
           stays aligned with the heading above; scroll-pl-6 keeps that
-          alignment on every snap stop. */}
+          alignment on every snap stop.
+
+          ⚠️ overflow-y-hidden IS LOAD-BEARING. overflow-x-auto makes the
+          browser treat Y as auto too, and the row was 1px taller than its box
+          (scrollHeight 442 vs 441), so on a phone the cards wobbled up and down
+          while swiping; founder, 2026-11-13: "it moves both vertically and
+          horizontally". overscroll-x-contain stops a swipe at the end of the
+          row from dragging the page or triggering browser back. */}
       <section className="mx-auto w-full max-w-6xl px-6">
         <div
-          className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-pl-6 px-6 pb-1 sm:gap-6"
+          className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto overflow-y-hidden overscroll-x-contain scroll-pl-6 px-6 pb-1 sm:gap-6"
           aria-label="Pieces to start with"
         >
           {items.map((item) => (
