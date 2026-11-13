@@ -216,7 +216,23 @@ export default function OnlineFitting({
   const [height, setHeight] = useState("");
   const [topSize, setTopSize] = useState("");
   const [trouserSize, setTrouserSize] = useState("");
-  const [front, setFront] = useState<File | null>(null);
+  const [front, setFrontFile] = useState<File | null>(null);
+  // Local preview of the front photo (an object URL: stays in this tab,
+  // never uploaded), so she can see which photo she is about to use.
+  const [frontUrl, setFrontUrl] = useState<string | null>(null);
+  const urlRef = useRef<string | null>(null);
+  const setFront = (file: File | null) => {
+    if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+    urlRef.current = file ? URL.createObjectURL(file) : null;
+    setFrontUrl(urlRef.current);
+    setFrontFile(file);
+  };
+  useEffect(
+    () => () => {
+      if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+    },
+    [],
+  );
   const [error, setError] = useState<string | null>(null);
   const [est, setEst] = useState<Estimate | null>(null);
   const [edits, setEdits] = useState<Record<string, string>>({});
@@ -266,8 +282,11 @@ export default function OnlineFitting({
     }
   }
 
-  function pick(which: "front" | "side", files: FileList | null) {
-    const file = files?.[0];
+  function pick(which: "front" | "side", input: HTMLInputElement) {
+    const file = input.files?.[0];
+    // Cleared so choosing the SAME photo again still fires onChange (a retake
+    // with the same file used to do nothing at all).
+    input.value = "";
     if (!file) return;
     setError(null);
     if (which === "front") {
@@ -292,12 +311,43 @@ export default function OnlineFitting({
   const btn2 = "flex min-h-11 w-full items-center justify-center border border-border-strong px-6 text-sm text-text";
   const label = "text-[11px] uppercase tracking-[0.14em] text-text-2";
 
+  const BACK: Partial<Record<Step, Step>> = { height: "intro", front: "height", side: "front", result: "side" };
+  const STEP_NO: Partial<Record<Step, [number, string]>> = {
+    height: [1, "Height"],
+    front: [2, "Front photo"],
+    side: [3, "Side photo"],
+  };
+  const header = (
+    <div className="absolute left-0 right-0 top-0 flex h-12 items-center justify-between px-2">
+      {BACK[step] ? (
+        <button
+          type="button"
+          onClick={() => {
+            setError(null);
+            setStep(BACK[step]!);
+          }}
+          className="flex h-11 items-center px-3 text-[13px] text-text-2"
+        >
+          ← Back
+        </button>
+      ) : (
+        <span />
+      )}
+      {STEP_NO[step] ? (
+        <span className="text-[11px] uppercase tracking-[0.14em] text-text-3">
+          Step {STEP_NO[step]![0]} of 3
+        </span>
+      ) : null}
+      <span className="w-11" />
+    </div>
+  );
+
   const fileInputs = (
     <>
-      <input ref={frontCam} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => pick("front", e.target.files)} />
-      <input ref={frontLib} type="file" accept="image/*" className="hidden" onChange={(e) => pick("front", e.target.files)} />
-      <input ref={sideCam} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => pick("side", e.target.files)} />
-      <input ref={sideLib} type="file" accept="image/*" className="hidden" onChange={(e) => pick("side", e.target.files)} />
+      <input ref={frontCam} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => pick("front", e.currentTarget)} />
+      <input ref={frontLib} type="file" accept="image/*" className="hidden" onChange={(e) => pick("front", e.currentTarget)} />
+      <input ref={sideCam} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => pick("side", e.currentTarget)} />
+      <input ref={sideLib} type="file" accept="image/*" className="hidden" onChange={(e) => pick("side", e.currentTarget)} />
     </>
   );
 
@@ -308,6 +358,7 @@ export default function OnlineFitting({
           ×
         </button>
         {fileInputs}
+        {header}
 
         {/* LEAST TEXT (founder, 2026-11-13: "people don't like reading
             anymore. concise steps, bullet points"). Keep every screen to a
@@ -369,8 +420,7 @@ export default function OnlineFitting({
 
         {(step === "front" || step === "side") && (
           <>
-            <p className={label}>{step === "front" ? "Photo 1 of 2" : "Photo 2 of 2"}</p>
-            <p className="mt-1 font-display text-[22px] leading-tight text-text">
+            <p className="font-display text-[22px] leading-tight text-text">
               {step === "front" ? "From the front" : "From the side"}
             </p>
             <div className="mt-5 flex items-center gap-5">
@@ -395,6 +445,16 @@ export default function OnlineFitting({
                 {error}
               </p>
             )}
+            {step === "side" && frontUrl ? (
+              <div className="mt-5 flex items-center gap-3 text-[12px] text-text-2">
+                {/* eslint-disable-next-line @next/next/no-img-element -- local object URL, never uploaded */}
+                <img src={frontUrl} alt="" className="h-14 w-10 object-cover" />
+                <span>Front photo ✓</span>
+                <button type="button" onClick={() => setStep("front")} className="ml-auto underline underline-offset-4">
+                  Change
+                </button>
+              </div>
+            ) : null}
             <div className="mt-6 space-y-2">
               <button type="button" className={btn} onClick={() => (step === "front" ? frontCam : sideCam).current?.click()}>
                 Take the photo
@@ -403,11 +463,13 @@ export default function OnlineFitting({
                 Choose from my photos
               </button>
             </div>
+            <p className="mt-3 text-center text-[12px] text-text-3">Alone? Use your camera&apos;s timer.</p>
           </>
         )}
 
         {step === "working" && (
           <div className="py-16 text-center" aria-live="polite">
+            <span aria-hidden="true" className="mx-auto mb-5 block h-8 w-8 animate-spin rounded-full border-2 border-border border-t-text" />
             <p className="font-display text-[20px] text-text">Measuring…</p>
           </div>
         )}
