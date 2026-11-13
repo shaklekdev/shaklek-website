@@ -134,7 +134,7 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       // row is WEB ONLY -- the label artwork does not import it -- so digits
       // here cannot reach the printed Arabic run. The Arabic needs her read.
       value: "Gentle machine wash at 30°C",
-      valueAr: "غسيل آلي لطيف على درجة حرارة 30 مئوية",
+      valueAr: "غسيل آلي لطيف على 30°C",
     },
     {
       // ✅ FOUNDER-READ AND APPROVED 2026-08-28 (at 14 days).
