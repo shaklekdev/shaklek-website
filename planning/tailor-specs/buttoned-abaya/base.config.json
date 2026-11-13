@@ -1,0 +1,15 @@
+{
+  "name": "Buttoned Abaya — Maxi",
+  "order": { "fields": { "Size": "", "Colour": "", "Length": "Maxi", "Fabric": "Linen" }, "notes": "Cut to her measurements · see the table on page 3 · BLACK cord + BLACK buttons" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "legend": "RED = armhole seam, SET-IN sleeve  ·  BLUE = underarm + side seam, one line  ·  BLACK = 4 cord bars with black button",
+  "photos": { "front": "../../../website/public/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg", "back": "../../../website/public/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg" },
+  "details": [
+    { "file": "d-neck.png", "title": "Neck", "sub": "round, no collar · V wide at neck, point at 1st bar" },
+    { "file": "d-closures.png", "title": "4 closures", "sub": "bar = 1/5 of body width · open below the last bar" },
+    { "file": "d-shoulder-flat.png", "title": "Shoulder", "sub": "drops 6 cm down the arm · set-in sleeve (red)" },
+    { "file": "d-sleeve-end.png", "title": "Sleeve end", "sub": "plain · no cuff, no band, no button" },
+    { "file": "d-back.png", "title": "Back", "sub": "one panel · nothing on it" }
+  ],
+  "pattern": "pattern.jpg"
+}

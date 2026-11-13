@@ -48,7 +48,7 @@ function strip(y) {
     const x = 30 + i * cw;
     doc.rect(x, y, cw - 8, 64).fill("#f2f2f2");
     doc.fillColor(GREY).font("Helvetica").fontSize(11).text(k.toUpperCase(), x + 10, y + 8);
-    doc.fillColor(INK).font("Helvetica-Bold").fontSize(22).text(String(v).toUpperCase(), x + 10, y + 26, { width: cw - 24 });
+    doc.fillColor(INK).font("Helvetica-Bold").fontSize(22).text(v ? String(v).toUpperCase() : "______", x + 10, y + 26, { width: cw - 24 });
   });
   if (o.notes) { doc.fillColor(GREEN).font("Helvetica-Bold").fontSize(16).text(o.notes.toUpperCase(), 30, y + 74, { width: W - 60 }); return y + 104; }
   return y + 76;
@@ -69,6 +69,7 @@ doc.image(await img(cfg.views.front, 900), xs[0], y, { fit: [flatW, viewH - 30],
 caption(xs[0], y + viewH - 28, flatW, "FRONT");
 doc.image(await img(cfg.views.back, 900), xs[1], y, { fit: [flatW, viewH - 30], align: "center" });
 caption(xs[1], y + viewH - 28, flatW, "BACK");
+if (cfg.legend) doc.fillColor(INK).font("Helvetica-Bold").fontSize(13).text(cfg.legend, 40, H - 26, { width: W - 80 });
 const px = xs[1] + flatW + 50;
 doc.fillColor(GREY).font("Helvetica-Bold").fontSize(12).text("WEBSITE PHOTO", px, y);
 doc.image(await img(cfg.photos.front, 500), px, y + 18, { fit: [photoW * 1.6, (viewH - 60) / 2], align: "left" });

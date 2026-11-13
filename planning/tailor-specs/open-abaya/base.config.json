@@ -1,0 +1,14 @@
+{
+  "name": "Open Abaya — Maxi",
+  "order": { "fields": { "Size": "", "Colour": "", "Length": "Maxi", "Fabric": "Linen" }, "notes": "Cut to her measurements · see the table on page 3" },
+  "views": { "front": "v-front.png", "back": "v-back.png" },
+  "legend": "RED = armhole seam, SET-IN sleeve  ·  BLUE = underarm + side seam, one line  ·  GREEN = fold to the OUTSIDE (front band + cuff)",
+  "photos": { "front": "../../../website/public/catalog/abaya/abaya-burgundy-front-v3.jpg", "back": "../../../website/public/catalog/abaya/abaya-burgundy-back-v3.jpg" },
+  "details": [
+    { "file": "d-neck.png", "title": "Neck — no collar", "sub": "front edge folded to the OUTSIDE · goes round the back neck" },
+    { "file": "d-shoulder-flat.png", "title": "Shoulder", "sub": "drops 6 cm down the arm · set-in sleeve (red)" },
+    { "file": "d-cuff.png", "title": "Cuff", "sub": "deep · sleeve turned back to the OUTSIDE · no button" },
+    { "file": "d-hem.png", "title": "Front + hem", "sub": "band runs to the floor · plain hem · always open" }
+  ],
+  "pattern": "pattern.jpg"
+}
