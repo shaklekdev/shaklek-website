@@ -35,11 +35,20 @@ export type ConstructionNotes = {
 export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
   "oversized-shirt": {
     silhouette: "Relaxed straight-cut shirt, dropped shoulder, no waist shaping",
+    // Corrected 2026-11-13 against the catalogue photographs (founder): the
+    // back photo shows a ROUNDED shirt-tail hem with shorter sides, a straight
+    // back yoke, a centre-back box pleat and a buttoned sleeve placket. This
+    // entry said "Straight hem, equal front and back" and "Convertible collar",
+    // and it pins the flat prompts, so the generated back flats came out
+    // straight-hemmed too. The photograph wins.
     details: [
       { text: "Full-length front placket with buttons", view: "front" },
-      { text: "Convertible collar with stand" },
+      { text: "Pointed shirt collar on a collar stand, soft (light or no interfacing)" },
       { text: "Dropped shoulder seam sitting below the natural shoulder point" },
-      { text: "Straight hem, equal front and back" },
+      { text: "Straight back yoke, shoulder to shoulder", view: "back" },
+      { text: "Centre-back box pleat below the yoke", view: "back" },
+      { text: "Long sleeve: buttoned sleeve placket and buttoned cuff" },
+      { text: "Rounded shirt-tail hem, sides shorter than centre front and back" },
     ],
   },
   "structured-blouse": {
@@ -117,7 +126,7 @@ export const ITEM_CONSTRUCTION: Record<string, ConstructionNotes> = {
 export const OPTION_CONSTRUCTION: Record<string, string> = {
   // Shirt — render tier
   "Shirt:sleeve_length:short": "Short sleeve, finishing above the elbow, plain turned hem.",
-  "Shirt:sleeve_length:long": "Long sleeve, finishing at the wrist bone, plain turned hem.",
+  "Shirt:sleeve_length:long": "Long sleeve, finishing at the wrist bone. Sleeve end as in this piece's construction (cuff or plain turned hem).",
   "Shirt:garment_length:normal": "Standard body length, hem sitting at the high hip.",
   "Shirt:garment_length:longer": "Extended body length, hem sitting at the low hip.",
   // Shirt — premium tier (committed at its default, not customer-editable)
