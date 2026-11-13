@@ -180,6 +180,26 @@ export default async function OrdersDashboardPage() {
                           {item.fabric ? ` · ${item.fabric}` : ""}
                           {item.color ? ` · ${item.color}` : ""}
                           {item.size ? ` · Size ${item.size}` : ""}
+                          {/* FITTING STATUS (founder, 2026-11-13: "everything
+                              tracked in the admin dashboard"). Tailored lines
+                              are measured after payment: by the virtual
+                              fitting (/measure, writes this field) or at the
+                              home fitting. Staff-only page (requireStaff in
+                              the loader above). */}
+                          {item.size === "Tailored" ? (
+                            item.measurements ? (
+                              <div className="mt-1 rounded bg-emerald-50 px-2 py-1 text-xs text-emerald-900">
+                                <span className="font-medium">
+                                  {item.measurements.includes("Online fitting") ? "Virtual fitting received" : "Measurements received"}
+                                </span>
+                                <span className="block whitespace-pre-wrap text-emerald-800">{item.measurements}</span>
+                              </div>
+                            ) : (
+                              <div className="mt-1 inline-block rounded bg-amber-50 px-2 py-0.5 text-xs text-amber-800 ring-1 ring-inset ring-amber-200">
+                                Awaiting fitting
+                              </div>
+                            )
+                          ) : null}
                           {/* Per garment, because the promise is per garment.
                               A shirt and pants in one parcel each carry
                               their own remake. */}
