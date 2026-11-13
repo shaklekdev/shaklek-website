@@ -216,9 +216,9 @@ export default function SizePicker({
           <>
             {/* "Private home fitting" is the founder's phrase for the visit
                 (2026-11-12). Always "we", never "I". */}
-            <span className="font-medium text-text">Private home fitting in Dubai, free.</span>{" "}
-            After you order, we contact you on WhatsApp to book it. Outside
-            Dubai, we guide you to take your measurements yourself.
+            {/* Founder's words, 2026-11-13: "do we have to tell more?" -- no.
+                Outside Dubai is online fitting, coming (branch online-fitting). */}
+            <span className="font-medium text-text">Free home fitting in Dubai</span> upon confirmation.
           </>
         ) : (
           <>
@@ -425,8 +425,10 @@ export default function SizePicker({
           <details className="group mt-4 border border-border-strong">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
               <span>
+                {/* "Any special request?" (founder, 2026-11-13): "Make it your
+                    way" promised endless customising, which we do not offer. */}
                 <span className="font-display block text-[15px] text-text">
-                  Make it your way
+                  Any special request?
                 </span>
               </span>
               <span

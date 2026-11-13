@@ -2,12 +2,6 @@
 
 import type { DesignSpec } from "@/data/designSpec";
 
-const NOTE_EXAMPLES: Record<string, string> = {
-  Shirt: "e.g. a wider collar, no chest pocket, sleeves a little shorter",
-  Pants: "e.g. deeper pockets, a higher waist, no turn-up on the hem",
-  Skirt: "e.g. a longer hem, a side slit, a flatter waistband",
-  Dress: "e.g. a higher neckline, a looser waist, longer sleeves",
-};
 
 /**
  * The free-text request, step three of the founder's three.
@@ -23,7 +17,6 @@ const NOTE_EXAMPLES: Record<string, string> = {
  */
 export default function DetailField({
   spec,
-  category,
   onSpecChange,
 }: {
   spec: DesignSpec;
@@ -43,11 +36,10 @@ export default function DetailField({
        So: no top margin creating a gap, and a quiet label rather than another
        uppercase section heading. */
     <div className="mt-3">
-      <label
-        htmlFor="customization-notes"
-        className="mb-2 block text-[12px] text-text-3"
-      >
-        Tell us how you like your fit, or anything else (optional)
+      {/* No visible sentence (founder, 2026-11-13: "too much text"): the
+          heading above asks the question; the label stays for screen readers. */}
+      <label htmlFor="customization-notes" className="sr-only">
+        Any special request? (optional)
       </label>
       <textarea
         id="customization-notes"
@@ -57,7 +49,7 @@ export default function DetailField({
         }
         rows={2}
         maxLength={500}
-        placeholder={NOTE_EXAMPLES[category] ?? ""}
+        placeholder="Optional"
         className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
       />
 
