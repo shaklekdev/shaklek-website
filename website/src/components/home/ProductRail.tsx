@@ -80,6 +80,15 @@ export default function ProductRail({
                 yours" / "Choose a piece to begin"; "Custom made for you" was cut
                 for repeating the hero). It invites; the card button acts. */}
             <h2 className="text-lg text-text">{title}</h2>
+            {/* Founder, 2026-11-13: a way to the explanation without putting it
+                above the clothes. Jumps to the Concept section further down
+                (id="how-it-works" in Concept.tsx -- rename both or neither). */}
+            <a
+              href="#how-it-works"
+              className="mt-1 inline-block text-[12px] text-text-2 underline underline-offset-4 hover:text-text"
+            >
+              How it works
+            </a>
             {/* No subtitle on the home (founder, 2026-11-13, "too much text...
                 be strategic"): every card already says "Customise this piece".
                 Pass `subtitle` explicitly to show one. */}

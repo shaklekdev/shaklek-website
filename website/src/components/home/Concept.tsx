@@ -33,7 +33,7 @@ import { STEPS, STEPS_NOTE } from "@/data/homeContent";
  */
 export default function Concept() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-6 pt-12 sm:pt-16">
+    <section id="how-it-works" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-12 sm:pt-16">
       {/* HOME RHYTHM (founder, 2026-11-13: uneven gaps "look amateur"): every
           home section opens with pt-12 / sm:pt-16 and nothing else adds bottom
           padding, so the gap between any two sections is identical; title to
