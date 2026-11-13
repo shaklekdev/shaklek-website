@@ -205,6 +205,15 @@ const buildConfig = (isDev: boolean): NextConfig => ({
         ],
       },
       {
+        // Virtual fitting link carries the order id and a fitting token.
+        source: "/measure/:path*",
+        headers: [
+          { key: "Cache-Control", value: "no-store, private" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+        ],
+      },
+      {
         source: "/order-confirmed",
         headers: [
           { key: "Cache-Control", value: "no-store, private" },

@@ -59,6 +59,10 @@ const isAccountRoute = createRouteMatcher(["/account(.*)"]);
 //                     directory under public/, not the /catalog page.
 const OPEN_WHILE_SHUT = [
   "/coming-soon",
+  // Virtual fitting links are in customers' confirmation emails: a paid
+  // order's fitting must still work if the shop is ever shut again.
+  "/measure",
+  "/fitting/", // the self-hosted measuring engine /measure loads
   // ⚠️ /blog IS OPEN WHILE THE SHOP IS SHUT. Founder, 2026-09-12. Search
   // ranking takes weeks and a one-page site ranks for nothing, so the three
   // articles start earning authority now rather than in October. They were

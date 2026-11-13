@@ -32,6 +32,27 @@ export function issueOrderAccessToken(orderId: string): string {
   return createHmac("sha256", key).update(orderId).digest("hex").slice(0, 32);
 }
 
+/**
+ * A token that ONLY opens the virtual fitting for one order (security review
+ * 2026-11-13): it goes in the confirmation email, which is durable, so it must
+ * not also read the order (email, total) through GET /api/orders/[id], which
+ * accepts issueOrderAccessToken only. Domain-separated by the "fitting:" label.
+ */
+export function issueFittingToken(orderId: string): string {
+  const key = signingKey();
+  if (!key) return "";
+  return createHmac("sha256", key).update(`fitting:${orderId}`).digest("hex").slice(0, 32);
+}
+
+export function verifyFittingToken(orderId: string, token: unknown): boolean {
+  if (typeof token !== "string" || !token) return false;
+  const expected = issueFittingToken(orderId);
+  if (!expected) return false;
+  const a = Buffer.from(token);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
 export function verifyOrderAccessToken(orderId: string, token: unknown): boolean {
   if (typeof token !== "string" || !token) return false;
 

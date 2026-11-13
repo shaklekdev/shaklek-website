@@ -1,4 +1,4 @@
-import { issueOrderAccessToken } from "@/lib/orderAccess";
+import { issueFittingToken } from "@/lib/orderAccess";
 // Shared by /api/orders (fallback path, used when Stripe isn't configured)
 // and /api/webhooks/stripe (real path, fires once Stripe confirms payment).
 // Needs RESEND_API_KEY to actually send — logs instead when it's unset, so
@@ -262,7 +262,7 @@ export async function sendCustomerConfirmationEmail(
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.shaklek.com";
 
   const tailored = items.some((i) => i.size === "Tailored");
-  const token = orderId && tailored ? issueOrderAccessToken(orderId) : "";
+  const token = orderId && tailored ? issueFittingToken(orderId) : ""; // fitting-only, see orderAccess.ts
   const fittingUrl = token ? `${appUrl.replace(/\/$/, "")}/measure/${orderId}?t=${token}` : null;
   const { html, text } = buildCustomerConfirmation({ items, total, email, appUrl, ref, fittingUrl });
 

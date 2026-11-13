@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { and, eq, inArray } from "drizzle-orm";
 import { getDb, schema } from "@/db/client";
-import { verifyOrderAccessToken } from "@/lib/orderAccess";
+import { verifyFittingToken, verifyOrderAccessToken } from "@/lib/orderAccess";
 import { isUuid, readBoundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
 import { composeFitting, validateFitting } from "@/lib/onlineFitting";
 import { orderRef } from "@/lib/orderRef";
@@ -46,7 +46,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
   const t = (body as { t?: unknown })?.t;
-  if (!verifyOrderAccessToken(id, t)) return notFound;
+  // Either the fitting-only token (email link) or the order token (the
+  // confirmation page, which already holds it).
+  if (!verifyFittingToken(id, t) && !verifyOrderAccessToken(id, t)) return notFound;
 
   const fitting = validateFitting(body);
   if (!fitting) return NextResponse.json({ ok: false, error: "Invalid measurements" }, { status: 400 });
@@ -73,6 +75,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
 
   const text = composeFitting(fitting);
+  const [before] = await db
+    .select({ m: schema.orderItems.measurements })
+    .from(schema.orderItems)
+    .where(and(eq(schema.orderItems.orderId, id), inArray(schema.orderItems.size, ["Tailored"])));
+  const changed = !before || before.m !== text;
   const updated = await db
     .update(schema.orderItems)
     .set({ measurements: text })
@@ -90,7 +97,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   // Tell the team, so the WhatsApp confirmation happens. Order reference only
   // in the email: the numbers are on the order in /dashboard.
   const apiKey = process.env.RESEND_API_KEY;
-  if (apiKey && updated.length) {
+  // Only when the numbers changed: a resubmit of the same values sends nothing.
+  if (apiKey && updated.length && changed) {
     try {
       await fetch("https://api.resend.com/emails", {
         method: "POST",
