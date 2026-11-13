@@ -62,8 +62,8 @@ export type Estimate = {
 // would move a bust by ~15cm, too much to apply without a tape check.
 export const CALIBRATION: Record<keyof Estimate, number> = {
   bust: 1,
-  waist: 1.061,
-  hip: 1.0966,
+  waist: 1,
+  hip: 1,
   height: 1,
   shoulder: 1,
   sleeve: 1,
@@ -319,6 +319,9 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   const measuredHalf =
     Math.max(forearmHalf(L.lElbow, L.lWrist), forearmHalf(L.rElbow, L.rWrist)) * 1.3;
   const upperHalf = measuredHalf > 0 ? Math.min(measuredHalf, typicalHalf * 1.5) : typicalHalf;
+  // Rows where an arm had to be cut out: the front width there is a guess,
+  // so the circumference falls back to side depth + height (see below).
+  let armsTouched = false;
   const frontWidthPx = (y: number, cx: number) => {
     let sum = 0;
     let n = 0;
@@ -331,8 +334,11 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
         [L.rShoulder, L.rElbow, L.rWrist],
       ] as const) {
         const ax = armX(sh, el, wr, y + d);
+        const l0 = l;
+        const r0 = r;
         if (ax < cx) l = Math.max(l, ax + upperHalf);
         else r = Math.min(r, ax - upperHalf);
+        if (l - l0 > 2 || r0 - r > 2) armsTouched = true;
       }
       if (r > l) {
         sum += r - l + 1;
@@ -344,30 +350,48 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   const W = (fr: number) => frontWidthPx(fRow(fr), fCx(fr)) * fScale;
   const D = (fr: number) => smoothWidth(side, sRow(fr), sCx(fr)) * sScale;
 
-  const scan = (a: number, b: number, score: (fr: number) => number, pick: "max" | "min") => {
-    let best = a;
-    let bestV = pick === "max" ? -Infinity : Infinity;
-    const steps = 40;
-    for (let i = 0; i <= steps; i++) {
-      const fr = shoulderF + torso * (a + ((b - a) * i) / steps);
-      const val = score(fr);
-      if (!(val > 0)) continue;
-      if (pick === "max" ? val > bestV : val < bestV) {
-        bestV = val;
-        best = fr;
-      }
-    }
-    return best;
+  // LEVELS. Bust and hip = fullest point in PROFILE (side depth), which the
+  // arms never hide. Waist = ANSUR II waist height (omphalion) = 0.6017 x
+  // stature (sd 0.0135): the narrowest front width moved with the arms and
+  // put the founder's waist 6cm too high (waist-to-floor 108 vs tape 102).
+  // ALL THREE LEVELS ARE ANSUR II HEIGHTS, as a fraction of stature:
+  // chest 0.7194 (sd 0.0140), waist/omphalion 0.6017 (sd 0.0135), buttock
+  // 0.5118 (sd 0.0156). Searching for the "fullest point" instead was fooled
+  // by long loose hair down the back in profile (a slim test model read bust
+  // 106) and by arms; a fixed level is wrong by ~1.5% of height at most.
+  const bustF = 1 - 0.7194;
+  const waistF = 1 - 0.6017;
+  const hipLevelF = 1 - 0.5118;
+
+  // CIRCUMFERENCES: least-squares fits on ANSUR II women (1,986, public CSV,
+  // all in mm), not the ellipse. Two models per level:
+  //   depth + breadth   residual sd: bust 21, waist 18, hip 15 mm
+  //   depth + stature   residual sd: bust 27, waist 36, hip 35 mm
+  // Depth comes from the side photo. The front width is used ONLY when no arm
+  // had to be cut out of it; otherwise the depth + height model. Founder's
+  // tape (2026-11-13) read waist 76 where front-width-with-arms gave 90.
+  const MODELS = {
+    // maxDB / maxDS: 99th percentile of depth/breadth and depth/stature in
+    // ANSUR II. A side depth beyond them is not a body: it is hair hanging
+    // down the back or an arm swung forward (a slim test model with loose
+    // long hair read bust 106). Depth is capped there before the model.
+    bust: { c: 50.361, depth: 2.32, breadth: 1.198, c2: 153.757, depth2: 2.827, stature: 0.058, maxDB: 1.105, maxDS: 0.1932 },
+    waist: { c: 29.56, depth: 1.402, breadth: 1.776, c2: 19.098, depth2: 2.921, stature: 0.135, maxDB: 0.869, maxDS: 0.1853 },
+    hip: { c: 74.341, depth: 1.238, breadth: 1.861, c2: 74.845, depth2: 2.586, stature: 0.211, maxDB: 0.786, maxDS: 0.1834 },
   };
-
-  // Bands as fractions of the shoulder-to-hip-joint distance.
-  const bustF = scan(0.2, 0.5, D, "max");
-  const waistF = scan(0.5, 0.85, W, "min");
-  const hipLevelF = scan(0.85, 1.3, W, "max");
-
-  const bust = ellipsePerimeter(W(bustF), D(bustF));
-  const waist = ellipsePerimeter(W(waistF), D(waistF));
-  const hip = ellipsePerimeter(W(hipLevelF), D(hipLevelF));
+  const circ = (m: (typeof MODELS)["bust"], fr: number) => {
+    armsTouched = false;
+    const wMm = W(fr) * 10;
+    const frontOk = !armsTouched && wMm > 0;
+    const dMm = Math.min(D(fr) * 10, m.maxDS * heightCm * 10, frontOk ? m.maxDB * wMm : Infinity);
+    const mm = frontOk
+      ? m.c + m.depth * dMm + m.breadth * wMm
+      : m.c2 + m.depth2 * dMm + m.stature * heightCm * 10;
+    return mm / 10;
+  };
+  const bust = circ(MODELS.bust, bustF);
+  const waist = circ(MODELS.waist, waistF);
+  const hip = circ(MODELS.hip, hipLevelF);
 
   // Silhouette width at the shoulder joints' row (in an A-pose the arms have
   // already left the body there), not the joint-to-joint distance, which sits
@@ -380,7 +404,7 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
   // (sd 0.0111, i.e. about +/-2cm at 170cm), tighter than the photo.
   const sleeve = 0.3337 * heightCm;
 
-  const outseam = (fe.bottom - fRow(waistF)) * fScale;
+  const outseam = 0.6017 * heightCm; // ANSUR II waist height, see LEVELS above
 
   // Crotch: first row below the hip joints where the body centre is background
   // (the gap between the legs).

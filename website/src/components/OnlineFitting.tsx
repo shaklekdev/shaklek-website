@@ -384,7 +384,7 @@ export default function OnlineFitting({
                 ) : (
                   <>
                     <li>Turn to your right</li>
-                    <li>Arms down</li>
+                    <li>Arms down, hair tied back</li>
                   </>
                 )}
                 <li>Head to feet in the photo</li>
