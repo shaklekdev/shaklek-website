@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { type Estimate, MeasureError, type Problem, type View, estimate } from "@/lib/bodyMeasure";
+import { BRA_BANDS, BRA_CUPS, bustFromBra } from "@/lib/onlineFitting";
 
 // ONLINE FITTING, the screen. Founder, 2026-11-13: "now your highest priority
 // is to make that fitting online because many people don't want home
@@ -41,9 +42,10 @@ export type OnlineFittingResult = {
   estimate: Estimate;
   topSize: string;
   trouserSize: string;
+  bra: string; // "75B" or ""
 };
 
-type Step = "intro" | "height" | "front" | "side" | "working" | "result";
+type Step = "height" | "front" | "side" | "working" | "result";
 
 // Ranges for her corrections: bust/waist/hip match FIELD_LABELS in
 // lib/measurements.ts; the rest are wide adult ranges. Out of range blocks
@@ -212,7 +214,11 @@ export default function OnlineFitting({
   onDone: (r: OnlineFittingResult) => void;
   onClose: () => void;
 }) {
-  const [step, setStep] = useState<Step>("intro");
+  // No intro screen (founder, 2026-11-13: "I agree" felt like asking for
+  // something private). The privacy line sits under the photo buttons.
+  const [step, setStep] = useState<Step>("height");
+  const [braBand, setBraBand] = useState("");
+  const [braCup, setBraCup] = useState("");
   const [height, setHeight] = useState("");
   const [topSize, setTopSize] = useState("");
   const [trouserSize, setTrouserSize] = useState("");
@@ -252,6 +258,10 @@ export default function OnlineFitting({
     };
   }, [onClose]);
 
+  useEffect(() => {
+    void getLandmarker().catch(() => {});
+  }, []);
+
   const h = Number(height);
   const heightOk = Number.isFinite(h) && h >= 130 && h <= 210;
 
@@ -262,6 +272,9 @@ export default function OnlineFitting({
     try {
       const [fv, sv] = await Promise.all([analyse(front), analyse(sideFile)]);
       const e = estimate(fv, sv, h);
+      // A bra size she gave beats the photo bust (its weakest number).
+      const fromBra = braBand && braCup ? bustFromBra(Number(braBand), braCup) : null;
+      if (fromBra) e.bust = fromBra;
       setEst(e);
       setEdits(Object.fromEntries(FIELDS.map((f) => [f.key, e[f.key] ? String(e[f.key]) : ""])));
       setStep("result");
@@ -304,14 +317,14 @@ export default function OnlineFitting({
       if (!inRange(f, edits[f.key])) return;
       out[f.key] = edits[f.key]?.trim() ? Math.round(Number(edits[f.key])) : 0;
     }
-    onDone({ estimate: out, topSize, trouserSize });
+    onDone({ estimate: out, topSize, trouserSize, bra: braBand && braCup ? `${braBand}${braCup}` : "" });
   }
 
   const btn = "flex min-h-11 w-full items-center justify-center bg-text px-6 text-sm text-white disabled:opacity-40";
   const btn2 = "flex min-h-11 w-full items-center justify-center border border-border-strong px-6 text-sm text-text";
   const label = "text-[11px] uppercase tracking-[0.14em] text-text-2";
 
-  const BACK: Partial<Record<Step, Step>> = { height: "intro", front: "height", side: "front", result: "side" };
+  const BACK: Partial<Record<Step, Step>> = { front: "height", side: "front", result: "side" };
   const STEP_NO: Partial<Record<Step, [number, string]>> = {
     height: [1, "Height"],
     front: [2, "Front photo"],
@@ -354,7 +367,7 @@ export default function OnlineFitting({
   );
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Online fitting" className="fixed inset-0 z-[70] flex items-end justify-center bg-black/40 sm:items-center">
+    <div role="dialog" aria-modal="true" aria-label="Virtual fitting" className="fixed inset-0 z-[70] flex items-end justify-center bg-black/40 sm:items-center">
       <div className="relative max-h-[92vh] w-full overflow-y-auto bg-white px-6 pb-8 pt-12 sm:max-w-md">
         <button type="button" onClick={onClose} aria-label="Close" className="absolute right-2 top-1 z-10 flex h-11 w-11 items-center justify-center text-2xl text-text-2">
           ×
@@ -365,22 +378,6 @@ export default function OnlineFitting({
         {/* LEAST TEXT (founder, 2026-11-13: "people don't like reading
             anymore. concise steps, bullet points"). Keep every screen to a
             title, at most three short bullets and one button. */}
-        {step === "intro" && (
-          <>
-            <p className="font-display text-[22px] leading-tight text-text">Online fitting</p>
-            <ol className="mt-4 space-y-1.5 text-[14px] text-text">
-              <li>1. Your height</li>
-              <li>2. A photo from the front</li>
-              <li>3. A photo from the side</li>
-            </ol>
-            <p className="mt-4 text-[12px] text-text-3">Fitted clothes · bare feet · plain wall</p>
-            <p className="mt-6 text-[12px] text-text-2">Your photos stay on your phone. Never sent, never stored.</p>
-            <button type="button" className={`mt-3 ${btn}`} onClick={() => { setStep("height"); void getLandmarker().catch(() => {}); }}>
-              I agree, start
-            </button>
-          </>
-        )}
-
         {step === "height" && (
           <>
             <p className="font-display text-[22px] leading-tight text-text">Your height</p>
@@ -411,6 +408,22 @@ export default function OnlineFitting({
                 <select value={trouserSize} onChange={(e) => setTrouserSize(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
                   <option value="">Not sure</option>
                   {TROUSERS.map((s) => <option key={s}>{s}</option>)}
+                </select>
+              </label>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <label className="block text-[12px] text-text-2">
+                Bra (EU / UK)
+                <select value={braBand} onChange={(e) => setBraBand(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
+                  <option value="">Not sure</option>
+                  {BRA_BANDS.map((b) => <option key={b.eu} value={b.eu}>{b.eu} / {b.uk}</option>)}
+                </select>
+              </label>
+              <label className="block text-[12px] text-text-2">
+                Cup
+                <select value={braCup} onChange={(e) => setBraCup(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
+                  <option value="">–</option>
+                  {BRA_CUPS.map((c) => <option key={c}>{c}</option>)}
                 </select>
               </label>
             </div>
@@ -465,7 +478,9 @@ export default function OnlineFitting({
                 Choose from my photos
               </button>
             </div>
-            <p className="mt-3 text-center text-[12px] text-text-3">Alone? Use your camera&apos;s timer.</p>
+            <p className="mt-3 text-center text-[12px] text-text-3">
+              Alone? Use your camera&apos;s timer. Photos stay on your phone.
+            </p>
           </>
         )}
 
@@ -510,16 +525,5 @@ export default function OnlineFitting({
         )}
       </div>
     </div>
-  );
-}
-
-/** The line the tailor reads, in the order's measurements string (after bust/waist/hip/height). */
-export function onlineFittingNote(r: OnlineFittingResult): string {
-  const e = r.estimate;
-  const sizes = [r.topSize && `top ${r.topSize}`, r.trouserSize && `trousers EU ${r.trouserSize}`].filter(Boolean).join(", ");
-  return (
-    `Online fitting (estimated, to confirm on WhatsApp): shoulders ${e.shoulder}cm; arm ${e.sleeve}cm; ` +
-    `waist to floor ${e.outseam}cm; inside leg ${e.inseam ? `${e.inseam}cm` : "to measure"}` +
-    (sizes ? `; usual size ${sizes}` : "")
   );
 }

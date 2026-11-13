@@ -1,3 +1,4 @@
+import { issueOrderAccessToken } from "@/lib/orderAccess";
 // Shared by /api/orders (fallback path, used when Stripe isn't configured)
 // and /api/webhooks/stripe (real path, fires once Stripe confirms payment).
 // Needs RESEND_API_KEY to actually send — logs instead when it's unset, so
@@ -170,8 +171,11 @@ export function buildCustomerConfirmation(opts: {
   email: string;
   appUrl: string;
   ref: string | null;
+  // Virtual fitting link for this order (/measure/[id]?t=...), set when an
+  // item is Tailored. Founder, 2026-11-13: fitting happens AFTER payment.
+  fittingUrl?: string | null;
 }): { html: string; text: string } {
-  const { items, total, email, appUrl, ref } = opts;
+  const { items, total, email, appUrl, ref, fittingUrl } = opts;
   // ⚠️ THROUGH buildEmail, NOT HAND-BUILT HTML. Until 2026-09-16 this function
   // carried its own <div> shell with its own font stack, its own greys and a
   // 480px width, while every waitlist email came out of lib/mail.ts looking
@@ -217,6 +221,9 @@ export function buildCustomerConfirmation(opts: {
     eyebrow: ref ? `Order reference ${ref}` : undefined,
     lines: [
       `Thank you. Your ${one ? "piece is" : "pieces are"} on ${one ? "its" : "their"} way to being made.`,
+      ...(fittingUrl
+        ? ["Your free fitting: take your measurements in 2 minutes with our virtual fitting below, or message us on WhatsApp (+971 50 476 6769) to book a home fitting in Dubai."]
+        : []),
     ],
     rows,
     totals,
@@ -224,7 +231,7 @@ export function buildCustomerConfirmation(opts: {
     // SITE. "strive to" and "approximately" match the terms of sale, which call
     // this an estimate and not a guarantee, and delivery is UAE-wide since
     // 2026-11-01 (founder); only the measurement visit is Dubai-only.
-    button: undefined,
+    button: fittingUrl ? { label: "Start your virtual fitting", url: fittingUrl } : undefined,
     note: {
       lines: [
         "We will contact you within 24 hours to confirm your details. Your piece is then made for you with special care; allow up to 3 weeks from confirmation, and delivery is included anywhere in the UAE.",
@@ -254,7 +261,10 @@ export async function sendCustomerConfirmationEmail(
   const apiKey = process.env.RESEND_API_KEY;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.shaklek.com";
 
-  const { html, text } = buildCustomerConfirmation({ items, total, email, appUrl, ref });
+  const tailored = items.some((i) => i.size === "Tailored");
+  const token = orderId && tailored ? issueOrderAccessToken(orderId) : "";
+  const fittingUrl = token ? `${appUrl.replace(/\/$/, "")}/measure/${orderId}?t=${token}` : null;
+  const { html, text } = buildCustomerConfirmation({ items, total, email, appUrl, ref, fittingUrl });
 
   if (!apiKey) {
     // The address is deliberately NOT interpolated here. Its sibling

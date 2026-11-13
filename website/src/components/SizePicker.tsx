@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import OnlineFitting, { type OnlineFittingResult, onlineFittingNote } from "@/components/OnlineFitting";
 import { SIZE_CHART, sizeLabel, sizesForCategory } from "@/data/sizeChart";
 import { fitNotesForCategory } from "@/data/fitNotes";
 import type { SizeMode } from "@/data/designSpec";
@@ -73,37 +72,6 @@ export default function SizePicker({
   detailSlot?: React.ReactNode;
 }) {
   const [fields, setFields] = useState<MeasurementFields>(EMPTY_FIELDS);
-  // ONLINE FITTING (2026-11-13, founder: "many people don't want home
-  // fitting"). Tailored now offers two ways: we come to you (Dubai), or she
-  // measures online with two photos. `online` holds the result once done.
-  const [method, setMethod] = useState<"home" | "online">("home");
-  const [fittingOpen, setFittingOpen] = useState(false);
-  const [online, setOnline] = useState<OnlineFittingResult | null>(null);
-
-  function applyOnline(r: OnlineFittingResult) {
-    setOnline(r);
-    setFittingOpen(false);
-    const next: MeasurementFields = {
-      bust: String(r.estimate.bust),
-      waist: String(r.estimate.waist),
-      hip: String(r.estimate.hip),
-      height: String(r.estimate.height),
-      notes: onlineFittingNote(r),
-    };
-    setFields(next);
-    onMeasurementsChange(composeMeasurements(next));
-  }
-
-  function chooseMethod(m: "home" | "online") {
-    setMethod(m);
-    if (m === "home" && online) {
-      // Home fitting takes the measurements in person; drop the estimate.
-      setOnline(null);
-      setFields(EMPTY_FIELDS);
-      onMeasurementsChange("");
-    }
-    if (m === "online" && !online) setFittingOpen(true);
-  }
   // Errors only surface once a field has been visited, so the form doesn't
   // open covered in red before anyone has typed anything.
   const [touched, setTouched] = useState<Partial<Record<string, boolean>>>({});
@@ -243,60 +211,21 @@ export default function SizePicker({
           SINON COMMENT ON MESURE LES GENS". Dubai only for the visit (her
           2026-09-14 rule); elsewhere we guide them on WhatsApp. Still no
           booking system: we reach out AFTER the order. */}
-      {sizeMode === "tailored" ? (
-        <div className="mt-3">
-          {/* No question above these two (founder, 2026-11-13: "too much
-              text"); the two buttons say it. */}
-          <div className="grid grid-cols-2 gap-1.5 lg:max-w-xs">
-            {([
-              ["home", "Home fitting"],
-              ["online", "Online fitting"],
-            ] as const).map(([m, label]) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => chooseMethod(m)}
-                aria-pressed={method === m}
-                className={`flex min-h-11 items-center justify-center border px-2 py-2 text-center text-xs transition-colors lg:min-h-0 lg:py-1.5 lg:text-[11px] ${
-                  method === m
-                    ? "border-text bg-white text-text"
-                    : "border-border bg-white text-text-3 hover:border-border-strong hover:text-text"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <p className="mt-3 text-[13px] leading-relaxed text-text-2">
-            {method === "home" ? (
-              <>
-                {/* Founder's words, 2026-11-13: "do we have to tell more?" -- no. */}
-                <span className="font-medium text-text">Free home fitting in Dubai</span> upon confirmation.
-              </>
-            ) : online ? (
-              <>
-                <span className="font-medium text-text">Measurements added.</span>{" "}
-                Bust {online.estimate.bust} · waist {online.estimate.waist} · hip {online.estimate.hip} cm.{" "}
-                <button type="button" onClick={() => setFittingOpen(true)} className="underline underline-offset-4">
-                  Redo
-                </button>
-              </>
-            ) : (
-              <>
-                <span className="font-medium text-text">Two photos and your height.</span>{" "}
-                <button type="button" onClick={() => setFittingOpen(true)} className="underline underline-offset-4">
-                  Start online fitting
-                </button>
-              </>
-            )}
-          </p>
-        </div>
-      ) : (
-        <p className="mt-3 text-[13px] leading-relaxed text-text-2">
-          Or choose <span className="font-medium text-text">Tailored</span>: home or online fitting.
-        </p>
-      )}
-      {fittingOpen ? <OnlineFitting onDone={applyOnline} onClose={() => setFittingOpen(false)} /> : null}
+      {/* ⚠️ NOTHING TO FILL BEFORE THE ORDER (founder, 2026-11-13: friction
+          before the order loses customers). Tailored = we measure AFTER
+          payment, free: home fitting in Dubai, or the virtual fitting
+          (/measure/[id], linked from the confirmation page and email). */}
+      <p className="mt-3 text-[13px] leading-relaxed text-text-2">
+        {sizeMode === "tailored" ? (
+          <>
+            <span className="font-medium text-text">Free after payment:</span> home fitting in Dubai or virtual fitting.
+          </>
+        ) : (
+          <>
+            Or choose <span className="font-medium text-text">Tailored</span>: free fitting after payment.
+          </>
+        )}
+      </p>
       {/* No helper line under this toggle. It said "Cut to your measurements,
           at no extra cost" and "Pick XS to XXL, or switch to Tailored..." --
           both of which the two buttons already say, one of them with the word

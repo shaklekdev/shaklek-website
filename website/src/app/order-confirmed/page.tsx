@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import Header from "@/components/Header";
+import { WHATSAPP_URL } from "@/lib/contact";
 import { useCart } from "@/lib/CartContext";
 import type { CartItem } from "@/lib/CartContext";
 
@@ -203,6 +204,36 @@ function OrderConfirmedContent() {
       </div>
 
       <p className="mt-4 text-right font-display text-xl text-text">Total AED {order.total}</p>
+
+      {/* YOUR FREE FITTING, AFTER PAYMENT (founder, 2026-11-13). Sizing moved
+          out of the purchase path so nobody is lost to it; this is where it is
+          picked up. Two clear choices, both free. Shown only for Tailored
+          lines and only with the order's access token (the online fitting
+          link needs it to save the numbers on this order). */}
+      {orderId && order.items.some((i) => i.size === "Tailored") ? (
+        <div className="mt-8 border border-border-strong p-5 text-left">
+          <p className="font-display text-[19px] text-text">Your free fitting</p>
+          <p className="mt-1 text-[13px] text-text-2">Choose one. We confirm your measurements before cutting.</p>
+          <div className="mt-4 space-y-2">
+            {accessToken ? (
+              <Link
+                href={`/measure/${orderId}?t=${encodeURIComponent(accessToken)}`}
+                className="flex min-h-11 w-full items-center justify-center bg-text px-6 text-sm text-white"
+              >
+                Virtual fitting · 2 minutes
+              </Link>
+            ) : null}
+            <a
+              href={`${WHATSAPP_URL}?text=${encodeURIComponent(`Hello, I would like to book my home fitting. Order ${orderRef(orderId)}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-11 w-full items-center justify-center border border-border-strong px-6 text-sm text-text"
+            >
+              Home fitting in Dubai · WhatsApp
+            </a>
+          </div>
+        </div>
+      ) : null}
 
       <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">
         <strong className="text-text">What happens next:</strong> we
