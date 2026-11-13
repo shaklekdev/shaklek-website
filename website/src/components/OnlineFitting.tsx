@@ -318,7 +318,9 @@ export default function OnlineFitting({
     side: [3, "Side photo"],
   };
   const header = (
-    <div className="absolute left-0 right-0 top-0 flex h-12 items-center justify-between px-2">
+    // pointer-events-none on the bar: it spans the top of the sheet and sat on
+    // top of the close button, so × did nothing (founder, 2026-11-13).
+    <div className="pointer-events-none absolute left-0 right-0 top-0 flex h-12 items-center justify-between px-2">
       {BACK[step] ? (
         <button
           type="button"
@@ -326,7 +328,7 @@ export default function OnlineFitting({
             setError(null);
             setStep(BACK[step]!);
           }}
-          className="flex h-11 items-center px-3 text-[13px] text-text-2"
+          className="pointer-events-auto flex h-11 items-center px-3 text-[13px] text-text-2"
         >
           ← Back
         </button>
@@ -354,7 +356,7 @@ export default function OnlineFitting({
   return (
     <div role="dialog" aria-modal="true" aria-label="Online fitting" className="fixed inset-0 z-[70] flex items-end justify-center bg-black/40 sm:items-center">
       <div className="relative max-h-[92vh] w-full overflow-y-auto bg-white px-6 pb-8 pt-12 sm:max-w-md">
-        <button type="button" onClick={onClose} aria-label="Close" className="absolute right-2 top-1 flex h-11 w-11 items-center justify-center text-2xl text-text-2">
+        <button type="button" onClick={onClose} aria-label="Close" className="absolute right-2 top-1 z-10 flex h-11 w-11 items-center justify-center text-2xl text-text-2">
           ×
         </button>
         {fileInputs}
