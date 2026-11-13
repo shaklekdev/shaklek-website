@@ -2,7 +2,6 @@ import LegalPage from "@/components/LegalPage";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
-import { WHATSAPP_URL } from "@/lib/contact";
 
 export const metadata: Metadata = pageMetadata({
   title: "Delivery",
@@ -91,15 +90,6 @@ export default function ShippingPage() {
         Anything else, write to{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
-        </a>{" "}
-        or message us on{" "}
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          WhatsApp
         </a>
         .
       </p>

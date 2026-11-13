@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 import { BASE_PRICE_BY_CATEGORY } from "@/data/catalog";
-import { WHATSAPP_URL } from "@/lib/contact";
 
 export const metadata: Metadata = pageMetadata({
   title: "Questions",
@@ -66,15 +65,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Do I have to know my measurements?",
     a: (
       <>
-        No. Choose Tailored and, after you order, we contact you on{" "}
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          WhatsApp
-        </a>{" "}
+        No. Choose Tailored and, after you order, we contact you on WhatsApp{" "}
         and come to you in Dubai to take your measurements, free, before
         your piece is made. Outside Dubai, we guide you to take them yourself. If you already have
         your own, send them the same way or in the notes on your order, and we
@@ -178,15 +169,6 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         Our client team is on{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
-        </a>{" "}
-        and{" "}
-        <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          WhatsApp
         </a>
         , and we confirm every order with you before your piece is made.
       </>

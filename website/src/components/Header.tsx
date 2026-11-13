@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import BrandLockup from "@/components/BrandLockup";
 import BagOfferBar from "@/components/BagOfferBar";
-import { WHATSAPP_HANDLE, WHATSAPP_URL } from "@/lib/contact";
+
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
 // onto the home page. Two reasons, both the founder's: it was a click that led
@@ -141,24 +141,26 @@ export default function Header() {
 
             Same number as the footer. wa.me opens WhatsApp on a phone and
             web.whatsapp.com on a desktop, so one link covers both. */}
+        {/* ⚠️ EMAIL, NOT WHATSAPP, BEFORE THE ORDER (founder, 2026-11-13).
+            wa.me/<number> showed her personal number to anyone who tapped;
+            the @shaklek alias does not hide it. WhatsApp is offered only
+            after payment (confirmation page, email, account, parcel card). */}
         <a
-          href={WHATSAPP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="WhatsApp" // founder review 2026-11-11: icon-only below 640px
+          href="mailto:hello@shaklek.com"
+          aria-label="Email us" // icon-only below 640px
           /* before:-inset-[11px] grows the 22px icon's HIT AREA to 44px without
              moving a pixel -- founder review 2026-11-11 (mobile tap targets). */
           className="relative flex items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2"
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <rect x="6" y="2" width="12" height="20" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M10.5 18.5h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M3.5 6l8.5 7 8.5-7" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
           </svg>
           <span className="hidden leading-tight sm:block">
             <span className="block text-[10px] tracking-wide text-text-3 uppercase">
               Need help? Message us
             </span>
-            <span className="block text-[13px] font-medium">WhatsApp {WHATSAPP_HANDLE}</span>
+            <span className="block text-[13px] font-medium">hello@shaklek.com</span>
           </span>
         </a>
         {/* items-CENTER, not items-start. The lockup is three stacked pieces --
