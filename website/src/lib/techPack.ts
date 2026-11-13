@@ -86,7 +86,9 @@ function flatsFor(item: SpecItem, comboKey: string | null) {
 function readFlat(rel: string | undefined): Buffer | null {
   if (!rel) return null;
   try {
-    return fs.readFileSync(path.join(process.cwd(), rel));
+    // Static "internal/flats" prefix so Next's file tracer can see exactly which
+    // folder this reads; a fully dynamic path makes it trace the whole project.
+    return fs.readFileSync(path.join(process.cwd(), "internal", "flats", path.basename(rel)));
   } catch {
     return null;
   }
