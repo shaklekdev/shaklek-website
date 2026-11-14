@@ -40,7 +40,7 @@ export function includedLines(category: string | null | undefined): IncludedLine
 
 /** Checkout, under the order lines, before paying. */
 export const INCLUDED_CHECKOUT_LINE =
-  "All included: private home fitting in Dubai or virtual fitting, every customisation, linen, UAE delivery and one alteration.";
+  "All included: private home fitting in Dubai or virtual fitting, every customisation, UAE delivery and one alteration.";
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */
 export const INCLUDED_HOME_LINE =
