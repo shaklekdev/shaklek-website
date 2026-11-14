@@ -70,7 +70,7 @@ export default function ProductRail({
           sticky header, which would otherwise cover the heading. */}
       <section
         id="catalog"
-        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-10 pb-4 sm:pt-12"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-6 pb-4 sm:pt-12"
       >
         {/* The price claim sits on the RIGHT, stacked, so the left column is
             only the heading (founder, 2026-11-12: "too much text on the left"). */}

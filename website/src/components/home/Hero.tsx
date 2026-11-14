@@ -51,7 +51,7 @@ export default function Hero({ compact = false }: { compact?: boolean }) {
         className={`relative mx-auto flex w-full max-w-3xl flex-col justify-center px-6 text-center ${
           compact
             ? "min-h-[200px] py-7 sm:min-h-[34vh] sm:py-8"
-            : "min-h-[240px] py-8 sm:min-h-[40vh] sm:py-10"
+            : "min-h-[150px] py-5 sm:min-h-[40vh] sm:py-10"
         }`}
       >
         {/* One line. The founder replaced "Your look, your way." plus a

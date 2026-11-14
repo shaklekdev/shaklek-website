@@ -154,7 +154,8 @@ if (TOPS[kind]) {
   });
   rows = TOPS[kind].rows || [["1", "Height"], ["2", "Bust (full, around)"], ["3", "Waist (full, around)"], ["4", "Hip (full, around)"], ["5", "Shoulder width (shoulder to shoulder)"], ["6", "Arm length (shoulder to wrist)"], ["7", "Upper arm (around)"], ["8", "Wrist (around)"], ["9", "Neck (around)"], ["10", "Length wanted (shoulder to hem)"]];
 }
-// TABLE
+// TABLE — now on its own page (HER MEASUREMENTS in tailor-sheet.mjs); kept only with WITH_TABLE=1.
+if (process.env.WITH_TABLE) {
 const tx = 1650, ty = 200;
 T(tx, ty, "HER MEASUREMENTS — full body (cm)", { size: 36, anchor: "start" });
   T(tx, ty + 34, "measured on her · the tailor adds the ease", { size: 24, anchor: "start", bold: false, color: "#666" });
@@ -165,10 +166,11 @@ rows.forEach(([k, n], i) => {
   const v = values[k];
   T(tx + 640, y, v != null ? String(v) : "______", { size: 30, anchor: "end", color: v != null ? INK : "#999" });
 });
+}
 const H = TOPS[kind] ? 1560 : 240 + L * s + 160;
 const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg"><defs><marker id="a" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="${DIM}"/></marker></defs><rect width="100%" height="100%" fill="white"/>
 <text x="40" y="70" font-family="Helvetica" font-weight="bold" font-size="52" fill="${INK}">${title} — PATTERN</text>
-<text x="40" y="118" font-family="Helvetica" font-size="30" fill="${DIM}">shape of the pieces · her full body measurements in the table · NO seam allowance drawn · green = fold</text>${o}
+<text x="40" y="118" font-family="Helvetica" font-size="30" fill="${DIM}">shape of the pieces · her measurements: see HER MEASUREMENTS page · NO seam allowance drawn · green = fold</text>${o}
 <text x="40" y="${H - 40}" font-family="Helvetica" font-weight="bold" font-size="32" fill="${INK}">${TOPS[kind]?.layout === "dress" ? "100% linen · light interfacing in facings only" : TOPS[kind]?.rows ? "100% linen · light interfacing in waistband only" : TOPS[kind] ? "100% linen · light interfacing in collar, stand and cuffs only" : "100% linen · NO interfacing anywhere · it must hang and fall"}</text></svg>`;
 await sharp(Buffer.from(svg)).jpeg({ quality: 92 }).toFile(out);
 console.log("wrote", out);

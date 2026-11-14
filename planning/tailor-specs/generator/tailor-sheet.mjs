@@ -19,6 +19,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { MEASURES, NEEDS, DESIGN, LANDMARK } from "./specs.mjs";
 const require = createRequire(new URL("../../../website/", import.meta.url));
 const PDFDocument = require("pdfkit");
 const sharp = require("sharp");
@@ -37,7 +38,7 @@ const GREEN = "#1e8449", INK = "#111111", GREY = "#777777";
 function header(title, page) {
   doc.rect(0, 0, W, 54).fill(INK);
   doc.fillColor("white").font("Helvetica-Bold").fontSize(24).text(`${cfg.name.toUpperCase()}  —  ${title}`, 30, 16);
-  if (page) doc.fontSize(14).text(`${page} / 3`, W - 90, 22);
+
 }
 function strip(y) {
   const o = cfg.order;
@@ -59,7 +60,7 @@ function caption(x, y, w, title, sub) {
 }
 
 // PAGE 1 — views
-header("FRONT / BACK", 1);
+header("FRONT / BACK", "");
 let y = strip(70);
 const viewH = H - y - 40;
 const flatW = viewH / 1.5;
@@ -74,6 +75,33 @@ const px = xs[1] + flatW + 50;
 doc.fillColor(GREY).font("Helvetica-Bold").fontSize(12).text("WEBSITE PHOTO", px, y);
 doc.image(await img(cfg.photos.front, 500), px, y + 18, { fit: [photoW * 1.6, (viewH - 60) / 2], align: "left" });
 doc.image(await img(cfg.photos.back, 500), px, y + 30 + (viewH - 60) / 2, { fit: [photoW * 1.6, (viewH - 60) / 2], align: "left" });
+
+// OPTIONS — every customisation the customer can choose, as the website shows it.
+const CAT = fs.readFileSync(new URL("../../../website/src/data/catalog.ts", import.meta.url), "utf8");
+const slug = cfg.slug || path.basename(base);
+const seg = CAT.slice(CAT.indexOf(`slug: "${slug}"`));
+const category = (seg.match(/category: "([A-Za-z]+)"/) || [])[1];
+{
+  const ci = seg.slice(seg.indexOf("colorImages"), seg.indexOf("comboImages"));
+  const colour = /Navy:/.test(ci) ? "Navy" : "Ivory";
+  const baseFront = (ci.slice(ci.indexOf(colour + ":")).match(/front: "([^"]+)"/) || [])[1];
+  const cc = seg.slice(seg.indexOf("comboImages"));
+  const block = cc.slice(cc.indexOf(colour + ":"), cc.indexOf("},\n      },", cc.indexOf(colour + ":")) + 1);
+  const combos = [...block.matchAll(/"([a-z0-9]+:[a-z0-9]+)": \{ front: "([^"]+)"/g)].map((m) => [m[1], m[2]]);
+  const DEF = { Shirt: "long:normal", Pants: "straight:full", Dress: "round:maxi", Abaya: slug === "buttoned-abaya" ? "maxi:4" : "maxi:narrow" };
+  const all = [[cfg.defaultCombo || DEF[category], baseFront], ...combos.filter(([k]) => k !== (cfg.defaultCombo || DEF[category]))];
+  const NAMES = { long: "LONG SLEEVE", short: "SHORT SLEEVE", normal: "NORMAL LENGTH", longer: "LONGER", straight: "STRAIGHT LEG", wide: "WIDE", full: "FULL LENGTH", cropped: "CROPPED", round: "ROUND NECK", v: "V NECK", maxi: "MAXI", midi: "MIDI", narrow: "NARROW SLEEVE", "4": "4 CLOSURES", "5": "5 CLOSURES" };
+  const label = (k) => k.split(":").map((v) => (category === "Abaya" && v === "wide" ? "WIDE SLEEVE" : category === "Pants" && v === "wide" ? "WIDE LEG" : NAMES[v] || v.toUpperCase())).join(" + ");
+  doc.addPage(); header("OPTIONS — every choice", "");
+  const n = all.length, cw2 = (W - 80) / n, ph = Math.min(H - 170, (cw2 - 16) * 1.5);
+  for (let i = 0; i < n; i++) {
+    const [k, f] = all[i]; if (!f) continue;
+    const x = 40 + i * cw2;
+    doc.image(await img("../../../website/public" + f, 600), x + 8, 70, { fit: [cw2 - 16, ph], align: "center" });
+    doc.fillColor(i === 0 ? INK : GREEN).font("Helvetica-Bold").fontSize(15).text(label(k), x, 80 + ph, { width: cw2, align: "center" });
+    if (i === 0) doc.fillColor(GREY).font("Helvetica").fontSize(11).text("(default)", x, 100 + ph, { width: cw2, align: "center" });
+  }
+}
 
 // OPTIONAL PAGE — FIT CORRECTIONS after a test piece came back wrong.
 // cfg.fit = { wrong: "photo of the test piece", rules: ["FITTED BODICE — ...", ...] }
@@ -98,7 +126,7 @@ if (cfg.fit) {
 }
 
 // PAGE 2 — details
-doc.addPage(); header("DETAILS", 2);
+doc.addPage(); header("DETAILS", "");
 const d = cfg.details, cols = 3, rows = Math.ceil(d.length / cols);
 const cw = (W - 80) / cols, ch = (H - 90) / rows;
 for (let i = 0; i < d.length; i++) {
@@ -107,8 +135,45 @@ for (let i = 0; i < d.length; i++) {
   caption(x, yy + ch - 48, cw, d[i].title, d[i].sub);
 }
 
+// DESIGN MEASUREMENTS — the garment's own numbers, per option.
+function table(title, sub, headers, rowsT, widths) {
+  doc.addPage(); header(title, "");
+  doc.fillColor("#c0392b").font("Helvetica-Bold").fontSize(13).text(sub, 40, 64, { width: W - 80 });
+  let y = 108; const xs0 = [40]; widths.forEach((w, i) => xs0.push(xs0[i] + w));
+  doc.font("Helvetica-Bold").fontSize(12).fillColor(GREY);
+  headers.forEach((h, i) => doc.text(h, xs0[i], y, { width: widths[i] - 8 }));
+  y += 20;
+  for (const row of rowsT) {
+    const hgt = Math.max(...row.map((c, i) => doc.font(i === 1 ? "Helvetica-Bold" : "Helvetica").fontSize(13).heightOfString(String(c ?? ""), { width: widths[i] - 8 }))) + 10;
+    if (y + hgt > H - 30) { doc.addPage(); header(title, ""); y = 70; }
+    doc.moveTo(40, y - 4).lineTo(W - 40, y - 4).lineWidth(0.5).strokeColor("#dddddd").stroke();
+    row.forEach((c, i) => doc.fillColor(i === 0 ? GREEN : INK).font(i === 1 || i === 0 ? "Helvetica-Bold" : "Helvetica").fontSize(13).text(String(c ?? ""), xs0[i], y, { width: widths[i] - 8 }));
+    y += hgt;
+  }
+}
+if (DESIGN[slug]) table("DESIGN RULES", "No size here: every rule uses HER measurements (page HER MEASUREMENTS). PROPOSED - check on the first piece.",
+  ["OPTION", "WHAT", "RULE", "CHECK ON THE GARMENT"], DESIGN[slug].map((r) => [r[0] === "all" ? "ALL" : r[0], r[1], r[2], r[3]]), [190, 200, 430, 290]);
+
+// HER MEASUREMENTS — what to take, whether the virtual fitting gives it, and
+// what to use when it does not.
+if (NEEDS[category]) {
+  const m = cfg.measured || {}; // order: { height, bust, ... } from live or virtual fitting
+  const have = (k) => m[k] != null && m[k] !== "";
+  const rowsM = NEEDS[category].map((k) => {
+    const d = MEASURES[k];
+    const src = d.virtual ? "VIRTUAL + LIVE" : d.liveOnly ? "LIVE ONLY (home fitting)" : "LIVE - or derived";
+    let val = have(k) ? `${m[k]} cm` : "______";
+    if (!have(k) && d.derive && ["bust", "waist", "hip", "height"].every((q) => !(d.derive.toString().includes("m." + q)) || have(q))) {
+      try { const v = d.derive(m); if (isFinite(v)) val = `~${v.toFixed(0)} cm (±${d.pm}) DERIVED`; } catch {}
+    }
+    return [d.label.toUpperCase(), d.how, src, val];
+  });
+  table("HER MEASUREMENTS (full body, cm)", "Take these on her. VIRTUAL = the online fitting gives it. DERIVED = calculated from her other measurements (ANSUR II, 1,986 women); use only when no tape value. LIVE ONLY = must be taken at the home fitting.",
+    ["MEASUREMENT", "HOW TO TAKE IT", "SOURCE", "HER VALUE"], rowsM, [230, 420, 220, 240]);
+}
+
 // PAGE 3 — pattern
-doc.addPage(); header("PATTERN", 3);
+doc.addPage(); header("PATTERN — shape of the pieces", "");
 doc.image(await img(cfg.pattern, 2400), 20, 64, { fit: [W - 40, H - 80], align: "center" });
 
 doc.end();

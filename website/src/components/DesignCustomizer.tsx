@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { includedWith } from "@/data/catalog";
@@ -515,8 +516,16 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           className="fixed inset-x-0 z-40 border-t border-border bg-white"
           style={{ bottom: "var(--consent-h, 0px)" }}
         >
-          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-3">
-            <div className="min-w-0">
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:gap-4 sm:px-6 sm:py-3">
+            {/* Founder 2026-11-13 (preview): the photo scrolls away while she
+                picks Length or Closures, so the bar carries a live thumbnail
+                that changes with every tap. */}
+            {previewImage ? (
+              <div className="relative h-14 w-10 shrink-0 overflow-hidden bg-white">
+                <Image src={previewImage} alt="" fill sizes="40px" className="object-contain" />
+              </div>
+            ) : null}
+            <div className="mr-auto min-w-0">
               <p className="truncate text-[13px] text-text">{item.name}</p>
               <p className="font-display text-lg leading-tight text-text">
                 AED {price}
