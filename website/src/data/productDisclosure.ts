@@ -164,9 +164,12 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       label: "Returns and exchange",
       labelAr: "الإرجاع والاستبدال",
       value:
-        "One free alteration within 10 days of delivery.",
+        // ⚠️ THE CHANGE-OF-MIND RULE LIVES HERE NOW (founder, 2026-11-14): it
+        // was removed from under Pay, so this collapsed row is where it is
+        // displayed before purchase (UAE requirement). Do not cut it again.
+        "Made to order, so not returnable for a change of mind. One free alteration within 10 days of delivery.",
       valueAr:
-        "تعديل واحد مجاني خلال 10 أيام من التسليم.",
+        "مصنوعة حسب الطلب، لذا لا يمكن إرجاعها لتغيير الرأي. تعديل واحد مجاني خلال 10 أيام من التسليم.",
     },
     {
       // ✅ FOUNDER-READ AND APPROVED 2026-08-28.
