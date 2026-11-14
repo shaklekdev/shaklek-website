@@ -123,8 +123,10 @@ export default function TermsPage() {
         {/* Visit back on the site 2026-11-12 (founder): terms must match. */}
         If you choose Tailored, we contact you after your order to arrange a
         private home fitting in Dubai, included in the price, where we take your
-        measurements before your piece is made. Outside Dubai, we guide you to
-        take them yourself. Otherwise you choose a standard size from our size
+        measurements before your piece is made. Anywhere in the UAE, you can
+        instead use our virtual fitting after your order: your height and two
+        photos give estimated measurements, which we confirm with you before
+        your piece is made. Otherwise you choose a standard size from our size
         guide.
       </p>
       <p>

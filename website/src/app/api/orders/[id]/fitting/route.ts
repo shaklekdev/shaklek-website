@@ -116,3 +116,30 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
   return NextResponse.json({ ok: true, items: updated.length });
 }
+
+/**
+ * Pre-check for /measure (bug review 2026-11-14): a broken or missing link,
+ * or an order not yet paid / already being made, is told BEFORE she takes the
+ * photos, not after. Returns only a coarse state -- no email, no items -- and
+ * the same 404 as POST for anything unauthorized.
+ */
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const notFound = NextResponse.json({ ok: false, error: "Order not found" }, { status: 404 });
+  if (!isUuid(id)) return notFound;
+  const t = req.nextUrl.searchParams.get("t");
+  if (!verifyFittingToken(id, t) && !verifyOrderAccessToken(id, t)) return notFound;
+  const db = getDb();
+  if (!db) return NextResponse.json({ ok: false, error: "Not available" }, { status: 501 });
+  const [order] = await db
+    .select({ status: schema.orders.status })
+    .from(schema.orders)
+    .where(eq(schema.orders.id, id));
+  if (!order) return notFound;
+  const state = EDITABLE.includes(order.status)
+    ? "open"
+    : ["in_progress", "shipped", "delivered"].includes(order.status)
+      ? "started"
+      : "unpaid";
+  return NextResponse.json({ ok: true, state });
+}

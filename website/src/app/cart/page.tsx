@@ -99,6 +99,11 @@ export default function CartPage() {
                   {/* "Size Tailored" read as a size called Tailored -- founder review 2026-11-11. */}
                   {item.size === "Tailored" ? "Tailored to you" : `Size ${item.size}`}
                 </p>
+                {/* What "Tailored" means, before paying (shaklek-ui 2026-11-14:
+                    a buyer outside Dubai did not know how she would be measured). */}
+                {item.size === "Tailored" && (
+                  <p className="mt-1 text-xs text-text-3">Free fitting after payment: home in Dubai, or virtual.</p>
+                )}
                 {customerChosenLabels(paramKeyForLine(item), item.changes).length > 0 && (
                   <p className="mt-1 text-xs text-text-2">
                     {customerChosenLabels(paramKeyForLine(item), item.changes).join(", ")}

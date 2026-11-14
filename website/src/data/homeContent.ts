@@ -145,7 +145,7 @@ export const STEPS = [
     title: "We do the rest",
     // Visit back 2026-11-12, and named "private home fitting" the same day
     // (founder wording). Always "we", never "I".
-    body: "A private home fitting in Dubai, free. Your tailor makes your piece. We bring it to your door.",
+    body: "A private home fitting in Dubai or our virtual fitting, free. Your tailor makes your piece. We bring it to your door.",
     // Still the one the whole proposition rests on. With only two steps the
     // emphasis is doing less work than it was, but it is the half a visitor
     // has to believe, so it keeps it.

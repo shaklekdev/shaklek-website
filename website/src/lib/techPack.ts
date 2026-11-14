@@ -493,7 +493,16 @@ export function buildPdf(
       const chartRow = rowForSize(item.size);
 
       if (fields) {
-        doc.font("Helvetica-Bold").fontSize(11).fillColor(INK).text("TAILORED TO MEASURE");
+        // VIRTUAL FITTING = ESTIMATES (photos + height), not a tape. Say so on
+        // the sheet the tailor cuts from (bug review 2026-11-14).
+        const online = !!fields.notes && fields.notes.includes("Online fitting");
+        if (online) {
+          doc.font("Helvetica-Bold").fontSize(11).fillColor("#a33").text("VIRTUAL FITTING — ESTIMATED MEASUREMENTS");
+          doc.font("Helvetica").fontSize(10).fillColor("#a33").text("Taken from the customer's photos and height. Confirm with her on WhatsApp before cutting.");
+          doc.fillColor(INK);
+        } else {
+          doc.font("Helvetica-Bold").fontSize(11).fillColor(INK).text("TAILORED TO MEASURE");
+        }
         doc.moveDown(0.3);
         const labelW = 118;
         for (const f of FIELD_LABELS) {
@@ -503,6 +512,21 @@ export function buildPdf(
           doc.font("Helvetica").fontSize(10).fillColor(MUTED).text(f.label, left, y, { width: labelW });
           doc.font("Helvetica-Bold").fontSize(12).fillColor(INK).text(`${v} cm`, left + labelW, y - 1);
           doc.y = y + 17;
+        }
+        if (online) {
+          for (const [label, re] of [
+            ["Shoulders", /shoulders (\d+)cm/],
+            ["Arm length", /arm (\d+)cm/],
+            ["Waist to floor", /waist to floor (\d+)cm/],
+            ["Inside leg", /inside leg (\d+)cm/],
+          ] as const) {
+            const m = fields.notes.match(re);
+            if (!m) continue;
+            const y = doc.y;
+            doc.font("Helvetica").fontSize(10).fillColor(MUTED).text(label, left, y, { width: labelW });
+            doc.font("Helvetica-Bold").fontSize(12).fillColor(INK).text(`${m[1]} cm`, left + labelW, y - 1);
+            doc.y = y + 17;
+          }
         }
         const bust = Number(fields.bust);
         if (Number.isFinite(bust) && bust > 0) {
@@ -525,7 +549,7 @@ export function buildPdf(
             .font("Helvetica")
             .fontSize(10.5)
             .fillColor(INK)
-            .text(`Customer's fit note: ${fields.notes}`, left, doc.y, { width });
+            .text(`${online ? "Virtual fitting detail" : "Customer's fit note"}: ${fields.notes}`, left, doc.y, { width });
         }
       } else if (chartRow) {
         // The label the customer actually chose -- "38" on a trouser, "M" on a

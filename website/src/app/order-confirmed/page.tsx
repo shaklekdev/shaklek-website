@@ -210,7 +210,9 @@ function OrderConfirmedContent() {
           picked up. Two clear choices, both free. Shown only for Tailored
           lines and only with the order's access token (the online fitting
           link needs it to save the numbers on this order). */}
-      {orderId && order.items.some((i) => i.size === "Tailored") ? (
+      {/* Only once PAID: before the webhook lands, the save would be refused
+          (bug review 2026-11-14). The same link is in the confirmation email. */}
+      {orderId && order.status === "paid" && order.items.some((i) => i.size === "Tailored") ? (
         <div className="mt-8 border border-border-strong p-5 text-left">
           <p className="font-display text-[19px] text-text">Your free fitting</p>
           <p className="mt-1 text-[13px] text-text-2">Choose one. We confirm your measurements before cutting.</p>

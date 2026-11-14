@@ -63,7 +63,6 @@ const FIELDS: { key: keyof Estimate; label: string; min: number; max: number }[]
 // Inside leg may be left blank: it cannot be measured when the feet are
 // together, and our team confirms it on WhatsApp.
 const inRange = (f: (typeof FIELDS)[number], v: string | undefined) => {
-  if (f.key === "inseam" && (v === undefined || v.trim() === "")) return true;
   const n = Number(v);
   return v !== undefined && v.trim() !== "" && Number.isFinite(n) && n >= f.min && n <= f.max;
 };
@@ -276,7 +275,7 @@ export default function OnlineFitting({
       const fromBra = braBand && braCup ? bustFromBra(Number(braBand), braCup) : null;
       if (fromBra) e.bust = fromBra;
       setEst(e);
-      setEdits(Object.fromEntries(FIELDS.map((f) => [f.key, e[f.key] ? String(e[f.key]) : ""])));
+      setEdits(Object.fromEntries(FIELDS.map((f) => [f.key, String(e[f.key])])));
       setStep("result");
     } catch (err) {
       if (err instanceof MeasureError) {
@@ -315,7 +314,7 @@ export default function OnlineFitting({
     const out = { ...est };
     for (const f of FIELDS) {
       if (!inRange(f, edits[f.key])) return;
-      out[f.key] = edits[f.key]?.trim() ? Math.round(Number(edits[f.key])) : 0;
+      out[f.key] = Math.round(Number(edits[f.key]));
     }
     onDone({ estimate: out, topSize, trouserSize, bra: braBand && braCup ? `${braBand}${braCup}` : "" });
   }
@@ -368,7 +367,7 @@ export default function OnlineFitting({
 
   return (
     <div role="dialog" aria-modal="true" aria-label="Virtual fitting" className="fixed inset-0 z-[70] flex items-end justify-center bg-black/40 sm:items-center">
-      <div className="relative max-h-[92vh] w-full overflow-y-auto bg-white px-6 pb-8 pt-12 sm:max-w-md">
+      <div className="relative max-h-[92dvh] w-full overflow-y-auto bg-white px-6 pb-8 pt-12 sm:max-w-md">
         <button type="button" onClick={onClose} aria-label="Close" className="absolute right-2 top-1 z-10 flex h-11 w-11 items-center justify-center text-2xl text-text-2">
           ×
         </button>

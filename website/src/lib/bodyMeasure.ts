@@ -438,7 +438,8 @@ export function estimate(front: View, side: View, heightCm: number): Estimate {
     out.bust >= 60 && out.bust <= 160 &&
     out.waist >= 50 && out.waist <= 150 &&
     out.hip >= 60 && out.hip <= 170 &&
-    out.waist < out.hip &&
+    // No waist < hip rule: some bodies have a waist equal to or above the hip,
+    // and the check refused them forever (bug review 2026-11-14).
     out.sleeve > 30 && out.sleeve < 90 &&
     out.inseam > 40 && out.inseam < out.outseam;
   if (!ok) throw new MeasureError("implausible", "both");
