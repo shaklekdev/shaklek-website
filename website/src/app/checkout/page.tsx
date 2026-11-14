@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { cartThumbnail } from "@/lib/cartThumbnail";
 import { customerChosenLabels, paramKeyFor } from "@/data/parameterSliders";
 import { catalog } from "@/data/catalog";
 import Header from "@/components/Header";
@@ -55,10 +56,10 @@ export default function CheckoutPage() {
               key={item.id}
               className="flex gap-4 rounded-shaklek-sm border border-border bg-surface p-5"
             >
-              {item.previewImage && (
+              {cartThumbnail(item) && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={item.previewImage}
+                  src={cartThumbnail(item)}
                   alt=""
                   className="h-16 w-12 shrink-0 rounded-shaklek-xs object-cover"
                 />

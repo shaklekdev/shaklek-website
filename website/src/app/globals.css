@@ -73,6 +73,10 @@ html {
 }
 
 body {
+  /* The cookie bar is fixed at the bottom and publishes its height as
+     --consent-h. Without this it covered the cart's Checkout button at
+     390x664 (Instagram in-app browser): a tap hit "Decline". 2026-11-14. */
+  padding-bottom: var(--consent-h, 0px);
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);

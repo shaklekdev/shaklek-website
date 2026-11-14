@@ -146,6 +146,10 @@ export default function CheckoutForm({ total }: { total: number }) {
     }
   }
 
+  // Pay enables only on a plausible address: "not-a-real-address" used to
+  // enable it, and the server's refusal then landed off screen.
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+
   async function handlePay() {
     setSubmitting(true);
     setError(null);
@@ -210,20 +214,6 @@ export default function CheckoutForm({ total }: { total: number }) {
 
   return (
     <div className="mt-8">
-      {!isSignedIn && (
-        <div className="mb-6 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-sm text-text-2">
-          <Link href="/sign-in?redirect_url=/checkout" className="font-medium text-text underline">
-            Sign in
-          </Link>{" "}
-          {/* This used to read "to save your measurements and track this
-              order". It did not save them: measurements reached order_items so
-              the tailor always had them, but nothing was written to
-              customers.measurements, and the only real save path was retyping
-              them on /account. Saving is now an explicit opt-in on the design
-              page, so this states what signing in actually does. */}
-          to keep this order in your account, or continue as a guest below.
-        </div>
-      )}
 
       {/* Discounts used to be reachable only after the redirect, on Stripe's
           page -- so someone arriving from a campaign with a code in hand saw
@@ -308,25 +298,6 @@ export default function CheckoutForm({ total }: { total: number }) {
       </div>
       )}
 
-      {/* Launch offer: the first 50 orders come in a Shaklek bag embroidered
-          with the customer's initials. Prefilled from the bag preview in the top
-          bar; sent with the order and saved in its notes (api/orders). */}
-      <label htmlFor="bag-initials" className="mb-2 block text-sm text-text">
-        Initials for your Shaklek bag <span className="text-text-3">(optional)</span>
-      </label>
-      <input
-        id="bag-initials"
-        value={bagInitials}
-        onChange={(e) => {
-          const v = e.target.value.replace(/[^a-z]/gi, "").toUpperCase().slice(0, 3);
-          setBagInitials(v);
-          if (v) localStorage.setItem(BAG_INITIALS_KEY, v);
-        }}
-        maxLength={3}
-        autoCapitalize="characters"
-        placeholder="e.g. NT"
-        className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-base text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
-      />
 
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
         Your email <span className="text-text-3">(required)</span>
@@ -376,9 +347,20 @@ export default function CheckoutForm({ total }: { total: number }) {
 
       {(
         <>
+      {/* Founder 2026-11-14: errors sit right above Pay, on screen, not
+          under the collapsed details where a refusal looked like nothing. */}
+          {error && (
+            <p
+              role="alert"
+              aria-live="assertive"
+              className="mt-6 rounded-shaklek-sm border border-red-300 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
+            >
+              {error}
+            </p>
+          )}
           <button
             onClick={handlePay}
-            disabled={submitting || !email}
+            disabled={submitting || !emailOk}
             className="mt-6 flex w-full items-center justify-center rounded-full bg-accent py-4 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {/* Follows the discount. This read the raw cart total until a
@@ -395,11 +377,18 @@ export default function CheckoutForm({ total }: { total: number }) {
               ? "Processing…"
               : `Pay AED ${promo ? previewTotal.toFixed(2) : total}`}
           </button>
+          {/* Reassurance AT the button, founder 2026-11-14 ("il faut rassurer le
+              client"): 0 of 2 ad carts reached Pay, and nothing on this screen
+              said the payment was secure. */}
+          <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-text-2">
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="5" y="11" width="14" height="9" rx="1.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+            Secure payment · Visa · Mastercard · Apple Pay
+          </p>
           {/* Without this the button just sits greyed out and the customer is
               left guessing -- the commonest reason checkout stalls here. */}
-          {!email && (
+          {!emailOk && (
             <p aria-live="polite" className="mt-2 text-center text-xs text-text-3">
-              Enter your email above to continue.
+              Enter a valid email above to continue.
             </p>
           )}
         </>
@@ -427,6 +416,41 @@ export default function CheckoutForm({ total }: { total: number }) {
         refunded.
       </p>
 
+      {/* BELOW Pay since 2026-11-14 (shaklek-ui, founder ok): these pushed
+          the email and the Pay button ~300px under the fold on a phone. */}
+      {/* Launch offer: the first 50 orders come in a Shaklek bag embroidered
+          with the customer's initials. Prefilled from the bag preview in the top
+          bar; sent with the order and saved in its notes (api/orders). */}
+      <label htmlFor="bag-initials" className="mb-2 mt-6 block text-sm text-text">
+        Initials for your Shaklek bag <span className="text-text-3">(optional)</span>
+      </label>
+      <input
+        id="bag-initials"
+        value={bagInitials}
+        onChange={(e) => {
+          const v = e.target.value.replace(/[^a-z]/gi, "").toUpperCase().slice(0, 3);
+          setBagInitials(v);
+          if (v) localStorage.setItem(BAG_INITIALS_KEY, v);
+        }}
+        maxLength={3}
+        autoCapitalize="characters"
+        placeholder="e.g. NT"
+        className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-base text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+      />
+      {!isSignedIn && (
+        <div className="mt-6 text-center text-xs text-text-3">
+          <Link href="/sign-in?redirect_url=/checkout" className="text-text-2 underline">
+            Sign in
+          </Link>{" "}
+          {/* This used to read "to save your measurements and track this
+              order". It did not save them: measurements reached order_items so
+              the tailor always had them, but nothing was written to
+              customers.measurements, and the only real save path was retyping
+              them on /account. Saving is now an explicit opt-in on the design
+              page, so this states what signing in actually does. */}
+          to keep this order in your account, or continue as a guest below.
+        </div>
+      )}
       <details className="group mt-3 border-t border-border pt-3">
         <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 text-xs text-text-3 hover:text-text-2">
           <span>Delivery, returns and payment</span>
@@ -472,15 +496,6 @@ export default function CheckoutForm({ total }: { total: number }) {
         </div>
       </details>
 
-      {error && (
-        <p
-          role="alert"
-          aria-live="assertive"
-          className="mt-4 rounded-shaklek-sm border border-red-300 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
-        >
-          {error}
-        </p>
-      )}
       {/* Shaklek+ sits after the decision, not before it -- it must never
           compete with the Pay button. */}
       {SHAKLEK_PLUS_ON ? (

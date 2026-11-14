@@ -22,6 +22,7 @@
 export const MEASURES = {
   height:   { label: "Height", how: "barefoot, against a wall", virtual: "height" },
   bust:     { label: "Bust", how: "around the fullest part, tape level", virtual: "bust" },
+  underbust:{ label: "Under bust (bra band)", how: "around the ribcage just under the bust, tape snug", virtual: "bra band (EU size = cm)", note: "online: from her bra size; essential for FITTED pieces" },
   waist:    { label: "Waist", how: "around the narrowest part, natural waist", virtual: "waist" },
   hip:      { label: "Hip", how: "around the fullest part of the seat", virtual: "hip" },
   shoulder: { label: "Shoulder width", how: "shoulder point to shoulder point, across the back", virtual: "shoulder" },
@@ -43,9 +44,9 @@ export const MEASURES = {
 
 /** Which body measurements each category needs. */
 export const NEEDS = {
-  Shirt: ["height", "bust", "waist", "hip", "shoulder", "arm", "inseam", "neck", "upperarm", "wrist", "nape", "bustline"],
+  Shirt: ["height", "bust", "underbust", "waist", "hip", "shoulder", "arm", "inseam", "neck", "upperarm", "wrist", "nape", "bustline"],
   Pants: ["height", "waist", "hip", "outseam", "inseam", "thigh", "knee", "calf", "ankle", "rise", "kneeH"],
-  Dress: ["height", "bust", "waist", "hip", "shoulder", "neck", "nape", "bustline", "outseam", "kneeH", "calf"],
+  Dress: ["height", "bust", "underbust", "waist", "hip", "shoulder", "neck", "nape", "bustline", "outseam", "kneeH", "calf"],
   Abaya: ["height", "bust", "hip", "shoulder", "arm", "upperarm", "wrist", "neck", "bustline", "kneeH"],
 };
 
@@ -104,30 +105,30 @@ export const DESIGN = {
   ],
   "wide-leg-trousers": [
     ["all", "Hip", "her hip + 6 cm", ""], ["all", "Waistband", "4 cm high, ON her natural waist", ""],
-    ["Leg STRAIGHT", "Bottom of the leg", "all round = her calf + 12 cm", "tape all round the hem"],
-    ["Leg WIDE", "Bottom of the leg", "all round = her calf + 26 cm", "tape all round the hem"],
+    ["Leg STRAIGHT", "Bottom of the leg", "24 cm laid FLAT, edge to edge (= 48 cm all round)", "one leg flat on the table"],
+    ["Leg WIDE", "Bottom of the leg", "31 cm laid FLAT, edge to edge (= 62 cm all round)", "one leg flat on the table"],
     ["Length FULL", "Hem", "touches the top of her foot", ""],
     ["Length CROPPED", "Hem", "5 cm above her ankle bone", ""],
   ],
   "banded-trousers": [
     ["all", "Hip", "her hip + 4 cm", ""], ["all", "Cuff", "4 cm, turned up flat", "fixed"],
-    ["Leg STRAIGHT", "Bottom of the leg", "all round = her calf + 6 cm", "tape all round the hem"],
-    ["Leg WIDE", "Bottom of the leg", "all round = her calf + 16 cm", "tape all round the hem"],
+    ["Leg STRAIGHT", "Bottom of the leg", "21 cm laid FLAT, edge to edge (= 42 cm all round)", "one leg flat on the table"],
+    ["Leg WIDE", "Bottom of the leg", "26 cm laid FLAT, edge to edge (= 52 cm all round)", "one leg flat on the table"],
     ["Length FULL", "Bottom of cuff", "touches the top of her foot", ""],
     ["Length CROPPED", "Bottom of cuff", "5 cm above her ankle bone", ""],
   ],
   "pleated-trousers": [
     ["all", "Hip", "her hip + 10 cm (pleats)", ""], ["all", "Pleats", "2 each side, 3 cm and 2.5 cm deep, folded toward the side", "fixed"],
-    ["Leg STRAIGHT", "Bottom of the leg", "all round = her calf + 4 cm, narrowing from the knee", "tape all round the hem"],
-    ["Leg WIDE", "Bottom of the leg", "all round = her calf + 18 cm, no narrowing", "tape all round the hem"],
+    ["Leg STRAIGHT", "Bottom of the leg", "20 cm laid FLAT, edge to edge (= 40 cm all round), narrowing from the knee", "one leg flat on the table"],
+    ["Leg WIDE", "Bottom of the leg", "27 cm laid FLAT, edge to edge (= 54 cm all round), no narrowing", "one leg flat on the table"],
     ["Length FULL", "Hem", "touches the top of her foot", ""],
     ["Length CROPPED", "Hem", "5 cm above her ankle bone", ""],
   ],
   "cargo-trousers": [
     ["all", "Hip", "her hip + 8 cm", ""], ["all", "Cargo pocket", "16 x 20 cm, outer side, top 8 cm below her crotch level", "fixed size"],
     ["all", "Drawstring", "cord through the front waistband, ends 35 cm", "fixed"],
-    ["Leg STRAIGHT", "Bottom of the leg", "all round = her calf + 10 cm", "tape all round the hem"],
-    ["Leg WIDE", "Bottom of the leg", "all round = her calf + 22 cm", "tape all round the hem"],
+    ["Leg STRAIGHT", "Bottom of the leg", "23 cm laid FLAT, edge to edge (= 46 cm all round)", "one leg flat on the table"],
+    ["Leg WIDE", "Bottom of the leg", "29 cm laid FLAT, edge to edge (= 58 cm all round)", "one leg flat on the table"],
     ["Length FULL", "Hem", "touches the top of her foot", ""],
     ["Length CROPPED", "Hem", "5 cm above her ankle bone", ""],
   ],
