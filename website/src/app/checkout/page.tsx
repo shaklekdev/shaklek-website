@@ -43,7 +43,7 @@ export default function CheckoutPage() {
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
-        <Link href="/cart" className="text-xs text-text-3 hover:text-text-2">
+        <Link href="/cart" className="inline-flex min-h-11 items-center text-xs text-text-2 hover:text-text">
           ← Back to cart
         </Link>
 

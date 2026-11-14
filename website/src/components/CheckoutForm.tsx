@@ -313,6 +313,11 @@ export default function CheckoutForm({ total }: { total: number }) {
           isSignedIn ? "bg-surface-2" : "bg-white"
         }`}
       />
+      {/* Only when there is a CHOICE (shaklek-ui walk 2026-11-14: a lone
+          "Card" radio on Android looked unfinished). With one method the
+          state already holds it and Stripe shows its own options next. */}
+      {methods.filter((m) => m.id !== "apple-pay" || applePay).length > 1 && (
+      <>
       <p className="mb-3 mt-5 text-sm text-text">Payment method</p>
       <div className="space-y-2">
         {methods.filter((m) => m.id !== "apple-pay" || applePay).map((m) => (
@@ -337,6 +342,8 @@ export default function CheckoutForm({ total }: { total: number }) {
           </button>
         ))}
       </div>
+      </>
+      )}
 
       {(
         <>
@@ -349,6 +356,14 @@ export default function CheckoutForm({ total }: { total: number }) {
               className="mt-6 rounded-shaklek-sm border border-red-300 bg-red-50 px-4 py-3 text-center text-sm text-red-800"
             >
               {error}
+            </p>
+          )}
+          {/* Without this the button just sits greyed out and the customer is
+              left guessing. ABOVE the button and readable (shaklek-ui walk
+              2026-11-14: it was 2.6:1 grey and below the fold). */}
+          {!emailOk && (
+            <p aria-live="polite" className="mt-6 -mb-3 text-center text-xs text-text-2">
+              Enter a valid email above to continue.
             </p>
           )}
           <button
@@ -377,13 +392,6 @@ export default function CheckoutForm({ total }: { total: number }) {
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="5" y="11" width="14" height="9" rx="1.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
             Secure payment
           </p>
-          {/* Without this the button just sits greyed out and the customer is
-              left guessing -- the commonest reason checkout stalls here. */}
-          {!emailOk && (
-            <p aria-live="polite" className="mt-2 text-center text-xs text-text-3">
-              Enter a valid email above to continue.
-            </p>
-          )}
         </>
       )}
 
@@ -406,9 +414,13 @@ export default function CheckoutForm({ total }: { total: number }) {
       {/* ONE line, founder 2026-11-14 ("why all that text after the payment").
           The change-of-mind rule must stay displayed (see above); faulty or
           wrong items are covered in the details below and in the terms. */}
+      {/* LINK ONLY, founder 2026-11-14: no change-of-mind sentence at the
+          moment of paying. The rule stays displayed BEFORE purchase on the
+          product page (Product information > Returns, productDisclosure.ts)
+          and behind this link -- keep both, that is what covers the UAE
+          display requirement now. */}
       <p className="mt-4 text-center text-xs text-text-3">
-        Made to order, so it&apos;s final once made.{" "}
-        <a href="/faq" target="_blank" rel="noopener noreferrer" className="underline hover:text-text-2">
+        <a href="/legal/terms#returns" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline hover:text-text-2">
           Terms of purchase
         </a>
       </p>

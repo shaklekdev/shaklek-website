@@ -92,7 +92,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             Same policy, said as what we do: refunds are for faulty or wrong
             items, fit is the alteration. The binding wording stays in
             legal/terms. */}
-        Made-to-order pieces are final. Faulty or wrong pieces are remade or
+        Each piece is made for you, so it isn&apos;t returnable for a change of mind. Faulty or wrong pieces are remade or
         refunded in full within 14 days. See the{" "}
         <Link href="/legal/terms#returns" className="underline">
           terms
