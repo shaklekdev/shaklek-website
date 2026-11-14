@@ -31,9 +31,8 @@ export default function TermsPage() {
   return (
     <LegalPage title="Terms, Returns & Alterations" updated="12 November 2026">
       <p>
-        Shaklek is a made-to-order clothing studio in the United Arab Emirates.
-        These terms cover how orders, production, delivery, alterations and
-        accounts work. Our{" "}
+        These terms cover orders, production, delivery, alterations and
+        accounts. Our{" "}
         <a href="/legal/privacy" className="underline">
           Privacy Policy
         </a>{" "}
@@ -58,9 +57,7 @@ export default function TermsPage() {
         size or Tailored, where we take your measurements ourselves. Your piece is
         made for you after you order, once we
         have confirmed the details with you. Because each piece is made
-        for one person, the specification is fixed at that point, this is the
-        one thing worth knowing before you order, and it is why we confirm with
-        you first rather than after.
+        for one person, the specification is fixed once confirmed.
       </p>
       <p>
         We may decline or cancel an order before production begins, for
@@ -82,8 +79,7 @@ export default function TermsPage() {
         page after you press Pay.
       </p>
       <p>
-        Prices may change over time, but never after you have paid, the price
-        you were shown at checkout is the price of your order. If a price is
+        The price shown at checkout is the price of your order. If a price is
         displayed incorrectly through a technical error, we will tell you before
         anything is made and you may cancel for a full refund.
       </p>
@@ -150,8 +146,8 @@ export default function TermsPage() {
             credit where alteration is not enough. */}
         You get <strong>one free alteration</strong> within 10 days of
         delivery: we adjust the piece you received (taking in, letting out
-        where the seam allowance permits, or changing the hem). This applies whether you chose a standard size or sent your own
-        measurements. Message us at{" "}
+        where the seam allowance permits, or changing the hem). This applies whether you chose a standard size or Tailored. Message us
+        at{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>{" "}
@@ -201,8 +197,7 @@ export default function TermsPage() {
             residual shrinkage. The terms of sale, the product page and the
             printed care label were giving three different instructions, and
             the terms were the one a customer could hold us to. */}
-        Linen behaves like the natural fibre it is: it creases, and it softens
-        with wear. Follow the care label. The alteration above covers the fit
+        Follow the care label. The alteration above covers the fit
         of the piece as delivered; care that departs from the label, work by
         another tailor, and ordinary wear sit outside it.
       </p>

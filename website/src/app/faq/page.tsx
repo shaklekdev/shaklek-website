@@ -19,10 +19,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is made until you order it.
-        Your piece is made for you, piece by piece and with special care, which
-        is why we allow up to 3 weeks rather than the next morning, and why it can be cut to your
-        measurements rather than an average.
+        Nothing is made until you order it, so it can be cut to your
+        measurements.
       </>
     ),
   },
@@ -33,11 +31,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         {/* ⚠️ CONSERVATIVE ON PURPOSE, founder 2026-11-05: "make it
             conservative and show we put a lot of work, this is not fast
             fashion". Was "approximately 10 working days". */}
-        Allow up to 3 weeks from the moment we confirm your details,
-        which usually happens within a day of ordering. Each piece is cut and
-        sewn for you, with special care: this is not fast
-        fashion, and we take the time to get it right. We deliver everywhere in
-        the UAE, and delivery is included in the price.
+        Up to 3 weeks from confirmation, usually within a day of ordering.
+        Delivery across the UAE is included.
       </>
     ),
   },
@@ -65,16 +60,12 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "Do I have to know my measurements?",
     a: (
       <>
-        No. Choose Tailored and, after you order, we contact you on WhatsApp{" "}
-        and come to you in Dubai to take your measurements, free, before
-        your piece is made. Outside Dubai, we guide you to take them yourself. If you already have
-        your own, send them the same way or in the notes on your order, and we
-        go through them with you. Or pick a standard size from XS to
-        XXL. The price is the same either way. The{" "}
+        No. Choose Tailored and we arrange a free home fitting in Dubai after
+        you order. Or pick a standard size, XS to XXL, same price. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide
-        </Link>{" "}
-        shows each measurement and how to take it.
+        </Link>
+        .
       </>
     ),
   },
@@ -85,14 +76,9 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         {/* ⚠️ AN ALTERATION, NOT A REMAKE. Founder, 2026-11-05: "we can't open
             everything, so it has to be like touching, not full remake, make it
             clear." Remake/refund survives ONLY for faulty or wrong items. */}
-        Every piece is cut from your measurements and the choices you made, and
-        we do everything to get the fit right the first time. If it still
-        needs a touch, one alteration is included within 10 days of delivery,
-        whether you used a standard size or your own measurements. We adjust the piece you
-        have: taking it in, letting it out where the seams allow, or changing
-        the hem. Message us with a photo
-        and we arrange it. If the piece needs more than an alteration can
-        give, we offer store credit instead.
+        One alteration is included within 10 days of delivery, standard size
+        or Tailored. Message us with a photo and we arrange it. If an
+        alteration is not enough, we offer store credit.
       </>
     ),
   },
@@ -106,12 +92,10 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             Same policy, said as what we do: refunds are for faulty or wrong
             items, fit is the alteration. The binding wording stays in
             legal/terms. */}
-        Every piece is made for one person after you order it, so a finished
-        piece is yours to keep. Refunds are reserved for pieces that arrive
-        faulty or are not what you ordered, which we remake or refund in full
-        within 14 days. Fit is covered by the alteration above. See the{" "}
+        Made-to-order pieces are final. Faulty or wrong pieces are remade or
+        refunded in full within 14 days. See the{" "}
         <Link href="/legal/terms#returns" className="underline">
-          full terms
+          terms
         </Link>
         .
       </>
@@ -121,13 +105,12 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What fabrics do you use?",
     a: (
       <>
-        100% natural linen, and nothing else. It is a plant fibre that
-        breathes in Gulf heat and softens with every wear, creasing gently the
-        way linen does. We wrote about{" "}
+        100% natural linen. It breathes in Gulf heat and softens with every
+        wear.{" "}
         <Link href="/blog/what-to-wear-dubai-summer-fabric" className="underline">
-          why natural fabrics suit a body better
-        </Link>{" "}
-        if you want the longer answer.
+          Read more
+        </Link>
+        .
       </>
     ),
   },
@@ -135,13 +118,12 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "How much does it cost?",
     a: (
       <>
-        One fixed price per category, whatever your size or measurements: shirts
-        AED {BASE_PRICE_BY_CATEGORY.Shirt}, pants AED{" "}
+        One fixed price per category, whatever your size: shirts AED{" "}
+        {BASE_PRICE_BY_CATEGORY.Shirt}, trousers AED{" "}
         {BASE_PRICE_BY_CATEGORY.Pants}, dresses AED{" "}
-        {BASE_PRICE_BY_CATEGORY.Dress}, and abayas AED{" "}
-        {BASE_PRICE_BY_CATEGORY.Abaya}, which includes a matching shayla in the
-        same linen. Fabric, every option on the piece and delivery are all
-        included. No quotes, and no surprises at checkout.
+        {BASE_PRICE_BY_CATEGORY.Dress}, abayas AED{" "}
+        {BASE_PRICE_BY_CATEGORY.Abaya} with matching shayla. Every option and
+        delivery included.
       </>
     ),
   },
@@ -156,9 +138,8 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             also untrue. What is true: a stylist goes through the request with
             her before the piece is made; the terms cover a full refund if an order
             is declined before production. */}
-        Write it in the note field when you customise: a shorter sleeve, a
-        wider collar. We go through your request with you before
-        your piece is made, so you know exactly what is being made for you.
+        Write it under &ldquo;Any special request?&rdquo; when you customise. We
+        confirm it with you before your piece is made.
       </>
     ),
   },
@@ -166,20 +147,11 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "How do I reach you?",
     a: (
       <>
-        Our client team is on{" "}
+        Write to{" "}
         <a href="mailto:hello@shaklek.com" className="underline">
           hello@shaklek.com
         </a>
-        , and we confirm every order with you before your piece is made.
-      </>
-    ),
-  },
-  {
-    q: "Do you deliver outside Dubai?",
-    a: (
-      <>
-        Yes. We deliver everywhere in the UAE, and delivery is included in
-        the price.
+        .
       </>
     ),
   },
@@ -187,10 +159,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
 
 export default function FaqPage() {
   return (
-    <LegalPage
-      title="Questions"
-      intro="For anything else, write to us. We are glad to help."
-    >
+    <LegalPage title="Questions">
       {FAQS.map(({ q, a }) => (
         <div key={q}>
           <h2 className="pt-2 text-base font-medium text-text">{q}</h2>

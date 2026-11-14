@@ -8,9 +8,14 @@ export default function CatalogCard({
   item,
   eager = false,
   fromMouth = false,
+  cta = true,
 }: {
   item: CatalogItem;
   fromMouth?: boolean;
+  // false on the product page's "Complete your look" cards (founder,
+  // 2026-11-14): three CTAs beside Add to cart was too many. Name and price
+  // stay clickable.
+  cta?: boolean;
   // Set on the cards that are above the fold. Deliberately `loading="eager"`
   // and not next/image's `priority`: priority also injects a <link rel=
   // "preload">, which would make these photos compete with the homepage hero
@@ -95,14 +100,16 @@ export default function CatalogCard({
           the founder's report was that visitors still assumed we sell the one
           garment in the photograph. The plain verb is worth more here than the
           nicer phrase, because the whole problem is comprehension. */}
-      <Link
-        href={href}
-        /* ::before extends the hit area 6px above and below (32 -> 44px); the
-           visible box is unchanged -- founder review 2026-11-11. */
-        className="relative mt-3 block border border-border-strong px-3 py-2 text-center text-[12px] text-text transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] hover:border-text hover:bg-text hover:text-white"
-      >
-        Customise this piece
-      </Link>
+      {cta ? (
+        <Link
+          href={href}
+          /* ::before extends the hit area 6px above and below (32 -> 44px); the
+             visible box is unchanged -- founder review 2026-11-11. */
+          className="relative mt-3 block border border-border-strong px-3 py-2 text-center text-[12px] text-text transition-colors before:absolute before:inset-x-0 before:-inset-y-1.5 before:content-[''] hover:border-text hover:bg-text hover:text-white"
+        >
+          Customise this piece
+        </Link>
+      ) : null}
     </div>
   );
 }

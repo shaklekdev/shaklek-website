@@ -14,7 +14,7 @@ import IncludedInPrice from "@/components/IncludedInPrice";
 // but every Arabic string is founder-read before it ships (productDisclosure.ts).
 const INCLUDED_COPY = {
   heading: "Matching shayla included",
-  line: "Same 100% linen, in the colour you choose. 68 x 180 cm.", // founder 2026-11-11: shorter; the heading already says included
+  line: "In your colour. 68 x 180 cm.", // founder 2026-11-14: linen already in the badge and Product information
 };
 import { createSpecFromCatalog, type DesignSpec } from "@/data/designSpec";
 import {
@@ -459,7 +459,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     sits at 11px under the price with the visit line, not in a
                     pill next to the button. */}
                 <p className="mt-0.5 text-[11px] text-text-3">
-                  Made for you, piece by piece. Up to 3 weeks.
+                  Made for you. Up to 3 weeks.
                 </p>
               </div>
               <button
@@ -552,8 +552,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           phone for a line nobody reads before choosing a colour. It still
           sits above the fold of the decision, just not in the way of it. */}
       <p className="mt-8 px-1 text-[11px] leading-relaxed text-text-3">
-        * Images are illustrative of the combination you chose. Every piece is
-        hand-cut, so fabric fall and shade vary slightly.
+        * Images are illustrative. Shade and fall vary slightly.
       </p>
 
       {/* Shaklek+ sits AFTER the decision. It advertises features nobody can

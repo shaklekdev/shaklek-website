@@ -190,20 +190,15 @@ export default function PrivacyPage() {
             already passes.
           </p>
           <p>
-            To be exact about what that promise covers: it is about what{" "}
-            <em>we</em> send. If you are signed in to Instagram or Facebook,
-            Meta may still recognise you on this site, as it does on any site
-            carrying its pixel. That recognition comes from your relationship
-            with Meta, not from anything Shaklek passes on, and we cannot
-            switch it off on your behalf. Declining above stops our side of it
-            and removes the cookies.
+            If you are signed in to Instagram or Facebook, Meta may still
+            recognise you here, as on any site with its pixel; declining stops
+            what we send and removes the cookies.
           </p>
           <p>
             <strong>You can change your mind at any time.</strong> Use{" "}
             <strong>Cookie choices</strong> at the bottom of any page. Declining
-            does more than switch it off from here on: it deletes the cookies
-            Meta has already set on this browser. Nothing
-            further is sent from the moment you decline.
+            deletes the cookies Meta has set and stops anything further being
+            sent.
           </p>
           <p>
             There are no other advertising, behavioural or affiliate cookies. You
@@ -235,8 +230,7 @@ export default function PrivacyPage() {
       <h2 className="pt-2 text-base font-medium text-text">Changes</h2>
       <p>
         If this changes we will update the date at the top. If a change is
-        significant, we will tell customers directly rather than rely on you
-        rechecking this page.
+        significant, we will tell you directly.
       </p>
     </LegalPage>
   );

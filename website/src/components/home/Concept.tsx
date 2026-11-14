@@ -74,9 +74,11 @@ export default function Concept() {
               step 02 lost its marker, and STEPS_NOTE is now just the delivery
               line. When the visit returns with slots, the marker and the
               city come back together, never one without the other. */}
-          <p className="mt-5 text-[12px] leading-relaxed text-text-3">
-            {STEPS_NOTE}
-          </p>
+          {STEPS_NOTE ? (
+            <p className="mt-5 text-[12px] leading-relaxed text-text-3">
+              {STEPS_NOTE}
+            </p>
+          ) : null}
         </div>
 
         {/* Words first on a phone, photo after and short. */}

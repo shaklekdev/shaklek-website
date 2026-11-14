@@ -28,9 +28,6 @@ export default function CartPage() {
         <Header />
         <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
           <h1 className="text-[26px] text-text">Your cart is empty</h1>
-          <p className="subtitle mt-2">
-            Browse the catalogue to get started.
-          </p>
           <Link
             href="/catalog"
             className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90"
@@ -42,8 +39,6 @@ export default function CartPage() {
     );
   }
 
-  // Garments, not cart lines -- two of the same shirt is two pieces to cut.
-  const units = items.reduce((sum, item) => sum + item.quantity, 0);
   const thumbnails = Object.fromEntries(items.map((item) => [item.id, cartThumbnail(item)]));
 
   return (
@@ -51,9 +46,6 @@ export default function CartPage() {
       <Header />
       <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
         <h1 className="text-[26px] text-text">Your cart</h1>
-        <p className="subtitle">
-          {units} {units === 1 ? "piece" : "pieces"}, each cut to order.
-        </p>
 
         <div className="mt-8 space-y-4">
           {items.map((item) => (
@@ -95,9 +87,9 @@ export default function CartPage() {
                   </div>
                 </div>
                 <p className="mt-1 text-xs text-text-2">
-                  {item.fabric === "cotton" ? "Cotton" : "Linen"} · {item.color} ·{" "}
+                  {item.color} ·{" "}
                   {/* "Size Tailored" read as a size called Tailored -- founder review 2026-11-11. */}
-                  {item.size === "Tailored" ? "Tailored to you" : `Size ${item.size}`}
+                  {item.size === "Tailored" ? "Tailored" : `Size ${item.size}`}
                 </p>
                 {/* What "Tailored" means, before paying (shaklek-ui 2026-11-14:
                     a buyer outside Dubai did not know how she would be measured). */}

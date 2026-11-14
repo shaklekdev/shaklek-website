@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 import { renderParamsForCategory } from "@/data/parameterSliders";
 import { colors, sizes } from "@/data/colors";
 import { SELLABLE_FABRICS } from "@/data/fabrics";
-import { BENEFITS, POSITIONING } from "@/data/homeContent";
+import { POSITIONING } from "@/data/homeContent";
 
 export const metadata: Metadata = pageMetadata({
   title: "Our story",
@@ -123,7 +123,7 @@ const tenetGroups = [
         // absorbent and a plant fibre are defensible; cures, prevents,
         // hypoallergenic and anything hormone- or health-shaped are not.
         title: "Materials you can feel the difference in",
-        body: "Plant-based fibre only, never synthetic. Linen is flax. It absorbs moisture and gives it up again, and it lets air through. Polyester is made from petroleum and does neither: it holds the heat in, and it holds on to smell. In a country that spends five months above forty degrees, that is a difference you feel by the afternoon.",
+        body: "Linen is flax: it absorbs moisture and lets air through, where polyester holds heat and smell. In forty-degree summers you feel the difference by the afternoon.",
       },
       {
         // "Timeless" folded in here at the founder's direction rather than
@@ -132,7 +132,7 @@ const tenetGroups = [
         // essentials is the brand's stated niche, and until now the site
         // never said so anywhere a customer would read it.
         title: "Timeless pieces, customised by you, for you",
-        body: "Those lovely shirts you wished had longer sleeves. Those trousers you wish had pockets. We believe in uniqueness, so the things you'd normally just live with, you can actually change. And they are essentials, not this season's: chosen to still be worn in five years, cut properly, in fabric that softens instead of wearing out.",
+        body: "Those lovely shirts you wished had longer sleeves. Those trousers you wish had pockets. The things you'd normally just live with, you can change. Essentials, not this season's: made to still be worn in five years.",
       },
     ],
   },
@@ -155,11 +155,11 @@ const tenetGroups = [
         // your body, not a size chart" and "nothing is made until you order
         // it" are both card copy now. Founder: "cut for you and made to order
         // are repeated a lot". The long version says what a card cannot.
-        body: "Our team cuts one piece at a time, for the person who ordered it. That is the part most labels cannot copy: nothing here is made before somebody wants it.",
+        body: "Our team cuts one piece at a time, for the person who ordered it.",
       },
       {
         title: "Fixed prices",
-        body: "You customise your pieces, and the price stays the same per piece type either way. Your measurements cost nothing extra, and neither does changing the sleeve, the length or the colour.",
+        body: "One price per piece type. Measurements, sleeve, length and colour cost nothing extra.",
       },
     ],
   },
@@ -242,66 +242,11 @@ export default function OurStoryPage() {
           We make elegant fashion essentials, not fast trends: pieces you can
           customise to your taste and shape.
         </p>
-        <p className="subtitle mt-4 max-w-md text-justify hyphens-auto">
-          Every piece here starts as an idea, not a rack of stock waiting for
-          someone your size to walk in. Our team makes it, one piece at
-          a time, for the person who ordered it. That comes down to four
-          things:
-        </p>
       </div>
 
-      {/* WHY SHAKLEK? — the four ideas in four words each, before the long
-          versions. On a phone this section is the whole answer; the prose
-          below is for search engines and for the reader who wants more. */}
-      <div className="mx-auto w-full max-w-5xl px-6 pb-14">
-        <p className="text-xs tracking-[0.14em] text-text-3 uppercase">
-          Why Shaklek?
-        </p>
-        <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-5">
-          {/* Same odd-count rule as the home page's Benefits: with five cards
-              in two columns the last one would sit alone in a half-width cell,
-              which reads as a bug. It spans the row instead. */}
-          {BENEFITS.map((v, i) => (
-            <li
-              key={v.k}
-              className={`border border-border-strong p-4 sm:p-6${
-                BENEFITS.length % 2 === 1 && i === BENEFITS.length - 1
-                  ? " col-span-2"
-                  : ""
-              }`}
-            >
-              <p className="font-display text-[15px] text-text sm:text-[18px]">
-                {v.k}
-              </p>
-              <p className="mt-2 text-[13px] leading-relaxed text-text-2 sm:text-[14px]">
-                {v.v}
-              </p>
-            </li>
-          ))}
-        </ul>
-        {/* Second way in to the founder's note (founder, 2026-11-11: the hero
-            link alone is too small to be noticed). */}
-        <p className="mt-8 text-center">
-          <a
-            href="#from-our-founder"
-            className="inline-block border-b border-text-3 pb-0.5 text-[14px] text-text transition-colors hover:border-text"
-          >
-            A word from our founder ↓
-          </a>
-        </p>
-
-        {/* ⚠️ NO VISIT LINE HERE. One was added on 2026-09-16 because a crawl
-            showed this page mentioned neither the visit nor Dubai anywhere --
-            true at the time. It stopped being true within the hour: the third
-            BENEFITS tile became "Free measurement, everything included", so the
-            page said it twice, two lines apart, the second time opening with
-            "And". Founder, seeing it rendered: "why are you adding this ??"
-
-            The lesson is not "do not repeat". It is that a fix aimed at a gap
-            has to be re-checked after the thing above it changes, and this one
-            was written and verified before the tile was rewritten. The crawl
-            that found the gap was never re-run against the fix. */}
-      </div>
+      {/* The "Why Shaklek?" cards (same four as the home page) and the second
+          "A word from our founder" link were cut 2026-11-14 (founder copy
+          clean-up): third copy of the block; the four sections below say it. */}
 
 
       {/* A FULL-BLEED HORIZONTAL BAND, text over the image.
@@ -546,9 +491,6 @@ export default function OurStoryPage() {
               components/home/Benefits.tsx carried it for about an hour and now
               carries no slogan at all. One line per surface is the whole point
               of the exercise; putting it back on the home page undoes it. */}
-          <p className="font-display text-[24px] leading-snug text-white sm:text-[32px]">
-            Your piece, cut by our team, after you order it.
-          </p>
           <p className="mt-8">
             {/* /#catalog, not "/". A button that drops someone at the top of
                 the home page makes them scroll past the whole page they have

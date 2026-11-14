@@ -116,8 +116,7 @@ export default function FabricColorPicker({
           and do not call the chips "true shades" (an exact match is not
           something we can promise). */}
       <p className="mt-3 text-[11px] leading-relaxed text-text-3">
-        The colour circles are photographs of the actual linen. Colours may
-        vary slightly on screen.
+        Colours may vary slightly on screen.
       </p>
       {/* ⚠️ NO "COMING SOON" LINE. Founder, 2026-09-14: "we need to remove the
           coming soon thing from everywhere, I still see it." This rendered

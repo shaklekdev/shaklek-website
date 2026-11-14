@@ -92,7 +92,7 @@ export const STEPS = [
     // sleeve. The DEMONSTRATION is on the product page, where the photo
     // actually changes. Here one line is enough to promise it.
     title: "You decide the piece",
-    body: "Customise your 100% natural linen piece and watch it change.",
+    body: "Customise your piece and watch it change.",
   },
   {
     n: "02",
@@ -145,7 +145,7 @@ export const STEPS = [
     title: "We do the rest",
     // Visit back 2026-11-12, and named "private home fitting" the same day
     // (founder wording). Always "we", never "I".
-    body: "A private home fitting in Dubai or our virtual fitting, free. Your tailor makes your piece. We bring it to your door.",
+    body: "A private home fitting in Dubai or our virtual fitting, free. We make your piece and bring it to your door.",
     // Still the one the whole proposition rests on. With only two steps the
     // emphasis is doing less work than it was, but it is the half a visitor
     // has to believe, so it keeps it.
@@ -204,7 +204,9 @@ export const STEPS = [
 // footnote -- it is the one delivery line on the home page, and it stays only
 // because "included" is a price claim, which sells. If it ever stops being
 // true, delete the line rather than hedge it.
-export const STEPS_NOTE = "Delivery included everywhere in the UAE.";
+// Emptied 2026-11-14 (founder copy clean-up): the top bar, step 02 and the
+// "All included" chips already say delivery. Renders nothing while empty.
+export const STEPS_NOTE = "";
 
 
 // ⚠️ THERE IS NO LEAD TIME ON THE HOMEPAGE, AND PUTTING ONE BACK IS A COPY

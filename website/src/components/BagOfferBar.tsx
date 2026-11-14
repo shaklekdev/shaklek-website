@@ -190,11 +190,11 @@ export default function BagOfferBar() {
             >
               {saved ? "Saved" : "Save my initials"}
             </button>
-            <p aria-live="polite" className="mt-3 text-sm leading-relaxed text-text">
-              {saved
-                ? `Saved: ${shown}. Your initials will be on your order at checkout.`
-                : "The first 50 orders come in a Shaklek bag embroidered with your initials."}
-            </p>
+            {saved ? (
+              <p aria-live="polite" className="mt-3 text-sm leading-relaxed text-text">
+                Saved: {shown}. Your initials will be on your order at checkout.
+              </p>
+            ) : null}
           </div>
         </div>
       ) : null}

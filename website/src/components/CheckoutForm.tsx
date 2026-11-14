@@ -12,7 +12,7 @@ import { capiHandoff, money, newEventId, track } from "@/lib/metaPixel";
 type PaymentMethod = "apple-pay" | "card";
 
 const methods: { id: PaymentMethod; label: string; sub: string }[] = [
-  { id: "apple-pay", label: "Apple Pay", sub: "Fastest checkout" },
+  { id: "apple-pay", label: "Apple Pay", sub: "" },
   { id: "card", label: "Card", sub: "Visa, Mastercard" },
 ];
 
@@ -313,12 +313,7 @@ export default function CheckoutForm({ total }: { total: number }) {
           isSignedIn ? "bg-surface-2" : "bg-white"
         }`}
       />
-      <p className="mb-5 text-xs text-text-3">
-        {isSignedIn
-          ? "Using your account email so this order shows up in your history."
-          : "We'll send your order confirmation here."}
-      </p>
-      <p className="mb-3 text-sm text-text">{isSignedIn ? "Payment method" : "Pay as guest"}</p>
+      <p className="mb-3 mt-5 text-sm text-text">Payment method</p>
       <div className="space-y-2">
         {methods.filter((m) => m.id !== "apple-pay" || applePay).map((m) => (
           <button
@@ -332,7 +327,7 @@ export default function CheckoutForm({ total }: { total: number }) {
           >
             <div>
               <p className="text-sm font-medium text-text">{m.label}</p>
-              <p className="text-xs text-text-3">{m.sub}</p>
+              {m.sub ? <p className="text-xs text-text-3">{m.sub}</p> : null}
             </div>
             <span
               className={`h-4 w-4 rounded-full border-2 ${
@@ -380,7 +375,7 @@ export default function CheckoutForm({ total }: { total: number }) {
               said the payment was secure. */}
           <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-text-2">
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="5" y="11" width="14" height="9" rx="1.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
-            Secure payment · Visa · Mastercard · Apple Pay
+            Secure payment
           </p>
           {/* Without this the button just sits greyed out and the customer is
               left guessing -- the commonest reason checkout stalls here. */}
@@ -412,7 +407,7 @@ export default function CheckoutForm({ total }: { total: number }) {
           The change-of-mind rule must stay displayed (see above); faulty or
           wrong items are covered in the details below and in the terms. */}
       <p className="mt-4 text-center text-xs text-text-3">
-        Made to order, so it&apos;s final once made. One alteration included.{" "}
+        Made to order, so it&apos;s final once made.{" "}
         <a href="/faq" target="_blank" rel="noopener noreferrer" className="underline hover:text-text-2">
           Terms of purchase
         </a>
@@ -424,7 +419,7 @@ export default function CheckoutForm({ total }: { total: number }) {
           with the customer's initials. Prefilled from the bag preview in the top
           bar; sent with the order and saved in its notes (api/orders). */}
       <label htmlFor="bag-initials" className="mb-2 mt-6 block text-sm text-text">
-        Initials for your Shaklek bag <span className="text-text-3">(optional)</span>
+        Initials for your bag <span className="text-text-3">(optional)</span>
       </label>
       <input
         id="bag-initials"

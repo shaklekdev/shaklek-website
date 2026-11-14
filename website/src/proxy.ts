@@ -120,6 +120,15 @@ export default clerkMiddleware(async (auth, req) => {
   // pattern the rest of this file already follows.
   const isApi = pathname.startsWith("/api/");
 
+  // WHILE OPEN, /coming-soon IS GONE. It still said "Opening 11·11" to anyone
+  // holding an old link after the shop opened (founder copy audit, 2026-11-14).
+  // A 307, not 301: nothing is cached, so the page works again as the
+  // shut-shop surface the moment STORE_OPEN stops being "true". The rewrite
+  // below never trips this: a rewrite keeps the visitor's original pathname.
+  if (isStoreOpen() && pathname === "/coming-soon") {
+    return NextResponse.redirect(new URL("/", req.url), 307);
+  }
+
   if (!isStoreOpen() && !isApi && !reachableWhileShut(pathname)) {
     // REWRITE, not redirect. The visitor keeps the URL they typed, so a link
     // shared from a post still reads as shaklek.com rather than announcing

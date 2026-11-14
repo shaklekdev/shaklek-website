@@ -298,12 +298,9 @@ export default function SizePicker({
                 </tbody>
               </table>
               <p className="mt-3 text-xs text-text-3">
-                Measure your body rather than a garment: bust at the fullest point, waist at
-                the narrowest, hip at the fullest. Between two sizes? Choose Tailored and
-                we take your measurements with you after you order, or
-                read the{" "}
+                Between two sizes? Choose Tailored, or see the{" "}
                 <a href="/size-guide" className="underline" target="_blank" rel="noopener noreferrer">
-                  full size guide
+                  size guide
                 </a>
                 .
               </p>

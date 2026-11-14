@@ -192,7 +192,7 @@ export default function FitFeedbackForm() {
           Your email
         </label>
         <p className="mt-1 text-[12.5px] text-text-3">
-          So we can put this with your order, and for nothing else.
+          To match it with your order.
         </p>
         <input
           id="fit-email"
