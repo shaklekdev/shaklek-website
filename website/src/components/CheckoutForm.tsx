@@ -406,8 +406,12 @@ export default function CheckoutForm({ total }: { total: number }) {
       {/* ONE line, founder 2026-11-14 ("why all that text after the payment").
           The change-of-mind rule must stay displayed (see above); faulty or
           wrong items are covered in the details below and in the terms. */}
+      {/* LINK ONLY, founder 2026-11-14: no change-of-mind sentence at the
+          moment of paying. The rule stays displayed BEFORE purchase on the
+          product page (Product information > Returns, productDisclosure.ts)
+          and behind this link -- keep both, that is what covers the UAE
+          display requirement now. */}
       <p className="mt-4 text-center text-xs text-text-3">
-        Made to order, so it&apos;s final once made.{" "}
         <a href="/faq" target="_blank" rel="noopener noreferrer" className="underline hover:text-text-2">
           Terms of purchase
         </a>
