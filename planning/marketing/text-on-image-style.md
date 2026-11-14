@@ -12,3 +12,6 @@ Inspiration: shopzavi.me posts (founder screenshots IMG_2169-2177, 2414-2416).
 - Master logo (white) small, bottom-right. Never type "Shaklek" in a font.
 - Photo straight (verticals vertical: measure, rotate), phone watermark ("Galaxy S25 Ultra") always cropped out.
 - Grade: luminance-only toward the approved FINAL-post (keeps the real linen colour).
+
+## 2026-11-14: one font everywhere (founder)
+Posts, reels (captions + end cards) and reel covers all use Avenir Next Demi, uppercase, ~0.22em tracking. Dark #2b2622 on light backgrounds, white on photos. No Italiana / big serif / italic headlines in new content ("pas consistant… on est démodées"). Example: ~/Desktop/PLANNING-7-JOURS/3-sam-14-reel (house-style reel), covers in catalog-archive/2026-11-14-covers/.
