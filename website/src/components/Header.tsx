@@ -75,6 +75,16 @@ export default function Header() {
   // Garments, not cart lines -- the cart page counts the same way, and a
   // badge reading "2" over a cart saying "4 pieces" reads as a bug.
   const units = items.reduce((sum, item) => sum + item.quantity, 0);
+  // PAY ABOVE THE FOLD (shaklek-ui walk 2026-11-14, founder ok): on /cart and
+  // /checkout the header is logo + account + cart only -- no offer bar, no
+  // black nav -- so the button is on screen on a 360x740 phone and there are
+  // fewer ways to wander off before paying.
+  const slim = pathname === "/cart" || pathname === "/checkout";
+  // On product pages the offer bar sits ABOVE the sticky header and scrolls
+  // away with the page, so the garment gets the room (40% of a small screen
+  // was bars). Moving it out of the sticky element, rather than hiding it on
+  // scroll, means no layout jump.
+  const barScrollsAway = pathname.startsWith("/design/");
   // NO HAMBURGER. The three links live in the black bar below the wordmark at
   // every width, so there is nothing left for a menu to hide. That removes the
   // panel, its Escape handler, its close-on-navigation state, and the bug where
@@ -103,8 +113,10 @@ export default function Header() {
   }, []);
 
   return (
+    <>
+    {barScrollsAway ? <BagOfferBar /> : null}
     <header ref={headerRef} className="sticky top-0 z-50 bg-white">
-      <BagOfferBar />
+      {slim || barScrollsAway ? null : <BagOfferBar />}
       {/* Wordmark LEFT, icons right, menu in a black band underneath. The bar
           is Youssef's layout; the left-aligned mark is the founder's amendment
           to it (2026-08-26) -- a centred wordmark reads as a fashion editorial,
@@ -241,6 +253,7 @@ export default function Header() {
           Right-aligned from 640px, matching the layout Youssef drew, and
           centred below that -- three short labels fit a phone comfortably,
           which is the whole reason the hamburger could go. */}
+      {slim ? null : (
       <nav aria-label="Main" className="bg-text">
         {/* CENTRED AT EVERY WIDTH (founder, 2026-08-26). It was right-aligned
             from 640px to match the mockup; she wants the three links centred on
@@ -268,6 +281,8 @@ export default function Header() {
           ))}
         </div>
       </nav>
+      )}
     </header>
+    </>
   );
 }

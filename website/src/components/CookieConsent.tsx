@@ -119,24 +119,26 @@ export default function CookieConsent() {
         {/* Founder, 2026-11-09: "way too long ... why are we dragging this much
             attention". One line; the detail lives on /legal/privacy (layered
             notice, see above). */}
-        <p className="text-xs text-text-2 sm:text-sm">
+        {/* ONE LINE on a 360px phone (shaklek-ui walk 2026-11-14): smaller
+            text and buttons below sm, wording unchanged. */}
+        <p className="text-[11px] leading-tight text-text-2 sm:text-sm">
           We use cookies to improve our ads.{" "}
           <Link href="/legal/privacy" className="underline">
             Privacy
           </Link>
         </p>
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => choose("denied")}
-            className="min-h-[44px] px-2 text-sm text-text-2 underline underline-offset-4 hover:text-text"
+            className="min-h-[44px] px-1 text-xs text-text-2 underline underline-offset-4 hover:text-text sm:px-2 sm:text-sm"
           >
             Decline
           </button>
           <button
             type="button"
             onClick={() => choose("granted")}
-            className="min-h-[44px] rounded-full bg-accent px-5 py-2 text-sm text-white hover:bg-accent-light"
+            className="min-h-[44px] rounded-full bg-accent px-4 py-2 text-xs text-white hover:bg-accent-light sm:px-5 sm:text-sm"
           >
             Accept
           </button>
