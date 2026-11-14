@@ -22,6 +22,7 @@
 export const MEASURES = {
   height:   { label: "Height", how: "barefoot, against a wall", virtual: "height" },
   bust:     { label: "Bust", how: "around the fullest part, tape level", virtual: "bust" },
+  underbust:{ label: "Under bust (bra band)", how: "around the ribcage just under the bust, tape snug", virtual: "bra band (EU size = cm)", note: "online: from her bra size; essential for FITTED pieces" },
   waist:    { label: "Waist", how: "around the narrowest part, natural waist", virtual: "waist" },
   hip:      { label: "Hip", how: "around the fullest part of the seat", virtual: "hip" },
   shoulder: { label: "Shoulder width", how: "shoulder point to shoulder point, across the back", virtual: "shoulder" },
@@ -43,9 +44,9 @@ export const MEASURES = {
 
 /** Which body measurements each category needs. */
 export const NEEDS = {
-  Shirt: ["height", "bust", "waist", "hip", "shoulder", "arm", "inseam", "neck", "upperarm", "wrist", "nape", "bustline"],
+  Shirt: ["height", "bust", "underbust", "waist", "hip", "shoulder", "arm", "inseam", "neck", "upperarm", "wrist", "nape", "bustline"],
   Pants: ["height", "waist", "hip", "outseam", "inseam", "thigh", "knee", "calf", "ankle", "rise", "kneeH"],
-  Dress: ["height", "bust", "waist", "hip", "shoulder", "neck", "nape", "bustline", "outseam", "kneeH", "calf"],
+  Dress: ["height", "bust", "underbust", "waist", "hip", "shoulder", "neck", "nape", "bustline", "outseam", "kneeH", "calf"],
   Abaya: ["height", "bust", "hip", "shoulder", "arm", "upperarm", "wrist", "neck", "bustline", "kneeH"],
 };
 
