@@ -91,6 +91,9 @@ export function composeFitting(s: FittingSubmission): string {
     `Bust / chest: ${v.bust}cm, Waist: ${v.waist}cm, Hip: ${v.hip}cm, Height: ${v.height}cm, ` +
     `Online fitting (estimated, confirm on WhatsApp): shoulders ${v.shoulder}cm; arm ${v.sleeve}cm; ` +
     `waist to floor ${v.outseam}cm; inside leg ${v.inseam}cm` +
+    // Underbust = the EU band (EN 13402: the band IS the underbust in cm);
+    // the tailor sheet reads it (founder, 2026-11-14).
+    (s.bra ? `; underbust ${s.bra.match(/^\d+/)?.[0]}cm` : "") +
     (sizes ? `; usual size ${sizes}` : "")
   );
 }

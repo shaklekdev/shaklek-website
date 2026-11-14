@@ -45,7 +45,7 @@ export type OnlineFittingResult = {
   bra: string; // "75B" or ""
 };
 
-type Step = "height" | "front" | "side" | "working" | "result";
+type Step = "height" | "front" | "side" | "working" | "bra" | "result";
 
 // Ranges for her corrections: bust/waist/hip match FIELD_LABELS in
 // lib/measurements.ts; the rest are wide adult ranges. Out of range blocks
@@ -209,9 +209,14 @@ function Pose({ side }: { side?: boolean }) {
 export default function OnlineFitting({
   onDone,
   onClose,
+  askBra = false,
 }: {
   onDone: (r: OnlineFittingResult) => void;
   onClose: () => void;
+  // FITTED pieces (Peplum Blouse, Buttoned Dress): a separate, skippable bra
+  // step after the photos, because the bust must be exact (founder,
+  // 2026-11-14). Other pieces never ask.
+  askBra?: boolean;
 }) {
   // No intro screen (founder, 2026-11-13: "I agree" felt like asking for
   // something private). The privacy line sits under the photo buttons.
@@ -271,12 +276,9 @@ export default function OnlineFitting({
     try {
       const [fv, sv] = await Promise.all([analyse(front), analyse(sideFile)]);
       const e = estimate(fv, sv, h);
-      // A bra size she gave beats the photo bust (its weakest number).
-      const fromBra = braBand && braCup ? bustFromBra(Number(braBand), braCup) : null;
-      if (fromBra) e.bust = fromBra;
       setEst(e);
       setEdits(Object.fromEntries(FIELDS.map((f) => [f.key, String(e[f.key])])));
-      setStep("result");
+      setStep(askBra ? "bra" : "result");
     } catch (err) {
       if (err instanceof MeasureError) {
         const which = err.view === "side" ? "side photo" : err.view === "front" ? "front photo" : "photos";
@@ -323,7 +325,7 @@ export default function OnlineFitting({
   const btn2 = "flex min-h-11 w-full items-center justify-center border border-border-strong px-6 text-sm text-text";
   const label = "text-[11px] uppercase tracking-[0.14em] text-text-2";
 
-  const BACK: Partial<Record<Step, Step>> = { front: "height", side: "front", result: "side" };
+  const BACK: Partial<Record<Step, Step>> = { front: "height", side: "front", bra: "side", result: askBra ? "bra" : "side" };
   const STEP_NO: Partial<Record<Step, [number, string]>> = {
     height: [1, "Height"],
     front: [2, "Front photo"],
@@ -379,6 +381,10 @@ export default function OnlineFitting({
             title, at most three short bullets and one button. */}
         {step === "height" && (
           <>
+            {/* Before the photos, post-purchase only (founder, 2026-11-14). */}
+            <p className="mb-4 bg-surface-2 px-3 py-2 text-[12px] text-text-2">
+              For your photos: leggings and a fitted top, hair tied back.
+            </p>
             <p className="font-display text-[22px] leading-tight text-text">Your height</p>
             <label className="mt-5 block">
               <span className={label}>cm, without shoes</span>
@@ -407,22 +413,6 @@ export default function OnlineFitting({
                 <select value={trouserSize} onChange={(e) => setTrouserSize(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
                   <option value="">Not sure</option>
                   {TROUSERS.map((s) => <option key={s}>{s}</option>)}
-                </select>
-              </label>
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-3">
-              <label className="block text-[12px] text-text-2">
-                Bra (EU / UK)
-                <select value={braBand} onChange={(e) => setBraBand(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
-                  <option value="">Not sure</option>
-                  {BRA_BANDS.map((b) => <option key={b.eu} value={b.eu}>{b.eu} / {b.uk}</option>)}
-                </select>
-              </label>
-              <label className="block text-[12px] text-text-2">
-                Cup
-                <select value={braCup} onChange={(e) => setBraCup(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
-                  <option value="">–</option>
-                  {BRA_CUPS.map((c) => <option key={c}>{c}</option>)}
                 </select>
               </label>
             </div>
@@ -488,6 +478,53 @@ export default function OnlineFitting({
             <span aria-hidden="true" className="mx-auto mb-5 block h-8 w-8 animate-spin rounded-full border-2 border-border border-t-text" />
             <p className="font-display text-[20px] text-text">Measuring…</p>
           </div>
+        )}
+
+        {step === "bra" && est && (
+          <>
+            <p className="font-display text-[22px] leading-tight text-text">Your bra size</p>
+            <p className="mt-2 text-[13px] text-text-2">Makes the bust exact for a fitted piece.</p>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <label className="block text-[12px] text-text-2">
+                Bra (EU / UK)
+                <select value={braBand} onChange={(e) => setBraBand(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
+                  <option value="">Not sure</option>
+                  {BRA_BANDS.map((b) => <option key={b.eu} value={b.eu}>{b.eu} / {b.uk}</option>)}
+                </select>
+              </label>
+              <label className="block text-[12px] text-text-2">
+                Cup
+                <select value={braCup} onChange={(e) => setBraCup(e.target.value)} className="mt-1 block w-full border border-border-strong bg-white px-2 py-2.5 text-[15px] text-text">
+                  <option value="">–</option>
+                  {BRA_CUPS.map((c) => <option key={c}>{c}</option>)}
+                </select>
+              </label>
+            </div>
+            <button
+              type="button"
+              disabled={!(braBand && braCup)}
+              className={`mt-6 ${btn}`}
+              onClick={() => {
+                // A bra size beats the photo bust, its weakest number.
+                const fromBra = bustFromBra(Number(braBand), braCup);
+                if (fromBra) setEdits((x) => ({ ...x, bust: String(fromBra) }));
+                setStep("result");
+              }}
+            >
+              Continue
+            </button>
+            <button
+              type="button"
+              className="mt-3 w-full text-center text-[12px] text-text-2 underline underline-offset-4"
+              onClick={() => {
+                setBraBand("");
+                setBraCup("");
+                setStep("result");
+              }}
+            >
+              Skip
+            </button>
+          </>
         )}
 
         {step === "result" && est && (

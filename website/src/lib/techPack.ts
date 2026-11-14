@@ -519,6 +519,7 @@ export function buildPdf(
             ["Arm length", /arm (\d+)cm/],
             ["Waist to floor", /waist to floor (\d+)cm/],
             ["Inside leg", /inside leg (\d+)cm/],
+            ["Underbust", /underbust (\d+)cm/],
           ] as const) {
             const m = fields.notes.match(re);
             if (!m) continue;

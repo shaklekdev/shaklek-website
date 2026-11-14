@@ -23,15 +23,17 @@ function MeasureInner() {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<"checking" | "idle" | "saving" | "done" | "error" | "blocked">("checking");
   const [error, setError] = useState("");
+  const [fitted, setFitted] = useState(false);
 
   // Check the link and the order BEFORE the photos (bug review 2026-11-14).
   useEffect(() => {
     let cancelled = false;
     fetch(`/api/orders/${encodeURIComponent(id)}/fitting?t=${encodeURIComponent(t ?? "")}`)
       .then((r) => r.json().catch(() => ({})))
-      .then((d: { ok?: boolean; state?: string }) => {
+      .then((d: { ok?: boolean; state?: string; fitted?: boolean }) => {
         if (cancelled) return;
         if (d.ok && d.state === "open") {
+          setFitted(!!d.fitted);
           setState("idle");
           setOpen(true);
         } else {
@@ -122,7 +124,7 @@ function MeasureInner() {
           </>
         )}
       </div>
-      {open && state !== "done" ? <OnlineFitting onDone={save} onClose={() => setOpen(false)} /> : null}
+      {open && state !== "done" ? <OnlineFitting onDone={save} onClose={() => setOpen(false)} askBra={fitted} /> : null}
     </div>
   );
 }

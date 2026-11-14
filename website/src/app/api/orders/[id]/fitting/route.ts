@@ -5,6 +5,15 @@ import { verifyFittingToken, verifyOrderAccessToken } from "@/lib/orderAccess";
 import { isUuid, readBoundedText, rejectCrossOrigin, rejectOversizedBody } from "@/lib/requestGuards";
 import { composeFitting, validateFitting } from "@/lib/onlineFitting";
 import { orderRef } from "@/lib/orderRef";
+import { catalog } from "@/data/catalog";
+
+// Fitted pieces get the bra step (founder, 2026-11-14). By catalogue slug;
+// order lines store the product NAME, so resolve names from the catalogue.
+const FITTED_SLUGS = ["structured-blouse", "buttoned-dress"];
+const FITTED_NAMES = [
+  ...catalog.filter((c) => FITTED_SLUGS.includes(c.slug)).map((c) => c.name),
+  "Structured Blouse", // the Peplum Blouse's earlier name, on older orders
+];
 
 // ONLINE FITTING, AFTER PAYMENT (founder, 2026-11-13: sizing before the order
 // is friction that loses customers, so measuring comes after, "free after
@@ -141,5 +150,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     : ["in_progress", "shipped", "delivered"].includes(order.status)
       ? "started"
       : "unpaid";
-  return NextResponse.json({ ok: true, state });
+  const lines = await db
+    .select({ name: schema.orderItems.name })
+    .from(schema.orderItems)
+    .where(and(eq(schema.orderItems.orderId, id), inArray(schema.orderItems.size, ["Tailored"])));
+  const fitted = lines.some((l) => FITTED_NAMES.includes(l.name));
+  return NextResponse.json({ ok: true, state, fitted });
 }
