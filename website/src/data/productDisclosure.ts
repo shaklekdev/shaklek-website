@@ -164,9 +164,9 @@ export function disclosuresFor(garmentName: string): Disclosure[] {
       label: "Returns and exchange",
       labelAr: "الإرجاع والاستبدال",
       value:
-        "One free alteration within 10 days of delivery, should the fit need adjusting.",
+        "One free alteration within 10 days of delivery.",
       valueAr:
-        "تعديل واحد مجاني خلال 10 أيام من التسليم إذا لم يكن المقاس مناسباً.",
+        "تعديل واحد مجاني خلال 10 أيام من التسليم.",
     },
     {
       // ✅ FOUNDER-READ AND APPROVED 2026-08-28.

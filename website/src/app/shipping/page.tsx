@@ -23,10 +23,7 @@ export default function ShippingPage() {
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
-        Allow <strong>up to 3 weeks</strong> from your order. Each piece is cut
-        and sewn for you, with special care.
-        Nothing is made before you order it, which is the point of
-        made-to-order.
+        Allow <strong>up to 3 weeks</strong>.
       </p>
       {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. This said "Ten days is
           an estimate, not a guarantee. If anything moves, whether fabric
@@ -35,23 +32,12 @@ export default function ShippingPage() {
           "ten days" was also stale against the 3-week line above it. The
           estimate wording that binds lives in legal/terms. */}
       <p>
-        We confirm your date with you once your details are final, and if
-        anything changes along the way we tell you directly.
+        We confirm your date once your details are final.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">What it costs</h2>
       <p>
-        Nothing. Delivery is included in the price of every piece, and no
-        shipping charge is added at checkout. The price you see on the catalogue
-        is the price you pay.
-      </p>
-
-      <h2 className="pt-2 text-base font-medium text-text">Where we deliver</h2>
-      {/* ⚠️ "THE AT-HOME MEASUREMENT VISIT IS IN DUBAI ONLY" CAME OUT,
-          2026-11-05. Founder pulled the visit from the whole site until she
-          defines appointment slots (OPEN.md measuring-slots). */}
-      <p>
-        <strong>Everywhere in the UAE</strong>, included in the price.
+        Nothing. Delivery is included in every price.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">Your address</h2>
@@ -60,8 +46,8 @@ export default function ShippingPage() {
           full site pass. The rule lives in the terms so the two copies cannot
           drift apart; this page keeps the instruction and the pointer. */}
       <p>
-        Your delivery address is taken on the secure payment page after you
-        press Pay. Check it carefully; how redelivery works is set out in the{" "}
+        Your address is taken on the payment page. Redelivery is set out in
+        the{" "}
         <Link href="/legal/terms" className="underline">
           terms
         </Link>
@@ -78,12 +64,11 @@ export default function ShippingPage() {
           again across four files. */}
       <h2 className="pt-2 text-base font-medium text-text">When it arrives</h2>
       <p>
-        Try it on when it arrives. If the fit needs a touch, or anything else
-        needs our attention, message us; the{" "}
+        If anything needs our attention, message us. See the{" "}
         <Link href="/legal/terms#returns" className="underline">
-          full terms
-        </Link>{" "}
-        set out exactly what is covered.
+          terms
+        </Link>
+        .
       </p>
 
       <p>

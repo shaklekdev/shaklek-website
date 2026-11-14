@@ -130,7 +130,7 @@ function OrderConfirmedContent() {
       <div className="mx-auto w-full max-w-md flex-1 px-6 py-20 text-center">
         <h1 className="text-[26px] text-text">No recent order found</h1>
         <p className="subtitle mt-2">
-          If you just placed an order, check your email, otherwise head back to the catalogue.
+          Check your email for your confirmation.
         </p>
         <Link
           href="/catalog"
@@ -169,8 +169,7 @@ function OrderConfirmedContent() {
         </p>
       )}
       <p className="subtitle mx-auto mt-2 max-w-sm">
-        Thank you, your {order.items.length === 1 ? "piece is" : "pieces are"} on{" "}
-        {order.items.length === 1 ? "its" : "their"} way to being made, just for you.
+        Thank you.
       </p>
 
       <div className="mt-8 space-y-3 text-left">
@@ -190,8 +189,7 @@ function OrderConfirmedContent() {
             <div className="flex-1">
               <p className="text-[15px] font-medium text-text">{item.name}</p>
               <p className="mt-1 text-xs text-text-2">
-                {item.fabric === "cotton" ? "Cotton" : item.fabric === "linen" ? "Linen" : item.fabric} ·{" "}
-                {item.color} · {item.size === "Tailored" ? "Tailored to you" : `Size ${item.size}`}
+                {item.color} · {item.size === "Tailored" ? "Tailored" : `Size ${item.size}`}
               </p>
               {chosen(item).length > 0 && (
                 <p className="mt-1 text-xs text-text-2">{chosen(item).join(", ")}</p>
@@ -205,29 +203,23 @@ function OrderConfirmedContent() {
       <p className="mt-4 text-right font-display text-xl text-text">Total AED {order.total}</p>
 
       <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">
-        <strong className="text-text">What happens next:</strong> we
-        contact you within 24 hours, by WhatsApp or email, to confirm your
-        details. Your piece is then made for you, with special care, and we
-        allow up to 3 weeks from confirmation.
+        We contact you within 24 hours to confirm your details. Allow up to 3
+        weeks from confirmation.
       </div>
 
       {!isSignedIn && (
         <div className="mt-4 rounded-shaklek-sm border border-border bg-surface p-5 text-left">
-          <p className="text-sm text-text">Want this order in one place?</p>
-          <p className="mt-1 text-xs text-text-2">
-            A free account keeps your order history and fit notes in one place.
+          <p className="text-xs text-text-2">
+            {order.email
+              ? `Sign up with ${order.email} and this order will already be there.`
+              : "Sign up and this order will already be there."}
           </p>
           <Link
             href="/sign-up"
             className="mt-3 inline-block rounded-full bg-accent px-6 py-2.5 text-xs text-white transition-opacity hover:opacity-90"
           >
-            Create a free account
+            Create an account
           </Link>
-          {order.email && (
-            <p className="mt-2 text-[11px] text-text-3">
-              Sign up with {order.email} and this order will already be there.
-            </p>
-          )}
         </div>
       )}
 

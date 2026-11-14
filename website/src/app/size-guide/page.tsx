@@ -20,7 +20,7 @@ export default function SizeGuidePage() {
   return (
     <LegalPage
       title="Size guide"
-      intro="Body measurements in centimetres. Measure yourself rather than a piece you already own."
+      intro="Body measurements in centimetres."
     >
       {/* The customer's own numbers come first. Founder: the size guide should
           open with "your measurements", and the regional chart is the
@@ -46,9 +46,6 @@ export default function SizeGuidePage() {
           somewhere to live. What has gone is asking her to supply them. */}
 
       <h2 className="pt-2 text-base font-medium text-text">Standard sizes</h2>
-      <p>
-        Our standard sizes, if you would rather pick a size than be measured.
-      </p>
 
       {/* No min-width: six short columns fit a 342px column at 390 wide, and
           the forced 460px clipped the Hip column -- founder review 2026-11-11 */}
@@ -96,7 +93,7 @@ export default function SizeGuidePage() {
       <h2 className="pt-2 text-base font-medium text-text">How to measure</h2>
       <p>
         Measure your body rather than a garment you already own, and keep the
-        tape level and snug. It is easiest over light clothing.
+        tape level and snug.
       </p>
       <p>
         <strong>Bust</strong>: around the fullest part, tape level under the
@@ -120,11 +117,8 @@ export default function SizeGuidePage() {
           bodies and exact for almost none of them." Same point, said as what
           Tailored does. */}
       <p>
-        Then <strong>Tailored</strong> is made for you. Choose it when you
-        order and we take your measurements with you afterwards, before
-        your piece is made. It costs exactly the same, and it is the reason
-        made-to-order exists. Most people are between sizes somewhere; a size
-        chart is an average of thousands of bodies, and Tailored is cut to one.
+        Choose <strong>Tailored</strong> when you order; we take your
+        measurements after, at the same price.
       </p>
 
       {/* A button, not a sentence with a link buried in it. This is the end of
@@ -140,11 +134,6 @@ export default function SizeGuidePage() {
         >
           Start designing
         </Link>
-      </p>
-
-      <p className="border border-border-strong bg-surface p-3 text-xs text-text-3">
-        These are a guide to choosing a standard size. For an exact fit, choose
-        Tailored and we take your measurements with you after you order.
       </p>
     </LegalPage>
   );

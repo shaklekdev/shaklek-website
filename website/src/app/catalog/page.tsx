@@ -83,8 +83,7 @@ export default function CatalogPage() {
               city: Dubai was only here as the visit's scope limit, and
               delivery is UAE-wide. "Cut to your measurements" is what is
               still true. */}
-          Customisable essentials in high-quality, 100% natural linen, made to your
-          measurements.
+          100% natural linen, made to your measurements.
         </p>
 
         {/* ⚠️ A PLAIN <a>, NOT next/link, AND THAT IS THE WHOLE TRICK. A hash

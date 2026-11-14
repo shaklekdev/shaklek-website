@@ -28,16 +28,6 @@ import Link from "next/link";
  */
 const QUESTIONS = [
   {
-    q: "What does made-to-order actually mean?",
-    a: (
-      <>
-        Nothing is made until you order it.
-        Your piece is made for you, which is why it can be cut to your
-        measurements rather than an average.
-      </>
-    ),
-  },
-  {
     q: "Do I have to know my measurements?",
     a: (
       <>
@@ -45,9 +35,8 @@ const QUESTIONS = [
             2026-11-05. Founder pulled the at-home visit from the whole site
             until she defines appointment slots (OPEN.md measuring-slots).
             Same wording as the matching /faq answer, on purpose. */}
-        No. Choose Tailored and we take you through them after you order,
-        before your piece is made.
-        Or pick a standard size from XS to XXL, for the same price. See the{" "}
+        No. Choose Tailored and we take them after you order. Or pick a
+        standard size, XS to XXL. See the{" "}
         <Link href="/size-guide" className="underline">
           size guide
         </Link>
@@ -59,8 +48,7 @@ const QUESTIONS = [
     q: "How long does it take?",
     a: (
       <>
-        Up to 3 weeks. Your piece is cut and sewn after you order, with
-        special care: this is not fast fashion.
+        Up to 3 weeks. Each piece is cut and sewn after you order.
       </>
     ),
   },
@@ -68,9 +56,8 @@ const QUESTIONS = [
     q: "What fabrics do you use?",
     a: (
       <>
-        100% natural linen, and nothing else. It is a plant fibre that
-        breathes in Gulf heat and softens with every wear, creasing gently the
-        way linen does.
+        100% natural linen. It breathes in Gulf heat and softens with every
+        wear.
       </>
     ),
   },

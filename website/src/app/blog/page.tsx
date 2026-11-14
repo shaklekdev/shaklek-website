@@ -23,8 +23,7 @@ export default function BlogIndexPage() {
           Journal
         </h1>
         <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-text-2">
-          Notes on fabric, fit and dressing for this climate, from the Shaklek
-          team.
+          Notes on fabric, fit and this climate.
         </p>
         <div className="mt-4 h-px w-10 bg-gold" />
 

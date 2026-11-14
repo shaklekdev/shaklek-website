@@ -184,9 +184,9 @@ export function buildCustomerConfirmation(opts: {
   // and still hand-built on purpose -- do not "tidy" that one into here, and do
   // not double-escape by wrapping these in esc() as the old code did.
   const rows: MailRow[] = items.map((item) => {
-    const fabric = item.fabric ? item.fabric.charAt(0).toUpperCase() + item.fabric.slice(1) : null;
-    const size = item.size === "Tailored" ? "Tailored to you" : item.size ? `Size ${item.size}` : null;
-    const spec = [fabric, item.color, size].filter(Boolean).join(" \u00b7 ");
+    // No fabric: linen is the only one (fabrics.ts), founder 2026-11-14.
+    const size = item.size === "Tailored" ? "Tailored" : item.size ? `Size ${item.size}` : null;
+    const spec = [item.color, size].filter(Boolean).join(" \u00b7 ");
     // Customer-facing: hide premium defaults never offered (see parameterSliders).
     const shown = chosenLabelsForName(item.name, item.category ?? undefined, item.changes, catalog, (c) => paramKeyFor(c));
     const changes = shown.length ? shown.join(", ") : "";
@@ -203,7 +203,6 @@ export function buildCustomerConfirmation(opts: {
   if (discount > 0) totals.push({ label: "Discount", amount: `\u2212AED ${discount.toFixed(2)}` });
   totals.push({ label: "Total", amount: `AED ${total}`, strong: true });
 
-  const one = items.length === 1;
 
   const built = buildEmail({
     // ⚠️ TRANSACTIONAL, so no visible unsubscribe line. This is the receipt for
@@ -216,7 +215,7 @@ export function buildCustomerConfirmation(opts: {
     heading: "Order confirmed",
     eyebrow: ref ? `Order reference ${ref}` : undefined,
     lines: [
-      `Thank you. Your ${one ? "piece is" : "pieces are"} on ${one ? "its" : "their"} way to being made.`,
+      "Thank you.",
     ],
     rows,
     totals,
@@ -227,10 +226,10 @@ export function buildCustomerConfirmation(opts: {
     button: undefined,
     note: {
       lines: [
-        "We will contact you within 24 hours to confirm your details. Your piece is then made for you with special care; allow up to 3 weeks from confirmation, and delivery is included anywhere in the UAE.",
-        `Want this order and any future ones in one place? Sign up with this same address (${email}) and it will already be there.`,
+        "We will contact you within 24 hours to confirm your details. Allow up to 3 weeks from confirmation. Delivery is included.",
+        `Sign up with ${email} and this order will already be there.`,
       ],
-      button: { label: "Create a free account", url: `${appUrl}/sign-up` },
+      button: { label: "Create an account", url: `${appUrl}/sign-up` },
     },
   });
   return { html: built.html, text: built.text };

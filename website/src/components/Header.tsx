@@ -158,7 +158,7 @@ export default function Header() {
           </svg>
           <span className="hidden leading-tight sm:block">
             <span className="block text-[10px] tracking-wide text-text-3 uppercase">
-              Need help? Message us
+              Need help?
             </span>
             <span className="block text-[13px] font-medium">hello@shaklek.com</span>
           </span>

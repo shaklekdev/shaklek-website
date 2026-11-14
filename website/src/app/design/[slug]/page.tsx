@@ -116,13 +116,8 @@ export default async function DesignPage({
           times -- header, SizePicker, this paragraph. Founder kept two: the
           header "Need help" link, which is on every page, and the SizePicker
           line, which is the one that helps the Tailored decision. */}
-      <div className="mx-auto w-full max-w-xl px-4 pb-10 sm:px-6 lg:max-w-5xl">
-        <p className="border-t border-border pt-6 text-sm leading-relaxed text-text-2">
-          Every piece is cut from your measurements and your choices, with
-          special care. If it still needs a touch, one alteration is included.
-          Delivery is included everywhere in the UAE.
-        </p>
-      </div>
+      {/* The fit/delivery paragraph that stood here was cut 2026-11-14
+          (founder copy clean-up): it repeated the "All included" list above. */}
       {/* COMPLETE YOUR LOOK, curated per piece in catalog.ts (COMPLETE_THE_LOOK).
           ⚠️ BELOW EVERYTHING, never beside the buy block: the customizer is one
           decision and a row of other garments next to Add to cart competes with
@@ -132,7 +127,7 @@ export default async function DesignPage({
           <h2 className="border-t border-border pt-8 text-lg text-text">Complete your look</h2>
           <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-6 lg:grid-cols-3">
             {looks.map((l) => (
-              <CatalogCard key={l.slug} item={l} />
+              <CatalogCard key={l.slug} item={l} cta={false} />
             ))}
           </div>
         </section>
