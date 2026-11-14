@@ -135,6 +135,14 @@ for (let i = 0; i < d.length; i++) {
   caption(x, yy + ch - 48, cw, d[i].title, d[i].sub);
 }
 
+export function parseMeasurements(t) {
+  const out = {}; const num = (re) => { const x = t.match(re); return x ? Number(x[1]) : undefined; };
+  const map = { bust: /Bust \/ chest:\s*(\d+(?:\.\d+)?)\s*cm/i, waist: /Waist:\s*(\d+(?:\.\d+)?)\s*cm/i, hip: /Hip:\s*(\d+(?:\.\d+)?)\s*cm/i,
+    height: /Height:\s*(\d+(?:\.\d+)?)\s*cm/i, shoulder: /shoulders\s+(\d+(?:\.\d+)?)\s*cm/i, arm: /\barm\s+(\d+(?:\.\d+)?)\s*cm/i,
+    outseam: /waist to floor\s+(\d+(?:\.\d+)?)\s*cm/i, inseam: /inside leg\s+(\d+(?:\.\d+)?)\s*cm/i, underbust: /underbust\s+(\d+(?:\.\d+)?)\s*cm/i };
+  for (const [k, re] of Object.entries(map)) { const v = num(re); if (v != null) out[k] = v; }
+  return out;
+}
 // DESIGN MEASUREMENTS — the garment's own numbers, per option.
 function table(title, sub, headers, rowsT, widths) {
   doc.addPage(); header(title, "");
@@ -157,7 +165,12 @@ if (DESIGN[slug]) table("DESIGN RULES", "No size here: every rule uses HER measu
 // HER MEASUREMENTS — what to take, whether the virtual fitting gives it, and
 // what to use when it does not.
 if (NEEDS[category]) {
-  const m = cfg.measured || {}; // order: { height, bust, ... } from live or virtual fitting
+  // cfg.measured: { height, bust, ... } typed by hand, and/or cfg.measurementsText:
+  // the order_items.measurements string the online fitting saves (branch
+  // online-fitting, lib/onlineFitting.ts): "Bust / chest: 88cm, Waist: 71cm,
+  // Hip: 97cm, Height: 168cm, Online fitting (...): shoulders 39cm; arm 58cm;
+  // waist to floor 102cm; inside leg 78cm; underbust 75cm; usual size ...".
+  const m = { ...parseMeasurements(cfg.measurementsText || ""), ...(cfg.measured || {}) };
   const have = (k) => m[k] != null && m[k] !== "";
   const rowsM = NEEDS[category].map((k) => {
     const d = MEASURES[k];

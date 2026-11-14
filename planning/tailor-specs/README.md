@@ -28,6 +28,11 @@ with cm. Pilot and reference: `oversized-shirt/` (config, flats, details, patter
   drafting standards on sizeChart M, NOT measured on a garment.
 - Minimal English, capital words: the tailor reads little English.
 
+**Per order:** copy `<slug>/base.config.json`, fill `order.fields` (size, colour, options) and paste
+the order's measurements string (from the online fitting) into `"measurementsText"`, or type them
+into `"measured": {"bust": 88, ...}`. The HER MEASUREMENTS page fills itself and derives the
+missing ones (ANSUR II, ± shown). Then `node generator/tailor-sheet.mjs <config> <out.pdf>`.
+
 ## ⚠️ THE METHOD, AND IT IS THE ONLY PART THAT MATTERS
 
 **PUT THE PHOTOGRAPH BESIDE THE DRAWING AND LOOK AT THEM TOGETHER.** Every

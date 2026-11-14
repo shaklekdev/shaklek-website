@@ -47,10 +47,8 @@ export default function CheckoutForm({ total }: { total: number }) {
   // confirmed date before the pieces are made, which is true and is already how
   // the studio works.
   const units = items.reduce((n, i) => n + (i.quantity ?? 1), 0);
-  const deliveryEstimate =
-    units > 2
-      ? "Made for you, piece by piece. Allow up to 3 weeks; with several pieces we confirm your exact date with you before we start."
-      : "Made for you, piece by piece. Allow up to 3 weeks, delivery included.";
+  // (Delivery estimate removed 2026-11-14 with the details block: founder
+  // wants one line under Pay. Lead time is stated on the product page.)
   const { isSignedIn, user } = useUser();
   // Founder, 2026-11-11: Apple Pay was preselected on every device, Android
   // included. Card is the default; Apple Pay is offered (and preselected) only
@@ -410,10 +408,14 @@ export default function CheckoutForm({ total }: { total: number }) {
           the open, as the comment above requires; it now says what applies
           (final once made, one alteration for fit, faulty or wrong items
           remade or refunded) instead of what is withheld. */}
+      {/* ONE line, founder 2026-11-14 ("why all that text after the payment").
+          The change-of-mind rule must stay displayed (see above); faulty or
+          wrong items are covered in the details below and in the terms. */}
       <p className="mt-4 text-center text-xs text-text-3">
-        Delivery and card details are taken securely on the next screen. Made to order for you, so a finished piece is final: one
-        alteration is included for fit, and faulty or wrong items are remade or
-        refunded.
+        Made to order, so it&apos;s final once made. One alteration included.{" "}
+        <a href="/faq" target="_blank" rel="noopener noreferrer" className="underline hover:text-text-2">
+          Terms of purchase
+        </a>
       </p>
 
       {/* BELOW Pay since 2026-11-14 (shaklek-ui, founder ok): these pushed
@@ -437,64 +439,6 @@ export default function CheckoutForm({ total }: { total: number }) {
         placeholder="e.g. NT"
         className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-base text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
       />
-      {!isSignedIn && (
-        <div className="mt-6 text-center text-xs text-text-3">
-          <Link href="/sign-in?redirect_url=/checkout" className="text-text-2 underline">
-            Sign in
-          </Link>{" "}
-          {/* This used to read "to save your measurements and track this
-              order". It did not save them: measurements reached order_items so
-              the tailor always had them, but nothing was written to
-              customers.measurements, and the only real save path was retyping
-              them on /account. Saving is now an explicit opt-in on the design
-              page, so this states what signing in actually does. */}
-          to keep this order in your account, or continue as a guest below.
-        </div>
-      )}
-      <details className="group mt-3 border-t border-border pt-3">
-        <summary className="flex cursor-pointer list-none items-center justify-center gap-1.5 text-xs text-text-3 hover:text-text-2">
-          <span>Delivery, returns and payment</span>
-          <span aria-hidden className="transition-transform group-open:rotate-180">
-            &#9662;
-          </span>
-        </summary>
-        <div className="mx-auto mt-3 max-w-md space-y-2 text-xs leading-relaxed text-text-3">
-          <p>
-            <strong className="font-medium text-text-2">Delivery.</strong> Your
-            address is collected on the secure payment screen. Delivery is
-            included everywhere in the UAE.
-          </p>
-          <p>
-            <strong className="font-medium text-text-2">When.</strong>{" "}
-            {deliveryEstimate}
-          </p>
-          {/* ⚠️ NO WINDOW AND NO "WHETHER WE MEASURED YOU", 2026-11-05.
-              Founder, full site pass: the dated fit guarantee (10 days) is
-              stated in legal/terms and one /faq answer only; product page and
-              checkout get ONE short reassurance without a date. "Whether we
-              measured you" went because the at-home visit is off the site
-              until she defines slots (OPEN.md measuring-slots). The
-              faulty/wrong-item clause (14 days) is terms-only as well, so the
-              sentence that paraphrased it under Refunds is gone and the link
-              carries it. */}
-          <p>
-            <strong className="font-medium text-text-2">Fit.</strong>{" "}
-            Cut from your measurements and your choices, with special care. If it still needs a touch, one alteration is included.
-          </p>
-          <p>
-            <strong className="font-medium text-text-2">Refunds.</strong> See
-            the{" "}
-            <a
-              href="/legal/terms#returns"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              Returns policy
-            </a>
-          </p>
-        </div>
-      </details>
 
       {/* Shaklek+ sits after the decision, not before it -- it must never
           compete with the Pay button. */}
