@@ -17,6 +17,22 @@ export default function Footer() {
         <p className="text-center sm:text-left">
           <span className="text-text-2">{SITE_TAGLINE}</span>
           <span className="mt-1 block sm:mt-0 sm:ml-3 sm:inline">© 2026 Shaklek</span>
+          {/* Instagram, founder 2026-11-14: a live brand account reassures a
+              first-time buyer. A plain link, no embedded feed (no third-party
+              script, nothing sent to Meta without consent). 44px tap target. */}
+          <a
+            href="https://www.instagram.com/shaklek.uae/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Shaklek on Instagram"
+            className="mx-auto mt-1 flex h-11 w-11 items-center justify-center text-text-2 hover:text-text sm:mx-0 sm:mt-0 sm:ml-2 sm:inline-flex sm:align-middle"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none" />
+            </svg>
+          </a>
         </p>
         {/* ⚠️ HALF OF THIS FOOTER DEAD-ENDED WHILE THE SHOP WAS SHUT.
             Questions, Size guide, Delivery and Returns all rewrite to
