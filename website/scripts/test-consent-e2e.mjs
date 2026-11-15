@@ -91,7 +91,11 @@ await evalJs(`try{localStorage.clear()}catch(e){}`);
 hits = [];
 await send("Page.navigate", { url: BASE });
 await sleep(3500);
-check(hits.length > 0, `OPT-OUT (2026-11-15): Meta is contacted before any choice (saw ${hits.length})`);
+if (process.env.SHOW_HITS) console.log("       first-load hits:", hits.map((u) => u.slice(0, 80)));
+// fbevents.js does not send /tr hits from an automated browser, so the
+// strongest thing this harness can see is the library and the pixel config
+// loading. Whether PageViews really arrive is checked in Events Manager.
+check(hits.some((u) => /signals\/config\//.test(u)), `OPT-OUT (2026-11-15): the Meta pixel loads before any choice (saw ${hits.length} Meta requests)`);
 
 await sleep(1500); // the bar appears 4 s after landing
 const barText = await evalJs(`document.body.innerText.includes('Refuse') && /\\bOK\\b/.test(document.body.innerText)`);
@@ -125,9 +129,14 @@ await sleep(5500);
 // Control: the same client-side navigation WITHOUT a refusal must reach Meta,
 // or the check below proves nothing.
 hits = [];
-await evalJs(`(()=>{const a=Array.from(document.querySelectorAll('a[href^="/"]')).find(a=>a.getAttribute('href').length>1);if(a)a.click();})()`);
-await sleep(3000);
-check(hits.length > 0, `control: a client-side navigation reaches Meta before Refuse (saw ${hits.length})`);
+await evalJs(`(()=>{window.__fbqCalls=[];const o=window.fbq;if(!o)return;const w=function(...a){window.__fbqCalls.push(a[0]+':'+a[1]);return o.apply(this,a)};Object.assign(w,o);window.fbq=w;})()`);
+// A product link: always a different route, so a PageView is due.
+const went = await evalJs(`(()=>{const a=Array.from(document.querySelectorAll('a[href^="/design/"]'))[0]||Array.from(document.querySelectorAll('a[href^="/"]')).find(a=>a.getAttribute('href').length>1&&a.getAttribute('href')!==location.pathname);if(!a)return null;const h=a.getAttribute('href');a.click();return h;})()`);
+await sleep(4000);
+console.log("       control navigated to", went, "->", await evalJs("location.pathname"));
+if (process.env.SHOW_HITS) console.log("       nav hits:", hits.map((u) => u.slice(0, 80)));
+const calls = await evalJs(`JSON.stringify(window.__fbqCalls||[])`);
+check(/track:PageView/.test(calls), `control: a client-side navigation calls fbq PageView before Refuse (${calls})`);
 const refused = await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Refuse');if(!b)return false;b.click();return true;})()`);
 if (!refused) { await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Cookie choices');if(b)b.click();})()`); await sleep(500);
   await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Refuse');if(b)b.click();})()`); }
