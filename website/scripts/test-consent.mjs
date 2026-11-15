@@ -23,28 +23,30 @@ const check = (c, m) => { if (!c) { console.error("FAIL:", m); fail++; } };
 // The default, which is the one that matters.
 store = {};
 check(readConsent() === "unset", "a visitor who never answered must read as unset");
-check(marketingAllowed() === false, "DEFAULT MUST BE NO: an unanswered visitor must not be tracked");
+check(marketingAllowed() === true, "OPT-OUT (founder 2026-11-15): an unanswered visitor is measured");
 
 writeConsent("granted");
 check(marketingAllowed() === true, "accepting must enable marketing");
 writeConsent("denied");
 check(marketingAllowed() === false, "declining must disable marketing");
 
-// A tampered or stale value must not be read as consent.
+// Only an exact "denied" is a refusal; anything else reads as unanswered.
 for (const junk of ["yes", "true", "1", "GRANTED", "", "null"]) {
   store = { "shaklek.consent.marketing.v1": junk };
-  check(marketingAllowed() === false, `a stored value of ${JSON.stringify(junk)} must not count as consent`);
+  check(readConsent() === "unset", `a stored value of ${JSON.stringify(junk)} must read as unset`);
 }
+store = { "shaklek.consent.marketing.v1": "denied" };
+check(marketingAllowed() === false, "a stored refusal must keep measurement off across visits");
 
 // Storage blocked (private mode, or a browser refusing site data): the site
 // must keep working and must fail CLOSED, never open.
 thrower = true;
 check(readConsent() === "unset", "blocked storage must read as unset, not throw");
-check(marketingAllowed() === false, "blocked storage must fail closed, not grant consent");
+check(marketingAllowed() === true, "blocked storage reads as unanswered (opt-out default)");
 let threw = false;
 try { writeConsent("granted"); } catch { threw = true; }
 check(!threw, "writing with blocked storage must not throw at the caller");
 thrower = false;
 
-console.log(fail === 0 ? "ok — consent defaults to no, and fails closed" : `${fail} failure(s)`);
+console.log(fail === 0 ? "ok — opt-out: measured by default, a refusal sticks" : `${fail} failure(s)`);
 process.exit(fail === 0 ? 0 : 1);

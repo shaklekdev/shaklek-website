@@ -21,6 +21,11 @@ import { CONSENT_REOPEN, readConsent, writeConsent } from "@/lib/consent";
 // Accept as the prominent button, Decline as a quieter one-click text button
 // beside it, friendlier words, and the bar arriving after a few seconds rather
 // than over the first image. That raises acceptance without hiding refusal.
+// ⚠️ OPT-OUT SINCE 2026-11-15 (founder): the pixel already runs while this
+// bar is showing (lib/consent.ts marketingAllowed). "OK" only records that the
+// notice was seen; "Refuse" stops measurement and deletes Meta's cookies. Do
+// not relabel OK as "Accept": nothing is being asked any more, and a button
+// that pretends to ask would misdescribe what the site does.
 export default function CookieConsent() {
   // Never render on the server: the answer lives in localStorage, so a
   // server-rendered bar would flash for people who already answered.
@@ -133,14 +138,14 @@ export default function CookieConsent() {
             onClick={() => choose("denied")}
             className="min-h-[44px] px-1 text-xs text-text-2 underline underline-offset-4 hover:text-text sm:px-2 sm:text-sm"
           >
-            Decline
+            Refuse
           </button>
           <button
             type="button"
             onClick={() => choose("granted")}
             className="min-h-[44px] rounded-full bg-accent px-4 py-2 text-xs text-white hover:bg-accent-light sm:px-5 sm:text-sm"
           >
-            Accept
+            OK
           </button>
         </div>
       </div>

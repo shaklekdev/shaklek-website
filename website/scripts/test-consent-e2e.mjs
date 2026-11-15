@@ -1,4 +1,4 @@
-// Does the pixel actually stay silent until consent?
+// Opt-out since 2026-11-15: does the pixel run by default and stay silent after Refuse?
 //
 // The unit test proves the consent module defaults to no. It cannot prove the
 // page honours it, and that is the claim that matters: this decides whether a
@@ -9,8 +9,8 @@
 //   npx next start -p 3111
 //   npx tsx scripts/test-consent-e2e.mjs http://localhost:3111
 //
-// Passing means: zero requests to Meta before a choice, requests after Accept,
-// still zero after Decline.
+// Passing means: requests to Meta before any choice (opt-out), requests after OK,
+// zero after Refuse.
 import { spawn } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -91,10 +91,11 @@ await evalJs(`try{localStorage.clear()}catch(e){}`);
 hits = [];
 await send("Page.navigate", { url: BASE });
 await sleep(3500);
-check(hits.length === 0, `no request to Meta before any choice (saw ${hits.length})`);
+check(hits.length > 0, `OPT-OUT (2026-11-15): Meta is contacted before any choice (saw ${hits.length})`);
 
-const barText = await evalJs(`document.body.innerText.includes('Decline') && document.body.innerText.includes('Accept')`);
-check(barText === true, "the consent bar is shown, with Decline as a real button");
+await sleep(1500); // the bar appears 4 s after landing
+const barText = await evalJs(`document.body.innerText.includes('Refuse') && /\\bOK\\b/.test(document.body.innerText)`);
+check(barText === true, "the notice is shown, with Refuse as a real button");
 
 // The bar must not understate what it asks for. Meta sets TWO cookies, _fbp
 // always and _fbc on an ad click, and lib/consent.ts deletes both. A banner
@@ -110,18 +111,38 @@ const tracky = await evalJs(`/track(s|ing|er|ers)?\\b/i.test(document.body.inner
 check(tracky === false, "no form of the word track appears in customer-facing copy");
 
 const scriptBefore = await evalJs(`!!document.getElementById('meta-pixel')`);
-check(scriptBefore === false, "the pixel script tag is absent before consent");
-
-const noscriptBefore = await evalJs(`document.documentElement.innerHTML.includes('facebook.com/tr')`);
-check(noscriptBefore === false, "the no-JS fallback image is absent before consent");
+check(scriptBefore === true, "the pixel script tag is present before any choice (opt-out)");
 
 // 2. Declined.
 await load("denied");
-check(hits.length === 0, `no request to Meta after Decline (saw ${hits.length})`);
+check(hits.length === 0, `no request to Meta after Refuse (saw ${hits.length})`);
+
+// 2b. Refuse on a page where the pixel is ALREADY running (the opt-out case):
+// after the click, a client-side navigation must not reach Meta.
+await evalJs(`try{localStorage.clear()}catch(e){}`);
+await send("Page.navigate", { url: BASE });
+await sleep(5500);
+// Control: the same client-side navigation WITHOUT a refusal must reach Meta,
+// or the check below proves nothing.
+hits = [];
+await evalJs(`(()=>{const a=Array.from(document.querySelectorAll('a[href^="/"]')).find(a=>a.getAttribute('href').length>1);if(a)a.click();})()`);
+await sleep(3000);
+check(hits.length > 0, `control: a client-side navigation reaches Meta before Refuse (saw ${hits.length})`);
+const refused = await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Refuse');if(!b)return false;b.click();return true;})()`);
+if (!refused) { await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Cookie choices');if(b)b.click();})()`); await sleep(500);
+  await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Refuse');if(b)b.click();})()`); }
+check(await evalJs(`localStorage.getItem('shaklek.consent.marketing.v1')`) === "denied", "Refuse was actually clicked on the live page");
+await sleep(500);
+hits = [];
+await evalJs(`(()=>{const a=Array.from(document.querySelectorAll('a[href^="/"]')).find(a=>a.getAttribute('href').length>1);if(a)a.click();})()`);
+await sleep(3000);
+await evalJs(`(()=>{const b=document.querySelector('main button, main a');if(b)b.dispatchEvent(new MouseEvent('click',{bubbles:true}));})()`);
+await sleep(1500);
+check(hits.length === 0, `no request to Meta after Refuse on a live page, then navigating (saw ${hits.length})`);
 
 // 3. Granted.
 await load("granted");
-check(hits.length > 0, `Meta is contacted after Accept (saw ${hits.length})`);
+check(hits.length > 0, `Meta is contacted after OK (saw ${hits.length})`);
 
 // 4. Withdrawal. Consent that cannot be withdrawn as easily as it was given is
 // not a lawful basis, so the footer control and the cookie deletion are part of
@@ -135,14 +156,14 @@ check(hasLink === true, "a Cookie choices control exists in the footer");
 // which failed while the bar was in fact opening correctly.
 await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Cookie choices');if(b)b.click();})()`);
 await sleep(500);
-const reopened = await evalJs(`document.body.innerText.includes('Decline') && document.body.innerText.includes('Accept')`);
+const reopened = await evalJs(`document.body.innerText.includes('Refuse')`);
 check(reopened === true, "the control reopens the bar so a choice can be changed");
 
 // Withdrawing must actually remove the identifier, not just stop future events.
 await evalJs(`document.cookie='_fbp=fb.1.test.123; path=/'`);
 const before = await evalJs(`document.cookie.includes('_fbp')`);
 check(before === true, "test cookie was set (control for the check below)");
-await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Decline');if(b)b.click();})()`);
+await evalJs(`(()=>{const b=Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Refuse');if(b)b.click();})()`);
 await sleep(400);
 const after = await evalJs(`document.cookie.includes('_fbp')`);
 check(after === false, "declining DELETES the Meta cookie, so withdrawal removes something");
@@ -150,7 +171,7 @@ check(after === false, "declining DELETES the Meta cookie, so withdrawal removes
 const stored = await evalJs(`localStorage.getItem('shaklek.consent.marketing.v1')`);
 check(stored === "denied", "the new choice is persisted");
 
-console.log(fail === 0 ? "\nok — silent until consent, and withdrawal actually withdraws" : `\n${fail} failure(s)`);
+console.log(fail === 0 ? "\nok — measured by default, and Refuse actually stops it" : `\n${fail} failure(s)`);
 ws.close();
 chrome.kill();
 process.exit(fail === 0 ? 0 : 1);

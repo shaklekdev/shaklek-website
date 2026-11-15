@@ -5,12 +5,9 @@
 // would be theatre. If analytics is ever added, add a category here rather
 // than quietly widening what "accepted" means.
 //
-// THE DEFAULT IS NO. A visitor who has never answered is treated as having
-// declined, which is the only safe default: consent has to be an act, and
-// silence is not one. That is also why this cannot be inferred from anything
-// else the visitor does, such as signing up to a newsletter. Consent bundled
-// into an unrelated offer is not freely given, and in practice it would only
-// ever cover the small fraction of visitors who take the offer.
+// THE DEFAULT IS YES SINCE 2026-11-15 (opt-out, founder decision; see
+// marketingAllowed below). Only an explicit "denied" switches measurement off.
+// It used to default to no; that history is in git.
 
 const KEY = "shaklek.consent.marketing.v1";
 
@@ -35,6 +32,18 @@ export function writeConsent(state: "granted" | "denied"): void {
     // A visitor blocking storage still gets a working site. They will be asked
     // again next visit, which is the correct failure direction: it never
     // silently upgrades to "granted".
+  }
+  // ⚠️ Under opt-out a refusal arrives with fbevents.js ALREADY RUNNING, and
+  // unmounting our <Script> does not stop it: Meta's library keeps its own
+  // listeners (SPA navigation, button clicks) and would keep sending and
+  // re-set _fbp. "revoke" is Meta's own switch that holds every further event;
+  // "grant" lifts it if she changes her mind on the same page.
+  // (Found by the shaklek-marketing review, 2026-11-15.)
+  try {
+    const w = window as unknown as { fbq?: (...a: unknown[]) => void };
+    w.fbq?.("consent", state === "denied" ? "revoke" : "grant");
+  } catch {
+    /* never break the page over a tracker */
   }
   if (state === "denied") clearMarketingCookies();
   window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: state }));
@@ -82,7 +91,16 @@ function clearMarketingCookies(): void {
   }
 }
 
-/** The single question the rest of the app should ask. */
+/**
+ * The single question the rest of the app should ask.
+ *
+ * ⚠️ OPT-OUT SINCE 2026-11-15 (founder decision). Advertising measurement runs
+ * unless the visitor has said NO. Under opt-in, Meta saw ~6 of ~45 real ad
+ * visits (Amplify access logs, 13-15 Nov) and optimised blind. Legal position
+ * taken knowingly: UAE PDPL is in force but its executive regulations were
+ * still unpublished; the founder accepted that risk. A refusal is still a real
+ * one-tap button, it is remembered, and it deletes Meta's cookies.
+ */
 export function marketingAllowed(): boolean {
-  return readConsent() === "granted";
+  return readConsent() !== "denied";
 }

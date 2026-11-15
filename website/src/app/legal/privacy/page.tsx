@@ -41,15 +41,15 @@ const adsEnabled = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacy & Cookies" updated="12 November 2026">
+    <LegalPage title="Privacy & Cookies" updated="15 November 2026">
       <p>
         This explains what Shaklek collects, why, and who else touches it. We
         collect what we need to make and deliver your order, and little else. We
         do not sell personal data.{" "}
         {adsEnabled ? (
           <>
-            We measure our advertising with Meta, only with your consent. See
-            Cookies below.
+            We measure our advertising with Meta, and you can refuse it at any
+            time. See Cookies below.
           </>
         ) : (
           <>We run no advertising cookies, and there is no analytics on this site.</>
@@ -122,7 +122,8 @@ export default function PrivacyPage() {
         to handle alterations and remakes, and to keep the records a business is
         required to keep. We rely on the performance of our contract with you
         for order data, your consent for saved measurements, and our legitimate
-        interest in a working, secure website for server logs.
+        interest in a working, secure website for server logs
+        {adsEnabled ? <> and in measuring our advertising, which you can refuse at any time</> : null}.
       </p>
 
       <h2 className="pt-2 text-base font-medium text-text">
@@ -162,13 +163,13 @@ export default function PrivacyPage() {
       {adsEnabled ? (
         <>
           <p>
-            <strong>Meta Pixel, and only with your agreement.</strong> Nothing
-            is set and nothing reaches Meta until you have chosen. We ask on your
-            first visit, with Decline one tap away, and if you do not answer the
-            answer is no.
+            <strong>Meta Pixel, unless you refuse it.</strong> It runs from your
+            first visit. A notice at the bottom of the page tells you so, with
+            Refuse one tap away. If you refuse, nothing more reaches Meta and its
+            cookies are deleted.
           </p>
           <p>
-            If you accept, Meta&apos;s pixel lets us measure how our advertising
+            Meta&apos;s pixel lets us measure how our advertising
             on Instagram and Facebook actually performs: which piece was looked
             at, what reached the cart, what became an order, and the amount. Meta is a joint
             controller for this information and uses it to measure and target
@@ -191,12 +192,12 @@ export default function PrivacyPage() {
           </p>
           <p>
             If you are signed in to Instagram or Facebook, Meta may still
-            recognise you here, as on any site with its pixel; declining stops
+            recognise you here, as on any site with its pixel; refusing stops
             what we send and removes the cookies.
           </p>
           <p>
             <strong>You can change your mind at any time.</strong> Use{" "}
-            <strong>Cookie choices</strong> at the bottom of any page. Declining
+            <strong>Cookie choices</strong> at the bottom of any page. Refusing
             deletes the cookies Meta has set and stops anything further being
             sent.
           </p>

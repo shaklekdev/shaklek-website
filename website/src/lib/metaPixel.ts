@@ -62,8 +62,9 @@ export function newEventId(prefix: string): string {
 
 /**
  * What checkout hands the server for the Conversions API -- ONLY when the
- * visitor accepted the cookie bar, and only the pixel's own cookie ids. No
- * consent: undefined, and the server sends nothing (lib/metaCapi.ts).
+ * visitor has not refused (opt-out since 2026-11-15, lib/consent.ts), and only
+ * the pixel's own cookie ids. Refused: undefined, and the server sends nothing
+ * (lib/metaCapi.ts).
  */
 export function capiHandoff(eventId: string): { consent: true; eventId: string; fbp: string | null; fbc: string | null } | undefined {
   try {
