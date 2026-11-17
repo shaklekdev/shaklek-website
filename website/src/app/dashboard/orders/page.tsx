@@ -148,6 +148,9 @@ export default async function OrdersDashboardPage() {
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-slate-500">
                       {new Date(order.createdAt).toLocaleString("en-AE", {
+                        // The server renders in UTC; without this a 12:36 Dubai
+                        // order read 8:36 AM (founder, first order, 2026-11-17).
+                        timeZone: "Asia/Dubai",
                         dateStyle: "medium",
                         timeStyle: "short",
                       })}

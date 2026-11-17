@@ -162,7 +162,11 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         size: line.size === "Tailored" ? prev.size : line.size,
         measurements: line.measurements,
         fitNotes: resolveFitNotes(item.category, line.fitNotes),
-        changes: changesFromLabels(item.category, line.changes, item.defaultChanges),
+        // Only offered sliders come back: changesFromLabels also refills the
+        // premium tier at its defaults, which then rode into the order.
+        changes: changesFromLabels(paramKeyFor(item), line.changes, item.defaultChanges).filter((c) =>
+          renderParamsForCategory(paramKeyFor(item)).some((p) => p.type === c.type),
+        ),
         freeformNotes: line.freeformNotes,
       }));
       return;

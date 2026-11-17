@@ -71,7 +71,10 @@ export async function sendOrderNotificationEmail(
       const inc = includedWith(item.category).map((p) => ` + ${p.name}`).join("");
       const parts = [`${i + 1}. ${item.name}${inc}${qty} · ${item.fabric}, ${item.color}, size ${item.size}, AED ${item.price}`];
       if (item.measurements) parts.push(`   Measurements: ${item.measurements}`);
-      if (item.changes && item.changes.length) parts.push(`   Changes: ${item.changes.join(", ")}`);
+      // Same filter as the customer's copy: never the premium defaults she was
+      // never offered (founder got "1 pocket" on the first real order, 2026-11-17).
+      const chosen = chosenLabelsForName(item.name, item.category ?? undefined, item.changes, catalog, (c) => paramKeyFor(c));
+      if (chosen.length) parts.push(`   Changes: ${chosen.join(", ")}`);
       if (item.freeformNotes) parts.push(`   Note: "${item.freeformNotes}"`);
       if (item.previewImage) parts.push(`   (reference photo attached)`);
       return parts.join("\n");

@@ -12,6 +12,7 @@ import {
   changesFromLabels,
   renderParamsForCategory,
   paramKeyFor,
+  chosenLabelsForName,
 } from "@/data/parameterSliders";
 import { catalog, includedWith } from "@/data/catalog";
 import { colors } from "@/data/colors";
@@ -302,7 +303,7 @@ export function buildPdf(
       .fillColor(MUTED)
       .font("Helvetica")
       .text(
-        `${totalGarments} garment${totalGarments === 1 ? "" : "s"} · ${groups.length} spec${groups.length === 1 ? "" : "s"} · placed ${order.createdAt.toLocaleDateString("en-AE", { dateStyle: "medium" })}`,
+        `${totalGarments} garment${totalGarments === 1 ? "" : "s"} · ${groups.length} spec${groups.length === 1 ? "" : "s"} · placed ${order.createdAt.toLocaleDateString("en-AE", { timeZone: "Asia/Dubai", dateStyle: "medium" })}`,
       );
     doc.moveDown(0.5);
     doc.fontSize(9).fillColor("#999").text("Quote this reference on every message about this order.");
@@ -338,7 +339,10 @@ export function buildPdf(
             : item.size
               ? `Standard ${item.size}`
               : null,
-        ...(item.changes ?? []),
+        // Only what the customer chose. Orders placed before 2026-11-17 can
+        // still carry never-offered premium defaults ("1 pocket, Button
+        // closure"), which printed on the first real order's tech pack.
+        ...chosenLabelsForName(item.name, item.category ?? undefined, item.changes, catalog, (c) => paramKeyFor(c)),
       ]
         .filter(Boolean)
         .join(" · ");

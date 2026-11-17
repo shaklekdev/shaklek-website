@@ -4,7 +4,13 @@ import { getDb, schema } from "@/db/client";
 import { getStripe } from "@/lib/stripe";
 import { resolveOrderPricing, type PricedItem } from "@/lib/pricing";
 import { resolveFabric } from "@/data/fabrics";
-import { includedWith } from "@/data/catalog";
+import { catalog, includedWith, type CatalogItem } from "@/data/catalog";
+import { customerChosenLabels, paramKeyFor } from "@/data/parameterSliders";
+
+function catalogBySlug(slug: string): Pick<CatalogItem, "category" | "paramSet"> {
+  // resolveOrderPricing already refused any slug not in the catalogue.
+  return catalog.find((c) => c.slug === slug)!;
+}
 import { cleanEventId, cleanFbCookie, clientIp, sendCapiEvent } from "@/lib/metaCapi";
 import { resolveFitNotes } from "@/data/fitNotes";
 import { reserveFabricOrThrow, SoldOutError } from "@/lib/fabricStock";
@@ -153,8 +159,16 @@ async function persistOrder(
         // This reaches a tailor's document, so nothing a client can type may
         // survive -- same rule as price, quantity and fabric.
         fitNotes: resolveFitNotes(priced[index].category, item.fitNotes),
+        // Only labels of sliders the customer was actually OFFERED for this
+        // piece. A cart line restored for editing used to come back with the
+        // never-offered premium defaults ("1 pocket, Button closure"), and the
+        // first real order (2026-11-17) sent them to the tailor and the
+        // founder. Resolved against the server-priced slug, like fitNotes.
         changes: Array.isArray(item.changes)
-          ? item.changes.slice(0, MAX_CHANGES).map((change) => text(change, 200))
+          ? customerChosenLabels(
+              paramKeyFor(catalogBySlug(priced[index].slug)),
+              item.changes.slice(0, MAX_CHANGES).map((change) => text(change, 200)),
+            )
           : [],
         freeformNotes: text(item.freeformNotes),
         priceAed: String(priced[index].price),
