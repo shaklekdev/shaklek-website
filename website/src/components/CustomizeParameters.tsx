@@ -264,11 +264,18 @@ export default function CustomizeParameters({
           IntersectionObserver-based lazy loading, which would otherwise
           never fire for an always-invisible 0x0 element. */}
       <div aria-hidden="true" className="pointer-events-none h-0 w-0 overflow-hidden opacity-0">
-        {preloadImages
+        {/* ⚠️ NOT `priority` ANY MORE (2026-11-17). `priority` puts every one of
+            these in <head> as a high-priority preload, so a phone downloaded
+            eight 1200px photos (all sleeve x length x front/back) BEFORE the
+            one it was showing. Ads land here; the founder and her friends saw
+            the page crawl on mobile and ~60% of ad clicks never arrived.
+            They now start once the visible photo has loaded (`warm`), at low
+            priority, ahead of the other colourways. */}
+        {(warm ? preloadImages : [])
           .filter((src) => src !== activeImage)
           .map((src) => (
             <div key={src} className="relative h-1 w-1">
-              <Image src={src} alt="" fill sizes={PREVIEW_SIZES} priority />
+              <Image src={src} alt="" fill sizes={PREVIEW_SIZES} loading="eager" fetchPriority="low" />
             </div>
           ))}
         {/* Other colourways: no `priority`, and fetchPriority="low", so they
