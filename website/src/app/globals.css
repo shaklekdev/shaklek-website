@@ -113,6 +113,48 @@ h3 {
   line-height: 1.5;
 }
 
+/* PRODUCT PAGE, FIRST SCREEN ON PHONES (below lg). Founder ok 2026-11-18.
+   The photo takes whatever the screen has left once the header above it and
+   the name, colours, option chips and Add to cart below it are counted, so
+   she taps an option and watches the garment change without scrolling.
+
+   - NOTHING IS STICKY. The photo is in normal flow and simply short enough.
+     See the layout history in CustomizeParameters.tsx before changing that.
+   - svh, not dvh: dvh grows when the phone's URL bar hides, which would
+     resize the photo while she scrolls. At scroll 0 the two are equal.
+   - --stage-top / --stage-below are measured by CustomizeParameters; the
+     fallbacks are the measured values at 360-390px, so the server-rendered
+     page is already the right height and nothing jumps on hydration.
+   - The cookie bar (61px) is reserved from the first paint on a first visit
+     rather than when it arrives 4s later, so the page does not shift under
+     her thumb. --stage-reserve drops to 0 once she has answered.
+   - When it cannot all fit, the PHOTO gives (down to 200px). Tap targets
+     never shrink.
+   Unlayered on purpose: globals h1 is unlayered and beats Tailwind's layered
+   utilities, which is why the name had an inline font-size before. */
+.design-name {
+  font-size: 15px;
+  letter-spacing: 0;
+}
+@media (width < 64rem) {
+  .design-name {
+    font-size: 17px;
+  }
+  .design-stage-photo {
+    --stage-chrome: calc(
+      var(--stage-top, 86px) + var(--stage-below, 236px) +
+        max(var(--consent-h, 0px), var(--stage-reserve, 61px))
+    );
+    --stage-h: calc(100vh - var(--stage-chrome));
+    height: clamp(200px, var(--stage-h), min(150vw, 672px));
+  }
+  @supports (height: 100svh) {
+    .design-stage-photo {
+      --stage-h: calc(100svh - var(--stage-chrome));
+    }
+  }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

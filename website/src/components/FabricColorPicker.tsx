@@ -4,6 +4,9 @@ import { colors } from "@/data/colors";
 import { FABRIC_OPTIONS, SELLABLE_FABRICS } from "@/data/fabrics";
 import type { Fabric } from "@/data/designSpec";
 
+// One string, two places (see the note beside it below). Founder's wording.
+export const SHADE_NOTE = "Colours may vary slightly on screen.";
+
 export default function FabricColorPicker({
   fabric,
   color,
@@ -39,18 +42,22 @@ export default function FabricColorPicker({
   // instead of sitting level with them. The box now shares a row with the dots
   // and the note drops underneath the pair.
   return (
-    <div className="mt-5">
+    /* PHONES (below lg): name and swatches share ONE line, so the colours sit
+       on the first screen with the photo (founder ok 2026-11-18). The name
+       may wrap onto two lines ("Burgundy, sold out"); the swatches never wrap
+       and never shrink. Desktop keeps the name above the swatches. */
+    <div className="mt-2 flex min-h-11 items-center gap-3 lg:mt-5 lg:block lg:min-h-0">
       {/* THE COLOUR NAME, VISIBLE. Founder, 2026-11-13: on mobile the name
           lived only in title/aria-label, so a customer could not tell us which
           colour she wanted (an offline order hit this). aria-live so a screen
           reader hears the change on tap. */}
-      <p className="mb-2 text-[13px] text-text-2" aria-live="polite">
+      <p className="min-w-0 text-[13px] leading-tight text-text-2 lg:mb-2 lg:leading-normal" aria-live="polite">
         <span className="uppercase tracking-[0.14em] text-text-2">Colour:</span>{" "}
         <span className="text-text">{color}</span>
         {soldOut.includes(color) ? <span className="text-text-2">, sold out</span> : null}
       </p>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex shrink-0 items-center justify-between gap-4 lg:flex-wrap">
+      <div className="flex items-center gap-3 lg:flex-wrap">
         {colors.filter((c) => available.includes(c.name)).map((c) => (
           <button
             key={c.name}
@@ -115,8 +122,11 @@ export default function FabricColorPicker({
           vary". Keep the retail phrasing; do not describe what a screen does,
           and do not call the chips "true shades" (an exact match is not
           something we can promise). */}
-      <p className="mt-3 text-[11px] leading-relaxed text-text-3">
-        Colours may vary slightly on screen.
+      {/* Below lg this same line is rendered by CustomizeParameters, under the
+          first-screen Add to cart, so it does not push the option chips off
+          the screen. It is shown exactly once at every width. */}
+      <p className="mt-3 hidden text-[11px] leading-relaxed text-text-3 lg:block">
+        {SHADE_NOTE}
       </p>
       {/* ⚠️ NO "COMING SOON" LINE. Founder, 2026-09-14: "we need to remove the
           coming soon thing from everywhere, I still see it." This rendered

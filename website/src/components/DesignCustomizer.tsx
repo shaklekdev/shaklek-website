@@ -112,6 +112,25 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  // PHONES: a second Add to cart sits on the first screen, right under the
+  // option chips (founder ok 2026-11-18). While THAT one is on screen the
+  // sticky bar would be a duplicate a few pixels below it, so the bar waits
+  // until both buttons are off screen -- which is the stretch between them,
+  // while she is in Size and the notes. The -60px top margin stops counting
+  // the button once it has slid under the sticky header.
+  // From lg up the first-screen button is display:none, an observer reports
+  // it as not intersecting, and the bar behaves exactly as it did.
+  const stageBuyRef = useRef<HTMLDivElement | null>(null);
+  const [stageBuyVisible, setStageBuyVisible] = useState(true);
+  useEffect(() => {
+    const el = stageBuyRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setStageBuyVisible(e.isIntersecting), {
+      rootMargin: "-60px 0px 0px 0px",
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   const { items, addItem, updateItem } = useCart();
   const { isSignedIn } = useUser();
   const router = useRouter();
@@ -329,15 +348,22 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
     }
     router.push("/cart");
   }
+  // The first-screen button on phones. The two older buttons below keep their
+  // own inline copies of these on purpose: this change does not touch them.
+  const buyDisabled = !spec.constraints.passed || colorSoldOut;
+  const buyLabel = colorSoldOut ? `${spec.color} sold out` : editingId ? "Save changes" : "Add to cart";
 
   return (
     // max-w-xl here is the real cap on the customizer -- the page wrapper has
     // one too, but this inner one is narrower and wins. Widened from lg up so
     // the two-column layout in CustomizeParameters actually has room; below lg
     // the original single-column width is unchanged.
-    <div className="mx-auto w-full max-w-xl px-4 py-8 sm:px-6 sm:py-10 lg:max-w-5xl">
+    /* Below lg there is NO space above the photo: the 48px that stood between
+       the header and the garment is what the option chips needed to fit on
+       the first screen. From lg the padding is what it was (py-10, mt-4). */
+    <div className="mx-auto w-full max-w-xl px-4 pb-8 sm:px-6 sm:pb-10 lg:max-w-5xl lg:pt-10">
       {editingId && (
-        <p className="mb-4 rounded-shaklek-xs border border-border-strong bg-surface-2 px-4 py-3 text-xs text-text-2">
+        <p className="mt-2 mb-2 rounded-shaklek-xs lg:mt-0 lg:mb-4 border border-border-strong bg-surface-2 px-4 py-3 text-xs text-text-2">
           Editing a piece already in your cart. Your changes replace it.
         </p>
       )}
@@ -348,8 +374,24 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           a decision and a cart is somewhere to lose them. Order is now
           options, then size, then the optional detail, then add to cart. */}
 
-      <div className="mt-4">
+      <div className="lg:mt-4">
           <CustomizeParameters
+            stageAction={
+              /* lg:hidden -- desktop has the buy block in view in its own
+                 column already. min-h-12: a 48px target. Same handler, same
+                 disabled rule and same label as the button below Size, and
+                 the default is Tailored (we measure her after the order), so
+                 adding from here is a complete, makeable order. */
+              <div ref={stageBuyRef} className="mt-3 lg:hidden">
+                <button
+                  onClick={handleSave}
+                  disabled={buyDisabled}
+                  className="min-h-12 w-full rounded-full bg-accent px-8 py-3 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+                >
+                  {buyLabel}
+                </button>
+              </div>
+            }
             spec={spec}
             onSpecChange={setSpec}
             itemName={item.name}
@@ -513,7 +555,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           />
 
       {/* Only while the real button is off screen, so it never doubles up. */}
-      {!buyVisible && (
+      {!buyVisible && !stageBuyVisible && (
         // bottom follows the cookie bar's height while it is open (CookieConsent
         // publishes --consent-h), so the button is never underneath it.
         <div

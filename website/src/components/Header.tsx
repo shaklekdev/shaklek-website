@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import BrandLockup from "@/components/BrandLockup";
@@ -85,7 +85,34 @@ export default function Header() {
   // was bars). Moving it out of the sticky element, rather than hiding it on
   // scroll, means no layout jump.
   const barScrollsAway = pathname.startsWith("/design/");
-  // NO HAMBURGER. The three links live in the black bar below the wordmark at
+  // ⚠️ PRODUCT PAGES ON PHONES GET A COMPACT HEADER (founder ok on the mockup,
+  // 2026-11-18: "oui bcp mieux"). Below lg, on /design/* only: a shorter logo
+  // row and NO black band, so the photo, the colours and both option groups
+  // fit on the first screen and she watches the garment change as she taps.
+  // Ads land on these pages. Everything here is keyed on `compact` AND an
+  // lg: class, so desktop and every other page render exactly as before.
+  //
+  // The two links the black band carried are NOT hidden without a
+  // replacement: they move into the menu button that takes the email icon's
+  // place, and "Email us" goes in with them. That is the 2026-08-23 audit
+  // lesson (nav was `hidden sm:inline` with no way to reach it).
+  const compact = barScrollsAway;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    const onDown = (e: PointerEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onDown);
+    };
+  }, [menuOpen]);
+  // NO HAMBURGER (every page except /design/* on a phone, see `compact`). The three links live in the black bar below the wordmark at
   // every width, so there is nothing left for a menu to hide. That removes the
   // panel, its Escape handler, its close-on-navigation state, and the bug where
   // "/catalog" tapped from the home page changed only the hash -- which the
@@ -143,7 +170,56 @@ export default function Header() {
           them. The previous full-bleed row existed only to stop a LEFT-aligned
           wordmark reading as "middle" on a wide screen; with the mark centred
           on purpose that reason is gone. */}
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 py-4 sm:py-5">
+      <div
+        className={`mx-auto grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-6 ${
+          compact ? "border-b border-border py-2 lg:border-b-0 lg:py-5" : "py-4 sm:py-5"
+        }`}
+      >
+        {compact ? (
+          <div ref={menuRef} className="justify-self-start lg:hidden">
+            <button
+              type="button"
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              aria-controls="design-menu"
+              onClick={() => setMenuOpen((v) => !v)}
+              /* 22px glyph, 44px hit area via ::before, same as the icons on the right. */
+              className="relative flex h-6 w-6 items-center justify-center text-text before:absolute before:-inset-2.5 before:content-['']"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+            {/* Every link closes the panel itself, so it cannot stay open over
+                the clothes the way the old hamburger did on a hash-only
+                navigation (see the NO HAMBURGER note above). */}
+            {menuOpen ? (
+              <nav
+                id="design-menu"
+                aria-label="Main"
+                className="absolute inset-x-0 top-full border-b border-border-strong bg-white px-6 py-1 shadow-[var(--shadow-lg)]"
+              >
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="font-body flex min-h-11 items-center border-b border-border text-sm tracking-[0.06em] text-text"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <a
+                  href="mailto:hello@shaklek.com"
+                  onClick={() => setMenuOpen(false)}
+                  className="font-body flex min-h-11 items-center text-sm tracking-[0.06em] text-text"
+                >
+                  Email us
+                </a>
+              </nav>
+            ) : null}
+          </div>
+        ) : null}
         {/* A REAL PHONE NUMBER, on purpose, and the reviewer's argument for it
             is a conversion one rather than a design one: the product imagery is
             generated, and a site with AI pictures and an AI chatbot reads as a
@@ -162,7 +238,9 @@ export default function Header() {
           aria-label="Email us" // icon-only below 640px
           /* before:-inset-[11px] grows the 22px icon's HIT AREA to 44px without
              moving a pixel -- founder review 2026-11-11 (mobile tap targets). */
-          className="relative flex items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2"
+          className={`relative items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2 ${
+            compact ? "hidden lg:flex" : "flex"
+          }`}
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
@@ -181,7 +259,27 @@ export default function Header() {
             pieces individually hung the rule and the Arabic off the "S" and
             left the mark looking unfinished under its own right half. */}
         <Link href="/" className="col-start-2 flex flex-col items-center leading-none" aria-label="Shaklek, home">
-          <BrandLockup />
+          {compact ? (
+            <>
+              {/* THE MASTER LOGO FILE, never the name typed in a font (founder
+                  rule: one brand lockup). Outlined SVG, 853x367, so 36px tall
+                  is 84px wide. Plain <img>: next/image does not optimise SVG.
+                  alt="" because the link already carries the name. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/shaklek-logo.svg"
+                alt=""
+                width={84}
+                height={36}
+                className="h-9 w-auto lg:hidden"
+              />
+              <span className="hidden lg:contents">
+                <BrandLockup />
+              </span>
+            </>
+          ) : (
+            <BrandLockup />
+          )}
         </Link>
         <div className="flex items-center gap-5 justify-self-end">
           {/* ONE LINK FOR BOTH STATES, and no Clerk in this component.
@@ -254,7 +352,7 @@ export default function Header() {
           centred below that -- three short labels fit a phone comfortably,
           which is the whole reason the hamburger could go. */}
       {slim ? null : (
-      <nav aria-label="Main" className="bg-text">
+      <nav aria-label="Main" className={compact ? "hidden bg-text lg:block" : "bg-text"}>
         {/* CENTRED AT EVERY WIDTH (founder, 2026-08-26). It was right-aligned
             from 640px to match the mockup; she wants the three links centred on
             a phone and on a desktop alike, so the bar reads the same way
