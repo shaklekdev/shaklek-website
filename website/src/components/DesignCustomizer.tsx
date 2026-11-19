@@ -120,6 +120,16 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   // the button once it has slid under the sticky header.
   // From lg up the first-screen button is display:none, an observer reports
   // it as not intersecting, and the bar behaves exactly as it did.
+  // Below lg the lower button is hidden, so only the first-screen button
+  // decides whether the sticky bar shows. SSR default false = phone rules.
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const on = () => setIsDesktop(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
   const stageBuyRef = useRef<HTMLDivElement | null>(null);
   const [stageBuyVisible, setStageBuyVisible] = useState(true);
   useEffect(() => {
@@ -383,6 +393,21 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                  the default is Tailored (we measure her after the order), so
                  adding from here is a complete, makeable order. */
               <div ref={stageBuyRef} className="mt-3 lg:hidden">
+                {/* Founder 2026-11-18: "size should be before add to cart?" The
+                    default is Tailored, so the order is complete from here; this
+                    line says so, and the link is for whoever wants a standard
+                    size. Wording reuses SizePicker's approved line. */}
+                <p className="mb-2 text-center text-[12px] text-text-2">
+                  {spec.sizeMode === "tailored" ? (
+                    <>Size: <span className="font-medium text-text">Tailored</span>, free fitting after payment</>
+                  ) : (
+                    <>Size: <span className="font-medium text-text">{spec.size}</span></>
+                  )}
+                  {" · "}
+                  <a href="#size" className="underline underline-offset-2">
+                    {spec.sizeMode === "tailored" ? "or choose XS–XXL" : "change"}
+                  </a>
+                </p>
                 <button
                   onClick={handleSave}
                   disabled={buyDisabled}
@@ -416,7 +441,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             deliberately: the customer is one decision from buying, and offering
             a return to the catalogue at that moment is an invitation to leave.
             Adding a second piece is offered AFTER the cart instead. */}
-        <div className="mt-8">
+        <div id="size" className="mt-8 scroll-mt-24">
 
             <SizePicker
               sizeMode={spec.sizeMode}
@@ -511,7 +536,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <button
                 onClick={handleSave}
                 disabled={!spec.constraints.passed || colorSoldOut}
-                className="w-full rounded-full bg-accent px-8 py-3.5 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
+                // Phones: hidden (founder 2026-11-18, "why 2 add to cart?").
+                // The first-screen button and the sticky bar cover it there.
+                className="hidden w-full rounded-full bg-accent px-8 py-3.5 lg:inline-block lg:w-auto text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
                 // ⚠️ THE MEASUREMENTS GATE IS GONE, and so is its tooltip.
                 // SizePicker.tsx:88 now sets measurementsValid to a literal
                 // true, because Tailored means WE take the measurements and
@@ -555,7 +582,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           />
 
       {/* Only while the real button is off screen, so it never doubles up. */}
-      {!buyVisible && !stageBuyVisible && (
+      {(isDesktop ? !buyVisible : true) && !stageBuyVisible && (
         // bottom follows the cookie bar's height while it is open (CookieConsent
         // publishes --consent-h), so the button is never underneath it.
         <div
