@@ -493,7 +493,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                one place a phone says it before checkout. Still quiet: 11px,
                no pill. Hidden from lg, where the Total block keeps its copy. */
             stageNote={
-              <p className="mt-2 text-center text-[11px] text-text-3 lg:hidden">{LEAD_TIME}</p>
+              {/* Lead-time line under the first-screen button REMOVED on phones (founder 2026-11-20: "I don't see the value"). It is in the sheet's All included. */}
             }
             /* PHONES: "All included ⓘ", right-aligned under the price, as in
                the mockup (founder ok 2026-11-20). Ads promise "all included";

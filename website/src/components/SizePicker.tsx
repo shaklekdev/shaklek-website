@@ -227,7 +227,9 @@ export default function SizePicker({
           before the order loses customers). Tailored = we measure AFTER
           payment, free: home fitting in Dubai, or the virtual fitting
           (/measure/[id], linked from the confirmation page and email). */}
-      <p className="mt-3 text-[13px] leading-relaxed text-text-2">
+      {/* Phones: the Tailored line is hidden; the sheet's All included says
+          it right below (founder 2026-11-20, "repetition"). */}
+      <p className={`mt-3 text-[13px] leading-relaxed text-text-2 ${sizeMode === "tailored" ? "hidden lg:block" : ""}`}>
         {sizeMode === "tailored" ? (
           <>
             <span className="font-medium text-text">Free after payment:</span> home fitting in Dubai or virtual fitting.
