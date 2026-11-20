@@ -50,6 +50,7 @@ export default function SizePicker({
   onMeasurementsChange,
   onMeasurementsValidChange,
   detailSlot,
+  afterSizeSlot,
 }: {
   sizeMode: SizeMode;
   size: string;
@@ -70,6 +71,13 @@ export default function SizePicker({
   // than an import so the free-text box and the chips can share one <details>
   // without this component knowing what a DetailField is.
   detailSlot?: React.ReactNode;
+  // PHONES ONLY (the caller hides it from lg up). Rendered between the sizes
+  // and "Any special request?". In the phone details sheet the founder's order
+  // is Size, Product information, special request (2026-11-20), and the
+  // request box lives inside this component, so the middle one has to be
+  // handed in. A slot, so DOM order and reading order stay the same thing for
+  // a keyboard or a screen reader; CSS `order` would have split them.
+  afterSizeSlot?: React.ReactNode;
 }) {
   const [fields, setFields] = useState<MeasurementFields>(EMPTY_FIELDS);
   // Errors only surface once a field has been visited, so the form doesn't
@@ -117,7 +125,9 @@ export default function SizePicker({
        where the customer moves to a new kind of decision. Leg width and Length
        describe the garment; Size describes the body. */
     /* Below lg: mt-0 pt-4, the caller's mt-3 is the only space above the rule
-       (founder 2026-11-20, "too far" from Add to cart). From lg: unchanged. */
+       (founder 2026-11-20, "too far" from Add to cart). From lg: unchanged.
+       Later the same day the whole picker moved into the phone details sheet
+       (DetailsSheet); there this rule separates it from "All included". */
     <div className="border-t border-border pt-4 lg:mt-6 lg:pt-6">
       {/* Tailored first and selected by default. Made-to-order only justifies
           its price if the garment is cut to the customer -- putting Standard
@@ -399,6 +409,8 @@ export default function SizePicker({
         </div>
       )}
 
+        {afterSizeSlot}
+
         {/* ⚠️ NOT ON A TAILORED ORDER. Founder, 2026-09-14: "Make it your way
             also disappears in the tailored one because for this one we're going
             to collect the feedback with the customer." The fit preferences are
@@ -420,7 +432,10 @@ export default function SizePicker({
 
              It also buys back most of the vertical space that was pushing
              Add to cart down the page, which was the other complaint. */
-          <details className="group mt-3 border border-border-strong lg:mt-4">
+          /* data-sheet-open: on phones DetailsSheet opens this when the sheet
+             opens, as in the mockup the founder approved 2026-11-20. Still
+             collapsed by default on desktop, and still the same <details>. */
+          <details data-sheet-open className="group mt-3 border border-border-strong lg:mt-4">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
               <span>
                 {/* "Any special request?" (founder, 2026-11-13): "Make it your

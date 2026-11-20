@@ -8,7 +8,7 @@ import {
 } from "@/data/included";
 
 /**
- * "All included in the price", drawn three ways from one copy source
+ * "All included in the price", drawn four ways from one copy source
  * (data/included.ts).
  *
  * TEXT ONLY, NO ICONS. Founder, 2026-11-12, on the first version with line
@@ -18,6 +18,8 @@ import {
  *
  * - `card`  product page, under the price and Add to cart: tracked-caps
  *           heading, then the lines separated by hairlines.
+ * - `sheet` product page on PHONES, first section of the details sheet
+ *           (DetailsSheet): the same lines as `card`, always open, no box.
  * - `chips` home rail, under the heading: "All included" then four words
  *           separated by thin dots. Full sentence kept for screen readers.
  * - `line`  checkout, under the order lines: one quiet line between hairlines.
@@ -25,7 +27,7 @@ import {
 export default function IncludedInPrice({
   variant,
 }: {
-  variant: "card" | "chips" | "line";
+  variant: "card" | "sheet" | "chips" | "line";
   // Still accepted (callers pass it) though no line depends on it since the
   // shayla line moved out, 2026-11-13.
   category?: string | null;
@@ -35,11 +37,12 @@ export default function IncludedInPrice({
     // (founder, 2026-11-13). Same box, same + / − as the other disclosures on
     // this page, so it reads as one family rather than a promotional card.
     return (
-      // Below lg: mt-3, because the Total block that stood above it is gone
-      // on phones and this now follows "Any special request?" directly. It and
-      // Product information (which tucks its top border under this one) read
-      // as ONE two-row accordion there: same 44px row, same 13px, same + sign
-      // (founder 2026-11-20: "everything is weird"). From lg: unchanged.
+      // 2026-11-20 (first pass): below lg this and Product information were
+      // made ONE two-row accordion, same 44px row, same 13px, same + sign
+      // (founder: "everything is weird").
+      // 2026-11-20 (second pass, same day): the card is DESKTOP ONLY now. On
+      // phones the caller hides it and the `sheet` variant below shows the
+      // same lines, open, at the top of the details sheet. From lg: unchanged.
       <details className="group mt-3 border border-border-strong lg:mt-5">
         <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
           <span className="text-[13px] text-text">{INCLUDED_HEADING}</span>
@@ -57,8 +60,30 @@ export default function IncludedInPrice({
             </li>
           ))}
         </ul>
-        <p className="border-t border-border px-4 py-2 text-[11px] text-text-3">{INCLUDED_HOME_FOOTNOTE}</p>
+        {/* No "*In Dubai" footnote any more: the lines say it themselves
+            since 2026-11-20 (data/included.ts). */}
       </details>
+    );
+  }
+
+  if (variant === "sheet") {
+    // PHONES, inside the details sheet. ALWAYS VISIBLE, NOT FOLDED (founder
+    // 2026-11-20): she opened the sheet from "All included ⓘ" to read exactly
+    // this, so a second tap to unfold it would be the clutter she asked to
+    // lose. Words only, hairlines, same register as the card.
+    return (
+      // No rule under the list: "After you order", which follows it in the
+      // sheet, draws its own, and two hairlines 16px apart read as a mistake.
+      <section className="pb-1 pt-1">
+        <p className="text-[13px] font-medium text-text">{INCLUDED_HEADING}</p>
+        <ul className="mt-2 divide-y divide-border border-t border-border">
+          {INCLUDED_PRODUCT_LINES.map((l) => (
+            <li key={l.key} className="py-2.5 text-[13px] text-text-2">
+              {l.label}
+            </li>
+          ))}
+        </ul>
+      </section>
     );
   }
 

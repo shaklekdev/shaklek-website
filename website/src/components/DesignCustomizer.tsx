@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { includedWith } from "@/data/catalog";
 import IncludedInPrice from "@/components/IncludedInPrice";
+import { AFTER_ORDER } from "@/data/included";
 
 // The line under the colour circles on every abaya. Cleared by shaklek-marketing
 // 2026-10-11 against catalog.ts, fabrics.ts and margins.mjs. "the price", never
@@ -32,11 +33,14 @@ import { resolveFitNotes } from "@/data/fitNotes";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
 import ProductDisclosure from "@/components/ProductDisclosure";
+import DetailsSheet from "@/components/DetailsSheet";
 import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSignup";
 
 // One string, two places: under the first-screen Add to cart on phones, under
 // the Total on desktop. Exactly one of them is displayed at any width.
-const LEAD_TIME = "Made for you. Up to 3 weeks.";
+// "About", not "Up to" (founder 2026-11-20): the checkout line already said
+// "Ready in about 3 weeks" and the two disagreed a page apart.
+const LEAD_TIME = "Made for you. About 3 weeks.";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
 
@@ -95,6 +99,20 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   // at the numbers. Each unmakeable order costs a manual stylist round-trip.
   const [measurementsValid, setMeasurementsValid] = useState(true);
 
+  // ── THE DETAILS SHEET (PHONES) ────────────────────────────────────────────
+  // Founder 2026-11-20, on a mockup, about the page ads land on: "there are
+  // still too many things… overwhelming for the customer… maybe a tab that
+  // opens with all the info on the side." Below lg, Size, "Any special
+  // request?", All included, Product information and the footnote no longer
+  // stack under Add to cart. ONE row replaces them and opens a bottom sheet
+  // (DetailsSheet) holding all of it. Three things open it: that row, the
+  // "All included" link under the price, and the size line's link, which
+  // lands on the Size section. null = closed.
+  // Everything inside writes to the same `spec`, so the size line on the
+  // first screen is already right when she closes it.
+  const [sheet, setSheet] = useState<null | "top" | "size">(null);
+  const closeSheet = useCallback(() => setSheet(null), []);
+
   // STICKY BUY BAR. The reviewer's requirement was that the customer can reach
   // Add to cart "sans avoir besoin de défiler et peu importe les dimensions de
   // son écran" -- without scrolling, whatever their screen size. Reordering
@@ -130,21 +148,55 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
-    const on = () => setIsDesktop(mq.matches);
+    const on = () => {
+      setIsDesktop(mq.matches);
+      // A phone turned to a desktop width with the sheet open: from lg the
+      // sheet is an ordinary block, so it must not stay a "dialog".
+      if (mq.matches) setSheet(null);
+    };
     on();
     mq.addEventListener("change", on);
     return () => mq.removeEventListener("change", on);
   }, []);
-  const stageBuyRef = useRef<HTMLDivElement | null>(null);
+  // ⚠️ NO GAP IN THE HANDOFF (founder 2026-11-20: "the Add to cart briefly
+  // disappears while scrolling"). The bar used to wait until the whole block
+  // (size line + button) had left a fixed 60px line, while the real header is
+  // taller than that: for a stretch of scroll the button was already under
+  // the header and the bar had not arrived, so there was no Add to cart on
+  // screen at all. Now:
+  //   - the BUTTON itself is observed, not the block around it;
+  //   - the top margin is the header's measured height, not a guess;
+  //   - "visible" means WHOLLY visible (ratio >= 0.98, i.e. within 1px), so
+  //     the bar arrives when the first pixel of the button slips under the
+  //     header, while the rest of it is still on screen. Overlap, never a gap.
+  // From lg the button is display:none, ratio 0, same result as before.
+  const stageBuyRef = useRef<HTMLButtonElement | null>(null);
   const [stageBuyVisible, setStageBuyVisible] = useState(true);
   useEffect(() => {
     const el = stageBuyRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(([e]) => setStageBuyVisible(e.isIntersecting), {
-      rootMargin: "-60px 0px 0px 0px",
-    });
-    io.observe(el);
-    return () => io.disconnect();
+    const header = document.querySelector("header");
+    let io: IntersectionObserver | null = null;
+    let top = -1;
+    const observe = () => {
+      const h = Math.round(header?.getBoundingClientRect().height ?? 60);
+      if (h === top) return;
+      top = h;
+      io?.disconnect();
+      io = new IntersectionObserver(
+        ([e]) => setStageBuyVisible(e.isIntersecting && e.intersectionRatio >= 0.98),
+        { rootMargin: `-${h}px 0px 0px 0px`, threshold: [0, 0.98, 1] },
+      );
+      io.observe(el);
+    };
+    observe();
+    // The header changes height (slim on cart pages, fonts landing).
+    const ro = header && typeof ResizeObserver !== "undefined" ? new ResizeObserver(observe) : null;
+    if (header) ro?.observe(header);
+    return () => {
+      io?.disconnect();
+      ro?.disconnect();
+    };
   }, []);
   const { items, addItem, updateItem } = useCart();
   const { isSignedIn } = useUser();
@@ -397,7 +449,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                  disabled rule and same label as the button below Size, and
                  the default is Tailored (we measure her after the order), so
                  adding from here is a complete, makeable order. */
-              <div ref={stageBuyRef} className="mt-3 lg:hidden">
+              <div className="mt-3 lg:hidden">
                 {/* Founder 2026-11-18: "size should be before add to cart?" The
                     default is Tailored, so the order is complete from here; this
                     line says so, and the link is for whoever wants a standard
@@ -409,11 +461,24 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     <>Size: <span className="font-medium text-text">{spec.size}</span></>
                   )}
                   {" · "}
-                  <a href="#size" className="underline underline-offset-2">
+                  {/* A button, not a link to #size: Size lives in the details
+                      sheet on phones now (2026-11-20) and this opens it at
+                      that section. ::before grows the 18px line to a 38px
+                      target, the most the 12px above and 8px below allow
+                      without covering the chips or the button. */}
+                  <button
+                    type="button"
+                    data-sheet-trigger="size"
+                    aria-haspopup="dialog"
+                    aria-controls="size"
+                    onClick={() => setSheet("size")}
+                    className="relative underline underline-offset-2 before:absolute before:-inset-x-3 before:-top-3 before:-bottom-2 before:content-['']"
+                  >
                     {spec.sizeMode === "tailored" ? "or choose XS–XXL" : "change"}
-                  </a>
+                  </button>
                 </p>
                 <button
+                  ref={stageBuyRef}
                   onClick={handleSave}
                   disabled={buyDisabled}
                   className="min-h-12 w-full rounded-full bg-accent px-8 py-3 text-sm text-white transition-opacity hover:opacity-90 disabled:opacity-40"
@@ -429,6 +494,39 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                no pill. Hidden from lg, where the Total block keeps its copy. */
             stageNote={
               <p className="mt-2 text-center text-[11px] text-text-3 lg:hidden">{LEAD_TIME}</p>
+            }
+            /* PHONES: "All included ⓘ", right-aligned under the price, as in
+               the mockup (founder ok 2026-11-20). Ads promise "all included";
+               this is where the landing page says it on the first screen
+               without spending a line of it. Opens the sheet at the top,
+               where the five lines are. The ::before reaches UP over the
+               name row (nothing to press there) to make a 44px target, and
+               only 8px down, so it never covers a colour swatch. */
+            stageInfo={
+              /* Later the same day (founder ok): the line now leads with "Made
+                 to your measurements", which is what the ad promised and what
+                 the first screen never said. ONE line: nowrap, 12px, 259px
+                 wide against 328px available at 360. Only "All included" is
+                 the link. */
+              <p className="flex items-center justify-end gap-1.5 whitespace-nowrap text-[12px] leading-4 text-text-2 lg:hidden">
+                <span>Made to your measurements</span>
+                <span aria-hidden="true">&middot;</span>
+                <button
+                  type="button"
+                  data-sheet-trigger="included"
+                  aria-haspopup="dialog"
+                  aria-controls="size"
+                  onClick={() => setSheet("top")}
+                  className="relative inline-flex items-center gap-1 underline underline-offset-2 before:absolute before:-inset-x-3 before:-top-5 before:-bottom-2 before:content-['']"
+                >
+                  All included
+                  <svg aria-hidden="true" viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="1.2">
+                    <circle cx="8" cy="8" r="6.4" />
+                    <path d="M8 7.2v4" strokeLinecap="round" />
+                    <circle cx="8" cy="4.9" r="0.5" fill="currentColor" />
+                  </svg>
+                </button>
+              </p>
             }
             spec={spec}
             onSpecChange={setSpec}
@@ -457,8 +555,54 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         {/* Below lg the gaps are halved (founder 2026-11-20, on her phone: "the
             space between Add to cart and Size is too far"): it was 81px of
             margin and padding around one hairline. From lg nothing changed. */}
-        <div id="size" className="mt-3 scroll-mt-24 lg:mt-8">
+        {/* PHONES: the ONE row that replaced the stack (founder 2026-11-20).
+            Hairline above and below, 48px tall. Hidden from lg, where
+            everything it opens is on the page. */}
+        <button
+          type="button"
+          data-sheet-trigger="details"
+          aria-haspopup="dialog"
+          aria-controls="size"
+          onClick={() => setSheet("top")}
+          className="mt-4 flex min-h-12 w-full items-center justify-between gap-3 border-y border-border py-3 text-left text-sm text-text lg:hidden"
+        >
+          Details, size &amp; special request
+          <span aria-hidden="true" className="text-lg leading-none text-text-3">&rsaquo;</span>
+        </button>
 
+        {/* Below lg this whole block is the bottom sheet; from lg it is the
+            same block in the page it always was (the wrapper carries the old
+            id="size" and lg:mt-8). See DetailsSheet. */}
+        <DetailsSheet open={sheet !== null} section={sheet === "size" ? "size" : null} onClose={closeSheet}>
+            {/* PHONES: first thing in the sheet, always open. Desktop keeps
+                the folded card further down. Same five lines, one source. */}
+            <div className="lg:hidden">
+              {/* The piece in one line, from catalog.ts (founder 2026-11-20).
+                  `descriptor` is the only description field the catalogue
+                  has; nothing is drawn for an item without one. */}
+              {item.descriptor?.trim() ? (
+                <p data-sheet-description className="pb-3 text-[13px] leading-relaxed text-text-2">
+                  <span className="text-text">{item.name}.</span> {item.descriptor.trim()}.
+                </p>
+              ) : null}
+              <IncludedInPrice variant="sheet" category={item.category} />
+              {/* "After you order": how she gets measured, in three steps.
+                  Copy lives in data/included.ts (AFTER_ORDER), one constant,
+                  pending a marketing check. */}
+              <section data-sheet-section="after" className="border-t border-border pb-4 pt-4">
+                <p className="text-[13px] font-medium text-text">{AFTER_ORDER.heading}</p>
+                <ol className="mt-2 space-y-1.5">
+                  {AFTER_ORDER.steps.map((step, i) => (
+                    <li key={step} className="flex gap-2.5 text-[13px] leading-relaxed text-text-2">
+                      <span aria-hidden="true" className="w-3 shrink-0 text-text-3">{i + 1}</span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </div>
+
+            <div data-sheet-section="size">
             <SizePicker
               sizeMode={spec.sizeMode}
               size={spec.size}
@@ -482,7 +626,17 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                   onSpecChange={setSpec}
                 />
               }
+              /* PHONES: Product information sits between Size and the special
+                 request in the sheet (founder's order, 2026-11-20). Desktop
+                 keeps its own copy after All included, below. Exactly one of
+                 the two is displayed at any width. */
+              afterSizeSlot={
+                <div className="lg:hidden">
+                  <ProductDisclosure garmentName={item.name} />
+                </div>
+              }
             />
+            </div>
 
             {/* ⚠️ SAVE-MEASUREMENTS IS GONE, and it had to be. It offered to
                 store the numbers she had just typed, at the highest-intent
@@ -588,13 +742,18 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 AED {price} is the whole price -- fitting, every option, linen,
                 delivery, one alteration. One card (IncludedInPrice), copy from
                 data/included.ts so checkout and the home page agree. On a phone
-                this is the next thing after Add to cart, so it is seen without
-                hunting; it is NOT in the sticky bar, which stays name + price
-                + button. The shayla line appears here for abayas; the
+                this WAS the next thing after Add to cart; since 2026-11-20 a
+                phone reaches it from the "All included" link under the price
+                and reads it at the top of the details sheet. It is NOT in the
+                sticky bar, which stays name + price + button. The shayla line appears here for abayas; the
                 IncludedPieces photo block under the colour swatches stays
                 because it shows the shayla IN HER COLOUR, which a line of text
                 cannot. They are a full screen apart on every breakpoint. */}
-            <IncludedInPrice variant="card" category={item.category} />
+            {/* DESKTOP ONLY since 2026-11-20: on phones the same lines are the
+                first section of the details sheet (variant="sheet" above). */}
+            <div className="hidden lg:block">
+              <IncludedInPrice variant="card" category={item.category} />
+            </div>
 
             {/* The consumer information UAE law requires with a product:
                 fibre composition, origin, care and return terms, in Arabic
@@ -603,8 +762,18 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 decision in front of the button. See
                 data/productDisclosure.ts for the law it satisfies and for
                 which Arabic strings are founder-verified. */}
-            <ProductDisclosure garmentName={item.name} />
-                </div>
+            {/* DESKTOP ONLY since 2026-11-20: the phone copy is inside the
+                sheet, handed to SizePicker as afterSizeSlot. */}
+            <div className="hidden lg:block">
+              <ProductDisclosure garmentName={item.name} />
+            </div>
+
+            {/* PHONES: the one footnote, last line of the sheet. Both
+                sentences verbatim, as they were at the end of the page. */}
+            <p className="mt-4 text-[11px] leading-relaxed text-text-3 lg:hidden">
+              * Images are illustrative. Shade and fall vary slightly. {SHADE_NOTE}
+            </p>
+        </DetailsSheet>
               </>
             }
           />
@@ -656,9 +825,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           screen can and cannot show are ONE footnote instead of two scattered
           lines (founder 2026-11-20). Both sentences are verbatim. From lg the
           shade line is still under the swatches (FabricColorPicker). */}
-      <p className="mt-4 px-1 text-[11px] leading-relaxed text-text-3 lg:mt-8">
+      {/* 2026-11-20, later: DESKTOP ONLY. On phones this footnote is the last
+          line of the details sheet (same two sentences), not in the page. */}
+      <p className="hidden px-1 text-[11px] leading-relaxed text-text-3 lg:mt-8 lg:block">
         * Images are illustrative. Shade and fall vary slightly.
-        <span className="lg:hidden"> {SHADE_NOTE}</span>
       </p>
 
       {/* Shaklek+ sits AFTER the decision. It advertises features nobody can

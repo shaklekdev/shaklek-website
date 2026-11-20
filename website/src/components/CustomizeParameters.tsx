@@ -46,6 +46,7 @@ export default function CustomizeParameters({
   primaryAction,
   stageAction,
   stageNote,
+  stageInfo,
   availableColors,
   soldOutColors = [],
   included = [],
@@ -80,6 +81,11 @@ export default function CustomizeParameters({
   // under that button. Outside the measured stage, so it never costs the
   // photo any height.
   stageNote?: React.ReactNode;
+  // PHONES ONLY (the caller hides it from lg up): the small "All included"
+  // link, right-aligned under the price (mockup, founder ok 2026-11-20). It
+  // sits between the photo and the button, so it is inside the measured stage
+  // and the photo gives up exactly its height.
+  stageInfo?: React.ReactNode;
 }) {
   function handleFabricChange(fabric: Fabric) {
     onSpecChange({ ...spec, fabric });
@@ -357,6 +363,7 @@ export default function CustomizeParameters({
         <h1 className="design-name min-w-0 font-display leading-normal text-text">{itemName}</h1>
         <p className="shrink-0 font-display text-[17px] text-text lg:mt-1 lg:font-body lg:text-xs lg:text-text-2">AED {price}</p>
       </div>
+      {stageInfo}
 
 
       </div>

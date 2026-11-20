@@ -155,6 +155,67 @@ h3 {
   }
 }
 
+/* ── THE DETAILS SHEET ON PHONES (components/DetailsSheet.tsx) ─────────────
+   Below lg the block that holds Size, the special request, All included and
+   Product information is a bottom sheet instead of a stack under Add to cart
+   (founder 2026-11-20). From lg there is NO rule here on purpose: the same
+   element is an ordinary block in the page and desktop is unchanged.
+   z-index 60/55: above the sticky header and the cookie bar (both z-50) and
+   the sticky buy bar (z-40). svh for the same reason as the stage photo. */
+@media (width < 64rem) {
+  .details-sheet {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    max-width: 36rem;
+    max-height: 85vh;
+    margin: 0 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform 0.28s ease,
+      visibility 0s linear 0.28s;
+  }
+  @supports (height: 100svh) {
+    .details-sheet {
+      max-height: 85svh;
+    }
+  }
+  .details-sheet[data-open="true"] {
+    transform: none;
+    visibility: visible;
+    transition:
+      transform 0.28s ease,
+      visibility 0s;
+  }
+  .details-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgb(0 0 0 / 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+  }
+  .details-sheet-backdrop[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .details-sheet,
+    .details-sheet[data-open="true"],
+    .details-sheet-backdrop {
+      transition: none;
+    }
+  }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
