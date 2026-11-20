@@ -559,7 +559,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           onClick={() => setSheet("top")}
           className="mt-4 flex min-h-12 w-full items-center justify-between gap-3 border-y border-border py-3 text-left text-sm text-text lg:hidden"
         >
-          Details, size &amp; special request
+          Sizing &amp; more details
           <span aria-hidden="true" className="text-lg leading-none text-text-3">&rsaquo;</span>
         </button>
 
