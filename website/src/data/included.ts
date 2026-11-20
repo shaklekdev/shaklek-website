@@ -100,3 +100,22 @@ export const AFTER_ORDER = {
     "We make your piece and deliver in about 3 weeks.",
   ],
 };
+
+/** PHONES, details sheet: ONE block that merges "All included" and "After
+ *  you order" (founder 2026-11-20: the two repeated each other). Lines reuse
+ *  the marketing-checked wording; Standard has no fitting (terms 120-126). */
+export const SHEET_INCLUDED = {
+  heading: "All included",
+  tailored: [
+    "Fitting after you order: at home in Dubai, or virtual from your phone",
+    "Cut to your measurements, with every customisation you choose",
+    "Delivery across the UAE, in about 3 weeks",
+    "One free alteration, within 10 days of delivery",
+  ],
+  standard: [
+    "Made in your size, with every customisation you choose",
+    "Delivery across the UAE, in about 3 weeks",
+    "One free alteration, within 10 days of delivery",
+  ],
+  shayla: "Shayla included, cut from the same linen in your colour",
+};

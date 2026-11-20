@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { includedWith } from "@/data/catalog";
 import IncludedInPrice from "@/components/IncludedInPrice";
-import { AFTER_ORDER } from "@/data/included";
+import { SHEET_INCLUDED } from "@/data/included";
 
 // The line under the colour circles on every abaya. Cleared by shaklek-marketing
 // 2026-10-11 against catalog.ts, fabrics.ts and margins.mjs. "the price", never
@@ -110,7 +110,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
   // lands on the Size section. null = closed.
   // Everything inside writes to the same `spec`, so the size line on the
   // first screen is already right when she closes it.
-  const [sheet, setSheet] = useState<null | "top" | "size">(null);
+  const [sheet, setSheet] = useState<null | "top" | "size" | "included">(null);
   const closeSheet = useCallback(() => setSheet(null), []);
 
   // STICKY BUY BAR. The reviewer's requirement was that the customer can reach
@@ -514,7 +514,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                   data-sheet-trigger="included"
                   aria-haspopup="dialog"
                   aria-controls="size"
-                  onClick={() => setSheet("top")}
+                  onClick={() => setSheet("included")}
                   className="relative inline-flex items-center gap-1 underline underline-offset-2 before:absolute before:-inset-x-3 before:-top-5 before:-bottom-2 before:content-['']"
                 >
                   All included
@@ -571,35 +571,14 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         {/* Below lg this whole block is the bottom sheet; from lg it is the
             same block in the page it always was (the wrapper carries the old
             id="size" and lg:mt-8). See DetailsSheet. */}
-        <DetailsSheet open={sheet !== null} section={sheet === "size" ? "size" : null} onClose={closeSheet}>
-            {/* PHONES: first thing in the sheet, always open. Desktop keeps
-                the folded card further down. Same five lines, one source. */}
-            <div className="lg:hidden">
-              {/* The piece in one line, from catalog.ts (founder 2026-11-20).
-                  `descriptor` is the only description field the catalogue
-                  has; nothing is drawn for an item without one. */}
-              {item.descriptor?.trim() ? (
-                <p data-sheet-description className="pb-3 text-[13px] leading-relaxed text-text-2">
-                  <span className="text-text">{item.name}.</span> {item.descriptor.trim()}.
-                </p>
-              ) : null}
-              <IncludedInPrice variant="sheet" category={item.category} />
-              {/* "After you order": how she gets measured, in three steps.
-                  Copy lives in data/included.ts (AFTER_ORDER), one constant,
-                  pending a marketing check. */}
-              <section data-sheet-section="after" className="border-t border-border pb-4 pt-4">
-                <p className="text-[13px] font-medium text-text">{AFTER_ORDER.heading}</p>
-                <ol className="mt-2 space-y-1.5">
-                  {(spec.sizeMode === "tailored" ? AFTER_ORDER.steps : AFTER_ORDER.standardSteps).map((step, i) => (
-                    <li key={step} className="flex gap-2.5 text-[13px] leading-relaxed text-text-2">
-                      <span aria-hidden="true" className="w-3 shrink-0 text-text-3">{i + 1}</span>
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            </div>
-
+        <DetailsSheet open={sheet !== null} section={sheet === "size" || sheet === "included" ? sheet : null} onClose={closeSheet}>
+            {/* PHONES: the piece in one line, then Size first (founder
+                2026-11-20: "size is the first, it's tailored"). */}
+            {item.descriptor?.trim() ? (
+              <p data-sheet-description className="pb-3 text-[13px] leading-relaxed text-text-2 lg:hidden">
+                <span className="text-text">{item.name}.</span> {item.descriptor.trim()}.
+              </p>
+            ) : null}
             <div data-sheet-section="size">
             <SizePicker
               sizeMode={spec.sizeMode}
@@ -630,6 +609,22 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                  the two is displayed at any width. */
               afterSizeSlot={
                 <div className="lg:hidden">
+                  {/* ONE block, not "All included" + "After you order":
+                      founder 2026-11-20, they repeated each other. */}
+                  <section data-sheet-section="included" className="mb-3 mt-4 border-t border-border pt-4">
+                    <p className="text-[13px] font-medium text-text">{SHEET_INCLUDED.heading}</p>
+                    <ul className="mt-2 space-y-1.5">
+                      {[
+                        ...(spec.sizeMode === "tailored" ? SHEET_INCLUDED.tailored : SHEET_INCLUDED.standard),
+                        ...(includedWith(item.category).length ? [SHEET_INCLUDED.shayla] : []),
+                      ].map((line) => (
+                        <li key={line} className="flex gap-2.5 text-[13px] leading-relaxed text-text-2">
+                          <span aria-hidden="true" className="text-text-3">·</span>
+                          <span>{line}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
                   <ProductDisclosure garmentName={item.name} />
                 </div>
               }
