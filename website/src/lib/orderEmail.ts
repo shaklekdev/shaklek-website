@@ -236,7 +236,7 @@ export function buildCustomerConfirmation(opts: {
     button: fittingUrl ? { label: "Start your virtual fitting", url: fittingUrl } : undefined,
     note: {
       lines: [
-        "We will contact you within 24 hours to confirm your details. Ready in 10 working days from confirmation. Delivery is included.",
+        "We will contact you within 24 hours to confirm your details. Ready in 10 working days from your fitting, or from confirmation for a standard size. Delivery is included.",
         `Sign up with ${email} and this order will already be there.`,
       ],
       button: { label: "Create an account", url: `${appUrl}/sign-up` },

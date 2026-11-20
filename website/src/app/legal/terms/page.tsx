@@ -29,7 +29,7 @@ export const metadata: Metadata = pageMetadata({
 // rule) are exactly the kind that consumer law can override.
 export default function TermsPage() {
   return (
-    <LegalPage title="Terms, Returns & Alterations" updated="12 November 2026">
+    <LegalPage title="Terms, Returns & Alterations" updated="20 November 2026">
       <p>
         These terms cover orders, production, delivery, alterations and
         accounts. Our{" "}

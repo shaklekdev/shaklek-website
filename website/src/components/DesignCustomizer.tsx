@@ -741,7 +741,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             {/* DESKTOP ONLY since 2026-11-20: on phones the same lines are the
                 first section of the details sheet (variant="sheet" above). */}
             <div className="hidden lg:block">
-              <IncludedInPrice variant="card" category={item.category} />
+              <IncludedInPrice variant="card" category={item.category} sizeMode={spec.sizeMode === "tailored" ? "tailored" : "standard"} />
             </div>
 
             {/* The consumer information UAE law requires with a product:

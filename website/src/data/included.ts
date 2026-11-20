@@ -40,7 +40,7 @@ export function includedLines(category: string | null | undefined): IncludedLine
 
 /** Checkout, under the order lines, before paying. */
 export const INCLUDED_CHECKOUT_LINE =
-  "All included: private home fitting in Dubai or virtual fitting, every customisation, UAE delivery and one alteration. Ready in 10 working days.";
+  "All included: every customisation, UAE delivery and one alteration, plus a free fitting (home in Dubai or virtual) on Tailored pieces. Ready in 10 working days.";
 // No "linen" here (founder 2026-11-14): she is already buying linen, it is in the item line above.
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */

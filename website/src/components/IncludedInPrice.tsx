@@ -5,7 +5,9 @@ import {
   INCLUDED_HOME_FOOTNOTE,
   INCLUDED_HOME_LEAD,
   INCLUDED_PRODUCT_LINES,
+  SHEET_INCLUDED,
 } from "@/data/included";
+import { includedWith } from "@/data/catalog";
 
 /**
  * "All included in the price", drawn four ways from one copy source
@@ -26,11 +28,15 @@ import {
  */
 export default function IncludedInPrice({
   variant,
+  category,
+  sizeMode,
 }: {
   variant: "card" | "sheet" | "chips" | "line";
   // Still accepted (callers pass it) though no line depends on it since the
   // shayla line moved out, 2026-11-13.
   category?: string | null;
+  /** When given, the card lists the size-mode lines (no fitting on Standard). */
+  sizeMode?: "tailored" | "standard";
 }) {
   if (variant === "card") {
     // FOLDED, like Product information and the home's "All included +"
@@ -54,7 +60,13 @@ export default function IncludedInPrice({
           </span>
         </summary>
         <ul className="divide-y divide-border border-t border-border">
-          {INCLUDED_PRODUCT_LINES.map((l) => (
+          {(sizeMode
+            ? [
+                ...(sizeMode === "tailored" ? SHEET_INCLUDED.tailored : SHEET_INCLUDED.standard),
+                ...(includedWith(category).length ? [SHEET_INCLUDED.shayla] : []),
+              ].map((label) => ({ key: label, label }))
+            : INCLUDED_PRODUCT_LINES
+          ).map((l) => (
             <li key={l.key} className="px-4 py-2.5 text-[13px] text-text-2">
               {l.label}
             </li>
