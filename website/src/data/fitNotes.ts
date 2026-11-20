@@ -92,7 +92,29 @@ const DRESS_NOTES: FitNote[] = [
   { id: "too-loose", label: "A closer fit overall" },
 ];
 
+// THREE PER PIECE (founder 2026-11-20: "on fait 3 par pièce ?"). The three
+// most asked-for, and each one is a tailor adjustment with no pattern redraft
+// (shaklek-designer review same day). "A closer fit overall" is gone: it means
+// a redraft on the darted Buttoned Dress and fights a relaxed cut. The full
+// lists above stay as LEGACY_BY_CATEGORY so orders placed before today still
+// print their labels on the tech pack and in the cart.
+const pick = (list: FitNote[], ids: string[]) => ids.map((id) => list.find((n) => n.id === id)!);
+
+const ABAYA_NOTES: FitNote[] = [
+  { id: "abaya-longer", label: "A little longer" },
+  { id: "sleeves-short", label: "Sleeves a little longer" },
+  { id: "abaya-room", label: "A little more room" },
+];
+
 const BY_CATEGORY: Record<string, FitNote[]> = {
+  Shirt: pick(SHIRT_NOTES, ["sleeves-short", "sleeves-long", "tight-chest"]),
+  Pants: pick(PANTS_NOTES, ["legs-long", "legs-short", "tight-hip"]),
+  Skirt: pick(SKIRT_NOTES, ["skirt-long", "skirt-short", "tight-hip"]),
+  Dress: pick(DRESS_NOTES, ["dress-long", "dress-short", "tight-chest"]),
+  Abaya: ABAYA_NOTES,
+};
+
+const LEGACY_BY_CATEGORY: Record<string, FitNote[]> = {
   Shirt: SHIRT_NOTES,
   Pants: PANTS_NOTES,
   Skirt: SKIRT_NOTES,
@@ -111,7 +133,9 @@ export function fitNotesForCategory(category: string): FitNote[] {
 }
 
 export function fitNoteLabel(category: string, id: string): string | undefined {
-  return fitNotesForCategory(category).find((n) => n.id === id)?.label;
+  // Offered first, then the pre-2026-11-20 lists, so old orders still read.
+  const legacy = Object.hasOwn(LEGACY_BY_CATEGORY, category) ? LEGACY_BY_CATEGORY[category] : [];
+  return [...fitNotesForCategory(category), ...legacy].find((n) => n.id === id)?.label;
 }
 
 /**
