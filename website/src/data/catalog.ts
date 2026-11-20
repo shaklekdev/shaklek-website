@@ -140,33 +140,33 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/oversized-shirt/oversized-shirt-back-v2.jpg",
     colorImages: {
       Ivory: { front: "/catalog/oversized-shirt/oversized-shirt-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-back-v2.jpg" },
-      White: { front: "/catalog/oversized-shirt/oversized-shirt-white-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-back-v2.jpg" },
-      Navy: { front: "/catalog/oversized-shirt/oversized-shirt-navy-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-back-v2.jpg" },
-      Burgundy: { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-back-v2.jpg" },
+      White: { front: "/catalog/oversized-shirt/oversized-shirt-white-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-back-v2-nf.jpg" },
+      Navy: { front: "/catalog/oversized-shirt/oversized-shirt-navy-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-back-v2-nf.jpg" },
+      Burgundy: { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-back-v2-nf.jpg" },
     },
     // Pilot for real per-combo rendering (Sleeves x Length) -- see
     // [[project_shaklek_customization_params]] and parameterSliders.ts.
     // "long:normal" isn't generated -- it's identical to colorImages above.
     comboImages: {
       Ivory: {
-        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-back-v2.jpg" },
-        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-long-longer-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-long-longer-back-v2.jpg" },
-        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-longer-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-longer-back-v2.jpg" },
+        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-normal-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-long-longer-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-long-longer-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-longer-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-ivory-combo-short-longer-back-v2-nf.jpg" },
       },
       White: {
-        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-normal-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-normal-back-v2.jpg" },
-        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-white-combo-long-longer-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-combo-long-longer-back-v2.jpg" },
-        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-longer-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-longer-back-v2.jpg" },
+        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-normal-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-normal-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-white-combo-long-longer-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-combo-long-longer-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-longer-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-white-combo-short-longer-back-v2-nf.jpg" },
       },
       Navy: {
-        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-normal-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-normal-back-v2.jpg" },
-        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-navy-combo-long-longer-front-v2.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-combo-long-longer-back-v2.jpg" },
-        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-longer-front-v3.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-longer-back-v3.jpg" },
+        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-normal-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-normal-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-navy-combo-long-longer-front-v2-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-combo-long-longer-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-longer-front-v3-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-navy-combo-short-longer-back-v3-nf.jpg" },
       },
       Burgundy: {
-        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-normal-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-normal-back-v2.jpg" },
-        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-long-longer-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-long-longer-back-v2.jpg" },
-        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-longer-front.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-longer-back-v2.jpg" },
+        "short:normal": { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-normal-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-normal-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-long-longer-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-long-longer-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-longer-front-nf.jpg", back: "/catalog/oversized-shirt/oversized-shirt-burgundy-combo-short-longer-back-v2-nf.jpg" },
       },
     },
   },
@@ -183,7 +183,7 @@ export const catalog: CatalogItem[] = [
       Ivory: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-ivory-back-v2.jpg" },
       White: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-white-front-v2.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-white-back-v2.jpg" },
       Navy: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-front-v3.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-navy-back-v2.jpg" },
-      Burgundy: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-front.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-back-v2.jpg" },
+      Burgundy: { front: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-front-nf.jpg", back: "/catalog/wide-leg-trousers/wide-leg-trousers-burgundy-back-v2-nf.jpg" },
     },
     // "wide:full" isn't generated -- it's identical to colorImages above.
     // Navy and Ivory are the generated masters; Burgundy/White are derived
@@ -222,33 +222,33 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg",
     backImage: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-back.jpg",
     colorImages: {
-      Ivory: { front: "/catalog/structured-blouse/structured-blouse-front.jpg", back: "/catalog/structured-blouse/structured-blouse-back.jpg" },
-      White: { front: "/catalog/structured-blouse/structured-blouse-white-front-v2.jpg", back: "/catalog/structured-blouse/structured-blouse-white-back.jpg" },
-      Navy: { front: "/catalog/structured-blouse/structured-blouse-navy-front.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-back.jpg" },
-      Burgundy: { front: "/catalog/structured-blouse/structured-blouse-burgundy-front-v2.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-back.jpg" },
+      Ivory: { front: "/catalog/structured-blouse/structured-blouse-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-back-nf.jpg" },
+      White: { front: "/catalog/structured-blouse/structured-blouse-white-front-v2-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-white-back-nf.jpg" },
+      Navy: { front: "/catalog/structured-blouse/structured-blouse-navy-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-back-nf.jpg" },
+      Burgundy: { front: "/catalog/structured-blouse/structured-blouse-burgundy-front-v2-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-back-nf.jpg" },
     },
     // "short:normal" isn't generated -- it's identical to colorImages above
     // (the existing photo's half sleeve is the "short" option for this item).
     comboImages: {
       Ivory: {
         "long:normal": { front: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-front.jpg", back: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-normal-back.jpg" },
-        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-longer-back.jpg" },
-        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-ivory-combo-short-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-ivory-combo-short-longer-back.jpg" },
+        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-ivory-combo-long-longer-back-nf.jpg" },
+        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-ivory-combo-short-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-ivory-combo-short-longer-back-nf.jpg" },
       },
       White: {
-        "long:normal": { front: "/catalog/structured-blouse/structured-blouse-white-combo-long-normal-front-v2.jpg", back: "/catalog/structured-blouse/structured-blouse-white-combo-long-normal-back-v2.jpg" },
-        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-white-combo-long-longer-front-v2.jpg", back: "/catalog/structured-blouse/structured-blouse-white-combo-long-longer-back-v2.jpg" },
-        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-white-combo-short-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-white-combo-short-longer-back.jpg" },
+        "long:normal": { front: "/catalog/structured-blouse/structured-blouse-white-combo-long-normal-front-v2-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-white-combo-long-normal-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-white-combo-long-longer-front-v2-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-white-combo-long-longer-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-white-combo-short-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-white-combo-short-longer-back-nf.jpg" },
       },
       Navy: {
-        "long:normal": { front: "/catalog/structured-blouse/structured-blouse-navy-combo-long-normal-front.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-combo-long-normal-back.jpg" },
-        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-navy-combo-long-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-combo-long-longer-back.jpg" },
-        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-navy-combo-short-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-combo-short-longer-back.jpg" },
+        "long:normal": { front: "/catalog/structured-blouse/structured-blouse-navy-combo-long-normal-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-combo-long-normal-back-nf.jpg" },
+        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-navy-combo-long-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-combo-long-longer-back-nf.jpg" },
+        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-navy-combo-short-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-navy-combo-short-longer-back-nf.jpg" },
       },
       Burgundy: {
-        "long:normal": { front: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-normal-front.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-normal-back.jpg" },
-        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-longer-back.jpg" },
-        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-burgundy-combo-short-longer-front.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-combo-short-longer-back.jpg" },
+        "long:normal": { front: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-normal-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-normal-back-nf.jpg" },
+        "long:longer": { front: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-combo-long-longer-back-nf.jpg" },
+        "short:longer": { front: "/catalog/structured-blouse/structured-blouse-burgundy-combo-short-longer-front-nf.jpg", back: "/catalog/structured-blouse/structured-blouse-burgundy-combo-short-longer-back-nf.jpg" },
       },
     },
     // The base photo is a half sleeve, not SHIRT_PARAMS' "long" default.
@@ -263,31 +263,31 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-front.jpg",
     backImage: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-back.jpg",
     colorImages: {
-      Ivory: { front: "/catalog/banded-trousers/banded-trousers-ivory-front-v2.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-back-v2.jpg" },
-      White: { front: "/catalog/banded-trousers/banded-trousers-white-front-v2.jpg", back: "/catalog/banded-trousers/banded-trousers-white-back-v2.jpg" },
-      Navy: { front: "/catalog/banded-trousers/banded-trousers-navy-front.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-back-v2.jpg" },
-      Burgundy: { front: "/catalog/banded-trousers/banded-trousers-burgundy-front-v2.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-back-v2.jpg" },
+      Ivory: { front: "/catalog/banded-trousers/banded-trousers-ivory-front-v2-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-back-v2-nf.jpg" },
+      White: { front: "/catalog/banded-trousers/banded-trousers-white-front-v2-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-white-back-v2-nf.jpg" },
+      Navy: { front: "/catalog/banded-trousers/banded-trousers-navy-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-back-v2-nf.jpg" },
+      Burgundy: { front: "/catalog/banded-trousers/banded-trousers-burgundy-front-v2-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-back-v2-nf.jpg" },
     },
     comboImages: {
       Ivory: {
-        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-straight-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-straight-cropped-back.jpg" },
-        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-full-front.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-full-back.jpg" },
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-straight-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-straight-cropped-back-nf.jpg" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-full-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-full-back-nf.jpg" },
         "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-ivory-combo-wide-cropped-back.jpg" },
       },
       White: {
-        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-white-combo-straight-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-white-combo-straight-cropped-back.jpg" },
-        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-white-combo-wide-full-front.jpg", back: "/catalog/banded-trousers/banded-trousers-white-combo-wide-full-back.jpg" },
-        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-white-combo-wide-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-white-combo-wide-cropped-back.jpg" },
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-white-combo-straight-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-white-combo-straight-cropped-back-nf.jpg" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-white-combo-wide-full-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-white-combo-wide-full-back-nf.jpg" },
+        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-white-combo-wide-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-white-combo-wide-cropped-back-nf.jpg" },
       },
       Navy: {
-        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-back.jpg" },
-        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-back.jpg" },
-        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-cropped-back.jpg" },
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-combo-straight-cropped-back-nf.jpg" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-full-back-nf.jpg" },
+        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-navy-combo-wide-cropped-back-nf.jpg" },
       },
       Burgundy: {
-        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-straight-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-straight-cropped-back.jpg" },
-        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-full-front.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-full-back.jpg" },
-        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-front.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-back.jpg" },
+        "straight:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-straight-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-straight-cropped-back-nf.jpg" },
+        "wide:full": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-full-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-full-back-nf.jpg" },
+        "wide:cropped": { front: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-front-nf.jpg", back: "/catalog/banded-trousers/banded-trousers-burgundy-combo-wide-cropped-back-nf.jpg" },
       },
     },
     defaultChanges: { leg_width: "wide", garment_length: "cropped" },
@@ -302,10 +302,10 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/wrap-top/wrap-top-ivory-combo-long-normal-front-v2.jpg",
     backImage: "/catalog/wrap-top/wrap-top-ivory-back-v4.jpg",
     colorImages: {
-      Ivory: { front: "/catalog/wrap-top/wrap-top-ivory-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-ivory-back-v3.jpg" },
-      White: { front: "/catalog/wrap-top/wrap-top-white-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-white-back-v3.jpg" },
-      Navy: { front: "/catalog/wrap-top/wrap-top-navy-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-navy-back-v3.jpg" },
-      Burgundy: { front: "/catalog/wrap-top/wrap-top-burgundy-front-v4.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v3.jpg" },
+      Ivory: { front: "/catalog/wrap-top/wrap-top-ivory-front-v4-nf.jpg", back: "/catalog/wrap-top/wrap-top-ivory-back-v3-nf.jpg" },
+      White: { front: "/catalog/wrap-top/wrap-top-white-front-v4-nf.jpg", back: "/catalog/wrap-top/wrap-top-white-back-v3-nf.jpg" },
+      Navy: { front: "/catalog/wrap-top/wrap-top-navy-front-v4-nf.jpg", back: "/catalog/wrap-top/wrap-top-navy-back-v3-nf.jpg" },
+      Burgundy: { front: "/catalog/wrap-top/wrap-top-burgundy-front-v4-nf.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v3-nf.jpg" },
       // ⚠️ These base backs show SHORT sleeves (short:normal falls back here).
       // Until 2026-11-11 they were the long-sleeved back-v4: short front, long
       // back. back-v4 stays under "long:normal" below, where it is correct.
@@ -315,23 +315,23 @@ export const catalog: CatalogItem[] = [
     comboImages: {
       Ivory: {
         "long:normal": { front: "/catalog/wrap-top/wrap-top-ivory-combo-long-normal-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-ivory-back-v4.jpg" },
-        "long:longer": { front: "/catalog/wrap-top/wrap-top-ivory-combo-long-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-ivory-combo-long-longer-back-v3.jpg" },
-        "short:longer": { front: "/catalog/wrap-top/wrap-top-ivory-combo-short-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-ivory-combo-short-longer-back-v3.jpg" },
+        "long:longer": { front: "/catalog/wrap-top/wrap-top-ivory-combo-long-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-ivory-combo-long-longer-back-v3-nf.jpg" },
+        "short:longer": { front: "/catalog/wrap-top/wrap-top-ivory-combo-short-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-ivory-combo-short-longer-back-v3-nf.jpg" },
       },
       White: {
-        "long:normal": { front: "/catalog/wrap-top/wrap-top-white-combo-long-normal-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-white-back-v4.jpg" },
-        "long:longer": { front: "/catalog/wrap-top/wrap-top-white-combo-long-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-white-combo-long-longer-back-v3.jpg" },
-        "short:longer": { front: "/catalog/wrap-top/wrap-top-white-combo-short-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-white-combo-short-longer-back-v3.jpg" },
+        "long:normal": { front: "/catalog/wrap-top/wrap-top-white-combo-long-normal-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-white-back-v4-nf.jpg" },
+        "long:longer": { front: "/catalog/wrap-top/wrap-top-white-combo-long-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-white-combo-long-longer-back-v3-nf.jpg" },
+        "short:longer": { front: "/catalog/wrap-top/wrap-top-white-combo-short-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-white-combo-short-longer-back-v3-nf.jpg" },
       },
       Navy: {
-        "long:normal": { front: "/catalog/wrap-top/wrap-top-navy-combo-long-normal-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-navy-back-v4.jpg" },
-        "long:longer": { front: "/catalog/wrap-top/wrap-top-navy-combo-long-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-navy-combo-long-longer-back-v4.jpg" },
-        "short:longer": { front: "/catalog/wrap-top/wrap-top-navy-combo-short-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-navy-combo-short-longer-back-v4.jpg" },
+        "long:normal": { front: "/catalog/wrap-top/wrap-top-navy-combo-long-normal-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-navy-back-v4-nf.jpg" },
+        "long:longer": { front: "/catalog/wrap-top/wrap-top-navy-combo-long-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-navy-combo-long-longer-back-v4-nf.jpg" },
+        "short:longer": { front: "/catalog/wrap-top/wrap-top-navy-combo-short-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-navy-combo-short-longer-back-v4-nf.jpg" },
       },
       Burgundy: {
-        "long:normal": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-normal-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v4.jpg" },
-        "long:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-front-v3.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-back-v3.jpg" },
-        "short:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-short-longer-front-v2.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-short-longer-back-v3.jpg" },
+        "long:normal": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-normal-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-back-v4-nf.jpg" },
+        "long:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-front-v3-nf.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-long-longer-back-v3-nf.jpg" },
+        "short:longer": { front: "/catalog/wrap-top/wrap-top-burgundy-combo-short-longer-front-v2-nf.jpg", back: "/catalog/wrap-top/wrap-top-burgundy-combo-short-longer-back-v3-nf.jpg" },
       },
     },
     // The base photo is a short sleeve, not SHIRT_PARAMS' "long" default.
@@ -424,34 +424,34 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-front-v2.jpg",
     backImage: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-back-v2.jpg",
     colorImages: {
-      Ivory: { front: "/catalog/utility-shirt/utility-shirt-ivory-front-v4.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-back-v4.jpg" },
-      White: { front: "/catalog/utility-shirt/utility-shirt-white-front-v4.jpg", back: "/catalog/utility-shirt/utility-shirt-white-back-v4.jpg" },
-      Navy: { front: "/catalog/utility-shirt/utility-shirt-navy-front-v4.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-back-v5.jpg" },
-      Burgundy: { front: "/catalog/utility-shirt/utility-shirt-burgundy-front-v4.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-back-v4.jpg" },
+      Ivory: { front: "/catalog/utility-shirt/utility-shirt-ivory-front-v4-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-back-v4-nf.jpg" },
+      White: { front: "/catalog/utility-shirt/utility-shirt-white-front-v4-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-white-back-v4-nf.jpg" },
+      Navy: { front: "/catalog/utility-shirt/utility-shirt-navy-front-v4-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-back-v5-nf.jpg" },
+      Burgundy: { front: "/catalog/utility-shirt/utility-shirt-burgundy-front-v4-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-back-v4-nf.jpg" },
     },
     // "short:normal" isn't generated -- it's identical to colorImages above
     // (the existing photo's short sleeve + tie-waist length is the "short:normal"
     // option for this item).
     comboImages: {
       Ivory: {
-        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-normal-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-normal-back-v2.jpg" },
+        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-normal-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-normal-back-v2-nf.jpg" },
         "short:longer": { front: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-combo-short-longer-back-v2.jpg" },
-        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-longer-back-v2.jpg" },
+        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-ivory-combo-long-longer-back-v2-nf.jpg" },
       },
       White: {
-        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-white-combo-long-normal-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-white-combo-long-normal-back-v2.jpg" },
-        "short:longer": { front: "/catalog/utility-shirt/utility-shirt-white-combo-short-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-white-combo-short-longer-back-v2.jpg" },
-        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-white-combo-long-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-white-combo-long-longer-back-v2.jpg" },
+        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-white-combo-long-normal-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-white-combo-long-normal-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/utility-shirt/utility-shirt-white-combo-short-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-white-combo-short-longer-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-white-combo-long-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-white-combo-long-longer-back-v2-nf.jpg" },
       },
       Navy: {
-        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-navy-combo-long-normal-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-combo-long-normal-back-v2.jpg" },
-        "short:longer": { front: "/catalog/utility-shirt/utility-shirt-navy-combo-short-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-combo-short-longer-back-v2.jpg" },
-        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-navy-combo-long-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-combo-long-longer-back-v2.jpg" },
+        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-navy-combo-long-normal-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-combo-long-normal-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/utility-shirt/utility-shirt-navy-combo-short-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-combo-short-longer-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-navy-combo-long-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-navy-combo-long-longer-back-v2-nf.jpg" },
       },
       Burgundy: {
-        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-normal-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-normal-back-v2.jpg" },
-        "short:longer": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-short-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-short-longer-back-v2.jpg" },
-        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-longer-front-v2.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-longer-back-v2.jpg" },
+        "long:normal": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-normal-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-normal-back-v2-nf.jpg" },
+        "short:longer": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-short-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-short-longer-back-v2-nf.jpg" },
+        "long:longer": { front: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-longer-front-v2-nf.jpg", back: "/catalog/utility-shirt/utility-shirt-burgundy-combo-long-longer-back-v2-nf.jpg" },
       },
     },
     defaultChanges: { sleeve_length: "short", garment_length: "longer" },
@@ -488,13 +488,13 @@ export const catalog: CatalogItem[] = [
     image: "/catalog/abaya/abaya-ivory-front.jpg",
     backImage: "/catalog/abaya/abaya-ivory-back.jpg",
     colorImages: {
-      Burgundy: { front: "/catalog/abaya/abaya-burgundy-front-v3.jpg", back: "/catalog/abaya/abaya-burgundy-back-v3.jpg" },
+      Burgundy: { front: "/catalog/abaya/abaya-burgundy-front-v3-nf.jpg", back: "/catalog/abaya/abaya-burgundy-back-v3-nf.jpg" },
       // ⚠️ NAVY IS GENERATED, NOT PHOTOGRAPHED, and it is held to the burgundy
       // set's own measurements rather than to a description. See
       // scripts/catalog/colourways/generate-cell.mjs: each prompt is BUILT from
       // the burgundy cell it copies, so a midi cell cannot be told to reach the
       // floor -- which is exactly the mistake that cost $0.27 in bad backs.
-      Navy: { front: "/catalog/abaya/abaya-navy-front-v3.jpg", back: "/catalog/abaya/abaya-navy-back-v3.jpg" },
+      Navy: { front: "/catalog/abaya/abaya-navy-front-v3-nf.jpg", back: "/catalog/abaya/abaya-navy-back-v3-nf.jpg" },
       // ⚠️ IVORY IS STYLED DIFFERENTLY FROM THE OTHER COLOURWAYS AND THAT IS
       // DELIBERATE. Burgundy and Navy are shot over a plain slip; Ivory is shot
       // on a hijabi model over real catalogue pieces -- the buttoned dress under
@@ -508,19 +508,19 @@ export const catalog: CatalogItem[] = [
     },
     comboImages: {
       Burgundy: {
-        "maxi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-front-v3.jpg", back: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-back-v3.jpg" },
-        "midi:narrow": { front: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-front-v3.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-back-v3.jpg" },
-        "midi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-midi-wide-front-v3.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-wide-back-v3.jpg" },
+        "maxi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-front-v3-nf.jpg", back: "/catalog/abaya/abaya-burgundy-combo-maxi-wide-back-v3-nf.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-front-v3-nf.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-narrow-back-v3-nf.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-burgundy-combo-midi-wide-front-v3-nf.jpg", back: "/catalog/abaya/abaya-burgundy-combo-midi-wide-back-v3-nf.jpg" },
       },
       Navy: {
-        "maxi:wide": { front: "/catalog/abaya/abaya-navy-combo-maxi-wide-front-v3.jpg", back: "/catalog/abaya/abaya-navy-combo-maxi-wide-back-v3.jpg" },
-        "midi:narrow": { front: "/catalog/abaya/abaya-navy-combo-midi-narrow-front-v3.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-narrow-back-v3.jpg" },
-        "midi:wide": { front: "/catalog/abaya/abaya-navy-combo-midi-wide-front-v3.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-wide-back-v3.jpg" },
+        "maxi:wide": { front: "/catalog/abaya/abaya-navy-combo-maxi-wide-front-v3-nf.jpg", back: "/catalog/abaya/abaya-navy-combo-maxi-wide-back-v3-nf.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-navy-combo-midi-narrow-front-v3-nf.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-narrow-back-v3-nf.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-navy-combo-midi-wide-front-v3-nf.jpg", back: "/catalog/abaya/abaya-navy-combo-midi-wide-back-v3-nf.jpg" },
       },
       Ivory: {
-        "maxi:wide": { front: "/catalog/abaya/abaya-ivory-combo-maxi-wide-front.jpg", back: "/catalog/abaya/abaya-ivory-combo-maxi-wide-back.jpg" },
-        "midi:narrow": { front: "/catalog/abaya/abaya-ivory-combo-midi-narrow-front.jpg", back: "/catalog/abaya/abaya-ivory-combo-midi-narrow-back.jpg" },
-        "midi:wide": { front: "/catalog/abaya/abaya-ivory-combo-midi-wide-front.jpg", back: "/catalog/abaya/abaya-ivory-combo-midi-wide-back.jpg" },
+        "maxi:wide": { front: "/catalog/abaya/abaya-ivory-combo-maxi-wide-front-nf.jpg", back: "/catalog/abaya/abaya-ivory-combo-maxi-wide-back-nf.jpg" },
+        "midi:narrow": { front: "/catalog/abaya/abaya-ivory-combo-midi-narrow-front-nf.jpg", back: "/catalog/abaya/abaya-ivory-combo-midi-narrow-back-nf.jpg" },
+        "midi:wide": { front: "/catalog/abaya/abaya-ivory-combo-midi-wide-front-nf.jpg", back: "/catalog/abaya/abaya-ivory-combo-midi-wide-back-nf.jpg" },
       },
     },
     // ⚠️ THE BASE PHOTO IS maxi:narrow, NOT THE CATEGORY DEFAULT. Left off,
@@ -583,24 +583,24 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg",
     colorImages: {
       Ivory: { front: "/catalog/abaya-jacket/abaya-jacket-ivory-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-back-v1-wb.jpg" },
-      Navy: { front: "/catalog/abaya-jacket/abaya-jacket-navy-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v3.jpg" },
-      Burgundy: { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v3.jpg" },
+      Navy: { front: "/catalog/abaya-jacket/abaya-jacket-navy-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v3-nf.jpg" },
+      Burgundy: { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v3-nf.jpg" },
     },
     comboImages: {
       Ivory: {
-        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-back-v1-wb.jpg" },
-        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-back-v1-wb.jpg" },
-        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1-wb.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1-wb.jpg" },
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-front-v1-wb-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-maxi-5-back-v1-wb-nf.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-front-v1-wb-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-4-back-v1-wb-nf.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-front-v1-wb-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-ivory-combo-midi-5-back-v1-wb-nf.jpg" },
       },
       Navy: {
-        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-maxi-5-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v3.jpg" },
-        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-4-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v3.jpg" },
-        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-5-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v3.jpg" },
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-maxi-5-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-back-v3-nf.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-4-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v3-nf.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-navy-combo-midi-5-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-navy-midi-back-v3-nf.jpg" },
       },
       Burgundy: {
-        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-maxi-5-front-v4.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v3.jpg" },
-        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-4-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v3.jpg" },
-        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-5-front-v3.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v3.jpg" },
+        "maxi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-maxi-5-front-v4-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-back-v3-nf.jpg" },
+        "midi:4": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-4-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v3-nf.jpg" },
+        "midi:5": { front: "/catalog/abaya-jacket/abaya-jacket-burgundy-combo-midi-5-front-v3-nf.jpg", back: "/catalog/abaya-jacket/abaya-jacket-burgundy-midi-back-v3-nf.jpg" },
       },
     },
     // The photographed base is the LONG one worn OPEN, which is maxi:4, and
@@ -646,24 +646,24 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg",
     colorImages: {
       Ivory: { front: "/catalog/slip-dress/slip-dress-ivory-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-back-v1.jpg" },
-      Navy: { front: "/catalog/slip-dress/slip-dress-navy-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v3.jpg" },
-      Burgundy: { front: "/catalog/slip-dress/slip-dress-burgundy-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v3.jpg" },
+      Navy: { front: "/catalog/slip-dress/slip-dress-navy-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v3-nf.jpg" },
+      Burgundy: { front: "/catalog/slip-dress/slip-dress-burgundy-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v3-nf.jpg" },
     },
     comboImages: {
       Ivory: {
-        "v:maxi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-back-v1.jpg" },
-        "round:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-back-v1.jpg" },
-        "v:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-back-v1.jpg" },
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-front-v1-nf.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-maxi-back-v1-nf.jpg" },
+        "round:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-front-v1-nf.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-round-midi-back-v1-nf.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-front-v1-nf.jpg", back: "/catalog/slip-dress/slip-dress-ivory-combo-v-midi-back-v1-nf.jpg" },
       },
       Navy: {
-        "v:maxi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-maxi-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v3.jpg" },
-        "round:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-round-midi-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v3.jpg" },
-        "v:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-midi-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v3.jpg" },
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-maxi-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-navy-back-v3-nf.jpg" },
+        "round:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-round-midi-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v3-nf.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-navy-combo-v-midi-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-navy-midi-back-v3-nf.jpg" },
       },
       Burgundy: {
-        "v:maxi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-maxi-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v3.jpg" },
-        "round:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-round-midi-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v3.jpg" },
-        "v:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-midi-front-v3.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v3.jpg" },
+        "v:maxi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-maxi-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-back-v3-nf.jpg" },
+        "round:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-round-midi-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v3-nf.jpg" },
+        "v:midi": { front: "/catalog/slip-dress/slip-dress-burgundy-combo-v-midi-front-v3-nf.jpg", back: "/catalog/slip-dress/slip-dress-burgundy-midi-back-v3-nf.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
@@ -702,24 +702,24 @@ export const catalog: CatalogItem[] = [
     backImage: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg",
     colorImages: {
       Ivory: { front: "/catalog/buttoned-dress/buttoned-dress-ivory-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-back-v1.jpg" },
-      Navy: { front: "/catalog/buttoned-dress/buttoned-dress-navy-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v3.jpg" },
-      Burgundy: { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-back-v3.jpg" },
+      Navy: { front: "/catalog/buttoned-dress/buttoned-dress-navy-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v3-nf.jpg" },
+      Burgundy: { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-back-v3-nf.jpg" },
     },
     comboImages: {
       Ivory: {
-        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-back-v1.jpg" },
-        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-back-v1.jpg" },
-        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-front-v1.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-back-v1.jpg" },
+        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-front-v1-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-maxi-back-v1-nf.jpg" },
+        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-front-v1-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-round-midi-back-v1-nf.jpg" },
+        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-front-v1-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-ivory-combo-v-midi-back-v1-nf.jpg" },
       },
       Navy: {
-        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-maxi-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v3.jpg" },
-        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-round-midi-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v3.jpg" },
-        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-midi-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v3.jpg" },
+        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-maxi-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-back-v3-nf.jpg" },
+        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-round-midi-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v3-nf.jpg" },
+        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-navy-combo-v-midi-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-navy-midi-back-v3-nf.jpg" },
       },
       Burgundy: {
-        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-v-maxi-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-back-v3.jpg" },
-        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-round-midi-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-midi-back-v3.jpg" },
-        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-v-midi-front-v3.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-midi-back-v3.jpg" },
+        "v:maxi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-v-maxi-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-back-v3-nf.jpg" },
+        "round:midi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-round-midi-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-midi-back-v3-nf.jpg" },
+        "v:midi": { front: "/catalog/buttoned-dress/buttoned-dress-burgundy-combo-v-midi-front-v3-nf.jpg", back: "/catalog/buttoned-dress/buttoned-dress-burgundy-midi-back-v3-nf.jpg" },
       },
     },
     // ⚠️ THE BACKS ARE SHARED ACROSS NECKLINES -- her call, and it is why each
