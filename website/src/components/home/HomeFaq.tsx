@@ -48,7 +48,7 @@ const QUESTIONS = [
     q: "How long does it take?",
     a: (
       <>
-        Up to 3 weeks. Each piece is cut and sewn after you order.
+        About 3 weeks. Each piece is cut and sewn after you order.
       </>
     ),
   },

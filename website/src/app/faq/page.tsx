@@ -31,7 +31,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
         {/* ⚠️ CONSERVATIVE ON PURPOSE, founder 2026-11-05: "make it
             conservative and show we put a lot of work, this is not fast
             fashion". Was "approximately 10 working days". */}
-        Up to 3 weeks from confirmation, usually within a day of ordering.
+        About 3 weeks from the day we confirm your details, usually within a day of ordering.
         Delivery across the UAE is included.
       </>
     ),

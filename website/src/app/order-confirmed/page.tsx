@@ -236,7 +236,7 @@ function OrderConfirmedContent() {
       ) : null}
 
       <div className="mt-8 rounded-shaklek-sm border border-gold/30 bg-gold/10 p-4 text-left text-xs text-text-2">
-        We contact you within 24 hours to confirm your details. Allow up to 3
+        We contact you within 24 hours to confirm your details. Ready in about 3
         weeks from confirmation.
       </div>
 

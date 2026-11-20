@@ -23,7 +23,7 @@ export default function ShippingPage() {
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
-        Allow <strong>up to 3 weeks</strong>.
+        Ready in <strong>about 3 weeks</strong>.
       </p>
       {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. This said "Ten days is
           an estimate, not a guarantee. If anything moves, whether fabric
