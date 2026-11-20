@@ -487,14 +487,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 </button>
               </div>
             }
-            /* PHONES: the lead time sits here, once, right under the first-screen
-               Add to cart (founder 2026-11-20: "we see the total twice"). The
-               Total block that carried it is desktop-only now, so this is the
-               one place a phone says it before checkout. Still quiet: 11px,
-               no pill. Hidden from lg, where the Total block keeps its copy. */
-            stageNote={
-              {/* Lead-time line under the first-screen button REMOVED on phones (founder 2026-11-20: "I don't see the value"). It is in the sheet's All included. */}
-            }
+            /* stageNote (the phone lead-time line under the first-screen
+               button) REMOVED, founder 2026-11-20: "I don't see the value".
+               The delay is in the sheet's All included. */
             /* PHONES: "All included ⓘ", right-aligned under the price, as in
                the mockup (founder ok 2026-11-20). Ads promise "all included";
                this is where the landing page says it on the first screen
