@@ -509,7 +509,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                  wide against 328px available at 360. Only "All included" is
                  the link. */
               <p className="flex items-center justify-end gap-1.5 whitespace-nowrap text-[12px] leading-4 text-text-2 lg:hidden">
-                <span>Made to your measurements</span>
+                <span>{spec.sizeMode === "tailored" ? "Made to your measurements" : "Made to order"}</span>
                 <span aria-hidden="true">&middot;</span>
                 <button
                   type="button"
@@ -592,7 +592,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
               <section data-sheet-section="after" className="border-t border-border pb-4 pt-4">
                 <p className="text-[13px] font-medium text-text">{AFTER_ORDER.heading}</p>
                 <ol className="mt-2 space-y-1.5">
-                  {AFTER_ORDER.steps.map((step, i) => (
+                  {(spec.sizeMode === "tailored" ? AFTER_ORDER.steps : AFTER_ORDER.standardSteps).map((step, i) => (
                     <li key={step} className="flex gap-2.5 text-[13px] leading-relaxed text-text-2">
                       <span aria-hidden="true" className="w-3 shrink-0 text-text-3">{i + 1}</span>
                       <span>{step}</span>

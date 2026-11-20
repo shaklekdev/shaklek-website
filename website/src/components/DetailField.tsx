@@ -50,7 +50,7 @@ export default function DetailField({
         rows={2}
         maxLength={500}
         placeholder="Optional"
-        className="w-full border border-border-strong bg-white p-3 text-sm text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
+        className="w-full border border-border-strong bg-white p-3 text-base text-text placeholder:text-text-3 focus:border-accent lg:text-sm focus:outline-none"
       />
 
     </div>

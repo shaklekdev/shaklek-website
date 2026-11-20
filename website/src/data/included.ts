@@ -92,4 +92,11 @@ export const AFTER_ORDER = {
     "We contact you to arrange your fitting: at home in Dubai, or virtual from your phone.",
     "We cut to your measurements and deliver in about 3 weeks.",
   ],
+  // Standard sizes get no fitting (terms 120-126), so their steps must not
+  // promise one. Marketing check 2026-11-20.
+  standardSteps: [
+    "You order.",
+    "We contact you to confirm your details.",
+    "We make your piece and deliver in about 3 weeks.",
+  ],
 };
