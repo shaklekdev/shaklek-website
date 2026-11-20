@@ -503,14 +503,12 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                name row (nothing to press there) to make a 44px target, and
                only 8px down, so it never covers a colour swatch. */
             stageInfo={
-              /* Later the same day (founder ok): the line now leads with "Made
-                 to your measurements", which is what the ad promised and what
-                 the first screen never said. ONE line: nowrap, 12px, 259px
+              /* "Made to your measurements" was added here and REMOVED the
+                 same day (founder 2026-11-20: "too much next to All
+                 included"). Do not put it back. ONE line: nowrap, 12px, 259px
                  wide against 328px available at 360. Only "All included" is
                  the link. */
               <p className="flex items-center justify-end gap-1.5 whitespace-nowrap text-[12px] leading-4 text-text-2 lg:hidden">
-                <span>{spec.sizeMode === "tailored" ? "Made to your measurements" : "Made to order"}</span>
-                <span aria-hidden="true">&middot;</span>
                 <button
                   type="button"
                   data-sheet-trigger="included"
