@@ -134,7 +134,7 @@ export default function ProductRail({
               key={item.slug}
               className="w-[72%] shrink-0 snap-start sm:w-[40%] lg:w-[calc(25%-18px)]"
             >
-              <CatalogCard item={item} eager fromMouth={item.slug === "structured-blouse"} />
+              <CatalogCard item={item} eager />
             </div>
           ))}
         </div>
