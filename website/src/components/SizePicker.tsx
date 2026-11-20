@@ -469,7 +469,10 @@ export default function SizePicker({
               {/* The labels are the ADJUSTMENT wanted, never the fault
                   reported -- see fitNotes.ts. Ids are untouched, so orders
                   already placed still resolve. */}
-            {sizeMode !== "tailored" && options.length > 0 && (
+            {/* Founder 2026-11-20: chips in EVERY size mode now (was Standard only,
+                her 2026-09-14 rule). A friend found them very useful, and in
+                Tailored they tell us her preference before the fitting. */}
+            {options.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1.5">
               {options.map((n) => {
                 const on = fitNotes.includes(n.id);
