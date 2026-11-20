@@ -40,7 +40,8 @@ import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSign
 // the Total on desktop. Exactly one of them is displayed at any width.
 // "About", not "Up to" (founder 2026-11-20): the checkout line already said
 // "Ready in about 3 weeks" and the two disagreed a page apart.
-const LEAD_TIME = "Made for you. About 3 weeks.";
+// 10 working days since 2026-11-20 (founder), same as the checkout line.
+const LEAD_TIME = "Made for you in 10 working days.";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
 

@@ -40,7 +40,7 @@ export function includedLines(category: string | null | undefined): IncludedLine
 
 /** Checkout, under the order lines, before paying. */
 export const INCLUDED_CHECKOUT_LINE =
-  "All included: private home fitting in Dubai or virtual fitting, every customisation, UAE delivery and one alteration. Ready in about 3 weeks.";
+  "All included: private home fitting in Dubai or virtual fitting, every customisation, UAE delivery and one alteration. Ready in 10 working days.";
 // No "linen" here (founder 2026-11-14): she is already buying linen, it is in the item line above.
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */
@@ -84,20 +84,21 @@ export const INCLUDED_PRODUCT_LINES: { key: string; label: string }[] = [
  *
  *  ⏳ ONE CONSTANT ON PURPOSE: these strings get a shaklek-marketing check
  *  against the terms before shipping. Change them here and nowhere else.
- *  "about 3 weeks" matches INCLUDED_CHECKOUT_LINE and the product page. */
+ *  "10 working days" (founder 2026-11-20) matches INCLUDED_CHECKOUT_LINE and
+ *  the product page. Tailored counts from the fitting, as the terms do. */
 export const AFTER_ORDER = {
   heading: "After you order",
   steps: [
     "You order.",
     "We contact you to arrange your fitting: at home in Dubai, or virtual from your phone.",
-    "We cut to your measurements and deliver in about 3 weeks.",
+    "We cut to your measurements and deliver within 10 working days of your fitting.",
   ],
   // Standard sizes get no fitting (terms 120-126), so their steps must not
   // promise one. Marketing check 2026-11-20.
   standardSteps: [
     "You order.",
     "We contact you to confirm your details.",
-    "We make your piece and deliver in about 3 weeks.",
+    "We make your piece and deliver in 10 working days.",
   ],
 };
 
@@ -109,12 +110,12 @@ export const SHEET_INCLUDED = {
   tailored: [
     "Fitting after you order: at home in Dubai, or virtual from your phone",
     "Cut to your measurements, with every customisation you choose",
-    "Delivery across the UAE, in about 3 weeks",
+    "Delivery across the UAE, 10 working days after your fitting",
     "One free alteration, within 10 days of delivery",
   ],
   standard: [
     "Made in your size, with every customisation you choose",
-    "Delivery across the UAE, in about 3 weeks",
+    "Delivery across the UAE, in 10 working days",
     "One free alteration, within 10 days of delivery",
   ],
   shayla: "Shayla included, cut from the same linen in your colour",

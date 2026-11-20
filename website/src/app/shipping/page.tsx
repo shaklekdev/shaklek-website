@@ -23,13 +23,15 @@ export default function ShippingPage() {
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
-        Ready in <strong>about 3 weeks</strong>.
+        Ready in <strong>10 working days</strong>, counted from your fitting,
+        or from our confirmation of your order for a standard size.
       </p>
       {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. This said "Ten days is
           an estimate, not a guarantee. If anything moves, whether fabric
           supply, a courier delay or an unusually busy week at the bench, we
           contact you directly rather than letting the date slip quietly." The
-          "ten days" was also stale against the 3-week line above it. The
+          "ten days" was also stale against the 3-week line then above it (10
+          working days since 2026-11-20, founder). The
           estimate wording that binds lives in legal/terms. */}
       <p>
         We confirm your date once your details are final.

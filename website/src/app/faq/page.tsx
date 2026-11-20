@@ -30,8 +30,13 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
       <>
         {/* ⚠️ CONSERVATIVE ON PURPOSE, founder 2026-11-05: "make it
             conservative and show we put a lot of work, this is not fast
-            fashion". Was "approximately 10 working days". */}
-        About 3 weeks from the day we confirm your details, usually within a day of ordering.
+            fashion". Was "approximately 10 working days", then "about 3
+            weeks". Founder 2026-11-20: 10 working days. The clock starts when
+            her details are final, which for Tailored is the fitting (terms,
+            Delivery). */}
+        10 working days from the day your details are final: your fitting if
+        you choose Tailored, or our confirmation of your order for a standard
+        size, usually within a day of ordering.
         Delivery across the UAE is included.
       </>
     ),

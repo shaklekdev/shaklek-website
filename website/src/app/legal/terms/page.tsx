@@ -103,11 +103,21 @@ export default function TermsPage() {
         three weeks to buy real headroom over a throughput nobody has measured,
         and it says estimate and not a guarantee in the same sentence. Narrow it
         only once a month of real orders says you can.
+
+        ⚠️ 10 WORKING DAYS, founder 2026-11-20 ("10 working days is 2 weeks so
+        it's fine"). The site now says 10 working days everywhere; the terms
+        say "usually" and keep the 3-week allowance as the outer figure, still
+        an estimate. THE CLOCK STARTS WHEN HER DETAILS ARE FINAL, NOT AT
+        PAYMENT: Tailored is measured after she pays, so a count from the
+        order would run while we are still waiting for a fitting.
       */}
       <p>
-        Every piece is made after you order it. We allow up to 3 weeks for
-        most orders. That is an estimate rather than a fixed date: we confirm
-        your date once your details are final, and we contact you directly if
+        Every piece is made after you order it. We usually deliver within 10
+        working days of the day your details are final, and we allow up to 3
+        weeks. For Tailored, that day is your fitting, once your measurements
+        are confirmed; for a standard size, it is the day we confirm your
+        order. That is an estimate rather than a fixed date: we confirm your
+        date once your details are final, and we contact you directly if
         anything moves. Delivery is included in the price to any address in the UAE.{" "}
         {/* ⚠️ "THE AT-HOME MEASUREMENT VISIT IS OFFERED WITHIN DUBAI ONLY" CAME
             OUT, 2026-11-05. Founder pulled the visit from the whole site until

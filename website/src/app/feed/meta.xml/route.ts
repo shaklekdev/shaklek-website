@@ -50,7 +50,7 @@ export async function GET() {
         `${item.descriptor}. Made to order in 100% natural linen, cut to your ` +
         `measurements or a standard size for the same price. Choose the cut, the ` +
         `length and the colour, and our team makes it for you, piece by piece, ` +
-        `in about 3 weeks. Delivered anywhere in the UAE.`;
+        `in 10 working days. Delivered anywhere in the UAE.`;
 
       entries.push(
         [
