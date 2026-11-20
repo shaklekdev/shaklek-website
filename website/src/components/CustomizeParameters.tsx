@@ -5,7 +5,7 @@ import Image from "next/image";
 import { colors } from "@/data/colors";
 import type { DesignSpec, Fabric, SilhouetteChangeType } from "@/data/designSpec";
 import { renderParamsForCategory, premiumParamsForCategory } from "@/data/parameterSliders";
-import FabricColorPicker, { SHADE_NOTE } from "@/components/FabricColorPicker";
+import FabricColorPicker from "@/components/FabricColorPicker";
 import { CONSENT_EVENT, readConsent } from "@/lib/consent";
 
 // useLayoutEffect warns during server rendering; this component is rendered on
@@ -45,6 +45,7 @@ export default function CustomizeParameters({
   deferredPreloads = [],
   primaryAction,
   stageAction,
+  stageNote,
   availableColors,
   soldOutColors = [],
   included = [],
@@ -75,6 +76,10 @@ export default function CustomizeParameters({
   // directly under the option chips, on the first screen. The full buy block
   // with the total stays where it is, inside primaryAction, after Size.
   stageAction?: React.ReactNode;
+  // PHONES ONLY (the caller hides it from lg up): one quiet line directly
+  // under that button. Outside the measured stage, so it never costs the
+  // photo any height.
+  stageNote?: React.ReactNode;
 }) {
   function handleFabricChange(fabric: Fabric) {
     onSpecChange({ ...spec, fabric });
@@ -511,8 +516,10 @@ export default function CustomizeParameters({
           {stageAction}
         </div>
       ) : null}
-      {/* The shade line, below lg only (FabricColorPicker shows it from lg). */}
-      <p className="order-3 mt-3 text-[11px] leading-relaxed text-text-3 lg:hidden">{SHADE_NOTE}</p>
+      {/* The shade line used to sit here below lg. It now shares the footnote
+          at the end of the page with the illustrative-images line (founder
+          2026-11-20), and the lead time takes this place. */}
+      {stageNote ? <div className="order-3">{stageNote}</div> : null}
       <div className="order-5">{primaryAction}</div>
 
       </div>

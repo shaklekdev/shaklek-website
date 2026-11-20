@@ -27,11 +27,16 @@ import {
 import { useCart } from "@/lib/CartContext";
 import { money, track } from "@/lib/metaPixel";
 import CustomizeParameters from "@/components/CustomizeParameters";
+import { SHADE_NOTE } from "@/components/FabricColorPicker";
 import { resolveFitNotes } from "@/data/fitNotes";
 import SizePicker, { parseMeasurements } from "@/components/SizePicker";
 import DetailField from "@/components/DetailField";
 import ProductDisclosure from "@/components/ProductDisclosure";
 import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSignup";
+
+// One string, two places: under the first-screen Add to cart on phones, under
+// the Total on desktop. Exactly one of them is displayed at any width.
+const LEAD_TIME = "Made for you. Up to 3 weeks.";
 
 type SavedMeasurements = { bust: string; waist: string; hip: string; height: string; notes: string };
 
@@ -417,6 +422,14 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 </button>
               </div>
             }
+            /* PHONES: the lead time sits here, once, right under the first-screen
+               Add to cart (founder 2026-11-20: "we see the total twice"). The
+               Total block that carried it is desktop-only now, so this is the
+               one place a phone says it before checkout. Still quiet: 11px,
+               no pill. Hidden from lg, where the Total block keeps its copy. */
+            stageNote={
+              <p className="mt-2 text-center text-[11px] text-text-3 lg:hidden">{LEAD_TIME}</p>
+            }
             spec={spec}
             onSpecChange={setSpec}
             itemName={item.name}
@@ -441,7 +454,10 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             deliberately: the customer is one decision from buying, and offering
             a return to the catalogue at that moment is an invitation to leave.
             Adding a second piece is offered AFTER the cart instead. */}
-        <div id="size" className="mt-8 scroll-mt-24">
+        {/* Below lg the gaps are halved (founder 2026-11-20, on her phone: "the
+            space between Add to cart and Size is too far"): it was 81px of
+            margin and padding around one hairline. From lg nothing changed. */}
+        <div id="size" className="mt-3 scroll-mt-24 lg:mt-8">
 
             <SizePicker
               sizeMode={spec.sizeMode}
@@ -480,9 +496,18 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 whose numbers we took at a fitting still has them. What has gone
                 is asking her to type them at checkout. */}
 
+            {/* ⚠️ DESKTOP ONLY (hidden below lg), AND DO NOT SHOW IT ON PHONES
+                AGAIN. Founder, 2026-11-20, testing on her phone: "we see the
+                total twice even though it's the same". Below lg the price is
+                already beside the name under the photo and in the sticky bar,
+                and the button in this block was hidden there on 2026-11-18,
+                so what was left was a second price with nothing to press.
+                The lead time moved up under the first-screen Add to cart
+                (stageNote above). From lg this renders exactly as before:
+                the sm: classes became lg: ones, same computed layout. */}
             <div
               ref={buyRef}
-              className="mt-5 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between"
+              className="mt-5 hidden gap-3 border-t border-border pt-4 lg:flex lg:flex-row lg:items-center lg:justify-between"
             >
               <div>
                 <p className="text-xs text-text-3">Total</p>
@@ -523,6 +548,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     before the number is the difference between "they are slow"
                     and "of course it takes that long".
 
+                    (Phones: the same line is under the first-screen Add to
+                    cart instead, see stageNote. Still once per width.)
+
                     ⚠️ QUIET, NOT A BADGE. The home page still says it nowhere
                     above its FAQ, and that stays true: speed is the wrong
                     headline for a made-to-order garment, it reads as carelessly
@@ -530,7 +558,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     sits at 11px under the price with the visit line, not in a
                     pill next to the button. */}
                 <p className="mt-0.5 text-[11px] text-text-3">
-                  Made for you. Up to 3 weeks.
+                  {LEAD_TIME}
                 </p>
               </div>
               <button
@@ -624,8 +652,13 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           preview. It was pushing the parameters further from the photo on a
           phone for a line nobody reads before choosing a colour. It still
           sits above the fold of the decision, just not in the way of it. */}
-      <p className="mt-8 px-1 text-[11px] leading-relaxed text-text-3">
+      {/* Below lg the shade line joins it, so the two notes about what a
+          screen can and cannot show are ONE footnote instead of two scattered
+          lines (founder 2026-11-20). Both sentences are verbatim. From lg the
+          shade line is still under the swatches (FabricColorPicker). */}
+      <p className="mt-4 px-1 text-[11px] leading-relaxed text-text-3 lg:mt-8">
         * Images are illustrative. Shade and fall vary slightly.
+        <span className="lg:hidden"> {SHADE_NOTE}</span>
       </p>
 
       {/* Shaklek+ sits AFTER the decision. It advertises features nobody can

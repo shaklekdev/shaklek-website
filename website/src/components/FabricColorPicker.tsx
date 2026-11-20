@@ -122,9 +122,9 @@ export default function FabricColorPicker({
           vary". Keep the retail phrasing; do not describe what a screen does,
           and do not call the chips "true shades" (an exact match is not
           something we can promise). */}
-      {/* Below lg this same line is rendered by CustomizeParameters, under the
-          first-screen Add to cart, so it does not push the option chips off
-          the screen. It is shown exactly once at every width. */}
+      {/* Below lg this same line is rendered by DesignCustomizer, in the one
+          footnote at the end of the page, so it does not push the option
+          chips off the screen. It is shown exactly once at every width. */}
       <p className="mt-3 hidden text-[11px] leading-relaxed text-text-3 lg:block">
         {SHADE_NOTE}
       </p>

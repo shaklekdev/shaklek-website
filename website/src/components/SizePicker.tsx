@@ -116,7 +116,9 @@ export default function SizePicker({
        between the product characteristics above and Size, because THIS is
        where the customer moves to a new kind of decision. Leg width and Length
        describe the garment; Size describes the body. */
-    <div className="mt-6 border-t border-border pt-6">
+    /* Below lg: mt-0 pt-4, the caller's mt-3 is the only space above the rule
+       (founder 2026-11-20, "too far" from Add to cart). From lg: unchanged. */
+    <div className="border-t border-border pt-4 lg:mt-6 lg:pt-6">
       {/* Tailored first and selected by default. Made-to-order only justifies
           its price if the garment is cut to the customer -- putting Standard
           first made the whole proposition opt-in. Standard stays one tap away
@@ -418,7 +420,7 @@ export default function SizePicker({
 
              It also buys back most of the vertical space that was pushing
              Add to cart down the page, which was the other complaint. */
-          <details className="group mt-4 border border-border-strong">
+          <details className="group mt-3 border border-border-strong lg:mt-4">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
               <span>
                 {/* "Any special request?" (founder, 2026-11-13): "Make it your

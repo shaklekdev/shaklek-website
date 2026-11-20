@@ -35,7 +35,12 @@ export default function IncludedInPrice({
     // (founder, 2026-11-13). Same box, same + / − as the other disclosures on
     // this page, so it reads as one family rather than a promotional card.
     return (
-      <details className="group mt-5 border border-border-strong">
+      // Below lg: mt-3, because the Total block that stood above it is gone
+      // on phones and this now follows "Any special request?" directly. It and
+      // Product information (which tucks its top border under this one) read
+      // as ONE two-row accordion there: same 44px row, same 13px, same + sign
+      // (founder 2026-11-20: "everything is weird"). From lg: unchanged.
+      <details className="group mt-3 border border-border-strong lg:mt-5">
         <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
           <span className="text-[13px] text-text">{INCLUDED_HEADING}</span>
           <span aria-hidden="true" className="shrink-0 text-lg leading-none text-text-3 group-open:hidden">

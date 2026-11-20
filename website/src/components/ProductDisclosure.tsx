@@ -25,16 +25,27 @@ export default function ProductDisclosure({
   const rows = disclosuresFor(garmentName);
 
   return (
-    <details className="group mt-3 border border-border-strong">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden">
-        <span>
+    /* BELOW lg THIS IS THE SECOND ROW OF ONE ACCORDION with "All included in
+       the price" above it (founder 2026-11-20, on her phone: the two boxes
+       and the Arabic "sits misaligned under the English"). So there:
+       - -mt-px: the two hairlines overlap into one shared rule;
+       - the row is the same 44px, 13px, px-4 as the one above;
+       - the Arabic is on the SAME line, against the right edge before the +,
+         exactly where every row inside this panel already puts its Arabic
+         label. It was a second line under the English, and dir="rtl" on a
+         shrink-wrapped block right-aligned it to the English word's width,
+         which is the "misaligned" she saw.
+       From lg nothing changed: stacked, mt-3. */
+    <details className="group -mt-px border border-border-strong lg:mt-3">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 marker:hidden [&::-webkit-details-marker]:hidden">
+        <span className="max-lg:flex max-lg:min-w-0 max-lg:flex-1 max-lg:items-baseline max-lg:justify-between max-lg:gap-3">
           <span className="block text-[13px] text-text">
             Product information
           </span>
           <span
             dir="rtl"
             lang="ar"
-            className="font-arabic mt-0.5 block text-[12px] text-text-3"
+            className="font-arabic mt-0.5 block text-[12px] text-text-3 max-lg:mt-0 max-lg:shrink-0"
           >
             معلومات المنتج
           </span>
