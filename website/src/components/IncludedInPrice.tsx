@@ -107,14 +107,14 @@ export default function IncludedInPrice({
     return (
       // The list drops DOWN over the top of the cards (absolute) rather than
       // widening this column, so the title beside it never re-wraps on open.
-      <details className="group relative z-10 shrink-0 text-right">
+      <details className="group relative z-10 shrink-0 text-center">
         <summary className="inline-flex min-h-[44px] cursor-pointer list-none items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-text sm:tracking-[0.18em] [&::-webkit-details-marker]:hidden">
           {INCLUDED_HOME_LEAD}
           <span aria-hidden="true" className="text-base font-light leading-none text-gold transition-transform group-open:rotate-45">
             +
           </span>
         </summary>
-        <div className="absolute right-0 top-full w-max border border-border bg-bg px-4 py-3 shadow-sm">
+        <div className="absolute left-1/2 top-full w-max -translate-x-1/2 border border-border bg-bg px-4 py-3 text-left shadow-sm">
           <ul className="space-y-0.5 text-[10px] uppercase leading-relaxed tracking-[0.12em] text-text-2 sm:tracking-[0.14em]">
             {INCLUDED_HOME_CHIPS.map((c) => (
               <li key={c.key}>{c.label}</li>

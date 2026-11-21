@@ -53,24 +53,37 @@ export default function EditorialBanner() {
             for legibility (she flagged it). The line sits on the LINEN TILE ALONE
             at every width (bottom left on phones, third on desktop), so it
             never crosses her face or the ivory cherries. */}
-        <div className="pointer-events-none absolute top-3/4 left-0 flex w-1/2 -translate-y-1/2 justify-center lg:top-1/2 lg:left-[calc(50%+4px)] lg:w-[calc(25%-16px)]">
-          <h2 className="bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.30),transparent_70%)] px-2 py-6 text-center">
-            {/* Type on the SPAN, not the h2: the global h2 rule in globals.css is
-                unlayered, so it beats any utility class on the h2 itself. */}
-            <span className="font-body block text-[13px] leading-[1.7] font-light tracking-[0.3em] text-white uppercase [text-shadow:0_1px_14px_rgba(0,0,0,0.35)] sm:text-[18px] lg:text-[16px] lg:tracking-[0.28em]">
-              Made to your
-              <br /> measurements
-            </span>
-          </h2>
+        {/* LINE + LINKS TOGETHER IN THE MIDDLE, Zavi's way (founder
+            2026-11-21: "au milieu ... plutôt que d'avoir plein de boutons de
+            partout"). White thin caps straight on the photos, no box; a soft
+            radial shade behind the block only. TILE ORDER IS HERS (door,
+            cherries / linen, walk): do not reorder for legibility. */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div
+            className="pointer-events-auto flex flex-col items-center px-16 py-14 text-center text-white"
+            style={{
+              // Inline, not a Tailwind arbitrary class: the arbitrary radial did not render.
+              background: "radial-gradient(ellipse at center, rgba(40,14,20,0.55) 0%, rgba(40,14,20,0.28) 45%, rgba(40,14,20,0) 72%)",
+              textShadow: "0 1px 10px rgba(0,0,0,0.5)",
+            }}
+          >
+            <h2 className="m-0">
+              {/* Type on the SPAN: the global h2 rule is unlayered and beats utilities. */}
+              <span className="font-body block text-[14px] leading-[1.7] font-light tracking-[0.32em] uppercase sm:text-[18px]">
+                Made to your
+                <br /> measurements
+              </span>
+            </h2>
+            <div className="mt-4 flex gap-6 text-[10px] tracking-[0.22em] uppercase sm:text-[11px]">
+              <Link href="/design/open-abaya" className="border-b border-white pb-1 hover:opacity-70">
+                The abaya
+              </Link>
+              <Link href="/catalog" className="border-b border-white pb-1 hover:opacity-70">
+                Shop all
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="mt-6 flex justify-center gap-8 text-[11px] tracking-[0.2em] text-text uppercase sm:mt-8 sm:text-[12px]">
-        <Link href="/design/open-abaya" className="border-b border-text pb-1 hover:opacity-60">
-          The abaya
-        </Link>
-        <Link href="/catalog" className="border-b border-text pb-1 hover:opacity-60">
-          Shop all
-        </Link>
       </div>
     </section>
   );

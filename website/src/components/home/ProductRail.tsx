@@ -70,35 +70,21 @@ export default function ProductRail({
           sticky header, which would otherwise cover the heading. */}
       <section
         id="catalog"
-        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-6 pb-4 sm:pt-12"
+        className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-12 pb-4 sm:pt-16"
       >
         {/* The price claim sits on the RIGHT, stacked, so the left column is
             only the heading (founder, 2026-11-12: "too much text on the left"). */}
-        <div className="flex items-center justify-between gap-3 sm:gap-4">
-          <div className="min-w-0">
-            {/* "Begin your piece" since 2026-11-13 (founder chose it over "Create
-                yours" / "Choose a piece to begin"; "Custom made for you" was cut
-                for repeating the hero). It invites; the card button acts. */}
-            <h2 className="text-lg text-text">{title}</h2>
-            {/* Founder, 2026-11-13: a way to the explanation without putting it
-                above the clothes. Jumps to the Concept section further down
-                (id="how-it-works" in Concept.tsx -- rename both or neither). */}
-            <a
-              href="#how-it-works"
-              className="mt-1 inline-block text-[12px] text-text-2 underline underline-offset-4 hover:text-text"
-            >
-              How it works
-            </a>
-            {/* No subtitle on the home (founder, 2026-11-13, "too much text...
-                be strategic"): every card already says "Customise this piece".
-                Pass `subtitle` explicitly to show one. */}
-            {subtitle ? <p className="mt-1 text-[13px] text-text-3">{subtitle}</p> : null}
+        {/* CENTRED, like every other home heading (founder 2026-11-21: titles
+            sat left here and centred elsewhere, "fais en sorte que
+            l'utilisateur ne se perde pas"). The small "How it works" link that
+            sat under this title was dropped the same day: the hero already has
+            a How it works button, and she asked for fewer scattered buttons. */}
+        <div className="flex flex-col items-center text-center">
+          <h2 className="font-display text-[26px] leading-tight text-text sm:text-[34px]">{title}</h2>
+          {subtitle ? <p className="mt-1 text-[13px] text-text-3">{subtitle}</p> : null}
+          <div className="mt-2">
+            <IncludedInPrice variant="chips" />
           </div>
-          {/* ⚠️ NO COUNT, same call as /catalog (founder, 2026-09-14). It read
-              "{catalog.length} pieces" and she flagged it as wrong on
-              2026-10-11: a number on the page goes stale every time the range
-              moves, and nobody remembers to look. */}
-          <IncludedInPrice variant="chips" />
         </div>
       </section>
 

@@ -1,4 +1,3 @@
-import { catalog } from "@/data/catalog";
 
 // All home-page copy in one place.
 //
@@ -254,7 +253,7 @@ export const BENEFITS = [
     // "watch it change"; the watch-it-change promise lives in STEPS 01 and
     // must stay attached to the options that actually do.
     k: "100% custom-made",
-    v: "Nothing is made until you order it.", // shortened: founder + marketing, 2026-11-12
+    v: "Cut to your true measurements, made for you.", // founder 2026-11-21 (never "not a size chart": standard sizes are also offered) (was "Nothing is made until you order it.": "it doesn't mean anything; the true value is your measurements and body")
     icon: "sewing-machine",
   },
   // ⚠️ SECOND, AND IT SAYS LINEN, NOT "NATURAL". Both are hers, 2026-09-16:
@@ -349,7 +348,7 @@ export const BENEFITS = [
     // its own -- one fixed price, everything you choose inside it -- and the
     // word "free" does not appear, because "free" was the visit's word.
     k: "One fixed price per piece",
-    v: `From AED ${Math.min(...catalog.map((i) => i.price))}, every option included.`,
+    v: "Every customisation included.", // founder 2026-11-21: the price is on every card; the value is that customising costs nothing (was "From AED X, every option included.")
     icon: "tag",
   },
   // ⚠️ NO COUNT OF TAILORS HERE, AND DO NOT ADD ONE.
@@ -380,7 +379,7 @@ export const BENEFITS = [
     // happens, which is where a garment is cut and sewn. productDisclosure.ts
     // already carries it as the legal origin field.
     k: "Made in the UAE",
-    v: "Handmade by our team.", // founder 2026-11-12 ("we" voice: a team, not one tailor)
+    v: "Handmade locally by our team.", // founder 2026-11-21 (was "Handmade by our team.", 2026-11-12) ("we" voice: a team, not one tailor)
     icon: "pin",
   },
 ];

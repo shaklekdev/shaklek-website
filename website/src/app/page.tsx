@@ -3,10 +3,9 @@ import Header from "@/components/Header";
 import HomeHero from "@/components/home/HomeHero";
 import Concept from "@/components/home/Concept";
 import EditorialBanner from "@/components/home/EditorialBanner";
-import LinenStory from "@/components/home/LinenStory";
+import WhyChooseUsPhotos from "@/components/home/WhyChooseUsPhotos";
 import ProductRail from "@/components/home/ProductRail";
 import BackToTop from "@/components/BackToTop";
-import Benefits from "@/components/home/Benefits";
 import HomeFaq from "@/components/home/HomeFaq";
 import {
   pageMetadata,
@@ -62,11 +61,12 @@ export default function Home() {
           mechanism (private home fitting), then the reasons. */}
       <ProductRail />
       {/* 2026-11-21 (founder, Zavi structure): editorial spread, then how it
-          works, then field-to-piece photos, then why choose us. */}
+          works, then why choose us in photos. */}
       <EditorialBanner />
       <Concept />
-      <LinenStory />
-      <Benefits />
+      {/* One photo section for the four arguments (was LinenStory + Benefits,
+          which repeated each other; founder 2026-11-21). */}
+      <WhyChooseUsPhotos />
       <HomeFaq />
       <BackToTop />
     </div>

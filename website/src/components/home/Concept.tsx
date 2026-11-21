@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { STEPS, STEPS_NOTE } from "@/data/homeContent";
 
 /**
@@ -33,63 +32,57 @@ import { STEPS, STEPS_NOTE } from "@/data/homeContent";
  */
 export default function Concept() {
   return (
+    // 2026-11-21 (founder): the words now sit ON the sewing-machine loop, in
+    // black and white. CONTAINED in the page column (max-w-6xl), not
+    // full-bleed, so it does not read as a second hero (see failure 2 above).
     <section id="how-it-works" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 pt-12 sm:pt-16">
-      {/* HOME RHYTHM (founder, 2026-11-13: uneven gaps "look amateur"): every
-          home section opens with pt-12 / sm:pt-16 and nothing else adds bottom
-          padding, so the gap between any two sections is identical; title to
-          content is always 24px (mt-6 / mb-6 / pb-6). Keep it that way. */}
-
-      <h2 className="font-display text-center text-[26px] leading-tight text-text sm:text-[34px]">How it works</h2>
-
-      <div className="mt-6 grid items-center gap-8 sm:mt-8 sm:grid-cols-2 sm:gap-12">
-        <div className="min-w-0">
-          <ol className="space-y-6">
+      {/* Title OUTSIDE the video, like every other section title (founder). */}
+      <h2 className="text-center">How it works</h2>
+      <div className="relative mt-6 flex min-h-[460px] items-center justify-center overflow-hidden sm:mt-8 sm:min-h-[460px]">
+        {/* Generated clip from the 2026-11-07 ad (ad1-sew-1.mp4, no text),
+            re-encoded H.264 1.4 Mbps, 724x1268, ~0.9 MB. Black and white by
+            CSS (grayscale), so the colour file stays usable elsewhere. Muted
+            + playsInline so iOS autoplays; the poster shows while it loads. */}
+        {/* WHOLE FRAME, hands included (a crop to the machine was tried and
+            she preferred the hands, 2026-11-21). FILM LOOK instead of plain
+            B&W ("enlever l'effet trop AI"): grayscale + contrast + a grain
+            layer (SVG noise, no extra file). */}
+        <video
+          className="absolute inset-x-0 top-0 h-full w-full object-cover"
+          style={{ filter: "grayscale(1) contrast(1.18) brightness(0.92)" }}
+          src="/marketing/how-it-works-sewing.mp4"
+          poster="/marketing/how-it-works-sewing-poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.22] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+          }}
+        />
+        <div className="absolute inset-0 bg-black/62" />
+        <div className="relative w-full max-w-md px-6 py-12 text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
+          <ol className="space-y-9">
             {STEPS.map((s) => (
-              <li key={s.n} className="flex gap-4">
-                <span className="font-display shrink-0 text-lg text-gold">
-                  {s.n}
-                </span>
-                <div className="min-w-0">
-                  <h3
-                    className={
-                      s.emphasis
-                        ? "font-display text-[18px] leading-snug text-text"
-                        : "text-[15px] font-medium text-text"
-                    }
-                  >
-                    {s.title}
-                  </h3>
-                  <p className="mt-1 text-[13px] leading-relaxed text-text-2">
-                    {s.body}
-                  </p>
-                </div>
+              <li key={s.n}>
+                {/* Number at the START of the line (founder 2026-11-21). */}
+                <h3 className="flex items-baseline gap-3 text-white">
+                  <span className="font-display text-[22px] text-gold">{s.n}</span>
+                  <span className="font-display text-[22px] leading-snug sm:text-[26px]">{s.title}</span>
+                </h3>
+                <p className="mt-2 pl-10 text-[15px] leading-relaxed text-white">{s.body}</p>
               </li>
             ))}
           </ol>
-
-          {/* ⚠️ NO LONGER A FOOTNOTE, 2026-11-05. It was the asterisk's
-              footnote for step 02's "we come to you", naming Dubai as the
-              visit's scope. The founder pulled the at-home visit site-wide
-              until she defines appointment slots (OPEN.md measuring-slots),
-              step 02 lost its marker, and STEPS_NOTE is now just the delivery
-              line. When the visit returns with slots, the marker and the
-              city come back together, never one without the other. */}
-          {STEPS_NOTE ? (
-            <p className="mt-5 text-[12px] leading-relaxed text-text-3">
-              {STEPS_NOTE}
-            </p>
-          ) : null}
-        </div>
-
-        {/* Words first on a phone, photo after and short. */}
-        <div className="relative order-first aspect-[4/3] w-full sm:order-last sm:aspect-square">
-          <Image
-            src="/marketing/story-tailoring-v2.jpg"
-            alt="Tailoring at Shaklek."
-            fill
-            sizes="(min-width: 640px) 50vw, 100vw"
-            className="object-cover"
-          />
+          {/* STEPS_NOTE: see the history above; kept, same place. */}
+          {STEPS_NOTE ? <p className="mt-8 pl-10 text-[13px] leading-relaxed text-white/85">{STEPS_NOTE}</p> : null}
         </div>
       </div>
     </section>
