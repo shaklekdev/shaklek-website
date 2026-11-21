@@ -347,7 +347,7 @@ export const BENEFITS = [
     // resumes the day slots exist. Until then the tile is the price claim on
     // its own -- one fixed price, everything you choose inside it -- and the
     // word "free" does not appear, because "free" was the visit's word.
-    k: "One fixed price per piece",
+    k: "Fixed price", // founder 2026-11-21: was "One fixed price per piece", too long
     v: "Every customisation included.", // founder 2026-11-21: the price is on every card; the value is that customising costs nothing (was "From AED X, every option included.")
     icon: "tag",
   },

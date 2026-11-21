@@ -13,16 +13,17 @@ import { BENEFITS } from "@/data/homeContent";
  * les arguments").
  *
  * id="why-choose-us" is linked from /catalog and the side menu. Keep it.
- * The price tile shows the four linen swatches (public/fabric) in a 2x2: the
- * argument is "every customisation included", so it shows choice (founder
- * 2026-11-21: the flax bundle had no link to it).
+ * The price tile shows our four linens folded in a stack (Gemini 3 Pro 2K,
+ * 2026-11-21, 0.13 USD, archived catalog-archive/2026-11-21-homepage): the
+ * argument is "every customisation included", so it shows choice. The flat
+ * 2x2 swatch tile was tried first and looked off beside three photos.
  * ⚠️ flax-field (509 px) is soft on big screens;
  * swap in sharper files under NEW filenames when they exist.
  */
 const PHOTOS: Record<string, { src: string; alt: string; pos?: string }> = {
   "100% custom-made": { src: "/marketing/story-tailor-hands-golden.jpg", alt: "A tailor's hands working on linen", pos: "50% 45%" },
   "100% natural linen": { src: "/marketing/pre-launch/flax-field.jpg", alt: "A field of flowering flax", pos: "50% 70%" },
-  "One fixed price per piece": { src: "/marketing/why-colour-swatches.jpg", alt: "Our four linen colours: ivory, white, navy and burgundy", pos: "50% 50%" },
+  "Fixed price": { src: "/marketing/why-folded-linens.jpg", alt: "Folded linen in our four colours: burgundy, navy, white and ivory", pos: "50% 55%" },
   "Made in the UAE": { src: "/marketing/pre-launch/uae-desert.jpg", alt: "The UAE flag over desert dunes and palms", pos: "50% 45%" },
 };
 
