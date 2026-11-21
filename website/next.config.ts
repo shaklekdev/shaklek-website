@@ -99,6 +99,17 @@ const buildConfig = (isDev: boolean): NextConfig => ({
     // detail there is not recoverable and not worth 20kb. Next 16 rejects any
     // quality not declared here.
     qualities: [55, 75],
+    // SLOW IMAGES (founder 2026-11-21). Measured on prod: the optimizer already
+    // serves WebP at 15-22 KB, but every first request is a CloudFront MISS
+    // costing 0.4-1.4 s, because (a) the default config makes ~15 width
+    // variants per photo, each its own cache entry, while catalog sources are
+    // only ~670-850 px wide, so everything above ~1080 is the same pixels
+    // re-encoded, and (b) the default 4 h TTL throws them all away.
+    // A long TTL is safe ONLY because changing an image's content means
+    // changing its filename (CLAUDE.md §6, Trap 2). Keep that rule.
+    deviceSizes: [640, 828, 1080, 1920],
+    imageSizes: [64, 128, 256, 384],
+    minimumCacheTTL: 2678400, // 31 days
   },
 
   // Framework disclosure. Off by default here rather than left on.
