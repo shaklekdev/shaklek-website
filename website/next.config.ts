@@ -136,6 +136,18 @@ const buildConfig = (isDev: boolean): NextConfig => ({
         destination: "/blog/what-to-wear-dubai-summer-fabric",
         permanent: true,
       },
+      // The PRINTED business card's QR encodes https://www.shaklek.com/?c=card
+      // (scripts/brand/generate-packaging-artwork.mjs, CARD_URL). 100 cards
+      // are already handed out, so the code cannot change -- the redirect can.
+      // Founder 2026-11-21: a scan goes to Instagram, not the site.
+      // NOT permanent: a 308 is cached by phones forever, and she may want the
+      // card to point somewhere else later.
+      {
+        source: "/",
+        has: [{ type: "query", key: "c", value: "card" }],
+        destination: "https://www.instagram.com/shaklek.uae/",
+        permanent: false,
+      },
     ];
   },
 
