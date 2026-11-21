@@ -2,6 +2,7 @@ import Link from "next/link";
 import CookieChoicesLink from "@/components/CookieChoicesLink";
 import { isStoreOpen } from "@/lib/storeOpen";
 import { SITE_TAGLINE } from "@/lib/seo";
+import { CardMarks } from "@/components/PaymentLogos";
 
 export default function Footer() {
   return (
@@ -91,6 +92,9 @@ export default function Footer() {
           </a>
           {/* No WhatsApp link before the order: it exposed the founder's number (2026-11-13). */}
         </div>
+        {/* Card marks, like every UAE shop footer (founder 2026-11-21). Only
+            brands Stripe really takes here: see PaymentLogos.tsx. */}
+        <CardMarks className="mt-6 sm:justify-start" />
       </div>
     </footer>
   );

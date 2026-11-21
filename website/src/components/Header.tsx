@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
 import BrandLockup from "@/components/BrandLockup";
 import BagOfferBar from "@/components/BagOfferBar";
+import SideMenu from "@/components/SideMenu";
 
 
 // "How it works" was removed from the menu on 2026-08-25 and its content moved
@@ -97,21 +98,6 @@ export default function Header() {
   // place, and "Email us" goes in with them. That is the 2026-08-23 audit
   // lesson (nav was `hidden sm:inline` with no way to reach it).
   const compact = barScrollsAway;
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
-    const onDown = (e: PointerEvent) => {
-      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("pointerdown", onDown);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("pointerdown", onDown);
-    };
-  }, [menuOpen]);
   // NO HAMBURGER (every page except /design/* on a phone, see `compact`). The three links live in the black bar below the wordmark at
   // every width, so there is nothing left for a menu to hide. That removes the
   // panel, its Escape handler, its close-on-navigation state, and the bug where
@@ -176,50 +162,15 @@ export default function Header() {
         }`}
       >
         {compact ? (
-          <div ref={menuRef} className="justify-self-start lg:hidden">
-            <button
-              type="button"
-              aria-label="Menu"
-              aria-expanded={menuOpen}
-              aria-controls="design-menu"
-              onClick={() => setMenuOpen((v) => !v)}
-              /* 22px glyph, 44px hit area via ::before, same as the icons on the right. */
-              className="relative flex h-6 w-6 items-center justify-center text-text before:absolute before:-inset-2.5 before:content-['']"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            </button>
-            {/* Every link closes the panel itself, so it cannot stay open over
-                the clothes the way the old hamburger did on a hash-only
-                navigation (see the NO HAMBURGER note above). */}
-            {menuOpen ? (
-              <nav
-                id="design-menu"
-                aria-label="Main"
-                className="absolute inset-x-0 top-full border-b border-border-strong bg-white px-6 py-1 shadow-[var(--shadow-lg)]"
-              >
-                {NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="font-body flex min-h-11 items-center border-b border-border text-sm tracking-[0.06em] text-text"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                <a
-                  href="mailto:hello@shaklek.com"
-                  onClick={() => setMenuOpen(false)}
-                  className="font-body flex min-h-11 items-center text-sm tracking-[0.06em] text-text"
-                >
-                  Email us
-                </a>
-              </nav>
-            ) : null}
+          <div className="col-start-1 row-start-1 justify-self-start lg:hidden">
+            <SideMenu />
           </div>
-        ) : null}
+        ) : slim ? null : (
+          // Side drawer on phones (founder 2026-11-21); the black bar is lg+ only.
+          <div className="col-start-1 row-start-1 justify-self-start lg:hidden">
+            <SideMenu />
+          </div>
+        )}
         {/* A REAL PHONE NUMBER, on purpose, and the reviewer's argument for it
             is a conversion one rather than a design one: the product imagery is
             generated, and a site with AI pictures and an AI chatbot reads as a
@@ -238,8 +189,8 @@ export default function Header() {
           aria-label="Email us" // icon-only below 640px
           /* before:-inset-[11px] grows the 22px icon's HIT AREA to 44px without
              moving a pixel -- founder review 2026-11-11 (mobile tap targets). */
-          className={`relative items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2 ${
-            compact ? "hidden lg:flex" : "flex"
+          className={`relative col-start-1 row-start-1 items-center gap-2.5 justify-self-start text-text transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:text-text-2 ${
+            slim ? "flex" : "hidden lg:flex"
           }`}
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -352,7 +303,7 @@ export default function Header() {
           centred below that -- three short labels fit a phone comfortably,
           which is the whole reason the hamburger could go. */}
       {slim ? null : (
-      <nav aria-label="Main" className={compact ? "hidden bg-text lg:block" : "bg-text"}>
+      <nav aria-label="Main" className="hidden bg-text lg:block">
         {/* CENTRED AT EVERY WIDTH (founder, 2026-08-26). It was right-aligned
             from 640px to match the mockup; she wants the three links centred on
             a phone and on a desktop alike, so the bar reads the same way

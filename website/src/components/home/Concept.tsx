@@ -39,9 +39,9 @@ export default function Concept() {
           padding, so the gap between any two sections is identical; title to
           content is always 24px (mt-6 / mb-6 / pb-6). Keep it that way. */}
 
-      <h2 className="text-lg text-text">How it works</h2>
+      <h2 className="font-display text-center text-[26px] leading-tight text-text sm:text-[34px]">How it works</h2>
 
-      <div className="mt-6 grid items-center gap-8 sm:grid-cols-2 sm:gap-10">
+      <div className="mt-6 grid items-center gap-8 sm:mt-8 sm:grid-cols-2 sm:gap-12">
         <div className="min-w-0">
           <ol className="space-y-6">
             {STEPS.map((s) => (
@@ -82,7 +82,7 @@ export default function Concept() {
         </div>
 
         {/* Words first on a phone, photo after and short. */}
-        <div className="relative order-last h-[200px] w-full sm:h-full sm:min-h-[260px]">
+        <div className="relative order-first aspect-[4/3] w-full sm:order-last sm:aspect-square">
           <Image
             src="/marketing/story-tailoring-v2.jpg"
             alt="Tailoring at Shaklek."

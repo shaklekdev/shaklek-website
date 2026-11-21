@@ -41,7 +41,7 @@ export default function Benefits() {
 
           Do not reintroduce a line above this heading. If the home page ever
           needs a slogan again, it replaces the hero. */}
-      <h2 className="mb-6 text-lg text-text">Why choose us</h2>
+      <h2 className="font-display mb-6 text-center text-[26px] leading-tight text-text sm:mb-8 sm:text-[34px]">Why choose us</h2>
       {/* BORDERED CARDS, three across, from the founder's mockup. As a bare
           list the three claims ran into the FAQ beneath them and read as more
           body copy; boxed, they read as three things rather than a paragraph,
@@ -51,20 +51,16 @@ export default function Benefits() {
           is kept anyway: a fifth card was added and removed within a day on
           2026-09-16, and without it the last one sits alone in a half-width
           cell at the two-column breakpoint, which reads as a rendering bug. */}
-      <ul className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-        {BENEFITS.map((b, i) => (
+      <ul className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4 lg:gap-8">
+        {BENEFITS.map((b) => (
           <li
             key={b.k}
-            className={`border border-border p-5 sm:p-6${
-              BENEFITS.length % 2 === 1 && i === BENEFITS.length - 1
-                ? " sm:col-span-2 lg:col-span-1"
-                : ""
-            }`}
+            className="text-center"
           >
-            <span className="block text-gold">
+            <span className="flex justify-center text-gold">
               <LineIcon name={b.icon} />
             </span>
-            <p className="font-display mt-4 text-[16px] text-text">{b.k}</p>
+            <p className="font-display mt-3 text-[16px] text-text">{b.k}</p>
             <p className="mt-2 text-[13px] leading-relaxed text-text-2">
               {b.v}
             </p>

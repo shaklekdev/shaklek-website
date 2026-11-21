@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import HomeHero from "@/components/home/HomeHero";
 import Concept from "@/components/home/Concept";
+import EditorialBanner from "@/components/home/EditorialBanner";
+import LinenStory from "@/components/home/LinenStory";
 import ProductRail from "@/components/home/ProductRail";
 import BackToTop from "@/components/BackToTop";
 import Benefits from "@/components/home/Benefits";
@@ -59,7 +61,11 @@ export default function Home() {
           see the clothes first (COS / Arket pattern), then the one unusual
           mechanism (private home fitting), then the reasons. */}
       <ProductRail />
+      {/* 2026-11-21 (founder, Zavi structure): editorial spread, then how it
+          works, then field-to-piece photos, then why choose us. */}
+      <EditorialBanner />
       <Concept />
+      <LinenStory />
       <Benefits />
       <HomeFaq />
       <BackToTop />

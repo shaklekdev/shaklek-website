@@ -8,10 +8,10 @@
 
 const card = "h-6 w-[38px] shrink-0 rounded-[3px] border border-[#E3DED4] bg-white";
 
-export default function PaymentLogos() {
+/** Visa + Mastercard marks alone (footer, checkout). */
+export function CardMarks({ className = "" }: { className?: string }) {
   return (
-    <>
-      <div className="mt-3 flex items-center justify-center gap-2" aria-label="We accept Visa and Mastercard">
+    <div className={`flex items-center justify-center gap-2 ${className}`} aria-label="We accept Visa and Mastercard">
       <svg viewBox="0 0 38 24" className={card} role="img" aria-label="Visa">
         <text x="19" y="16" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="10.5" fontWeight="900" fontStyle="italic" fill="#1A1F71" letterSpacing="0.3">VISA</text>
       </svg>
@@ -20,7 +20,14 @@ export default function PaymentLogos() {
         <circle cx="22.5" cy="12" r="6.5" fill="#F79E1B" />
         <path d="M19 6.52a6.5 6.5 0 0 1 0 10.96a6.5 6.5 0 0 1 0-10.96z" fill="#FF5F00" />
       </svg>
-      </div>
+    </div>
+  );
+}
+
+export default function PaymentLogos() {
+  return (
+    <>
+      <CardMarks className="mt-3" />
       {/* Founder 2026-11-21: trust BADGES, like other shops -- not a sentence.
           Paying through Stripe Checkout/Elements keeps card data off our
           servers, which is what lets a Stripe merchant show "PCI DSS
