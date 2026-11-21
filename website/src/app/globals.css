@@ -252,3 +252,20 @@ h3 {
     animation: none;
   }
 }
+
+/* NO ZOOM ON PHONES WHEN A FIELD IS TAPPED (founder 2026-11-21). iOS Safari
+   zooms into any input, select or textarea whose font is under 16px, and does
+   not zoom back out. Fixing it field by field missed some (account name,
+   measurements, fit feedback, online fitting were 14-15px), so it is one rule
+   here. It is UNLAYERED on purpose: Tailwind v4 utilities live in
+   @layer utilities, and unlayered CSS beats any layer, so a text-sm on a new
+   field cannot bring the zoom back. Touch screens only; desktop keeps the
+   designed sizes. Do NOT fix this with maximum-scale=1 in the viewport: that
+   also blocks pinch-zoom, which is an accessibility failure. */
+@media (hover: none) and (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
