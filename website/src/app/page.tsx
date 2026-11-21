@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
-import Hero from "@/components/home/Hero";
+import HomeHero from "@/components/home/HomeHero";
 import Concept from "@/components/home/Concept";
 import ProductRail from "@/components/home/ProductRail";
 import BackToTop from "@/components/BackToTop";
@@ -53,7 +53,8 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col bg-bg">
       <Header />
-      <Hero />
+      {/* Full-bleed photo hero since 2026-11-21 (founder, Zavi structure). */}
+      <HomeHero />
       {/* Founder + marketing agent, 2026-11-12: a cold visitor from an ad must
           see the clothes first (COS / Arket pattern), then the one unusual
           mechanism (private home fitting), then the reasons. */}
