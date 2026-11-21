@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import PaymentLogos from "./PaymentLogos";
 import ShaklekPlusSignup, { SHAKLEK_PLUS_ON } from "@/components/ShaklekPlusSignup";
 import { previewDiscountAed, previewTotalAed } from "@/lib/promoPreview";
 import { useUser } from "@clerk/nextjs";
@@ -392,6 +393,7 @@ export default function CheckoutForm({ total }: { total: number }) {
             <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6"><rect x="5" y="11" width="14" height="9" rx="1.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
             Secure payment
           </p>
+          <PaymentLogos />
         </>
       )}
 
