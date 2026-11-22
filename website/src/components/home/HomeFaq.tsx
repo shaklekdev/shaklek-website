@@ -48,7 +48,7 @@ const QUESTIONS = [
     q: "How long does it take?",
     a: (
       <>
-        10 working days. Each piece is cut and sewn after you order.
+        10 working days. Our team cuts and sews your piece by hand, for you.
       </>
     ),
   },

@@ -40,7 +40,9 @@ export function includedLines(category: string | null | undefined): IncludedLine
 
 /** Checkout, under the order lines, before paying. */
 export const INCLUDED_CHECKOUT_LINE =
-  "All included: every customisation, UAE delivery and one alteration, plus a free fitting (home in Dubai or virtual) on Tailored pieces. Ready in 10 working days.";
+  // founder 2026-11-22: keep "All included" (it sells); the rest leads with what
+  // SHE gets, not a process list (copy-value-audit-2026-11-22.md #2).
+  "All included: your design, delivery to your door anywhere in the UAE and one free alteration, plus your free fitting (home in Dubai or virtual) on Tailored pieces. Ready in 10 working days.";
 // No "linen" here (founder 2026-11-14): she is already buying linen, it is in the item line above.
 
 /** Home page and ads: the sentence, verbatim, for ads and for screen readers. */
@@ -108,7 +110,7 @@ export const AFTER_ORDER = {
 export const SHEET_INCLUDED = {
   heading: "All included",
   tailored: [
-    "Fitting after you order: at home in Dubai, or virtual from your phone",
+    "Your true measurements, taken free: at home in Dubai, or virtual from your phone", // founder 2026-11-22 (was "Fitting after you order")
     "Cut to your measurements, with every customisation you choose",
     "Delivery across the UAE, 10 working days after your fitting",
     "One free alteration, within 10 days of delivery",
