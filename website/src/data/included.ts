@@ -21,7 +21,7 @@ const INCLUDED_LINES: IncludedLine[] = [
   { key: "sliders", label: "Every customisation" },
   { key: "flax", label: "100% natural linen" },
   { key: "parcel", label: "Delivery across the UAE" },
-  { key: "needle", label: "One fit alteration, within 10 days" },
+  { key: "needle", label: "Fit guarantee" },
 ];
 
 // Abaya only (catalog.ts includedWith): sits right after the linen line because
@@ -53,7 +53,7 @@ export const INCLUDED_HOME_LINE =
  *  words are the sentence's own words, so the two never disagree. */
 export const INCLUDED_HOME_LEAD = "All included";
 export const INCLUDED_HOME_CHIPS: IncludedLine[] = [
-  { key: "home", label: "Private home fitting*" },
+  { key: "home", label: "Private home fitting in Dubai" },
   { key: "virtual", label: "Virtual fitting" }, // founder 2026-11-13
   { key: "sliders", label: "Every customisation" },
   { key: "parcel", label: "UAE delivery" },
@@ -77,7 +77,7 @@ export const INCLUDED_PRODUCT_LINES: { key: string; label: string }[] = [
   { key: "virtual", label: "Virtual fitting, from your phone" },
   { key: "sliders", label: "Every customisation you choose" },
   { key: "parcel", label: "Delivery across the UAE" },
-  { key: "needle", label: "One free alteration, within 10 days of delivery" },
+  { key: "needle", label: "Fit guarantee: your perfect fit is our responsibility" },
 ];
 
 /** "After you order", in the phone details sheet on the product page, between
@@ -113,12 +113,12 @@ export const SHEET_INCLUDED = {
     "Your true measurements, taken free: at home in Dubai, or virtual from your phone", // founder 2026-11-22 (was "Fitting after you order")
     "Cut to your measurements, with every customisation you choose",
     "Delivery across the UAE, 10 working days after your fitting",
-    "One free alteration, within 10 days of delivery",
+    "Fit guarantee: your perfect fit is our responsibility",
   ],
   standard: [
     "Made in your size, with every customisation you choose",
     "Delivery across the UAE, in 10 working days",
-    "One free alteration, within 10 days of delivery",
+    "Fit guarantee: your perfect fit is our responsibility",
   ],
   shayla: "Shayla included, cut from the same linen in your colour",
 };
@@ -129,19 +129,21 @@ export const SHEET_INCLUDED = {
  *  said ONCE per screen (founder: "trop répétitif"), so the checkout steps
  *  REPLACE the old INCLUDED_CHECKOUT_LINE rather than sitting under it.
  *  "Within 24 hours" is already promised in order-confirmed and orderEmail. */
+// Founder 2026-11-23: name the guarantee, never list the remedies ("people
+// don't have to know all our process"). The remedies live in legal/terms only.
 export const SIZE_LINE_TAILORED = "We take your true measurements, free";
-export const FIT_COVERED_LINE = "Your fit is covered: one free alteration, within 10 days of delivery.";
-export const CART_INCLUDED_LINE = "All included: delivery to your door anywhere in the UAE and one free alteration.";
+export const FIT_COVERED_LINE = "Fit guarantee: your perfect fit is our responsibility.";
+export const CART_INCLUDED_LINE = "All included: delivery to your door anywhere in the UAE and our Fit guarantee.";
 export const CHECKOUT_STEPS = {
   heading: "From here, we take care of it",
   tailored: [
     { lead: "We come to you.", text: "Within 24 hours we are in touch to arrange your free fitting: at home in Dubai, or virtual from your phone." },
     { lead: "Cut for you alone.", text: "Our team makes your piece to your measurements, with every customisation you chose." },
-    { lead: "At your door in 10 working days from your fitting.", text: "One free alteration is included, within 10 days of delivery." },
+    { lead: "At your door in 10 working days from your fitting.", text: "Covered by our Fit guarantee." },
   ],
   standard: [
     { lead: "Your piece is in our team's hands.", text: "Within 24 hours we are in touch to confirm your details." },
     { lead: "Made for you.", text: "In your size, with every customisation you chose." },
-    { lead: "At your door in 10 working days.", text: "One free alteration is included, within 10 days of delivery." },
+    { lead: "At your door in 10 working days.", text: "Covered by our Fit guarantee." },
   ],
 };

@@ -457,7 +457,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     size. Wording reuses SizePicker's approved line. */}
                 <p className="mb-2 text-center text-[12px] text-text-2">
                   {spec.sizeMode === "tailored" ? (
-                    <>Size: <span className="font-medium text-text">Tailored</span>. {SIZE_LINE_TAILORED}</>
+                    <>{SIZE_LINE_TAILORED}</>
                   ) : (
                     <>Size: <span className="font-medium text-text">{spec.size}</span></>
                   )}
@@ -573,11 +573,8 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
         <DetailsSheet open={sheet !== null} section={sheet === "size" || sheet === "included" ? sheet : null} onClose={closeSheet}>
             {/* PHONES: the piece in one line, then Size first (founder
                 2026-11-20: "size is the first, it's tailored"). */}
-            {item.descriptor?.trim() ? (
-              <p data-sheet-description className="pb-3 text-[13px] leading-relaxed text-text-2 lg:hidden">
-                <span className="text-text">{item.name}.</span> {item.descriptor.trim()}.
-              </p>
-            ) : null}
+            {/* "Peplum Blouse. Minimal dart." line REMOVED 2026-11-23
+                (conversion audit): read like a tailor's note. */}
             <div data-sheet-section="size">
             <SizePicker
               sizeMode={spec.sizeMode}
@@ -763,7 +760,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
             {/* PHONES: the one footnote, last line of the sheet. Both
                 sentences verbatim, as they were at the end of the page. */}
             <p className="mt-4 text-[11px] leading-relaxed text-text-3 lg:hidden">
-              * Images are illustrative. Shade and fall vary slightly. {SHADE_NOTE}
+              {SHADE_NOTE}
             </p>
         </DetailsSheet>
               </>
@@ -819,9 +816,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
           shade line is still under the swatches (FabricColorPicker). */}
       {/* 2026-11-20, later: DESKTOP ONLY. On phones this footnote is the last
           line of the details sheet (same two sentences), not in the page. */}
-      <p className="hidden px-1 text-[11px] leading-relaxed text-text-3 lg:mt-8 lg:block">
-        * Images are illustrative. Shade and fall vary slightly.
-      </p>
+      {/* "Images are illustrative. Shade and fall vary slightly." moved to
+          legal/terms ("How an order works"), founder 2026-11-23: one caveat
+          on the buying screen, SHADE_NOTE, already under the swatches. */}
 
       {/* Shaklek+ sits AFTER the decision. It advertises features nobody can
           buy yet, so it must never stand between the customer and the cart --

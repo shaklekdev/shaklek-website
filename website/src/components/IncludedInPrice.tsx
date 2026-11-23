@@ -2,7 +2,6 @@ import {
   INCLUDED_CHECKOUT_LINE,
   INCLUDED_HEADING,
   INCLUDED_HOME_CHIPS,
-  INCLUDED_HOME_FOOTNOTE,
   INCLUDED_HOME_LEAD,
   INCLUDED_PRODUCT_LINES,
   SHEET_INCLUDED,
@@ -142,7 +141,7 @@ export default function IncludedInPrice({
               <li key={c.key}>{c.label}</li>
             ))}
           </ul>
-          <p className="mt-1 text-[10px] tracking-[0.1em] text-text-3">{INCLUDED_HOME_FOOTNOTE}</p>
+          {/* "*In Dubai" footnote removed 2026-11-23: the line says it. */}
         </div>
       </details>
     );

@@ -299,7 +299,7 @@ export default function CheckoutForm({ total }: { total: number }) {
 
 
       <label htmlFor="checkout-email" className="mb-2 block text-sm text-text">
-        Your email <span className="text-text-3">(required)</span>
+        Your email
       </label>
       <input
         id="checkout-email"
@@ -362,7 +362,9 @@ export default function CheckoutForm({ total }: { total: number }) {
           {/* Without this the button just sits greyed out and the customer is
               left guessing. ABOVE the button and readable (shaklek-ui walk
               2026-11-14: it was 2.6:1 grey and below the fold). */}
-          {!emailOk && (
+          {/* Only once she has typed something (audit 2026-11-23: on arrival it
+              read as an error before she had done anything). */}
+          {!emailOk && email.trim().length > 0 && (
             <p aria-live="polite" className="mt-6 -mb-3 text-center text-xs text-text-2">
               Enter a valid email above to continue.
             </p>
@@ -432,22 +434,10 @@ export default function CheckoutForm({ total }: { total: number }) {
       {/* Launch offer: the first 50 orders come in a Shaklek bag embroidered
           with the customer's initials. Prefilled from the bag preview in the top
           bar; sent with the order and saved in its notes (api/orders). */}
-      <label htmlFor="bag-initials" className="mb-2 mt-6 block text-sm text-text">
-        Initials for your bag <span className="text-text-3">(optional)</span>
-      </label>
-      <input
-        id="bag-initials"
-        value={bagInitials}
-        onChange={(e) => {
-          const v = e.target.value.replace(/[^a-z]/gi, "").toUpperCase().slice(0, 3);
-          setBagInitials(v);
-          if (v) localStorage.setItem(BAG_INITIALS_KEY, v);
-        }}
-        maxLength={3}
-        autoCapitalize="characters"
-        placeholder="e.g. NT"
-        className="mb-5 w-full rounded-shaklek-sm border border-border-strong bg-surface px-4 py-3 text-base text-text placeholder:text-text-3 focus:border-accent focus:outline-none"
-      />
+      {/* Initials field REMOVED from checkout, founder 2026-11-23: a field
+          after Pay looked unfinished. Initials typed in the top-bar bag
+          preview (BagOfferBar) still load from localStorage above and travel
+          with the order. */}
 
       {/* Shaklek+ sits after the decision, not before it -- it must never
           compete with the Pay button. */}

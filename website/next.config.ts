@@ -142,6 +142,10 @@ const buildConfig = (isDev: boolean): NextConfig => ({
   // and is a worse experience than the 404 it replaces.
   async redirects() {
     return [
+      // One screen to pay (founder 2026-11-23): email + Pay live on /cart.
+      // Stripe's cancel_url and any old link still say /checkout. Not
+      // permanent, in case the separate page ever comes back.
+      { source: "/checkout", destination: "/cart", permanent: false },
       {
         source: "/blog/natural-fabrics-better-for-your-body",
         destination: "/blog/what-to-wear-dubai-summer-fabric",

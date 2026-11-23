@@ -58,6 +58,8 @@ export default function TermsPage() {
         made for you after you order, once we
         have confirmed the details with you. Because each piece is made
         for one person, the specification is fixed once confirmed.
+        Product images show the design and its options; as every piece is
+        cut by hand, its shade and fall vary slightly from the image.
       </p>
       <p>
         We may decline or cancel an order before production begins, for
@@ -143,7 +145,7 @@ export default function TermsPage() {
       </p>
 
       <h2 id="returns" className="pt-2 text-base font-medium text-text">
-        Fit and alterations
+        Fit guarantee
       </h2>
       <p>
         {/* ⚠️ ALTERATION ONLY, founder 2026-11-05: adjustments, never a full
@@ -162,8 +164,9 @@ export default function TermsPage() {
           hello@shaklek.com
         </a>{" "}
         or on WhatsApp with a photo and what you would like adjusted, and we
-        will arrange it. If the piece needs more than an alteration can
-        give, we offer store credit instead.
+        will arrange it. Your perfect fit is our responsibility: where a
+        piece needs more than an alteration can give, we refund it in full,
+        including delivery, once it is back with us.
       </p>
       <p>
         {/* ⚠️ THE NO-CHANGE-OF-MIND-REFUND RULE, stated here and in the Art. 40
@@ -176,8 +179,8 @@ export default function TermsPage() {
         Each piece is made for one person, so once it has been made it is
         yours: a made-to-order piece is final, and a change of mind after
         production is outside what a refund covers. Refunds are reserved for
-        faulty or wrong items (below), and fit is resolved through the
-        alteration and store credit above. Nothing here affects your statutory
+        faulty or wrong items (below), and fit is covered by the Fit
+        guarantee above. Nothing here affects your statutory
         rights as a consumer in the UAE.
       </p>
 

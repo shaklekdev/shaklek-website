@@ -9,6 +9,8 @@ import { useCart } from "@/lib/CartContext";
 import { cartThumbnail } from "@/lib/cartThumbnail";
 import { MAX_QUANTITY_PER_ITEM } from "@/lib/pricing";
 import { CART_INCLUDED_LINE } from "@/data/included";
+import CheckoutForm from "@/components/CheckoutForm";
+import IncludedInPrice from "@/components/IncludedInPrice";
 
 /** The slider set a cart line's product uses. The line stores a slug, so the
  *  catalogue item is recoverable; without this the labels are filtered against
@@ -94,9 +96,8 @@ export default function CartPage() {
                 </p>
                 {/* What "Tailored" means, before paying (shaklek-ui 2026-11-14:
                     a buyer outside Dubai did not know how she would be measured). */}
-                {item.size === "Tailored" && (
-                  <p className="mt-1 text-xs text-text-3">Free fitting after payment: home in Dubai, or virtual.</p>
-                )}
+                {/* "Free fitting after payment" REMOVED, founder 2026-11-23: a
+                    condition at the cart; checkout step 1 says it as a gift. */}
                 {customerChosenLabels(paramKeyForLine(item), item.changes).length > 0 && (
                   <p className="mt-1 text-xs text-text-2">
                     {customerChosenLabels(paramKeyForLine(item), item.changes).join(", ")}
@@ -181,26 +182,25 @@ export default function CartPage() {
             <p className="text-xs text-text-3">Total</p>
             <p className="font-display text-2xl text-text whitespace-nowrap">AED {total}</p>
           </div>
-          <div className="flex items-center gap-3">
-            {/* Adding a second piece used to mean finding your own way back --
-                the only route out of the cart was a grey line of text under
-                the fold. */}
-            <Link
-              href="/catalog"
-              className="flex-1 rounded-full border border-border-strong px-4 py-3.5 text-center text-sm whitespace-nowrap text-text transition-colors hover:bg-surface-2 sm:flex-none sm:px-6"
-            >
-              Add another piece
-            </Link>
-            <Link
-              href="/checkout"
-              className="flex-1 rounded-full bg-accent px-8 py-3.5 text-center text-sm whitespace-nowrap text-white transition-opacity hover:opacity-90 sm:flex-none"
-            >
-              Checkout
-            </Link>
-          </div>
         </div>
+        {/* ONE SCREEN TO PAY, founder 2026-11-23 (conversion audit): the email
+            and Pay sit here; /checkout only asked for the email and now
+            redirects to /cart (next.config.ts). Stripe's cancel_url still says
+            /checkout and lands here through that redirect. */}
+        <div className="mt-6">
+          <CheckoutForm total={total} />
+        </div>
+        <p className="text-center">
+          <Link
+            href="/catalog"
+            className="inline-flex min-h-11 items-center text-sm text-text-2 underline underline-offset-2 hover:text-text"
+          >
+            Add another piece
+          </Link>
+        </p>
         {/* Founder 2026-11-23: one reassurance line under the total, said once. */}
-        <p className="mt-4 text-xs leading-relaxed text-text-2">{CART_INCLUDED_LINE}</p>
+        <p className="mt-2 text-xs leading-relaxed text-text-2">{CART_INCLUDED_LINE}</p>
+        <IncludedInPrice variant="steps" sizeMode={items.some((i) => i.size === "Tailored") ? "tailored" : "standard"} />
       </div>
     </div>
   );

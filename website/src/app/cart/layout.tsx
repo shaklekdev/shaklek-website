@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AuthProvider from "@/components/AuthProvider";
 import { NOINDEX } from "@/lib/seo";
 
 // Transactional page -- kept out of search results. It is a client
@@ -20,6 +21,8 @@ export const metadata: Metadata = {
   description: "The pieces you have designed, before you check out.",
 };
 
+// Clerk mounted here since 2026-11-23: the cart now carries the email + Pay
+// form (CheckoutForm reads useUser), the old /checkout page redirects here.
 export default function CartLayout({ children }: LayoutProps<"/cart">) {
-  return children;
+  return <AuthProvider>{children}</AuthProvider>;
 }

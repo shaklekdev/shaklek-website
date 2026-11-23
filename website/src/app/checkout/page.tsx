@@ -92,9 +92,12 @@ export default function CheckoutPage() {
 
         {/* Founder priority 2026-11-12: the price is the whole price, said once
             more at the moment of paying. Shared copy in data/included.ts. */}
+        {/* Founder 2026-11-23 (conversion audit): Pay on the first screen,
+            the steps under it, not in front of it. */}
+        <div className="mt-6">
+          <CheckoutForm total={total} />
+        </div>
         <IncludedInPrice variant="steps" sizeMode={items.some((i) => i.size === "Tailored") ? "tailored" : "standard"} />
-
-        <CheckoutForm total={total} />
       </div>
     </div>
   );

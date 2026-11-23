@@ -19,8 +19,7 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     q: "What does made-to-order actually mean?",
     a: (
       <>
-        Nothing is made until you order it, so it can be cut to your
-        measurements.
+        Your piece is cut for you, to your measurements.
       </>
     ),
   },
@@ -34,10 +33,9 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
             weeks". Founder 2026-11-20: 10 working days. The clock starts when
             her details are final, which for Tailored is the fitting (terms,
             Delivery). */}
-        10 working days from the day your details are final: your fitting if
-        you choose Tailored, or our confirmation of your order for a standard
-        size, usually within a day of ordering.
-        Delivery across the UAE is included.
+        {/* Founder 2026-11-23: one plain number; the counting rule lives in
+            legal/terms. */}
+        10 working days, delivered to your door anywhere in the UAE, included.
       </>
     ),
   },
@@ -75,15 +73,16 @@ const FAQS: { q: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "What if it doesn't fit?",
+    q: "What is the Fit guarantee?",
     a: (
       <>
         {/* ⚠️ AN ALTERATION, NOT A REMAKE. Founder, 2026-11-05: "we can't open
             everything, so it has to be like touching, not full remake, make it
             clear." Remake/refund survives ONLY for faulty or wrong items. */}
-        One alteration is included within 10 days of delivery, standard size
-        or Tailored. Message us with a photo and we arrange it. If an
-        alteration is not enough, we offer store credit.
+        {/* Founder 2026-11-23: name it, own it, no process. The remedies
+            (alteration, then full refund) are in legal/terms. */}
+        Your perfect fit is our responsibility, standard size or Tailored.
+        Message us within 10 days of delivery and we take care of it.
       </>
     ),
   },

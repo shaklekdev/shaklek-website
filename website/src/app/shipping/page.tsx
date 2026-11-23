@@ -1,5 +1,4 @@
 import LegalPage from "@/components/LegalPage";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
 
@@ -23,8 +22,7 @@ export default function ShippingPage() {
     >
       <h2 className="pt-2 text-base font-medium text-text">How long it takes</h2>
       <p>
-        Ready in <strong>10 working days</strong>, counted from your fitting,
-        or from our confirmation of your order for a standard size.
+        Ready in <strong>10 working days</strong>.
       </p>
       {/* ⚠️ NEGATIVE-LANGUAGE PASS, founder 2026-11-05. This said "Ten days is
           an estimate, not a guarantee. If anything moves, whether fabric
@@ -33,45 +31,15 @@ export default function ShippingPage() {
           "ten days" was also stale against the 3-week line then above it (10
           working days since 2026-11-20, founder). The
           estimate wording that binds lives in legal/terms. */}
-      <p>
-        We confirm your date once your details are final.
-      </p>
 
       <h2 className="pt-2 text-base font-medium text-text">What it costs</h2>
       <p>
         Nothing. Delivery is included in every price.
       </p>
 
-      <h2 className="pt-2 text-base font-medium text-text">Your address</h2>
-      {/* ⚠️ ONE LINE, NOT A POLICY. This paragraph repeated the returned-parcel
-          clause from legal/terms almost word for word; founder, 2026-11-05,
-          full site pass. The rule lives in the terms so the two copies cannot
-          drift apart; this page keeps the instruction and the pointer. */}
-      <p>
-        Your address is taken on the payment page. Redelivery is set out in
-        the{" "}
-        <Link href="/legal/terms" className="underline">
-          terms
-        </Link>
-        .
-      </p>
-
-      {/* ⚠️ THE FIT GUARANTEE AND THE FAULTY-ITEM CLAUSE LEFT THIS PAGE,
-          2026-11-05. Founder, full site pass: "if something isn't bringing
-          conversion, mention it ONLY WHERE IT HAS TO BE" -- she is tired of
-          the same information repeated everywhere. The dated versions (10
-          days for fit, 14 for faulty or wrong) now live in legal/terms, plus
-          one /faq answer for fit. This page keeps the instruction and the
-          pointer, not the promise, so the two numbers cannot drift apart
-          again across four files. */}
-      <h2 className="pt-2 text-base font-medium text-text">When it arrives</h2>
-      <p>
-        If anything needs our attention, message us. See the{" "}
-        <Link href="/legal/terms#returns" className="underline">
-          terms
-        </Link>
-        .
-      </p>
+      {/* "Your address" and "When it arrives" REMOVED, founder 2026-11-23
+          (conversion audit): process and pointers to legal text on a page
+          meant to reassure. Both rules live in legal/terms. */}
 
       <p>
         Anything else, write to{" "}
