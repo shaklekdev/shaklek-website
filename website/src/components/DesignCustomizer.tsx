@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import type { CatalogItem } from "@/data/catalog";
 import { includedWith } from "@/data/catalog";
 import IncludedInPrice from "@/components/IncludedInPrice";
-import { SHEET_INCLUDED } from "@/data/included";
+import { SHEET_INCLUDED, SIZE_LINE_TAILORED, FIT_COVERED_LINE } from "@/data/included";
 
 // The line under the colour circles on every abaya. Cleared by shaklek-marketing
 // 2026-10-11 against catalog.ts, fabrics.ts and margins.mjs. "the price", never
@@ -457,7 +457,7 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                     size. Wording reuses SizePicker's approved line. */}
                 <p className="mb-2 text-center text-[12px] text-text-2">
                   {spec.sizeMode === "tailored" ? (
-                    <>Size: <span className="font-medium text-text">Tailored</span>, free fitting after payment</>
+                    <>Size: <span className="font-medium text-text">Tailored</span>. {SIZE_LINE_TAILORED}</>
                   ) : (
                     <>Size: <span className="font-medium text-text">{spec.size}</span></>
                   )}
@@ -486,6 +486,9 @@ export default function DesignCustomizer({ item }: { item: CatalogItem }) {
                 >
                   {buyLabel}
                 </button>
+                {/* Founder 2026-11-23: the one fear at this button is "what if
+                    it does not fit". Said once here; data/included.ts. */}
+                <p className="mt-2 text-center text-[12px] text-text-2">{FIT_COVERED_LINE}</p>
               </div>
             }
             /* stageNote (the phone lead-time line under the first-screen

@@ -236,7 +236,7 @@ export default function SizePicker({
           </>
         ) : (
           <>
-            Or choose <span className="font-medium text-text">Tailored</span>: free fitting after payment.
+            Or choose <span className="font-medium text-text">Tailored</span>: we take your true measurements, free.
           </>
         )}
       </p>

@@ -122,3 +122,26 @@ export const SHEET_INCLUDED = {
   ],
   shayla: "Shayla included, cut from the same linen in your colour",
 };
+
+/** CONVERSION PASS, founder approved the mock-up 2026-11-23 (0 orders: ad
+ *  carts never reached Pay). Copy by shaklek-marketing, checked against
+ *  legal/terms (113-135 delivery + fitting, 157-168 alteration). Each fact is
+ *  said ONCE per screen (founder: "trop répétitif"), so the checkout steps
+ *  REPLACE the old INCLUDED_CHECKOUT_LINE rather than sitting under it.
+ *  "Within 24 hours" is already promised in order-confirmed and orderEmail. */
+export const SIZE_LINE_TAILORED = "We take your true measurements, free";
+export const FIT_COVERED_LINE = "Your fit is covered: one free alteration, within 10 days of delivery.";
+export const CART_INCLUDED_LINE = "All included: delivery to your door anywhere in the UAE and one free alteration.";
+export const CHECKOUT_STEPS = {
+  heading: "From here, we take care of it",
+  tailored: [
+    { lead: "We come to you.", text: "Within 24 hours we are in touch to arrange your free fitting: at home in Dubai, or virtual from your phone." },
+    { lead: "Cut for you alone.", text: "Our team makes your piece to your measurements, with every customisation you chose." },
+    { lead: "At your door in 10 working days from your fitting.", text: "One free alteration is included, within 10 days of delivery." },
+  ],
+  standard: [
+    { lead: "Your piece is in our team's hands.", text: "Within 24 hours we are in touch to confirm your details." },
+    { lead: "Made for you.", text: "In your size, with every customisation you chose." },
+    { lead: "At your door in 10 working days.", text: "One free alteration is included, within 10 days of delivery." },
+  ],
+};

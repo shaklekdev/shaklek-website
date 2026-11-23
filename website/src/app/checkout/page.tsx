@@ -92,7 +92,7 @@ export default function CheckoutPage() {
 
         {/* Founder priority 2026-11-12: the price is the whole price, said once
             more at the moment of paying. Shared copy in data/included.ts. */}
-        <IncludedInPrice variant="line" />
+        <IncludedInPrice variant="steps" sizeMode={items.some((i) => i.size === "Tailored") ? "tailored" : "standard"} />
 
         <CheckoutForm total={total} />
       </div>

@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import { useCart } from "@/lib/CartContext";
 import { cartThumbnail } from "@/lib/cartThumbnail";
 import { MAX_QUANTITY_PER_ITEM } from "@/lib/pricing";
+import { CART_INCLUDED_LINE } from "@/data/included";
 
 /** The slider set a cart line's product uses. The line stores a slug, so the
  *  catalogue item is recoverable; without this the labels are filtered against
@@ -198,6 +199,8 @@ export default function CartPage() {
             </Link>
           </div>
         </div>
+        {/* Founder 2026-11-23: one reassurance line under the total, said once. */}
+        <p className="mt-4 text-xs leading-relaxed text-text-2">{CART_INCLUDED_LINE}</p>
       </div>
     </div>
   );

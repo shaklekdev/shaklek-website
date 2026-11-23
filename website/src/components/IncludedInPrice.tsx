@@ -6,6 +6,7 @@ import {
   INCLUDED_HOME_LEAD,
   INCLUDED_PRODUCT_LINES,
   SHEET_INCLUDED,
+  CHECKOUT_STEPS,
 } from "@/data/included";
 import { includedWith } from "@/data/catalog";
 
@@ -31,13 +32,34 @@ export default function IncludedInPrice({
   category,
   sizeMode,
 }: {
-  variant: "card" | "sheet" | "chips" | "line";
+  variant: "card" | "sheet" | "chips" | "line" | "steps";
   // Still accepted (callers pass it) though no line depends on it since the
   // shayla line moved out, 2026-11-13.
   category?: string | null;
   /** When given, the card lists the size-mode lines (no fitting on Standard). */
   sizeMode?: "tailored" | "standard";
 }) {
+  if (variant === "steps") {
+    // Checkout, in place of the old one-line "All included" (founder
+    // 2026-11-23). Tailored steps whenever the cart holds a Tailored piece.
+    const steps = sizeMode === "standard" ? CHECKOUT_STEPS.standard : CHECKOUT_STEPS.tailored;
+    return (
+      <section className="mt-4 border-t border-border pt-3">
+        <p className="text-[13px] font-medium text-text">{CHECKOUT_STEPS.heading}</p>
+        <ol className="mt-2">
+          {steps.map((st, i) => (
+            <li key={i} className="flex gap-3 border-t border-border py-2.5 text-xs leading-relaxed text-text-2">
+              <span aria-hidden="true" className="min-w-3 text-text-3">{i + 1}</span>
+              <span>
+                <span className="font-medium text-text">{st.lead}</span> {st.text}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    );
+  }
+
   if (variant === "card") {
     // FOLDED, like Product information and the home's "All included +"
     // (founder, 2026-11-13). Same box, same + / − as the other disclosures on
