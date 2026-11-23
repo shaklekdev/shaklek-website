@@ -181,6 +181,8 @@ export default function CartPage() {
           <div>
             <p className="text-xs text-text-3">Total</p>
             <p className="font-display text-2xl text-text whitespace-nowrap">AED {total}</p>
+            {/* Right under the total, founder 2026-11-23: the price is the whole price. */}
+            <p className="mt-1 text-xs leading-relaxed text-text-2">{CART_INCLUDED_LINE}</p>
           </div>
         </div>
         {/* ONE SCREEN TO PAY, founder 2026-11-23 (conversion audit): the email
@@ -206,8 +208,6 @@ export default function CartPage() {
             Add another piece
           </Link>
         </p>
-        {/* Founder 2026-11-23: one reassurance line under the total, said once. */}
-        <p className="mt-2 text-xs leading-relaxed text-text-2">{CART_INCLUDED_LINE}</p>
         <IncludedInPrice variant="steps" sizeMode={items.some((i) => i.size === "Tailored") ? "tailored" : "standard"} />
       </div>
     </div>

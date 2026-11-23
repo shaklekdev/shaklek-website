@@ -133,7 +133,7 @@ export const SHEET_INCLUDED = {
 // don't have to know all our process"). The remedies live in legal/terms only.
 export const SIZE_LINE_TAILORED = "We take your true measurements, free";
 export const FIT_COVERED_LINE = "Fit guarantee: your perfect fit is our responsibility.";
-export const CART_INCLUDED_LINE = "All included: delivery to your door anywhere in the UAE and our Fit guarantee.";
+export const CART_INCLUDED_LINE = "All included: every customisation, delivery to your door anywhere in the UAE and our Fit guarantee.";
 export const CHECKOUT_STEPS = {
   heading: "From here, we take care of it",
   tailored: [
