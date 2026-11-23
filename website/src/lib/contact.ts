@@ -18,3 +18,10 @@
 // phone that is not the founder's.
 export const WHATSAPP_URL = "https://wa.me/971504766769";
 export const WHATSAPP_HANDLE = "@shaklek";
+
+// PRE-ORDER contact, /cart only (founder 2026-11-23: "only at the order page",
+// and ONLY if her number stays hidden). So the USERNAME link, never the number
+// above. The 2026-11-11 test of this route failed to open a chat; she will
+// re-test on a phone without her as a contact. If it fails again, remove the
+// cart line rather than switching it to WHATSAPP_URL.
+export const WHATSAPP_USERNAME_URL = "https://wa.me/shaklek";

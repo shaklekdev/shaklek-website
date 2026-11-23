@@ -10,6 +10,7 @@ import { cartThumbnail } from "@/lib/cartThumbnail";
 import { MAX_QUANTITY_PER_ITEM } from "@/lib/pricing";
 import { CART_INCLUDED_LINE } from "@/data/included";
 import CheckoutForm from "@/components/CheckoutForm";
+import { WHATSAPP_USERNAME_URL } from "@/lib/contact";
 import IncludedInPrice from "@/components/IncludedInPrice";
 
 /** The slider set a cart line's product uses. The line stores a slug, so the
@@ -190,6 +191,16 @@ export default function CartPage() {
         <div className="mt-6">
           <CheckoutForm total={total} />
         </div>
+        {/* Founder 2026-11-23: questions before ordering go to WhatsApp, on
+            this page only. Copy by shaklek-marketing. Username link: her number
+            must never show (lib/contact.ts). */}
+        <p className="text-center text-sm text-text-2">
+          Ask us anything on{" "}
+          <a href={WHATSAPP_USERNAME_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline underline-offset-2 hover:text-text">
+            WhatsApp
+          </a>{" "}
+          before you order.
+        </p>
         <p className="text-center">
           <Link
             href="/catalog"
